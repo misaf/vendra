@@ -52,7 +52,6 @@
         "barryvdh/laravel-debugbar": "^3.10.5",
         "fakerphp/faker": "^1.23.1",
         "jasonmccreary/laravel-test-assertions": "^2.3",
-        "laravel-shift/blueprint": "^2.9",
         "laravel/pint": "^1.14.0",
         "laravel/sail": "^1.28.1",
         "mockery/mockery": "^1.6.7",

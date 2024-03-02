@@ -33,12 +33,12 @@ final class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('username')
-                    ->autocomplete(false)
-                    ->autofocus()
-                    ->label(__('form.username'))
-                    ->maxLength(255)
-                    ->required(),
+                // Forms\Components\TextInput::make('username')
+                //     ->autocomplete(false)
+                //     ->autofocus()
+                //     ->label(__('form.username'))
+                //     ->maxLength(255),
+                    // ->required()
 
                 Forms\Components\TextInput::make('email')
                     ->autocomplete(false)
