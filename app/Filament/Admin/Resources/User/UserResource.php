@@ -38,7 +38,7 @@ final class UserResource extends Resource
                 //     ->autofocus()
                 //     ->label(__('form.username'))
                 //     ->maxLength(255),
-                    // ->required()
+                // ->required()
 
                 Forms\Components\TextInput::make('email')
                     ->autocomplete(false)

@@ -182,7 +182,7 @@ final class CurrencyResource extends Resource
                 Tables\Columns\TextColumn::make('conversion_rate')
                     ->label(__('form.conversion_rate'))
                     ->searchable()
-                    ->numeric(fn(Currency $record) => $record->decimal_place)
+                    ->numeric(fn(Currency $record): int => $record->decimal_place)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('decimal_place')

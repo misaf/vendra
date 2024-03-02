@@ -13,43 +13,51 @@ final class ProductObserver implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    //public $queue = 'listeners';
-
     public bool $afterCommit = true;
 
-    public $maxExceptions = 5;
-
-    public $tries = 5;
-
-    public function backoff(): array
-    {
-        return [1, 5, 10, 30];
-    }
-
-    public function created(Product $product): void {}
-
+    /**
+     * Handle the product "deleted" event.
+     *
+     * @param  Product  $product
+     * @return void
+     */
     public function deleted(Product $product): void
     {
-        $product->productPrices()->delete();
+        $this->deleteRelatedData($product);
 
-        $product->orderProducts()->delete();
-
-        Cache::forget('product_row_count');
+        $this->forgetProductRowCountCache();
     }
 
-    public function forceDeleted(Product $product): void {}
-
-    public function restored(Product $product): void {}
-
-    public function retryUntil()
-    {
-        return now()->addMinutes(5);
-    }
-
+    /**
+     * Handle the product "saved" event.
+     *
+     * @param  Product  $product
+     * @return void
+     */
     public function saved(Product $product): void
     {
-        Cache::forget('product_row_count');
+        $this->forgetProductRowCountCache();
     }
 
-    public function updated(Product $product): void {}
+    /**
+     * Delete related data when a product is deleted or force deleted.
+     *
+     * @param  Product  $product
+     * @return void
+     */
+    private function deleteRelatedData(Product $product): void
+    {
+        $product->productPrices()->delete();
+        $product->orderProducts()->delete();
+    }
+
+    /**
+     * Forget the product row count cache.
+     *
+     * @return void
+     */
+    private function forgetProductRowCountCache(): void
+    {
+        Cache::forget('product_row_count');
+    }
 }

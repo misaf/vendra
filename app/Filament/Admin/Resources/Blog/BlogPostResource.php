@@ -117,7 +117,7 @@ final class BlogPostResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('model.blog_post');
+        return __('navigation.blog_post');
     }
 
     public static function getNavigationBadge(): ?string
@@ -132,7 +132,7 @@ final class BlogPostResource extends Resource
 
     public static function getNavigationLabel(): string
     {
-        return __('model.blog_post');
+        return __('navigation.blog_post');
     }
 
     public static function getPages(): array

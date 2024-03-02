@@ -7,36 +7,76 @@ namespace App\Observers\Product;
 use App\Models\Product\ProductPrice;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Carbon;
 
 final class ProductPriceObserver implements ShouldQueue
 {
     use InteractsWithQueue;
 
-    //public $queue = 'listeners';
-
     public bool $afterCommit = true;
 
-    public $maxExceptions = 5;
-
-    public $tries = 5;
-
-    public function backoff(): array
+    /**
+     * Handle the product price "created" event.
+     *
+     * @param  ProductPrice  $productPrice
+     * @return void
+     */
+    public function created(ProductPrice $productPrice): void
     {
-        return [1, 5, 10, 30];
+        // Implement if needed
     }
 
-    public function created(ProductPrice $productPrice): void {}
+    /**
+     * Handle the product price "deleted" event.
+     *
+     * @param  ProductPrice  $productPrice
+     * @return void
+     */
+    public function deleted(ProductPrice $productPrice): void
+    {
+        // Implement if needed
+    }
 
-    public function deleted(ProductPrice $productPrice): void {}
+    /**
+     * Handle the product price "force deleted" event.
+     *
+     * @param  ProductPrice  $productPrice
+     * @return void
+     */
+    public function forceDeleted(ProductPrice $productPrice): void
+    {
+        // Implement if needed
+    }
 
-    public function forceDeleted(ProductPrice $productPrice): void {}
+    /**
+     * Handle the product price "restored" event.
+     *
+     * @param  ProductPrice  $productPrice
+     * @return void
+     */
+    public function restored(ProductPrice $productPrice): void
+    {
+        // Implement if needed
+    }
 
-    public function restored(ProductPrice $productPrice): void {}
-
-    public function retryUntil()
+    /**
+     * Determine the time at which the job should timeout.
+     *
+     * @return Carbon
+     */
+    public function retryUntil(): Carbon
     {
         return now()->addMinutes(5);
     }
 
-    public function updated(ProductPrice $productPrice): void {}
+    /**
+     * Handle the product price "updated" event.
+     *
+     * @param  ProductPrice  $productPrice
+     * @return void
+     */
+    public function updated(ProductPrice $productPrice): void
+    {
+        // Implement if needed
+    }
 }
