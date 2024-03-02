@@ -46,8 +46,8 @@ final class ProductCategoryResource extends Resource
                     ->label(__('form.name'))
                     ->live(onBlur: true)
                     ->required()
-                    ->translatable()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at')),
+                    ->unique(ignoreRecord: true, column: fn($livewire) => 'name->' . $livewire->activeLocale, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at'))
+                    ->translatable(),
 
                 Forms\Components\TextInput::make('slug')
                     ->columnSpan([

@@ -62,8 +62,8 @@ final class BlogPostResource extends Resource
                     ->label(__('form.name'))
                     ->live(onBlur: true)
                     ->required()
-                    ->translatable()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at')),
+                    ->unique(ignoreRecord: true, column: fn($livewire) => 'name->' . $livewire->activeLocale, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at'))
+                    ->translatable(),
 
                 Forms\Components\TextInput::make('slug')
                     ->columnSpan([
@@ -71,7 +71,8 @@ final class BlogPostResource extends Resource
                     ])
                     ->label(__('form.slug'))
                     ->required()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at')),
+                    ->unique(ignoreRecord: true, column: fn($livewire) => 'slug->' . $livewire->activeLocale, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at'))
+                    ->translatable(),
 
                 Forms\Components\RichEditor::make('description')
                     ->columnSpanFull()
@@ -91,6 +92,7 @@ final class BlogPostResource extends Resource
                         'underline',
                         'undo',
                     ])
+                    ->unique(ignoreRecord: true, column: fn($livewire) => 'description->' . $livewire->activeLocale, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at'))
                     ->translatable(),
 
                 Forms\Components\SpatieMediaLibraryFileUpload::make('image')
