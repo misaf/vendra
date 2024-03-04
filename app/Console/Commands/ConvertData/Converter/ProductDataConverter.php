@@ -2,30 +2,33 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\ConvertData\Converter;
 
+use App\Console\Commands\ConvertData\Interfaces\DataConverter;
 use App\Models\Currency\Currency;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
-use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-final class ConvertData extends Command
+final class ProductDataConverter implements DataConverter
 {
-    protected $description = 'Command description';
-
-    protected $signature = 'app:convert-data';
-
-    public function handle(): int
+    /**
+     * Migrate data.
+     *
+     * @return void
+     */
+    public function migrate(): void
     {
-        DB::transaction(function (): void {
-            $this->migrateProductCategories();
-        });
-
-        return Command::SUCCESS;
+        $this->migrateProductCategories();
+        $this->migrateProducts();
+        $this->migrateProductImages();
+        $this->migrateProductPrices();
     }
 
+    /**
+     * Create a new product based on the old data.
+     */
     private function createNewProduct($oldProduct, $newProductCategory): Product
     {
         $newProduct = new Product();
@@ -45,6 +48,9 @@ final class ConvertData extends Command
         return $newProduct;
     }
 
+    /**
+     * Create a new product category based on the old data.
+     */
     private function createNewProductCategory($oldProductCategory): ProductCategory
     {
         $newProductCategory = new ProductCategory();
@@ -60,12 +66,14 @@ final class ConvertData extends Command
         return $newProductCategory;
     }
 
+    /**
+     * Migrate product categories from the old database.
+     */
     private function migrateProductCategories(): void
     {
         DB::connection('mysql_old')
             ->table('product_categories')
             ->whereNull('deleted_at')
-            ->distinct()
             ->oldest('id')
             ->each(function ($oldProductCategory): void {
                 $newProductCategory = $this->createNewProductCategory($oldProductCategory);
@@ -74,17 +82,19 @@ final class ConvertData extends Command
             });
     }
 
+    /**
+     * Migrate product images from the old database.
+     */
     private function migrateProductImages($oldProduct, $newProduct): void
     {
         DB::connection('mysql_old')
             ->table('product_images')
             ->where('product_id', $oldProduct->id)
             ->whereNull('deleted_at')
-            ->distinct()
             ->oldest('id')
-            ->each(function ($productImage) use ($newProduct): void {
-                if (Storage::exists('old-images/' . $productImage->image)) {
-                    $newProduct->addMedia(storage_path('app/old-images/' . $productImage->image))
+            ->each(function ($oldProductImage) use ($newProduct): void {
+                if (Storage::exists('old-images/' . $oldProductImage->image)) {
+                    $newProduct->addMedia(storage_path('app/old-images/' . $oldProductImage->image))
                         ->preservingOriginal()
                         ->withResponsiveImages()
                         ->toMediaCollection();
@@ -92,21 +102,23 @@ final class ConvertData extends Command
             });
     }
 
+    /**
+     * Migrate product prices from the old database.
+     */
     private function migrateProductPrices($oldProduct, $newProduct): void
     {
         DB::connection('mysql_old')
             ->table('product_prices')
             ->where('product_id', $oldProduct->id)
             ->whereNull('deleted_at')
-            ->distinct()
             ->oldest('id')
-            ->each(function ($productPrice) use ($newProduct): void {
-                if ($productPrice->price > 0) {
+            ->each(function ($oldProductPrice) use ($newProduct): void {
+                if ($oldProductPrice->price > 0) {
                     $newProduct->productPrices()
                         ->create([
                             'product_id'  => $newProduct->id,
                             'currency_id' => Currency::value('id'),
-                            'price'       => $productPrice->price / 10,
+                            'price'       => $oldProductPrice->price / 10,
                         ]);
 
                     $newProduct->in_stock = 0;
@@ -116,13 +128,15 @@ final class ConvertData extends Command
             });
     }
 
+    /**
+     * Migrate products from the old database.
+     */
     private function migrateProducts($oldProductCategory, $newProductCategory): void
     {
         DB::connection('mysql_old')
             ->table('products')
             ->where('product_category_id', $oldProductCategory->id)
             ->whereNull('deleted_at')
-            ->distinct()
             ->oldest('id')
             ->each(function ($oldProduct) use ($newProductCategory): void {
                 $newProduct = $this->createNewProduct($oldProduct, $newProductCategory);

@@ -16,6 +16,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Concerns\Translatable;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Support\Facades\Cache;
@@ -164,7 +165,8 @@ final class BlogPostResource extends Resource
                 Tables\Columns\TextColumn::make('blogPostCategory.name')
                     ->label(__('model.blog_post_category'))
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->summarize(Sum::make()),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))

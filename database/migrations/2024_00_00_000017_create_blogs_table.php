@@ -82,6 +82,8 @@ return new class () extends Migration {
             $table->longText('description')
                 ->nullable();
             $table->longText('slug');
+            $table->unsignedBigInteger('position')
+                ->index();
             $table->boolean('status')
                 ->index();
             $table->timestampsTz();
