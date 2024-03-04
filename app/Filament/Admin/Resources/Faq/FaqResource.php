@@ -36,7 +36,7 @@ final class FaqResource extends Resource
             ->schema([
                 Forms\Components\Select::make('faq_category_id')
                     ->columnSpanFull()
-                    ->getOptionLabelFromRecordUsing(fn(Faq $record, $livewire) => $record->getTranslation('name', $livewire->activeLocale))
+                    ->getOptionLabelFromRecordUsing(fn($record, $livewire) => $record->getTranslation('name', $livewire->activeLocale))
                     ->label(__('model.faq_category'))
                     ->native(false)
                     ->preload()
