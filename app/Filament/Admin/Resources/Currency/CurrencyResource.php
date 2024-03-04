@@ -227,8 +227,8 @@ final class CurrencyResource extends Resource
             ])
             ->defaultGroup('currencyCategory.name')
             ->defaultSort('position', 'desc')
-            ->reorderable('position')
-            ->paginatedWhileReordering();
+            ->paginatedWhileReordering()
+            ->reorderable('position');
         // ->poll()
     }
 }

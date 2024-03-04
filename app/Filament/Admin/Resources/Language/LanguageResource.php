@@ -173,8 +173,8 @@ final class LanguageResource extends Resource
                 ]),
             ])
             ->defaultSort('id', 'desc')
-            ->reorderable('position')
-            ->paginatedWhileReordering();
+            ->paginatedWhileReordering()
+            ->reorderable('position');
         // ->poll()
     }
 }

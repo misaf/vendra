@@ -203,8 +203,8 @@ final class BlogPostResource extends Resource
             ])
             ->defaultGroup('blogPostCategory.name')
             ->defaultSort('position', 'desc')
-            ->reorderable('position')
-            ->paginatedWhileReordering();
+            ->paginatedWhileReordering()
+            ->reorderable('position');
         // ->poll()
     }
 

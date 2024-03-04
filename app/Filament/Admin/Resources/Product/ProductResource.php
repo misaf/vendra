@@ -333,8 +333,8 @@ final class ProductResource extends Resource
             ])
             ->defaultGroup('productCategory.name')
             ->defaultSort('id', 'desc')
-            ->reorderable('position')
-            ->paginatedWhileReordering();
+            ->paginatedWhileReordering()
+            ->reorderable('position');
         // ->poll()
     }
 }

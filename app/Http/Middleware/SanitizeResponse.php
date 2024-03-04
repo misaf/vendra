@@ -12,7 +12,7 @@ final class SanitizeResponse
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request);
+        return $next($request);
 
         // $body = $response->getContent();
 
@@ -44,6 +44,5 @@ final class SanitizeResponse
         // $body = preg_replace(array_keys($replace), array_values($replace), $body);
 
         // return $response->setContent($body);
-        return $response;
     }
 }

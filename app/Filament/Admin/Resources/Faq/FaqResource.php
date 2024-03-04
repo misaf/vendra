@@ -205,8 +205,8 @@ final class FaqResource extends Resource
             ])
             ->defaultGroup('faqCategory.name')
             ->defaultSort('id', 'desc')
-            ->reorderable('position')
-            ->paginatedWhileReordering();
+            ->paginatedWhileReordering()
+            ->reorderable('position');
         // ->poll()
     }
 }

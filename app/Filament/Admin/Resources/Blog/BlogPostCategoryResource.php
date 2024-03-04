@@ -162,8 +162,8 @@ final class BlogPostCategoryResource extends Resource
                 ]),
             ])
             ->defaultSort('position', 'desc')
-            ->reorderable('position')
-            ->paginatedWhileReordering();
+            ->paginatedWhileReordering()
+            ->reorderable('position');
         // ->poll()
     }
 }
