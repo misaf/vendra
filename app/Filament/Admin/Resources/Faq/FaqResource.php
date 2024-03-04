@@ -6,7 +6,6 @@ namespace App\Filament\Admin\Resources\Faq;
 
 use App\Filament\Admin\Resources\Faq\FaqResource\Pages;
 use App\Models\Faq\Faq;
-use App\Models\Faq\FaqCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -36,7 +35,7 @@ final class FaqResource extends Resource
             ->schema([
                 Forms\Components\Select::make('faq_category_id')
                     ->columnSpanFull()
-                    ->getOptionLabelFromRecordUsing(fn(FaqCategory $record, $livewire) => $record->getTranslation('name', $livewire->activeLocale))
+                    ->getOptionLabelFromRecordUsing(fn(Faq $record, $livewire) => $record->getTranslation('name', $livewire->activeLocale))
                     ->label(__('model.faq_category'))
                     ->native(false)
                     ->preload()
@@ -198,6 +197,12 @@ final class FaqResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
+            ->groups([
+                Tables\Grouping\Group::make('faqCategory.name')
+                    ->collapsible()
+                    ->label(__('model.faq_category')),
+            ])
+            ->defaultGroup('faqCategory.name')
             ->defaultSort('id', 'desc')
             ->reorderable('position')
             ->paginatedWhileReordering();
