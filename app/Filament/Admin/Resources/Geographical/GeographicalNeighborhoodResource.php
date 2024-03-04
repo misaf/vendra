@@ -179,26 +179,6 @@ final class GeographicalNeighborhoodResource extends Resource
                     ->stacked()
                     ->defaultImageUrl(url('coin-payment/images/default.png')),
 
-                Tables\Columns\TextColumn::make('geographicalZone.name')
-                    ->label(__('model.geographical_zone'))
-                    ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('geographicalCountry.name')
-                    ->label(__('model.geographical_country'))
-                    ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('geographicalState.name')
-                    ->label(__('model.geographical_state'))
-                    ->sortable()
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('geographicalCity.name')
-                    ->label(__('model.geographical_city'))
-                    ->sortable()
-                    ->searchable(),
-
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))
                     ->searchable()
@@ -234,6 +214,24 @@ final class GeographicalNeighborhoodResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
+            ->groups([
+                Tables\Grouping\Group::make('geographicalZone.name')
+                    ->collapsible()
+                    ->label(__('model.geographical_zone')),
+
+                Tables\Grouping\Group::make('geographicalCountry.name')
+                    ->collapsible()
+                    ->label(__('model.geographical_country')),
+                    
+                Tables\Grouping\Group::make('geographicalState.name')
+                    ->collapsible()
+                    ->label(__('model.geographical_state')),
+                
+                Tables\Grouping\Group::make('geographicalCity.name')
+                    ->collapsible()
+                    ->label(__('model.geographical_city')),
+            ])
+            ->defaultGroup('geographicalCity.name')
             ->defaultSort('id', 'desc');
     }
 }

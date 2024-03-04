@@ -126,11 +126,6 @@ final class GeographicalCountryResource extends Resource
                     ->stacked()
                     ->defaultImageUrl(url('coin-payment/images/default.png')),
 
-                Tables\Columns\TextColumn::make('geographicalZone.name')
-                    ->label(__('model.geographical_zone'))
-                    ->sortable()
-                    ->searchable(),
-
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))
                     ->searchable()
@@ -166,6 +161,12 @@ final class GeographicalCountryResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
+            ->groups([
+                Tables\Grouping\Group::make('geographicalZone.name')
+                    ->collapsible()
+                    ->label(__('model.geographical_zone')),
+            ])
+            ->defaultGroup('geographicalZone.name')
             ->defaultSort('id', 'desc');
     }
 }
