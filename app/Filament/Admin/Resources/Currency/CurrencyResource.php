@@ -162,11 +162,6 @@ final class CurrencyResource extends Resource
                     ->stacked()
                     ->defaultImageUrl(url('coin-payment/images/default.png')),
 
-                Tables\Columns\TextColumn::make('currencyCategory.name')
-                    ->label(__('form.category'))
-                    ->searchable()
-                    ->sortable(),
-
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))
                     ->searchable()
