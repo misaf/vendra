@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources\Faq;
 
 use App\Filament\Admin\Resources\Faq\FaqResource\Pages;
 use App\Models\Faq\Faq;
+use App\Models\Faq\FaqCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
