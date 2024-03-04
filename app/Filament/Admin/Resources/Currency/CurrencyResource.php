@@ -223,7 +223,7 @@ final class CurrencyResource extends Resource
             ->groups([
                 Tables\Grouping\Group::make('currencyCategory.name')
                     ->collapsible()
-                    ->label(__('model.currency_category')),
+                    ->label(__('form.category')),
             ])
             ->defaultGroup('currencyCategory.name')
             ->defaultSort('position', 'desc')

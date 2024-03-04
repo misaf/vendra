@@ -200,7 +200,7 @@ final class BlogPostResource extends Resource
             ->groups([
                 Tables\Grouping\Group::make('blogPostCategory.name')
                     ->collapsible()
-                    ->label(__('model.blog_post_category')),
+                    ->label(__('form.category')),
             ])
             ->defaultGroup('blogPostCategory.name')
             ->defaultSort('position', 'desc')
