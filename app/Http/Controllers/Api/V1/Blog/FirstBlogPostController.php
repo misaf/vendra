@@ -10,9 +10,9 @@ use App\Models\Blog\BlogPost;
 use Spatie\QueryBuilder\AllowedInclude;
 use Spatie\QueryBuilder\QueryBuilder;
 
-final class BlogPostController extends Controller
+final class FirstBlogPostController extends Controller
 {
-    public function index()
+    public function __invoke()
     {
         $query = QueryBuilder::for(BlogPost::class)
             ->allowedIncludes([
@@ -21,16 +21,9 @@ final class BlogPostController extends Controller
             ])
             ->allowedFilters(['name', 'slug', 'status'])
             ->allowedSorts('position')
-            ->defaultSort('-position');
+            ->defaultSort('-position')
+            ->first();
 
-        $perPage = request()->query('per_page', 10);
-        $paginatedPosts = $query->paginate($perPage)->appends(request()->except('page'));
-
-        return BlogPostResource::collection($paginatedPosts);
-    }
-
-    public function show(string $id)
-    {
-        return BlogPostResource::collection(BlogPost::find($id));
+        return new BlogPostResource($query);
     }
 }

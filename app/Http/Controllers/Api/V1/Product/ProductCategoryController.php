@@ -7,32 +7,23 @@ namespace App\Http\Controllers\Api\V1\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Product\ProductCategoryResource;
 use App\Models\Product\ProductCategory;
-use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 final class ProductCategoryController extends Controller
 {
-    public function destroy(string $id)
-    {
-        return ProductCategoryResource::collection(ProductCategory::destroy($id));
-    }
-
     public function index()
     {
-        return ProductCategoryResource::collection(ProductCategory::all());
-    }
+        $query = QueryBuilder::for(ProductCategory::class)
+            ->allowedIncludes([
+                'media'
+            ])
+            ->allowedFilters(['name', 'slug', 'status'])
+            ->allowedSorts('position')
+            ->defaultSort('-position');
 
-    public function show(string $id)
-    {
-        return ProductCategoryResource::collection(ProductCategory::find($id));
-    }
+        $perPage = request()->query('per_page', 10);
+        $paginatedPosts = $query->paginate($perPage)->appends(request()->except('page'));
 
-    public function store(Request $request)
-    {
-        return new ProductCategoryResource(ProductCategory::create($request));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        return ProductCategoryResource::collection(ProductCategory::find($id)->update($request));
+        return ProductCategoryResource::collection($paginatedPosts);
     }
 }

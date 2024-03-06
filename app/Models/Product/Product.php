@@ -71,6 +71,11 @@ final class Product extends Model implements HasMedia, Sortable
         'availability_date',
     ];
 
+    public function ggg()
+    {
+        return $this->getFirstMedia()->toHtml();
+    }
+
     public function orderProducts(): HasMany
     {
         return $this->hasMany(OrderProduct::class);

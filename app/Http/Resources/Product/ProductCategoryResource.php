@@ -11,6 +11,12 @@ final class ProductCategoryResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'                  => $this->id,
+            'name'                => $this->getTranslations('name'),
+            'description'         => $this->getTranslations('description'),
+            'slug'                => $this->getTranslations('slug'),
+            'media'               => $this->media->map(fn($item) => $item->toHtml())
+        ];
     }
 }

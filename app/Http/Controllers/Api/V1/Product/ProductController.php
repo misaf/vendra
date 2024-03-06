@@ -7,32 +7,34 @@ namespace App\Http\Controllers\Api\V1\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Product\Product;
-use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 final class ProductController extends Controller
 {
-    public function destroy(string $id)
-    {
-        return ProductResource::collection(Product::destroy($id));
-    }
-
     public function index()
     {
-        return ProductResource::collection(Product::with('productCategory')->get());
+        $query = QueryBuilder::for(Product::class)
+            ->allowedIncludes(['productCategory', 'media'])
+            ->allowedFilters([
+                AllowedFilter::callback('product_category.slug', function ($query, $value): void {
+                    $query->whereRelation('productCategory', 'product_categories.slug->fa', $value);
+                }),
+                'name',
+                'slug',
+                'in_stock'
+            ])
+            ->allowedSorts('position')
+            ->defaultSort('-position');
+
+        $perPage = request()->query('per_page', 10);
+        $paginatedPosts = $query->paginate($perPage)->appends(request()->except('page'));
+
+        return ProductResource::collection($paginatedPosts);
     }
 
     public function show(string $id)
     {
         return ProductResource::collection(Product::find($id));
-    }
-
-    public function store(Request $request)
-    {
-        return new ProductResource(Product::create($request));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        return ProductResource::collection(Product::find($id)->update($request));
     }
 }

@@ -11,6 +11,13 @@ final class BlogPostResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'                  => $this->id,
+            'blog_post_category'  => $this->blogPostCategory,
+            'name'                => $this->getTranslations('name'),
+            'description'         => $this->getTranslations('description'),
+            'slug'                => $this->getTranslations('slug'),
+            'media'               => $this->media->map(fn($item) => $item->toHtml())
+        ];
     }
 }
