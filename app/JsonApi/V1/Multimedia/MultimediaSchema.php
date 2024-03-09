@@ -15,6 +15,11 @@ class MultimediaSchema extends Schema
 {
     public static string $model = Spatie\Models\Media::class;
 
+    public function authorizable(): bool
+    {
+        return false;
+    }
+
     public function fields(): array
     {
         return [

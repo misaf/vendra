@@ -38,17 +38,17 @@ class BlogPostSchema extends Schema
         return [
             Filters\WhereIdIn::make($this),
             Filters\where::make('slug', 'slug->fa'),
-            Filters\where::make('status'),
+            Filters\where::make('status')->asBoolean(),
         ];
     }
 
-    // public function includePaths(): iterable
-    // {
-    //     return [
-    //         'blog-post-categories',
-    //         'multimedia',
-    //     ];
-    // }
+    public function includePaths(): iterable
+    {
+        return [
+            'blogPostCategory',
+            'multimedia',
+        ];
+    }
 
     public function pagination(): ?Paginator
     {

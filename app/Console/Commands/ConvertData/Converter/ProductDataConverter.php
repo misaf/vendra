@@ -13,11 +13,6 @@ use Illuminate\Support\Facades\Storage;
 
 final class ProductDataConverter implements DataConverter
 {
-    /**
-     * Migrate data.
-     *
-     * @return void
-     */
     public function migrate(): void
     {
         $this->migrateProductCategories();
@@ -26,9 +21,6 @@ final class ProductDataConverter implements DataConverter
         $this->migrateProductPrices();
     }
 
-    /**
-     * Create a new product based on the old data.
-     */
     private function createNewProduct($oldProduct, $newProductCategory): Product
     {
         $newProduct = new Product();
@@ -48,9 +40,6 @@ final class ProductDataConverter implements DataConverter
         return $newProduct;
     }
 
-    /**
-     * Create a new product category based on the old data.
-     */
     private function createNewProductCategory($oldProductCategory): ProductCategory
     {
         $newProductCategory = new ProductCategory();
@@ -66,9 +55,6 @@ final class ProductDataConverter implements DataConverter
         return $newProductCategory;
     }
 
-    /**
-     * Migrate product categories from the old database.
-     */
     private function migrateProductCategories(): void
     {
         DB::connection('mysql_old')
@@ -82,9 +68,6 @@ final class ProductDataConverter implements DataConverter
             });
     }
 
-    /**
-     * Migrate product images from the old database.
-     */
     private function migrateProductImages($oldProduct, $newProduct): void
     {
         DB::connection('mysql_old')
@@ -102,9 +85,6 @@ final class ProductDataConverter implements DataConverter
             });
     }
 
-    /**
-     * Migrate product prices from the old database.
-     */
     private function migrateProductPrices($oldProduct, $newProduct): void
     {
         DB::connection('mysql_old')
@@ -128,9 +108,6 @@ final class ProductDataConverter implements DataConverter
             });
     }
 
-    /**
-     * Migrate products from the old database.
-     */
     private function migrateProducts($oldProductCategory, $newProductCategory): void
     {
         DB::connection('mysql_old')

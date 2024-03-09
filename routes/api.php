@@ -50,4 +50,7 @@ JsonApiRoute::server('v1')->prefix('v1')->resources(function (ResourceRegistrar 
             $relations->hasOne('blogPostCategory')->readOnly();
             $relations->hasMany('multimedia')->readOnly();
         });
+
+    $server->resource('multimedia', JsonApiController::class)
+        ->readOnly();
 });

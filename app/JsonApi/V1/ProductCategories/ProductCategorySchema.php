@@ -38,7 +38,7 @@ class ProductCategorySchema extends Schema
         return [
             Filters\WhereIdIn::make($this),
             Filters\where::make('slug', 'slug->fa'),
-            Filters\where::make('status'),
+            Filters\where::make('status')->asBoolean(),
         ];
     }
 
@@ -46,6 +46,7 @@ class ProductCategorySchema extends Schema
     {
         return [
             'multimedia',
+            'products',
         ];
     }
 

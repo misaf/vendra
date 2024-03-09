@@ -16,9 +16,9 @@ class ProductCategoryResource extends JsonApiResource
         $locale = $request->query('locale');
 
         return [
-            'name'        => $this->getLocalizedAttribute('name', $locale),
-            'description' => $this->getLocalizedAttribute('description', $locale),
-            'slug'        => $this->getLocalizedAttribute('slug', $locale),
+            'name'        => $this->getLocalizedAttribute('name', $locale) ?: null,
+            'description' => $this->getLocalizedAttribute('description', $locale) ?: null,
+            'slug'        => $this->getLocalizedAttribute('slug', $locale) ?: null,
             'position'    => $this->position,
             'status'      => $this->status,
             'createdAt'   => $this->resource->created_at,
@@ -29,7 +29,8 @@ class ProductCategoryResource extends JsonApiResource
     public function relationships($request): iterable
     {
         return [
-            $this->relation('multimedia')
+            $this->relation('multimedia'),
+            $this->relation('products')
         ];
     }
 }

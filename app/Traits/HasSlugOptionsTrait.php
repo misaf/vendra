@@ -8,11 +8,6 @@ use Spatie\Sluggable\SlugOptions;
 
 trait HasSlugOptionsTrait
 {
-    /**
-     * Get the default slug options.
-     *
-     * @return SlugOptions
-     */
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()

@@ -38,14 +38,15 @@ class BlogPostCategorySchema extends Schema
         return [
             Filters\WhereIdIn::make($this),
             Filters\where::make('slug', 'slug->fa'),
-            Filters\where::make('status'),
+            Filters\where::make('status')->asBoolean(),
         ];
     }
 
     public function includePaths(): iterable
     {
         return [
-            'multimedia'
+            'blogPosts',
+            'multimedia',
         ];
     }
 
