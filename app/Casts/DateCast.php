@@ -12,7 +12,7 @@ final class DateCast implements CastsAttributes
 {
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        if ('fa' === app()->getLocale()) {
+        if (null !== $value && 'fa' === app()->getLocale()) {
             return Jalalian::forge($value)->__toString();
         }
 
@@ -21,7 +21,7 @@ final class DateCast implements CastsAttributes
 
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
-        if ('fa' === app()->getLocale()) {
+        if (null !== $value && 'fa' === app()->getLocale()) {
             return Jalalian::fromFormat('Y-m-d H:i:s', $value)->__toString();
         }
 
