@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\JsonApi\V1\BlogPostCategories;
+namespace App\JsonApi\V1\ProductPrices;
 
 use App\Models;
 use LaravelJsonApi\Eloquent\Contracts\Paginator;
@@ -11,25 +11,19 @@ use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
 
-final class BlogPostCategorySchema extends Schema
+final class ProductPriceSchema extends Schema
 {
-    public static string $model = Models\Blog\BlogPostCategory::class;
-
-    protected $defaultSort = ['-position'];
+    public static string $model = Models\Product\ProductPrice::class;
 
     public function fields(): array
     {
         return [
             Fields\ID::make(),
-            Fields\ArrayHash::make('name'),
-            Fields\ArrayHash::make('description'),
-            Fields\ArrayHash::make('slug'),
-            Fields\Number::make('position')->sortable()->readOnly(),
-            Fields\Boolean::make('status'),
+            Fields\ArrayHash::make('price'),
             Fields\DateTime::make('createdAt')->sortable()->readOnly(),
             Fields\DateTime::make('updatedAt')->sortable()->readOnly(),
-            Fields\Relations\HasMany::make('blogPosts')->readOnly(),
-            Fields\Relations\BelongsToMany::make('multimedia')->readOnly(),
+            Fields\Relations\BelongsTo::make('product')->readOnly(),
+            Fields\Relations\BelongsTo::make('currency')->readOnly(),
         ];
     }
 
@@ -37,16 +31,14 @@ final class BlogPostCategorySchema extends Schema
     {
         return [
             Filters\WhereIdIn::make($this),
-            Filters\where::make('slug', 'slug->fa'),
-            Filters\where::make('status')->asBoolean(),
         ];
     }
 
     public function includePaths(): iterable
     {
         return [
-            'blogPosts',
-            'multimedia',
+            'product',
+            'currency',
         ];
     }
 

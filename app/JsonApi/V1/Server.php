@@ -18,11 +18,14 @@ final class Server extends BaseServer
     protected function allSchemas(): array
     {
         return [
-            ProductCategories\ProductCategorySchema::class,
-            Products\ProductSchema::class,
             BlogPostCategories\BlogPostCategorySchema::class,
             BlogPosts\BlogPostSchema::class,
+            FaqCategories\FaqCategorySchema::class,
+            Faqs\FaqSchema::class,
             Multimedia\MultimediaSchema::class,
+            ProductCategories\ProductCategorySchema::class,
+            ProductPrices\ProductPriceSchema::class,
+            Products\ProductSchema::class,
         ];
     }
 }

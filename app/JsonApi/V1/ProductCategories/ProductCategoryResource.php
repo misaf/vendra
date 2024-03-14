@@ -7,7 +7,7 @@ namespace App\JsonApi\V1\ProductCategories;
 use App\Traits\LocalizableAttributesTrait;
 use LaravelJsonApi\Core\Resources\JsonApiResource;
 
-class ProductCategoryResource extends JsonApiResource
+final class ProductCategoryResource extends JsonApiResource
 {
     use LocalizableAttributesTrait;
 

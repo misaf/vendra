@@ -62,13 +62,27 @@ final class ProductPricePolicy
         return $user->can('update-product-price');
     }
 
-    public function view(User $user, ProductPrice $productPrice): bool
+    public function view(?User $user, ProductPrice $productPrice): bool
     {
+        return true;
+
         return $user->can('view-product-price');
     }
 
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
+        return true;
+
         return $user->can('view-any-product-price');
+    }
+
+    public function viewCurrency(?User $user, ProductPrice $productPrice)
+    {
+        return $this->view($user, $productPrice);
+    }
+
+    public function viewProduct(?User $user, ProductPrice $productPrice)
+    {
+        return $this->view($user, $productPrice);
     }
 }

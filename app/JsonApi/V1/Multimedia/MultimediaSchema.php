@@ -11,7 +11,7 @@ use LaravelJsonApi\Eloquent\Pagination\PagePagination;
 use LaravelJsonApi\Eloquent\Schema;
 use Spatie\MediaLibrary\MediaCollections as Spatie;
 
-class MultimediaSchema extends Schema
+final class MultimediaSchema extends Schema
 {
     public static string $model = Spatie\Models\Media::class;
 

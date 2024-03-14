@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\JsonApi\V1\BlogPostCategories;
+namespace App\JsonApi\V1\FaqCategories;
 
 use App\Models;
 use LaravelJsonApi\Eloquent\Contracts\Paginator;
@@ -11,11 +11,9 @@ use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
 
-final class BlogPostCategorySchema extends Schema
+final class FaqCategorySchema extends Schema
 {
-    public static string $model = Models\Blog\BlogPostCategory::class;
-
-    protected $defaultSort = ['-position'];
+    public static string $model = Models\Faq\FaqCategory::class;
 
     public function fields(): array
     {
@@ -24,11 +22,10 @@ final class BlogPostCategorySchema extends Schema
             Fields\ArrayHash::make('name'),
             Fields\ArrayHash::make('description'),
             Fields\ArrayHash::make('slug'),
-            Fields\Number::make('position')->sortable()->readOnly(),
             Fields\Boolean::make('status'),
             Fields\DateTime::make('createdAt')->sortable()->readOnly(),
             Fields\DateTime::make('updatedAt')->sortable()->readOnly(),
-            Fields\Relations\HasMany::make('blogPosts')->readOnly(),
+            Fields\Relations\BelongsTo::make('faqs')->readOnly(),
             Fields\Relations\BelongsToMany::make('multimedia')->readOnly(),
         ];
     }
@@ -45,7 +42,7 @@ final class BlogPostCategorySchema extends Schema
     public function includePaths(): iterable
     {
         return [
-            'blogPosts',
+            'faqs',
             'multimedia',
         ];
     }

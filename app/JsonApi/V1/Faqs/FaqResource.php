@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\JsonApi\V1\BlogPosts;
+namespace App\JsonApi\V1\Faqs;
 
 use App\Traits\LocalizableAttributesTrait;
 use LaravelJsonApi\Core\Resources\JsonApiResource;
 
-final class BlogPostResource extends JsonApiResource
+final class FaqResource extends JsonApiResource
 {
     use LocalizableAttributesTrait;
 
@@ -23,14 +23,13 @@ final class BlogPostResource extends JsonApiResource
             'status'      => $this->status,
             'createdAt'   => $this->resource->created_at,
             'updatedAt'   => $this->resource->updated_at,
-            // 'image'       => $this->getFirstMedia()->getSrcset(),
         ];
     }
 
     public function relationships($request): iterable
     {
         return [
-            $this->relation('blogPostCategory'),
+            $this->relation('faqCategory'),
             $this->relation('multimedia'),
         ];
     }

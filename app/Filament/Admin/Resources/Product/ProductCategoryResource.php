@@ -137,13 +137,13 @@ final class ProductCategoryResource extends Resource
                     ->onIcon('heroicon-m-bolt'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->label(__('form.created_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->label(__('form.updated_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

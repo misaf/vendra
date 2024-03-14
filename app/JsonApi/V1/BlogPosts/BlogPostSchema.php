@@ -11,7 +11,7 @@ use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
 
-class BlogPostSchema extends Schema
+final class BlogPostSchema extends Schema
 {
     public static string $model = Models\Blog\BlogPost::class;
 

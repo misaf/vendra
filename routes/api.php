@@ -36,7 +36,15 @@ JsonApiRoute::server('v1')->prefix('v1')->resources(function (ResourceRegistrar 
         ->readOnly()
         ->relationships(function (Relationships $relations): void {
             $relations->hasOne('productCategory')->readOnly();
+            $relations->hasMany('productPrices')->readOnly();
             $relations->hasMany('multimedia')->readOnly();
+        });
+
+    $server->resource('product-prices', JsonApiController::class)
+        ->readOnly()
+        ->relationships(function (Relationships $relations): void {
+            $relations->hasOne('product')->readOnly();
+            $relations->hasOne('currency')->readOnly();
         });
 
     $server->resource('blog-post-categories', JsonApiController::class)
@@ -50,6 +58,20 @@ JsonApiRoute::server('v1')->prefix('v1')->resources(function (ResourceRegistrar 
         ->readOnly()
         ->relationships(function (Relationships $relations): void {
             $relations->hasOne('blogPostCategory')->readOnly();
+            $relations->hasMany('multimedia')->readOnly();
+        });
+
+    $server->resource('faqs', JsonApiController::class)
+        ->readOnly()
+        ->relationships(function (Relationships $relations): void {
+            $relations->hasOne('faqCategory')->readOnly();
+            $relations->hasMany('multimedia')->readOnly();
+        });
+
+    $server->resource('faq-categories', JsonApiController::class)
+        ->readOnly()
+        ->relationships(function (Relationships $relations): void {
+            $relations->hasOne('faqs')->readOnly();
             $relations->hasMany('multimedia')->readOnly();
         });
 

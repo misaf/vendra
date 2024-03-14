@@ -46,7 +46,7 @@ final class ProductDataConverter implements DataConverter
             'description'         => $oldProduct->description,
             'slug'                => $oldProduct->slug,
             'in_stock'            => 1,
-            'available_soon'      => 1,
+            'available_soon'      => 0,
         ]);
 
         $newProduct->save();

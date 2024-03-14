@@ -10,6 +10,7 @@ use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -56,5 +57,10 @@ final class FaqCategory extends Model implements HasMedia
     public function faqs(): HasMany
     {
         return $this->hasMany(Faq::class);
+    }
+
+    public function multimedia(): MorphMany
+    {
+        return $this->media();
     }
 }

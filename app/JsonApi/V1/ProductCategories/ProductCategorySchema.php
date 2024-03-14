@@ -11,7 +11,7 @@ use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
 
-class ProductCategorySchema extends Schema
+final class ProductCategorySchema extends Schema
 {
     public static string $model = Models\Product\ProductCategory::class;
 

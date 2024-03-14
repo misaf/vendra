@@ -7,7 +7,7 @@ namespace App\JsonApi\V1\BlogPostCategories;
 use App\Traits\LocalizableAttributesTrait;
 use LaravelJsonApi\Core\Resources\JsonApiResource;
 
-class BlogPostCategoryResource extends JsonApiResource
+final class BlogPostCategoryResource extends JsonApiResource
 {
     use LocalizableAttributesTrait;
 

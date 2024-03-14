@@ -62,13 +62,27 @@ final class FaqCategoryPolicy
         return $user->can('update-faq-category');
     }
 
-    public function view(User $user, FaqCategory $faqCategory): bool
+    public function view(?User $user, FaqCategory $faqCategory): bool
     {
+        return true;
+
         return $user->can('view-faq-category');
     }
 
-    public function viewAny(User $user): bool
+    public function viewAny(?User $user): bool
     {
+        return true;
+
         return $user->can('view-any-faq-category');
+    }
+
+    public function viewFaqs(?User $user, FaqCategory $faqCategory)
+    {
+        return $this->view($user, $faqCategory);
+    }
+
+    public function viewMultimedia(?User $user, FaqCategory $faqCategory)
+    {
+        return $this->view($user, $faqCategory);
     }
 }

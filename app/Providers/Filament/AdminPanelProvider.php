@@ -50,35 +50,35 @@ final class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.product_management'))
-                    // ->icon('heroicon-o-building-storefront')
+                    ->icon('heroicon-o-building-storefront')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.blog_management'))
-                    // ->icon('heroicon-o-presentation-chart-line')
+                    ->icon('heroicon-o-presentation-chart-line')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.currency_management'))
-                    // ->icon('heroicon-o-currency-dollar')
+                    ->icon('heroicon-o-currency-dollar')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.faq_management'))
-                    // ->icon('heroicon-o-question-mark-circle')
+                    ->icon('heroicon-o-question-mark-circle')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.user_management'))
-                    // ->icon('heroicon-o-users')
+                    ->icon('heroicon-o-users')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.geographical_management'))
-                    // ->icon('heroicon-o-globe-europe-africa')
+                    ->icon('heroicon-o-globe-europe-africa')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.report_management'))
-                    // ->icon('heroicon-o-bug-ant')
+                    ->icon('heroicon-o-bug-ant')
                     ->collapsed(),
                 NavigationGroup::make()
                     ->label(fn(): string => __('navigation.setting_management'))
-                    // ->icon('heroicon-o-cog-6-tooth')
+                    ->icon('heroicon-o-cog-6-tooth')
                     ->collapsed(),
             ])
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')

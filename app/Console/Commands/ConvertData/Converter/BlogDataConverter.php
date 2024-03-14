@@ -12,6 +12,7 @@ use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Spatie\MediaLibrary\HasMedia;
 
 final class BlogDataConverter implements DataConverter
 {
@@ -26,6 +27,20 @@ final class BlogDataConverter implements DataConverter
             $this->migrateBlogPostCategoryImages();
             $this->migrateBlogPosts();
             $this->migrateBlogPostImages();
+        });
+    }
+
+    private function clearBlogPostCategoriesMediaCollections(): void
+    {
+        BlogPostCategory::chunkById(100, function (Collection $blogPostCategories): void {
+            $blogPostCategories->each(fn(BlogPostCategory $blogPostCategory): HasMedia => $blogPostCategory->clearMediaCollection());
+        });
+    }
+
+    private function clearBlogPostsMediaCollections(): void
+    {
+        BlogPost::chunkById(100, function (Collection $blogPosts): void {
+            $blogPosts->each(fn(BlogPost $blogPost): HasMedia => $blogPost->clearMediaCollection());
         });
     }
 
@@ -63,20 +78,6 @@ final class BlogDataConverter implements DataConverter
         $newBlogPostCategory->save();
 
         return $newBlogPostCategory;
-    }
-
-    private function forceDeleteBlogPostCategories(): void
-    {
-        BlogPostCategory::chunkById(100, function (Collection $blogPostCategories): void {
-            $blogPostCategories->each(fn(BlogPostCategory $blogPostCategory): bool => $blogPostCategory->forceDelete());
-        });
-    }
-
-    private function forceDeleteBlogPosts(): void
-    {
-        BlogPost::chunkById(100, function (Collection $blogPosts): void {
-            $blogPosts->each(fn(BlogPost $blogPost): bool => $blogPost->forceDelete());
-        });
     }
 
     private function migrateBlogPostCategories(): void
@@ -125,8 +126,8 @@ final class BlogDataConverter implements DataConverter
 
     private function resync(): void
     {
-        $this->forceDeleteBlogPosts();
-        $this->forceDeleteBlogPostCategories();
+        $this->clearBlogPostsMediaCollections();
+        $this->clearBlogPostCategoriesMediaCollections();
         $this->truncateTables();
     }
 

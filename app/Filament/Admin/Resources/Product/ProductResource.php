@@ -293,18 +293,18 @@ final class ProductResource extends Resource
                     ->label(__('form.available_soon')),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->label(__('form.created_at'))
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->label(__('form.created_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->label(__('form.updated_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

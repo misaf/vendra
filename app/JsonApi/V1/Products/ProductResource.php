@@ -7,7 +7,7 @@ namespace App\JsonApi\V1\Products;
 use App\Traits\LocalizableAttributesTrait;
 use LaravelJsonApi\Core\Resources\JsonApiResource;
 
-class ProductResource extends JsonApiResource
+final class ProductResource extends JsonApiResource
 {
     use LocalizableAttributesTrait;
 
@@ -35,6 +35,7 @@ class ProductResource extends JsonApiResource
     {
         return [
             $this->relation('productCategory'),
+            $this->relation('productPrices'),
             $this->relation('multimedia'),
         ];
     }

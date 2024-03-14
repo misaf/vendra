@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\JsonApi\V1\Products;
+namespace App\JsonApi\V1\Faqs;
 
 use App\Models;
 use LaravelJsonApi\Eloquent\Contracts\Paginator;
@@ -11,9 +11,9 @@ use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
 
-final class ProductSchema extends Schema
+final class FaqSchema extends Schema
 {
-    public static string $model = Models\Product\Product::class;
+    public static string $model = Models\Faq\Faq::class;
 
     protected $defaultSort = ['-position'];
 
@@ -21,20 +21,14 @@ final class ProductSchema extends Schema
     {
         return [
             Fields\ID::make(),
-            Fields\Str::make('name'),
-            Fields\Str::make('description'),
-            Fields\Str::make('slug'),
-            Fields\Number::make('token'),
-            Fields\Number::make('quantity'),
-            Fields\Number::make('stock_threshold'),
-            Fields\Boolean::make('in_stock'),
+            Fields\ArrayHash::make('name'),
+            Fields\ArrayHash::make('description'),
+            Fields\ArrayHash::make('slug'),
             Fields\Number::make('position')->sortable()->readOnly(),
-            Fields\DateTime::make('available_soon')->sortable(),
-            Fields\DateTime::make('availability_date')->sortable(),
+            Fields\Boolean::make('status'),
             Fields\DateTime::make('createdAt')->sortable()->readOnly(),
             Fields\DateTime::make('updatedAt')->sortable()->readOnly(),
-            Fields\Relations\BelongsTo::make('productCategory')->readOnly(),
-            Fields\Relations\HasMany::make('productPrices')->readOnly(),
+            Fields\Relations\BelongsTo::make('faqCategory')->readOnly(),
             Fields\Relations\BelongsToMany::make('multimedia')->readOnly(),
         ];
     }
@@ -43,20 +37,16 @@ final class ProductSchema extends Schema
     {
         return [
             Filters\WhereIdIn::make($this),
-            Filters\where::make('name', 'name->fa'),
             Filters\where::make('slug', 'slug->fa'),
-            Filters\where::make('token'),
-            Filters\where::make('in_stock')->asBoolean(),
-            Filters\WhereHas::make($this, 'productCategory'),
+            Filters\where::make('status')->asBoolean(),
         ];
     }
 
     public function includePaths(): iterable
     {
         return [
+            'faqCategory',
             'multimedia',
-            'productCategory',
-            'productPrices',
         ];
     }
 
