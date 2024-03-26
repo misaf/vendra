@@ -43,6 +43,7 @@ final class ProductSchema extends Schema
     {
         return [
             Filters\WhereIdIn::make($this),
+            Filters\Where::make('product_category_id'),
             Filters\Where::make('name', 'name->fa'),
             Filters\Where::make('slug', 'slug->fa'),
             Filters\Where::make('token'),

@@ -9,10 +9,11 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
 
 final class RouteServiceProvider extends ServiceProvider
 {
-    use \Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
+    use LoadsTranslatedCachedRoutes;
 
     public const HOME = '/home';
 
