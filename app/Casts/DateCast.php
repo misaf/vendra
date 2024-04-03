@@ -22,7 +22,7 @@ final class DateCast implements CastsAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         if (null !== $value && 'fa' === app()->getLocale()) {
-            return Jalalian::fromFormat('Y-m-d H:i:s', $value)->__toString();
+            return Jalalian::forge($value)->__toString();
         }
 
         return $value;
