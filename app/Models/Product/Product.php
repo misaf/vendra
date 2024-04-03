@@ -58,8 +58,9 @@ final class Product extends Model implements HasMedia, Sortable
         'in_stock'            => 'boolean',
         'available_soon'      => 'boolean',
         'availability_date'   => DateCast::class,
-        'created_at'          => DateCast::class,
-        'updated_at'          => DateCast::class,
+        'created_at'  => DateCast::class,
+        'updated_at'  => DateCast::class,
+        'deleted_at'  => DateCast::class,
     ];
 
     protected $fillable = [
