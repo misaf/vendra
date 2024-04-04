@@ -34,6 +34,7 @@ final class ProductSchema extends Schema
             Fields\DateTime::make('createdAt')->sortable()->readOnly(),
             Fields\DateTime::make('updatedAt')->sortable()->readOnly(),
             Fields\Relations\BelongsTo::make('productCategory')->readOnly(),
+            Fields\Relations\HasOne::make('productPrice')->readOnly(),
             Fields\Relations\HasMany::make('productPrices')->readOnly(),
             Fields\Relations\BelongsToMany::make('multimedia')->readOnly(),
         ];
@@ -57,6 +58,7 @@ final class ProductSchema extends Schema
         return [
             'multimedia',
             'productCategory',
+            'productPrice',
             'productPrices',
         ];
     }

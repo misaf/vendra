@@ -35,6 +35,7 @@ final class ProductResource extends JsonApiResource
     {
         return [
             $this->relation('productCategory'),
+            $this->relation('productPrice'),
             $this->relation('productPrices'),
             $this->relation('multimedia'),
         ];

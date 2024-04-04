@@ -90,4 +90,9 @@ final class ProductPolicy
     {
         return $this->view($user, $product);
     }
+
+    public function viewProductPrices(?User $user, Product $product)
+    {
+        return $this->view($user, $product);
+    }
 }

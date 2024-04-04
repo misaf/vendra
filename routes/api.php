@@ -36,6 +36,7 @@ JsonApiRoute::server('v1')->prefix('v1')->resources(function (ResourceRegistrar 
         ->readOnly()
         ->relationships(function (Relationships $relations): void {
             $relations->hasOne('productCategory')->readOnly();
+            $relations->hasOne('productPrice')->readOnly();
             $relations->hasMany('productPrices')->readOnly();
             $relations->hasMany('multimedia')->readOnly();
         });
