@@ -94,7 +94,8 @@ final class BlogPostResource extends Resource
                 Forms\Components\SpatieMediaLibraryFileUpload::make('image')
                     ->columnSpanFull()
                     ->image()
-                    ->label(__('form.image')),
+                    ->label(__('form.image'))
+                    ->required(),
 
                 Forms\Components\Toggle::make('status')
                     ->columnSpanFull()

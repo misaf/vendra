@@ -95,9 +95,9 @@ final class FaqResource extends Resource
 
                 Forms\Components\Toggle::make('status')
                     ->columnSpanFull()
+                    ->default(true)
                     ->label(__('form.status'))
-                    ->rules('required')
-                    ->default(true),
+                    ->rules('required'),
             ]);
     }
 
@@ -153,10 +153,10 @@ final class FaqResource extends Resource
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('image')
                     ->circular()
                     ->conversion('thumb-table')
+                    ->defaultImageUrl(url('coin-payment/images/default.png'))
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                     ->label(__('form.image'))
-                    ->stacked()
-                    ->defaultImageUrl(url('coin-payment/images/default.png')),
+                    ->stacked(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))
@@ -168,14 +168,14 @@ final class FaqResource extends Resource
                     ->onIcon('heroicon-m-bolt'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('form.created_at'))
                     ->dateTime('Y-m-d H:i')
+                    ->label(__('form.created_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('form.updated_at'))
                     ->dateTime('Y-m-d H:i')
+                    ->label(__('form.updated_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

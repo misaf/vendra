@@ -122,14 +122,22 @@ final class ProductCategoryResource extends Resource
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('image')
                     ->circular()
                     ->conversion('thumb-table')
+                    ->defaultImageUrl(url('coin-payment/images/default.png'))
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                     ->label(__('form.image'))
-                    ->stacked()
-                    ->defaultImageUrl(url('coin-payment/images/default.png')),
+                    ->stacked(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))
                     ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('products_count')
+                    ->alignCenter()
+                    ->badge()
+                    ->counts('products')
+                    ->label(__('form.product_relationship_count'))
+                    ->numeric()
                     ->sortable(),
 
                 Tables\Columns\ToggleColumn::make('status')

@@ -121,14 +121,22 @@ final class BlogPostCategoryResource extends Resource
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('image')
                     ->circular()
                     ->conversion('thumb-table')
+                    ->defaultImageUrl(url('coin-payment/images/default.png'))
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                     ->label(__('form.image'))
-                    ->stacked()
-                    ->defaultImageUrl(url('coin-payment/images/default.png')),
+                    ->stacked(),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('form.name'))
                     ->searchable()
+                    ->sortable(),
+
+                Tables\Columns\TextColumn::make('blog_posts_count')
+                    ->alignCenter()
+                    ->badge()
+                    ->counts('blogPosts')
+                    ->label(__('form.blog_post_relationship_count'))
+                    ->numeric()
                     ->sortable(),
 
                 Tables\Columns\ToggleColumn::make('status')
@@ -136,14 +144,14 @@ final class BlogPostCategoryResource extends Resource
                     ->onIcon('heroicon-m-bolt'),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(__('form.created_at'))
                     ->dateTime('Y-m-d H:i')
+                    ->label(__('form.created_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('form.updated_at'))
                     ->dateTime('Y-m-d H:i')
+                    ->label(__('form.updated_at'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

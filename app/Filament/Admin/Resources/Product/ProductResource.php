@@ -19,6 +19,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontFamily;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
@@ -282,15 +283,17 @@ final class ProductResource extends Resource
                     ->formatStateUsing(fn(Product $record) => $record->productPrice->getFormattedPrice())
                     ->label(__('form.price'))
                     ->searchable()
-                    ->sortable(),
+                    ->sortable(query: function (Builder $query, string $direction) {
+                        $query->withAggregate('productPrice', 'price')->orderBy("product_price_price", $direction);
+                    }),
 
                 Tables\Columns\ToggleColumn::make('in_stock')
-                    ->onIcon('heroicon-m-bolt')
-                    ->label(__('form.in_stock')),
+                    ->label(__('form.in_stock'))
+                    ->onIcon('heroicon-m-bolt'),
 
                 Tables\Columns\ToggleColumn::make('available_soon')
-                    ->onIcon('heroicon-m-bolt')
-                    ->label(__('form.available_soon')),
+                    ->label(__('form.available_soon'))
+                    ->onIcon('heroicon-m-bolt'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('Y-m-d H:i')
@@ -312,14 +315,14 @@ final class ProductResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\SelectFilter::make('productCategory')
+                    ->getOptionLabelFromRecordUsing(fn(ProductCategory $record, $livewire) => $record->getTranslation('name', $livewire->activeLocale))
                     ->label(__('model.product_category'))
+                    ->preload()
                     ->relationship(
                         name: 'productCategory',
                         titleAttribute: 'name',
                     )
-                    ->getOptionLabelFromRecordUsing(fn(ProductCategory $record, $livewire) => $record->getTranslation('name', $livewire->activeLocale))
                     ->searchable()
-                    ->preload()
             ])
             ->persistFiltersInSession()
             ->actions([
