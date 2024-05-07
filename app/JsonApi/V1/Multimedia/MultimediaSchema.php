@@ -73,12 +73,12 @@ final class MultimediaSchema extends Schema
             Filters\WhereIdNotIn::make($this, 'exclude'),
             Filters\Where::make('uuid')
                 ->singular(),
-            Filters\Where::make('collection-name', 'collection_name'),
+            Filters\Where::make('collection-name'),
             Filters\Where::make('name'),
-            Filters\Where::make('file-name', 'file_name'),
-            Filters\Where::make('mime-type', 'mime_type'),
+            Filters\Where::make('file-name'),
+            Filters\Where::make('mime-type'),
             Filters\Where::make('disk'),
-            Filters\Where::make('conversions-disk', 'conversions_disk'),
+            Filters\Where::make('conversions-disk'),
             Filters\Where::make('size'),
             Filters\Where::make('gt-size', 'size')
                 ->gt(),

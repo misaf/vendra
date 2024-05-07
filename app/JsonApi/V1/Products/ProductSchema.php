@@ -81,7 +81,7 @@ final class ProductSchema extends Schema
                 ->lt(),
             Filters\Where::make('lte-quantity', 'quantity')
                 ->lte(),
-            Filters\Where::make('stock-threshold', 'stock_threshold'),
+            Filters\Where::make('stock-threshold'),
             Filters\Where::make('gt-stock-threshold', 'stock_threshold')
                 ->gt(),
             Filters\Where::make('gte-stock-threshold', 'stock_threshold')
