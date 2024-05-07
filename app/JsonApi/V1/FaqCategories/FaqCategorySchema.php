@@ -62,9 +62,9 @@ final class FaqCategorySchema extends Schema
             Filters\Where::make('status')
                 ->asBoolean(),
 
-            Filters\Has::make($this, 'faqs'),
+            Filters\Has::make($this, 'faqs', 'hasFaqs'),
 
-            Filters\Has::make($this, 'multimedia'),
+            Filters\Has::make($this, 'multimedia', 'hasMultimedia'),
         ];
     }
 

@@ -69,11 +69,11 @@ final class ProductCategorySchema extends Schema
             Filters\Where::make('status')
                 ->asBoolean(),
 
-            Filters\Has::make($this, 'productPrices'),
+            Filters\Has::make($this, 'hasProductPrices'),
 
-            Filters\Has::make($this, 'multimedia'),
+            Filters\Has::make($this, 'hasMultimedia'),
 
-            Filters\Has::make($this, 'products'),
+            Filters\Has::make($this, 'hasProducts'),
         ];
     }
 

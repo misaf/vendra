@@ -66,9 +66,9 @@ final class BlogPostCategorySchema extends Schema
             Filters\Where::make('status')
                 ->asBoolean(),
 
-            Filters\Has::make($this, 'blogPosts'),
+            Filters\Has::make($this, 'blogPosts', 'hasBlogPosts'),
 
-            Filters\Has::make($this, 'multimedia'),
+            Filters\Has::make($this, 'multimedia', 'hasMultimedia'),
         ];
     }
 

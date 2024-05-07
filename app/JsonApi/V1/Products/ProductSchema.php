@@ -92,9 +92,9 @@ final class ProductSchema extends Schema
             Filters\Where::make('in_stock')
                 ->asBoolean(),
 
-            Filters\Has::make($this, 'multimedia'),
+            Filters\Has::make($this, 'hasMultimedia'),
 
-            Filters\Has::make($this, 'productPrices'),
+            Filters\Has::make($this, 'hasProductPrices'),
         ];
     }
 
