@@ -25,20 +25,15 @@ final class ProductPriceSchema extends Schema
     {
         return [
             Fields\ID::make(),
-
             Fields\ArrayHash::make('price'),
-
             Fields\DateTime::make('created_at')
                 ->sortable()
                 ->readOnly(),
-
             Fields\DateTime::make('updated_at')
                 ->sortable()
                 ->readOnly(),
-
             Fields\Relations\BelongsTo::make('product')
                 ->readOnly(),
-
             Fields\Relations\BelongsTo::make('currency')
                 ->readOnly(),
         ];
@@ -48,8 +43,17 @@ final class ProductPriceSchema extends Schema
     {
         return [
             Filters\WhereIdIn::make($this),
-
             Filters\WhereIdNotIn::make($this, 'exclude'),
+            Filters\Where::make('product', 'product_id'),
+            Filters\Where::make('currency', 'currency_id'),
+            Filters\WhereHas::make($this, 'product', 'with-product'),
+            Filters\WhereDoesntHave::make($this, 'product', 'without-product'),
+            Filters\WhereIn::make('in-product', 'product_id'),
+            Filters\WhereNotIn::make('not-in-product', 'product_id'),
+            Filters\WhereHas::make($this, 'currency', 'with-currency'),
+            Filters\WhereDoesntHave::make($this, 'currency', 'without-currency'),
+            Filters\WhereIn::make('in-currency', 'currency_id'),
+            Filters\WhereNotIn::make('not-in-currency', 'currency_id'),
         ];
     }
 

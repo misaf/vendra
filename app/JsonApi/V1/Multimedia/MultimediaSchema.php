@@ -30,51 +30,36 @@ final class MultimediaSchema extends Schema
     {
         return [
             Fields\ID::make(),
-
             Fields\Str::make('uuid')
                 ->readOnly(),
-
             Fields\Str::make('collection_name')
                 ->readOnly(),
-
             Fields\Str::make('name')
                 ->readOnly(),
-
             Fields\Str::make('file_name')
                 ->readOnly(),
-
             Fields\Str::make('mime_type')
                 ->readOnly(),
-
             Fields\Str::make('disk')
                 ->readOnly(),
-
             Fields\Str::make('conversions_disk')
                 ->readOnly(),
-
             Fields\Number::make('size')
                 ->readOnly(),
-
             Fields\Str::make('manipulations')
                 ->readOnly(),
-
             Fields\Str::make('custom_properties')
                 ->readOnly(),
-
             Fields\ArrayHash::make('generated_conversions')
                 ->readOnly(),
-
             Fields\ArrayHash::make('responsive_images')
                 ->readOnly(),
-
             Fields\Number::make('order_column')
                 ->sortable()
                 ->readOnly(),
-
             Fields\DateTime::make('created_at')
                 ->sortable()
                 ->readOnly(),
-
             Fields\DateTime::make('updated_at')
                 ->sortable()
                 ->readOnly(),
@@ -85,8 +70,24 @@ final class MultimediaSchema extends Schema
     {
         return [
             Filters\WhereIdIn::make($this),
-
             Filters\WhereIdNotIn::make($this, 'exclude'),
+            Filters\Where::make('uuid')
+                ->singular(),
+            Filters\Where::make('collection-name', 'collection_name'),
+            Filters\Where::make('name'),
+            Filters\Where::make('file-name', 'file_name'),
+            Filters\Where::make('mime-type', 'mime_type'),
+            Filters\Where::make('disk'),
+            Filters\Where::make('conversions-disk', 'conversions_disk'),
+            Filters\Where::make('size'),
+            Filters\Where::make('gt-size', 'size')
+                ->gt(),
+            Filters\Where::make('gte-size', 'size')
+                ->gte(),
+            Filters\Where::make('lt-size', 'size')
+                ->lt(),
+            Filters\Where::make('lte-size', 'size')
+                ->lte(),
         ];
     }
 

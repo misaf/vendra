@@ -25,33 +25,23 @@ final class ProductCategorySchema extends Schema
     {
         return [
             Fields\ID::make(),
-
             Fields\ArrayHash::make('name'),
-
             Fields\ArrayHash::make('description'),
-
             Fields\ArrayHash::make('slug'),
-
             Fields\Number::make('position')
                 ->sortable()
                 ->readOnly(),
-
             Fields\Boolean::make('status'),
-
             Fields\DateTime::make('created_at')
                 ->sortable()
                 ->readOnly(),
-
             Fields\DateTime::make('updated_at')
                 ->sortable()
                 ->readOnly(),
-
             Fields\Relations\HasMany::make('productPrices')
                 ->readOnly(),
-
             Fields\Relations\BelongsToMany::make('multimedia')
                 ->readOnly(),
-
             Fields\Relations\HasMany::make('products')
                 ->readOnly(),
         ];
@@ -61,19 +51,20 @@ final class ProductCategorySchema extends Schema
     {
         return [
             Filters\WhereIdIn::make($this),
-
             Filters\WhereIdNotIn::make($this, 'exclude'),
-
-            Filters\Where::make('slug', 'slug->fa'),
-
+            Filters\Where::make('slug', 'slug->fa')
+                ->singular(),
             Filters\Where::make('status')
                 ->asBoolean(),
-
-            Filters\Has::make($this, 'hasProductPrices'),
-
-            Filters\Has::make($this, 'hasMultimedia'),
-
-            Filters\Has::make($this, 'hasProducts'),
+            Filters\Has::make($this, 'productPrices', 'has-product-prices'),
+            Filters\WhereHas::make($this, 'productPrices', 'with-product-prices'),
+            Filters\WhereDoesntHave::make($this, 'productPrices', 'without-product-prices'),
+            Filters\Has::make($this, 'multimedia', 'has-multimedia'),
+            Filters\WhereHas::make($this, 'multimedia', 'with-multimedia'),
+            Filters\WhereDoesntHave::make($this, 'multimedia', 'without-multimedia'),
+            Filters\Has::make($this, 'products', 'has-products'),
+            Filters\WhereHas::make($this, 'products', 'with-products'),
+            Filters\WhereDoesntHave::make($this, 'products', 'without-products'),
         ];
     }
 
