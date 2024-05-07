@@ -92,9 +92,9 @@ final class ProductSchema extends Schema
                 ->lte(),
             Filters\Where::make('in_stock')
                 ->asBoolean(),
-            Filters\Where::make('available_soon')
+            Filters\Where::make('available-soon')
                 ->asBoolean(),
-            Filters\Where::make('availability_date'),
+            Filters\Where::make('availability-date'),
             Filters\WhereHas::make($this, 'latestProductPrice', 'with-latest-product-price'),
             Filters\WhereDoesntHave::make($this, 'latestProductPrice', 'without-latest-product-price'),
             Filters\Has::make($this, 'multimedia', 'has-multimedia'),
