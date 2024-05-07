@@ -48,6 +48,8 @@ final class ProductCategoryCollectionQuery extends ResourceQuery
             'filter.with-products.*'          => 'string',
             'filter.without-products'         => 'array',
             'filter.without-products.*'       => 'string',
+            'filter.with-trashed'             => JsonApiRule::boolean(),
+            'filter.only-trashed'             => JsonApiRule::boolean(),
             'include'                         => [
                 'nullable',
                 'string',

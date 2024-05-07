@@ -53,6 +53,7 @@ final class ProductCollectionQuery extends ResourceQuery
             'filter.lt-stock-threshold'             => JsonApiRule::integer(),
             'filter.lte-stock-threshold'            => JsonApiRule::integer(),
             'filter.in_stock'                       => JsonApiRule::boolean(),
+            'filter.availability_date'              => JsonApiRule::dateTime(),
             'filter.with-latest-product-price'      => 'array',
             'filter.with-latest-product-price.*'    => 'string',
             'filter.without-latest-product-price'   => 'array',
@@ -73,6 +74,8 @@ final class ProductCollectionQuery extends ResourceQuery
             'filter.with-product-prices.*'          => 'string',
             'filter.without-product-prices'         => 'array',
             'filter.without-product-prices.*'       => 'string',
+            'filter.with-trashed'                   => JsonApiRule::boolean(),
+            'filter.only-trashed'                   => JsonApiRule::boolean(),
             'include'                               => [
                 'nullable',
                 'string',

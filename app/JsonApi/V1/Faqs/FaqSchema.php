@@ -62,6 +62,8 @@ final class FaqSchema extends Schema
             Filters\Has::make($this, 'multimedia', 'has-multimedia'),
             Filters\WhereHas::make($this, 'multimedia', 'with-multimedia'),
             Filters\WhereDoesntHave::make($this, 'multimedia', 'without-multimedia'),
+            Filters\WithTrashed::make('with-trashed'),
+            Filters\OnlyTrashed::make('trashed'),
         ];
     }
 

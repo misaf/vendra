@@ -45,6 +45,8 @@ final class BlogPostCollectionQuery extends ResourceQuery
             'filter.with-multimedia.*'            => 'string',
             'filter.without-multimedia'           => 'array',
             'filter.without-multimedia.*'         => 'string',
+            'filter.with-trashed'                 => JsonApiRule::boolean(),
+            'filter.only-trashed'                 => JsonApiRule::boolean(),
             'include'                             => [
                 'nullable',
                 'string',

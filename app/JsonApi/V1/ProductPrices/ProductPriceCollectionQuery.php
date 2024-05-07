@@ -45,6 +45,8 @@ final class ProductPriceCollectionQuery extends ResourceQuery
             'filter.without-currency.*' => 'string',
             'filter.in-currency.*'      => JsonApiRule::integer(),
             'filter.not-in-currency.*'  => JsonApiRule::integer(),
+            'filter.with-trashed'       => JsonApiRule::boolean(),
+            'filter.only-trashed'       => JsonApiRule::boolean(),
             'include'                   => [
                 'nullable',
                 'string',

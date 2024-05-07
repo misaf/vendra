@@ -54,6 +54,8 @@ final class ProductPriceSchema extends Schema
             Filters\WhereDoesntHave::make($this, 'currency', 'without-currency'),
             Filters\WhereIn::make('in-currency', 'currency_id'),
             Filters\WhereNotIn::make('not-in-currency', 'currency_id'),
+            Filters\WithTrashed::make('with-trashed'),
+            Filters\OnlyTrashed::make('trashed'),
         ];
     }
 

@@ -94,6 +94,7 @@ final class ProductSchema extends Schema
                 ->asBoolean(),
             Filters\Where::make('available_soon')
                 ->asBoolean(),
+            Filters\Where::make('availability_date'),
             Filters\WhereHas::make($this, 'latestProductPrice', 'with-latest-product-price'),
             Filters\WhereDoesntHave::make($this, 'latestProductPrice', 'without-latest-product-price'),
             Filters\Has::make($this, 'multimedia', 'has-multimedia'),
@@ -106,6 +107,8 @@ final class ProductSchema extends Schema
             Filters\Has::make($this, 'productPrices', 'has-product-prices'),
             Filters\WhereHas::make($this, 'productPrices', 'with-product-prices'),
             Filters\WhereDoesntHave::make($this, 'productPrices', 'without-product-prices'),
+            Filters\WithTrashed::make('with-trashed'),
+            Filters\OnlyTrashed::make('trashed'),
         ];
     }
 

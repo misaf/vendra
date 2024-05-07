@@ -65,6 +65,8 @@ final class ProductCategorySchema extends Schema
             Filters\Has::make($this, 'products', 'has-products'),
             Filters\WhereHas::make($this, 'products', 'with-products'),
             Filters\WhereDoesntHave::make($this, 'products', 'without-products'),
+            Filters\WithTrashed::make('with-trashed'),
+            Filters\OnlyTrashed::make('trashed'),
         ];
     }
 
