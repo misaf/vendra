@@ -123,7 +123,7 @@ final class FaqCategoryPolicy
      * @param FaqCategory $faqCategory
      * @return bool
      */
-    public function view(?User $user, FaqCategory $faqCategory): bool
+    public function view(?User $user = null, FaqCategory $faqCategory): bool
     {
         return true;
 
@@ -136,7 +136,7 @@ final class FaqCategoryPolicy
      * @param User $user
      * @return bool
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(?User $user = null): bool
     {
         return true;
 
@@ -150,7 +150,7 @@ final class FaqCategoryPolicy
      * @param FaqCategory $faqCategory
      * @return bool
      */
-    public function viewFaqs(?User $user, FaqCategory $faqCategory): bool
+    public function viewFaqs(?User $user = null, FaqCategory $faqCategory): bool
     {
         return $this->view($user, $faqCategory);
     }
@@ -162,7 +162,7 @@ final class FaqCategoryPolicy
      * @param FaqCategory $faqCategory
      * @return bool
      */
-    public function viewMultimedia(?User $user, FaqCategory $faqCategory): bool
+    public function viewMultimedia(?User $user = null, FaqCategory $faqCategory): bool
     {
         return $this->view($user, $faqCategory);
     }

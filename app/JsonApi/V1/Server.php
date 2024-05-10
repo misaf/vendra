@@ -10,6 +10,16 @@ final class Server extends BaseServer
 {
     protected string $baseUri = '/api/v1';
 
+    /**
+     * Determine if the server is authorizable.
+     *
+     * @return bool
+     */
+    public function authorizable(): bool
+    {
+        return true;
+    }
+
     public function serving(): void {}
 
     /**

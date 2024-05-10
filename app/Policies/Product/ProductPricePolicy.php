@@ -123,7 +123,7 @@ final class ProductPricePolicy
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function view(?User $user, ProductPrice $productPrice): bool
+    public function view(?User $user = null, ProductPrice $productPrice): bool
     {
         return true;
 
@@ -136,7 +136,7 @@ final class ProductPricePolicy
      * @param User $user
      * @return bool
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(?User $user = null): bool
     {
         return true;
 
@@ -150,7 +150,7 @@ final class ProductPricePolicy
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function viewCurrency(?User $user, ProductPrice $productPrice): bool
+    public function viewCurrency(?User $user = null, ProductPrice $productPrice): bool
     {
         return $this->view($user, $productPrice);
     }
@@ -162,7 +162,7 @@ final class ProductPricePolicy
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function viewProduct(?User $user, ProductPrice $productPrice): bool
+    public function viewProduct(?User $user = null, ProductPrice $productPrice): bool
     {
         return $this->view($user, $productPrice);
     }

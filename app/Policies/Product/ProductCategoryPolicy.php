@@ -134,7 +134,7 @@ final class ProductCategoryPolicy
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function view(?User $user, ProductCategory $productCategory): bool
+    public function view(?User $user = null, ProductCategory $productCategory): bool
     {
         return true;
 
@@ -147,7 +147,7 @@ final class ProductCategoryPolicy
      * @param User $user
      * @return bool
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(?User $user = null): bool
     {
         return true;
 
@@ -161,7 +161,7 @@ final class ProductCategoryPolicy
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function viewMultimedia(?User $user, ProductCategory $productCategory): bool
+    public function viewMultimedia(?User $user = null, ProductCategory $productCategory): bool
     {
         return $this->view($user, $productCategory);
     }
@@ -173,7 +173,7 @@ final class ProductCategoryPolicy
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function viewProductPrices(?User $user, ProductCategory $productCategory): bool
+    public function viewProductPrices(?User $user = null, ProductCategory $productCategory): bool
     {
         return $this->view($user, $productCategory);
     }
@@ -185,7 +185,7 @@ final class ProductCategoryPolicy
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function viewProducts(?User $user, ProductCategory $productCategory): bool
+    public function viewProducts(?User $user = null, ProductCategory $productCategory): bool
     {
         return $this->view($user, $productCategory);
     }

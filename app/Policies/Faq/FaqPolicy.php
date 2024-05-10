@@ -134,7 +134,7 @@ final class FaqPolicy
      * @param Faq $faq
      * @return bool
      */
-    public function view(?User $user, Faq $faq): bool
+    public function view(?User $user = null, Faq $faq): bool
     {
         return true;
 
@@ -147,7 +147,7 @@ final class FaqPolicy
      * @param User $user
      * @return bool
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(?User $user = null): bool
     {
         return true;
 
@@ -161,7 +161,7 @@ final class FaqPolicy
      * @param Faq $faq
      * @return bool
      */
-    public function viewFaqCategory(?User $user, Faq $faq): bool
+    public function viewFaqCategory(?User $user = null, Faq $faq): bool
     {
         return $this->view($user, $faq);
     }
@@ -173,7 +173,7 @@ final class FaqPolicy
      * @param Faq $faq
      * @return bool
      */
-    public function viewMultimedia(?User $user, Faq $faq): bool
+    public function viewMultimedia(?User $user = null, Faq $faq): bool
     {
         return $this->view($user, $faq);
     }

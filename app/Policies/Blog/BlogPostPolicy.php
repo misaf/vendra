@@ -134,7 +134,7 @@ final class BlogPostPolicy
      * @param BlogPost $blogPost
      * @return bool
      */
-    public function view(?User $user, BlogPost $blogPost): bool
+    public function view(?User $user = null, BlogPost $blogPost): bool
     {
         return true;
 
@@ -147,7 +147,7 @@ final class BlogPostPolicy
      * @param User $user
      * @return bool
      */
-    public function viewAny(?User $user): bool
+    public function viewAny(?User $user = null): bool
     {
         return true;
 
@@ -161,7 +161,7 @@ final class BlogPostPolicy
      * @param BlogPost $blogPost
      * @return bool
      */
-    public function viewBlogPostCategory(?User $user, BlogPost $blogPost): bool
+    public function viewBlogPostCategory(?User $user = null, BlogPost $blogPost): bool
     {
         return $this->view($user, $blogPost);
     }
@@ -173,7 +173,7 @@ final class BlogPostPolicy
      * @param BlogPost $blogPost
      * @return bool
      */
-    public function viewMultimedia(?User $user, BlogPost $blogPost): bool
+    public function viewMultimedia(?User $user = null, BlogPost $blogPost): bool
     {
         return $this->view($user, $blogPost);
     }
