@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Contract\Language;
 use App\Models\Language\Language as LanguageLanguage;
+use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\DB;
@@ -35,23 +36,24 @@ final class AppServiceProvider extends ServiceProvider
         }
 
         config()->set([
-            'app.name'      => 'xxx',
+            'app.name'      => 'asd',
+            'session.cookie' => str()->slug('asd', '_') . '_session',
             'app.url'       => 'https://panel.houshang-flowers.test',
             'app.asset_url' => 'https://panel.houshang-flowers.test',
         ]);
 
-        app()->singleton('url', function ($app) {
-            return new UrlGenerator(
-                $app['router']->getRoutes(),
-                $app->rebinding(
-                    'request',
-                    function ($app2, $request): void {
-                        $app2['url']->setRequest($request);
-                    },
-                ),
-                null,
-            );
-        });
+        // app()->singleton('url', function ($app) {
+        //     return new UrlGenerator(
+        //         $app['router']->getRoutes(),
+        //         $app->rebinding(
+        //             'request',
+        //             function ($app2, $request): void {
+        //                 $app2['url']->setRequest($request);
+        //             },
+        //         ),
+        //         null,
+        //     );
+        // });
 
         // Lang::handleMissingKeysUsing(function (string $key, array $replacements, string $locale) {
         //     info("Missing translation key [{$key}] detected.");

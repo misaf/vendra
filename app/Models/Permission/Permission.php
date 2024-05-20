@@ -6,12 +6,14 @@ namespace App\Models\Permission;
 
 use App\Casts\DateCast;
 use App\Traits\BelongsToTenant;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Permission as ModelsPermission;
 
+#[ScopedBy([\App\Scopes\Tenant::class])]
 final class Permission extends ModelsPermission
 {
     use BelongsToTenant;

@@ -9,6 +9,7 @@ use App\Casts\MoneyCast;
 use App\Models\Currency\Currency;
 use App\Traits\BelongsToTenant;
 use Brick\Money\Money;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
+#[ScopedBy([\App\Scopes\Tenant::class])]
 final class ProductPrice extends Model
 {
     use BelongsToTenant;

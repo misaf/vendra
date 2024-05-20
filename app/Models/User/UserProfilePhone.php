@@ -7,6 +7,7 @@ namespace App\Models\User;
 use App\Casts\DateCast;
 use App\Support\Enums\UserProfileDocumentStatusEnum;
 use App\Traits\BelongsToTenant;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,7 @@ use Spatie\ModelStatus\HasStatuses;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
+#[ScopedBy([\App\Scopes\Tenant::class])]
 final class UserProfilePhone extends Model
 {
     use BelongsToTenant;

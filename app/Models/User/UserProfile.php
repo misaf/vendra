@@ -7,6 +7,7 @@ namespace App\Models\User;
 use App\Casts\DateCast;
 use App\Traits\BelongsToTenant;
 use App\Traits\ThumbnailTableRecord;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+#[ScopedBy([\App\Scopes\Tenant::class])]
 final class UserProfile extends Model implements HasMedia
 {
     use BelongsToTenant;

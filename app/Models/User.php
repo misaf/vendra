@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Casts\DateCast;
 use App\Traits\BelongsToTenant;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,6 +21,7 @@ use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+#[ScopedBy([\App\Scopes\Tenant::class])]
 final class User extends \Illuminate\Foundation\Auth\User implements
     \Filament\Models\Contracts\FilamentUser,
     \Filament\Models\Contracts\HasName,
@@ -59,26 +61,47 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         'remember_token',
     ];
 
+    /**
+     * @param \Filament\Panel $panel
+     *
+     * @return bool
+     */
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->hasAnyRole('super-admin', 'admin', 'user');
     }
 
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $tenant
+     *
+     * @return bool
+     */
     public function canAccessTenant(Model $tenant): bool
     {
         return $this->tenants()->whereKey($tenant)->exists();
     }
 
+    /**
+     * @return string
+     */
     public function getFilamentName(): string
     {
         return $this->name ?? $this->email;
     }
 
+    /**
+     * @param \Filament\Panel $panel
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public function getTenants(Panel $panel): Collection
     {
         return $this->tenants;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function tenants(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -86,6 +109,9 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function userProfile(): HasOne
     {
         return $this->hasOne(
@@ -93,6 +119,9 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         )->latestOfMany();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
     public function userProfileDocument(): HasOneThrough
     {
         return $this->hasOneThrough(
@@ -101,6 +130,9 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         )->latest();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function userProfileDocuments(): HasManyThrough
     {
         return $this->hasManyThrough(
@@ -109,6 +141,9 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOneThrough
+     */
     public function userProfilePhone(): HasOneThrough
     {
         return $this->hasOneThrough(
@@ -117,6 +152,9 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         )->latest();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function userProfilePhones(): HasManyThrough
     {
         return $this->hasManyThrough(
@@ -125,6 +163,9 @@ final class User extends \Illuminate\Foundation\Auth\User implements
         );
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function userProfiles(): HasMany
     {
         return $this->hasMany(

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Admin;
-use App\Filament\Admin\Pages\Tenancy\RegisterTenant;
 use App\Models\Tenant\Tenant;
 use App\Settings\GlobalSetting;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
@@ -29,11 +28,11 @@ final class AdminPanelProvider extends PanelProvider
      */
     public function boot(): void
     {
-        FilamentAsset::register([
+        \Filament\Support\Facades\FilamentAsset::register([
             Css::make('example-external-stylesheet', '//cdn.font-store.ir/yekan.css'),
         ]);
 
-        LanguageSwitch::configureUsing(function (LanguageSwitch $switch): void {
+        \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (LanguageSwitch $switch): void {
             $switch->locales(['fa', 'en'])
                 ->visible(outsidePanels: true);
         });
@@ -46,19 +45,19 @@ final class AdminPanelProvider extends PanelProvider
         //     ]))->renderHook('panels::global-search.after');
         // });
 
-        Tables\Table::configureUsing(function (Tables\Table $table): void {
+        \Filament\Tables\Table::configureUsing(function (Tables\Table $table): void {
             $table->paginationPageOptions([10, 25, 50]);
         });
 
-        Tables\Actions\ViewAction::configureUsing(function (Tables\Actions\ViewAction $viewAction): void {
+        \Filament\Tables\Actions\ViewAction::configureUsing(function (Tables\Actions\ViewAction $viewAction): void {
             $viewAction->button();
         });
 
-        Tables\Actions\EditAction::configureUsing(function (Tables\Actions\EditAction $editAction): void {
+        \Filament\Tables\Actions\EditAction::configureUsing(function (Tables\Actions\EditAction $editAction): void {
             $editAction->button();
         });
 
-        Tables\Actions\DeleteAction::configureUsing(function (Tables\Actions\DeleteAction $deleteAction): void {
+        \Filament\Tables\Actions\DeleteAction::configureUsing(function (Tables\Actions\DeleteAction $deleteAction): void {
             $deleteAction->button();
         });
     }
@@ -117,49 +116,25 @@ final class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-cog-6-tooth')
                     ->collapsed(),
             ])
-            ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['fa', 'en']))
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
+            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
+            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
+            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
+            ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['fa', 'en']))
             ->pages([
                 \Filament\Pages\Dashboard::class,
-                \App\Filament\Admin\Pages\ManageGlobalSetting::class,
-                \App\Filament\Admin\Pages\Tenancy\RegisterTenant::class,
-                \App\Filament\Admin\Pages\Tenancy\EditTenantProfile::class,
-            ])
-            ->resources([
-                \App\Filament\Admin\Resources\Blog\BlogPostCategoryResource::class,
-                \App\Filament\Admin\Resources\Blog\BlogPostResource::class,
-                \App\Filament\Admin\Resources\Currency\CurrencyCategoryResource::class,
-                \App\Filament\Admin\Resources\Currency\CurrencyResource::class,
-                \App\Filament\Admin\Resources\Faq\FaqCategoryResource::class,
-                \App\Filament\Admin\Resources\Faq\FaqResource::class,
-                \App\Filament\Admin\Resources\Geographical\GeographicalZoneResource::class,
-                \App\Filament\Admin\Resources\Geographical\GeographicalCountryResource::class,
-                \App\Filament\Admin\Resources\Geographical\GeographicalStateResource::class,
-                \App\Filament\Admin\Resources\Geographical\GeographicalCityResource::class,
-                \App\Filament\Admin\Resources\Geographical\GeographicalNeighborhoodResource::class,
-                \App\Filament\Admin\Resources\Language\LanguageResource::class,
-                \App\Filament\Admin\Resources\Language\LanguageLineResource::class,
-                \App\Filament\Admin\Resources\Permission\PermissionResource::class,
-                \App\Filament\Admin\Resources\Permission\RoleResource::class,
-                \App\Filament\Admin\Resources\Product\ProductCategoryResource::class,
-                \App\Filament\Admin\Resources\Product\ProductResource::class,
-                \App\Filament\Admin\Resources\User\UserResource::class,
-                \App\Filament\Admin\Resources\User\UserProfileResource::class,
-                \App\Filament\Admin\Resources\User\UserProfileBalanceResource::class,
-                \App\Filament\Admin\Resources\User\UserProfileDocumentResource::class,
-                \App\Filament\Admin\Resources\User\UserProfilePhoneResource::class,
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
-                Admin\Widgets\StatOverview::class,
-                Admin\Widgets\LatestUserTable::class,
-                Admin\Widgets\LatestUserProfileDocumentTable::class,
             ])
             ->middleware([
-                'web',
-                'localizationRedirect',
-                'localeCookieRedirect',
+                \Illuminate\Cookie\Middleware\EncryptCookies::class,
+                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+                \Illuminate\Session\Middleware\StartSession::class,
                 \Illuminate\Session\Middleware\AuthenticateSession::class,
+                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+                \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
                 \Filament\Http\Middleware\DisableBladeIconComponents::class,
                 \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
             ])
@@ -168,16 +143,17 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->databaseNotifications()
             ->databaseTransactions()
-            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearchKeyBindings(keyBindings: ['command+k', 'ctrl+k'])
             ->spa()
-            ->viteTheme('resources/css/filament/admin/theme.css')
-            ->tenant(
-                model: Tenant::class,
-                slugAttribute: 'domain',
-                ownershipRelationship: 'tenant',
-            )
-            ->tenantDomain('{tenant:domain}')
-            ->tenantProfile(\App\Filament\Admin\Pages\Tenancy\EditTenantProfile::class)
-            ->tenantRegistration(RegisterTenant::class);
+            ->viteTheme(theme: 'resources/css/filament/admin/theme.css');
+            // ->tenant(
+            //     model: Tenant::class,
+            // );
+            // ->tenantDomain(domain: '{tenant:domain}')
+            // ->tenantProfile(page: \App\Filament\Admin\Pages\Tenancy\EditTenantProfile::class)
+            // ->tenantRegistration(page: \App\Filament\Admin\Pages\Tenancy\RegisterTenant::class)
+            // ->tenantMenuItems([
+            //     'register' => \Filament\Navigation\MenuItem::make()->label('Register new team'),
+            // ]);
     }
 }
