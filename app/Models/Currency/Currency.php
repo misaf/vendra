@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Currency;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -19,6 +20,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 final class Currency extends Model implements HasMedia, Sortable
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;
@@ -64,7 +67,9 @@ final class Currency extends Model implements HasMedia, Sortable
 
     public function currencyCategory(): BelongsTo
     {
-        return $this->belongsTo(CurrencyCategory::class);
+        return $this->belongsTo(
+            related: \App\Models\Currency\CurrencyCategory::class,
+        );
     }
 
     // protected function conversionRate(): Attribute

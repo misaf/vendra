@@ -40,6 +40,10 @@ return new class () extends Migration {
     {
         Schema::create('blog_post_categories', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->longText('name');
             $table->longText('description')
                 ->nullable();
@@ -62,6 +66,10 @@ return new class () extends Migration {
     {
         Schema::create('blog_posts', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('blog_post_category_id')
                 ->constrained()
                 ->cascadeOnDelete()

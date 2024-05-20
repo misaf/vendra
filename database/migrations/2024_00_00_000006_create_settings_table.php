@@ -26,6 +26,10 @@ return new class () extends Migration {
     {
         Schema::create('settings', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('group');
             $table->string('name');
             $table->boolean('locked')

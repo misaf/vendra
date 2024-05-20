@@ -30,11 +30,12 @@ final class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', fn(Request $request) => Limit::perMinute(1000)->by($request->user()?->id ?: $request->ip()));
 
         $this->routes(function (): void {
-            Route::middleware('api')
+            Route::middleware(['api', 'localizationRedirect', 'localeCookieRedirect'])
                 ->prefix(LaravelLocalization::setLocale() . '/api')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware(['web', 'tenant'])
+            Route::middleware(['web', 'localizationRedirect', 'localeCookieRedirect'])
+                ->prefix(LaravelLocalization::setLocale())
                 ->group(base_path('routes/web.php'));
         });
     }

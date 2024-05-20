@@ -5,34 +5,13 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Admin;
-use App\Filament\Admin\Resources\Blog\BlogPostCategoryResource;
-use App\Filament\Admin\Resources\Blog\BlogPostResource;
-use App\Filament\Admin\Resources\Currency\CurrencyCategoryResource;
-use App\Filament\Admin\Resources\Currency\CurrencyResource;
-use App\Filament\Admin\Resources\Faq\FaqCategoryResource;
-use App\Filament\Admin\Resources\Faq\FaqResource;
-use App\Filament\Admin\Resources\Geographical\GeographicalCityResource;
-use App\Filament\Admin\Resources\Geographical\GeographicalCountryResource;
-use App\Filament\Admin\Resources\Geographical\GeographicalNeighborhoodResource;
-use App\Filament\Admin\Resources\Geographical\GeographicalStateResource;
-use App\Filament\Admin\Resources\Geographical\GeographicalZoneResource;
-use App\Filament\Admin\Resources\Language\LanguageLineResource;
-use App\Filament\Admin\Resources\Language\LanguageResource;
-use App\Filament\Admin\Resources\Permission\PermissionResource;
-use App\Filament\Admin\Resources\Permission\RoleResource;
-use App\Filament\Admin\Resources\Product\ProductCategoryResource;
-use App\Filament\Admin\Resources\Product\ProductResource;
-use App\Filament\Admin\Resources\User\UserProfileBalanceResource;
-use App\Filament\Admin\Resources\User\UserProfileDocumentResource;
-use App\Filament\Admin\Resources\User\UserProfilePhoneResource;
-use App\Filament\Admin\Resources\User\UserProfileResource;
-use App\Filament\Admin\Resources\User\UserResource;
+use App\Filament\Admin\Pages\Tenancy\RegisterTenant;
+use App\Models\Tenant\Tenant;
 use App\Settings\GlobalSetting;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\SpatieLaravelTranslatablePlugin;
@@ -141,32 +120,34 @@ final class AdminPanelProvider extends PanelProvider
             ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['fa', 'en']))
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
             ->pages([
-                Pages\Dashboard::class,
-                Admin\Pages\ManageGlobalSetting::class,
+                \Filament\Pages\Dashboard::class,
+                \App\Filament\Admin\Pages\ManageGlobalSetting::class,
+                \App\Filament\Admin\Pages\Tenancy\RegisterTenant::class,
+                \App\Filament\Admin\Pages\Tenancy\EditTenantProfile::class,
             ])
             ->resources([
-                BlogPostCategoryResource::class,
-                BlogPostResource::class,
-                CurrencyCategoryResource::class,
-                CurrencyResource::class,
-                FaqCategoryResource::class,
-                FaqResource::class,
-                GeographicalZoneResource::class,
-                GeographicalCountryResource::class,
-                GeographicalStateResource::class,
-                GeographicalCityResource::class,
-                GeographicalNeighborhoodResource::class,
-                LanguageResource::class,
-                LanguageLineResource::class,
-                PermissionResource::class,
-                RoleResource::class,
-                ProductCategoryResource::class,
-                ProductResource::class,
-                UserResource::class,
-                UserProfileResource::class,
-                UserProfileBalanceResource::class,
-                UserProfileDocumentResource::class,
-                UserProfilePhoneResource::class,
+                \App\Filament\Admin\Resources\Blog\BlogPostCategoryResource::class,
+                \App\Filament\Admin\Resources\Blog\BlogPostResource::class,
+                \App\Filament\Admin\Resources\Currency\CurrencyCategoryResource::class,
+                \App\Filament\Admin\Resources\Currency\CurrencyResource::class,
+                \App\Filament\Admin\Resources\Faq\FaqCategoryResource::class,
+                \App\Filament\Admin\Resources\Faq\FaqResource::class,
+                \App\Filament\Admin\Resources\Geographical\GeographicalZoneResource::class,
+                \App\Filament\Admin\Resources\Geographical\GeographicalCountryResource::class,
+                \App\Filament\Admin\Resources\Geographical\GeographicalStateResource::class,
+                \App\Filament\Admin\Resources\Geographical\GeographicalCityResource::class,
+                \App\Filament\Admin\Resources\Geographical\GeographicalNeighborhoodResource::class,
+                \App\Filament\Admin\Resources\Language\LanguageResource::class,
+                \App\Filament\Admin\Resources\Language\LanguageLineResource::class,
+                \App\Filament\Admin\Resources\Permission\PermissionResource::class,
+                \App\Filament\Admin\Resources\Permission\RoleResource::class,
+                \App\Filament\Admin\Resources\Product\ProductCategoryResource::class,
+                \App\Filament\Admin\Resources\Product\ProductResource::class,
+                \App\Filament\Admin\Resources\User\UserResource::class,
+                \App\Filament\Admin\Resources\User\UserProfileResource::class,
+                \App\Filament\Admin\Resources\User\UserProfileBalanceResource::class,
+                \App\Filament\Admin\Resources\User\UserProfileDocumentResource::class,
+                \App\Filament\Admin\Resources\User\UserProfilePhoneResource::class,
             ])
             ->widgets([
                 Widgets\AccountWidget::class,
@@ -175,19 +156,12 @@ final class AdminPanelProvider extends PanelProvider
                 Admin\Widgets\LatestUserProfileDocumentTable::class,
             ])
             ->middleware([
-                \App\Http\Middleware\EncryptCookies::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-                \Illuminate\Session\Middleware\StartSession::class,
+                'web',
+                'localizationRedirect',
+                'localeCookieRedirect',
                 \Illuminate\Session\Middleware\AuthenticateSession::class,
-                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-                \App\Http\Middleware\VerifyCsrfToken::class,
-                \Illuminate\Routing\Middleware\SubstituteBindings::class,
                 \Filament\Http\Middleware\DisableBladeIconComponents::class,
                 \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
-                \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
-                \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
-                \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
-                \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
             ])
             ->authMiddleware([
                 \Filament\Http\Middleware\Authenticate::class,
@@ -196,6 +170,14 @@ final class AdminPanelProvider extends PanelProvider
             ->databaseTransactions()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->spa()
-            ->viteTheme('resources/css/filament/admin/theme.css');
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->tenant(
+                model: Tenant::class,
+                slugAttribute: 'domain',
+                ownershipRelationship: 'tenant',
+            )
+            ->tenantDomain('{tenant:domain}')
+            ->tenantProfile(\App\Filament\Admin\Pages\Tenancy\EditTenantProfile::class)
+            ->tenantRegistration(RegisterTenant::class);
     }
 }

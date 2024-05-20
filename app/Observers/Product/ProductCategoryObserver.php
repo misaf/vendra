@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Observers\Product;
 
-use App\Models\Product\ProductCategory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -17,10 +16,10 @@ final class ProductCategoryObserver implements ShouldQueue
     /**
      * Handle the product category "deleted" event.
      *
-     * @param  ProductCategory  $productCategory
+     * @param  \App\Models\Product\ProductCategory $productCategory
      * @return void
      */
-    public function deleted(ProductCategory $productCategory): void
+    public function deleted(\App\Models\Product\ProductCategory $productCategory): void
     {
         $this->deleteRelatedProducts($productCategory);
     }
@@ -28,10 +27,10 @@ final class ProductCategoryObserver implements ShouldQueue
     /**
      * Delete related products when a product category is deleted or force deleted.
      *
-     * @param  ProductCategory  $productCategory
+     * @param  \App\Models\Product\ProductCategory $productCategory
      * @return void
      */
-    private function deleteRelatedProducts(ProductCategory $productCategory): void
+    private function deleteRelatedProducts(\App\Models\Product\ProductCategory $productCategory): void
     {
         $productCategory->products()->each(function ($product): void {
             $product->productPrices()->delete();

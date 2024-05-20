@@ -15,10 +15,10 @@ final class ProductPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function create(User $user): bool
+    public function create(\App\Models\User $user): bool
     {
         return $user->can('create-product');
     }
@@ -26,11 +26,11 @@ final class ProductPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Product $product
      * @return bool
      */
-    public function delete(User $user, Product $product): bool
+    public function delete(\App\Models\User $user, Product $product): bool
     {
         return $user->can('delete-product');
     }
@@ -38,10 +38,10 @@ final class ProductPolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function deleteAny(User $user): bool
+    public function deleteAny(\App\Models\User $user): bool
     {
         return $user->can('delete-any-product');
     }
@@ -49,11 +49,11 @@ final class ProductPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Product $product
      * @return bool
      */
-    public function forceDelete(User $user, Product $product): bool
+    public function forceDelete(\App\Models\User $user, Product $product): bool
     {
         return $user->can('force-delete-product');
     }
@@ -61,10 +61,10 @@ final class ProductPolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(\App\Models\User $user): bool
     {
         return $user->can('force-delete-any-product');
     }
@@ -72,11 +72,11 @@ final class ProductPolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Product $product
      * @return bool
      */
-    public function replicate(User $user, Product $product): bool
+    public function replicate(\App\Models\User $user, Product $product): bool
     {
         return $user->can('replicate-product');
     }
@@ -84,11 +84,11 @@ final class ProductPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Product $product
      * @return bool
      */
-    public function restore(User $user, Product $product): bool
+    public function restore(\App\Models\User $user, Product $product): bool
     {
         return $user->can('restore-product');
     }
@@ -96,10 +96,10 @@ final class ProductPolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function restoreAny(User $user): bool
+    public function restoreAny(\App\Models\User $user): bool
     {
         return $user->can('restore-any-product');
     }
@@ -107,11 +107,11 @@ final class ProductPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Product $product
      * @return bool
      */
-    public function update(User $user, Product $product): bool
+    public function update(\App\Models\User $user, Product $product): bool
     {
         return $user->can('update-product');
     }
@@ -119,7 +119,7 @@ final class ProductPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Product $product
      * @return bool
      */
@@ -133,7 +133,7 @@ final class ProductPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
     public function viewAny(?User $user = null): bool

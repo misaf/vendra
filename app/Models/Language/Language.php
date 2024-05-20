@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Language;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +18,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 final class Language extends Model implements HasMedia, Sortable
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;

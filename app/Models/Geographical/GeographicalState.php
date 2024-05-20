@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class GeographicalState extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;
@@ -59,22 +62,32 @@ final class GeographicalState extends Model implements HasMedia
 
     public function geographicalCities(): HasMany
     {
-        return $this->hasMany(GeographicalCity::class);
+        return $this->hasMany(
+            related: \App\Models\Geographical\GeographicalCity::class,
+        );
     }
 
     public function geographicalCountry(): BelongsTo
     {
-        return $this->belongsTo(GeographicalCountry::class);
+        return $this->belongsTo(
+            related: \App\Models\Geographical\GeographicalCountry::class,
+        );
     }
 
     public function geographicalNeighborhoods(): HasManyThrough
     {
-        return $this->hasManyThrough(GeographicalNeighborhood::class, GeographicalCity::class);
+        return $this->hasManyThrough(
+            related: \App\Models\Geographical\GeographicalNeighborhood::class,
+            through: \App\Models\Geographical\GeographicalCity::class,
+        );
     }
 
     public function geographicalZone(): BelongsToThrough
     {
-        return $this->belongsToThrough(GeographicalZone::class, GeographicalCountry::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Geographical\GeographicalZone::class,
+            through: \App\Models\Geographical\GeographicalCountry::class,
+        );
     }
 
     public function getActivitylogOptions(): LogOptions

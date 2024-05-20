@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Observers\Geographical;
 
-use App\Models\Geographical\GeographicalNeighborhood;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -14,13 +13,13 @@ final class GeographicalNeighborhoodObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(GeographicalNeighborhood $geographicalNeighborhood): void {}
+    public function created(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function deleted(GeographicalNeighborhood $geographicalNeighborhood): void {}
+    public function deleted(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function forceDeleted(GeographicalNeighborhood $geographicalNeighborhood): void {}
+    public function forceDeleted(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function restored(GeographicalNeighborhood $geographicalNeighborhood): void {}
+    public function restored(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function updated(GeographicalNeighborhood $geographicalNeighborhood): void {}
+    public function updated(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
 }

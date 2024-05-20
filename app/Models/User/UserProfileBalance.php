@@ -6,9 +6,7 @@ namespace App\Models\User;
 
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\User;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +19,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class UserProfileBalance extends Model
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     // use HasStatuses;
@@ -51,12 +51,17 @@ final class UserProfileBalance extends Model
 
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(
+            related: \App\Models\Currency\Currency::class,
+        );
     }
 
     public function currencyCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Currency\CurrencyCategory::class,
+            through: \App\Models\Currency\Currency::class,
+        );
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -66,11 +71,16 @@ final class UserProfileBalance extends Model
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(User::class, UserProfile::class);
+        return $this->belongsToThrough(
+            related: \App\Models\User::class,
+            through: \App\Models\User\UserProfile::class,
+        );
     }
 
     public function userProfile(): BelongsTo
     {
-        return $this->belongsTo(UserProfile::class);
+        return $this->belongsTo(
+            related: \App\Models\User\UserProfile::class,
+        );
     }
 }

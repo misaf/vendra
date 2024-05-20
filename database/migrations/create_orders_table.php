@@ -30,6 +30,10 @@ return new class () extends Migration {
         Schema::disableForeignKeyConstraints();
         Schema::create('orders', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -52,6 +56,10 @@ return new class () extends Migration {
         });
         Schema::create('order_products', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('order_id')
                 ->constrained()
                 ->cascadeOnDelete()

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Observers\Product;
 
-use App\Models\Product\ProductPrice;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -17,10 +16,10 @@ final class ProductPriceObserver implements ShouldQueue
     /**
      * Handle the product price "created" event.
      *
-     * @param  ProductPrice  $productPrice
+     * @param  \App\Models\Product\ProductPrice $productPrice
      * @return void
      */
-    public function created(ProductPrice $productPrice): void
+    public function created(\App\Models\Product\ProductPrice $productPrice): void
     {
         // Implement if needed
     }
@@ -28,10 +27,10 @@ final class ProductPriceObserver implements ShouldQueue
     /**
      * Handle the product price "deleted" event.
      *
-     * @param  ProductPrice  $productPrice
+     * @param  \App\Models\Product\ProductPrice $productPrice
      * @return void
      */
-    public function deleted(ProductPrice $productPrice): void
+    public function deleted(\App\Models\Product\ProductPrice $productPrice): void
     {
         // Implement if needed
     }
@@ -39,10 +38,10 @@ final class ProductPriceObserver implements ShouldQueue
     /**
      * Handle the product price "force deleted" event.
      *
-     * @param  ProductPrice  $productPrice
+     * @param  \App\Models\Product\ProductPrice $productPrice
      * @return void
      */
-    public function forceDeleted(ProductPrice $productPrice): void
+    public function forceDeleted(\App\Models\Product\ProductPrice $productPrice): void
     {
         // Implement if needed
     }
@@ -50,10 +49,10 @@ final class ProductPriceObserver implements ShouldQueue
     /**
      * Handle the product price "restored" event.
      *
-     * @param  ProductPrice  $productPrice
+     * @param  \App\Models\Product\ProductPrice $productPrice
      * @return void
      */
-    public function restored(ProductPrice $productPrice): void
+    public function restored(\App\Models\Product\ProductPrice $productPrice): void
     {
         // Implement if needed
     }
@@ -61,10 +60,10 @@ final class ProductPriceObserver implements ShouldQueue
     /**
      * Handle the product price "updated" event.
      *
-     * @param  ProductPrice  $productPrice
+     * @param  \App\Models\Product\ProductPrice $productPrice
      * @return void
      */
-    public function updated(ProductPrice $productPrice): void
+    public function updated(\App\Models\Product\ProductPrice $productPrice): void
     {
         // Implement if needed
     }

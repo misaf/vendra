@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Faq;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,8 @@ use Spatie\Translatable\HasTranslations;
 
 final class Faq extends Model implements HasMedia, Sortable
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;
@@ -64,7 +67,9 @@ final class Faq extends Model implements HasMedia, Sortable
 
     public function faqCategory(): BelongsTo
     {
-        return $this->belongsTo(FaqCategory::class);
+        return $this->belongsTo(
+            related: \App\Models\Faq\FaqCategory::class,
+        );
     }
 
     public function multimedia(): MorphMany

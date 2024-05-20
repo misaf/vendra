@@ -9,7 +9,6 @@ use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalCountry;
 use App\Models\Geographical\GeographicalNeighborhood;
 use App\Models\Geographical\GeographicalState;
-use App\Models\Geographical\GeographicalZone;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -20,9 +19,9 @@ final class GeographicalZoneObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(GeographicalZone $geographicalZone): void {}
+    public function created(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
 
-    public function deleted(GeographicalZone $geographicalZone): void
+    public function deleted(\App\Models\Geographical\GeographicalZone $geographicalZone): void
     {
         DB::transaction(function () use ($geographicalZone): void {
             $geographicalZone->geographicalCountries()->delete();
@@ -32,7 +31,7 @@ final class GeographicalZoneObserver implements ShouldQueue
         });
     }
 
-    public function deleting(GeographicalZone $geographicalZone): void
+    public function deleting(\App\Models\Geographical\GeographicalZone $geographicalZone): void
     {
         if ($geographicalZone->isForceDeleting()) {
             $geographicalZone->geographicalCountries()->each(function ($item): void {
@@ -53,9 +52,9 @@ final class GeographicalZoneObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(GeographicalZone $geographicalZone): void {}
+    public function forceDeleted(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
 
-    public function restored(GeographicalZone $geographicalZone): void {}
+    public function restored(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
 
-    public function updated(GeographicalZone $geographicalZone): void {}
+    public function updated(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
 }

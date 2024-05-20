@@ -40,6 +40,10 @@ return new class () extends Migration {
     {
         Schema::create('geographical_zones', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('name')
                 ->index();
             $table->text('description')
@@ -54,6 +58,10 @@ return new class () extends Migration {
 
         Schema::create('geographical_countries', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('geographical_zone_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -72,6 +80,10 @@ return new class () extends Migration {
 
         Schema::create('geographical_states', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('geographical_country_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -90,6 +102,10 @@ return new class () extends Migration {
 
         Schema::create('geographical_cities', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('geographical_state_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -108,6 +124,10 @@ return new class () extends Migration {
 
         Schema::create('geographical_neighborhoods', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('geographical_city_id')
                 ->constrained()
                 ->cascadeOnDelete()

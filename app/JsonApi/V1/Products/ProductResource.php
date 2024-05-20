@@ -19,7 +19,7 @@ final class ProductResource extends JsonApiResource
      */
     public function attributes($request): iterable
     {
-        $locale = $request->query('locale');
+        $locale = app()->getLocale();
 
         return [
             'name'               => $this->getLocalizedAttribute('name', $locale) ?: null,

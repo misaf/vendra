@@ -7,7 +7,7 @@ namespace App\Models\Product;
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
 use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
+use App\Traits\BelongsToTenant;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +18,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class ProductPrice extends Model
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use SoftDeletes;
@@ -44,12 +46,17 @@ final class ProductPrice extends Model
 
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(
+            related: \App\Models\Currency\Currency::class,
+        );
     }
 
     public function currencyCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Currency\CurrencyCategory::class,
+            through: \App\Models\Currency\Currency::class,
+        );
     }
 
     public function getFormattedPrice()
@@ -66,16 +73,21 @@ final class ProductPrice extends Model
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(
+            related: \App\Models\Product\Product::class,
+        );
     }
 
     public function productCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(ProductCategory::class, Product::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Product\ProductCategory::class,
+            through: \App\Models\Product\Product::class,
+        );
     }
 
     protected static function booted(): void
     {
-        static::creating(fn(ProductPrice $productPrice) => $productPrice->currency_id = Currency::where('slug', 'toman')->value('id'));
+        static::creating(fn(\App\Models\Product\ProductPrice $productPrice) => $productPrice->currency_id = Currency::where('slug', 'toman')->value('id'));
     }
 }

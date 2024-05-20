@@ -32,6 +32,10 @@ return new class () extends Migration {
         Schema::disableForeignKeyConstraints();
         Schema::create('user_profiles', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -54,6 +58,10 @@ return new class () extends Migration {
         });
         Schema::create('user_profile_phones', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('user_profile_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -77,6 +85,10 @@ return new class () extends Migration {
         });
         Schema::create('user_profile_documents', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('user_profile_id')
                 ->constrained()
                 ->cascadeOnDelete()
@@ -90,6 +102,10 @@ return new class () extends Migration {
         });
         Schema::create('user_profile_balances', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('user_profile_id')
                 ->constrained()
                 ->cascadeOnDelete()

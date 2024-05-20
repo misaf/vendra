@@ -41,6 +41,10 @@ return new class () extends Migration {
 
         Schema::create($tableNames['permissions'], function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('name');
             $table->string('guard_name');
             $table->timestampsTz();
@@ -49,6 +53,10 @@ return new class () extends Migration {
 
         Schema::create($tableNames['roles'], function (Blueprint $table) use ($teams, $columnNames): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
 
             // Add team foreign key if necessary
             if ($teams || config('permission.testing')) {

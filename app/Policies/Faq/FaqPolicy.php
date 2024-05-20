@@ -15,10 +15,10 @@ final class FaqPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function create(User $user): bool
+    public function create(\App\Models\User $user): bool
     {
         return $user->can('create-faq');
     }
@@ -26,11 +26,11 @@ final class FaqPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
-    public function delete(User $user, Faq $faq): bool
+    public function delete(\App\Models\User $user, Faq $faq): bool
     {
         return $user->can('delete-faq');
     }
@@ -38,10 +38,10 @@ final class FaqPolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function deleteAny(User $user): bool
+    public function deleteAny(\App\Models\User $user): bool
     {
         return $user->can('delete-any-faq');
     }
@@ -49,11 +49,11 @@ final class FaqPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
-    public function forceDelete(User $user, Faq $faq): bool
+    public function forceDelete(\App\Models\User $user, Faq $faq): bool
     {
         return $user->can('force-delete-faq');
     }
@@ -61,10 +61,10 @@ final class FaqPolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(\App\Models\User $user): bool
     {
         return $user->can('force-delete-any-faq');
     }
@@ -72,10 +72,10 @@ final class FaqPolicy
     /**
      * Determine whether the user can reorder the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function reorder(User $user): bool
+    public function reorder(\App\Models\User $user): bool
     {
         return $user->can('reorder-faq');
     }
@@ -83,11 +83,11 @@ final class FaqPolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
-    public function replicate(User $user, Faq $faq): bool
+    public function replicate(\App\Models\User $user, Faq $faq): bool
     {
         return $user->can('replicate-faq');
     }
@@ -95,11 +95,11 @@ final class FaqPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
-    public function restore(User $user, Faq $faq): bool
+    public function restore(\App\Models\User $user, Faq $faq): bool
     {
         return $user->can('restore-faq');
     }
@@ -107,10 +107,10 @@ final class FaqPolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function restoreAny(User $user): bool
+    public function restoreAny(\App\Models\User $user): bool
     {
         return $user->can('restore-any-faq');
     }
@@ -118,11 +118,11 @@ final class FaqPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
-    public function update(User $user, Faq $faq): bool
+    public function update(\App\Models\User $user, Faq $faq): bool
     {
         return $user->can('update-faq');
     }
@@ -130,7 +130,7 @@ final class FaqPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
@@ -144,7 +144,7 @@ final class FaqPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
     public function viewAny(?User $user = null): bool
@@ -157,7 +157,7 @@ final class FaqPolicy
     /**
      * Determine whether the user can view the faq category model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */
@@ -169,7 +169,7 @@ final class FaqPolicy
     /**
      * Determine whether the user can view the multimedia model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Faq $faq
      * @return bool
      */

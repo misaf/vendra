@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Order;
 
 use App\Casts\DateCast;
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\Transaction\Transaction;
-use App\Models\User;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +16,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class Order extends Model
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use SoftDeletes;
@@ -49,21 +48,31 @@ final class Order extends Model
 
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(
+            related: \App\Models\Currency\Currency::class,
+        );
     }
 
     public function currencyCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Currency\CurrencyCategory::class,
+            through: \App\Models\Currency\Currency::class,
+        );
     }
 
     public function transactions(): MorphMany
     {
-        return $this->morphMany(Transaction::class, 'transactionable');
+        return $this->morphMany(
+            related: \App\Models\Transaction\Transaction::class,
+            name: 'transactionable',
+        );
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(
+            related: \App\Models\User::class,
+        );
     }
 }

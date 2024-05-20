@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Page;
 
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 final class PageCategory extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;
@@ -40,6 +43,8 @@ final class PageCategory extends Model implements HasMedia
 
     public function pages(): HasMany
     {
-        return $this->hasMany(Page::class);
+        return $this->hasMany(
+            related: \App\Models\Page\Page::class,
+        );
     }
 }

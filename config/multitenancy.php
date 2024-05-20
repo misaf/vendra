@@ -27,7 +27,7 @@ return [
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
-        \Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
+        // \Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
         \App\Support\SwitchTenantTasks\ClearFacadeInstancesTask::class,
         \App\Support\SwitchTenantTasks\SwitchTenantConfigTask::class,
         // Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,

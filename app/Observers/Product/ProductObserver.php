@@ -18,10 +18,10 @@ final class ProductObserver implements ShouldQueue
     /**
      * Handle the product "deleted" event.
      *
-     * @param  Product  $product
+     * @param  \App\Models\Product\Product  $product
      * @return void
      */
-    public function deleted(Product $product): void
+    public function deleted(\App\Models\Product\Product $product): void
     {
         $this->deleteRelatedData($product);
 
@@ -31,10 +31,10 @@ final class ProductObserver implements ShouldQueue
     /**
      * Handle the product "saved" event.
      *
-     * @param  Product  $product
+     * @param  \App\Models\Product\Product  $product
      * @return void
      */
-    public function saved(Product $product): void
+    public function saved(\App\Models\Product\Product $product): void
     {
         $this->forgetProductRowCountCache();
     }
@@ -42,10 +42,10 @@ final class ProductObserver implements ShouldQueue
     /**
      * Delete related data when a product is deleted or force deleted.
      *
-     * @param  Product  $product
+     * @param  \App\Models\Product\Product  $product
      * @return void
      */
-    private function deleteRelatedData(Product $product): void
+    private function deleteRelatedData(\App\Models\Product\Product $product): void
     {
         $product->productPrices()->delete();
         $product->orderProducts()->delete();

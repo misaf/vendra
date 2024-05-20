@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Order;
 
 use App\Casts\DateCast;
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\Product\Product;
-use App\Models\Product\ProductCategory;
-use App\Models\User;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +15,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class OrderProduct extends Model
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use SoftDeletes;
@@ -49,31 +47,50 @@ final class OrderProduct extends Model
 
     public function currency(): BelongsToThrough
     {
-        return $this->belongsToThrough(Currency::class, Order::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Currency\Currency::class,
+            through: \App\Models\Order\Order::class,
+        );
     }
 
     public function CurrencyCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(CurrencyCategory::class, [Currency::class, Order::class]);
+        return $this->belongsToThrough(
+            related: \App\Models\Currency\CurrencyCategory::class,
+            through: [
+                \App\Models\Currency\Currency::class,
+                \App\Models\Order\Order::class,
+            ],
+        );
     }
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(
+            related: \App\Models\Order\Order::class,
+        );
     }
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(
+            related: \App\Models\Product\Product::class,
+        );
     }
 
     public function productCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(ProductCategory::class, Product::class);
+        return $this->belongsToThrough(
+            related: \App\Models\Product\ProductCategory::class,
+            through: \App\Models\Product\Product::class,
+        );
     }
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(User::class, Order::class);
+        return $this->belongsToThrough(
+            related: \App\Models\User::class,
+            through: \App\Models\Order\Order::class,
+        );
     }
 }

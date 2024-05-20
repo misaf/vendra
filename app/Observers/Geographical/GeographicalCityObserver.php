@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Observers\Geographical;
 
 use App\Jobs\DeleteImageJob;
-use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalNeighborhood;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -16,14 +15,14 @@ final class GeographicalCityObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(GeographicalCity $geographicalCity): void {}
+    public function created(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
 
-    public function deleted(GeographicalCity $geographicalCity): void
+    public function deleted(\App\Models\Geographical\GeographicalCity $geographicalCity): void
     {
         $geographicalCity->geographicalNeighborhoods()->delete();
     }
 
-    public function deleting(GeographicalCity $geographicalCity): void
+    public function deleting(\App\Models\Geographical\GeographicalCity $geographicalCity): void
     {
         if ($geographicalCity->isForceDeleting()) {
             $geographicalCity->geographicalNeighborhoods()->each(function ($item): void {
@@ -32,9 +31,9 @@ final class GeographicalCityObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(GeographicalCity $geographicalCity): void {}
+    public function forceDeleted(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
 
-    public function restored(GeographicalCity $geographicalCity): void {}
+    public function restored(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
 
-    public function updated(GeographicalCity $geographicalCity): void {}
+    public function updated(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
 }

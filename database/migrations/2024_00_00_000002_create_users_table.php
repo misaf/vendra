@@ -29,6 +29,10 @@ return new class () extends Migration {
         Schema::disableForeignKeyConstraints();
         Schema::create('users', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('name');
             $table->string('email');
             $table->timestamp('email_verified_at')

@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Contract\Language;
 use App\Models\Language\Language as LanguageLanguage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
@@ -32,6 +33,25 @@ final class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             Password::defaults(fn() => Password::min(8)->mixedCase());
         }
+
+        config()->set([
+            'app.name'      => 'xxx',
+            'app.url'       => 'https://panel.houshang-flowers.test',
+            'app.asset_url' => 'https://panel.houshang-flowers.test',
+        ]);
+
+        app()->singleton('url', function ($app) {
+            return new UrlGenerator(
+                $app['router']->getRoutes(),
+                $app->rebinding(
+                    'request',
+                    function ($app2, $request): void {
+                        $app2['url']->setRequest($request);
+                    },
+                ),
+                null,
+            );
+        });
 
         // Lang::handleMissingKeysUsing(function (string $key, array $replacements, string $locale) {
         //     info("Missing translation key [{$key}] detected.");

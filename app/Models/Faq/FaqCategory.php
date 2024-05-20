@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Faq;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,8 @@ use Spatie\Translatable\HasTranslations;
 
 final class FaqCategory extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;
@@ -56,7 +59,9 @@ final class FaqCategory extends Model implements HasMedia
 
     public function faqs(): HasMany
     {
-        return $this->hasMany(Faq::class);
+        return $this->hasMany(
+            related: \App\Models\Faq\Faq::class,
+        );
     }
 
     public function multimedia(): MorphMany

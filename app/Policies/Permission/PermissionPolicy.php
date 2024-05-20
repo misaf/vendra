@@ -15,10 +15,10 @@ final class PermissionPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function create(User $user): bool
+    public function create(\App\Models\User $user): bool
     {
         return $user->can('create-permission');
     }
@@ -26,11 +26,11 @@ final class PermissionPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Permission $permission
      * @return bool
      */
-    public function delete(User $user, Permission $permission): bool
+    public function delete(\App\Models\User $user, Permission $permission): bool
     {
         return $user->can('delete-permission');
     }
@@ -38,10 +38,10 @@ final class PermissionPolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function deleteAny(User $user): bool
+    public function deleteAny(\App\Models\User $user): bool
     {
         return $user->can('delete-any-permission');
     }
@@ -49,11 +49,11 @@ final class PermissionPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Permission $permission
      * @return bool
      */
-    public function forceDelete(User $user, Permission $permission): bool
+    public function forceDelete(\App\Models\User $user, Permission $permission): bool
     {
         return $user->can('force-delete-permission');
     }
@@ -61,10 +61,10 @@ final class PermissionPolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(\App\Models\User $user): bool
     {
         return $user->can('force-delete-any-permission');
     }
@@ -72,11 +72,11 @@ final class PermissionPolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Permission $permission
      * @return bool
      */
-    public function replicate(User $user, Permission $permission): bool
+    public function replicate(\App\Models\User $user, Permission $permission): bool
     {
         return $user->can('replicate-permission');
     }
@@ -84,11 +84,11 @@ final class PermissionPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Permission $permission
      * @return bool
      */
-    public function restore(User $user, Permission $permission): bool
+    public function restore(\App\Models\User $user, Permission $permission): bool
     {
         return $user->can('restore-permission');
     }
@@ -96,10 +96,10 @@ final class PermissionPolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function restoreAny(User $user): bool
+    public function restoreAny(\App\Models\User $user): bool
     {
         return $user->can('restore-any-permission');
     }
@@ -107,11 +107,11 @@ final class PermissionPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Permission $permission
      * @return bool
      */
-    public function update(User $user, Permission $permission): bool
+    public function update(\App\Models\User $user, Permission $permission): bool
     {
         return $user->can('update-permission');
     }
@@ -119,7 +119,7 @@ final class PermissionPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param Permission $permission
      * @return bool
      */
@@ -131,7 +131,7 @@ final class PermissionPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
     public function viewAny(User $user): bool

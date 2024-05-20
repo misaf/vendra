@@ -21,5 +21,11 @@ final class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+
+        $schedule->command('telescope:prune --hours=2')
+            ->daily()
+            ->appendOutputTo(storage_path('logs/schedule-telescope.log'))
+            ->withoutOverlapping(3)
+            ->evenInMaintenanceMode();
     }
 }

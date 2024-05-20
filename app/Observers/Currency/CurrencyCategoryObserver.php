@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Observers\Currency;
 
-use App\Models\Currency\CurrencyCategory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -14,16 +13,16 @@ final class CurrencyCategoryObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(CurrencyCategory $currencyCategory): void {}
+    public function created(\App\Models\Currency\CurrencyCategory $currencyCategory): void {}
 
-    public function deleted(CurrencyCategory $currencyCategory): void
+    public function deleted(\App\Models\Currency\CurrencyCategory $currencyCategory): void
     {
         $currencyCategory->currencies()->delete();
     }
 
-    public function forceDeleted(CurrencyCategory $currencyCategory): void {}
+    public function forceDeleted(\App\Models\Currency\CurrencyCategory $currencyCategory): void {}
 
-    public function restored(CurrencyCategory $currencyCategory): void {}
+    public function restored(\App\Models\Currency\CurrencyCategory $currencyCategory): void {}
 
-    public function updated(CurrencyCategory $currencyCategory): void {}
+    public function updated(\App\Models\Currency\CurrencyCategory $currencyCategory): void {}
 }

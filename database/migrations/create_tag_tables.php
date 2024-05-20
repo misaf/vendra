@@ -27,6 +27,10 @@ return new class () extends Migration {
     {
         Schema::create('tags', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->json('name');
             $table->json('slug');
             $table->string('type')

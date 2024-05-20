@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Permission;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
@@ -13,6 +14,8 @@ use Spatie\Permission\Models\Role as ModelsRole;
 
 final class Role extends ModelsRole
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use LogsActivity;

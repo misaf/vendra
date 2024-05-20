@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 final class GeographicalZone extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasRelationships;
@@ -56,22 +59,40 @@ final class GeographicalZone extends Model implements HasMedia
 
     public function geographicalCities(): HasManyDeep
     {
-        return $this->hasManyDeep(GeographicalCity::class, [GeographicalCountry::class, GeographicalState::class]);
+        return $this->hasManyDeep(
+            related: \App\Models\Geographical\GeographicalCity::class,
+            through: [
+                \App\Models\Geographical\GeographicalCountry::class,
+                \App\Models\Geographical\GeographicalState::class,
+            ],
+        );
     }
 
     public function geographicalCountries(): HasMany
     {
-        return $this->hasMany(GeographicalCountry::class);
+        return $this->hasMany(
+            related: \App\Models\Geographical\GeographicalCountry::class,
+        );
     }
 
     public function geographicalNeighborhoods(): HasManyDeep
     {
-        return $this->hasManyDeep(GeographicalNeighborhood::class, [GeographicalCountry::class, GeographicalState::class, GeographicalCity::class]);
+        return $this->hasManyDeep(
+            related: \App\Models\Geographical\GeographicalNeighborhood::class,
+            through: [
+                \App\Models\Geographical\GeographicalCountry::class,
+                \App\Models\Geographical\GeographicalState::class,
+                \App\Models\Geographical\GeographicalCity::class,
+            ],
+        );
     }
 
     public function geographicalStates(): HasManyThrough
     {
-        return $this->hasManyThrough(GeographicalState::class, GeographicalCountry::class);
+        return $this->hasManyThrough(
+            related: \App\Models\Geographical\GeographicalState::class,
+            through: \App\Models\Geographical\GeographicalCountry::class,
+        );
     }
 
     public function getActivitylogOptions(): LogOptions

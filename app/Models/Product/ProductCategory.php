@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Product;
 
 use App\Casts\DateCast;
-use App\Models\Order\OrderProduct;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +24,8 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
 final class ProductCategory extends Model implements HasMedia, Sortable
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasRecursiveRelationships;
@@ -74,16 +76,24 @@ final class ProductCategory extends Model implements HasMedia, Sortable
 
     public function orderProducts(): HasManyThrough
     {
-        return $this->hasManyThrough(OrderProduct::class, Product::class);
+        return $this->hasManyThrough(
+            related: \App\Models\Order\OrderProduct::class,
+            through: \App\Models\Product\Product::class,
+        );
     }
 
     public function productPrices(): HasManyThrough
     {
-        return $this->hasManyThrough(ProductPrice::class, Product::class);
+        return $this->hasManyThrough(
+            related: \App\Models\Product\ProductPrice::class,
+            through: \App\Models\Product\Product::class,
+        );
     }
 
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(
+            related: \App\Models\Product\Product::class,
+        );
     }
 }

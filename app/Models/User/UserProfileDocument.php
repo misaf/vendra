@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
-use App\Models\User;
 use App\Support\Enums\UserProfileDocumentStatusEnum;
+use App\Traits\BelongsToTenant;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +22,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class UserProfileDocument extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     // use HasStatuses;
@@ -60,11 +62,16 @@ final class UserProfileDocument extends Model implements HasMedia
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(User::class, UserProfile::class);
+        return $this->belongsToThrough(
+            related: \App\Models\User::class,
+            through: \App\Models\User\UserProfile::class,
+        );
     }
 
     public function userProfile(): BelongsTo
     {
-        return $this->belongsTo(UserProfile::class);
+        return $this->belongsTo(
+            related: \App\Models\User\UserProfile::class,
+        );
     }
 }

@@ -7,7 +7,6 @@ namespace App\Observers\Geographical;
 use App\Jobs\DeleteImageJob;
 use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalNeighborhood;
-use App\Models\Geographical\GeographicalState;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +17,9 @@ final class GeographicalStateObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(GeographicalState $geographicalState): void {}
+    public function created(\App\Models\Geographical\GeographicalState $geographicalState): void {}
 
-    public function deleted(GeographicalState $geographicalState): void
+    public function deleted(\App\Models\Geographical\GeographicalState $geographicalState): void
     {
         DB::transaction(function () use ($geographicalState): void {
             $geographicalState->geographicalCities()->delete();
@@ -28,7 +27,7 @@ final class GeographicalStateObserver implements ShouldQueue
         });
     }
 
-    public function deleting(GeographicalState $geographicalState): void
+    public function deleting(\App\Models\Geographical\GeographicalState $geographicalState): void
     {
         if ($geographicalState->isForceDeleting()) {
             $geographicalState->geographicalCities()->each(function ($item): void {
@@ -41,9 +40,9 @@ final class GeographicalStateObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(GeographicalState $geographicalState): void {}
+    public function forceDeleted(\App\Models\Geographical\GeographicalState $geographicalState): void {}
 
-    public function restored(GeographicalState $geographicalState): void {}
+    public function restored(\App\Models\Geographical\GeographicalState $geographicalState): void {}
 
-    public function updated(GeographicalState $geographicalState): void {}
+    public function updated(\App\Models\Geographical\GeographicalState $geographicalState): void {}
 }

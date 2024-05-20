@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,8 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 final class GeographicalCountry extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasRelationships;
@@ -59,22 +62,36 @@ final class GeographicalCountry extends Model implements HasMedia
 
     public function geographicalCities(): HasManyThrough
     {
-        return $this->hasManyThrough(GeographicalCity::class, GeographicalState::class);
+        return $this->hasManyThrough(
+            related: \App\Models\Geographical\GeographicalCity::class,
+            through: \App\Models\Geographical\GeographicalState::class,
+        );
     }
 
     public function geographicalNeighborhoods(): HasManyDeep
     {
-        return $this->hasManyDeep(GeographicalNeighborhood::class, [GeographicalState::class, GeographicalCity::class, GeographicalCountry::class]);
+        return $this->hasManyDeep(
+            related: \App\Models\Geographical\GeographicalNeighborhood::class,
+            through: [
+                \App\Models\Geographical\GeographicalState::class,
+                \App\Models\Geographical\GeographicalCity::class,
+                \App\Models\Geographical\GeographicalCountry::class,
+            ],
+        );
     }
 
     public function geographicalStates(): HasMany
     {
-        return $this->hasMany(GeographicalState::class);
+        return $this->hasMany(
+            related: \App\Models\Geographical\GeographicalState::class,
+        );
     }
 
     public function geographicalZone(): BelongsTo
     {
-        return $this->belongsTo(GeographicalZone::class);
+        return $this->belongsTo(
+            related: \App\Models\Geographical\GeographicalZone::class,
+        );
     }
 
     public function getActivitylogOptions(): LogOptions

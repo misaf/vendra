@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Blog;
 
 use App\Casts\DateCast;
+use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,8 @@ use Spatie\Translatable\HasTranslations;
 
 final class BlogPost extends Model implements HasMedia, Sortable
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;
@@ -64,7 +67,9 @@ final class BlogPost extends Model implements HasMedia, Sortable
 
     public function blogPostCategory(): BelongsTo
     {
-        return $this->belongsTo(BlogPostCategory::class);
+        return $this->belongsTo(
+            related: \App\Models\Blog\BlogPostCategory::class,
+        );
     }
 
     public function multimedia(): MorphMany

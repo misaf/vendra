@@ -27,6 +27,10 @@ return new class () extends Migration {
     {
         Schema::create('languages', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->longText('name');
             $table->longText('description')
                 ->nullable();
@@ -45,6 +49,10 @@ return new class () extends Migration {
 
         Schema::create('language_lines', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('group')
                 ->index();
             $table->string('key');

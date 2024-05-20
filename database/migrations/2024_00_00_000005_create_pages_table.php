@@ -29,6 +29,10 @@ return new class () extends Migration {
         Schema::disableForeignKeyConstraints();
         Schema::create('page_categories', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('name')
                 ->index();
             $table->text('description')
@@ -42,6 +46,10 @@ return new class () extends Migration {
         });
         Schema::create('pages', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('page_category_id')
                 ->constrained()
                 ->cascadeOnDelete()

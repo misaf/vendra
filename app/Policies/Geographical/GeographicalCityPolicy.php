@@ -15,10 +15,10 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function create(User $user): bool
+    public function create(\App\Models\User $user): bool
     {
         return $user->can('create-geographical-city');
     }
@@ -26,11 +26,11 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param GeographicalCity $geographicalCity
      * @return bool
      */
-    public function delete(User $user, GeographicalCity $geographicalCity): bool
+    public function delete(\App\Models\User $user, GeographicalCity $geographicalCity): bool
     {
         return $user->can('delete-geographical-city');
     }
@@ -38,10 +38,10 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function deleteAny(User $user): bool
+    public function deleteAny(\App\Models\User $user): bool
     {
         return $user->can('delete-any-geographical-city');
     }
@@ -49,11 +49,11 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param GeographicalCity $geographicalCity
      * @return bool
      */
-    public function forceDelete(User $user, GeographicalCity $geographicalCity): bool
+    public function forceDelete(\App\Models\User $user, GeographicalCity $geographicalCity): bool
     {
         return $user->can('force-delete-geographical-city');
     }
@@ -61,10 +61,10 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function forceDeleteAny(User $user): bool
+    public function forceDeleteAny(\App\Models\User $user): bool
     {
         return $user->can('force-delete-any-geographical-city');
     }
@@ -72,11 +72,11 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param GeographicalCity $geographicalCity
      * @return bool
      */
-    public function replicate(User $user, GeographicalCity $geographicalCity): bool
+    public function replicate(\App\Models\User $user, GeographicalCity $geographicalCity): bool
     {
         return $user->can('replicate-geographical-city');
     }
@@ -84,11 +84,11 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param GeographicalCity $geographicalCity
      * @return bool
      */
-    public function restore(User $user, GeographicalCity $geographicalCity): bool
+    public function restore(\App\Models\User $user, GeographicalCity $geographicalCity): bool
     {
         return $user->can('restore-geographical-city');
     }
@@ -96,10 +96,10 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
-    public function restoreAny(User $user): bool
+    public function restoreAny(\App\Models\User $user): bool
     {
         return $user->can('restore-any-geographical-city');
     }
@@ -107,11 +107,11 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param GeographicalCity $geographicalCity
      * @return bool
      */
-    public function update(User $user, GeographicalCity $geographicalCity): bool
+    public function update(\App\Models\User $user, GeographicalCity $geographicalCity): bool
     {
         return $user->can('update-geographical-city');
     }
@@ -119,7 +119,7 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @param GeographicalCity $geographicalCity
      * @return bool
      */
@@ -131,7 +131,7 @@ final class GeographicalCityPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param User $user
+     * @param \App\Models\User $user
      * @return bool
      */
     public function viewAny(User $user): bool

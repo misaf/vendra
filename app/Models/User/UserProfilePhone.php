@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
-use App\Models\User;
-use App\Services\UserProfilePhoneService;
 use App\Support\Enums\UserProfileDocumentStatusEnum;
-use App\Support\Enums\UserProfilePhoneStatusEnum;
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,6 +20,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
 
 final class UserProfilePhone extends Model
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     // use HasStatuses;
@@ -62,14 +62,14 @@ final class UserProfilePhone extends Model
     {
         parent::boot();
 
-        static::saving(function (UserProfilePhone $userProfilePhone): void {
+        static::saving(function (\App\Models\User\UserProfilePhone $userProfilePhone): void {
             if ($userProfilePhone->isDirty('phone') && $userProfilePhone->phone) {
-                $userProfilePhone->phone_normalized = UserProfilePhoneService::phoneNormalized($userProfilePhone->phone);
-                $userProfilePhone->phone_national = UserProfilePhoneService::phoneNational($userProfilePhone->country, $userProfilePhone->phone);
-                $userProfilePhone->phone_e164 = UserProfilePhoneService::phoneE164($userProfilePhone->country, $userProfilePhone->phone);
+                $userProfilePhone->phone_normalized = \App\Services\UserProfilePhoneService::phoneNormalized($userProfilePhone->phone);
+                $userProfilePhone->phone_national = \App\Services\UserProfilePhoneService::phoneNational($userProfilePhone->country, $userProfilePhone->phone);
+                $userProfilePhone->phone_e164 = \App\Services\UserProfilePhoneService::phoneE164($userProfilePhone->country, $userProfilePhone->phone);
             }
 
-            if ($userProfilePhone->isDirty('status') === UserProfilePhoneStatusEnum::Approved->value) {
+            if ($userProfilePhone->isDirty('status') === \App\Support\Enums\UserProfilePhoneStatusEnum::Approved->value) {
                 $userProfilePhone->verified_at = now();
             }
         });
@@ -82,11 +82,16 @@ final class UserProfilePhone extends Model
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(User::class, UserProfile::class);
+        return $this->belongsToThrough(
+            related: \App\Models\User::class,
+            through: \App\Models\User\UserProfile::class,
+        );
     }
 
     public function userProfile(): BelongsTo
     {
-        return $this->belongsTo(UserProfile::class);
+        return $this->belongsTo(
+            related: \App\Models\User\UserProfile::class,
+        );
     }
 }

@@ -19,5 +19,17 @@ return new class () extends Migration {
             $table->string('database')->unique();
             $table->timestamps();
         });
+        Schema::create('tenant_user', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->timestampsTz();
+        });
     }
 };

@@ -30,6 +30,10 @@ return new class () extends Migration {
         Schema::disableForeignKeyConstraints();
         Schema::create('currency_categories', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->string('name');
             $table->string('description')
                 ->nullable();
@@ -42,6 +46,10 @@ return new class () extends Migration {
         });
         Schema::create('currencies', function (Blueprint $table): void {
             $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('currency_category_id')
                 ->constrained()
                 ->cascadeOnUpdate()

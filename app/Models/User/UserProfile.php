@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
-use App\Models\User;
+use App\Traits\BelongsToTenant;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +21,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 final class UserProfile extends Model implements HasMedia
 {
+    use BelongsToTenant;
+
     use HasFactory;
 
     use InteractsWithMedia, ThumbnailTableRecord {
@@ -61,32 +63,44 @@ final class UserProfile extends Model implements HasMedia
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(
+            related: \App\Models\User::class,
+        );
     }
 
     public function userProfileBalances(): HasMany
     {
-        return $this->hasMany(UserProfileBalance::class);
+        return $this->hasMany(
+            related: \App\Models\User\UserProfileBalance::class,
+        );
     }
 
     public function userProfileDocument(): HasOne
     {
-        return $this->hasOne(UserProfileDocument::class)->latestOfMany();
+        return $this->hasOne(
+            related: \App\Models\User\UserProfileDocument::class,
+        )->latestOfMany();
     }
 
     public function userProfileDocuments(): HasMany
     {
-        return $this->hasMany(UserProfileDocument::class);
+        return $this->hasMany(
+            related: \App\Models\User\UserProfileDocument::class,
+        );
     }
 
     public function userProfilePhone(): HasOne
     {
-        return $this->hasOne(UserProfilePhone::class)->latestOfMany();
+        return $this->hasOne(
+            related: \App\Models\User\UserProfilePhone::class,
+        )->latestOfMany();
     }
 
     public function userProfilePhones(): HasMany
     {
-        return $this->hasMany(UserProfilePhone::class);
+        return $this->hasMany(
+            related: \App\Models\User\UserProfilePhone::class,
+        );
     }
 
     protected function fullName(): Attribute
