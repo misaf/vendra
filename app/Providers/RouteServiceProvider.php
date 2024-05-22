@@ -10,9 +10,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
 
 final class RouteServiceProvider extends ServiceProvider
 {
+    use LoadsTranslatedCachedRoutes;
+
     /**
      * The path to your application's "home" route.
      *
@@ -27,16 +30,46 @@ final class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        RateLimiter::for('api', fn(Request $request) => Limit::perMinute(1000)->by($request->user()?->id ?: $request->ip()));
+        $this->configureRateLimiting();
+        $this->configureRoutes();
+    }
 
-        $this->routes(function (): void {
-            Route::middleware(['api', 'localizationRedirect', 'localeCookieRedirect'])
-                ->prefix(LaravelLocalization::setLocale() . '/api')
-                ->group(base_path('routes/api.php'));
+    /**
+     * Configure API routes.
+     */
+    private function configureApiRoutes(): void
+    {
+        Route::middleware(['api', 'tenant', 'localizationRedirect', 'localeCookieRedirect'])
+            ->prefix(LaravelLocalization::setLocale() . '/api')
+            ->group(base_path('routes/api.php'));
+    }
 
-            Route::middleware(['web', 'localizationRedirect', 'localeCookieRedirect'])
-                ->prefix(LaravelLocalization::setLocale())
-                ->group(base_path('routes/web.php'));
+    /**
+     * Configure rate limiting for the API.
+     */
+    private function configureRateLimiting(): void
+    {
+        RateLimiter::for('api', function (Request $request): void {
+            Limit::perMinute(1000)->by($request->user()?->id ?: $request->ip());
         });
+    }
+
+    /**
+     * Configure application routes.
+     */
+    private function configureRoutes(): void
+    {
+        $this->configureApiRoutes();
+        $this->configureWebRoutes();
+    }
+
+    /**
+     * Configure web routes.
+     */
+    private function configureWebRoutes(): void
+    {
+        Route::middleware(['web', 'tenant', 'localizationRedirect', 'localeCookieRedirect'])
+            ->prefix(LaravelLocalization::setLocale())
+            ->group(base_path('routes/web.php'));
     }
 }

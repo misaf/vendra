@@ -4,39 +4,90 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Blog\BlogPost;
+use App\Models\Blog\BlogPostCategory;
+use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyCategory;
+use App\Models\Faq\Faq;
+use App\Models\Faq\FaqCategory;
+use App\Models\Geographical\GeographicalCity;
+use App\Models\Geographical\GeographicalCountry;
+use App\Models\Geographical\GeographicalNeighborhood;
+use App\Models\Geographical\GeographicalState;
+use App\Models\Geographical\GeographicalZone;
+use App\Models\Language\Language;
+use App\Models\Language\LanguageLine;
+use App\Models\Order\Order;
+use App\Models\Order\OrderProduct;
+use App\Models\Permission\Permission;
+use App\Models\Permission\Role;
+use App\Models\Product\Product;
+use App\Models\Product\ProductCategory;
+use App\Models\Product\ProductPrice;
+use App\Models\Transaction\Transaction;
 use App\Models\User;
+use App\Models\User\UserProfile;
+use App\Models\User\UserProfileBalance;
+use App\Models\User\UserProfileDocument;
+use App\Models\User\UserProfilePhone;
+use App\Policies\Blog\BlogPostCategoryPolicy;
+use App\Policies\Blog\BlogPostPolicy;
+use App\Policies\Currency\CurrencyCategoryPolicy;
+use App\Policies\Currency\CurrencyPolicy;
+use App\Policies\Faq\FaqCategoryPolicy;
+use App\Policies\Faq\FaqPolicy;
+use App\Policies\Geographical\GeographicalCityPolicy;
+use App\Policies\Geographical\GeographicalCountryPolicy;
+use App\Policies\Geographical\GeographicalNeighborhoodPolicy;
+use App\Policies\Geographical\GeographicalStatePolicy;
+use App\Policies\Geographical\GeographicalZonePolicy;
+use App\Policies\Language\LanguageLinePolicy;
+use App\Policies\Language\LanguagePolicy;
+use App\Policies\Order\OrderPolicy;
+use App\Policies\Order\OrderProductPolicy;
+use App\Policies\Permission\PermissionPolicy;
+use App\Policies\Permission\RolePolicy;
+use App\Policies\Product\ProductCategoryPolicy;
+use App\Policies\Product\ProductPolicy;
+use App\Policies\Product\ProductPricePolicy;
+use App\Policies\Transaction\TransactionPolicy;
+use App\Policies\User\UserPolicy;
+use App\Policies\User\UserProfileBalancePolicy;
+use App\Policies\User\UserProfileDocumentPolicy;
+use App\Policies\User\UserProfilePhonePolicy;
+use App\Policies\User\UserProfilePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
 final class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        \App\Models\Blog\BlogPost::class                         => \App\Policies\Blog\BlogPostPolicy::class,
-        \App\Models\Blog\BlogPostCategory::class                 => \App\Policies\Blog\BlogPostCategoryPolicy::class,
-        \App\Models\Currency\Currency::class                     => \App\Policies\Currency\CurrencyPolicy::class,
-        \App\Models\Currency\CurrencyCategory::class             => \App\Policies\Currency\CurrencyCategoryPolicy::class,
-        \App\Models\Faq\Faq::class                               => \App\Policies\Faq\FaqPolicy::class,
-        \App\Models\Faq\FaqCategory::class                       => \App\Policies\Faq\FaqCategoryPolicy::class,
-        \App\Models\Geographical\GeographicalCity::class         => \App\Policies\Geographical\GeographicalCityPolicy::class,
-        \App\Models\Geographical\GeographicalCountry::class      => \App\Policies\Geographical\GeographicalCountryPolicy::class,
-        \App\Models\Geographical\GeographicalNeighborhood::class => \App\Policies\Geographical\GeographicalNeighborhoodPolicy::class,
-        \App\Models\Geographical\GeographicalState::class        => \App\Policies\Geographical\GeographicalStatePolicy::class,
-        \App\Models\Geographical\GeographicalZone::class         => \App\Policies\Geographical\GeographicalZonePolicy::class,
-        \App\Models\Language\Language::class                     => \App\Policies\Language\LanguagePolicy::class,
-        \App\Models\Language\LanguageLine::class                 => \App\Policies\Language\LanguageLinePolicy::class,
-        \App\Models\Permission\Permission::class                 => \App\Policies\Permission\PermissionPolicy::class,
-        \App\Models\Permission\Role::class                       => \App\Policies\Permission\RolePolicy::class,
-        \App\Models\Product\Product::class                       => \App\Policies\Product\ProductPolicy::class,
-        \App\Models\Product\ProductCategory::class               => \App\Policies\Product\ProductCategoryPolicy::class,
-        \App\Models\Product\ProductPrice::class                  => \App\Policies\Product\ProductPricePolicy::class,
-        User::class                                              => \App\Policies\User\UserPolicy::class,
-        User\UserProfile::class                                  => \App\Policies\User\UserProfilePolicy::class,
-        User\UserProfileBalance::class                           => \App\Policies\User\UserProfileBalancePolicy::class,
-        User\UserProfileDocument::class                          => \App\Policies\User\UserProfileDocumentPolicy::class,
-        User\UserProfilePhone::class                             => \App\Policies\User\UserProfilePhonePolicy::class,
-        \App\Models\Order\Order::class                           => \App\Policies\Order\OrderPolicy::class,
-        \App\Models\Order\OrderProduct::class                    => \App\Policies\Order\OrderProductPolicy::class,
-        \App\Models\Transaction\Transaction::class               => \App\Policies\Transaction\TransactionPolicy::class,
+        BlogPost::class                 => BlogPostPolicy::class,
+        BlogPostCategory::class         => BlogPostCategoryPolicy::class,
+        Currency::class                 => CurrencyPolicy::class,
+        CurrencyCategory::class         => CurrencyCategoryPolicy::class,
+        Faq::class                      => FaqPolicy::class,
+        FaqCategory::class              => FaqCategoryPolicy::class,
+        GeographicalCity::class         => GeographicalCityPolicy::class,
+        GeographicalCountry::class      => GeographicalCountryPolicy::class,
+        GeographicalNeighborhood::class => GeographicalNeighborhoodPolicy::class,
+        GeographicalState::class        => GeographicalStatePolicy::class,
+        GeographicalZone::class         => GeographicalZonePolicy::class,
+        Language::class                 => LanguagePolicy::class,
+        LanguageLine::class             => LanguageLinePolicy::class,
+        Permission::class               => PermissionPolicy::class,
+        Role::class                     => RolePolicy::class,
+        Product::class                  => ProductPolicy::class,
+        ProductCategory::class          => ProductCategoryPolicy::class,
+        ProductPrice::class             => ProductPricePolicy::class,
+        User::class                     => UserPolicy::class,
+        UserProfile::class              => UserProfilePolicy::class,
+        UserProfileBalance::class       => UserProfileBalancePolicy::class,
+        UserProfileDocument::class      => UserProfileDocumentPolicy::class,
+        UserProfilePhone::class         => UserProfilePhonePolicy::class,
+        Order::class                    => OrderPolicy::class,
+        OrderProduct::class             => OrderProductPolicy::class,
+        Transaction::class              => TransactionPolicy::class,
     ];
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\Faq;
 
+use App\Models\Faq\FaqCategory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -13,16 +14,46 @@ final class FaqCategoryObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Faq\FaqCategory $faqCategory): void {}
+    /**
+     * Handle the FaqCategory "created" event.
+     *
+     * @param FaqCategory $faqCategory
+     * @return void
+     */
+    public function created(FaqCategory $faqCategory): void {}
 
-    public function deleted(\App\Models\Faq\FaqCategory $faqCategory): void
+    /**
+     * Handle the FaqCategory "deleted" event.
+     *
+     * @param FaqCategory $faqCategory
+     * @return void
+     */
+    public function deleted(FaqCategory $faqCategory): void
     {
         $faqCategory->faqs()->delete();
     }
 
-    public function forceDeleted(\App\Models\Faq\FaqCategory $faqCategory): void {}
+    /**
+     * Handle the FaqCategory "force deleted" event.
+     *
+     * @param FaqCategory $faqCategory
+     * @return void
+     */
+    public function forceDeleted(FaqCategory $faqCategory): void {}
 
-    public function restored(\App\Models\Faq\FaqCategory $faqCategory): void {}
+    /**
+     * Handle the FaqCategory "restored" event.
+     *
+     * @param FaqCategory $faqCategory
+     * @return void
+     */
+    public function restored(FaqCategory $faqCategory): void {}
 
-    public function updated(\App\Models\Faq\FaqCategory $faqCategory): void {}
+    /**
+     * Handle the FaqCategory "updated" event.
+     *
+     * @param FaqCategory $faqCategory
+     * @return void
+     */
+    public function updated(FaqCategory $faqCategory): void {}
 }

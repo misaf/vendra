@@ -6,6 +6,10 @@ namespace App\Models\User;
 
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
+use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyCategory;
+use App\Models\Scopes\Tenant as TenantScope;
+use App\Models\User;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,9 +20,9 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\ModelStatus\HasStatuses;
 use Znck\Eloquent\Relations\BelongsToThrough;
-use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class UserProfileBalance extends Model
 {
     use BelongsToTenant;
@@ -31,7 +35,7 @@ final class UserProfileBalance extends Model
 
     use SoftDeletes;
 
-    use TraitsBelongsToThrough;
+    use TraitBelongsToThrough;
 
     protected $casts = [
         'id'               => 'integer',
@@ -53,17 +57,12 @@ final class UserProfileBalance extends Model
 
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\Currency\Currency::class,
-        );
+        return $this->belongsTo(Currency::class);
     }
 
     public function currencyCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(
-            related: \App\Models\Currency\CurrencyCategory::class,
-            through: \App\Models\Currency\Currency::class,
-        );
+        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
     }
 
     public function getActivitylogOptions(): LogOptions
@@ -73,16 +72,11 @@ final class UserProfileBalance extends Model
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(
-            related: \App\Models\User::class,
-            through: \App\Models\User\UserProfile::class,
-        );
+        return $this->belongsToThrough(User::class, UserProfile::class);
     }
 
     public function userProfile(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\User\UserProfile::class,
-        );
+        return $this->belongsTo(UserProfile::class);
     }
 }

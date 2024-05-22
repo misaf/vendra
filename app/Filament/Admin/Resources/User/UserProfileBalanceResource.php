@@ -45,9 +45,9 @@ final class UserProfileBalanceResource extends Resource
                     })
                     ->required()
                     ->searchable(),
-                // ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule, Get $get): void {
-                //     $rule->where('currency_id', $get('currency_id'))->whereNull('deleted_at');
-                // })
+                    // ->unique(ignoreRecord: true, modifyRuleUsing: function (Unique $rule, Get $get): void {
+                    //     $rule->where('currency_id', $get('currency_id'))->whereNull('deleted_at');
+                    // })
 
                 Forms\Components\Select::make('currency_id')
                     ->columnSpan(['lg' => 1])
@@ -57,7 +57,10 @@ final class UserProfileBalanceResource extends Resource
                     ->preload()
                     ->required()
                     ->searchable(),
-                // ->unique(ignoreRecord: true, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at')),
+                    // ->unique(
+                    //     ignoreRecord: true,
+                    //     modifyRuleUsing: fn(Unique $rule) => $rule->where('tenant_id', app('currentTenant')->id)->whereNull('deleted_at'),
+                    // ),
 
                 Forms\Components\TextInput::make('amount')
                     ->columnSpan(['lg' => 1])

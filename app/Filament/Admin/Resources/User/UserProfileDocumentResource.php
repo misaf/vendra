@@ -42,7 +42,10 @@ final class UserProfileDocumentResource extends Resource
                     })
                     ->required()
                     ->searchable()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at')),
+                    ->unique(
+                        ignoreRecord: true,
+                        modifyRuleUsing: fn(Unique $rule) => $rule->where('tenant_id', app('currentTenant')->id)->whereNull('deleted_at'),
+                    ),
 
                 Forms\Components\SpatieMediaLibraryFileUpload::make('image')
                     ->columnSpanFull()

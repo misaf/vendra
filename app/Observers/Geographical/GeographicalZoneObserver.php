@@ -9,6 +9,7 @@ use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalCountry;
 use App\Models\Geographical\GeographicalNeighborhood;
 use App\Models\Geographical\GeographicalState;
+use App\Models\Geographical\GeographicalZone;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,21 @@ final class GeographicalZoneObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
+    /**
+     * Handle the GeographicalZone "created" event.
+     *
+     * @param GeographicalZone $geographicalZone
+     * @return void
+     */
+    public function created(GeographicalZone $geographicalZone): void {}
 
-    public function deleted(\App\Models\Geographical\GeographicalZone $geographicalZone): void
+    /**
+     * Handle the GeographicalZone "deleted" event.
+     *
+     * @param GeographicalZone $geographicalZone
+     * @return void
+     */
+    public function deleted(GeographicalZone $geographicalZone): void
     {
         DB::transaction(function () use ($geographicalZone): void {
             $geographicalZone->geographicalCountries()->delete();
@@ -31,7 +44,13 @@ final class GeographicalZoneObserver implements ShouldQueue
         });
     }
 
-    public function deleting(\App\Models\Geographical\GeographicalZone $geographicalZone): void
+    /**
+     * Handle the GeographicalZone "deleting" event.
+     *
+     * @param GeographicalZone $geographicalZone
+     * @return void
+     */
+    public function deleting(GeographicalZone $geographicalZone): void
     {
         if ($geographicalZone->isForceDeleting()) {
             $geographicalZone->geographicalCountries()->each(function ($item): void {
@@ -52,9 +71,27 @@ final class GeographicalZoneObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
+    /**
+     * Handle the GeographicalZone "force deleted" event.
+     *
+     * @param GeographicalZone $geographicalZone
+     * @return void
+     */
+    public function forceDeleted(GeographicalZone $geographicalZone): void {}
 
-    public function restored(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
+    /**
+     * Handle the GeographicalZone "restored" event.
+     *
+     * @param GeographicalZone $geographicalZone
+     * @return void
+     */
+    public function restored(GeographicalZone $geographicalZone): void {}
 
-    public function updated(\App\Models\Geographical\GeographicalZone $geographicalZone): void {}
+    /**
+     * Handle the GeographicalZone "updated" event.
+     *
+     * @param GeographicalZone $geographicalZone
+     * @return void
+     */
+    public function updated(GeographicalZone $geographicalZone): void {}
 }

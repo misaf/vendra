@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
+use App\Models\User;
 use App\Support\Enums\UserProfileDocumentStatusEnum;
 use App\Traits\BelongsToTenant;
 use App\Traits\ThumbnailTableRecord;
@@ -19,9 +21,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\ModelStatus\HasStatuses;
 use Znck\Eloquent\Relations\BelongsToThrough;
-use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class UserProfileDocument extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -39,7 +41,7 @@ final class UserProfileDocument extends Model implements HasMedia
 
     use SoftDeletes;
 
-    use TraitsBelongsToThrough;
+    use TraitBelongsToThrough;
 
     protected $casts = [
         'id'              => 'integer',
@@ -64,16 +66,11 @@ final class UserProfileDocument extends Model implements HasMedia
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(
-            related: \App\Models\User::class,
-            through: \App\Models\User\UserProfile::class,
-        );
+        return $this->belongsToThrough(User::class, UserProfile::class);
     }
 
     public function userProfile(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\User\UserProfile::class,
-        );
+        return $this->belongsTo(UserProfile::class);
     }
 }

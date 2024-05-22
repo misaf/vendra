@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Faq;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -19,7 +20,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class FaqCategory extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -61,9 +62,7 @@ final class FaqCategory extends Model implements HasMedia
 
     public function faqs(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Faq\Faq::class,
-        );
+        return $this->hasMany(Faq::class);
     }
 
     public function multimedia(): MorphMany

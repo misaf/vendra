@@ -11,6 +11,11 @@ final class LanguageLineFactory extends Factory
 {
     protected $model = LanguageLine::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

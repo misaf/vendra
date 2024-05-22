@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\User;
 
+use App\Models\User\UserProfileDocument;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -13,13 +14,43 @@ final class UserProfileDocumentObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\User\UserProfileDocument $userProfileDocument): void {}
+    /**
+     * Handle the UserProfileDocument "created" event.
+     *
+     * @param UserProfileDocument $userProfileDocument
+     * @return void
+     */
+    public function created(UserProfileDocument $userProfileDocument): void {}
 
-    public function deleted(\App\Models\User\UserProfileDocument $userProfileDocument): void {}
+    /**
+     * Handle the UserProfileDocument "deleted" event.
+     *
+     * @param UserProfileDocument $userProfileDocument
+     * @return void
+     */
+    public function deleted(UserProfileDocument $userProfileDocument): void {}
 
-    public function forceDeleted(\App\Models\User\UserProfileDocument $userProfileDocument): void {}
+    /**
+     * Handle the UserProfileDocument "force deleted" event.
+     *
+     * @param UserProfileDocument $userProfileDocument
+     * @return void
+     */
+    public function forceDeleted(UserProfileDocument $userProfileDocument): void {}
 
-    public function restored(\App\Models\User\UserProfileDocument $userProfileDocument): void {}
+    /**
+     * Handle the UserProfileDocument "restored" event.
+     *
+     * @param UserProfileDocument $userProfileDocument
+     * @return void
+     */
+    public function restored(UserProfileDocument $userProfileDocument): void {}
 
-    public function updated(\App\Models\User\UserProfileDocument $userProfileDocument): void {}
+    /**
+     * Handle the UserProfileDocument "updated" event.
+     *
+     * @param UserProfileDocument $userProfileDocument
+     * @return void
+     */
+    public function updated(UserProfileDocument $userProfileDocument): void {}
 }

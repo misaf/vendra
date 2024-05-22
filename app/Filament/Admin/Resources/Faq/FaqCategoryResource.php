@@ -46,7 +46,11 @@ final class FaqCategoryResource extends Resource
                     ->label(__('form.name'))
                     ->live(onBlur: true)
                     ->required()
-                    ->unique(ignoreRecord: true, column: fn($livewire) => 'name->' . $livewire->activeLocale, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at'))
+                    ->unique(
+                        column: fn($livewire) => 'name->' . $livewire->activeLocale,
+                        ignoreRecord: true,
+                        modifyRuleUsing: fn(Unique $rule) => $rule->where('tenant_id', app('currentTenant')->id)->whereNull('deleted_at'),
+                    )
                     ->translatable(),
 
                 Forms\Components\TextInput::make('slug')

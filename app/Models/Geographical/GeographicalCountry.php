@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -22,7 +23,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class GeographicalCountry extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -64,36 +65,26 @@ final class GeographicalCountry extends Model implements HasMedia
 
     public function geographicalCities(): HasManyThrough
     {
-        return $this->hasManyThrough(
-            related: \App\Models\Geographical\GeographicalCity::class,
-            through: \App\Models\Geographical\GeographicalState::class,
-        );
+        return $this->hasManyThrough(GeographicalCity::class, GeographicalState::class);
     }
 
     public function geographicalNeighborhoods(): HasManyDeep
     {
-        return $this->hasManyDeep(
-            related: \App\Models\Geographical\GeographicalNeighborhood::class,
-            through: [
-                \App\Models\Geographical\GeographicalState::class,
-                \App\Models\Geographical\GeographicalCity::class,
-                \App\Models\Geographical\GeographicalCountry::class,
-            ],
-        );
+        return $this->hasManyDeep(GeographicalNeighborhood::class, [
+            GeographicalState::class,
+            GeographicalCity::class,
+            GeographicalCountry::class,
+        ]);
     }
 
     public function geographicalStates(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Geographical\GeographicalState::class,
-        );
+        return $this->hasMany(GeographicalState::class);
     }
 
     public function geographicalZone(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\Geographical\GeographicalZone::class,
-        );
+        return $this->belongsTo(GeographicalZone::class);
     }
 
     public function getActivitylogOptions(): LogOptions

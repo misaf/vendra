@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\Product;
 
+use App\Models\Product\ProductPrice;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -14,57 +15,42 @@ final class ProductPriceObserver implements ShouldQueue
     public bool $afterCommit = true;
 
     /**
-     * Handle the product price "created" event.
+     * Handle the ProductPrice "created" event.
      *
-     * @param  \App\Models\Product\ProductPrice $productPrice
+     * @param ProductPrice $productPrice
      * @return void
      */
-    public function created(\App\Models\Product\ProductPrice $productPrice): void
-    {
-        // Implement if needed
-    }
+    public function created(ProductPrice $productPrice): void {}
 
     /**
-     * Handle the product price "deleted" event.
+     * Handle the ProductPrice "deleted" event.
      *
-     * @param  \App\Models\Product\ProductPrice $productPrice
+     * @param ProductPrice $productPrice
      * @return void
      */
-    public function deleted(\App\Models\Product\ProductPrice $productPrice): void
-    {
-        // Implement if needed
-    }
+    public function deleted(ProductPrice $productPrice): void {}
 
     /**
-     * Handle the product price "force deleted" event.
+     * Handle the ProductPrice "force deleted" event.
      *
-     * @param  \App\Models\Product\ProductPrice $productPrice
+     * @param ProductPrice $productPrice
      * @return void
      */
-    public function forceDeleted(\App\Models\Product\ProductPrice $productPrice): void
-    {
-        // Implement if needed
-    }
+    public function forceDeleted(ProductPrice $productPrice): void {}
 
     /**
-     * Handle the product price "restored" event.
+     * Handle the ProductPrice "restored" event.
      *
-     * @param  \App\Models\Product\ProductPrice $productPrice
+     * @param ProductPrice $productPrice
      * @return void
      */
-    public function restored(\App\Models\Product\ProductPrice $productPrice): void
-    {
-        // Implement if needed
-    }
+    public function restored(ProductPrice $productPrice): void {}
 
     /**
-     * Handle the product price "updated" event.
+     * Handle the ProductPrice "updated" event.
      *
-     * @param  \App\Models\Product\ProductPrice $productPrice
+     * @param ProductPrice $productPrice
      * @return void
      */
-    public function updated(\App\Models\Product\ProductPrice $productPrice): void
-    {
-        // Implement if needed
-    }
+    public function updated(ProductPrice $productPrice): void {}
 }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models\Product;
 
 use App\Casts\DateCast;
+use App\Models\Order\OrderProduct;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -24,7 +26,7 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class Product extends Model implements HasMedia, Sortable
 {
     use BelongsToTenant;
@@ -86,9 +88,7 @@ final class Product extends Model implements HasMedia, Sortable
 
     public function latestProductPrice(): HasOne
     {
-        return $this->hasOne(
-            related: \App\Models\Product\ProductPrice::class,
-        )->latestOfMany();
+        return $this->hasOne(ProductPrice::class)->latestOfMany();
     }
 
     public function multimedia(): MorphMany
@@ -98,23 +98,17 @@ final class Product extends Model implements HasMedia, Sortable
 
     public function orderProducts(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Order\OrderProduct::class,
-        );
+        return $this->hasMany(OrderProduct::class);
     }
 
     public function productCategory(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\Product\ProductCategory::class,
-        );
+        return $this->belongsTo(ProductCategory::class);
     }
 
     public function productPrices(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Product\ProductPrice::class,
-        );
+        return $this->hasMany(ProductPrice::class);
     }
 
     protected static function booted(): void

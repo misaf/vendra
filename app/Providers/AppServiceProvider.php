@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Contract\Language;
-use App\Models\Language\Language as LanguageLanguage;
-use Filament\Facades\Filament;
+use App\Contract\Language as ContractLanguage;
+use App\Models\Language\Language;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -23,44 +20,64 @@ final class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->bind(Language::class, LanguageLanguage::class);
-
-        Model::shouldBeStrict( ! $this->app->environment('production'));
-
-        URL::forceScheme('https');
-
-        $this->app['request']->server->set('HTTPS', 'on');
+        $this->configureEloquentStrictMode();
 
         if ($this->app->environment('production')) {
-            Password::defaults(fn() => Password::min(8)->mixedCase());
+            $this->configurePasswordDefaults();
         }
+    }
 
-        config()->set([
-            'app.name'      => 'asd',
-            'session.cookie' => str()->slug('asd', '_') . '_session',
-            'app.url'       => 'https://panel.houshang-flowers.test',
-            'app.asset_url' => 'https://panel.houshang-flowers.test',
-        ]);
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register(): void
+    {
+        // $this->app->bind(ContractLanguage::class, Language::class);
+    }
 
-        // app()->singleton('url', function ($app) {
-        //     return new UrlGenerator(
-        //         $app['router']->getRoutes(),
-        //         $app->rebinding(
-        //             'request',
-        //             function ($app2, $request): void {
-        //                 $app2['url']->setRequest($request);
-        //             },
-        //         ),
-        //         null,
-        //     );
-        // });
+    /**
+     * Configure Eloquent strict mode.
+     */
+    private function configureEloquentStrictMode(): void
+    {
+        Model::shouldBeStrict($this->app->environment('production'));
+    }
 
-        // Lang::handleMissingKeysUsing(function (string $key, array $replacements, string $locale) {
-        //     info("Missing translation key [{$key}] detected.");
+    /**
+     * Configure password defaults.
+     */
+    private function configurePasswordDefaults(): void
+    {
+        Password::defaults(fn() => Password::min(8)->mixedCase());
+    }
 
-        //     return $key;
-        // });
+    /**
+     * Log missing translation key.
+     *
+     * @param  string $key
+     * @return string
+     */
+    private function logMissingTranslationKey(string $key): string
+    {
+        Log::info("Missing translation key [{$key}] detected.");
+        return $key;
+    }
 
-        // DB::listen(fn($query) => Log::info($query->sql, $query->bindings));
+    /**
+     * Register database query logger.
+     */
+    private function registerDatabaseQueryLogger(): void
+    {
+        DB::listen(fn($query) => Log::info($query->sql, $query->bindings));
+    }
+
+    /**
+     * Register missing translation handler.
+     */
+    private function registerMissingTranslationHandler(): void
+    {
+        Lang::handleMissingKeysUsing(fn(string $key, array $replacements, string $locale) => $this->logMissingTranslationKey($key));
     }
 }

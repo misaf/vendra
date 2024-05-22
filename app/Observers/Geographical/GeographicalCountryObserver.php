@@ -6,6 +6,7 @@ namespace App\Observers\Geographical;
 
 use App\Jobs\DeleteImageJob;
 use App\Models\Geographical\GeographicalCity;
+use App\Models\Geographical\GeographicalCountry;
 use App\Models\Geographical\GeographicalNeighborhood;
 use App\Models\Geographical\GeographicalState;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,9 +19,21 @@ final class GeographicalCountryObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Geographical\GeographicalCountry $geographicalCountry): void {}
+    /**
+     * Handle the GeographicalCountry "created" event.
+     *
+     * @param GeographicalCountry $geographicalCountry
+     * @return void
+     */
+    public function created(GeographicalCountry $geographicalCountry): void {}
 
-    public function deleted(\App\Models\Geographical\GeographicalCountry $geographicalCountry): void
+    /**
+     * Handle the GeographicalCountry "deleted" event.
+     *
+     * @param GeographicalCountry $geographicalCountry
+     * @return void
+     */
+    public function deleted(GeographicalCountry $geographicalCountry): void
     {
         DB::transaction(function () use ($geographicalCountry): void {
             $geographicalCountry->geographicalStates()->delete();
@@ -29,7 +42,13 @@ final class GeographicalCountryObserver implements ShouldQueue
         });
     }
 
-    public function deleting(\App\Models\Geographical\GeographicalCountry $geographicalCountry): void
+    /**
+     * Handle the GeographicalCountry "deleting" event.
+     *
+     * @param GeographicalCountry $geographicalCountry
+     * @return void
+     */
+    public function deleting(GeographicalCountry $geographicalCountry): void
     {
         if ($geographicalCountry->isForceDeleting()) {
             $geographicalCountry->geographicalStates()->each(function ($item): void {
@@ -46,9 +65,27 @@ final class GeographicalCountryObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(\App\Models\Geographical\GeographicalCountry $geographicalCountry): void {}
+    /**
+     * Handle the GeographicalCountry "force deleted" event.
+     *
+     * @param GeographicalCountry $geographicalCountry
+     * @return void
+     */
+    public function forceDeleted(GeographicalCountry $geographicalCountry): void {}
 
-    public function restored(\App\Models\Geographical\GeographicalCountry $geographicalCountry): void {}
+    /**
+     * Handle the GeographicalCountry "restored" event.
+     *
+     * @param GeographicalCountry $geographicalCountry
+     * @return void
+     */
+    public function restored(GeographicalCountry $geographicalCountry): void {}
 
-    public function updated(\App\Models\Geographical\GeographicalCountry $geographicalCountry): void {}
+    /**
+     * Handle the GeographicalCountry "updated" event.
+     *
+     * @param GeographicalCountry $geographicalCountry
+     * @return void
+     */
+    public function updated(GeographicalCountry $geographicalCountry): void {}
 }

@@ -15,10 +15,10 @@ final class OrderPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function create(\App\Models\User $user): bool
+    public function create(User $user): bool
     {
         return $user->can('create-order');
     }
@@ -26,11 +26,11 @@ final class OrderPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param Order $order
      * @return bool
      */
-    public function delete(\App\Models\User $user, Order $order): bool
+    public function delete(User $user, Order $order): bool
     {
         return $user->can('delete-order');
     }
@@ -38,10 +38,10 @@ final class OrderPolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function deleteAny(\App\Models\User $user): bool
+    public function deleteAny(User $user): bool
     {
         return $user->can('delete-any-order');
     }
@@ -49,11 +49,11 @@ final class OrderPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param Order $order
      * @return bool
      */
-    public function forceDelete(\App\Models\User $user, Order $order): bool
+    public function forceDelete(User $user, Order $order): bool
     {
         return $user->can('force-delete-order');
     }
@@ -61,10 +61,10 @@ final class OrderPolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function forceDeleteAny(\App\Models\User $user): bool
+    public function forceDeleteAny(User $user): bool
     {
         return $user->can('force-delete-any-order');
     }
@@ -72,11 +72,11 @@ final class OrderPolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param Order $order
      * @return bool
      */
-    public function replicate(\App\Models\User $user, Order $order): bool
+    public function replicate(User $user, Order $order): bool
     {
         return $user->can('replicate-order');
     }
@@ -84,11 +84,11 @@ final class OrderPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param Order $order
      * @return bool
      */
-    public function restore(\App\Models\User $user, Order $order): bool
+    public function restore(User $user, Order $order): bool
     {
         return $user->can('restore-order');
     }
@@ -96,10 +96,10 @@ final class OrderPolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function restoreAny(\App\Models\User $user): bool
+    public function restoreAny(User $user): bool
     {
         return $user->can('restore-any-order');
     }
@@ -107,11 +107,11 @@ final class OrderPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param Order $order
      * @return bool
      */
-    public function update(\App\Models\User $user, Order $order): bool
+    public function update(User $user, Order $order): bool
     {
         return $user->can('update-order');
     }
@@ -119,7 +119,7 @@ final class OrderPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param Order $order
      * @return bool
      */
@@ -131,7 +131,7 @@ final class OrderPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
     public function viewAny(User $user): bool

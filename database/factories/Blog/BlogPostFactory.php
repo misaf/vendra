@@ -12,6 +12,11 @@ final class BlogPostFactory extends Factory
 {
     protected $model = BlogPost::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

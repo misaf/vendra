@@ -14,6 +14,11 @@ final class UserProfilePhoneFactory extends Factory
 {
     protected $model = UserProfilePhone::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         $country = $this->faker->countryISOAlpha3();

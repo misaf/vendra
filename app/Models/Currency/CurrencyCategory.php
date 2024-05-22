@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Currency;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class CurrencyCategory extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -52,8 +53,6 @@ final class CurrencyCategory extends Model implements HasMedia
 
     public function currencies(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Currency\Currency::class,
-        );
+        return $this->hasMany(Currency::class);
     }
 }

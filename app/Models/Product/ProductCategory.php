@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models\Product;
 
 use App\Casts\DateCast;
+use App\Models\Order\OrderProduct;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -23,7 +25,7 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class ProductCategory extends Model implements HasMedia, Sortable
 {
     use BelongsToTenant;
@@ -78,24 +80,16 @@ final class ProductCategory extends Model implements HasMedia, Sortable
 
     public function orderProducts(): HasManyThrough
     {
-        return $this->hasManyThrough(
-            related: \App\Models\Order\OrderProduct::class,
-            through: \App\Models\Product\Product::class,
-        );
+        return $this->hasManyThrough(OrderProduct::class, Product::class);
     }
 
     public function productPrices(): HasManyThrough
     {
-        return $this->hasManyThrough(
-            related: \App\Models\Product\ProductPrice::class,
-            through: \App\Models\Product\Product::class,
-        );
+        return $this->hasManyThrough(ProductPrice::class, Product::class);
     }
 
     public function products(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Product\Product::class,
-        );
+        return $this->hasMany(Product::class);
     }
 }

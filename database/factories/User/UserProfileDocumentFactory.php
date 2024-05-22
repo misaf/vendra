@@ -13,6 +13,11 @@ final class UserProfileDocumentFactory extends Factory
 {
     protected $model = UserProfileDocument::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

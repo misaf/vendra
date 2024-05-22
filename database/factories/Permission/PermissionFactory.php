@@ -11,6 +11,11 @@ final class PermissionFactory extends Factory
 {
     protected $model = Permission::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\User;
 
+use App\Models\User\UserProfile;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -14,9 +15,21 @@ final class UserProfileObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\User\UserProfile $userProfile): void {}
+    /**
+     * Handle the UserProfile "created" event.
+     *
+     * @param UserProfile $userProfile
+     * @return void
+     */
+    public function created(UserProfile $userProfile): void {}
 
-    public function deleted(\App\Models\User\UserProfile $userProfile): void
+    /**
+     * Handle the UserProfile "deleted" event.
+     *
+     * @param UserProfile $userProfile
+     * @return void
+     */
+    public function deleted(UserProfile $userProfile): void
     {
         DB::transaction(function () use ($userProfile): void {
             $userProfile->userProfileDocuments()->delete();
@@ -24,9 +37,27 @@ final class UserProfileObserver implements ShouldQueue
         });
     }
 
-    public function forceDeleted(\App\Models\User\UserProfile $userProfile): void {}
+    /**
+     * Handle the UserProfile "force deleted" event.
+     *
+     * @param UserProfile $userProfile
+     * @return void
+     */
+    public function forceDeleted(UserProfile $userProfile): void {}
 
-    public function restored(\App\Models\User\UserProfile $userProfile): void {}
+    /**
+     * Handle the UserProfile "restored" event.
+     *
+     * @param UserProfile $userProfile
+     * @return void
+     */
+    public function restored(UserProfile $userProfile): void {}
 
-    public function updated(\App\Models\User\UserProfile $userProfile): void {}
+    /**
+     * Handle the UserProfile "updated" event.
+     *
+     * @param UserProfile $userProfile
+     * @return void
+     */
+    public function updated(UserProfile $userProfile): void {}
 }

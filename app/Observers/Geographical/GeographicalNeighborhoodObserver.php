@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\Geographical;
 
+use App\Models\Geographical\GeographicalNeighborhood;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -13,13 +14,43 @@ final class GeographicalNeighborhoodObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
+    /**
+     * Handle the GeographicalNeighborhood "created" event.
+     *
+     * @param GeographicalNeighborhood $geographicalNeighborhood
+     * @return void
+     */
+    public function created(GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function deleted(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
+    /**
+     * Handle the GeographicalNeighborhood "deleted" event.
+     *
+     * @param GeographicalNeighborhood $geographicalNeighborhood
+     * @return void
+     */
+    public function deleted(GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function forceDeleted(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
+    /**
+     * Handle the GeographicalNeighborhood "force deleted" event.
+     *
+     * @param GeographicalNeighborhood $geographicalNeighborhood
+     * @return void
+     */
+    public function forceDeleted(GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function restored(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
+    /**
+     * Handle the GeographicalNeighborhood "restored" event.
+     *
+     * @param GeographicalNeighborhood $geographicalNeighborhood
+     * @return void
+     */
+    public function restored(GeographicalNeighborhood $geographicalNeighborhood): void {}
 
-    public function updated(\App\Models\Geographical\GeographicalNeighborhood $geographicalNeighborhood): void {}
+    /**
+     * Handle the GeographicalNeighborhood "updated" event.
+     *
+     * @param GeographicalNeighborhood $geographicalNeighborhood
+     * @return void
+     */
+    public function updated(GeographicalNeighborhood $geographicalNeighborhood): void {}
 }

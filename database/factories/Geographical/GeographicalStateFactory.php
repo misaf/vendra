@@ -12,6 +12,11 @@ final class GeographicalStateFactory extends Factory
 {
     protected $model = GeographicalState::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

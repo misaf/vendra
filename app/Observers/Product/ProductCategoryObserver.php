@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\Product;
 
+use App\Models\Product\ProductCategory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -14,23 +15,55 @@ final class ProductCategoryObserver implements ShouldQueue
     public bool $afterCommit = true;
 
     /**
-     * Handle the product category "deleted" event.
+     * Handle the ProductCategory "created" event.
      *
-     * @param  \App\Models\Product\ProductCategory $productCategory
+     * @param ProductCategory $productCategory
      * @return void
      */
-    public function deleted(\App\Models\Product\ProductCategory $productCategory): void
+    public function created(ProductCategory $productCategory): void {}
+
+    /**
+     * Handle the ProductCategory "deleted" event.
+     *
+     * @param ProductCategory $productCategory
+     * @return void
+     */
+    public function deleted(ProductCategory $productCategory): void
     {
         $this->deleteRelatedProducts($productCategory);
     }
 
     /**
-     * Delete related products when a product category is deleted or force deleted.
+     * Handle the ProductCategory "force deleted" event.
      *
-     * @param  \App\Models\Product\ProductCategory $productCategory
+     * @param ProductCategory $productCategory
      * @return void
      */
-    private function deleteRelatedProducts(\App\Models\Product\ProductCategory $productCategory): void
+    public function forceDeleted(ProductCategory $productCategory): void {}
+
+    /**
+     * Handle the ProductCategory "restored" event.
+     *
+     * @param ProductCategory $productCategory
+     * @return void
+     */
+    public function restored(ProductCategory $productCategory): void {}
+
+    /**
+     * Handle the ProductCategory "updated" event.
+     *
+     * @param ProductCategory $productCategory
+     * @return void
+     */
+    public function updated(ProductCategory $productCategory): void {}
+
+    /**
+     * Delete related products when a product category is deleted or force deleted.
+     *
+     * @param  ProductCategory $productCategory
+     * @return void
+     */
+    private function deleteRelatedProducts(ProductCategory $productCategory): void
     {
         $productCategory->products()->each(function ($product): void {
             $product->productPrices()->delete();

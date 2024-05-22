@@ -25,11 +25,5 @@ final class PulseServiceProvider extends ServiceProvider
                 'stack'   => $e->getTraceAsString(),
             ]);
         });
-
-        // Pulse::user(fn(User $user) => [
-        //     'name'   => $user->name,
-        //     'extra'  => $user->email,
-        //     'avatar' => $user->avatar_url,
-        // ]);
     }
 }

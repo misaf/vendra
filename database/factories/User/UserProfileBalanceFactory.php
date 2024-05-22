@@ -13,6 +13,11 @@ final class UserProfileBalanceFactory extends Factory
 {
     protected $model = UserProfileBalance::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

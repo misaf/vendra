@@ -7,6 +7,7 @@ namespace App\Observers\Geographical;
 use App\Jobs\DeleteImageJob;
 use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalNeighborhood;
+use App\Models\Geographical\GeographicalState;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +18,21 @@ final class GeographicalStateObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Geographical\GeographicalState $geographicalState): void {}
+    /**
+     * Handle the GeographicalState "created" event.
+     *
+     * @param GeographicalState $geographicalState
+     * @return void
+     */
+    public function created(GeographicalState $geographicalState): void {}
 
-    public function deleted(\App\Models\Geographical\GeographicalState $geographicalState): void
+    /**
+     * Handle the GeographicalState "deleted" event.
+     *
+     * @param GeographicalState $geographicalState
+     * @return void
+     */
+    public function deleted(GeographicalState $geographicalState): void
     {
         DB::transaction(function () use ($geographicalState): void {
             $geographicalState->geographicalCities()->delete();
@@ -27,7 +40,13 @@ final class GeographicalStateObserver implements ShouldQueue
         });
     }
 
-    public function deleting(\App\Models\Geographical\GeographicalState $geographicalState): void
+    /**
+     * Handle the GeographicalState "deleting" event.
+     *
+     * @param GeographicalState $geographicalState
+     * @return void
+     */
+    public function deleting(GeographicalState $geographicalState): void
     {
         if ($geographicalState->isForceDeleting()) {
             $geographicalState->geographicalCities()->each(function ($item): void {
@@ -40,9 +59,27 @@ final class GeographicalStateObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(\App\Models\Geographical\GeographicalState $geographicalState): void {}
+    /**
+     * Handle the GeographicalState "force deleted" event.
+     *
+     * @param GeographicalState $geographicalState
+     * @return void
+     */
+    public function forceDeleted(GeographicalState $geographicalState): void {}
 
-    public function restored(\App\Models\Geographical\GeographicalState $geographicalState): void {}
+    /**
+     * Handle the GeographicalState "restored" event.
+     *
+     * @param GeographicalState $geographicalState
+     * @return void
+     */
+    public function restored(GeographicalState $geographicalState): void {}
 
-    public function updated(\App\Models\Geographical\GeographicalState $geographicalState): void {}
+    /**
+     * Handle the GeographicalState "updated" event.
+     *
+     * @param GeographicalState $geographicalState
+     * @return void
+     */
+    public function updated(GeographicalState $geographicalState): void {}
 }

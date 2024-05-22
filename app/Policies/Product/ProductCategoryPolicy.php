@@ -15,10 +15,10 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function create(\App\Models\User $user): bool
+    public function create(User $user): bool
     {
         return $user->can('create-product-category');
     }
@@ -26,11 +26,11 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function delete(\App\Models\User $user, ProductCategory $productCategory): bool
+    public function delete(User $user, ProductCategory $productCategory): bool
     {
         return $user->can('delete-product-category');
     }
@@ -38,10 +38,10 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function deleteAny(\App\Models\User $user): bool
+    public function deleteAny(User $user): bool
     {
         return $user->can('delete-any-product-category');
     }
@@ -49,11 +49,11 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function forceDelete(\App\Models\User $user, ProductCategory $productCategory): bool
+    public function forceDelete(User $user, ProductCategory $productCategory): bool
     {
         return $user->can('force-delete-product-category');
     }
@@ -61,10 +61,10 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function forceDeleteAny(\App\Models\User $user): bool
+    public function forceDeleteAny(User $user): bool
     {
         return $user->can('force-delete-any-product-category');
     }
@@ -72,10 +72,10 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can reorder the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function reorder(\App\Models\User $user): bool
+    public function reorder(User $user): bool
     {
         return $user->can('reorder-product-category');
     }
@@ -83,11 +83,11 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function replicate(\App\Models\User $user, ProductCategory $productCategory): bool
+    public function replicate(User $user, ProductCategory $productCategory): bool
     {
         return $user->can('replicate-product-category');
     }
@@ -95,11 +95,11 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function restore(\App\Models\User $user, ProductCategory $productCategory): bool
+    public function restore(User $user, ProductCategory $productCategory): bool
     {
         return $user->can('restore-product-category');
     }
@@ -107,10 +107,10 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function restoreAny(\App\Models\User $user): bool
+    public function restoreAny(User $user): bool
     {
         return $user->can('restore-any-product-category');
     }
@@ -118,11 +118,11 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
-    public function update(\App\Models\User $user, ProductCategory $productCategory): bool
+    public function update(User $user, ProductCategory $productCategory): bool
     {
         return $user->can('update-product-category');
     }
@@ -130,7 +130,7 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
@@ -144,7 +144,7 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
     public function viewAny(?User $user = null): bool
@@ -157,7 +157,7 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can view the multimedia model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
@@ -169,7 +169,7 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can view the product prices model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */
@@ -181,7 +181,7 @@ final class ProductCategoryPolicy
     /**
      * Determine whether the user can view the products model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductCategory $productCategory
      * @return bool
      */

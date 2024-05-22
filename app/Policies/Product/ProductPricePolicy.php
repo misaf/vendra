@@ -15,10 +15,10 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function create(\App\Models\User $user): bool
+    public function create(User $user): bool
     {
         return $user->can('create-product-price');
     }
@@ -26,11 +26,11 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function delete(\App\Models\User $user, ProductPrice $productPrice): bool
+    public function delete(User $user, ProductPrice $productPrice): bool
     {
         return $user->can('delete-product-price');
     }
@@ -38,10 +38,10 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can delete any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function deleteAny(\App\Models\User $user): bool
+    public function deleteAny(User $user): bool
     {
         return $user->can('delete-any-product-price');
     }
@@ -49,11 +49,11 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function forceDelete(\App\Models\User $user, ProductPrice $productPrice): bool
+    public function forceDelete(User $user, ProductPrice $productPrice): bool
     {
         return $user->can('force-delete-product-price');
     }
@@ -61,10 +61,10 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can permanently delete any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function forceDeleteAny(\App\Models\User $user): bool
+    public function forceDeleteAny(User $user): bool
     {
         return $user->can('force-delete-any-product-price');
     }
@@ -72,11 +72,11 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can replicate the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function replicate(\App\Models\User $user, ProductPrice $productPrice): bool
+    public function replicate(User $user, ProductPrice $productPrice): bool
     {
         return $user->can('replicate-product-price');
     }
@@ -84,11 +84,11 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function restore(\App\Models\User $user, ProductPrice $productPrice): bool
+    public function restore(User $user, ProductPrice $productPrice): bool
     {
         return $user->can('restore-product-price');
     }
@@ -96,10 +96,10 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can restore any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
-    public function restoreAny(\App\Models\User $user): bool
+    public function restoreAny(User $user): bool
     {
         return $user->can('restore-any-product-price');
     }
@@ -107,11 +107,11 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
-    public function update(\App\Models\User $user, ProductPrice $productPrice): bool
+    public function update(User $user, ProductPrice $productPrice): bool
     {
         return $user->can('update-product-price');
     }
@@ -119,7 +119,7 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
@@ -133,7 +133,7 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return bool
      */
     public function viewAny(?User $user = null): bool
@@ -146,7 +146,7 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can view the currency model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */
@@ -158,7 +158,7 @@ final class ProductPricePolicy
     /**
      * Determine whether the user can view the product model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param ProductPrice $productPrice
      * @return bool
      */

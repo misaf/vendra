@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Observers\Permission;
 
+use App\Models\Permission\Role;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -13,16 +14,46 @@ final class RoleObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Permission\Role $role): void {}
+    /**
+     * Handle the Role "created" event.
+     *
+     * @param Role $role
+     * @return void
+     */
+    public function created(Role $role): void {}
 
-    public function deleted(\App\Models\Permission\Role $role): void
+    /**
+     * Handle the Role "deleted" event.
+     *
+     * @param Role $role
+     * @return void
+     */
+    public function deleted(Role $role): void
     {
         $role->permissions()->delete();
     }
 
-    public function forceDeleted(\App\Models\Permission\Role $role): void {}
+    /**
+     * Handle the Role "force deleted" event.
+     *
+     * @param Role $role
+     * @return void
+     */
+    public function forceDeleted(Role $role): void {}
 
-    public function restored(\App\Models\Permission\Role $role): void {}
+    /**
+     * Handle the Role "restored" event.
+     *
+     * @param Role $role
+     * @return void
+     */
+    public function restored(Role $role): void {}
 
-    public function updated(\App\Models\Permission\Role $role): void {}
+    /**
+     * Handle the Role "updated" event.
+     *
+     * @param Role $role
+     * @return void
+     */
+    public function updated(Role $role): void {}
 }

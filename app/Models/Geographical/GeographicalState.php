@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -20,9 +21,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
-use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class GeographicalState extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -40,7 +41,7 @@ final class GeographicalState extends Model implements HasMedia
 
     use SoftDeletes;
 
-    use TraitsBelongsToThrough;
+    use TraitBelongsToThrough;
 
     protected $casts = [
         'id'                      => 'integer',
@@ -64,32 +65,22 @@ final class GeographicalState extends Model implements HasMedia
 
     public function geographicalCities(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Geographical\GeographicalCity::class,
-        );
+        return $this->hasMany(GeographicalCity::class);
     }
 
     public function geographicalCountry(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\Geographical\GeographicalCountry::class,
-        );
+        return $this->belongsTo(GeographicalCountry::class);
     }
 
     public function geographicalNeighborhoods(): HasManyThrough
     {
-        return $this->hasManyThrough(
-            related: \App\Models\Geographical\GeographicalNeighborhood::class,
-            through: \App\Models\Geographical\GeographicalCity::class,
-        );
+        return $this->hasManyThrough(GeographicalNeighborhood::class, GeographicalCity::class);
     }
 
     public function geographicalZone(): BelongsToThrough
     {
-        return $this->belongsToThrough(
-            related: \App\Models\Geographical\GeographicalZone::class,
-            through: \App\Models\Geographical\GeographicalCountry::class,
-        );
+        return $this->belongsToThrough(GeographicalZone::class, GeographicalCountry::class);
     }
 
     public function getActivitylogOptions(): LogOptions

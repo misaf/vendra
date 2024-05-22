@@ -4,22 +4,33 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin;
+use App\Filament\Admin\Pages\Tenancy\EditTenantProfile;
+use App\Filament\Admin\Pages\Tenancy\RegisterTenant;
+use App\Http\Middleware\ApplyTenantScopes;
+use App\Http\Middleware\Filament\ConfigMiddleware;
 use App\Models\Tenant\Tenant;
-use App\Settings\GlobalSetting;
-use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-use Filament\FontProviders\LocalFontProvider;
+use Filament\Facades\Filament;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\SpatieLaravelTranslatablePlugin;
-use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
-use Filament\Support\Facades\FilamentAsset;
-use Filament\Tables;
-use Filament\Widgets;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Table;
+use Filament\Widgets\AccountWidget;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -28,132 +39,149 @@ final class AdminPanelProvider extends PanelProvider
      */
     public function boot(): void
     {
-        \Filament\Support\Facades\FilamentAsset::register([
-            Css::make('example-external-stylesheet', '//cdn.font-store.ir/yekan.css'),
-        ]);
+        $this->configureTableActions();
+    }
 
-        \BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch::configureUsing(function (LanguageSwitch $switch): void {
-            $switch->locales(['fa', 'en'])
-                ->visible(outsidePanels: true);
-        });
+    /**
+     * Define the Filament admin panel configuration.
+     *
+     * @param Panel $panel
+     * @return Panel
+     */
+    public function panel(Panel $panel): Panel
+    {
+        return $panel
+            ->default()
+            ->id('admin')
+            ->path(app('request')->segment(1) . '/admin')
+            ->login()
+            ->profile(isSimple: false)
+            ->brandLogoHeight('2rem')
+            ->colors(['primary' => Color::Amber])
+            ->authMiddleware($this->getAuthMiddleware())
+            ->middleware($this->getMiddleware(), true)
+            ->discoverClusters(app_path('Filament/Admin/Clusters'), 'App\\Filament\\Admin\\Clusters')
+            ->discoverPages(app_path('Filament/Admin/Pages'), 'App\\Filament\\Admin\\Pages')
+            ->discoverResources(app_path('Filament/Admin/Resources'), 'App\\Filament\\Admin\\Resources')
+            ->discoverWidgets(app_path('Filament/Admin/Widgets'), 'App\\Filament\\Admin\\Widgets')
+            ->pages($this->getPages())
+            ->widgets($this->getWidgets())
+            // ->tenant(Tenant::class, 'domain')
+            // ->tenantDomain('{tenant:domain}')
+            // ->tenantMenuItems($this->getMenuItems())
+            // ->tenantProfile(EditTenantProfile::class)
+            // ->tenantRegistration(RegisterTenant::class)
+            ->databaseNotifications()
+            ->databaseTransactions()
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->navigationGroups($this->getNavigationGroups())
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->spa()
+        ;
+    }
 
-        // PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch): void {
-        //     $panelSwitch->modalHeading('Available Panels')->visible(fn(): bool => auth()->user()->hasAnyRole([
-        //         'admin',
-        //         'general_manager',
-        //         'super_admin',
-        //     ]))->renderHook('panels::global-search.after');
-        // });
-
-        \Filament\Tables\Table::configureUsing(function (Tables\Table $table): void {
+    /**
+     * Configure table actions.
+     */
+    private function configureTableActions(): void
+    {
+        Table::configureUsing(function (Table $table): void {
             $table->paginationPageOptions([10, 25, 50]);
         });
 
-        \Filament\Tables\Actions\ViewAction::configureUsing(function (Tables\Actions\ViewAction $viewAction): void {
+        ViewAction::configureUsing(function (ViewAction $viewAction): void {
             $viewAction->button();
         });
 
-        \Filament\Tables\Actions\EditAction::configureUsing(function (Tables\Actions\EditAction $editAction): void {
+        EditAction::configureUsing(function (EditAction $editAction): void {
             $editAction->button();
         });
 
-        \Filament\Tables\Actions\DeleteAction::configureUsing(function (Tables\Actions\DeleteAction $deleteAction): void {
+        DeleteAction::configureUsing(function (DeleteAction $deleteAction): void {
             $deleteAction->button();
         });
     }
 
-    public function panel(Panel $panel): Panel
+    /**
+     * Get the list of authentication middleware.
+     *
+     * @return array
+     */
+    private function getAuthMiddleware(): array
     {
-        return $panel
-            // ->brandLogo(asset(app(GlobalSetting::class)->site_sidebar_logo_light))
-            // ->brandName(app(GlobalSetting::class)->site_title)
-            // ->darkModeBrandLogo(asset(app(GlobalSetting::class)->site_sidebar_logo_dark))
-            ->brandLogoHeight('2rem')
-            ->default()
-            ->id('admin')
-            ->login()
-            ->path(LaravelLocalization::setLocale() . '/admin')
-            ->profile(isSimple: false)
-            ->font(
-                'yekan',
-                url: asset('css/fonts.css'),
-                provider: LocalFontProvider::class,
-            )
-            ->colors([
-                'primary' => Color::Amber,
-            ])
-            ->navigationGroups([
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.product_management'))
-                    ->icon('heroicon-o-building-storefront')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.blog_management'))
-                    ->icon('heroicon-o-presentation-chart-line')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.currency_management'))
-                    ->icon('heroicon-o-currency-dollar')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.faq_management'))
-                    ->icon('heroicon-o-question-mark-circle')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.user_management'))
-                    ->icon('heroicon-o-users')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.geographical_management'))
-                    ->icon('heroicon-o-globe-europe-africa')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.report_management'))
-                    ->icon('heroicon-o-bug-ant')
-                    ->collapsed(),
-                NavigationGroup::make()
-                    ->label(fn(): string => __('navigation.setting_management'))
-                    ->icon('heroicon-o-cog-6-tooth')
-                    ->collapsed(),
-            ])
-            ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
-            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-            ->plugin(SpatieLaravelTranslatablePlugin::make()->defaultLocales(['fa', 'en']))
-            ->pages([
-                \Filament\Pages\Dashboard::class,
-            ])
-            ->widgets([
-                Widgets\AccountWidget::class,
-            ])
-            ->middleware([
-                \Illuminate\Cookie\Middleware\EncryptCookies::class,
-                \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-                \Illuminate\Session\Middleware\StartSession::class,
-                \Illuminate\Session\Middleware\AuthenticateSession::class,
-                \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-                \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-                \Illuminate\Routing\Middleware\SubstituteBindings::class,
-                \Filament\Http\Middleware\DisableBladeIconComponents::class,
-                \Filament\Http\Middleware\DispatchServingFilamentEvent::class,
-            ])
-            ->authMiddleware([
-                \Filament\Http\Middleware\Authenticate::class,
-            ])
-            ->databaseNotifications()
-            ->databaseTransactions()
-            ->globalSearchKeyBindings(keyBindings: ['command+k', 'ctrl+k'])
-            ->spa()
-            ->viteTheme(theme: 'resources/css/filament/admin/theme.css');
-            // ->tenant(
-            //     model: Tenant::class,
-            // );
-            // ->tenantDomain(domain: '{tenant:domain}')
-            // ->tenantProfile(page: \App\Filament\Admin\Pages\Tenancy\EditTenantProfile::class)
-            // ->tenantRegistration(page: \App\Filament\Admin\Pages\Tenancy\RegisterTenant::class)
-            // ->tenantMenuItems([
-            //     'register' => \Filament\Navigation\MenuItem::make()->label('Register new team'),
-            // ]);
+        return [
+            Authenticate::class,
+        ];
+    }
+
+    /**
+     * Get the menu items.
+     *
+     * @return array
+     */
+    private function getMenuItems(): array
+    {
+        return ['register' => MenuItem::make()->label('Register new team')];
+    }
+
+    /**
+     * Get the list of middleware.
+     *
+     * @return array
+     */
+    private function getMiddleware(): array
+    {
+        return [
+            EncryptCookies::class,
+            AddQueuedCookiesToResponse::class,
+            StartSession::class,
+            AuthenticateSession::class,
+            ShareErrorsFromSession::class,
+            VerifyCsrfToken::class,
+            SubstituteBindings::class,
+            DisableBladeIconComponents::class,
+            DispatchServingFilamentEvent::class,
+            ConfigMiddleware::class,
+            // ApplyTenantScopes::class
+        ];
+    }
+
+    /**
+     * Get the navigation groups.
+     *
+     * @return array
+     */
+    private function getNavigationGroups(): array
+    {
+        return [
+            NavigationGroup::make()->label(fn(): string => __('navigation.product_management'))->icon('heroicon-o-building-storefront')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.blog_management'))->icon('heroicon-o-presentation-chart-line')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.currency_management'))->icon('heroicon-o-currency-dollar')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.faq_management'))->icon('heroicon-o-question-mark-circle')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.user_management'))->icon('heroicon-o-users')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.geographical_management'))->icon('heroicon-o-globe-europe-africa')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.report_management'))->icon('heroicon-o-bug-ant')->collapsed(),
+            NavigationGroup::make()->label(fn(): string => __('navigation.setting_management'))->icon('heroicon-o-cog-6-tooth')->collapsed(),
+        ];
+    }
+
+    /**
+     * Get the pages.
+     *
+     * @return array
+     */
+    private function getPages(): array
+    {
+        return [Dashboard::class];
+    }
+
+    /**
+     * Get the widgets.
+     *
+     * @return array
+     */
+    private function getWidgets(): array
+    {
+        return [AccountWidget::class];
     }
 }

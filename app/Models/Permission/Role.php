@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace App\Models\Permission;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Models\Role as ModelsRole;
+use Spatie\Permission\Models\Role as ModelRole;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
-final class Role extends ModelsRole
+#[ScopedBy(TenantScope::class)]
+final class Role extends ModelRole
 {
     use BelongsToTenant;
 

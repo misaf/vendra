@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
+use App\Models\Scopes\Tenant as TenantScope;
+use App\Models\User;
 use App\Traits\BelongsToTenant;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -20,7 +22,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class UserProfile extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -58,53 +60,81 @@ final class UserProfile extends Model implements HasMedia
         'status',
     ];
 
+    /**
+     * Get the options for activity logging.
+     *
+     * @return LogOptions
+     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logExcept(['id']);
     }
 
+    /**
+     * Get the user that owns the profile.
+     *
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\User::class,
-        );
+        return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the balances for the user profile.
+     *
+     * @return HasMany
+     */
     public function userProfileBalances(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\User\UserProfileBalance::class,
-        );
+        return $this->hasMany(UserProfileBalance::class);
     }
 
+    /**
+     * Get the latest document for the user profile.
+     *
+     * @return HasOne
+     */
     public function userProfileDocument(): HasOne
     {
-        return $this->hasOne(
-            related: \App\Models\User\UserProfileDocument::class,
-        )->latestOfMany();
+        return $this->hasOne(UserProfileDocument::class)->latestOfMany();
     }
 
+    /**
+     * Get all documents for the user profile.
+     *
+     * @return HasMany
+     */
     public function userProfileDocuments(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\User\UserProfileDocument::class,
-        );
+        return $this->hasMany(UserProfileDocument::class);
     }
 
+    /**
+     * Get the latest phone for the user profile.
+     *
+     * @return HasOne
+     */
     public function userProfilePhone(): HasOne
     {
-        return $this->hasOne(
-            related: \App\Models\User\UserProfilePhone::class,
-        )->latestOfMany();
+        return $this->hasOne(UserProfilePhone::class)->latestOfMany();
     }
 
+    /**
+     * Get all phones for the user profile.
+     *
+     * @return HasMany
+     */
     public function userProfilePhones(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\User\UserProfilePhone::class,
-        );
+        return $this->hasMany(UserProfilePhone::class);
     }
 
+    /**
+     * Get the full name of the user.
+     *
+     * @return Attribute
+     */
     protected function fullName(): Attribute
     {
         return Attribute::make(

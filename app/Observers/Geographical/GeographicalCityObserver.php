@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Observers\Geographical;
 
 use App\Jobs\DeleteImageJob;
+use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalNeighborhood;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,14 +16,32 @@ final class GeographicalCityObserver implements ShouldQueue
 
     public bool $afterCommit = true;
 
-    public function created(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
+    /**
+     * Handle the GeographicalCity "created" event.
+     *
+     * @param GeographicalCity $geographicalCity
+     * @return void
+     */
+    public function created(GeographicalCity $geographicalCity): void {}
 
-    public function deleted(\App\Models\Geographical\GeographicalCity $geographicalCity): void
+    /**
+     * Handle the GeographicalCity "deleted" event.
+     *
+     * @param GeographicalCity $geographicalCity
+     * @return void
+     */
+    public function deleted(GeographicalCity $geographicalCity): void
     {
         $geographicalCity->geographicalNeighborhoods()->delete();
     }
 
-    public function deleting(\App\Models\Geographical\GeographicalCity $geographicalCity): void
+    /**
+     * Handle the GeographicalCity "deleting" event.
+     *
+     * @param GeographicalCity $geographicalCity
+     * @return void
+     */
+    public function deleting(GeographicalCity $geographicalCity): void
     {
         if ($geographicalCity->isForceDeleting()) {
             $geographicalCity->geographicalNeighborhoods()->each(function ($item): void {
@@ -31,9 +50,27 @@ final class GeographicalCityObserver implements ShouldQueue
         }
     }
 
-    public function forceDeleted(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
+    /**
+     * Handle the GeographicalCity "force deleted" event.
+     *
+     * @param GeographicalCity $geographicalCity
+     * @return void
+     */
+    public function forceDeleted(GeographicalCity $geographicalCity): void {}
 
-    public function restored(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
+    /**
+     * Handle the GeographicalCity "restored" event.
+     *
+     * @param GeographicalCity $geographicalCity
+     * @return void
+     */
+    public function restored(GeographicalCity $geographicalCity): void {}
 
-    public function updated(\App\Models\Geographical\GeographicalCity $geographicalCity): void {}
+    /**
+     * Handle the GeographicalCity "updated" event.
+     *
+     * @param GeographicalCity $geographicalCity
+     * @return void
+     */
+    public function updated(GeographicalCity $geographicalCity): void {}
 }

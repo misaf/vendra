@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace App\Models\Order;
 
 use App\Casts\DateCast;
+use App\Models\Currency\Currency;
+use App\Models\Currency\CurrencyCategory;
+use App\Models\Scopes\Tenant as TenantScope;
+use App\Models\Transaction\Transaction;
+use App\Models\User;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,9 +18,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Znck\Eloquent\Relations\BelongsToThrough;
-use Znck\Eloquent\Traits\BelongsToThrough as TraitsBelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class Order extends Model
 {
     use BelongsToTenant;
@@ -24,7 +29,7 @@ final class Order extends Model
 
     use SoftDeletes;
 
-    use TraitsBelongsToThrough;
+    use TraitBelongsToThrough;
 
     protected $casts = [
         'id'              => 'integer',
@@ -50,31 +55,21 @@ final class Order extends Model
 
     public function currency(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\Currency\Currency::class,
-        );
+        return $this->belongsTo(Currency::class);
     }
 
     public function currencyCategory(): BelongsToThrough
     {
-        return $this->belongsToThrough(
-            related: \App\Models\Currency\CurrencyCategory::class,
-            through: \App\Models\Currency\Currency::class,
-        );
+        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
     }
 
     public function transactions(): MorphMany
     {
-        return $this->morphMany(
-            related: \App\Models\Transaction\Transaction::class,
-            name: 'transactionable',
-        );
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(
-            related: \App\Models\User::class,
-        );
+        return $this->belongsTo(User::class);
     }
 }

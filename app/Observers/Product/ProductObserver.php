@@ -16,12 +16,20 @@ final class ProductObserver implements ShouldQueue
     public bool $afterCommit = true;
 
     /**
-     * Handle the product "deleted" event.
+     * Handle the Product "created" event.
      *
-     * @param  \App\Models\Product\Product  $product
+     * @param Product $product
      * @return void
      */
-    public function deleted(\App\Models\Product\Product $product): void
+    public function created(Product $product): void {}
+
+    /**
+     * Handle the Product "deleted" event.
+     *
+     * @param Product $product
+     * @return void
+     */
+    public function deleted(Product $product): void
     {
         $this->deleteRelatedData($product);
 
@@ -29,23 +37,47 @@ final class ProductObserver implements ShouldQueue
     }
 
     /**
-     * Handle the product "saved" event.
+     * Handle the Product "force deleted" event.
      *
-     * @param  \App\Models\Product\Product  $product
+     * @param Product $product
      * @return void
      */
-    public function saved(\App\Models\Product\Product $product): void
+    public function forceDeleted(Product $product): void {}
+
+    /**
+     * Handle the Product "restored" event.
+     *
+     * @param Product $product
+     * @return void
+     */
+    public function restored(Product $product): void {}
+
+    /**
+     * Handle the Product "saved" event.
+     *
+     * @param Product $product
+     * @return void
+     */
+    public function saved(Product $product): void
     {
         $this->forgetProductRowCountCache();
     }
 
     /**
-     * Delete related data when a product is deleted or force deleted.
+     * Handle the Product "updated" event.
      *
-     * @param  \App\Models\Product\Product  $product
+     * @param Product $product
      * @return void
      */
-    private function deleteRelatedData(\App\Models\Product\Product $product): void
+    public function updated(Product $product): void {}
+
+    /**
+     * Delete related data when a product is deleted or force deleted.
+     *
+     * @param Product $product
+     * @return void
+     */
+    private function deleteRelatedData(Product $product): void
     {
         $product->productPrices()->delete();
         $product->orderProducts()->delete();
@@ -53,7 +85,6 @@ final class ProductObserver implements ShouldQueue
 
     /**
      * Forget the product row count cache.
-     *
      * @return void
      */
     private function forgetProductRowCountCache(): void

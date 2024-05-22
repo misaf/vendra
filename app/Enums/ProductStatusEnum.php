@@ -7,6 +7,7 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
+use InvalidArgumentException;
 
 enum ProductStatusEnum: string implements HasLabel, HasColor, HasIcon
 {
@@ -14,35 +15,74 @@ enum ProductStatusEnum: string implements HasLabel, HasColor, HasIcon
     case InStock = 'in_stock';
     case OutOfStock = 'out_of_stock';
 
+    /**
+     * Get all enum values.
+     *
+     * @return array<int, string>
+     */
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
     }
 
-    public function getColor(): string | array | null
+    /**
+     * Get the color associated with the status.
+     *
+     * @return string|null
+     */
+    public function getColor(): ?string
     {
-        return match ($this) {
-            self::InStock       => 'warning',
-            self::OutOfStock    => 'warning',
-            self::AvailableSoon => 'warning',
-        };
+        return $this->getAttributeValue('color');
     }
 
+    /**
+     * Get the icon associated with the status.
+     *
+     * @return string|null
+     */
     public function getIcon(): ?string
     {
-        return match ($this) {
-            self::InStock       => 'heroicon-m-check',
-            self::OutOfStock    => 'heroicon-m-check',
-            self::AvailableSoon => 'heroicon-m-check',
-        };
+        return $this->getAttributeValue('icon');
     }
 
+    /**
+     * Get the label associated with the status.
+     *
+     * @return string|null
+     */
     public function getLabel(): ?string
     {
-        return match ($this) {
-            self::InStock       => __('status.in_stock'),
-            self::OutOfStock    => __('status.out_of_stock'),
-            self::AvailableSoon => __('status.available_soon'),
+        return $this->getAttributeValue('label');
+    }
+
+    /**
+     * Get the attribute value for the given attribute name.
+     *
+     * @param string $attribute
+     * @return mixed
+     */
+    private function getAttributeValue(string $attribute): mixed
+    {
+        return match ($attribute) {
+            'color' => match ($this) {
+                self::AvailableSoon => 'warning',
+                self::InStock       => 'warning',
+                self::OutOfStock    => 'warning',
+                default             => throw new InvalidArgumentException("Invalid value for color."),
+            },
+            'icon' => match ($this) {
+                self::AvailableSoon => 'heroicon-m-x-mark',
+                self::InStock       => 'heroicon-m-x-mark',
+                self::OutOfStock    => 'heroicon-m-x-mark',
+                default             => throw new InvalidArgumentException("Invalid value for icon."),
+            },
+            'label' => match ($this) {
+                self::AvailableSoon => __('status.available_soon'),
+                self::InStock       => __('status.in_stock'),
+                self::OutOfStock    => __('status.out_of_stock'),
+                default             => throw new InvalidArgumentException("Invalid value for label."),
+            },
+            default => throw new InvalidArgumentException("Invalid attribute name."),
         };
     }
 }

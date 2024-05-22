@@ -40,7 +40,10 @@ final class UserProfileResource extends Resource
                     ->relationship('user', 'name')
                     ->required()
                     ->searchable()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn(Unique $rule) => $rule->whereNull('deleted_at')),
+                    ->unique(
+                        ignoreRecord: true,
+                        modifyRuleUsing: fn(Unique $rule) => $rule->where('tenant_id', app('currentTenant')->id)->whereNull('deleted_at'),
+                    ),
 
                 Forms\Components\TextInput::make('first_name')
                     ->autofocus()

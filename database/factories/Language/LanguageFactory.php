@@ -11,6 +11,11 @@ final class LanguageFactory extends Factory
 {
     protected $model = Language::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\Page;
 
+use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-#[ScopedBy([\App\Scopes\Tenant::class])]
+#[ScopedBy(TenantScope::class)]
 final class PageCategory extends Model implements HasMedia
 {
     use BelongsToTenant;
@@ -45,8 +46,6 @@ final class PageCategory extends Model implements HasMedia
 
     public function pages(): HasMany
     {
-        return $this->hasMany(
-            related: \App\Models\Page\Page::class,
-        );
+        return $this->hasMany(Page::class);
     }
 }

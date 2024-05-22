@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
 
-    'laravellocalization' => false,
+    'laravellocalization' => true,
 
     'locales' => [
         'fa' => 'Persian',

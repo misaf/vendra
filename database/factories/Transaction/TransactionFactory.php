@@ -13,6 +13,11 @@ final class TransactionFactory extends Factory
 {
     protected $model = Transaction::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
