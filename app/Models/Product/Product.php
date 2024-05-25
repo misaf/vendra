@@ -7,6 +7,7 @@ namespace App\Models\Product;
 use App\Casts\DateCast;
 use App\Models\Order\OrderProduct;
 use App\Models\Scopes\Tenant as TenantScope;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -29,6 +30,8 @@ use Spatie\Translatable\HasTranslations;
 #[ScopedBy(TenantScope::class)]
 final class Product extends Model implements HasMedia, Sortable
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;

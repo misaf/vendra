@@ -6,7 +6,7 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Models\Blog\BlogPost;
 use App\Models\Faq\Faq;
-use App\Models\User;
+use App\Models\User\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;

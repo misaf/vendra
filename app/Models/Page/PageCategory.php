@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Page;
 
 use App\Models\Scopes\Tenant as TenantScope;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -18,6 +19,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 #[ScopedBy(TenantScope::class)]
 final class PageCategory extends Model implements HasMedia
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;

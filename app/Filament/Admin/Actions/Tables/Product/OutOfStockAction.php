@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Tables\Product;
+namespace App\Filament\Admin\Actions\Tables\Product;
 
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
-final class InStockAction extends BulkAction
+final class OutOfStockAction extends BulkAction
 {
     use CanCustomizeProcess;
 
@@ -17,20 +17,20 @@ final class InStockAction extends BulkAction
     {
         parent::setUp();
 
-        $this->label(__('form.in_stock'));
+        $this->label(__('form.out_of_stock'));
 
         $this->successNotificationTitle(__('filament-actions::edit.single.notifications.saved.title'));
 
-        $this->color('primary');
+        $this->color('gray');
 
-        $this->icon('heroicon-o-archive-box-arrow-down');
+        $this->icon('heroicon-o-archive-box-x-mark');
 
         $this->requiresConfirmation();
 
-        $this->modalIcon('heroicon-o-archive-box-arrow-down');
+        $this->modalIcon('heroicon-o-archive-box-x-mark');
 
         $this->action(function (): void {
-            $this->process(static fn(Collection $records) => $records->each(fn(Model $record) => $record->update(['in_stock' => true])));
+            $this->process(static fn(Collection $records) => $records->each(fn(Model $record) => $record->update(['in_stock' => false])));
 
             $this->success();
         });
@@ -40,6 +40,6 @@ final class InStockAction extends BulkAction
 
     public static function getDefaultName(): ?string
     {
-        return 'inStock';
+        return 'outOfStock';
     }
 }

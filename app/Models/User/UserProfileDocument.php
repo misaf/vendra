@@ -6,26 +6,25 @@ namespace App\Models\User;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\User;
 use App\Models\User\Enums\UserProfileDocumentStatusEnum;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\ModelStatus\HasStatuses;
-use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 #[ScopedBy(TenantScope::class)]
-final class UserProfileDocument extends Model implements HasMedia
+final class UserProfileDocument extends Model implements
+    Contracts\BelongsToUserProfile,
+    Contracts\BelongsToUserThroughUserProfile
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;
@@ -43,6 +42,10 @@ final class UserProfileDocument extends Model implements HasMedia
 
     use TraitBelongsToThrough;
 
+    use Traits\BelongsToUserProfile;
+
+    use Traits\BelongsToUserThroughUserProfile;
+
     protected $casts = [
         'id'              => 'integer',
         'user_profile_id' => 'integer',
@@ -58,19 +61,4 @@ final class UserProfileDocument extends Model implements HasMedia
         'status',
         'verified_at',
     ];
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->logExcept(['id']);
-    }
-
-    public function user(): BelongsToThrough
-    {
-        return $this->belongsToThrough(User::class, UserProfile::class);
-    }
-
-    public function userProfile(): BelongsTo
-    {
-        return $this->belongsTo(UserProfile::class);
-    }
 }

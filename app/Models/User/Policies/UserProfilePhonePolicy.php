@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models\User\Policies;
 
-use App\Models\User;
+use App\Models\User\User;
 use App\Models\User\UserProfilePhone;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

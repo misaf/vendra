@@ -6,26 +6,27 @@ namespace App\Models\User;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\User;
 use App\Models\User\Enums\UserProfileDocumentStatusEnum;
 use App\Models\User\Enums\UserProfilePhoneStatusEnum;
 use App\Models\User\Services\UserProfilePhoneService;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
-use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\ModelStatus\HasStatuses;
-use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 #[ScopedBy(TenantScope::class)]
-final class UserProfilePhone extends Model
+final class UserProfilePhone extends Model implements
+    Contracts\BelongsToUserProfile,
+    Contracts\BelongsToUserThroughUserProfile
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;
@@ -37,6 +38,10 @@ final class UserProfilePhone extends Model
     use SoftDeletes;
 
     use TraitBelongsToThrough;
+
+    use Traits\BelongsToUserProfile;
+
+    use Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [
         'id'               => 'integer',
@@ -79,20 +84,5 @@ final class UserProfilePhone extends Model
                 $userProfilePhone->verified_at = now();
             }
         });
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->logExcept(['id']);
-    }
-
-    public function user(): BelongsToThrough
-    {
-        return $this->belongsToThrough(User::class, UserProfile::class);
-    }
-
-    public function userProfile(): BelongsTo
-    {
-        return $this->belongsTo(UserProfile::class);
     }
 }

@@ -27,11 +27,12 @@ use App\Models\Permission\Role;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductPrice;
-use App\Models\User;
+use App\Models\User\User;
 use App\Models\User\UserProfile;
 use App\Models\User\UserProfileBalance;
 use App\Models\User\UserProfileDocument;
 use App\Models\User\UserProfilePhone;
+use App\Traits\ActivityLog;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -41,6 +42,8 @@ use Spatie\Tags\Tag;
 
 final class Tenant extends SpatieTenant
 {
+    use ActivityLog;
+
     use HasFactory;
 
     use HasSlugOptionsTrait;

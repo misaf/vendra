@@ -6,6 +6,7 @@ namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -14,7 +15,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,6 +24,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 #[ScopedBy(TenantScope::class)]
 final class GeographicalNeighborhood extends Model implements HasMedia
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;
@@ -86,10 +88,5 @@ final class GeographicalNeighborhood extends Model implements HasMedia
             GeographicalState::class,
             GeographicalCity::class,
         ]);
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()->logExcept(['id']);
     }
 }

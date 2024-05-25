@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Permission\Policies;
 
 use App\Models\Permission\Role;
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 final class RolePolicy

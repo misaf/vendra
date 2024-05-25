@@ -7,6 +7,7 @@ namespace App\Models\User;
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
 use App\Models\Tenant\Tenant;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
@@ -29,6 +30,8 @@ final class User extends AuthUser implements
     FilamentUser,
     HasName
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasApiTokens;

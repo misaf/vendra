@@ -6,6 +6,7 @@ namespace App\Models\Currency;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -20,6 +21,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 #[ScopedBy(TenantScope::class)]
 final class CurrencyCategory extends Model implements HasMedia
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;

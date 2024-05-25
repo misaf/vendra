@@ -10,7 +10,8 @@ use App\Models\Currency\CurrencyCategory;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\User;
+use App\Models\User\User;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 #[ScopedBy(TenantScope::class)]
 final class OrderProduct extends Model
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;

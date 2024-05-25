@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\Product;
 
-use App\Actions\Tables\Product\InStockAction;
-use App\Actions\Tables\Product\OutOfStockAction;
+use App\Filament\Admin\Actions\Tables\Product\InStockAction;
+use App\Filament\Admin\Actions\Tables\Product\OutOfStockAction;
 use App\Filament\Admin\Resources\Product\ProductResource\Pages;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;

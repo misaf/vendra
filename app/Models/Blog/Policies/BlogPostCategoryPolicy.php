@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Models\Blog\Policies;
 
 use App\Models\Blog\BlogPostCategory;
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 final class BlogPostCategoryPolicy

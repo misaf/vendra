@@ -6,6 +6,7 @@ namespace App\Models\Transaction;
 
 use App\Casts\DateCast;
 use App\Enums\TransactionStatusEnum;
+use App\Traits\ActivityLog;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class Transaction extends Model
 {
+    use ActivityLog;
+
     use HasFactory;
 
     use SoftDeletes;

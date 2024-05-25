@@ -6,6 +6,7 @@ namespace App\Models\Blog;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
@@ -25,6 +26,8 @@ use Spatie\Translatable\HasTranslations;
 #[ScopedBy(TenantScope::class)]
 final class BlogPost extends Model implements HasMedia, Sortable
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;

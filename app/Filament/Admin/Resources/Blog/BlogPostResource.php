@@ -7,7 +7,7 @@ namespace App\Filament\Admin\Resources\Blog;
 use App\Filament\Admin\Resources\Blog\BlogPostResource\Pages;
 use App\Models\Blog\BlogPost;
 use App\Models\Blog\BlogPostCategory;
-use App\Models\User;
+use App\Models\User\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;

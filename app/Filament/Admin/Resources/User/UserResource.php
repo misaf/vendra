@@ -7,7 +7,7 @@ namespace App\Filament\Admin\Resources\User;
 use App\Filament\Admin\Resources\User\UserProfileDocumentResource\RelationManagers\UserProfileDocumentRelationManager;
 use App\Filament\Admin\Resources\User\UserProfileResource\RelationManagers\UserProfileRelationManager;
 use App\Filament\Admin\Resources\User\UserResource\Pages;
-use App\Models\User;
+use App\Models\User\User;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;

@@ -9,6 +9,7 @@ use App\Casts\MoneyCast;
 use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyCategory;
 use App\Models\Scopes\Tenant as TenantScope;
+use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -22,6 +23,8 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 #[ScopedBy(TenantScope::class)]
 final class ProductPrice extends Model
 {
+    use ActivityLog;
+
     use BelongsToTenant;
 
     use HasFactory;
