@@ -5,28 +5,17 @@ declare(strict_types=1);
 namespace App\Models\Currency;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
+use App\Models\Tenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-#[ScopedBy(TenantScope::class)]
-final class CurrencyCategory extends Model implements HasMedia
+final class CurrencyCategory extends Tenant implements
+    Contracts\HasCurrency,
+    HasMedia
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
     use HasSlugOptionsTrait;
 
     use InteractsWithMedia, ThumbnailTableRecord {
@@ -35,6 +24,8 @@ final class CurrencyCategory extends Model implements HasMedia
     }
 
     use SoftDeletes;
+
+    use Traits\HasCurrency;
 
     protected $casts = [
         'id'          => 'integer',
@@ -53,9 +44,4 @@ final class CurrencyCategory extends Model implements HasMedia
         'slug',
         'status',
     ];
-
-    public function currencies(): HasMany
-    {
-        return $this->hasMany(Currency::class);
-    }
 }

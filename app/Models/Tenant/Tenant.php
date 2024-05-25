@@ -7,7 +7,7 @@ namespace App\Models\Tenant;
 use App\Casts\DateCast;
 use App\Models\Blog\BlogPost;
 use App\Models\Blog\BlogPostCategory;
-use App\Models\Currency\Currency;
+use App\Models\Currency;
 use App\Models\Currency\CurrencyCategory;
 use App\Models\Faq\Faq;
 use App\Models\Faq\FaqCategory;
@@ -27,26 +27,36 @@ use App\Models\Permission\Role;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\Product\ProductPrice;
-use App\Models\User\User;
-use App\Models\User\UserProfile;
-use App\Models\User\UserProfileBalance;
-use App\Models\User\UserProfileDocument;
-use App\Models\User\UserProfilePhone;
+use App\Models\User;
 use App\Traits\ActivityLog;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
 use Spatie\Tags\Tag;
 
-final class Tenant extends SpatieTenant
+final class Tenant extends SpatieTenant implements
+    Currency\Contracts\HasCurrency,
+    User\Contracts\HasUserProfile,
+    User\Contracts\HasUserProfileBalance,
+    User\Contracts\HasUserProfileDocument,
+    User\Contracts\HasUserProfilePhone
 {
     use ActivityLog;
+
+    use Currency\Traits\HasCurrency;
 
     use HasFactory;
 
     use HasSlugOptionsTrait;
+
+    use User\Traits\HasUserProfile;
+
+    use User\Traits\HasUserProfileBalance;
+
+    use User\Traits\HasUserProfileDocument;
+
+    use User\Traits\HasUserProfilePhone;
 
     protected $casts = [
         'id'          => 'integer',
@@ -77,11 +87,11 @@ final class Tenant extends SpatieTenant
         return $this->hasMany(BlogPost::class);
     }
 
-    public function currencies(): HasMany
-    {
-        return $this->hasMany(Currency::class);
-    }
-
+    /**
+     * Get the user that owns the profile.
+     *
+     * @return HasMany
+     */
     public function currencyCategories(): HasMany
     {
         return $this->hasMany(CurrencyCategory::class);
@@ -180,30 +190,5 @@ final class Tenant extends SpatieTenant
     public function tags(): HasMany
     {
         return $this->hasMany(Tag::class);
-    }
-
-    public function userProfileBalances(): HasMany
-    {
-        return $this->hasMany(UserProfileBalance::class);
-    }
-
-    public function userProfileDocuments(): HasMany
-    {
-        return $this->hasMany(UserProfileDocument::class);
-    }
-
-    public function userProfilePhones(): HasMany
-    {
-        return $this->hasMany(UserProfilePhone::class);
-    }
-
-    public function userProfiles(): HasMany
-    {
-        return $this->hasMany(UserProfile::class);
-    }
-
-    public function users(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class);
     }
 }

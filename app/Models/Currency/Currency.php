@@ -5,31 +5,22 @@ declare(strict_types=1);
 namespace App\Models\Currency;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
+use App\Models\Tenant;
+use App\Models\User;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-#[ScopedBy(TenantScope::class)]
-final class Currency extends Model implements HasMedia, Sortable
+final class Currency extends Tenant implements
+    Contracts\BelongsToCurrencyCategory,
+    HasMedia,
+    Sortable,
+    User\Contracts\HasUserProfileBalance
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
     use HasSlugOptionsTrait;
 
     use InteractsWithMedia, ThumbnailTableRecord {
@@ -40,6 +31,10 @@ final class Currency extends Model implements HasMedia, Sortable
     use SoftDeletes;
 
     use SortableTrait;
+
+    use Traits\BelongsToCurrencyCategory;
+
+    use User\Traits\HasUserProfileBalance;
 
     protected $casts = [
         'id'                   => 'integer',
@@ -70,16 +65,4 @@ final class Currency extends Model implements HasMedia, Sortable
         'position',
         'status',
     ];
-
-    public function currencyCategory(): BelongsTo
-    {
-        return $this->belongsTo(CurrencyCategory::class);
-    }
-
-    // protected function conversionRate(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn(mixed $value, array $attributes) => dd($attributes)
-    //     );
-    // }
 }

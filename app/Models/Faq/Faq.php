@@ -5,14 +5,9 @@ declare(strict_types=1);
 namespace App\Models\Faq;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
+use App\Models\Tenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,15 +18,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 
-#[ScopedBy(TenantScope::class)]
-final class Faq extends Model implements HasMedia, Sortable
+final class Faq extends Tenant implements HasMedia, Sortable
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
     use HasSlugOptionsTrait;
 
     use HasTranslatableSlug;

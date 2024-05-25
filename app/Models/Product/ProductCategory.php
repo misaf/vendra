@@ -6,14 +6,9 @@ namespace App\Models\Product;
 
 use App\Casts\DateCast;
 use App\Models\Order\OrderProduct;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
+use App\Models\Tenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -26,15 +21,8 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
-#[ScopedBy(TenantScope::class)]
-final class ProductCategory extends Model implements HasMedia, Sortable
+final class ProductCategory extends Tenant implements HasMedia, Sortable
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
     use HasRecursiveRelationships;
 
     use HasSlugOptionsTrait;

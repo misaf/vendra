@@ -5,18 +5,12 @@ declare(strict_types=1);
 namespace App\Models\Tenant;
 
 use App\Casts\DateCast;
-use App\Traits\ActivityLog;
+use App\Models\Tenant;
 use App\Traits\HasSlugOptionsTrait;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-final class TenantDomain extends Model
+final class TenantDomain extends Tenant
 {
-    use ActivityLog;
-
-    use HasFactory;
-
     use HasSlugOptionsTrait;
 
     use SoftDeletes;

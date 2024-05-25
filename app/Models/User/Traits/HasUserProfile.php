@@ -6,17 +6,17 @@ namespace App\Models\User\Traits;
 
 use App\Models\User\User;
 use App\Models\User\UserProfile;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-trait BelongsToUserProfile
+trait HasUserProfile
 {
     /**
      * Get the user that owns the profile.
      *
-     * @return BelongsTo
+     * @return HasMany
      */
-    public function userProfile(): BelongsTo
+    public function userProfiles(): HasMany
     {
-        return $this->belongsTo(UserProfile::class);
+        return $this->hasMany(UserProfile::class);
     }
 }

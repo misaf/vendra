@@ -6,41 +6,31 @@ namespace App\Models\User;
 
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Currency;
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\ModelStatus\HasStatuses;
-use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy(TenantScope::class)]
-final class UserProfileBalance extends Model implements
+final class UserProfileBalance extends Tenant implements
     Contracts\BelongsToUserProfile,
-    Contracts\BelongsToUserThroughUserProfile
+    Contracts\BelongsToUserThroughUserProfile,
+    Currency\Contracts\BelongsToCurrency,
+    Currency\Contracts\BelongsToCurrencyCategoryThroughCurrency
 {
-    use ActivityLog;
+    use Currency\Traits\BelongsToCurrency;
 
-    use BelongsToTenant;
-
-    use HasFactory;
+    use Currency\Traits\BelongsToCurrencyCategoryThroughCurrency;
 
     // use HasStatuses;
-
-    use LogsActivity;
 
     use SoftDeletes;
 
     use TraitBelongsToThrough;
 
     use Traits\BelongsToUserProfile;
+
+    use Traits\BelongsToUserThroughUserProfile;
 
     use Traits\BelongsToUserThroughUserProfile;
 
@@ -61,14 +51,4 @@ final class UserProfileBalance extends Model implements
         'amount',
         'status',
     ];
-
-    public function currency(): BelongsTo
-    {
-        return $this->belongsTo(Currency::class);
-    }
-
-    public function currencyCategory(): BelongsToThrough
-    {
-        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
-    }
 }

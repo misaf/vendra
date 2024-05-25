@@ -5,14 +5,9 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
+use App\Models\Tenant;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,15 +17,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy(TenantScope::class)]
-final class GeographicalCity extends Model implements HasMedia
+final class GeographicalCity extends Tenant implements HasMedia
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
     use HasSlugOptionsTrait;
 
     use InteractsWithMedia, ThumbnailTableRecord {

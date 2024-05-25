@@ -5,34 +5,28 @@ declare(strict_types=1);
 namespace App\Models\Order;
 
 use App\Casts\DateCast;
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\Scopes\Tenant as TenantScope;
+use App\Models\Currency;
+use App\Models\Tenant;
 use App\Models\Transaction\Transaction;
-use App\Models\User\User;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy(TenantScope::class)]
-final class Order extends Model
+final class Order extends Tenant implements
+    Currency\Contracts\BelongsToCurrency,
+    Currency\Contracts\BelongsToCurrencyCategoryThroughCurrency,
+    User\Contracts\BelongsToUser
 {
-    use ActivityLog;
+    use Currency\Traits\BelongsToCurrency;
 
-    use BelongsToTenant;
-
-    use HasFactory;
+    use Currency\Traits\BelongsToCurrencyCategoryThroughCurrency;
 
     use SoftDeletes;
 
     use TraitBelongsToThrough;
+
+    use User\Traits\BelongsToUser;
 
     protected $casts = [
         'id'              => 'integer',
@@ -56,23 +50,8 @@ final class Order extends Model
         'status',
     ];
 
-    public function currency(): BelongsTo
-    {
-        return $this->belongsTo(Currency::class);
-    }
-
-    public function currencyCategory(): BelongsToThrough
-    {
-        return $this->belongsToThrough(CurrencyCategory::class, Currency::class);
-    }
-
     public function transactions(): MorphMany
     {
         return $this->morphMany(Transaction::class, 'transactionable');
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
     }
 }

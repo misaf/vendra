@@ -5,31 +5,22 @@ declare(strict_types=1);
 namespace App\Models\Order;
 
 use App\Casts\DateCast;
-use App\Models\Currency\Currency;
+use App\Models\Currency;
 use App\Models\Currency\CurrencyCategory;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\User\User;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy(TenantScope::class)]
-final class OrderProduct extends Model
+final class OrderProduct extends Tenant implements
+    User\Contracts\BelongsToUser,
+    Currency\Contracts\BelongsToCurrency,
+    Currency\Contracts\BelongsToCurrencyCategory
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
     use SoftDeletes;
 
     use TraitBelongsToThrough;
@@ -56,15 +47,25 @@ final class OrderProduct extends Model
         'discount_amount',
     ];
 
+    /**
+     * Get the user that owns the profile.
+     *
+     * @return BelongsToThrough
+     */
     public function currency(): BelongsToThrough
     {
-        return $this->belongsToThrough(Currency::class, Order::class);
+        return $this->belongsToThrough(Currency\Currency::class, Order::class);
     }
 
+    /**
+     * Get the user that owns the profile.
+     *
+     * @return BelongsToThrough
+     */
     public function CurrencyCategory(): BelongsToThrough
     {
         return $this->belongsToThrough(CurrencyCategory::class, [
-            Currency::class,
+            Currency\Currency::class,
             Order::class,
         ]);
     }
@@ -86,6 +87,6 @@ final class OrderProduct extends Model
 
     public function user(): BelongsToThrough
     {
-        return $this->belongsToThrough(User::class, Order::class);
+        return $this->belongsToThrough(User\User::class, Order::class);
     }
 }

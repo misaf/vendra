@@ -8,5 +8,10 @@ use Znck\Eloquent\Relations\BelongsToThrough;
 
 interface BelongsToUserThroughUserProfile
 {
+    /**
+     * Get the latest document for the user profile.
+     *
+     * @return BelongsToThrough
+     */
     public function user(): BelongsToThrough;
 }

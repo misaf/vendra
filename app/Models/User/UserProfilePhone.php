@@ -5,36 +5,18 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
+use App\Models\Tenant;
 use App\Models\User\Enums\UserProfileDocumentStatusEnum;
 use App\Models\User\Enums\UserProfilePhoneStatusEnum;
 use App\Models\User\Services\UserProfilePhoneService;
-use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\ModelStatus\HasStatuses;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-#[ScopedBy(TenantScope::class)]
-final class UserProfilePhone extends Model implements
+final class UserProfilePhone extends Tenant implements
     Contracts\BelongsToUserProfile,
     Contracts\BelongsToUserThroughUserProfile
 {
-    use ActivityLog;
-
-    use BelongsToTenant;
-
-    use HasFactory;
-
-    // use HasStatuses;
-
-    use LogsActivity;
-
     use SoftDeletes;
 
     use TraitBelongsToThrough;

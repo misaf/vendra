@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Models\User\Contracts;
+namespace App\Models\Currency\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Znck\Eloquent\Relations\BelongsToThrough;
 
-interface BelongsToUser
+interface BelongsToCurrencyCategory
 {
     /**
-     * Get the latest document for the user profile.
+     * Get the user that owns the profile.
      *
      * @return BelongsTo|BelongsToThrough
      */
-    public function user(): BelongsTo|BelongsToThrough;
+    public function currencyCategory(): BelongsTo|BelongsToThrough;
 }

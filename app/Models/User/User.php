@@ -15,10 +15,6 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Notifications\Notifiable;
@@ -28,7 +24,8 @@ use Spatie\Permission\Traits\HasRoles;
 #[ScopedBy(TenantScope::class)]
 final class User extends AuthUser implements
     FilamentUser,
-    HasName
+    HasName,
+    Contracts\HasUserProfile
 {
     use ActivityLog;
 
@@ -43,6 +40,8 @@ final class User extends AuthUser implements
     use Notifiable;
 
     use SoftDeletes;
+
+    use Traits\HasUserProfile;
 
     protected $casts = [
         'tenant_id'         => 'integer',
@@ -90,53 +89,5 @@ final class User extends AuthUser implements
     public function tenants(): BelongsToMany
     {
         return $this->belongsToMany(Tenant::class);
-    }
-
-    /**
-     * @return HasOne
-     */
-    public function userProfile(): HasOne
-    {
-        return $this->hasOne(UserProfile::class)->latestOfMany();
-    }
-
-    /**
-     * @return HasOneThrough
-     */
-    public function userProfileDocument(): HasOneThrough
-    {
-        return $this->hasOneThrough(UserProfileDocument::class, UserProfile::class)->latest();
-    }
-
-    /**
-     * @return HasManyThrough
-     */
-    public function userProfileDocuments(): HasManyThrough
-    {
-        return $this->hasManyThrough(UserProfileDocument::class, UserProfile::class);
-    }
-
-    /**
-     * @return HasOneThrough
-     */
-    public function userProfilePhone(): HasOneThrough
-    {
-        return $this->hasOneThrough(UserProfilePhone::class, UserProfile::class)->latest();
-    }
-
-    /**
-     * @return HasManyThrough
-     */
-    public function userProfilePhones(): HasManyThrough
-    {
-        return $this->hasManyThrough(UserProfilePhone::class, UserProfile::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function userProfiles(): HasMany
-    {
-        return $this->hasMany(UserProfile::class);
     }
 }
