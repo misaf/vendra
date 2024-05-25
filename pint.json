@@ -92,7 +92,7 @@
                 "const": "one",
                 "method": "one",
                 "property": "one",
-                "trait_import": "one",
+                "trait_import": "none",
                 "case": "none"
             }
         }

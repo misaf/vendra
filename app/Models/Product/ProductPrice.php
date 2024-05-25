@@ -18,7 +18,6 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 final class ProductPrice extends Tenant
 {
     use SoftDeletes;
-
     use TraitBelongsToThrough;
 
     protected $casts = [

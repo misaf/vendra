@@ -23,15 +23,10 @@ final class UserProfile extends Tenant implements
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use Traits\BelongsToUser;
-
     use Traits\HasUserProfileBalance;
-
     use Traits\HasUserProfileDocument;
-
     use Traits\HasUserProfilePhone;
 
     protected $casts = [
@@ -64,7 +59,7 @@ final class UserProfile extends Tenant implements
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn(mixed $value, array $attributes) => "{$attributes['first_name']} {$attributes['last_name']}",
+            get: fn(mixed $value, array $attributes): string => "{$attributes['first_name']} {$attributes['last_name']}",
         );
     }
 }

@@ -43,19 +43,12 @@ final class Tenant extends SpatieTenant implements
     User\Contracts\HasUserProfilePhone
 {
     use ActivityLog;
-
     use Currency\Traits\HasCurrency;
-
     use HasFactory;
-
     use HasSlugOptionsTrait;
-
     use User\Traits\HasUserProfile;
-
     use User\Traits\HasUserProfileBalance;
-
     use User\Traits\HasUserProfileDocument;
-
     use User\Traits\HasUserProfilePhone;
 
     protected $casts = [

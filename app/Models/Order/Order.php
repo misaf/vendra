@@ -19,13 +19,9 @@ final class Order extends Tenant implements
     User\Contracts\BelongsToUser
 {
     use Currency\Traits\BelongsToCurrency;
-
     use Currency\Traits\BelongsToCurrencyCategoryThroughCurrency;
-
     use SoftDeletes;
-
     use TraitBelongsToThrough;
-
     use User\Traits\BelongsToUser;
 
     protected $casts = [

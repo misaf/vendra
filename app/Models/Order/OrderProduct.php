@@ -22,7 +22,6 @@ final class OrderProduct extends Tenant implements
     Currency\Contracts\BelongsToCurrencyCategory
 {
     use SoftDeletes;
-
     use TraitBelongsToThrough;
 
     protected $casts = [

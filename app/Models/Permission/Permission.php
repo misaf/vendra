@@ -18,13 +18,9 @@ use Spatie\Permission\Models\Permission as ModelPermission;
 final class Permission extends ModelPermission
 {
     use ActivityLog;
-
     use BelongsToTenant;
-
     use HasFactory;
-
     use LogsActivity;
-
     use SoftDeletes;
 
     protected $casts = [

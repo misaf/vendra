@@ -10,14 +10,21 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 interface HasUserProfilePhone
 {
     /**
-     * Get the latest document for the user profile.
+     * Get the latest user profile phone for the user profile.
      *
      * @return HasOne
      */
-    public function LatestUserProfilePhone(): HasOne;
+    public function latestUserProfilePhone(): HasOne;
 
     /**
-     * Get the latest document for the user profile.
+     * Get the oldest user profile phone for the user profile.
+     *
+     * @return HasOne
+     */
+    public function oldestUserProfilePhone(): HasOne;
+
+    /**
+     * Get the latest user profile phone for the user profile.
      *
      * @return HasMany
      */

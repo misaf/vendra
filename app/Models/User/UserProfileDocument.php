@@ -13,20 +13,16 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 final class UserProfileDocument extends Tenant implements
-    Contracts\BelongsToUserProfile,
-    Contracts\BelongsToUserThroughUserProfile
+    Contracts\BelongsToUser,
+    Contracts\BelongsToUserProfile
 {
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use TraitBelongsToThrough;
-
     use Traits\BelongsToUserProfile;
-
     use Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [

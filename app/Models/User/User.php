@@ -28,19 +28,12 @@ final class User extends AuthUser implements
     Contracts\HasUserProfile
 {
     use ActivityLog;
-
     use BelongsToTenant;
-
     use HasApiTokens;
-
     use HasFactory;
-
     use HasRoles;
-
     use Notifiable;
-
     use SoftDeletes;
-
     use Traits\HasUserProfile;
 
     protected $casts = [

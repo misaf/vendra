@@ -20,14 +20,11 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 final class GeographicalState extends Tenant implements HasMedia
 {
     use HasSlugOptionsTrait;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use TraitBelongsToThrough;
 
     protected $casts = [

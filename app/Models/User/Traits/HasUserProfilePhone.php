@@ -12,17 +12,27 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 trait HasUserProfilePhone
 {
     /**
-     * Get the latest document for the user profile.
+     * Get the latest user profile phone for the user profile.
      *
      * @return HasOne
      */
-    public function LatestUserProfilePhone(): HasOne
+    public function latestUserProfilePhone(): HasOne
     {
         return $this->hasOne(UserProfilePhone::class)->latestOfMany();
     }
 
     /**
-     * Get the latest document for the user profile.
+     * Get the oldest user profile phone for the user profile.
+     *
+     * @return HasOne
+     */
+    public function oldestUserProfilePhone(): HasOne
+    {
+        return $this->hasOne(UserProfilePhone::class)->oldestOfMany();
+    }
+
+    /**
+     * Get the latest user profile phone for the user profile.
      *
      * @return HasMany
      */

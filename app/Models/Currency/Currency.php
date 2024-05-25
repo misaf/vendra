@@ -9,6 +9,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -22,18 +23,12 @@ final class Currency extends Tenant implements
     User\Contracts\HasUserProfileBalance
 {
     use HasSlugOptionsTrait;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use SortableTrait;
-
-    use Traits\BelongsToCurrencyCategory;
-
     use User\Traits\HasUserProfileBalance;
 
     protected $casts = [
@@ -65,4 +60,14 @@ final class Currency extends Tenant implements
         'position',
         'status',
     ];
+
+    /**
+     * Get the user that owns the profile.
+     *
+     * @return BelongsTo
+     */
+    public function currencyCategory(): BelongsTo
+    {
+        return $this->belongsTo(CurrencyCategory::class);
+    }
 }

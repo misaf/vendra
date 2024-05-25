@@ -11,7 +11,6 @@ use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
@@ -20,16 +19,11 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 final class GeographicalCity extends Tenant implements HasMedia
 {
     use HasSlugOptionsTrait;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
-    use LogsActivity;
-
     use SoftDeletes;
-
     use TraitBelongsToThrough;
 
     protected $casts = [

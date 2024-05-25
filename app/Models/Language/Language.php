@@ -20,14 +20,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 final class Language extends Tenant implements HasMedia, Sortable
 {
     use HasSlugOptionsTrait;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use SortableTrait;
 
     protected $casts = [

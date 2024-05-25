@@ -17,14 +17,11 @@ final class CurrencyCategory extends Tenant implements
     HasMedia
 {
     use HasSlugOptionsTrait;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use Traits\HasCurrency;
 
     protected $casts = [

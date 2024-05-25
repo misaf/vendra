@@ -22,14 +22,11 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 final class GeographicalZone extends Tenant implements HasMedia
 {
     use HasRelationships;
-
     use HasSlugOptionsTrait;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
 
     protected $casts = [

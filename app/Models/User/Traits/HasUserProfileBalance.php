@@ -12,19 +12,29 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 trait HasUserProfileBalance
 {
     /**
-     * Get the latest document for the user profile.
+     * Get the latest user profile balance for the user profile.
      *
      * @return HasOne
      */
-    public function LatestUserProfileBalance(): HasOne
+    public function latestUserProfileBalance(): HasOne
     {
         return $this->hasOne(UserProfileBalance::class)->latestOfMany();
     }
 
     /**
-     * Get the latest document for the user profile.
+     * Get the oldest use profile balance for the user profile.
      *
-     * @return HasMany
+     * @return HasOne
+     */
+    public function oldestUserProfileBalance(): HasOne
+    {
+        return $this->hasOne(UserProfileBalance::class)->oldestOfMany();
+    }
+
+    /**
+     * Get the use profile balance for the user profile.
+     *
+     * @return HasOne
      */
     public function userProfileBalances(): HasMany
     {

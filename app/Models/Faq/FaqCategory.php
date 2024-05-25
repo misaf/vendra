@@ -19,16 +19,12 @@ use Spatie\Translatable\HasTranslations;
 final class FaqCategory extends Tenant implements HasMedia
 {
     use HasSlugOptionsTrait;
-
     use HasTranslatableSlug;
-
     use HasTranslations;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
 
     public $translatable = ['name', 'description', 'slug'];

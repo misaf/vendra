@@ -15,14 +15,11 @@ use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 final class UserProfilePhone extends Tenant implements
     Contracts\BelongsToUserProfile,
-    Contracts\BelongsToUserThroughUserProfile
+    Contracts\BelongsToUser
 {
     use SoftDeletes;
-
     use TraitBelongsToThrough;
-
     use Traits\BelongsToUserProfile;
-
     use Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [

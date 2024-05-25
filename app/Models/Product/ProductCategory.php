@@ -24,20 +24,14 @@ use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 final class ProductCategory extends Tenant implements HasMedia, Sortable
 {
     use HasRecursiveRelationships;
-
     use HasSlugOptionsTrait;
-
     use HasTranslatableSlug;
-
     use HasTranslations;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use SortableTrait;
 
     public $translatable = ['name', 'description', 'slug'];

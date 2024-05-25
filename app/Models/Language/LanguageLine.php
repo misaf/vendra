@@ -13,7 +13,6 @@ use Spatie\TranslationLoader\LanguageLine as TranslationLoaderLanguageLine;
 final class LanguageLine extends Tenant
 {
     use HasTranslations;
-
     use SoftDeletes;
 
     protected $casts = [

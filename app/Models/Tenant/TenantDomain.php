@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 final class TenantDomain extends Tenant
 {
     use HasSlugOptionsTrait;
-
     use SoftDeletes;
 
     protected $casts = [

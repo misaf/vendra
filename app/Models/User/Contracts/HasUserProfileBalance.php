@@ -10,14 +10,21 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 interface HasUserProfileBalance
 {
     /**
-     * Get the latest document for the user profile.
+     * Get the latest user profile balance for the user profile.
      *
      * @return HasOne
      */
-    public function LatestUserProfileBalance(): HasOne;
+    public function latestUserProfileBalance(): HasOne;
 
     /**
-     * Get the latest document for the user profile.
+     * Get the oldest use profile balance for the user profile.
+     *
+     * @return HasOne
+     */
+    public function oldestUserProfileBalance(): HasOne;
+
+    /**
+     * Get the use profile balance for the user profile.
      *
      * @return HasOne
      */

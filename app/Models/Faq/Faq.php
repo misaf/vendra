@@ -21,18 +21,13 @@ use Spatie\Translatable\HasTranslations;
 final class Faq extends Tenant implements HasMedia, Sortable
 {
     use HasSlugOptionsTrait;
-
     use HasTranslatableSlug;
-
     use HasTranslations;
-
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
     }
-
     use SoftDeletes;
-
     use SortableTrait;
 
     public $translatable = ['name', 'description', 'slug'];

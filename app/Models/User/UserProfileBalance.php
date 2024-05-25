@@ -9,29 +9,20 @@ use App\Casts\MoneyCast;
 use App\Models\Currency;
 use App\Models\Tenant;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\ModelStatus\HasStatuses;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 final class UserProfileBalance extends Tenant implements
+    Contracts\BelongsToUser,
     Contracts\BelongsToUserProfile,
-    Contracts\BelongsToUserThroughUserProfile,
     Currency\Contracts\BelongsToCurrency,
-    Currency\Contracts\BelongsToCurrencyCategoryThroughCurrency
+    Currency\Contracts\BelongsToCurrencyCategory
 {
     use Currency\Traits\BelongsToCurrency;
-
+    use Currency\Traits\BelongsToCurrency;
     use Currency\Traits\BelongsToCurrencyCategoryThroughCurrency;
-
-    // use HasStatuses;
-
     use SoftDeletes;
-
     use TraitBelongsToThrough;
-
     use Traits\BelongsToUserProfile;
-
-    use Traits\BelongsToUserThroughUserProfile;
-
     use Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [
