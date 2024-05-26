@@ -5,24 +5,16 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
-use App\Traits\ThumbnailTableRecord;
+use App\Models\TenantWithMedia;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-final class UserProfile extends Tenant implements
-    HasMedia,
+final class UserProfile extends TenantWithMedia implements
     Contracts\BelongsToUser,
     Contracts\HasUserProfileBalance,
     Contracts\HasUserProfileDocument,
     Contracts\HasUserProfilePhone
 {
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use Traits\BelongsToUser;
     use Traits\HasUserProfileBalance;

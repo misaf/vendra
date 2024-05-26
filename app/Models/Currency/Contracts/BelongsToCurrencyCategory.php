@@ -7,6 +7,9 @@ namespace App\Models\Currency\Contracts;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Znck\Eloquent\Relations\BelongsToThrough;
 
+/**
+ * @method BelongsTo|BelongsToThrough currencyCategory
+ */
 interface BelongsToCurrencyCategory
 {
     /**

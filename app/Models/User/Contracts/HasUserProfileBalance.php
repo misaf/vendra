@@ -7,6 +7,11 @@ namespace App\Models\User\Contracts;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @method HasOne latestUserProfileBalance
+ * @method HasOne oldestUserProfileBalance
+ * @method HasMany userProfileBalances
+ */
 interface HasUserProfileBalance
 {
     /**
@@ -26,7 +31,7 @@ interface HasUserProfileBalance
     /**
      * Get the use profile balance for the user profile.
      *
-     * @return HasOne
+     * @return HasMany
      */
     public function userProfileBalances(): HasMany;
 }

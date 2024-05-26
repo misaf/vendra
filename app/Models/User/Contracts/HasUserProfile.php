@@ -7,12 +7,17 @@ namespace App\Models\User\Contracts;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @method HasOne latestUserProfile
+ * @method HasOne oldestUserProfile
+ * @method HasMany userProfiles
+ */
 interface HasUserProfile
 {
     /**
      * Get the latest user profile for the user.
      *
-     * @return HasMany
+     * @return HasOne
      */
     public function latestUserProfile(): HasOne;
 
@@ -24,9 +29,9 @@ interface HasUserProfile
     public function oldestUserProfile(): HasOne;
 
     /**
-     * Get the user that owns the profile.
+     * Get the user profile that owns the user.
      *
-     * @return HasOne
+     * @return HasMany
      */
-    public function userProfiles(): HasOne;
+    public function userProfiles(): HasMany;
 }

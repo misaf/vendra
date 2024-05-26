@@ -6,9 +6,8 @@ namespace App\Models\Product;
 
 use App\Casts\DateCast;
 use App\Models\Order\OrderProduct;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -16,22 +15,16 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 
-final class Product extends Tenant implements HasMedia, Sortable
+final class Product extends TenantWithMedia implements Sortable
 {
     use HasSlugOptionsTrait;
     use HasTags;
     use HasTranslatableSlug;
     use HasTranslations;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use SortableTrait;
 

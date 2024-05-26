@@ -6,6 +6,9 @@ namespace App\Models\Currency\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method HasMany currencies
+ */
 interface HasCurrency
 {
     /**

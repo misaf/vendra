@@ -5,23 +5,16 @@ declare(strict_types=1);
 namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-final class GeographicalNeighborhood extends Tenant implements HasMedia
+final class GeographicalNeighborhood extends TenantWithMedia
 {
     use HasSlugOptionsTrait;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use TraitBelongsToThrough;
 

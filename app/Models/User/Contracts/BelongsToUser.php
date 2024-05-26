@@ -7,11 +7,12 @@ namespace App\Models\User\Contracts;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Znck\Eloquent\Relations\BelongsToThrough;
 
+/**
+ * @method BelongsTo|BelongsToThrough user
+ */
 interface BelongsToUser
 {
     /**
-     * Get the latest document for the user profile.
-     *
      * @return BelongsTo|BelongsToThrough
      */
     public function user(): BelongsTo|BelongsToThrough;

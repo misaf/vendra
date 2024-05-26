@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 #[ScopedBy(TenantScope::class)]
-class Tenant extends Model
+abstract class Tenant extends Model
 {
     use ActivityLog;
     use BelongsToTenant;

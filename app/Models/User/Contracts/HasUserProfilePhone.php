@@ -7,6 +7,11 @@ namespace App\Models\User\Contracts;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @method HasOne latestUserProfilePhone
+ * @method HasOne oldestUserProfilePhone
+ * @method HasMany userProfilePhones
+ */
 interface HasUserProfilePhone
 {
     /**

@@ -5,21 +5,15 @@ declare(strict_types=1);
 namespace App\Models\User;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Models\User\Enums\UserProfileDocumentStatusEnum;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-final class UserProfileDocument extends Tenant implements
+final class UserProfileDocument extends TenantWithMedia implements
     Contracts\BelongsToUser,
     Contracts\BelongsToUserProfile
 {
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use TraitBelongsToThrough;
     use Traits\BelongsToUserProfile;

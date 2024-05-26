@@ -5,28 +5,20 @@ declare(strict_types=1);
 namespace App\Models\Currency;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Models\User;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-final class Currency extends Tenant implements
+final class Currency extends TenantWithMedia implements
     Contracts\BelongsToCurrencyCategory,
-    HasMedia,
     Sortable,
     User\Contracts\HasUserProfileBalance
 {
     use HasSlugOptionsTrait;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use SortableTrait;
     use User\Traits\HasUserProfileBalance;
@@ -62,7 +54,7 @@ final class Currency extends Tenant implements
     ];
 
     /**
-     * Get the user that owns the profile.
+     * Get the currency category that owns the currency.
      *
      * @return BelongsTo
      */

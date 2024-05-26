@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace App\Models\Page;
 
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-final class Page extends Tenant implements HasMedia
+final class Page extends TenantWithMedia
 {
     use HasSlugOptionsTrait;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
 
     protected $casts = [
         'id'               => 'integer',

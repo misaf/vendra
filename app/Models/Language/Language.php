@@ -6,24 +6,16 @@ namespace App\Models\Language;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 #[ScopedBy(TenantScope::class)]
-final class Language extends Tenant implements HasMedia, Sortable
+final class Language extends TenantWithMedia
 {
     use HasSlugOptionsTrait;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use SortableTrait;
 

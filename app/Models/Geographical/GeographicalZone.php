@@ -6,27 +6,20 @@ namespace App\Models\Geographical;
 
 use App\Casts\DateCast;
 use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 #[ScopedBy(TenantScope::class)]
-final class GeographicalZone extends Tenant implements HasMedia
+final class GeographicalZone extends TenantWithMedia
 {
     use HasRelationships;
     use HasSlugOptionsTrait;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
 
     protected $casts = [

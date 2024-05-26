@@ -5,22 +5,13 @@ declare(strict_types=1);
 namespace App\Models\Currency;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
+use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-final class CurrencyCategory extends Tenant implements
-    Contracts\HasCurrency,
-    HasMedia
+final class CurrencyCategory extends TenantWithMedia implements Contracts\HasCurrency
 {
     use HasSlugOptionsTrait;
-    use InteractsWithMedia, ThumbnailTableRecord {
-        ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
-        ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
-    }
     use SoftDeletes;
     use Traits\HasCurrency;
 
