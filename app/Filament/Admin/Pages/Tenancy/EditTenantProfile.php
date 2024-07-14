@@ -17,9 +17,8 @@ final class EditTenantProfile extends TenancyEditTenantProfile
 
     public function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                TextInput::make('name'),
-            ]);
+        return $form->schema([
+            TextInput::make('name'),
+        ]);
     }
 }

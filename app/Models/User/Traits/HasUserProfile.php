@@ -34,9 +34,9 @@ trait HasUserProfile
     /**
      * Get the user that owns the profile.
      *
-     * @return HasOne
+     * @return HasMany
      */
-    public function userProfiles(): HasOne
+    public function userProfiles(): HasMany
     {
         return $this->hasMany(UserProfile::class);
     }

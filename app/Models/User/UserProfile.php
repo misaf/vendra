@@ -6,8 +6,8 @@ namespace App\Models\User;
 
 use App\Casts\DateCast;
 use App\Models\TenantWithMedia;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 final class UserProfile extends TenantWithMedia implements
     Contracts\BelongsToUser,
@@ -15,7 +15,7 @@ final class UserProfile extends TenantWithMedia implements
     Contracts\HasUserProfileDocument,
     Contracts\HasUserProfilePhone
 {
-    use SoftDeletes;
+    use Eloquent\SoftDeletes;
     use Traits\BelongsToUser;
     use Traits\HasUserProfileBalance;
     use Traits\HasUserProfileDocument;
@@ -50,8 +50,8 @@ final class UserProfile extends TenantWithMedia implements
      */
     protected function fullName(): Attribute
     {
-        return Attribute::make(
-            get: fn(mixed $value, array $attributes): string => "{$attributes['first_name']} {$attributes['last_name']}",
+        return new Attribute(
+            get: fn($value, $attributes): string => "{$attributes['first_name']} {$attributes['last_name']}",
         );
     }
 }

@@ -31,11 +31,11 @@ use App\Models\User;
 use App\Traits\ActivityLog;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
 use Spatie\Tags\Tag;
 
-final class Tenant extends SpatieTenant implements
+final class Tenant extends Model implements
     Currency\Contracts\HasCurrency,
     User\Contracts\HasUserProfile,
     User\Contracts\HasUserProfileBalance,

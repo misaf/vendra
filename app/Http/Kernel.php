@@ -7,6 +7,7 @@ namespace App\Http;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustHosts;
+use App\Http\Middleware\VerifyCsrfToken as MiddlewareVerifyCsrfToken;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
@@ -19,7 +20,6 @@ use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
 use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
 use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
 use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Http\Middleware\TrustProxies;
@@ -29,13 +29,6 @@ use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
-use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes;
-use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath;
-use Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect;
-use Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect;
-use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
-use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 
 final class Kernel extends HttpKernel
 {
@@ -75,11 +68,6 @@ final class Kernel extends HttpKernel
         'signed'                  => ValidateSignature::class,
         'throttle'                => ThrottleRequests::class,
         'verified'                => EnsureEmailIsVerified::class,
-        'localize'                => LaravelLocalizationRoutes::class,
-        'localizationRedirect'    => LaravelLocalizationRedirectFilter::class,
-        'localeSessionRedirect'   => LocaleSessionRedirect::class,
-        'localeCookieRedirect'    => LocaleCookieRedirect::class,
-        'localeViewPath'          => LaravelLocalizationViewPath::class,
     ];
 
     /**
@@ -90,10 +78,10 @@ final class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             EncryptCookies::class,
-            AddQueuedCookiesToResponse::class,
             StartSession::class,
+            AddQueuedCookiesToResponse::class,
             ShareErrorsFromSession::class,
-            VerifyCsrfToken::class,
+            MiddlewareVerifyCsrfToken::class,
             SubstituteBindings::class,
         ],
 
@@ -101,11 +89,6 @@ final class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class . ':api',
             SubstituteBindings::class,
-        ],
-
-        'tenant' => [
-            NeedsTenant::class,
-            EnsureValidTenantSession::class,
         ],
     ];
 }

@@ -11,20 +11,24 @@ use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-#[ScopedBy(TenantScope::class)]
-final class User extends AuthUser implements
+// #[ScopedBy(TenantScope::class)]
+final class User extends Authenticatable implements
     FilamentUser,
     HasName,
+    HasTenants,
     Contracts\HasUserProfile
 {
     use ActivityLog;
@@ -65,7 +69,12 @@ final class User extends AuthUser implements
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasAnyRole('super-admin', 'admin', 'user');
+        return $this->hasAnyRole(['super-admin', 'admin', 'user']);
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->tenants()->whereKey($tenant)->exists();
     }
 
     /**
@@ -74,6 +83,11 @@ final class User extends AuthUser implements
     public function getFilamentName(): string
     {
         return $this->name ?? $this->email;
+    }
+
+    public function getTenants(Panel $panel): Collection
+    {
+        return $this->tenants;
     }
 
     /**

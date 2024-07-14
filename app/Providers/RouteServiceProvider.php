@@ -9,13 +9,9 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
 
 final class RouteServiceProvider extends ServiceProvider
 {
-    use LoadsTranslatedCachedRoutes;
-
     /**
      * The path to your application's "home" route.
      *
@@ -39,8 +35,8 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureApiRoutes(): void
     {
-        Route::middleware(['api', 'tenant', 'localizationRedirect', 'localeCookieRedirect'])
-            ->prefix(LaravelLocalization::setLocale() . '/api')
+        Route::middleware(['api'])
+            ->prefix('api')
             ->group(base_path('routes/api.php'));
     }
 
@@ -59,8 +55,10 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureRoutes(): void
     {
-        $this->configureApiRoutes();
-        $this->configureWebRoutes();
+        $this->routes(function (): void {
+            $this->configureApiRoutes();
+            $this->configureWebRoutes();
+        });
     }
 
     /**
@@ -68,8 +66,7 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureWebRoutes(): void
     {
-        Route::middleware(['web', 'tenant', 'localizationRedirect', 'localeCookieRedirect'])
-            ->prefix(LaravelLocalization::setLocale())
+        Route::middleware(['web'])
             ->group(base_path('routes/web.php'));
     }
 }

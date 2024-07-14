@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Providers\Filament;
+namespace App\Providers\Filament\Commerce;
 
 use App\Filament\Admin\Pages\Tenancy\EditTenantProfile;
-use App\Filament\Admin\Pages\Tenancy\RegisterTenant;
 use App\Models\Language\Language;
+use App\Models\Tenant\Services\SetGlobalConfigurationTask;
 use App\Models\Tenant\Tenant;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Filament\Facades\Filament;
@@ -16,7 +16,6 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\SpatieLaravelTranslatablePlugin;
@@ -25,7 +24,6 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
-use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -42,10 +40,13 @@ final class AdminPanelProvider extends PanelProvider
     public function boot(): void
     {
         $this->registerFont();
-        $this->registerPlugins();
+        // $this->registerPlugins();
         $this->registerComponents();
         $this->registerTableActions();
         $this->registerSpa();
+
+        // Set Global Configuration
+        // SetGlobalConfigurationTask::makeConfiguration(filament()->getTenant());
     }
 
     /**
@@ -57,17 +58,18 @@ final class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('admin')
-            ->default()
+            ->id('admin-commerce')
             ->login()
-            ->brandName('termehsoft')
+            ->brandName('commerce')
             ->path('/admin')
             ->profile(isSimple: false)
             ->brandLogoHeight('2rem')
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->authMiddleware([Authenticate::class])
+            ->authMiddleware([
+                Authenticate::class,
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -79,19 +81,19 @@ final class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->domain('panel.termehsoft.test')
+            ->plugins([
+                SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->getLocales()),
+            ])
+            ->font('yekan', 'https://cdn.font-store.ir/yekan.css', LocalFontProvider::class)
             ->discoverClusters(app_path('Filament/Admin/Clusters'), 'App\\Filament\\Admin\\Clusters')
             ->discoverPages(app_path('Filament/Admin/Pages'), 'App\\Filament\\Admin\\Pages')
             ->discoverResources(app_path('Filament/Admin/Resources'), 'App\\Filament\\Admin\\Resources')
             ->discoverWidgets(app_path('Filament/Admin/Widgets'), 'App\\Filament\\Admin\\Widgets')
-            ->tenant(Tenant::class, 'domain')
-            ->tenantDomain('{tenant:domain}')
-            ->tenantMenu(fn() => 'admin@houshang-flowers.test' === auth()->user()->email)
-            ->tenantMenuItems([
-                'register' => MenuItem::make()->label('Register new team'),
-            ])
-            ->tenantProfile(EditTenantProfile::class)
-            ->tenantRegistration(RegisterTenant::class)
+            // ->tenant(Tenant::class, 'domain')
+            // ->tenantDomain('{tenant:domain}')
+            // ->tenantMenu(fn() => 'admin@houshang-flowers.test' === auth()->user()->email)
+            // ->tenantMenuItems($this->getMenuItems())
+            // ->tenantProfile(EditTenantProfile::class)
             ->databaseNotifications()
             ->databaseTransactions()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
@@ -142,26 +144,6 @@ final class AdminPanelProvider extends PanelProvider
             NavigationGroup::make()->label(fn(): string => __('navigation.report_management'))->icon('heroicon-o-bug-ant')->collapsed(),
             NavigationGroup::make()->label(fn(): string => __('navigation.setting_management'))->icon('heroicon-o-cog-6-tooth')->collapsed(),
         ];
-    }
-
-    /**
-     * Get the pages.
-     *
-     * @return array
-     */
-    private function getPages(): array
-    {
-        return [Dashboard::class];
-    }
-
-    /**
-     * Get the widgets.
-     *
-     * @return array
-     */
-    private function getWidgets(): array
-    {
-        return [AccountWidget::class];
     }
 
     /**

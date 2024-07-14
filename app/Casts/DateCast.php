@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Casts;
 
+use Ariaieboy\Jalali\Jalali;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Morilog\Jalali\Jalalian;
 
 final class DateCast implements CastsAttributes
 {
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         if (null !== $value && 'fa' === app()->getLocale()) {
-            return Jalalian::forge($value)->__toString();
+            return Jalali::forge($value)->__toString();
         }
 
         return $value;
@@ -24,10 +24,10 @@ final class DateCast implements CastsAttributes
     {
         if (null !== $value && 'fa' === app()->getLocale()) {
             if ($value instanceof Carbon) {
-                return Jalalian::fromCarbon($value)->__toString();
+                return Jalali::fromCarbon($value)->__toString();
             }
 
-            return Jalalian::fromFormat('Y-m-d H:i:s', $value)->__toString();
+            return Jalali::fromFormat('Y-m-d H:i:s', $value)->__toString();
         }
 
         return $value;

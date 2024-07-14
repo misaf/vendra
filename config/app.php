@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\BroadcastServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\Filament;
+use App\Providers\HorizonServiceProvider;
+use App\Providers\PulseServiceProvider;
+use App\Providers\RouteServiceProvider;
+use App\Providers\TelescopeServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -165,15 +174,18 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\HorizonServiceProvider::class,
-        App\Providers\PulseServiceProvider::class,
-        App\Providers\TelescopeServiceProvider::class,
-        App\Providers\Filament\AdminPanelProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
+        BroadcastServiceProvider::class,
+        EventServiceProvider::class,
+        HorizonServiceProvider::class,
+        PulseServiceProvider::class,
+        TelescopeServiceProvider::class,
+        // Filament Panels
+        Filament\AdminPanelProvider::class,
+        // E-Commerce Panels
+        Filament\Commerce\AdminPanelProvider::class,
+        RouteServiceProvider::class,
     ])->toArray(),
 
     /*
