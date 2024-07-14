@@ -19,6 +19,7 @@
         "filament/spatie-laravel-translatable-plugin": "^3.2.93",
         "flowframe/laravel-trend": "^0.1.5",
         "guzzlehttp/guzzle": "^7.8.1",
+        "internachi/modular": "^2.2",
         "laravel-json-api/cursor-pagination": "^3.0",
         "laravel-json-api/hashids": "^2.0",
         "laravel-json-api/laravel": "^3.4",
