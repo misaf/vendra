@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Termehsoft\Geographical\Models;
 
 use App\Casts\DateCast;
-use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Tenant\Models\TenantWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 

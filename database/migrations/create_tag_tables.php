@@ -25,6 +25,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('tags', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('tenant_id')
@@ -46,5 +47,6 @@ return new class () extends Migration {
             $table->morphs('taggable');
             $table->unique(['tag_id', 'taggable_id', 'taggable_type']);
         });
+        Schema::enableForeignKeyConstraints();
     }
 };

@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Blog;
 
 use App\Filament\Admin\Resources\Blog\BlogPostResource\Pages;
-use App\Models\Blog\BlogPost;
-use App\Models\Blog\BlogPostCategory;
-use App\Models\User\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -22,6 +19,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Blog\Models\BlogPost;
+use Termehsoft\Blog\Models\BlogPostCategory;
+use Termehsoft\User\Models\User;
 
 final class BlogPostResource extends Resource
 {

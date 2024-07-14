@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\User;
 
 use App\Filament\Admin\Resources\User\UserProfileDocumentResource\Pages;
-use App\Models\User\UserProfileDocument;
 use App\Support\Enums\UserProfileDocumentStatusEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\User\Models\UserProfileDocument;
 
 final class UserProfileDocumentResource extends Resource
 {

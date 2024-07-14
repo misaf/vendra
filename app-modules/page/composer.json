@@ -1,24 +1,17 @@
 {
-	"name": "termehsoft/page",
-	"description": "",
-	"type": "library",
-	"version": "1.0",
-	"license": "proprietary",
-	"require": {},
-	"autoload": {
-		"psr-4": {
-			"Termehsoft\\Page\\": "src/",
-			"Termehsoft\\Page\\Tests\\": "tests/",
-			"Termehsoft\\Page\\Database\\Factories\\": "database/factories/",
-			"Termehsoft\\Page\\Database\\Seeders\\": "database/seeders/"
-		}
-	},
-	"minimum-stability": "stable",
-	"extra": {
-		"laravel": {
-			"providers": [
-				"Termehsoft\\Page\\Providers\\PageServiceProvider"
-			]
-		}
-	}
+    "name": "termehsoft/page",
+    "description": "",
+    "type": "library",
+    "version": "1.0",
+    "license": "proprietary",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Termehsoft\\Page\\": "src/",
+            "Termehsoft\\Page\\Tests\\": "tests/",
+            "Termehsoft\\Page\\Database\\Factories\\": "database/factories/",
+            "Termehsoft\\Page\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "minimum-stability": "stable"
 }

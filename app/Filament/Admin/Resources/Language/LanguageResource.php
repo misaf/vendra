@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\Language;
 
+use App\Contract\Language;
 use App\Filament\Admin\Resources\Language\LanguageResource\Pages;
-use App\Models\Language\Language;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;

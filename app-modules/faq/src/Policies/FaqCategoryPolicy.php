@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Termehsoft\Faq\Policies;
 
-use App\Models\User\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Termehsoft\Faq\Models\FaqCategory;
+use Termehsoft\User\Models\User;
 
 final class FaqCategoryPolicy
 {

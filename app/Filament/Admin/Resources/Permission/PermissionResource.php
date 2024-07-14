@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Permission;
 
 use App\Filament\Admin\Resources\Permission\PermissionResource\Pages;
-use App\Models\Permission\Permission;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -15,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Permission\Models\Permission;
 
 final class PermissionResource extends Resource
 {

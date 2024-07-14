@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
-use App\Models\TenantWithMedia;
 use App\Models\User\Enums\UserProfileDocumentStatusEnum;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Tenant\Models\TenantWithMedia;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 final class UserProfileDocument extends TenantWithMedia implements

@@ -7,7 +7,6 @@ namespace App\Filament\Admin\Resources\User;
 use App\Filament\Admin\Resources\User\UserProfileDocumentResource\RelationManagers\UserProfileDocumentRelationManager;
 use App\Filament\Admin\Resources\User\UserProfilePhoneResource\RelationManagers\UserProfilePhoneRelationManager;
 use App\Filament\Admin\Resources\User\UserProfileResource\Pages;
-use App\Models\User\UserProfile;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\GlobalSearch\Actions\Action;
@@ -18,6 +17,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\User\Models\UserProfile;
 
 final class UserProfileResource extends Resource
 {

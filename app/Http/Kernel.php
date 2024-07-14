@@ -29,6 +29,8 @@ use Illuminate\Routing\Middleware\ValidateSignature;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
+use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 
 final class Kernel extends HttpKernel
 {
@@ -78,8 +80,8 @@ final class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             EncryptCookies::class,
-            StartSession::class,
             AddQueuedCookiesToResponse::class,
+            StartSession::class,
             ShareErrorsFromSession::class,
             MiddlewareVerifyCsrfToken::class,
             SubstituteBindings::class,
@@ -89,6 +91,11 @@ final class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             ThrottleRequests::class . ':api',
             SubstituteBindings::class,
+        ],
+
+        'tenant' => [
+            NeedsTenant::class,
+            EnsureValidTenantSession::class,
         ],
     ];
 }

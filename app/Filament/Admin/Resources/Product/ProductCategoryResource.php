@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Product;
 
 use App\Filament\Admin\Resources\Product\ProductCategoryResource\Pages;
-use App\Models\Product\ProductCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -16,6 +15,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Product\Models\ProductCategory;
 
 final class ProductCategoryResource extends Resource
 {

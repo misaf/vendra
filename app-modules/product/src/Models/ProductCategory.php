@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Termehsoft\Product\Models;
 
 use App\Casts\DateCast;
-use App\Models\Order\OrderProduct;
-use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -17,6 +15,8 @@ use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+use Termehsoft\Order\Models\OrderProduct;
+use Termehsoft\Tenant\Models\TenantWithMedia;
 
 final class ProductCategory extends TenantWithMedia implements Sortable
 {

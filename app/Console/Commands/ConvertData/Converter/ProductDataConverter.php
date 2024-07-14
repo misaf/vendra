@@ -6,14 +6,12 @@ namespace App\Console\Commands\ConvertData\Converter;
 
 use App\Console\Commands\ConvertData\Interfaces\DataConverter;
 use App\Console\Commands\ConvertData\Retriever\ProductDataRetriever;
-use App\Models\Currency\Currency;
-use App\Models\Product\Product;
-use App\Models\Product\ProductCategory;
-use App\Models\Product\ProductPrice;
 use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Termehsoft\Product\Models\Product;
+use Termehsoft\Product\Models\ProductCategory;
 
 final class ProductDataConverter implements DataConverter
 {

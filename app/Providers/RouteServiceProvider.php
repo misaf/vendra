@@ -35,7 +35,7 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureApiRoutes(): void
     {
-        Route::middleware(['api'])
+        Route::middleware(['api', 'tenannt'])
             ->prefix('api')
             ->group(base_path('routes/api.php'));
     }
@@ -66,7 +66,7 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureWebRoutes(): void
     {
-        Route::middleware(['web'])
+        Route::middleware(['web', 'tenant'])
             ->group(base_path('routes/web.php'));
     }
 }

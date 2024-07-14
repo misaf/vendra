@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Termehsoft\Language\Models;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 use Spatie\TranslationLoader\LanguageLine as TranslationLoaderLanguageLine;
+use Termehsoft\Tenant\Models\Tenant;
 
 final class LanguageLine extends Tenant
 {

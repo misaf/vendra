@@ -6,13 +6,13 @@ namespace App\Console\Commands\ConvertData\Converter;
 
 use App\Console\Commands\ConvertData\Interfaces\DataConverter;
 use App\Console\Commands\ConvertData\Retriever\BlogDataRetriever;
-use App\Models\Blog\BlogPost;
-use App\Models\Blog\BlogPostCategory;
 use Illuminate\Contracts\Filesystem\Filesystem as Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Spatie\MediaLibrary\HasMedia;
+use Termehsoft\Blog\Models\BlogPost;
+use Termehsoft\Blog\Models\BlogPostCategory;
 
 final class BlogDataConverter implements DataConverter
 {

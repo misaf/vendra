@@ -1,24 +1,17 @@
 {
-	"name": "termehsoft/transaction",
-	"description": "",
-	"type": "library",
-	"version": "1.0",
-	"license": "proprietary",
-	"require": {},
-	"autoload": {
-		"psr-4": {
-			"Termehsoft\\Transaction\\": "src/",
-			"Termehsoft\\Transaction\\Tests\\": "tests/",
-			"Termehsoft\\Transaction\\Database\\Factories\\": "database/factories/",
-			"Termehsoft\\Transaction\\Database\\Seeders\\": "database/seeders/"
-		}
-	},
-	"minimum-stability": "stable",
-	"extra": {
-		"laravel": {
-			"providers": [
-				"Termehsoft\\Transaction\\Providers\\TransactionServiceProvider"
-			]
-		}
-	}
+    "name": "termehsoft/transaction",
+    "description": "",
+    "type": "library",
+    "version": "1.0",
+    "license": "proprietary",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Termehsoft\\Transaction\\": "src/",
+            "Termehsoft\\Transaction\\Tests\\": "tests/",
+            "Termehsoft\\Transaction\\Database\\Factories\\": "database/factories/",
+            "Termehsoft\\Transaction\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "minimum-stability": "stable"
 }

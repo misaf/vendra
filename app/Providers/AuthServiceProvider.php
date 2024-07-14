@@ -51,43 +51,43 @@ use App\Models\User\Policies\UserProfileBalancePolicy;
 use App\Models\User\Policies\UserProfileDocumentPolicy;
 use App\Models\User\Policies\UserProfilePhonePolicy;
 use App\Models\User\Policies\UserProfilePolicy;
-use App\Models\User\User;
 use App\Models\User\UserProfile;
 use App\Models\User\UserProfileBalance;
 use App\Models\User\UserProfileDocument;
 use App\Models\User\UserProfilePhone;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Termehsoft\User\Models\User;
 
 final class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        BlogPost::class                 => BlogPostPolicy::class,
-        BlogPostCategory::class         => BlogPostCategoryPolicy::class,
-        Currency::class                 => CurrencyPolicy::class,
-        CurrencyCategory::class         => CurrencyCategoryPolicy::class,
-        Faq::class                      => FaqPolicy::class,
-        FaqCategory::class              => FaqCategoryPolicy::class,
-        GeographicalCity::class         => GeographicalCityPolicy::class,
-        GeographicalCountry::class      => GeographicalCountryPolicy::class,
-        GeographicalNeighborhood::class => GeographicalNeighborhoodPolicy::class,
-        GeographicalState::class        => GeographicalStatePolicy::class,
-        GeographicalZone::class         => GeographicalZonePolicy::class,
-        Language::class                 => LanguagePolicy::class,
-        LanguageLine::class             => LanguageLinePolicy::class,
-        Permission::class               => PermissionPolicy::class,
-        Role::class                     => RolePolicy::class,
-        Product::class                  => ProductPolicy::class,
-        ProductCategory::class          => ProductCategoryPolicy::class,
-        ProductPrice::class             => ProductPricePolicy::class,
-        User::class                     => UserPolicy::class,
-        UserProfile::class              => UserProfilePolicy::class,
-        UserProfileBalance::class       => UserProfileBalancePolicy::class,
-        UserProfileDocument::class      => UserProfileDocumentPolicy::class,
-        UserProfilePhone::class         => UserProfilePhonePolicy::class,
-        Order::class                    => OrderPolicy::class,
-        OrderProduct::class             => OrderProductPolicy::class,
-        Transaction::class              => TransactionPolicy::class,
+        // BlogPost::class                 => BlogPostPolicy::class,
+        // BlogPostCategory::class         => BlogPostCategoryPolicy::class,
+        // Currency::class                 => CurrencyPolicy::class,
+        // CurrencyCategory::class         => CurrencyCategoryPolicy::class,
+        // Faq::class                      => FaqPolicy::class,
+        // FaqCategory::class              => FaqCategoryPolicy::class,
+        // GeographicalCity::class         => GeographicalCityPolicy::class,
+        // GeographicalCountry::class      => GeographicalCountryPolicy::class,
+        // GeographicalNeighborhood::class => GeographicalNeighborhoodPolicy::class,
+        // GeographicalState::class        => GeographicalStatePolicy::class,
+        // GeographicalZone::class         => GeographicalZonePolicy::class,
+        // Language::class                 => LanguagePolicy::class,
+        // LanguageLine::class             => LanguageLinePolicy::class,
+        // Permission::class               => PermissionPolicy::class,
+        // Role::class                     => RolePolicy::class,
+        // Product::class                  => ProductPolicy::class,
+        // ProductCategory::class          => ProductCategoryPolicy::class,
+        // ProductPrice::class             => ProductPricePolicy::class,
+        // User::class                     => UserPolicy::class,
+        // UserProfile::class              => UserProfilePolicy::class,
+        // UserProfileBalance::class       => UserProfileBalancePolicy::class,
+        // UserProfileDocument::class      => UserProfileDocumentPolicy::class,
+        // UserProfilePhone::class         => UserProfilePhonePolicy::class,
+        // Order::class                    => OrderPolicy::class,
+        // OrderProduct::class             => OrderProductPolicy::class,
+        // Transaction::class              => TransactionPolicy::class,
     ];
 
     /**

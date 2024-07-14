@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\User\Services;
+namespace Termehsoft\User\Services;
 
 use Propaganistas\LaravelPhone\PhoneNumber;
 

@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Models\User\Traits;
+namespace Termehsoft\User\Traits;
 
-use App\Models\User\User;
-use App\Models\User\UserProfile;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Termehsoft\User\Models\UserProfile;
 
 trait BelongsToUserProfile
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Currency\Traits;
+namespace Termehsoft\Currency\Traits;
 
-use App\Models\Currency\Currency;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Termehsoft\Currency\Models\Currency;
 
 trait HasCurrency
 {

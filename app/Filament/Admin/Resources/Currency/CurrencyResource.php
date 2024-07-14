@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Currency;
 
 use App\Filament\Admin\Resources\Currency\CurrencyResource\Pages;
-use App\Models\Currency\Currency;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -16,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Currency\Models\Currency;
 
 final class CurrencyResource extends Resource
 {

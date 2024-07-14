@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Termehsoft\Transaction\Models;
 
 use App\Casts\DateCast;
-use App\Enums\TransactionStatusEnum;
-use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Tenant\Models\Tenant;
+use Termehsoft\Transaction\Enums\TransactionStatusEnum;
 
 final class Transaction extends Tenant
 {

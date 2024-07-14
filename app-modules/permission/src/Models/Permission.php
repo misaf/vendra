@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Termehsoft\Permission\Models;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
 use App\Traits\ActivityLog;
 use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
@@ -13,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Permission as ModelPermission;
+use Termehsoft\Tenant\Scopes\Tenant as TenantScope;
 
 #[ScopedBy(TenantScope::class)]
 final class Permission extends ModelPermission

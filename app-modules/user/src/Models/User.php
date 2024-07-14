@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
-use App\Models\Scopes\Tenant as TenantScope;
-use App\Models\Tenant\Tenant;
 use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Models\Contracts\HasTenants;
@@ -23,22 +20,27 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Termehsoft\Tenant\Models\Tenant;
+use Termehsoft\Tenant\Scopes\Tenant as TenantScope;
+use Termehsoft\Tenant\Traits\BelongsToTenant as BelongsToTenantTrait;
+use Termehsoft\User\Contracts\HasUserProfile as UserProfileInterface;
+use Termehsoft\User\Traits\HasUserProfile as UserProfileTrait;
 
-// #[ScopedBy(TenantScope::class)]
+#[ScopedBy(TenantScope::class)]
 final class User extends Authenticatable implements
     FilamentUser,
     HasName,
     HasTenants,
-    Contracts\HasUserProfile
+    UserProfileInterface
 {
     use ActivityLog;
-    use BelongsToTenant;
+    use BelongsToTenantTrait;
     use HasApiTokens;
     use HasFactory;
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
-    use Traits\HasUserProfile;
+    use UserProfileTrait;
 
     protected $casts = [
         'tenant_id'         => 'integer',

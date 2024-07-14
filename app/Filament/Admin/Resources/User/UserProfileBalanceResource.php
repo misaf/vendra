@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\User;
 
 use App\Filament\Admin\Resources\User\UserProfileBalanceResource\Pages;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\User\UserProfileBalance;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -17,6 +15,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Currency\Models\CurrencyCategory;
+use Termehsoft\User\Models\UserProfileBalance;
 
 final class UserProfileBalanceResource extends Resource
 {

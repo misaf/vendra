@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Models\Blog\BlogPost;
-use App\Models\Faq\Faq;
-use App\Models\User\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Number;
+use Termehsoft\Blog\Models\BlogPost;
+use Termehsoft\Faq\Models\Faq;
+use Termehsoft\User\Models\User;
 
 final class StatOverview extends BaseWidget
 {

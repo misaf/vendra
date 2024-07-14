@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Termehsoft\Order\Models;
 
 use App\Casts\DateCast;
-use App\Models\Currency;
-use App\Models\Tenant;
-use App\Models\Transaction\Transaction;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Tenant\Models\Tenant;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 final class Order extends Tenant implements

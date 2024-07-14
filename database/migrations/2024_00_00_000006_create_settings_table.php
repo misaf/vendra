@@ -24,6 +24,7 @@ return new class () extends Migration {
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::create('settings', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('tenant_id')
@@ -40,5 +41,6 @@ return new class () extends Migration {
             // Define unique constraint for group and name columns
             $table->unique(['group', 'name']);
         });
+        Schema::enableForeignKeyConstraints();
     }
 };

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Language;
 
 use App\Filament\Admin\Resources\Language\LanguageLineResource\Pages;
-use App\Models\Language\LanguageLine;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -14,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Language\Models\LanguageLine;
 
 final class LanguageLineResource extends Resource
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Termehsoft\Language\Database\Factories;
 
-use App\Contract\Language;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Termehsoft\Language\Models\Language;
 
 final class LanguageFactory extends Factory
 {

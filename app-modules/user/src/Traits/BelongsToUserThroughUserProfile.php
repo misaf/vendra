@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Models\User\Traits;
+namespace Termehsoft\User\Traits;
 
-use App\Models\User\User;
-use App\Models\User\UserProfile;
+use Termehsoft\User\Models\User;
+use Termehsoft\User\Models\UserProfile;
 use Znck\Eloquent\Relations\BelongsToThrough;
 
 trait BelongsToUserThroughUserProfile

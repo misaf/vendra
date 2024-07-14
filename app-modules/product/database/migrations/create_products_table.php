@@ -15,9 +15,7 @@ return new class () extends Migration {
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('product_categories');
-        Schema::dropIfExists('product_prices');
-        Schema::dropIfExists('products');
+        $this->dropProductTables();
         Schema::enableForeignKeyConstraints();
     }
 
@@ -29,6 +27,17 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::disableForeignKeyConstraints();
+        $this->createProductTables();
+        Schema::enableForeignKeyConstraints();
+    }
+
+    /**
+     * Create product categories table.
+     *
+     * @return void
+     */
+    private function createProductCategoriesTable(): void
+    {
         Schema::create('product_categories', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('tenant_id')
@@ -51,6 +60,43 @@ return new class () extends Migration {
             $table->timestampsTz();
             $table->softDeletesTz();
         });
+    }
+
+    /**
+     * Create product prices table.
+     *
+     * @return void
+     */
+    private function createProductPricesTable(): void
+    {
+        Schema::create('product_prices', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('tenant_id')
+                ->constrained()
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('product_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreignId('currency_id')
+                ->constrained()
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->unsignedBigInteger('price')
+                ->default(0);
+            $table->timestampsTz();
+            $table->softDeletesTz();
+        });
+    }
+
+    /**
+     * Create products table.
+     *
+     * @return void
+     */
+    private function createProductsTable(): void
+    {
         Schema::create('products', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('tenant_id')
@@ -86,25 +132,29 @@ return new class () extends Migration {
             $table->timestampsTz();
             $table->softDeletesTz();
         });
-        Schema::create('product_prices', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('tenant_id')
-                ->constrained()
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->foreignId('product_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->foreignId('currency_id')
-                ->constrained()
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
-            $table->unsignedBigInteger('price')
-                ->default(0);
-            $table->timestampsTz();
-            $table->softDeletesTz();
-        });
-        Schema::enableForeignKeyConstraints();
+    }
+
+    /**
+     * Create product tables.
+     *
+     * @return void
+     */
+    private function createProductTables(): void
+    {
+        $this->createProductCategoriesTable();
+        $this->createProductsTable();
+        $this->createProductPricesTable();
+    }
+
+    /**
+     * Drop product tables.
+     *
+     * @return void
+     */
+    private function dropProductTables(): void
+    {
+        Schema::dropIfExists('products');
+        Schema::dropIfExists('product_prices');
+        Schema::dropIfExists('product_categories');
     }
 };

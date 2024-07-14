@@ -1,0 +1,17 @@
+{
+    "name": "termehsoft/tenant",
+    "description": "",
+    "type": "library",
+    "version": "1.0",
+    "license": "proprietary",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Termehsoft\\Tenant\\": "src/",
+            "Termehsoft\\Tenant\\Tests\\": "tests/",
+            "Termehsoft\\Tenant\\Database\\Factories\\": "database/factories/",
+            "Termehsoft\\Tenant\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "minimum-stability": "stable"
+}

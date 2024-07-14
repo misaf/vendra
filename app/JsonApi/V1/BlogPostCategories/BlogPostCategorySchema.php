@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\JsonApi\V1\BlogPostCategories;
 
-use App\Models;
 use LaravelJsonApi\Eloquent\Fields;
 use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
+use Termehsoft\Blog\Models\BlogPostCategory;
 
 final class BlogPostCategorySchema extends Schema
 {
@@ -17,7 +17,7 @@ final class BlogPostCategorySchema extends Schema
      *
      * @var string
      */
-    public static string $model = Models\Blog\BlogPostCategory::class;
+    public static string $model = BlogPostCategory::class;
 
     protected ?array $defaultPagination = ['number' => 1];
 

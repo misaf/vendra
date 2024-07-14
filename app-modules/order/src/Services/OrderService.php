@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Order\Services;
+namespace Termehsoft\Order\Services;
 
 final class OrderService
 {

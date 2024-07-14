@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "684c2d0826689d9f0b86d6008f17af47",
+    "content-hash": "920caba2579c165819ebb25991fede70",
     "packages": [
         {
             "name": "afsakar/filament-translate-action",
@@ -12557,16 +12557,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/blog",
-                "reference": "2af4451be49fc67541e85ef40dd05bd94cf20daa"
+                "reference": "01fda315173eb308c3404b026eccc3fe3c823855"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Blog\\Providers\\BlogServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Blog\\": "src/",
@@ -12589,16 +12582,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/currency",
-                "reference": "ad9a6fe04a337ddaca300dc45dc0b2a7a3a3839f"
+                "reference": "44d771f0faef0d572a4d32c688c25f2ab0f20956"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Currency\\Providers\\CurrencyServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Currency\\": "src/",
@@ -12621,16 +12607,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/faq",
-                "reference": "1e9b0776d5420f4c3bbd02906ad40e6b34b88abf"
+                "reference": "f418b0eab9dc4ada66306449795682e1825d51c9"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Faq\\Providers\\FaqServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Faq\\": "src/",
@@ -12653,16 +12632,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/geographical",
-                "reference": "f1dde602b7f1b23b7934f020270e0e137ef1d23c"
+                "reference": "ae31bd7b66a60aff8774fbb9918633c458e92046"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Geographical\\Providers\\GeographicalServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Geographical\\": "src/",
@@ -12717,16 +12689,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/order",
-                "reference": "1b11a9bc518d0ee66b5386fcd47091743af89c84"
+                "reference": "1b7754fd5c474ed0c20f3d6a4599f36fbe80e479"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Order\\Providers\\OrderServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Order\\": "src/",
@@ -12749,16 +12714,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/page",
-                "reference": "e2829c6510b8648c0506dbe00fad29abe38586f9"
+                "reference": "68a97a82f0fb187ea0fe35628e311e408d5e2920"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Page\\Providers\\PageServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Page\\": "src/",
@@ -12781,16 +12739,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/permission",
-                "reference": "f87b433272a51cc963d6d90ba3c52441573e8495"
+                "reference": "50c2154c8f63066570496d00df93d16dbd63c2b0"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Permission\\Providers\\PermissionServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Permission\\": "src/",
@@ -12813,16 +12764,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/product",
-                "reference": "92e7997c159ff16273cf2d55b7666443d563f63a"
+                "reference": "ad3faa9c6249f5fd24ef3061b4510f1804a64759"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Product\\Providers\\ProductServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Product\\": "src/",
@@ -12840,21 +12784,39 @@
             }
         },
         {
+            "name": "termehsoft/tenant",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/tenant",
+                "reference": "aa99950a5550a301b7fa36d5fabae8f9f1612b6a"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Tenant\\": "src/",
+                    "Termehsoft\\Tenant\\Tests\\": "tests/",
+                    "Termehsoft\\Tenant\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Tenant\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "termehsoft/transaction",
             "version": "1.0",
             "dist": {
                 "type": "path",
                 "url": "app-modules/transaction",
-                "reference": "1976032990bc676e3be2e419219c47ce94a2b6a3"
+                "reference": "1b3dc68feba35c31cb2efa4cd8c7da12f2f9f387"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\Transaction\\Providers\\TransactionServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\Transaction\\": "src/",
@@ -12877,16 +12839,9 @@
             "dist": {
                 "type": "path",
                 "url": "app-modules/user",
-                "reference": "35284187644fed20692a60568d076b6b0492e321"
+                "reference": "fb884ed5dd605b92cfd1a7d137b1eebac06a0017"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Termehsoft\\User\\Providers\\UserServiceProvider"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Termehsoft\\User\\": "src/",

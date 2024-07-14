@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Termehsoft\Faq\Models;
 
 use App\Casts\DateCast;
-use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -14,6 +13,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
+use Termehsoft\Tenant\Models\TenantWithMedia;
 
 final class Faq extends TenantWithMedia implements Sortable
 {

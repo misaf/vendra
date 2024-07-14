@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Termehsoft\Page\Models;
 
-use App\Models\TenantWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Termehsoft\Tenant\Models\TenantWithMedia;
 
 final class PageCategory extends TenantWithMedia
 {

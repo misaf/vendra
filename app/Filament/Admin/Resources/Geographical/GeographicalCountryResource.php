@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Geographical;
 
 use App\Filament\Admin\Resources\Geographical\GeographicalCountryResource\Pages;
-use App\Models\Geographical\GeographicalCountry;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -15,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Geographical\Models\GeographicalCountry;
 
 final class GeographicalCountryResource extends Resource
 {

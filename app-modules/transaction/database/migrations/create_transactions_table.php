@@ -15,7 +15,7 @@ return new class () extends Migration {
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('transactions');
+        $this->dropTransactionTables();
         Schema::enableForeignKeyConstraints();
     }
 
@@ -27,6 +27,17 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::disableForeignKeyConstraints();
+        $this->createTransactionTables();
+        Schema::enableForeignKeyConstraints();
+    }
+
+    /**
+     * Create transactions table.
+     *
+     * @return void
+     */
+    private function createTransactionsTable(): void
+    {
         Schema::create('transactions', function (Blueprint $table): void {
             $table->id();
             $table->morphs('model');
@@ -39,6 +50,25 @@ return new class () extends Migration {
             $table->timestampsTz();
             $table->softDeletesTz();
         });
-        Schema::enableForeignKeyConstraints();
+    }
+
+    /**
+     * Create transaction tables.
+     *
+     * @return void
+     */
+    private function createTransactionTables(): void
+    {
+        $this->createTransactionsTable();
+    }
+
+    /**
+     * Drop transaction tables.
+     *
+     * @return void
+     */
+    private function dropTransactionTables(): void
+    {
+        Schema::dropIfExists('transactions');
     }
 };

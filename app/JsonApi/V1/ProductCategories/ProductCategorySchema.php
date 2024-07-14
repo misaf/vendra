@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\JsonApi\V1\ProductCategories;
 
-use App\Models;
 use LaravelJsonApi\Eloquent\Fields;
 use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
+use Termehsoft\Product\Models\ProductCategory;
 
 final class ProductCategorySchema extends Schema
 {
@@ -17,7 +17,7 @@ final class ProductCategorySchema extends Schema
      *
      * @var string
      */
-    public static string $model = Models\Product\ProductCategory::class;
+    public static string $model = ProductCategory::class;
 
     protected ?array $defaultPagination = ['number' => 1];
 

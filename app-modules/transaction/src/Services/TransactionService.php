@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Transaction\Services;
+namespace Termehsoft\Transaction\Services;
 
 final class TransactionService
 {

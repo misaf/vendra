@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\JsonApi\V1\Products;
 
 use App\JsonApi\Sorting;
-use App\Models;
 use LaravelJsonApi\Eloquent\Fields;
 use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
+use Termehsoft\Product\Models\Product;
 
 final class ProductSchema extends Schema
 {
@@ -18,7 +18,7 @@ final class ProductSchema extends Schema
      *
      * @var string
      */
-    public static string $model = Models\Product\Product::class;
+    public static string $model = Product::class;
 
     protected ?array $defaultPagination = ['number' => 1];
 

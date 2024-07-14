@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Termehsoft\Transaction\Database\Factories;
 
-use App\Enums\TransactionStatusEnum;
-use App\Services\TransactionService;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Termehsoft\Transaction\Enums\TransactionStatusEnum;
 use Termehsoft\Transaction\Models\Transaction;
+use Termehsoft\Transaction\Services\TransactionService;
 
 final class TransactionFactory extends Factory
 {

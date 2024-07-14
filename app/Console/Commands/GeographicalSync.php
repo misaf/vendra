@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
-use App\Models\Geographical\GeographicalCountry;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Termehsoft\Geographical\Models\GeographicalCountry;
 
 final class GeographicalSync extends Command
 {

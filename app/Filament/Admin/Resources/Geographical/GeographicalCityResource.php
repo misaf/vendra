@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Geographical;
 
 use App\Filament\Admin\Resources\Geographical\GeographicalCityResource\Pages;
-use App\Models\Geographical\GeographicalCity;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -16,6 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Geographical\Models\GeographicalCity;
 
 final class GeographicalCityResource extends Resource
 {

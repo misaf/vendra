@@ -6,12 +6,12 @@ namespace Termehsoft\Product\Models;
 
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
-use App\Models\Tenant;
 use Brick\Money\Money;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Currency\Models\Currency;
+use Termehsoft\Currency\Models\CurrencyCategory;
+use Termehsoft\Tenant\Models\Tenant;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 

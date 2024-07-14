@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\JsonApi\V1\Faqs;
 
-use App\Models;
 use LaravelJsonApi\Eloquent\Fields;
 use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
+use Termehsoft\Faq\Models\Faq;
 
 final class FaqSchema extends Schema
 {
@@ -17,7 +17,7 @@ final class FaqSchema extends Schema
      *
      * @var string
      */
-    public static string $model = Models\Faq\Faq::class;
+    public static string $model = Faq::class;
 
     protected ?array $defaultPagination = ['number' => 1];
 

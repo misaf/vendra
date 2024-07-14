@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\User;
 
 use App\Filament\Admin\Resources\User\UserProfilePhoneResource\Pages;
-use App\Models\User\UserProfilePhone;
 use App\Support\Enums\UserProfilePhoneStatusEnum;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -17,6 +16,7 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\User\Models\UserProfilePhone;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 use Ysfkaya\FilamentPhoneInput\Tables\PhoneInputColumn;

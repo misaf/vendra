@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Resources\Faq;
 
 use App\Filament\Admin\Resources\Faq\FaqResource\Pages;
-use App\Models\Faq\Faq;
-use App\Models\Faq\FaqCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -19,6 +17,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Faq\Models\Faq;
+use Termehsoft\Faq\Models\FaqCategory;
 
 final class FaqResource extends Resource
 {

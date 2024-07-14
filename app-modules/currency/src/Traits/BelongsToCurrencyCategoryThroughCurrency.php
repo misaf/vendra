@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Currency\Traits;
+namespace Termehsoft\Currency\Traits;
 
-use App\Models\Currency\Currency;
-use App\Models\Currency\CurrencyCategory;
+use Termehsoft\Currency\Models\Currency;
+use Termehsoft\Currency\Models\CurrencyCategory;
 use Znck\Eloquent\Relations\BelongsToThrough;
 
 trait BelongsToCurrencyCategoryThroughCurrency

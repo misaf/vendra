@@ -7,7 +7,6 @@ namespace App\Filament\Admin\Resources\User;
 use App\Filament\Admin\Resources\User\UserProfileDocumentResource\RelationManagers\UserProfileDocumentRelationManager;
 use App\Filament\Admin\Resources\User\UserProfileResource\RelationManagers\UserProfileRelationManager;
 use App\Filament\Admin\Resources\User\UserResource\Pages;
-use App\Models\User\User;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\User\Models\User;
 
 final class UserResource extends Resource
 {

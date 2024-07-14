@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
-use App\Models\TenantWithMedia;
 use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Termehsoft\Tenant\Models\TenantWithMedia;
 
 final class UserProfile extends TenantWithMedia implements
     Contracts\BelongsToUser,

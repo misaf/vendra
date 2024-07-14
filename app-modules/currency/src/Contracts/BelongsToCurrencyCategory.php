@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\Currency\Contracts;
+namespace Termehsoft\Currency\Contracts;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Znck\Eloquent\Relations\BelongsToThrough;

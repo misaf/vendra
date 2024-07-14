@@ -9,10 +9,10 @@ use App\Models\Currency;
 use App\Models\Currency\CurrencyCategory;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
-use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Tenant\Models\Tenant;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 

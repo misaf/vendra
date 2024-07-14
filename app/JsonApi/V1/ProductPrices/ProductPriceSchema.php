@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\JsonApi\V1\ProductPrices;
 
-use App\Models;
 use LaravelJsonApi\Eloquent\Fields;
 use LaravelJsonApi\Eloquent\Filters;
 use LaravelJsonApi\Eloquent\Pagination;
 use LaravelJsonApi\Eloquent\Schema;
+use Termehsoft\Product\Models\ProductPrice;
 
 final class ProductPriceSchema extends Schema
 {
@@ -17,7 +17,7 @@ final class ProductPriceSchema extends Schema
      *
      * @var string
      */
-    public static string $model = Models\Product\ProductPrice::class;
+    public static string $model = ProductPrice::class;
 
     protected ?array $defaultPagination = ['number' => 1];
 

@@ -7,9 +7,6 @@ namespace App\Filament\Admin\Resources\Product;
 use App\Filament\Admin\Actions\Tables\Product\InStockAction;
 use App\Filament\Admin\Actions\Tables\Product\OutOfStockAction;
 use App\Filament\Admin\Resources\Product\ProductResource\Pages;
-use App\Models\Product\Product;
-use App\Models\Product\ProductCategory;
-use App\Models\Product\ProductPrice;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -24,6 +21,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Product\Models\Product;
+use Termehsoft\Product\Models\ProductCategory;
+use Termehsoft\Product\Models\ProductPrice;
 
 final class ProductResource extends Resource
 {

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Casts;
 
-use App\Models\Currency\Currency;
 use Brick\Money\Currency as MoneyCurrency;
 use Brick\Money\Money;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
+use Termehsoft\Currency\Models\Currency;
 
 final class MoneyCast implements CastsAttributes
 {

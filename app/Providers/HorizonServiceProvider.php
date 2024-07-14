@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\User\User;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
+use Termehsoft\User\Models\User;
 
 final class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {

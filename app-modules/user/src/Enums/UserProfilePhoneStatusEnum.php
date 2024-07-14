@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models\User\Enums;
+namespace Termehsoft\User\Enums;
 
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasDescription;

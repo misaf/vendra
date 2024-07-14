@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Models\User\User;
+use Termehsoft\User\Models\User;
 
 return [
 

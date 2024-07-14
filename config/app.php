@@ -181,10 +181,7 @@ return [
         HorizonServiceProvider::class,
         PulseServiceProvider::class,
         TelescopeServiceProvider::class,
-        // Filament Panels
         Filament\AdminPanelProvider::class,
-        // E-Commerce Panels
-        Filament\Commerce\AdminPanelProvider::class,
         RouteServiceProvider::class,
     ])->toArray(),
 

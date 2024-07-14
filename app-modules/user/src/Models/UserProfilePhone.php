@@ -5,22 +5,26 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
-use App\Models\Tenant;
-use App\Models\User\Enums\UserProfileDocumentStatusEnum;
-use App\Models\User\Enums\UserProfilePhoneStatusEnum;
-use App\Models\User\Services\UserProfilePhoneService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
+use Termehsoft\Tenant\Models\Tenant;
+use Termehsoft\User\Contracts\BelongsToUser as BelongsToUserInterface;
+use Termehsoft\User\Contracts\BelongsToUserProfile as BelongsToUserProfileInterface;
+use Termehsoft\User\Enums\UserProfileDocumentStatusEnum;
+use Termehsoft\User\Enums\UserProfilePhoneStatusEnum;
+use Termehsoft\User\Services\UserProfilePhoneService;
+use Termehsoft\User\Traits\BelongsToUserProfile as BelongsToUserProfileTrait;
+use Termehsoft\User\Traits\BelongsToUserThroughUserProfile as BelongsToUserThroughUserProfileTrait;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 final class UserProfilePhone extends Tenant implements
-    Contracts\BelongsToUserProfile,
-    Contracts\BelongsToUser
+    BelongsToUserProfileInterface,
+    BelongsToUserInterface
 {
+    use BelongsToUserProfileTrait;
+    use BelongsToUserThroughUserProfileTrait;
     use SoftDeletes;
     use TraitBelongsToThrough;
-    use Traits\BelongsToUserProfile;
-    use Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [
         'id'               => 'integer',

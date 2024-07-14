@@ -1,24 +1,17 @@
 {
-	"name": "termehsoft/faq",
-	"description": "",
-	"type": "library",
-	"version": "1.0",
-	"license": "proprietary",
-	"require": {},
-	"autoload": {
-		"psr-4": {
-			"Termehsoft\\Faq\\": "src/",
-			"Termehsoft\\Faq\\Tests\\": "tests/",
-			"Termehsoft\\Faq\\Database\\Factories\\": "database/factories/",
-			"Termehsoft\\Faq\\Database\\Seeders\\": "database/seeders/"
-		}
-	},
-	"minimum-stability": "stable",
-	"extra": {
-		"laravel": {
-			"providers": [
-				"Termehsoft\\Faq\\Providers\\FaqServiceProvider"
-			]
-		}
-	}
+    "name": "termehsoft/faq",
+    "description": "",
+    "type": "library",
+    "version": "1.0",
+    "license": "proprietary",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Termehsoft\\Faq\\": "src/",
+            "Termehsoft\\Faq\\Tests\\": "tests/",
+            "Termehsoft\\Faq\\Database\\Factories\\": "database/factories/",
+            "Termehsoft\\Faq\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "minimum-stability": "stable"
 }

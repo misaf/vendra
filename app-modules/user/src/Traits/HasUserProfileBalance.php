@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models\User\Traits;
+namespace Termehsoft\User\Traits;
 
-use App\Models\User\User;
-use App\Models\User\UserProfileBalance;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Termehsoft\User\Models\UserProfileBalance;
 
 trait HasUserProfileBalance
 {
