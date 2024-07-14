@@ -43,6 +43,17 @@
         "staudenmeir/belongs-to-through": "^2.15.1",
         "staudenmeir/eloquent-has-many-deep": "^1.19.4",
         "staudenmeir/laravel-adjacency-list": "^1.20.1",
+        "termehsoft/blog": "*",
+        "termehsoft/currency": "*",
+        "termehsoft/faq": "*",
+        "termehsoft/geographical": "*",
+        "termehsoft/language": "*",
+        "termehsoft/order": "*",
+        "termehsoft/page": "*",
+        "termehsoft/permission": "*",
+        "termehsoft/product": "*",
+        "termehsoft/transaction": "*",
+        "termehsoft/user": "*",
         "ysfkaya/filament-phone-input": "^2.3.6"
     },
     "require-dev": {
@@ -101,5 +112,14 @@
         }
     },
     "minimum-stability": "beta",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "app-modules/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

@@ -1,0 +1,24 @@
+{
+	"name": "termehsoft/order",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Termehsoft\\Order\\": "src/",
+			"Termehsoft\\Order\\Tests\\": "tests/",
+			"Termehsoft\\Order\\Database\\Factories\\": "database/factories/",
+			"Termehsoft\\Order\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Termehsoft\\Order\\Providers\\OrderServiceProvider"
+			]
+		}
+	}
+}

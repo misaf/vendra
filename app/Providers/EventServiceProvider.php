@@ -12,10 +12,6 @@ use App\Models\Currency\Currency;
 use App\Models\Currency\CurrencyCategory;
 use App\Models\Currency\Observers\CurrencyCategoryObserver;
 use App\Models\Currency\Observers\CurrencyObserver;
-use App\Models\Faq\Faq;
-use App\Models\Faq\FaqCategory;
-use App\Models\Faq\Observers\FaqCategoryObserver;
-use App\Models\Faq\Observers\FaqObserver;
 use App\Models\Geographical\GeographicalCity;
 use App\Models\Geographical\GeographicalCountry;
 use App\Models\Geographical\GeographicalNeighborhood;
@@ -55,6 +51,10 @@ use App\Models\User\UserProfilePhone;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Termehsoft\Faq\Models\Faq;
+use Termehsoft\Faq\Models\FaqCategory;
+use Termehsoft\Faq\Observers\FaqCategoryObserver;
+use Termehsoft\Faq\Observers\FaqObserver;
 
 final class EventServiceProvider extends ServiceProvider
 {
@@ -65,30 +65,30 @@ final class EventServiceProvider extends ServiceProvider
     ];
 
     protected $observers = [
-        BlogPost::class                 => BlogPostObserver::class,
-        BlogPostCategory::class         => BlogPostCategoryObserver::class,
-        Currency::class                 => CurrencyObserver::class,
-        CurrencyCategory::class         => CurrencyCategoryObserver::class,
-        Faq::class                      => FaqObserver::class,
-        FaqCategory::class              => FaqCategoryObserver::class,
-        GeographicalCity::class         => GeographicalCityObserver::class,
-        GeographicalCountry::class      => GeographicalCountryObserver::class,
-        GeographicalNeighborhood::class => GeographicalNeighborhoodObserver::class,
-        GeographicalState::class        => GeographicalStateObserver::class,
-        GeographicalZone::class         => GeographicalZoneObserver::class,
-        Language::class                 => LanguageObserver::class,
-        LanguageLine::class             => LanguageLineObserver::class,
-        Permission::class               => PermissionObserver::class,
-        Role::class                     => RoleObserver::class,
-        Product::class                  => ProductObserver::class,
-        ProductCategory::class          => ProductCategoryObserver::class,
-        ProductPrice::class             => ProductPriceObserver::class,
-        User::class                     => UserObserver::class,
-        UserProfile::class              => UserProfileObserver::class,
-        UserProfileBalance::class       => UserProfileBalanceObserver::class,
-        UserProfileDocument::class      => UserProfileDocumentObserver::class,
-        UserProfilePhone::class         => UserProfilePhoneObserver::class,
-        Transaction::class              => TransactionObserver::class,
+        // BlogPost::class                 => BlogPostObserver::class,
+        // BlogPostCategory::class         => BlogPostCategoryObserver::class,
+        // Currency::class                 => CurrencyObserver::class,
+        // CurrencyCategory::class         => CurrencyCategoryObserver::class,
+        // Faq::class                      => FaqObserver::class,
+        // FaqCategory::class              => FaqCategoryObserver::class,
+        // GeographicalCity::class         => GeographicalCityObserver::class,
+        // GeographicalCountry::class      => GeographicalCountryObserver::class,
+        // GeographicalNeighborhood::class => GeographicalNeighborhoodObserver::class,
+        // GeographicalState::class        => GeographicalStateObserver::class,
+        // GeographicalZone::class         => GeographicalZoneObserver::class,
+        // Language::class                 => LanguageObserver::class,
+        // LanguageLine::class             => LanguageLineObserver::class,
+        // Permission::class               => PermissionObserver::class,
+        // Role::class                     => RoleObserver::class,
+        // Product::class                  => ProductObserver::class,
+        // ProductCategory::class          => ProductCategoryObserver::class,
+        // ProductPrice::class             => ProductPriceObserver::class,
+        // User::class                     => UserObserver::class,
+        // UserProfile::class              => UserProfileObserver::class,
+        // UserProfileBalance::class       => UserProfileBalanceObserver::class,
+        // UserProfileDocument::class      => UserProfileDocumentObserver::class,
+        // UserProfilePhone::class         => UserProfilePhoneObserver::class,
+        // Transaction::class              => TransactionObserver::class,
     ];
 
     public function shouldDiscoverEvents(): bool

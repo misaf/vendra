@@ -1,0 +1,24 @@
+{
+	"name": "termehsoft/permission",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Termehsoft\\Permission\\": "src/",
+			"Termehsoft\\Permission\\Tests\\": "tests/",
+			"Termehsoft\\Permission\\Database\\Factories\\": "database/factories/",
+			"Termehsoft\\Permission\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Termehsoft\\Permission\\Providers\\PermissionServiceProvider"
+			]
+		}
+	}
+}

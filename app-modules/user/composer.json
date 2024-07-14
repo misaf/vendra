@@ -1,0 +1,24 @@
+{
+	"name": "termehsoft/user",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Termehsoft\\User\\": "src/",
+			"Termehsoft\\User\\Tests\\": "tests/",
+			"Termehsoft\\User\\Database\\Factories\\": "database/factories/",
+			"Termehsoft\\User\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Termehsoft\\User\\Providers\\UserServiceProvider"
+			]
+		}
+	}
+}

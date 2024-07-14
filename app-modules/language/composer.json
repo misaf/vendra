@@ -1,0 +1,24 @@
+{
+	"name": "termehsoft/language",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Termehsoft\\Language\\": "src/",
+			"Termehsoft\\Language\\Tests\\": "tests/",
+			"Termehsoft\\Language\\Database\\Factories\\": "database/factories/",
+			"Termehsoft\\Language\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Termehsoft\\Language\\Providers\\LanguageServiceProvider"
+			]
+		}
+	}
+}

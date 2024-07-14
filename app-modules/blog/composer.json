@@ -1,0 +1,24 @@
+{
+	"name": "termehsoft/blog",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Termehsoft\\Blog\\": "src/",
+			"Termehsoft\\Blog\\Tests\\": "tests/",
+			"Termehsoft\\Blog\\Database\\Factories\\": "database/factories/",
+			"Termehsoft\\Blog\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Termehsoft\\Blog\\Providers\\BlogServiceProvider"
+			]
+		}
+	}
+}

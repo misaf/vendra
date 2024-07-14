@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79e5fb8e85951f580f6e9f3b16803880",
+    "content-hash": "684c2d0826689d9f0b86d6008f17af47",
     "packages": [
         {
             "name": "afsakar/filament-translate-action",
@@ -12550,6 +12550,358 @@
                 }
             ],
             "time": "2024-06-27T13:23:14+00:00"
+        },
+        {
+            "name": "termehsoft/blog",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/blog",
+                "reference": "2af4451be49fc67541e85ef40dd05bd94cf20daa"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Blog\\Providers\\BlogServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Blog\\": "src/",
+                    "Termehsoft\\Blog\\Tests\\": "tests/",
+                    "Termehsoft\\Blog\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Blog\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/currency",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/currency",
+                "reference": "ad9a6fe04a337ddaca300dc45dc0b2a7a3a3839f"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Currency\\Providers\\CurrencyServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Currency\\": "src/",
+                    "Termehsoft\\Currency\\Tests\\": "tests/",
+                    "Termehsoft\\Currency\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Currency\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/faq",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/faq",
+                "reference": "1e9b0776d5420f4c3bbd02906ad40e6b34b88abf"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Faq\\Providers\\FaqServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Faq\\": "src/",
+                    "Termehsoft\\Faq\\Tests\\": "tests/",
+                    "Termehsoft\\Faq\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Faq\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/geographical",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/geographical",
+                "reference": "f1dde602b7f1b23b7934f020270e0e137ef1d23c"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Geographical\\Providers\\GeographicalServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Geographical\\": "src/",
+                    "Termehsoft\\Geographical\\Tests\\": "tests/",
+                    "Termehsoft\\Geographical\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Geographical\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/language",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/language",
+                "reference": "f4077cbbf750edbeabe6e172a06e653d031c21e2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Language\\Providers\\LanguageServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Language\\": "src/",
+                    "Termehsoft\\Language\\Tests\\": "tests/",
+                    "Termehsoft\\Language\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Language\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/order",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/order",
+                "reference": "1b11a9bc518d0ee66b5386fcd47091743af89c84"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Order\\Providers\\OrderServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Order\\": "src/",
+                    "Termehsoft\\Order\\Tests\\": "tests/",
+                    "Termehsoft\\Order\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Order\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/page",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/page",
+                "reference": "e2829c6510b8648c0506dbe00fad29abe38586f9"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Page\\Providers\\PageServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Page\\": "src/",
+                    "Termehsoft\\Page\\Tests\\": "tests/",
+                    "Termehsoft\\Page\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Page\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/permission",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/permission",
+                "reference": "f87b433272a51cc963d6d90ba3c52441573e8495"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Permission\\Providers\\PermissionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Permission\\": "src/",
+                    "Termehsoft\\Permission\\Tests\\": "tests/",
+                    "Termehsoft\\Permission\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Permission\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/product",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/product",
+                "reference": "92e7997c159ff16273cf2d55b7666443d563f63a"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Product\\Providers\\ProductServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Product\\": "src/",
+                    "Termehsoft\\Product\\Tests\\": "tests/",
+                    "Termehsoft\\Product\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Product\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/transaction",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/transaction",
+                "reference": "1976032990bc676e3be2e419219c47ce94a2b6a3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\Transaction\\Providers\\TransactionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\Transaction\\": "src/",
+                    "Termehsoft\\Transaction\\Tests\\": "tests/",
+                    "Termehsoft\\Transaction\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\Transaction\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "termehsoft/user",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/user",
+                "reference": "35284187644fed20692a60568d076b6b0492e321"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Termehsoft\\User\\Providers\\UserServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Termehsoft\\User\\": "src/",
+                    "Termehsoft\\User\\Tests\\": "tests/",
+                    "Termehsoft\\User\\Database\\Factories\\": "database/factories/",
+                    "Termehsoft\\User\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "thecodingmachine/safe",
