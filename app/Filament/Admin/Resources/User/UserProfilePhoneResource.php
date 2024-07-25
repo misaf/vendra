@@ -139,13 +139,18 @@ final class UserProfilePhoneResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('userProfile.image')
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('latestUserProfile.image')
                     ->circular()
                     ->conversion('thumb-table')
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                     ->label(__('form.image'))
                     ->stacked()
                     ->defaultImageUrl(url('coin-payment/images/default.png')),
+
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label(__('model.user'))
+                    ->searchable()
+                    ->sortable(),
 
                 Tables\Columns\TextColumn::make('userProfile.first_name')
                     ->label(__('form.first_name'))

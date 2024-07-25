@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Multitenancy\Tasks;
 
 use Illuminate\Support\Facades\URL;
+use Spatie\Multitenancy\Models\Tenant;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
-use Termehsoft\Tenant\Models\Tenant;
 
 final class SwitchAppTask implements SwitchTenantTask
 {
     public function __construct(
-        private ?string $original = null,
+        private ?array $original = null,
     ) {
         $this->original ??= config('app');
     }
@@ -21,15 +21,15 @@ final class SwitchAppTask implements SwitchTenantTask
         $this->setLocale($this->original['locale']);
         $this->setName($this->original['name']);
         $this->setTimezone($this->original['timezone']);
-        $this->setUrl($this->original['url']);
+        // $this->setUrl($this->original['url']);
     }
 
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(object $tenant): void
     {
-        $this->setLocale($tenant->locale);
+        $this->setLocale('fa');
         $this->setName($tenant->name);
-        $this->setTimezone($tenant->timezone);
-        $this->setUrl($tenant->url);
+        $this->setTimezone('Asia/Tehran');
+        // $this->setUrl($tenant->url);
     }
 
     private function setLocale(string $locale): void

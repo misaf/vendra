@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Termehsoft\Currency\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Termehsoft\Currency\Contracts\BelongsToCurrencyCategory as BelongsToCurrencyCategoryInterface;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 use Termehsoft\User\Contracts\HasUserProfileBalance as UserProfileBalanceInterface;
 use Termehsoft\User\Traits\HasUserProfileBalance as UserProfileBalanceTrait;
 
-final class Currency extends TenantWithMedia implements
+final class Currency extends BaseModelWithMedia implements
     BelongsToCurrencyCategoryInterface,
     Sortable,
     UserProfileBalanceInterface

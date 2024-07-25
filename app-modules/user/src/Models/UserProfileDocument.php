@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
-use App\Models\User\Enums\UserProfileDocumentStatusEnum;
+use App\Models\BaseModelWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Termehsoft\Tenant\Models\TenantWithMedia;
+use Termehsoft\User;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-final class UserProfileDocument extends TenantWithMedia implements
-    Contracts\BelongsToUser,
-    Contracts\BelongsToUserProfile
+final class UserProfileDocument extends BaseModelWithMedia implements
+    User\Contracts\BelongsToUser,
+    User\Contracts\BelongsToUserProfile
 {
     use SoftDeletes;
     use TraitBelongsToThrough;
-    use Traits\BelongsToUserProfile;
-    use Traits\BelongsToUserThroughUserProfile;
+    use User\Traits\BelongsToUserProfile;
+    use User\Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [
         'id'              => 'integer',
         'user_profile_id' => 'integer',
-        'status'          => UserProfileDocumentStatusEnum::class,
+        'status'          => User\Enums\UserProfileDocumentStatusEnum::class,
         'verified_at'     => 'datetime',
         'created_at'      => DateCast::class,
         'updated_at'      => DateCast::class,

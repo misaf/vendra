@@ -6,16 +6,13 @@ namespace Termehsoft\Permission\Models;
 
 use App\Casts\DateCast;
 use App\Traits\ActivityLog;
-use App\Traits\BelongsToTenant;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Models\Permission as ModelPermission;
-use Termehsoft\Tenant\Scopes\Tenant as TenantScope;
+use Spatie\Permission\Models\Permission as SpatiePermission;
+use Termehsoft\Tenant\Traits\BelongsToTenant;
 
-#[ScopedBy(TenantScope::class)]
-final class Permission extends ModelPermission
+final class Permission extends SpatiePermission
 {
     use ActivityLog;
     use BelongsToTenant;

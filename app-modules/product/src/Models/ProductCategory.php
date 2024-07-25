@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Termehsoft\Product\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -16,9 +16,9 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Termehsoft\Order\Models\OrderProduct;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 
-final class ProductCategory extends TenantWithMedia implements Sortable
+final class ProductCategory extends BaseModelWithMedia implements
+    Sortable
 {
     use HasRecursiveRelationships;
     use HasSlugOptionsTrait;
@@ -50,11 +50,6 @@ final class ProductCategory extends TenantWithMedia implements Sortable
         'position',
         'status',
     ];
-
-    public function multimedia(): MorphMany
-    {
-        return $this->media();
-    }
 
     public function orderProducts(): HasManyThrough
     {

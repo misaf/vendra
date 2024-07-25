@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Termehsoft\Product\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -17,9 +17,9 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 use Termehsoft\Order\Models\OrderProduct;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 
-final class Product extends TenantWithMedia implements Sortable
+final class Product extends BaseModelWithMedia implements
+    Sortable
 {
     use HasSlugOptionsTrait;
     use HasTags;
@@ -67,11 +67,6 @@ final class Product extends TenantWithMedia implements Sortable
     public function latestProductPrice(): HasOne
     {
         return $this->hasOne(ProductPrice::class)->latestOfMany();
-    }
-
-    public function multimedia(): MorphMany
-    {
-        return $this->media();
     }
 
     public function orderProducts(): HasMany

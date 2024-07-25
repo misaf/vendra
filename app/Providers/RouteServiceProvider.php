@@ -26,6 +26,9 @@ final class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::whereNumber('id');
+        Route::pattern('locale', '[a-zA-Z]{2}');
+
         $this->configureRateLimiting();
         $this->configureRoutes();
     }
@@ -35,7 +38,7 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureApiRoutes(): void
     {
-        Route::middleware(['api', 'tenannt'])
+        Route::middleware(['api'])
             ->prefix('api')
             ->group(base_path('routes/api.php'));
     }
@@ -45,9 +48,8 @@ final class RouteServiceProvider extends ServiceProvider
      */
     private function configureRateLimiting(): void
     {
-        RateLimiter::for('api', function (Request $request): void {
-            Limit::perMinute(1000)->by($request->user()?->id ?: $request->ip());
-        });
+        RateLimiter::for('api', fn(Request $request) => Limit::perMinute(60)->by($request->user()?->id ?: $request->ip()));
+        RateLimiter::for('web', fn(Request $request) => Limit::perMinute(180)->by($request->user()?->id ?: $request->ip()));
     }
 
     /**

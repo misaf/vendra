@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Termehsoft\Faq\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 
-final class Faq extends TenantWithMedia implements Sortable
+final class Faq extends BaseModelWithMedia implements
+    Sortable
 {
     use HasSlugOptionsTrait;
     use HasTranslatableSlug;
@@ -50,10 +50,5 @@ final class Faq extends TenantWithMedia implements Sortable
     public function faqCategory(): BelongsTo
     {
         return $this->belongsTo(FaqCategory::class);
-    }
-
-    public function multimedia(): MorphMany
-    {
-        return $this->media();
     }
 }

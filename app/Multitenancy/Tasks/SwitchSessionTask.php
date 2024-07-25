@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Multitenancy\Tasks;
 
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
-use Termehsoft\Tenant\Models\Tenant;
 
 final class SwitchSessionTask implements SwitchTenantTask
 {
@@ -32,7 +31,7 @@ final class SwitchSessionTask implements SwitchTenantTask
         );
     }
 
-    public function makeCurrent(Tenant $tenant): void
+    public function makeCurrent(object $tenant): void
     {
         // Not going to switch the session driver in testing, stick with the default array driver
         if (app()->runningUnitTests()) {

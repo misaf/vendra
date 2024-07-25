@@ -95,8 +95,8 @@ final class UserResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Email'   => $record->email,
-            'Roles'   => Arr::join($record->roles()->pluck('name')->toArray(), ', '),
+            'Email' => $record->email,
+            'Roles' => Arr::join($record->roles()->pluck('name')->toArray(), ', '),
         ];
     }
 
@@ -146,7 +146,7 @@ final class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('userProfile.image')
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('latestUserProfile.image')
                     ->circular()
                     ->conversion('thumb-table')
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])

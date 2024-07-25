@@ -8,39 +8,31 @@ use App\Casts\DateCast;
 use App\Traits\ActivityLog;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
-use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-use Termehsoft\Tenant\Models\Tenant;
-use Termehsoft\Tenant\Scopes\Tenant as TenantScope;
-use Termehsoft\Tenant\Traits\BelongsToTenant as BelongsToTenantTrait;
-use Termehsoft\User\Contracts\HasUserProfile as UserProfileInterface;
-use Termehsoft\User\Traits\HasUserProfile as UserProfileTrait;
+use Termehsoft\Tenant;
+use Termehsoft\User\Contracts;
+use Termehsoft\User\Traits;
 
-#[ScopedBy(TenantScope::class)]
 final class User extends Authenticatable implements
     FilamentUser,
     HasName,
-    HasTenants,
-    UserProfileInterface
+    Contracts\HasUserProfile
 {
     use ActivityLog;
-    use BelongsToTenantTrait;
     use HasApiTokens;
     use HasFactory;
     use HasRoles;
     use Notifiable;
     use SoftDeletes;
-    use UserProfileTrait;
+    use Tenant\Traits\BelongsToTenant;
+    use Traits\HasUserProfile;
 
     protected $casts = [
         'tenant_id'         => 'integer',
@@ -74,11 +66,6 @@ final class User extends Authenticatable implements
         return $this->hasAnyRole(['super-admin', 'admin', 'user']);
     }
 
-    public function canAccessTenant(Model $tenant): bool
-    {
-        return $this->tenants()->whereKey($tenant)->exists();
-    }
-
     /**
      * @return string
      */
@@ -87,16 +74,11 @@ final class User extends Authenticatable implements
         return $this->name ?? $this->email;
     }
 
-    public function getTenants(Panel $panel): Collection
-    {
-        return $this->tenants;
-    }
-
     /**
      * @return BelongsToMany
      */
     public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(Tenant::class);
+        return $this->belongsToMany(Tenant\Models\Tenant::class);
     }
 }

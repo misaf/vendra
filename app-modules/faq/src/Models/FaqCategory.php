@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Termehsoft\Faq\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 
-final class FaqCategory extends TenantWithMedia
+final class FaqCategory extends BaseModelWithMedia
 {
     use HasSlugOptionsTrait;
     use HasTranslatableSlug;
@@ -43,10 +42,5 @@ final class FaqCategory extends TenantWithMedia
     public function faqs(): HasMany
     {
         return $this->hasMany(Faq::class);
-    }
-
-    public function multimedia(): MorphMany
-    {
-        return $this->media();
     }
 }

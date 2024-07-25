@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Termehsoft\Order\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModel;
 use App\Models\Currency;
 use App\Models\Currency\CurrencyCategory;
 use App\Models\Product\Product;
@@ -12,11 +13,10 @@ use App\Models\Product\ProductCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Termehsoft\Tenant\Models\Tenant;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-final class OrderProduct extends Tenant implements
+final class OrderProduct extends BaseModel implements
     User\Contracts\BelongsToUser,
     Currency\Contracts\BelongsToCurrency,
     Currency\Contracts\BelongsToCurrencyCategory

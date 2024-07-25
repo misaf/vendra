@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace Termehsoft\Geographical\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-use Termehsoft\Tenant\Models\TenantWithMedia;
-use Termehsoft\Tenant\Scopes\Tenant as TenantScope;
 
-#[ScopedBy(TenantScope::class)]
-final class GeographicalZone extends TenantWithMedia
+final class GeographicalZone extends BaseModelWithMedia
 {
     use HasRelationships;
     use HasSlugOptionsTrait;

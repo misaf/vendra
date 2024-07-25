@@ -92,5 +92,5 @@ return [
     | the presence of event discovery.
     */
 
-    'should_discover_events' => null,
+    'should_discover_events' => 'enable',
 ];

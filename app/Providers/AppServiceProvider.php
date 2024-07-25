@@ -26,18 +26,6 @@ final class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             $this->configurePasswordDefaults();
         }
-
-        config()->set([
-            // 'app.asset_url'                => 'https://' . request()->getHost(),
-            'app.locale'                   => 'fa',
-            // 'app.name'                     => 'https://' . request()->getHost(),
-            'app.timezone'                 => 'Asia/Tehran',
-            // 'app.url'                      => 'https://' . request()->getHost(),
-            // 'cache.stores.file.path'       => storage_path('framework/cache/data/' . $tenant->name),
-            'filesystems.disks.public.url' => 'https://' . request()->getHost(),
-            // 'session.cookie'               => '__Secure-' . request()->getHost() . '-session',
-            // 'session.files'                => storage_path('framework/sessions/' . $tenant->name),
-        ]);
     }
 
     /**

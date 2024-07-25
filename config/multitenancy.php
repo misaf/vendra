@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Multitenancy\Services\DomainTenantFinder;
+use App\Multitenancy\Tasks\ClearFacadeInstancesTask;
 use App\Multitenancy\Tasks\SwitchAppTask;
 use App\Multitenancy\Tasks\SwitchMailTask;
+use App\Multitenancy\Tasks\SwitchSessionTask;
 use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
@@ -41,9 +43,10 @@ return [
     'switch_tenant_tasks' => [
         Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
         Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,
-        // ClearFacadeInstancesTask::class,
-        SwitchAppTask::class,
-        SwitchMailTask::class,
+        ClearFacadeInstancesTask::class,
+        // SwitchAppTask::class,
+        // SwitchSessionTask::class
+        // SwitchMailTask::class,
     ],
 
     /*

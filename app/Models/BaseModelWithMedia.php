@@ -2,17 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Termehsoft\Tenant\Models;
+namespace App\Models;
 
 use App\Traits\ThumbnailTableRecord;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class TenantWithMedia extends Tenant implements
-    HasMedia
+class BaseModelWithMedia extends BaseModel implements HasMedia
 {
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
+    }
+
+    public function multimedia(): MorphMany
+    {
+        return $this->media();
     }
 }

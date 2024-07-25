@@ -117,7 +117,7 @@ final class UserProfileBalanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('userProfile.image')
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('latestUserProfile.image')
                     ->circular()
                     ->conversion('thumb-table')
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])

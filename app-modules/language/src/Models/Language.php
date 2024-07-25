@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Termehsoft\Language\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
-use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
-use Termehsoft\Tenant\Models\TenantWithMedia;
-use Termehsoft\Tenant\Scopes\Tenant as TenantScope;
 
-#[ScopedBy(TenantScope::class)]
-final class Language extends TenantWithMedia
+final class Language extends BaseModelWithMedia implements
+    Sortable
 {
     use HasSlugOptionsTrait;
     use SoftDeletes;

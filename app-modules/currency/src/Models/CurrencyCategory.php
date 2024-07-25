@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Termehsoft\Currency\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\Currency\Contracts\HasCurrency as HasCurrencyInterface;
 use Termehsoft\Currency\Traits\HasCurrency as HasCurrencyTrait;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 
-final class CurrencyCategory extends TenantWithMedia implements HasCurrencyInterface
+final class CurrencyCategory extends BaseModelWithMedia implements
+    HasCurrencyInterface
 {
     use HasCurrencyTrait;
     use HasSlugOptionsTrait;

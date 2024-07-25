@@ -4,33 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http;
 
-use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Http\Middleware\TrimStrings;
-use App\Http\Middleware\TrustHosts;
-use App\Http\Middleware\VerifyCsrfToken as MiddlewareVerifyCsrfToken;
-use Illuminate\Auth\Middleware\Authenticate;
-use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
-use Illuminate\Auth\Middleware\Authorize;
-use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
-use Illuminate\Auth\Middleware\RequirePassword;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
-use Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests;
-use Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance;
-use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Illuminate\Http\Middleware\HandleCors;
-use Illuminate\Http\Middleware\SetCacheHeaders;
-use Illuminate\Http\Middleware\TrustProxies;
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Routing\Middleware\ThrottleRequests;
-use Illuminate\Routing\Middleware\ValidateSignature;
-use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
-use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 
 final class Kernel extends HttpKernel
 {
@@ -42,13 +16,13 @@ final class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        TrustHosts::class,
-        TrustProxies::class,
-        HandleCors::class,
-        PreventRequestsDuringMaintenance::class,
-        ValidatePostSize::class,
-        TrimStrings::class,
-        ConvertEmptyStringsToNull::class,
+        Middleware\TrustHosts::class,
+        Middleware\TrustProxies::class,
+        \Illuminate\Http\Middleware\HandleCors::class,
+        Middleware\PreventRequestsDuringMaintenance::class,
+        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
+        Middleware\TrimStrings::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
     /**
@@ -59,17 +33,17 @@ final class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $middlewareAliases = [
-        'auth'                    => Authenticate::class,
-        'auth.basic'              => AuthenticateWithBasicAuth::class,
-        'auth.session'            => AuthenticateSession::class,
-        'cache.headers'           => SetCacheHeaders::class,
-        'can'                     => Authorize::class,
-        'guest'                   => RedirectIfAuthenticated::class,
-        'password.confirm'        => RequirePassword::class,
-        'precognitive'            => HandlePrecognitiveRequests::class,
-        'signed'                  => ValidateSignature::class,
-        'throttle'                => ThrottleRequests::class,
-        'verified'                => EnsureEmailIsVerified::class,
+        'auth'             => Middleware\Authenticate::class,
+        'auth.basic'       => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'auth.session'     => \Illuminate\Session\Middleware\AuthenticateSession::class,
+        'cache.headers'    => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'can'              => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'            => Middleware\RedirectIfAuthenticated::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+        'precognitive'     => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
+        'signed'           => Middleware\ValidateSignature::class,
+        'throttle'         => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verified'         => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 
     /**
@@ -79,23 +53,23 @@ final class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            EncryptCookies::class,
-            AddQueuedCookiesToResponse::class,
-            StartSession::class,
-            ShareErrorsFromSession::class,
-            MiddlewareVerifyCsrfToken::class,
-            SubstituteBindings::class,
+            Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            ThrottleRequests::class . ':api',
-            SubstituteBindings::class,
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
         'tenant' => [
-            NeedsTenant::class,
-            EnsureValidTenantSession::class,
+            \Spatie\Multitenancy\Http\Middleware\NeedsTenant::class,
+            \Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession::class,
         ],
     ];
 }

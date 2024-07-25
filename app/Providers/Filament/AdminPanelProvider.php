@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\EncryptCookies;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
-use Filament\Facades\Filament;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -21,7 +21,6 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Table;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
@@ -72,10 +71,10 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->middleware([
                 NeedsTenant::class,
-                StartSession::class,
-                EnsureValidTenantSession::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                EnsureValidTenantSession::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 VerifyCsrfToken::class,

@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
-use Illuminate\Database\Eloquent;
+use App\Models\BaseModelWithMedia;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Termehsoft\Tenant\Models\TenantWithMedia;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\User;
 
-final class UserProfile extends TenantWithMedia implements
-    Contracts\BelongsToUser,
-    Contracts\HasUserProfileBalance,
-    Contracts\HasUserProfileDocument,
-    Contracts\HasUserProfilePhone
+final class UserProfile extends BaseModelWithMedia implements
+    User\Contracts\BelongsToUser,
+    User\Contracts\HasUserProfileBalance,
+    User\Contracts\HasUserProfileDocument,
+    User\Contracts\HasUserProfilePhone
 {
-    use Eloquent\SoftDeletes;
-    use Traits\BelongsToUser;
-    use Traits\HasUserProfileBalance;
-    use Traits\HasUserProfileDocument;
-    use Traits\HasUserProfilePhone;
+    use SoftDeletes;
+    use User\Traits\BelongsToUser;
+    use User\Traits\HasUserProfileBalance;
+    use User\Traits\HasUserProfileDocument;
+    use User\Traits\HasUserProfilePhone;
 
     protected $casts = [
         'id'          => 'integer',

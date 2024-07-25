@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Termehsoft\Geographical\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,9 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 
-final class GeographicalCountry extends TenantWithMedia
+final class GeographicalCountry extends BaseModelWithMedia
 {
     use HasRelationships;
     use HasSlugOptionsTrait;

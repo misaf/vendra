@@ -7,10 +7,15 @@ namespace Termehsoft\Tenant\Models;
 use App\Casts\DateCast;
 use App\Traits\ActivityLog;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Multitenancy\Models\Tenant as SpatieTenant;
 use Spatie\Tags\Tag;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 use Termehsoft\Blog\Models\BlogPost;
 use Termehsoft\Blog\Models\BlogPostCategory;
 use Termehsoft\Currency\Contracts\HasCurrency as CurrencyInterface;
@@ -34,7 +39,6 @@ use Termehsoft\Permission\Models\Role;
 use Termehsoft\Product\Models\Product;
 use Termehsoft\Product\Models\ProductCategory;
 use Termehsoft\Product\Models\ProductPrice;
-use Termehsoft\Tenant\Traits\BelongsToTenant;
 use Termehsoft\User\Contracts\HasUserProfile as UserProfileInterface;
 use Termehsoft\User\Contracts\HasUserProfileBalance as UserProfileBalanceInterface;
 use Termehsoft\User\Contracts\HasUserProfileDocument as UserProfileDocumentInterface;
@@ -43,6 +47,8 @@ use Termehsoft\User\Traits\HasUserProfile as UserProfileTrait;
 use Termehsoft\User\Traits\HasUserProfileBalance as UserProfileBalanceTrait;
 use Termehsoft\User\Traits\HasUserProfileDocument as UserProfileDocumentTrait;
 use Termehsoft\User\Traits\HasUserProfilePhone as UserProfilePhoneTrait;
+use Znck\Eloquent\Relations\BelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
 class Tenant extends SpatieTenant implements
     CurrencyInterface,
@@ -52,10 +58,12 @@ class Tenant extends SpatieTenant implements
     UserProfilePhoneInterface
 {
     use ActivityLog;
-    use BelongsToTenant;
     use CurrencyTrait;
+    use HasRelationships;
     use HasSlugOptionsTrait;
     use LogsActivity;
+    use SoftDeletes;
+    use TraitBelongsToThrough;
     use UserProfileBalanceTrait;
     use UserProfileDocumentTrait;
     use UserProfilePhoneTrait;
@@ -105,7 +113,7 @@ class Tenant extends SpatieTenant implements
         return $this->hasMany(Faq::class);
     }
 
-    public function geographicalCities(): HasMany
+    public function geographicalCities(): HasMany|HasManyThrough
     {
         return $this->hasMany(GeographicalCity::class);
     }
@@ -115,17 +123,17 @@ class Tenant extends SpatieTenant implements
         return $this->hasMany(GeographicalCountry::class);
     }
 
-    public function geographicalNeighborhoods(): HasMany
+    public function geographicalNeighborhoods(): HasMany|HasManyDeep|HasManyThrough
     {
         return $this->hasMany(GeographicalNeighborhood::class);
     }
 
-    public function geographicalStates(): HasMany
+    public function geographicalStates(): HasMany|HasManyThrough
     {
         return $this->hasMany(GeographicalState::class);
     }
 
-    public function geographicalZones(): HasMany
+    public function geographicalZones(): HasMany|BelongsTo|BelongsToThrough
     {
         return $this->hasMany(GeographicalZone::class);
     }
@@ -140,7 +148,7 @@ class Tenant extends SpatieTenant implements
         return $this->hasMany(Language::class);
     }
 
-    public function orderProducts(): HasMany
+    public function orderProducts(): HasMany|HasManyThrough
     {
         return $this->hasMany(OrderProduct::class);
     }
@@ -170,7 +178,7 @@ class Tenant extends SpatieTenant implements
         return $this->hasMany(ProductCategory::class);
     }
 
-    public function productPrices(): HasMany
+    public function productPrices(): HasMany|HasManyThrough
     {
         return $this->hasMany(ProductPrice::class);
     }

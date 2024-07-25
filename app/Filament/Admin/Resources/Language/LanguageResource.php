@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Resources\Language;
 
-use App\Contract\Language;
 use App\Filament\Admin\Resources\Language\LanguageResource\Pages;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -15,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Termehsoft\Language\Models\Language;
 
 final class LanguageResource extends Resource
 {

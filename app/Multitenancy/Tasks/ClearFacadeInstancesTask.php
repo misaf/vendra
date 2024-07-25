@@ -7,7 +7,6 @@ namespace App\Multitenancy\Tasks;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Str;
 use Spatie\Multitenancy\Tasks\SwitchTenantTask;
-use Termehsoft\Tenant\Models\Tenant;
 
 final class ClearFacadeInstancesTask implements SwitchTenantTask
 {
@@ -16,7 +15,7 @@ final class ClearFacadeInstancesTask implements SwitchTenantTask
         $this->clearFacadeInstancesInTheAppNamespace();
     }
 
-    public function makeCurrent(Tenant $tenant): void {}
+    public function makeCurrent(object $tenant): void {}
 
     private function clearFacadeInstancesInTheAppNamespace(): void
     {

@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Termehsoft\Geographical\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Termehsoft\Tenant\Models\TenantWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-final class GeographicalState extends TenantWithMedia
+final class GeographicalState extends BaseModelWithMedia
 {
     use HasSlugOptionsTrait;
     use SoftDeletes;

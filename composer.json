@@ -52,9 +52,9 @@
         "termehsoft/page": ">=1",
         "termehsoft/permission": ">=1",
         "termehsoft/product": ">=1",
+        "termehsoft/tenant": ">=1",
         "termehsoft/transaction": ">=1",
         "termehsoft/user": ">=1",
-        "termehsoft/tenant": ">=1",
         "ysfkaya/filament-phone-input": "^2.3.6"
     },
     "require-dev": {

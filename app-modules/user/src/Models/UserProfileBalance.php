@@ -6,30 +6,22 @@ namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Termehsoft\Currency\Contracts\BelongsToCurrency as BelongsToCurrencyInterface;
-use Termehsoft\Currency\Contracts\BelongsToCurrencyCategory as BelongsToCurrencyCategoryInterface;
-use Termehsoft\Currency\Traits\BelongsToCurrency as BelongsToCurrencyTrait;
-use Termehsoft\Currency\Traits\BelongsToCurrencyCategoryThroughCurrency as BelongsToCurrencyCategoryThroughCurrencyTrait;
-use Termehsoft\Tenant\Models\Tenant;
-use Termehsoft\User\Contracts\BelongsToUser as BelongsToUserInterface;
-use Termehsoft\User\Contracts\BelongsToUserProfile as BelongsToUserProfileInterface;
-use Termehsoft\User\Traits\BelongsToUserProfile as BelongsToUserProfileTrait;
-use Termehsoft\User\Traits\BelongsToUserThroughUserProfile as BelongsToUserThroughUserProfileTrait;
-use Znck\Eloquent\Traits\BelongsToThrough as BelongsToThroughTrait;
+use Termehsoft\Currency;
+use Termehsoft\User;
 
-final class UserProfileBalance extends Tenant implements
-    BelongsToUserInterface,
-    BelongsToUserProfileInterface,
-    BelongsToCurrencyInterface,
-    BelongsToCurrencyCategoryInterface
+final class UserProfileBalance extends BaseModel implements
+    User\Contracts\BelongsToUser,
+    User\Contracts\BelongsToUserProfile,
+    Currency\Contracts\BelongsToCurrency,
+    Currency\Contracts\BelongsToCurrencyCategory
 {
-    use BelongsToCurrencyCategoryThroughCurrencyTrait;
-    use BelongsToCurrencyTrait;
-    use BelongsToThroughTrait;
-    use BelongsToUserProfileTrait;
-    use BelongsToUserThroughUserProfileTrait;
+    use Currency\Traits\BelongsToCurrency;
+    use Currency\Traits\BelongsToCurrencyCategoryThroughCurrency;
     use SoftDeletes;
+    use User\Traits\BelongsToUserProfile;
+    use User\Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [
         'id'               => 'integer',

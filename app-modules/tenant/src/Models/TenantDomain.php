@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Termehsoft\Tenant\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModel;
 use App\Traits\HasSlugOptionsTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-final class TenantDomain extends Tenant
+final class TenantDomain extends BaseModel
 {
     use HasSlugOptionsTrait;
     use SoftDeletes;

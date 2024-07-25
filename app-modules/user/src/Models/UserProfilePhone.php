@@ -5,26 +5,20 @@ declare(strict_types=1);
 namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
+use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
-use Termehsoft\Tenant\Models\Tenant;
-use Termehsoft\User\Contracts\BelongsToUser as BelongsToUserInterface;
-use Termehsoft\User\Contracts\BelongsToUserProfile as BelongsToUserProfileInterface;
-use Termehsoft\User\Enums\UserProfileDocumentStatusEnum;
-use Termehsoft\User\Enums\UserProfilePhoneStatusEnum;
-use Termehsoft\User\Services\UserProfilePhoneService;
-use Termehsoft\User\Traits\BelongsToUserProfile as BelongsToUserProfileTrait;
-use Termehsoft\User\Traits\BelongsToUserThroughUserProfile as BelongsToUserThroughUserProfileTrait;
+use Termehsoft\User;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
-final class UserProfilePhone extends Tenant implements
-    BelongsToUserProfileInterface,
-    BelongsToUserInterface
+final class UserProfilePhone extends BaseModel implements
+    User\Contracts\BelongsToUserProfile,
+    User\Contracts\BelongsToUser
 {
-    use BelongsToUserProfileTrait;
-    use BelongsToUserThroughUserProfileTrait;
     use SoftDeletes;
     use TraitBelongsToThrough;
+    use User\Traits\BelongsToUserProfile;
+    use User\Traits\BelongsToUserThroughUserProfile;
 
     protected $casts = [
         'id'               => 'integer',
@@ -34,7 +28,7 @@ final class UserProfilePhone extends Tenant implements
         'phone_normalized' => 'string',
         'phone_national'   => 'string',
         'phone_e164'       => 'string',
-        'status'           => UserProfileDocumentStatusEnum::class,
+        'status'           => User\Enums\UserProfileDocumentStatusEnum::class,
         'verified_at'      => 'datetime',
         'created_at'       => DateCast::class,
         'updated_at'       => DateCast::class,
@@ -58,12 +52,12 @@ final class UserProfilePhone extends Tenant implements
 
         static::saving(function (UserProfilePhone $userProfilePhone): void {
             if ($userProfilePhone->isDirty('phone') && $userProfilePhone->phone) {
-                $userProfilePhone->phone_normalized = UserProfilePhoneService::phoneNormalized($userProfilePhone->phone);
-                $userProfilePhone->phone_national = UserProfilePhoneService::phoneNational($userProfilePhone->country, $userProfilePhone->phone);
-                $userProfilePhone->phone_e164 = UserProfilePhoneService::phoneE164($userProfilePhone->country, $userProfilePhone->phone);
+                $userProfilePhone->phone_normalized = User\Services\UserProfilePhoneService::phoneNormalized($userProfilePhone->phone);
+                $userProfilePhone->phone_national = User\Services\UserProfilePhoneService::phoneNational($userProfilePhone->country, $userProfilePhone->phone);
+                $userProfilePhone->phone_e164 = User\Services\UserProfilePhoneService::phoneE164($userProfilePhone->country, $userProfilePhone->phone);
             }
 
-            if ($userProfilePhone->isDirty('status') === UserProfilePhoneStatusEnum::Approved->value) {
+            if ($userProfilePhone->isDirty('status') === User\Enums\UserProfilePhoneStatusEnum::Approved->value) {
                 $userProfilePhone->verified_at = now();
             }
         });
