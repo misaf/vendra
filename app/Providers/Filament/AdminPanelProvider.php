@@ -56,10 +56,10 @@ final class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('ecommerce')
+            ->id('panel-ecommerce')
             ->login()
             ->default()
-            ->brandName('commerce')
+            ->brandName('Houshang-Flowers')
             ->path('/admin')
             ->profile(isSimple: false)
             ->brandLogoHeight('2rem')
@@ -189,15 +189,5 @@ final class AdminPanelProvider extends PanelProvider
         DeleteAction::configureUsing(function (DeleteAction $deleteAction): void {
             $deleteAction->button();
         });
-    }
-
-    /**
-     * Get the tenant Domains.
-     *
-     * @return array
-     */
-    private function tenantDomains(): array
-    {
-        return [];
     }
 }

@@ -21,7 +21,8 @@ final class SwitchAppTask implements SwitchTenantTask
         $this->setLocale($this->original['locale']);
         $this->setName($this->original['name']);
         $this->setTimezone($this->original['timezone']);
-        // $this->setUrl($this->original['url']);
+        $this->setAppUrl($this->original['url']);
+        $this->setAssetUrl($this->original['asset_url']);
     }
 
     public function makeCurrent(object $tenant): void
@@ -29,7 +30,8 @@ final class SwitchAppTask implements SwitchTenantTask
         $this->setLocale('fa');
         $this->setName($tenant->name);
         $this->setTimezone('Asia/Tehran');
-        $this->setUrl('https://panel.houshang-flowers.com');
+        $this->setAppUrl('https://panel.houshang-flowers.com');
+        $this->setAssetUrl('https://panel.houshang-flowers.com');
     }
 
     private function setLocale(string $locale): void
@@ -53,7 +55,7 @@ final class SwitchAppTask implements SwitchTenantTask
         ]);
     }
 
-    private function setUrl(string $url): void
+    private function setAppUrl(string $url): void
     {
         // We may want to look into defining whether we want to use https at the tenant level
         // $scheme = parse_url($this->original)['scheme'];
@@ -64,5 +66,16 @@ final class SwitchAppTask implements SwitchTenantTask
         ]);
 
         URL::forceRootUrl(config('app.url'));
+    }
+
+    private function setAssetUrl(string $url): void
+    {
+        // We may want to look into defining whether we want to use https at the tenant level
+        // $scheme = parse_url($this->original)['scheme'];
+
+        config([
+            // 'app.url' => "{$scheme}://{domain}",
+            'app.asset_url' => $url,
+        ]);
     }
 }
