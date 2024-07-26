@@ -44,7 +44,7 @@ return [
         Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
         Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,
         ClearFacadeInstancesTask::class,
-        // SwitchAppTask::class,
+        SwitchAppTask::class,
         // SwitchSessionTask::class
         // SwitchMailTask::class,
     ],
