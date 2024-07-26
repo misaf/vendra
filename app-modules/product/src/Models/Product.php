@@ -86,6 +86,6 @@ final class Product extends BaseModelWithMedia implements
 
     protected static function booted(): void
     {
-        static::creating(fn(self $product): int => $product->token = fake()->randomNumber(9, true));
+        static::creating(fn(self $product): string => $product->token = substr(str_shuffle(str_repeat('123456789', 9)), 0, 9));
     }
 }
