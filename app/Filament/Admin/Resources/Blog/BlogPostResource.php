@@ -75,11 +75,6 @@ final class BlogPostResource extends Resource
                     ])
                     ->label(__('form.slug')),
 
-                Forms\Components\Textarea::make('short_description')
-                    ->columnSpanFull()
-                    ->label(__('form.short_description'))
-                    ->rows(5),
-
                 Forms\Components\RichEditor::make('description')
                     ->columnSpanFull()
                     ->label(__('form.description'))
