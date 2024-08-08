@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\JsonApi\V1\Products;
 
+use App\JsonApi\Filters\WhereHasInFilter;
 use App\JsonApi\Sorting;
 use LaravelJsonApi\Eloquent\Fields;
 use LaravelJsonApi\Eloquent\Filters;
@@ -101,10 +102,11 @@ final class ProductSchema extends Schema
             Filters\Has::make($this, 'multimedia', 'has-multimedia'),
             Filters\WhereHas::make($this, 'multimedia', 'with-multimedia'),
             Filters\WhereDoesntHave::make($this, 'multimedia', 'without-multimedia'),
-            Filters\WhereHas::make($this, 'productCategory', 'with-productCategory'),
-            Filters\WhereDoesntHave::make($this, 'productCategory', 'without-productCategory'),
-            Filters\WhereIn::make('in-productCategory', 'product_category_id'),
-            Filters\WhereNotIn::make('not-in-productCategory', 'product_category_id'),
+            Filters\WhereHas::make($this, 'productCategory', 'with-product-category'),
+            WhereHasInFilter::make($this, 'productCategory', 'with-in-product-category', 'slug->fa')->delimiter(','),
+            Filters\WhereDoesntHave::make($this, 'productCategory', 'without-product-category'),
+            Filters\WhereIn::make('in-product-category', 'product_category_id'),
+            Filters\WhereNotIn::make('not-in-product-category', 'product_category_id'),
             Filters\Has::make($this, 'productPrices', 'has-product-prices'),
             Filters\WhereHas::make($this, 'productPrices', 'with-product-prices'),
             Filters\WhereDoesntHave::make($this, 'productPrices', 'without-product-prices'),
