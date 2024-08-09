@@ -7,10 +7,13 @@ namespace Termehsoft\Currency\Models;
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\Currency\Contracts\HasCurrency as HasCurrencyInterface;
+use Termehsoft\Currency\Observers\CurrencyCategoryObserver;
 use Termehsoft\Currency\Traits\HasCurrency as HasCurrencyTrait;
 
+#[ObservedBy([CurrencyCategoryObserver::class])]
 final class CurrencyCategory extends BaseModelWithMedia implements
     HasCurrencyInterface
 {

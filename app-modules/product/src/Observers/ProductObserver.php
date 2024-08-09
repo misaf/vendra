@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Termehsoft\Product\Policies;
+namespace Termehsoft\Product\Observers;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,6 +14,17 @@ final class ProductObserver implements ShouldQueue
     use InteractsWithQueue;
 
     public bool $afterCommit = true;
+
+    /**
+     * Handle the Product "created" event.
+     *
+     * @param Product $product
+     * @return void
+     */
+    public function created(Product $product): void
+    {
+        $this->clearCaches($product);
+    }
 
     /**
      * Handle the Product "deleted" event.
@@ -52,6 +63,15 @@ final class ProductObserver implements ShouldQueue
     }
 
     /**
+     * Decrement the product row count cache.
+     * @return void
+     */
+    private function decrementRowCountCache(): void
+    {
+        Cache::decrement('product-row-count');
+    }
+
+    /**
      * Delete related data when a product is deleted or force deleted.
      *
      * @param Product $product
@@ -79,5 +99,14 @@ final class ProductObserver implements ShouldQueue
     private function forgetShowCache(Product $product): void
     {
         Cache::forget('show-product-' . $product->token);
+    }
+
+    /**
+     * Increment the product row count cache.
+     * @return void
+     */
+    private function increamentRowCountCache(): void
+    {
+        Cache::increment('product-row-count');
     }
 }

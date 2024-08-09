@@ -9,6 +9,7 @@ use App\Traits\ActivityLog;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,8 +19,10 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Termehsoft\Tenant;
 use Termehsoft\User\Contracts;
+use Termehsoft\User\Observers\UserObserver;
 use Termehsoft\User\Traits;
 
+#[ObservedBy([UserObserver::class])]
 final class User extends Authenticatable implements
     FilamentUser,
     HasName,

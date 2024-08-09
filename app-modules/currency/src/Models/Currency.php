@@ -7,14 +7,17 @@ namespace Termehsoft\Currency\Models;
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Termehsoft\Currency\Contracts\BelongsToCurrencyCategory as BelongsToCurrencyCategoryInterface;
+use Termehsoft\Currency\Observers\CurrencyObserver;
 use Termehsoft\User\Contracts\HasUserProfileBalance as UserProfileBalanceInterface;
 use Termehsoft\User\Traits\HasUserProfileBalance as UserProfileBalanceTrait;
 
+#[ObservedBy([CurrencyObserver::class])]
 final class Currency extends BaseModelWithMedia implements
     BelongsToCurrencyCategoryInterface,
     Sortable,

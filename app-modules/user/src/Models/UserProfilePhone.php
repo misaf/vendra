@@ -6,11 +6,14 @@ namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Propaganistas\LaravelPhone\Casts\RawPhoneNumberCast;
 use Termehsoft\User;
+use Termehsoft\User\Observers\UserProfilePhoneObserver;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
+#[ObservedBy([UserProfilePhoneObserver::class])]
 final class UserProfilePhone extends BaseModel implements
     User\Contracts\BelongsToUserProfile,
     User\Contracts\BelongsToUser

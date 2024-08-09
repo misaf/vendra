@@ -6,10 +6,13 @@ namespace Termehsoft\Order\Models;
 
 use App\Casts\DateCast;
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Order\Observers\OrderObserver;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
+#[ObservedBy([OrderObserver::class])]
 final class Order extends BaseModel implements
     Currency\Contracts\BelongsToCurrency,
     Currency\Contracts\BelongsToCurrencyCategoryThroughCurrency,

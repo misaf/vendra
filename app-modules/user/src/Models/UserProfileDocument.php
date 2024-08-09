@@ -6,10 +6,13 @@ namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\User;
+use Termehsoft\User\Observers\UserProfileDocumentObserver;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
+#[ObservedBy([UserProfileDocumentObserver::class])]
 final class UserProfileDocument extends BaseModelWithMedia implements
     User\Contracts\BelongsToUser,
     User\Contracts\BelongsToUserProfile

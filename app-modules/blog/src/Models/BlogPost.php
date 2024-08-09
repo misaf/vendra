@@ -7,13 +7,16 @@ namespace Termehsoft\Blog\Models;
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
+use Termehsoft\Blog\Observers\BlogPostObserver;
 
+#[ObservedBy([BlogPostObserver::class])]
 final class BlogPost extends BaseModelWithMedia implements
     Sortable
 {

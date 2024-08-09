@@ -6,10 +6,13 @@ namespace Termehsoft\Transaction\Models;
 
 use App\Casts\DateCast;
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\Transaction\Enums\TransactionStatusEnum;
+use Termehsoft\Transaction\Policies\TransactionObserver;
 
+#[ObservedBy([TransactionObserver::class])]
 final class Transaction extends BaseModel
 {
     use SoftDeletes;

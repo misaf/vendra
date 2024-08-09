@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Termehsoft\Geographical\Observers;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
 use Termehsoft\Geographical\Models\GeographicalNeighborhood;
 
+#[ObservedBy([GeographicalNeighborhoodObserver::class])]
 final class GeographicalNeighborhoodObserver implements ShouldQueue
 {
     use InteractsWithQueue;

@@ -8,6 +8,7 @@ use App\Casts\DateCast;
 use App\Casts\MoneyCast;
 use App\Models\BaseModel;
 use Brick\Money\Money;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\Currency\Models\Currency;
@@ -15,6 +16,7 @@ use Termehsoft\Currency\Models\CurrencyCategory;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
+#[ObservedBy([ProductPrice::class])]
 final class ProductPrice extends BaseModel
 {
     use SoftDeletes;

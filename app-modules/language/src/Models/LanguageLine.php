@@ -6,10 +6,13 @@ namespace Termehsoft\Language\Models;
 
 use App\Casts\DateCast;
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 use Spatie\TranslationLoader\LanguageLine as TranslationLoaderLanguageLine;
+use Termehsoft\Language\Observers\LanguageLineObserver;
 
+#[ObservedBy([LanguageLineObserver::class])]
 final class LanguageLine extends BaseModel
 {
     use HasTranslations;

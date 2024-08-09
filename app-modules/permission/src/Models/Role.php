@@ -6,12 +6,15 @@ namespace Termehsoft\Permission\Models;
 
 use App\Casts\DateCast;
 use App\Traits\ActivityLog;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Role as SpatieRole;
+use Termehsoft\Permission\Policies\RoleObserver;
 use Termehsoft\Tenant\Traits\BelongsToTenant;
 
+#[ObservedBy([RoleObserver::class])]
 final class Role extends SpatieRole
 {
     use ActivityLog;

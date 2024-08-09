@@ -11,11 +11,14 @@ use App\Models\Currency\CurrencyCategory;
 use App\Models\Product\Product;
 use App\Models\Product\ProductCategory;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Termehsoft\Order\Observers\OrderProductObserver;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as TraitBelongsToThrough;
 
+#[ObservedBy([OrderProductObserver::class])]
 final class OrderProduct extends BaseModel implements
     User\Contracts\BelongsToUser,
     Currency\Contracts\BelongsToCurrency,

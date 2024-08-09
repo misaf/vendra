@@ -37,11 +37,11 @@ final class AdminPanelProvider extends PanelProvider
      */
     public function boot(): void
     {
-        // $this->registerFont();
-        // $this->registerPlugins();
+        $this->registerFont();
+        $this->registerPlugins();
         $this->registerComponents();
         $this->registerTableActions();
-        // $this->registerSpa();
+        $this->registerSpa();
 
         // Set Global Configuration
         // SetGlobalConfigurationTask::makeConfiguration(filament()->getTenant());
@@ -59,7 +59,7 @@ final class AdminPanelProvider extends PanelProvider
             ->id('panel-ecommerce')
             ->login()
             ->default()
-            ->brandName('Houshang-Flowers')
+            ->brandName(fn() => config('app.name'))
             ->path('/admin')
             ->profile(isSimple: false)
             ->brandLogoHeight('2rem')
@@ -82,10 +82,6 @@ final class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->plugins([
-                SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->getLocales()),
-            ])
-            ->font('yekan', 'https://cdn.font-store.ir/yekan.css', LocalFontProvider::class)
             ->discoverClusters(app_path('Filament/Admin/Clusters'), 'App\\Filament\\Admin\\Clusters')
             ->discoverPages(app_path('Filament/Admin/Pages'), 'App\\Filament\\Admin\\Pages')
             ->discoverResources(app_path('Filament/Admin/Resources'), 'App\\Filament\\Admin\\Resources')
@@ -96,11 +92,6 @@ final class AdminPanelProvider extends PanelProvider
             ->navigationGroups($this->getNavigationGroups())
             ->viteTheme('resources/css/filament/admin/theme.css');
         ;
-    }
-
-    public function registerSpa(): void
-    {
-        filament()->getCurrentPanel()->spa(true);
     }
 
     /**
@@ -167,6 +158,11 @@ final class AdminPanelProvider extends PanelProvider
         filament()->getCurrentPanel()->plugins([
             SpatieLaravelTranslatablePlugin::make()->defaultLocales($this->getLocales()),
         ]);
+    }
+
+    private function registerSpa(): void
+    {
+        filament()->getCurrentPanel()->spa(true);
     }
 
     /**

@@ -7,10 +7,13 @@ namespace Termehsoft\Language\Models;
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use Termehsoft\Language\Observers\LanguageObserver;
 
+#[ObservedBy([LanguageObserver::class])]
 final class Language extends BaseModelWithMedia implements
     Sortable
 {

@@ -6,12 +6,15 @@ namespace Termehsoft\Permission\Models;
 
 use App\Casts\DateCast;
 use App\Traits\ActivityLog;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Permission as SpatiePermission;
+use Termehsoft\Permission\Policies\PermissionObserver;
 use Termehsoft\Tenant\Traits\BelongsToTenant;
 
+#[ObservedBy([PermissionObserver::class])]
 final class Permission extends SpatiePermission
 {
     use ActivityLog;

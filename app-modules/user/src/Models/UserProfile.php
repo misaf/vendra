@@ -6,10 +6,13 @@ namespace Termehsoft\User\Models;
 
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\User;
+use Termehsoft\User\Observers\UserProfileObserver;
 
+#[ObservedBy([UserProfileObserver::class])]
 final class UserProfile extends BaseModelWithMedia implements
     User\Contracts\BelongsToUser,
     User\Contracts\HasUserProfileBalance,

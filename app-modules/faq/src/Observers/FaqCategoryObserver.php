@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Termehsoft\Faq\Observers;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
 use Termehsoft\Faq\Models\FaqCategory;
 
+#[ObservedBy([FaqCategoryObserver::class])]
 final class FaqCategoryObserver implements ShouldQueue
 {
     use InteractsWithQueue;

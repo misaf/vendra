@@ -6,11 +6,13 @@ namespace Termehsoft\Geographical\Observers;
 
 use App\Jobs\DeleteImageJob;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Termehsoft\Geographical\Models\GeographicalState;
 
+#[ObservedBy([GeographicalStateObserver::class])]
 final class GeographicalStateObserver implements ShouldQueue
 {
     use InteractsWithQueue;

@@ -7,6 +7,7 @@ namespace Termehsoft\Product\Models;
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -17,7 +18,9 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Tags\HasTags;
 use Spatie\Translatable\HasTranslations;
 use Termehsoft\Order\Models\OrderProduct;
+use Termehsoft\Product\Observers\ProductObserver;
 
+#[ObservedBy([ProductObserver::class])]
 final class Product extends BaseModelWithMedia implements
     Sortable
 {

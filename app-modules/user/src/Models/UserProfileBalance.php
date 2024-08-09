@@ -7,10 +7,13 @@ namespace Termehsoft\User\Models;
 use App\Casts\DateCast;
 use App\Casts\MoneyCast;
 use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Termehsoft\Currency;
 use Termehsoft\User;
+use Termehsoft\User\Observers\UserProfileBalanceObserver;
 
+#[ObservedBy([UserProfileBalanceObserver::class])]
 final class UserProfileBalance extends BaseModel implements
     User\Contracts\BelongsToUser,
     User\Contracts\BelongsToUserProfile,

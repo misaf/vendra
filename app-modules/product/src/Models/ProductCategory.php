@@ -7,6 +7,7 @@ namespace Termehsoft\Product\Models;
 use App\Casts\DateCast;
 use App\Models\BaseModelWithMedia;
 use App\Traits\HasSlugOptionsTrait;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,7 +17,9 @@ use Spatie\Sluggable\HasTranslatableSlug;
 use Spatie\Translatable\HasTranslations;
 use Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 use Termehsoft\Order\Models\OrderProduct;
+use Termehsoft\Product\Observers\ProductCategoryObserver;
 
+#[ObservedBy([ProductCategoryObserver::class])]
 final class ProductCategory extends BaseModelWithMedia implements
     Sortable
 {
