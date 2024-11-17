@@ -66,6 +66,8 @@ final class ProductSchema extends Schema
             Filters\WhereIdIn::make($this),
             Filters\WhereIdNotIn::make($this, 'exclude'),
             Filters\Where::make('product-category', 'product_category_id'),
+            Filters\Where::make('search', 'name->fa')
+                ->using('like'),
             Filters\Where::make('slug', 'slug->fa')
                 ->singular(),
             Filters\WhereIn::make('in-slug', 'slug->fa'),

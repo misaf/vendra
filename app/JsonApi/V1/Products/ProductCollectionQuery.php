@@ -32,6 +32,7 @@ final class ProductCollectionQuery extends ResourceQuery
             'filter.exclude'                        => 'array',
             'filter.exclude.*'                      => 'integer',
             'filter.product-category'               => 'integer',
+            'filter.search'                         => 'string',
             'filter.slug'                           => 'string',
             'filter.in-slug'                        => 'array',
             'filter.in-slug.*'                      => 'string',
