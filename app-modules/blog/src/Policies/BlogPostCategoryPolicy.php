@@ -130,7 +130,7 @@ final class BlogPostCategoryPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param User $user
+     * @param ?User $user
      * @param BlogPostCategory $blogPostCategory
      * @return bool
      */
@@ -144,7 +144,7 @@ final class BlogPostCategoryPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param User $user
+     * @param ?User $user
      * @return bool
      */
     public function viewAny(?User $user): bool
@@ -157,11 +157,11 @@ final class BlogPostCategoryPolicy
     /**
      * Determine whether the user can view the blog posts model.
      *
-     * @param User $user
+     * @param ?User $user
      * @param BlogPostCategory $blogPostCategory
      * @return bool
      */
-    public function viewBlogPosts(User $user, BlogPostCategory $blogPostCategory): bool
+    public function viewBlogPosts(?User $user, BlogPostCategory $blogPostCategory): bool
     {
         return $this->view($user, $blogPostCategory);
     }
@@ -169,11 +169,11 @@ final class BlogPostCategoryPolicy
     /**
      * Determine whether the user can view the multimedia model.
      *
-     * @param User $user
+     * @param ?User $user
      * @param BlogPostCategory $blogPostCategory
      * @return bool
      */
-    public function viewMultimedia(User $user, BlogPostCategory $blogPostCategory): bool
+    public function viewMultimedia(?User $user, BlogPostCategory $blogPostCategory): bool
     {
         return $this->view($user, $blogPostCategory);
     }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 final class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,10 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureEloquentStrictMode();
+
+        URL::forceScheme('https');
+
+        $this->app['request']->server->set('HTTPS', 'on');
     }
 
     /**

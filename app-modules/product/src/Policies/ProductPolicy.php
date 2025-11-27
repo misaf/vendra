@@ -146,7 +146,7 @@ final class ProductPolicy
     /**
      * Determine whether the user can view the multimedia model.
      */
-    public function viewMultimedia(User $user, Product $product): bool
+    public function viewMultimedia(?User $user, Product $product): bool
     {
         return $this->view($user, $product);
     }
@@ -154,7 +154,7 @@ final class ProductPolicy
     /**
      * Determine whether the user can view the product category model.
      */
-    public function viewProductCategory(User $user, Product $product): bool
+    public function viewProductCategory(?User $user, Product $product): bool
     {
         return $this->view($user, $product);
     }
@@ -162,15 +162,17 @@ final class ProductPolicy
     /**
      * Determine whether the user can view the product price model.
      */
-    public function viewProductPrice(User $user, Product $product): bool
+    public function viewProductPrice(?User $user, Product $product): bool
     {
         return $this->view($user, $product);
     }
 
-    /**
-     * Determine whether the user can view the product prices model.
-     */
-    public function viewProductPrices(User $user, Product $product): bool
+    public function viewProductPrices(?User $user, Product $product): bool
+    {
+        return $this->view($user, $product);
+    }
+
+    public function viewLatestProductPrice(?User $user, Product $product): bool
     {
         return $this->view($user, $product);
     }
