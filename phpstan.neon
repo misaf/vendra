@@ -1,0 +1,30 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+
+parameters:
+
+    paths:
+        - app/Filament
+        - app-modules/affiliate
+        - app-modules/authify-log
+        - app-modules/currency
+        - app-modules/email-webhooks
+        - app-modules/email-webhooks-resend
+        - app-modules/geographical
+        - app-modules/language
+        - app-modules/newsletter
+        - app-modules/permission
+        - app-modules/tag
+        - app-modules/user
+        - app-modules/transaction
+        - app-modules/user-level
+        - app-modules/user-messenger
+
+    # Level 10 is the highest level
+    level: 10
+#
+#    excludePaths:
+#        - ./*/*/FileToBeExcluded.php
+#
+#    checkMissingIterableValueType: false
