@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\Admin\Clusters\Newsletters\Resources\NewsletterSendHistoryPosts\RelationManagers;
 
 use App\Filament\Admin\Clusters\Newsletters\Resources\NewsletterSendHistories\NewsletterSendHistoryResource;
-use App\Filament\Admin\Clusters\Newsletters\Resources\NewsletterSendHistoryPosts\Schemas\NewsletterSendHistoryPostTable;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
