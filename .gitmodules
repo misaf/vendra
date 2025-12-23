@@ -7,3 +7,6 @@
 [submodule "app-modules/authify-log"]
 	path = app-modules/authify-log
 	url = https://github.com/misaf/laravel-authify-log
+[submodule "app-modules/currency"]
+	path = app-modules/currency
+	url = https://github.com/misaf/laravel-currency
