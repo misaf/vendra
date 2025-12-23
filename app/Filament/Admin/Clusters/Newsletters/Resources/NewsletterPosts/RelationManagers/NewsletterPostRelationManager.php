@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Clusters\Newsletters\Resources\NewsletterPosts\RelationManagers;
 
-use App\Filament\Admin\Clusters\Newsletters\Resources\NewsletterPosts\Schemas\NewsletterPostForm;
-use App\Filament\Admin\Clusters\Newsletters\Resources\NewsletterPosts\Schemas\NewsletterPostTable;
 use App\Filament\Admin\Clusters\Newsletters\Resources\Newsletters\NewsletterResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
