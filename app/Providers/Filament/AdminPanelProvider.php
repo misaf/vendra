@@ -74,8 +74,8 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->navigationGroups([
                 NavigationGroup::make()->label(fn(): string => __('navigation.user_management'))->icon('heroicon-o-users')->collapsed(),
+                NavigationGroup::make()->label(fn(): string => __('navigation.billing_management'))->icon('heroicon-o-credit-card')->collapsed(),
                 NavigationGroup::make()->label(fn(): string => __('navigation.transaction_management'))->icon('heroicon-o-users')->collapsed(),
-                NavigationGroup::make()->label(fn(): string => __('navigation.game_management'))->icon('heroicon-o-puzzle-piece')->collapsed(),
                 NavigationGroup::make()->label(fn(): string => __('navigation.content_management'))->icon('heroicon-o-users')->collapsed(),
                 NavigationGroup::make()->label(fn(): string => __('navigation.report_management'))->icon('heroicon-o-bug-ant')->collapsed(),
                 NavigationGroup::make()->label(fn(): string => __('navigation.setting_management'))->icon('heroicon-o-cog-6-tooth')->collapsed(),
