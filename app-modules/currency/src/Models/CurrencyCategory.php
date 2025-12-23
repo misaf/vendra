@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\Currency\Models;
 
-use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +20,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Sluggable\SlugOptions;
 
 /**
  * @property int $id
@@ -40,7 +40,6 @@ final class CurrencyCategory extends Model implements HasMedia
     use HasCurrencyTrait;
     /** @use HasFactory<CurrencyCategoryFactory> */
     use HasFactory;
-    use HasSlugOptionsTrait;
     use InteractsWithMedia, ThumbnailTableRecord {
         ThumbnailTableRecord::registerMediaCollections insteadof InteractsWithMedia;
         ThumbnailTableRecord::registerMediaConversions insteadof InteractsWithMedia;
@@ -91,5 +90,13 @@ final class CurrencyCategory extends Model implements HasMedia
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->logFillable()->logExcept(['id']);
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->preventOverwrite();
     }
 }

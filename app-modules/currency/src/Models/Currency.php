@@ -6,7 +6,6 @@ namespace Misaf\Currency\Models;
 
 use App\Traits\HasSlugOptionsTrait;
 use App\Traits\ThumbnailTableRecord;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,9 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\Currency\Database\Factories\CurrencyFactory;
-use Misaf\Currency\Observers\CurrencyObserver;
 use Misaf\Tenant\Traits\BelongsToTenant;
-use Misaf\User\Traits\HasUserProfileBalance as UserProfileBalanceTrait;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\EloquentSortable\Sortable;
@@ -44,7 +41,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property Carbon $updated_at
  * @property Carbon $deleted_at
  */
-#[ObservedBy([CurrencyObserver::class])]
 final class Currency extends Model implements HasMedia, Sortable
 {
     use BelongsToTenant;
@@ -58,7 +54,6 @@ final class Currency extends Model implements HasMedia, Sortable
     use LogsActivity;
     use SoftDeletes;
     use SortableTrait;
-    use UserProfileBalanceTrait;
 
     /**
      * @var array<string, string>
