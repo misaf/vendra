@@ -21,6 +21,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Number;
 use Misaf\Newsletter\Models\Newsletter;
 
@@ -29,7 +30,7 @@ final class NewsletterTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->withCount(['newsletterPosts', 'newsletterSubscribers',  'newsletterSubscribedUsers', 'newsletterUnsubscribedUsers']))
+            // ->modifyQueryUsing(fn(Builder $query) => $query->withCount(['newsletterPosts', 'newsletterSubscribers',  'newsletterSubscribedUsers', 'newsletterUnsubscribedUsers']))
             ->columns([
                 TextColumn::make('row')
                     ->label('#')

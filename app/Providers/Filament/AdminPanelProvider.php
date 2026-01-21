@@ -41,7 +41,7 @@ final class AdminPanelProvider extends PanelProvider
                 ? asset('images/' . Tenant::current()->slug . '.webp')
                 : null)
             ->brandLogoHeight('10rem')
-            ->brandName(fn(GeneralSettings $generalSettings) => $generalSettings->site_title . ' Admin')
+            ->brandName(fn(GeneralSettings $generalSettings) => $generalSettings->site_title)
             ->databaseNotifications()
             ->databaseTransactions()
             ->defaultThemeMode(ThemeMode::Dark)

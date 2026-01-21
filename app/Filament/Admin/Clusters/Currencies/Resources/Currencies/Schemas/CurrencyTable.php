@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Clusters\Currencies\Resources\Currencies\Schemas;
 
-use App\Tables\Columns\CreatedAtTextColumn;
-use App\Tables\Columns\NameTextColumn;
-use App\Tables\Columns\StatusToggleColumn;
-use App\Tables\Columns\UpdatedAtTextColumn;
+use Awcodes\BadgeableColumn\Components\Badge;
+use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
@@ -16,6 +14,7 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Support\Enums\Size;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -38,30 +37,33 @@ final class CurrencyTable
                     ->label('#')
                     ->rowIndex(),
 
-                SpatieMediaLibraryImageColumn::make('image')
-                    ->circular()
-                    ->conversion('thumb-table')
-                    ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
-                    ->label(__('form.image'))
-                    ->stacked()
-                    ->defaultImageUrl(url('coin-payment/images/default.png')),
+                // SpatieMediaLibraryImageColumn::make('image')
+                //     ->circular()
+                //     ->conversion('thumb-table')
+                //     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
+                //     ->label(__('currency::attributes.image'))
+                //     ->stacked()
+                //     ->defaultImageUrl(url('coin-payment/images/default.png')),
 
-                NameTextColumn::make('name'),
-
-                TextColumn::make('iso_code')
-                    ->badge()
-                    ->label(__('form.iso_code'))
-                    ->searchable(),
+                BadgeableColumn::make('name')
+                    ->alignStart()
+                    ->label(__('newsletter::attributes.name'))
+                    ->searchable()
+                    ->suffixBadges([
+                        Badge::make('status')
+                            ->label(fn(Currency $record) => $record->iso_code)
+                            ->size(Size::Small),
+                    ]),
 
                 TextColumn::make('buy_price')
-                    ->label(__('form.buy_price'))
+                    ->label(__('currency::attributes.buy_price'))
                     ->numeric()
                     ->action(
                         Action::make('updateBuyPrice')
                             ->schema([
                                 TextInput::make('buy_price')
                                     ->extraInputAttributes(['dir' => 'ltr'])
-                                    ->label(__('form.buy_price'))
+                                    ->label(__('currency::attributes.buy_price'))
                                     ->required()
                                     ->numeric(),
                             ])
@@ -69,18 +71,18 @@ final class CurrencyTable
                                 $record->buy_price = $data['buy_price'];
                                 $record->save();
                             })
-                            ->label(__('بروزرسانی %s', [__('form.buy_price')])),
+                            ->label(__('بروزرسانی %s', [__('currency::attributes.buy_price')])),
                     ),
 
                 TextColumn::make('sell_price')
-                    ->label(__('form.sell_price'))
+                    ->label(__('currency::attributes.sell_price'))
                     ->numeric()
                     ->action(
                         Action::make('updateSellPrice')
                             ->schema([
                                 TextInput::make('sell_price')
                                     ->extraInputAttributes(['dir' => 'ltr'])
-                                    ->label(__('form.sell_price'))
+                                    ->label(__('currency::attributes.sell_price'))
                                     ->required()
                                     ->numeric(),
                             ])
@@ -88,21 +90,38 @@ final class CurrencyTable
                                 $record->sell_price = $data['sell_price'];
                                 $record->save();
                             })
-                            ->label(__('بروزرسانی %s', [__('form.sell_price')])),
+                            ->label(__('بروزرسانی %s', [__('currency::attributes.sell_price')])),
                     ),
 
                 ToggleColumn::make('is_default')
                     ->afterStateUpdated(function (Currency $record, ?string $state): void {
                         Currency::when($state, fn(Builder $query) => $query->whereKeyNot($record->id)->where('is_default', 1))->update(['is_default' => 0]);
                     })
-                    ->label(__('form.is_default'))
+                    ->label(__('currency::attributes.is_default'))
                     ->onIcon('heroicon-m-bolt'),
 
-                StatusToggleColumn::make('status'),
+                ToggleColumn::make('status')
+                    ->label(__('newsletter::attributes.status'))
+                    ->onIcon('heroicon-m-bolt'),
 
-                CreatedAtTextColumn::make('created_at'),
+                TextColumn::make('created_at')
+                    ->alignCenter()
+                    ->badge()
+                    ->extraCellAttributes(['dir' => 'ltr'])
+                    ->label(__('newsletter::attributes.created_at'))
+                    ->sinceTooltip()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->unless(app()->isLocale('fa'), fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', toLatin: true), fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')),
 
-                UpdatedAtTextColumn::make('updated_at'),
+                TextColumn::make('updated_at')
+                    ->alignCenter()
+                    ->badge()
+                    ->extraCellAttributes(['dir' => 'ltr'])
+                    ->label(__('newsletter::attributes.updated_at'))
+                    ->sinceTooltip()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->unless(app()->isLocale('fa'), fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', toLatin: true), fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')),
             ])
             ->filters(
                 [

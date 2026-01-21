@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App\Filament\Admin\Clusters\Currencies\Resources\Currencies\Schemas;
 
-use App\Forms\Components\DescriptionTextarea;
-use App\Forms\Components\SlugTextInput;
-use App\Forms\Components\StatusToggle;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Fieldset;
@@ -17,6 +15,7 @@ use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
+use Livewire\Component as Livewire;
 use Misaf\Tenant\Models\Tenant;
 
 final class CurrencyForm
@@ -27,7 +26,7 @@ final class CurrencyForm
             ->components([
                 Select::make('currency_category_id')
                     ->columnSpanFull()
-                    ->label(__('model.currency_category'))
+                    ->label(__('currency::navigation.currency_category'))
                     ->native(false)
                     ->preload()
                     ->relationship('currencyCategory', 'name')
@@ -42,7 +41,7 @@ final class CurrencyForm
                     })
                     ->autofocus()
                     ->columnSpan(['lg' => 1])
-                    ->label(__('form.name'))
+                    ->label(__('currency::attributes.name'))
                     ->live(onBlur: true)
                     ->required()
                     ->unique(
@@ -52,18 +51,31 @@ final class CurrencyForm
                         },
                     ),
 
-                SlugTextInput::make('slug'),
+                TextInput::make('slug')
+                    ->afterStateUpdated(function (Livewire $livewire): void {
+                        $livewire->validateOnly("data.slug");
+                    })
+                    ->columnSpan(['lg' => 1])
+                    ->helperText(__('currency::attributes.slug_helper_text'))
+                    ->label(__('currency::attributes.slug'))
+                    ->required()
+                    ->unique(
+                        modifyRuleUsing: function (Unique $rule): void {
+                            $rule->withoutTrashed();
+                        },
+                    )
+                    ->label(__('currency::attributes.slug')),
 
                 Fieldset::make('currency_setting')
                     ->columns(3)
-                    ->label(__('form.currency_setting'))
+                    ->label(__('currency::attributes.currency_setting'))
                     ->schema([
                         TextInput::make('iso_code')
                             ->columnSpan([
                                 'lg' => 1,
                             ])
                             ->extraInputAttributes(['dir' => 'ltr'])
-                            ->label(__('form.iso_code'))
+                            ->label(__('currency::attributes.iso_code'))
                             ->required(),
 
                         TextInput::make('conversion_rate')
@@ -72,7 +84,7 @@ final class CurrencyForm
                             ])
                             ->extraInputAttributes(['dir' => 'ltr'])
                             // ->inputMode('decimal')
-                            ->label(__('form.conversion_rate'))
+                            ->label(__('currency::attributes.conversion_rate'))
                             ->required(),
 
                         TextInput::make('decimal_place')
@@ -81,20 +93,20 @@ final class CurrencyForm
                             ])
                             ->extraInputAttributes(['dir' => 'ltr'])
                             ->inputMode('decimal')
-                            ->label(__('form.decimal_place'))
+                            ->label(__('currency::attributes.decimal_place'))
                             ->required(),
                     ]),
 
                 Fieldset::make('exchange_setting')
                     ->columns(2)
-                    ->label(__('form.exchange_setting'))
+                    ->label(__('currency::attributes.exchange_setting'))
                     ->schema([
                         TextInput::make('buy_price')
                             ->columnSpan([
                                 'lg' => 1,
                             ])
                             ->extraInputAttributes(['dir' => 'ltr'])
-                            ->label(__('form.buy_price'))
+                            ->label(__('currency::attributes.buy_price'))
                             ->required()
                             ->numeric(),
 
@@ -103,25 +115,45 @@ final class CurrencyForm
                                 'lg' => 1,
                             ])
                             ->extraInputAttributes(['dir' => 'ltr'])
-                            ->label(__('form.sell_price'))
+                            ->label(__('currency::attributes.sell_price'))
                             ->required()
                             ->numeric(),
                     ]),
 
-                DescriptionTextarea::make('description'),
+                Textarea::make('description')
+                    ->columnSpanFull()
+                    ->label(__('currency::attributes.description'))
+                    ->required()
+                    ->rows(5),
 
                 SpatieMediaLibraryFileUpload::make('image')
+                    ->collection('currencies')
                     ->columnSpanFull()
                     ->image()
-                    ->label(__('form.image'))
+                    ->label(__('currency::attributes.image'))
                     ->panelLayout('grid'),
 
                 Toggle::make('is_default')
+                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly("data.is_default"))
                     ->columnSpanFull()
-                    ->label(__('form.is_default'))
-                    ->rules('required'),
+                    ->default(false)
+                    ->label(__('currency::attributes.is_default'))
+                    ->onIcon('heroicon-m-bolt')
+                    ->required()
+                    ->rules([
+                        'boolean',
+                    ]),
 
-                StatusToggle::make('status'),
+                Toggle::make('status')
+                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly("data.status"))
+                    ->columnSpanFull()
+                    ->default(false)
+                    ->label(__('currency::attributes.status'))
+                    ->onIcon('heroicon-m-bolt')
+                    ->required()
+                    ->rules([
+                        'boolean',
+                    ]),
             ]);
     }
 }
