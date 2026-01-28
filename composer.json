@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "misaf/vendra",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "The skeleton application for the Vendra framework.",
+    "keywords": ["laravel", "framework", "vendra", "ecommerce", "shopping"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -23,7 +23,7 @@
         "laravel/sanctum": "^4.2.4",
         "laravel/tinker": "^2.11.0",
         "misaf/affiliate": "^1.0.1",
-        "misaf/currency": "^1.0.3",
+        "misaf/vendra-currency": "*",
         "misaf/faq": "^1.0.3",
         "misaf/geographical": "^1.0.1",
         "misaf/language": "^1.0.4",
