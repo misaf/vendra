@@ -1,6 +1,6 @@
 {{-- <x-filament-widgets::widget>
     <x-filament::section>
-        <x-filament::link icon="heroicon-m-sparkles" :href="route('filament.panel-admin.resources.affiliates.view', filament()->auth()->user()->latestAffiliate->slug)">
+        <x-filament::link icon="heroicon-m-sparkles" :href="route('filament.admin.resources.affiliates.view', filament()->auth()->user()->latestAffiliate->slug)">
             لینک دعوتنامه اختصاصی شما
 
             <x-slot name="badge">
@@ -40,7 +40,7 @@
                 {{ filament()->getUserName($user) }}
             </p> --}}
 
-        <x-filament::link icon="heroicon-m-sparkles" :href="route('filament.panel-admin.resources.affiliates.view', filament()->auth()->user()->latestAffiliate->slug)">
+        <x-filament::link icon="heroicon-m-sparkles" :href="route('filament.admin.resources.affiliates.view', filament()->auth()->user()->latestAffiliate->slug)">
             لینک دعوتنامه اختصاصی شما
 
             <x-slot name="badge">

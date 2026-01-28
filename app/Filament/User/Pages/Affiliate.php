@@ -131,7 +131,7 @@ final class Affiliate extends Page implements HasTable
                             ->color($red, $green, $blue)
                             ->margin(1)
                             ->size(150)
-                            ->generate(route('filament.panel-user.auth.register', [
+                            ->generate(route('filament.user.auth.register', [
                                 'affiliate' => filament()->auth()->user()->latestAffiliate->slug,
                             ]));
 
@@ -140,7 +140,7 @@ final class Affiliate extends Page implements HasTable
                             ->where('user_id', filament()->auth()->user()->getAuthIdentifier())
                             ->value('slug');
 
-                        $affiliateLink = route('filament.panel-user.auth.register', [
+                        $affiliateLink = route('filament.user.auth.register', [
                             'affiliate' => $affiliateSlug,
                         ]);
 

@@ -182,13 +182,13 @@ final class AffiliateResource extends Resource
                     ->alignCenter()
                     ->copyable()
                     ->copyableState(function (string $state): string {
-                        return route('filament.panel-user.auth.register', ['affiliate' => $state]);
+                        return route('filament.user.auth.register', ['affiliate' => $state]);
                     })
                     ->copyMessage(__('Link copied to clipboard'))
                     ->copyMessageDuration(1500)
                     ->fontFamily(FontFamily::Mono)
                     ->formatStateUsing(function (string $state): string {
-                        return route('filament.panel-user.auth.register', ['affiliate' => $state]);
+                        return route('filament.user.auth.register', ['affiliate' => $state]);
                     })
                     ->label(__('form.link'))
                     ->searchable()
