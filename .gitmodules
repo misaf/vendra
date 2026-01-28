@@ -1,3 +1,0 @@
-[submodule "app-modules/currency"]
-	path = app-modules/currency
-	url = https://github.com/misaf/vendra-currency.git
