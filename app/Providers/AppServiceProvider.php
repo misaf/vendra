@@ -96,13 +96,13 @@ final class AppServiceProvider extends ServiceProvider
                 ->modalWidth('sm')
                 ->slideOver()
                 ->icons([
-                    'admin'    => 'heroicon-o-square-2-stack',
-                    'user'     => 'heroicon-o-star',
+                    'admin' => 'heroicon-o-square-2-stack',
+                    'user'  => 'heroicon-o-star',
                 ])
                 ->iconSize(16)
                 ->labels([
-                    'panel-admin'    => 'Admin',
-                    'panel-user'     => 'User',
+                    'admin' => 'Admin',
+                    'user'  => 'User',
                 ])
                 ->panels(fn() => $this->resolvePanels())
                 ->canSwitchPanels(fn() => $this->userHasAnyRole())
@@ -126,14 +126,14 @@ final class AppServiceProvider extends ServiceProvider
         $user = filament()->auth()->user();
 
         if ( ! $user) {
-            return ['panel-user'];
+            return ['user'];
         }
 
         if ($user->hasAnyRole(['super-admin', 'admin'])) {
-            return ['panel-admin', 'panel-user'];
+            return ['admin', 'user'];
         }
 
-        $panels = ['panel-user'];
+        $panels = ['user'];
 
         return $panels;
     }
