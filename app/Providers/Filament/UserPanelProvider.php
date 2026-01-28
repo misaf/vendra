@@ -42,7 +42,7 @@ final class UserPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('panel-user')
+            ->id('user')
             ->path('user')
             ->login()
             ->authMiddleware([Authenticate::class])

@@ -35,7 +35,7 @@ final class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->id('panel-admin')
+            ->id('admin')
             ->authMiddleware([Authenticate::class])
             ->brandLogo(fn() => app()->environment('production')
                 ? asset('images/' . Tenant::current()->slug . '.webp')
