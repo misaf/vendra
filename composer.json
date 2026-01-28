@@ -3,7 +3,13 @@
     "name": "misaf/vendra",
     "type": "project",
     "description": "The skeleton application for the Vendra framework.",
-    "keywords": ["laravel", "framework", "vendra", "ecommerce", "shopping"],
+    "keywords": [
+        "laravel",
+        "framework",
+        "vendra",
+        "ecommerce",
+        "shopping"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
@@ -23,7 +29,6 @@
         "laravel/sanctum": "^4.2.4",
         "laravel/tinker": "^2.11.0",
         "misaf/affiliate": "^1.0.1",
-        "misaf/vendra-currency": "*",
         "misaf/faq": "^1.0.3",
         "misaf/geographical": "^1.0.1",
         "misaf/language": "^1.0.4",
@@ -39,6 +44,7 @@
         "misaf/user": "^1.0.1",
         "misaf/user-level": "^1.0.1",
         "misaf/user-messenger": "^1.0.1",
+        "misaf/vendra-currency": "^12.0",
         "mokhosh/filament-jalali": "^5.1",
         "morilog/jalali": "^3.5.0",
         "owenvoke/blade-fontawesome": "^2.9.1",
