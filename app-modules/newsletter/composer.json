@@ -17,7 +17,7 @@
     "require": {
         "php": "^8.3",
         "spatie/laravel-translatable": "^6.11.4",
-        "misaf/email-webhooks": "^1.0.0",
+        "misaf/laravel-email-webhooks": "^1.0.0",
         "misaf/language": "^1.0.4",
         "spatie/laravel-activitylog": "^4.10.2",
         "spatie/laravel-sluggable": "^3.7.5",
