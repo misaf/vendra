@@ -1,7 +1,0 @@
-<?php
-
-declare(strict_types=1);
-
-return [
-    'token_copied' => 'توکن در کلیپ‌بورد کپی شد',
-];
