@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480">
+  <!-- Green stripe (top) -->
+  <rect width="640" height="160" y="0" fill="#007a3d"/>
+  <!-- White stripe (middle) -->
+  <rect width="640" height="160" y="160" fill="#fff"/>
+  <!-- Red stripe (bottom) -->
+  <rect width="640" height="160" y="320" fill="#000"/>
+  <!-- Three red stars centered on the white stripe -->
+  <path fill="#ce1126" d="m101 300 39-120 39 120-102-74.2h126"/>
+  <path fill="#ce1126" d="m281 300 39-120 39 120-102.1-74.2h126.2"/>
+  <path fill="#ce1126" d="m461 300 39-120 39 120-102-74.2h126"/>
+</svg>
