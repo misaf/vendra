@@ -1,0 +1,16 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+.fi-body {
+    @apply bg-stone-200 dark:bg-stone-900;
+}
+
+.fi-ta-ctn{
+    @apply bg-stone-100 dark:bg-stone-800;
+}
+
+.fi-wi-stats-overview-stat{
+    @apply bg-stone-100 dark:bg-stone-800;
+}
