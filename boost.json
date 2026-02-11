@@ -1,0 +1,22 @@
+{
+    "agents": [
+        "codex"
+    ],
+    "guidelines": true,
+    "herd_mcp": true,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "packages": [
+        "filament/filament",
+        "internachi/modular"
+    ],
+    "sail": false,
+    "skills": [
+        "laravel-best-practices",
+        "configuring-horizon",
+        "pennant-development",
+        "pest-testing",
+        "tailwindcss-development",
+        "modular"
+    ]
+}

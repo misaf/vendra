@@ -1,0 +1,13 @@
+
+[mcp_servers.laravel-boost]
+command = "php"
+args = ["artisan", "boost:mcp"]
+cwd = "/Users/misaf/Documents/Projects/vendra"
+
+[mcp_servers.herd]
+command = "php"
+args = ["/Applications/Herd.app/Contents/Resources/herd-mcp.phar"]
+cwd = "/Users/misaf/Documents/Projects/vendra"
+
+[mcp_servers.herd.env]
+SITE_PATH = "/Users/misaf/Documents/Projects/vendra"
