@@ -6,6 +6,7 @@ namespace App\Filament\Admin\Resources\Product;
 
 use App\Filament\Admin\Actions\Tables\Product\InStockAction;
 use App\Filament\Admin\Actions\Tables\Product\OutOfStockAction;
+use App\Filament\Admin\Actions\Tables\Product\SetPriceByPercentageAction;
 use App\Filament\Admin\Resources\Product\ProductResource\Pages;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -341,6 +342,7 @@ final class ProductResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    SetPriceByPercentageAction::make(),
                     InStockAction::make(),
                     OutOfStockAction::make(),
                     Tables\Actions\DeleteBulkAction::make(),
