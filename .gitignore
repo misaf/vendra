@@ -12,3 +12,4 @@ npm-debug.log
 /.fleet
 /.idea
 /.vscode
+composer.lock
