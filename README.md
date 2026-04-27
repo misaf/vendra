@@ -4,10 +4,10 @@ Vendra is a modular Laravel 12 application for e-commerce and marketplace use ca
 
 ## Tech Stack
 
-- PHP 8.4+
+- PHP 8.2+
 - Laravel 12
-- Filament 4
-- Livewire 3
+- Filament 5
+- Livewire 4
 - Pest 4
 - Tailwind CSS 4
 
@@ -104,3 +104,7 @@ vendor/bin/phpstan analyse
 - If provider discovery seems stale, run `php artisan package:discover`.
 - If configuration values look outdated, run `php artisan config:clear`.
 - If frontend changes do not appear, run `npm run dev` or `npm run build`.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
