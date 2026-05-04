@@ -23,10 +23,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        if ( ! class_exists(ExceptionParser::class) || ! class_exists(JsonApiException::class)) {
-            return;
-        }
-
         $exceptions->dontReport(JsonApiException::class);
         $exceptions->render(ExceptionParser::renderer());
     })->create();
