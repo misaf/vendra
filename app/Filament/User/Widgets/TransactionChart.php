@@ -42,9 +42,9 @@ final class TransactionChart extends ChartWidget
 
         return [
             'labels' => [
-                __('transaction::transaction_type_enum.bonus'),
-                __('transaction::transaction_type_enum.withdrawal'),
-                __('transaction::transaction_type_enum.deposit'),
+                __('vendra-transaction::transaction_type_enum.bonus'),
+                __('vendra-transaction::transaction_type_enum.withdrawal'),
+                __('vendra-transaction::transaction_type_enum.deposit'),
             ],
             'datasets' => [
                 [

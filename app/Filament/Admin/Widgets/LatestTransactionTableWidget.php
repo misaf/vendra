@@ -42,7 +42,7 @@ final class LatestTransactionTableWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading(__('transaction::widgets.latest_transaction_table'))
+            ->heading(__('vendra-transaction::widgets.latest_transaction_table'))
             ->query(Transaction::take(10))
             ->columns([
                 TextColumn::make('transactionGateway.name')
@@ -50,7 +50,7 @@ final class LatestTransactionTableWidget extends BaseWidget
 
                 TextColumn::make('transaction_type')
                     ->badge()
-                    ->label(__('transaction::attributes.transaction_type')),
+                    ->label(__('vendra-transaction::attributes.transaction_type')),
 
                 TextColumn::make('user.username')
                     ->label(__('form.username')),
@@ -72,18 +72,18 @@ final class LatestTransactionTableWidget extends BaseWidget
                     ->copyMessage(__('Amount copied to clipboard'))
                     ->copyMessageDuration(1500)
                     ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('transaction::attributes.amount'))
+                    ->label(__('vendra-transaction::attributes.amount'))
                     ->numeric(locale: 'en', maxDecimalPlaces: 0),
 
                 TextColumn::make('status')
                     ->alignStart()
-                    ->label(__('transaction::attributes.status')),
+                    ->label(__('vendra-transaction::attributes.status')),
 
                 SpatieTagsColumn::make('tags')
                     ->label(__('tag::navigation.tag')),
 
                 TextColumn::make('created_at')
-                    ->label(__('transaction::attributes.status')),
+                    ->label(__('vendra-transaction::attributes.status')),
             ])
             ->paginated(false)
             ->searchable(false)

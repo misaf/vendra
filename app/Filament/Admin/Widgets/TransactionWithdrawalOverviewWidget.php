@@ -62,8 +62,8 @@ final class TransactionWithdrawalOverviewWidget extends StatsOverviewWidget
 
         return [
             Stat::make('withdrawal_transaction_stats', Number::format($todayTotal))
-                ->label(__('transaction::widgets.withdrawal_transaction_stats'))
-                ->description(__('transaction::widgets.withdrawal_transaction_stats_description'))
+                ->label(__('vendra-transaction::widgets.withdrawal_transaction_stats'))
+                ->description(__('vendra-transaction::widgets.withdrawal_transaction_stats_description'))
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->chart(
                     $withdrawalTrend->map(fn(TrendValue $value) => (int) $value->aggregate)->toArray(),
