@@ -69,6 +69,7 @@
 		{
 			"type": "path",
 			"url": "app-modules/*",
+            "canonical": false,
 			"options": {
 				"symlink": true
 			}
