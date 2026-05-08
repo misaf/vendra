@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "485ca7b60efbaa526bfe548c35d587d3",
+    "content-hash": "0fc16ee9bb55b3f0eba0f26e07dd4448",
     "packages": [
         {
             "name": "awcodes/filament-badgeable-column",
