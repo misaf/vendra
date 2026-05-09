@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0fc16ee9bb55b3f0eba0f26e07dd4448",
+    "content-hash": "25a5eeb09267ab9323b5fb92f29466a0",
     "packages": [
         {
             "name": "awcodes/filament-badgeable-column",
@@ -5897,16 +5897,22 @@
         {
             "name": "misaf/vendra-activity-log",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-activity-log.git",
+                "reference": "31fae7a6281963b09f1cccfaa4d17223959093e5"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-activity-log",
-                "reference": "f5e36dcd02c4afead3182c2cc22f466887ebcd62"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-activity-log/zipball/31fae7a6281963b09f1cccfaa4d17223959093e5",
+                "reference": "31fae7a6281963b09f1cccfaa4d17223959093e5",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
                 "filament/filament": "^5.0",
                 "illuminate/support": "^11.0|^12.0",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -5926,6 +5932,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -5940,20 +5947,7 @@
                     "Misaf\\VendraActivityLog\\Tests\\": "tests/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5977,18 +5971,21 @@
                 "issues": "https://github.com/misaf/vendra-activity-log/issues",
                 "source": "https://github.com/misaf/vendra-activity-log"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:42:08+00:00"
         },
         {
             "name": "misaf/vendra-affiliate",
-            "version": "12.0.0",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-affiliate",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-affiliate.git",
                 "reference": "8c543e55b8f2f77207ecab3ce09d2e5ee251a074"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-affiliate/zipball/8c543e55b8f2f77207ecab3ce09d2e5ee251a074",
+                "reference": "8c543e55b8f2f77207ecab3ce09d2e5ee251a074",
+                "shasum": ""
             },
             "require": {
                 "filament/filament": "^5.0",
@@ -6008,6 +6005,7 @@
                 "pestphp/pest": "^4.3.1",
                 "pestphp/pest-plugin-laravel": "^4.0"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6019,19 +6017,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraAffiliate\\": "src/",
-                    "Misaf\\VendraAffiliate\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraAffiliate\\Tests\\": "tests/",
                     "Misaf\\VendraAffiliate\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraAffiliate\\Tests\\": "tests/"
+                    "Misaf\\VendraAffiliate\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6047,18 +6038,25 @@
                 "filamentphp",
                 "laravel"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-affiliate/issues",
+                "source": "https://github.com/misaf/vendra-affiliate/tree/master"
+            },
+            "time": "2026-05-07T09:14:57+00:00"
         },
         {
             "name": "misaf/vendra-api",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-api",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-api.git",
                 "reference": "d496e288ecdbb579c7840b239cbd8e99716ba21c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-api/zipball/d496e288ecdbb579c7840b239cbd8e99716ba21c",
+                "reference": "d496e288ecdbb579c7840b239cbd8e99716ba21c",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0 || ^12.0",
@@ -6081,6 +6079,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6095,6 +6094,7 @@
                     "Misaf\\VendraApi\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6118,24 +6118,27 @@
                 "issues": "https://github.com/misaf/vendra-api/issues",
                 "source": "https://github.com/misaf/vendra-api"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-07T09:15:22+00:00"
         },
         {
             "name": "misaf/vendra-authify-log",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-authify-log.git",
+                "reference": "518502d466f2447e7e070a7814bd9765686ef8fb"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-authify-log",
-                "reference": "c773ad0b9fe70e02ce822d5460423fa8981a5f39"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-authify-log/zipball/518502d466f2447e7e070a7814bd9765686ef8fb",
+                "reference": "518502d466f2447e7e070a7814bd9765686ef8fb",
+                "shasum": ""
             },
             "require": {
                 "filament/filament": "^5.0",
                 "illuminate/support": "^11.0 || ^12.0",
                 "misaf/laravel-authify-log": "^1.0",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -6155,6 +6158,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6166,19 +6170,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraAuthifyLog\\": "src/",
-                    "Misaf\\VendraAuthifyLog\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraAuthifyLog\\Tests\\": "tests/",
                     "Misaf\\VendraAuthifyLog\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraAuthifyLog\\Tests\\": "tests/"
+                    "Misaf\\VendraAuthifyLog\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6194,18 +6191,25 @@
                 "laravel",
                 "log"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-authify-log/issues",
+                "source": "https://github.com/misaf/vendra-authify-log/tree/master"
+            },
+            "time": "2026-05-09T13:42:29+00:00"
         },
         {
             "name": "misaf/vendra-blog",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-blog.git",
+                "reference": "7c474c88947c7aec473c2097f6b7bf4c4b22f837"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-blog",
-                "reference": "3a88d828468fc731352c28a6a54d83da29a70a0f"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-blog/zipball/7c474c88947c7aec473c2097f6b7bf4c4b22f837",
+                "reference": "7c474c88947c7aec473c2097f6b7bf4c4b22f837",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -6214,7 +6218,7 @@
                 "illuminate/support": "^11.0 || ^12.0",
                 "lara-zeus/spatie-translatable": "^2.0",
                 "misaf/vendra-activity-log": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
                 "spatie/eloquent-sortable": "^5.0",
@@ -6236,6 +6240,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6247,25 +6252,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraBlog\\": "src/",
-                    "Misaf\\VendraBlog\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraBlog\\Tests\\": "tests/",
                     "Misaf\\VendraBlog\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraBlog\\Tests\\": "tests/"
+                    "Misaf\\VendraBlog\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6288,18 +6280,21 @@
                 "issues": "https://github.com/misaf/vendra-blog/issues",
                 "source": "https://github.com/misaf/vendra-blog"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:42:42+00:00"
         },
         {
             "name": "misaf/vendra-blog-api",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-blog-api",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-blog-api.git",
                 "reference": "bc4e62bd01020c706f04466914a9ed80c5aa51d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-blog-api/zipball/bc4e62bd01020c706f04466914a9ed80c5aa51d8",
+                "reference": "bc4e62bd01020c706f04466914a9ed80c5aa51d8",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0 || ^12.0",
@@ -6324,6 +6319,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6338,6 +6334,7 @@
                     "Misaf\\VendraBlogApi\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6361,18 +6358,21 @@
                 "issues": "https://github.com/misaf/vendra-blog-api/issues",
                 "source": "https://github.com/misaf/vendra-blog-api"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-07T09:17:46+00:00"
         },
         {
             "name": "misaf/vendra-currency",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-currency.git",
+                "reference": "7c438655ae7d796770184241efb99f3bf4bfe5db"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-currency",
-                "reference": "19da18229334545ffa511555253015350f07a6c8"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-currency/zipball/7c438655ae7d796770184241efb99f3bf4bfe5db",
+                "reference": "7c438655ae7d796770184241efb99f3bf4bfe5db",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -6380,7 +6380,7 @@
                 "filament/spatie-laravel-media-library-plugin": "^4.0 || ^5.0",
                 "illuminate/support": "^11.0 || ^12.0",
                 "misaf/vendra-activity-log": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
                 "spatie/eloquent-sortable": "^5.0",
@@ -6403,6 +6403,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6414,25 +6415,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraCurrency\\": "src/",
-                    "Misaf\\VendraCurrency\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraCurrency\\Tests\\": "tests/",
                     "Misaf\\VendraCurrency\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraCurrency\\Tests\\": "tests/"
+                    "Misaf\\VendraCurrency\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6451,18 +6439,25 @@
                 "misaf",
                 "vendra"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-currency/issues",
+                "source": "https://github.com/misaf/vendra-currency/tree/master"
+            },
+            "time": "2026-05-09T13:42:59+00:00"
         },
         {
             "name": "misaf/vendra-custom-page",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-custom-page.git",
+                "reference": "6ef627b914f8bcdfcba0375613ecb6a15286d40b"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-custom-page",
-                "reference": "380a0a5675a6fd3bb8b9c4c7b5c335c60997b719"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-custom-page/zipball/6ef627b914f8bcdfcba0375613ecb6a15286d40b",
+                "reference": "6ef627b914f8bcdfcba0375613ecb6a15286d40b",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -6471,7 +6466,7 @@
                 "illuminate/support": "^11.0 || ^12.0",
                 "lara-zeus/spatie-translatable": "^2.0",
                 "misaf/vendra-activity-log": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
                 "spatie/eloquent-sortable": "^5.0",
@@ -6493,6 +6488,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6504,25 +6500,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraCustomPage\\": "src/",
-                    "Misaf\\VendraCustomPage\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraCustomPage\\Tests\\": "tests/",
                     "Misaf\\VendraCustomPage\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraCustomPage\\Tests\\": "tests/"
+                    "Misaf\\VendraCustomPage\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6548,18 +6531,21 @@
                 "issues": "https://github.com/misaf/vendra-custom-page/issues",
                 "source": "https://github.com/misaf/vendra-custom-page"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:43:12+00:00"
         },
         {
             "name": "misaf/vendra-faq",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-faq.git",
+                "reference": "9e984f0c923b7a572512c1266ead1bf24bd6bae7"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-faq",
-                "reference": "a9117c133b5a79892ba90dc3e0b1594b5285cbe6"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-faq/zipball/9e984f0c923b7a572512c1266ead1bf24bd6bae7",
+                "reference": "9e984f0c923b7a572512c1266ead1bf24bd6bae7",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -6568,7 +6554,7 @@
                 "illuminate/support": "^11.0 || ^12.0",
                 "lara-zeus/spatie-translatable": "^2.0",
                 "laravel/pennant": "^1.19",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -6591,6 +6577,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6602,25 +6589,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraFaq\\": "src/",
-                    "Misaf\\VendraFaq\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraFaq\\Tests\\": "tests/",
                     "Misaf\\VendraFaq\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraFaq\\Tests\\": "tests/"
+                    "Misaf\\VendraFaq\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6634,7 +6608,7 @@
             "description": "Frequently Asked Questions management system with categorization",
             "homepage": "https://github.com/misaf/vendra-faq",
             "keywords": [
-                "faq",
+                "FAQ",
                 "filamentphp",
                 "laravel",
                 "misaf",
@@ -6644,18 +6618,21 @@
                 "issues": "https://github.com/misaf/vendra-faq/issues",
                 "source": "https://github.com/misaf/vendra-faq"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:43:23+00:00"
         },
         {
             "name": "misaf/vendra-faq-api",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-faq-api",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-faq-api.git",
                 "reference": "61aeb7c1f857710c15da672d67677361d33277e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-faq-api/zipball/61aeb7c1f857710c15da672d67677361d33277e0",
+                "reference": "61aeb7c1f857710c15da672d67677361d33277e0",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0 || ^12.0",
@@ -6680,6 +6657,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6694,6 +6672,7 @@
                     "Misaf\\VendraFaqApi\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6717,18 +6696,100 @@
                 "issues": "https://github.com/misaf/vendra-faq-api/issues",
                 "source": "https://github.com/misaf/vendra-faq-api"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-07T09:22:09+00:00"
+        },
+        {
+            "name": "misaf/vendra-jalali",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-jalali.git",
+                "reference": "e7c4cd082992e1be2aac6fbf230a528a3d20f322"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-jalali/zipball/e7c4cd082992e1be2aac6fbf230a528a3d20f322",
+                "reference": "e7c4cd082992e1be2aac6fbf230a528a3d20f322",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "illuminate/contracts": "^11.28|^12.0",
+                "morilog/jalali": "^v3.4.2",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.14.0"
+            },
+            "replace": {
+                "mokhosh/filament-jalali": "*"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9|^8.0",
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^3.7",
+                "pestphp/pest-plugin-arch": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentJalali": "Mokhosh\\FilamentJalali\\Facades\\FilamentJalali"
+                    },
+                    "providers": [
+                        "Mokhosh\\FilamentJalali\\FilamentJalaliServiceProvider"
+                    ]
+                },
+                "phpstan": {
+                    "includes": [
+                        "extension.neon"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mokhosh\\FilamentJalali\\": "src/",
+                    "Mokhosh\\FilamentJalali\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ehsan Mahmoodi",
+                    "email": "misaf.1990@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Add Jalali datetime to your filament tables",
+            "homepage": "https://github.com/misaf/vendra-jalali",
+            "keywords": [
+                "laravel",
+                "misaf",
+                "vendra-jalali"
+            ],
+            "support": {
+                "issues": "https://github.com/misaf/vendra-jalali/issues",
+                "source": "https://github.com/misaf/vendra-jalali/tree/master"
+            },
+            "time": "2026-05-09T14:12:02+00:00"
         },
         {
             "name": "misaf/vendra-multilang",
-            "version": "12.0.0",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-multilang.git",
+                "reference": "e845de576a58d2a1309c5486189c56a6b03a595d"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-multilang",
-                "reference": "92f35014856ac3ad7060f5b4844eeb8e157d26aa"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-multilang/zipball/e845de576a58d2a1309c5486189c56a6b03a595d",
+                "reference": "e845de576a58d2a1309c5486189c56a6b03a595d",
+                "shasum": ""
             },
             "require": {
                 "bezhansalleh/filament-language-switch": "^4.0",
@@ -6751,6 +6812,7 @@
                 "pestphp/pest": "^4.3.1",
                 "pestphp/pest-plugin-laravel": "^4.0"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6764,18 +6826,11 @@
                 "psr-4": {
                     "Misaf\\VendraMultilang\\": "src/",
                     "Misaf\\VendraMultilang\\Tests\\": "tests/",
-                    "Misaf\\VendraMultilang\\Database\\Factories\\": "database/factories/",
-                    "Misaf\\VendraMultilang\\Database\\Seeders\\": "database/seeders/"
+                    "Misaf\\VendraMultilang\\Database\\Seeders\\": "database/seeders/",
+                    "Misaf\\VendraMultilang\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6790,24 +6845,31 @@
                 "laravel",
                 "multilang"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-multilang/issues",
+                "source": "https://github.com/misaf/vendra-multilang/tree/master"
+            },
+            "time": "2026-05-09T13:13:26+00:00"
         },
         {
             "name": "misaf/vendra-multimedia",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-multimedia.git",
+                "reference": "f8279e522c5b7af252b9bd140aa4c6a599e63196"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-multimedia",
-                "reference": "f40319a77d8f9f90131889e90d71fb0c62620bc1"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-multimedia/zipball/f8279e522c5b7af252b9bd140aa4c6a599e63196",
+                "reference": "f8279e522c5b7af252b9bd140aa4c6a599e63196",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
                 "filament/filament": "^5.0",
                 "illuminate/support": "^11.0 || ^12.0",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -6827,6 +6889,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6841,20 +6904,7 @@
                     "Misaf\\VendraMultimedia\\Tests\\": "tests/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6877,18 +6927,21 @@
                 "issues": "https://github.com/misaf/vendra-multimedia/issues",
                 "source": "https://github.com/misaf/vendra-multimedia"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:43:39+00:00"
         },
         {
             "name": "misaf/vendra-multimedia-api",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-multimedia-api",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-multimedia-api.git",
                 "reference": "6edf972b7ea99a62193a4192d737f80921482bec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-multimedia-api/zipball/6edf972b7ea99a62193a4192d737f80921482bec",
+                "reference": "6edf972b7ea99a62193a4192d737f80921482bec",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0 || ^12.0",
@@ -6912,6 +6965,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -6926,6 +6980,7 @@
                     "Misaf\\VendraMultimediaApi\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -6949,18 +7004,21 @@
                 "issues": "https://github.com/misaf/vendra-multimedia-api/issues",
                 "source": "https://github.com/misaf/vendra-multimedia-api"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-07T09:24:06+00:00"
         },
         {
             "name": "misaf/vendra-newsletter",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-newsletter.git",
+                "reference": "36840400febe24181231893b61fe05f7d85c1cba"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-newsletter",
-                "reference": "bdfd14ecc1bbc2eff58201f6057a4d4965a88026"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-newsletter/zipball/36840400febe24181231893b61fe05f7d85c1cba",
+                "reference": "36840400febe24181231893b61fe05f7d85c1cba",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -6968,7 +7026,7 @@
                 "illuminate/support": "^11.0 || ^12.0",
                 "misaf/laravel-email-webhooks": "^1.0.0",
                 "misaf/vendra-activity-log": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -6992,6 +7050,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7004,25 +7063,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraNewsletter\\": "src/",
-                    "Misaf\\VendraNewsletter\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraNewsletter\\Tests\\": "tests/",
                     "Misaf\\VendraNewsletter\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraNewsletter\\Tests\\": "tests/"
+                    "Misaf\\VendraNewsletter\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7045,18 +7091,21 @@
                 "issues": "https://github.com/misaf/vendra-newsletter/issues",
                 "source": "https://github.com/misaf/vendra-newsletter"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:43:54+00:00"
         },
         {
             "name": "misaf/vendra-permission",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-permission.git",
+                "reference": "20b73e8107de5d220f32cd67d281191b9edc9559"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-permission",
-                "reference": "a1a5d2d10658475ebe656ef4344d4b429c6cfe54"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-permission/zipball/20b73e8107de5d220f32cd67d281191b9edc9559",
+                "reference": "20b73e8107de5d220f32cd67d281191b9edc9559",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -7064,7 +7113,7 @@
                 "illuminate/support": "^11.0 || ^12.0",
                 "laravel/pennant": "^1.19",
                 "misaf/vendra-activity-log": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -7087,6 +7136,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7098,25 +7148,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraPermission\\": "src/",
-                    "Misaf\\VendraPermission\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraPermission\\Tests\\": "tests/",
                     "Misaf\\VendraPermission\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraPermission\\Tests\\": "tests/"
+                    "Misaf\\VendraPermission\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7140,18 +7177,21 @@
                 "issues": "https://github.com/misaf/vendra-permission/issues",
                 "source": "https://github.com/misaf/vendra-permission"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:44:04+00:00"
         },
         {
             "name": "misaf/vendra-product",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-product.git",
+                "reference": "3981e2fdb43302a6865190827c0c71fa3d8ba21f"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-product",
-                "reference": "ca4f69ae47ddc35a4ec82072546a2eb8d1662234"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-product/zipball/3981e2fdb43302a6865190827c0c71fa3d8ba21f",
+                "reference": "3981e2fdb43302a6865190827c0c71fa3d8ba21f",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -7162,7 +7202,7 @@
                 "lara-zeus/spatie-translatable": "^2.0",
                 "misaf/vendra-activity-log": "dev-master",
                 "misaf/vendra-currency": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -7186,6 +7226,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7197,25 +7238,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraProduct\\": "src/",
-                    "Misaf\\VendraProduct\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraProduct\\Tests\\": "tests/",
                     "Misaf\\VendraProduct\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraProduct\\Tests\\": "tests/"
+                    "Misaf\\VendraProduct\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7239,18 +7267,21 @@
                 "issues": "https://github.com/misaf/vendra-product/issues",
                 "source": "https://github.com/misaf/vendra-product"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:44:15+00:00"
         },
         {
             "name": "misaf/vendra-product-api",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-product-api",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-product-api.git",
                 "reference": "51bd2818442cc71a0c16f59602791c29dc7a0d47"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-product-api/zipball/51bd2818442cc71a0c16f59602791c29dc7a0d47",
+                "reference": "51bd2818442cc71a0c16f59602791c29dc7a0d47",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0 || ^12.0",
@@ -7275,6 +7306,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7289,6 +7321,7 @@
                     "Misaf\\VendraProductApi\\Tests\\": "tests/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7312,18 +7345,21 @@
                 "issues": "https://github.com/misaf/vendra-product-api/issues",
                 "source": "https://github.com/misaf/vendra-product-api"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-07T09:27:43+00:00"
         },
         {
             "name": "misaf/vendra-tagger",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-tagger.git",
+                "reference": "427d07f1f1b84e717514170f5874f8c9be4931e3"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-tagger",
-                "reference": "32ec9408cdfb39f888fc93f1cc696850d20abb99"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-tagger/zipball/427d07f1f1b84e717514170f5874f8c9be4931e3",
+                "reference": "427d07f1f1b84e717514170f5874f8c9be4931e3",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -7331,7 +7367,7 @@
                 "filament/spatie-laravel-tags-plugin": "^5.0",
                 "illuminate/support": "^11.0 || ^12.0",
                 "lara-zeus/spatie-translatable": "^2.0",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -7352,6 +7388,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7366,20 +7403,7 @@
                     "Misaf\\VendraTagger\\Tests\\": "tests/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7402,18 +7426,21 @@
                 "issues": "https://github.com/misaf/vendra-tagger/issues",
                 "source": "https://github.com/misaf/vendra-tagger"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T13:44:32+00:00"
         },
         {
             "name": "misaf/vendra-tenant",
-            "version": "12.0.0",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-tenant",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-tenant.git",
                 "reference": "38446e061e34b41328d4e86a5709a954c12a4984"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/38446e061e34b41328d4e86a5709a954c12a4984",
+                "reference": "38446e061e34b41328d4e86a5709a954c12a4984",
+                "shasum": ""
             },
             "require": {
                 "filament/filament": "^5.0",
@@ -7436,6 +7463,7 @@
                 "pestphp/pest": "^4.3.1",
                 "pestphp/pest-plugin-laravel": "^4.0"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7448,18 +7476,11 @@
                 "psr-4": {
                     "Misaf\\VendraTenant\\": "src/",
                     "Misaf\\VendraTenant\\Tests\\": "tests/",
-                    "Misaf\\VendraTenant\\Database\\Factories\\": "database/factories/",
-                    "Misaf\\VendraTenant\\Database\\Seeders\\": "database/seeders/"
+                    "Misaf\\VendraTenant\\Database\\Seeders\\": "database/seeders/",
+                    "Misaf\\VendraTenant\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7475,18 +7496,25 @@
                 "laravel",
                 "tenant"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-tenant/issues",
+                "source": "https://github.com/misaf/vendra-tenant/tree/master"
+            },
+            "time": "2026-05-07T09:40:30+00:00"
         },
         {
             "name": "misaf/vendra-testing",
             "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-testing",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-testing.git",
                 "reference": "a15fe54462347d872c089bbf1548055ed58ddccb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-testing/zipball/a15fe54462347d872c089bbf1548055ed58ddccb",
+                "reference": "a15fe54462347d872c089bbf1548055ed58ddccb",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0|^12.0",
@@ -7508,30 +7536,18 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "autoload": {
+                "files": [
+                    "src/Expectations.php"
+                ],
                 "psr-4": {
                     "Misaf\\VendraTesting\\": "src/",
                     "Misaf\\VendraPermission\\Tests\\": "tests/"
-                },
-                "files": [
-                    "src/Expectations.php"
-                ]
+                }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7555,18 +7571,21 @@
                 "issues": "https://github.com/misaf/vendra-testing/issues",
                 "source": "https://github.com/misaf/vendra-testing"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-04-27T00:35:17+00:00"
         },
         {
             "name": "misaf/vendra-transaction",
-            "version": "12.0.0",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-transaction.git",
+                "reference": "feb4bff77e550adf50b884b9117b2c6acbb47835"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-transaction",
-                "reference": "86ad58c25f2a3cbcbabb12c7bcd5fdb228962970"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-transaction/zipball/feb4bff77e550adf50b884b9117b2c6acbb47835",
+                "reference": "feb4bff77e550adf50b884b9117b2c6acbb47835",
+                "shasum": ""
             },
             "require": {
                 "filament/filament": "^5.0",
@@ -7588,6 +7607,7 @@
                 "pestphp/pest": "^4.3.1",
                 "pestphp/pest-plugin-laravel": "^4.0"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7600,18 +7620,11 @@
                 "psr-4": {
                     "Misaf\\VendraTransaction\\": "src/",
                     "Misaf\\VendraTransaction\\Tests\\": "tests/",
-                    "Misaf\\VendraTransaction\\Database\\Factories\\": "database/factories/",
-                    "Misaf\\VendraTransaction\\Database\\Seeders\\": "database/seeders/"
+                    "Misaf\\VendraTransaction\\Database\\Seeders\\": "database/seeders/",
+                    "Misaf\\VendraTransaction\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7627,25 +7640,32 @@
                 "laravel",
                 "transaction"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-transaction/issues",
+                "source": "https://github.com/misaf/vendra-transaction/tree/master"
+            },
+            "time": "2026-05-09T14:22:04+00:00"
         },
         {
             "name": "misaf/vendra-user",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-user.git",
+                "reference": "79fe3ab6cb785f04aa621be6178c41c2a5a520ac"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-user",
-                "reference": "081681ac2bdb268d5798b1508f9b9e3d3f5bf5d6"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-user/zipball/79fe3ab6cb785f04aa621be6178c41c2a5a520ac",
+                "reference": "79fe3ab6cb785f04aa621be6178c41c2a5a520ac",
+                "shasum": ""
             },
             "require": {
                 "filament/filament": "^5.0",
                 "illuminate/support": "^11.0 || ^12.0",
                 "laravel/pennant": "^1.19",
                 "misaf/vendra-activity-log": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
                 "spatie/laravel-package-tools": "^1.0",
@@ -7662,6 +7682,7 @@
                 "pestphp/pest": "^4.3.1",
                 "pestphp/pest-plugin-laravel": "^4.0"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7673,19 +7694,12 @@
             "autoload": {
                 "psr-4": {
                     "Misaf\\VendraUser\\": "src/",
-                    "Misaf\\VendraUser\\Database\\Factories\\": "database/factories/",
+                    "Misaf\\VendraUser\\Tests\\": "tests/",
                     "Misaf\\VendraUser\\Database\\Seeders\\": "database/seeders/",
-                    "Misaf\\VendraUser\\Tests\\": "tests/"
+                    "Misaf\\VendraUser\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7701,18 +7715,25 @@
                 "laravel",
                 "user"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/misaf/vendra-user/issues",
+                "source": "https://github.com/misaf/vendra-user/tree/master"
+            },
+            "time": "2026-05-09T13:45:02+00:00"
         },
         {
             "name": "misaf/vendra-user-profile",
             "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/misaf/vendra-user-profile.git",
+                "reference": "03a20f4906a8578991c253335839fbb10ba9c518"
+            },
             "dist": {
-                "type": "path",
-                "url": "app-modules/vendra-user-profile",
-                "reference": "fd24859bb5a4c9462d57d46139ee9f1ce7851b41"
+                "type": "zip",
+                "url": "https://api.github.com/repos/misaf/vendra-user-profile/zipball/03a20f4906a8578991c253335839fbb10ba9c518",
+                "reference": "03a20f4906a8578991c253335839fbb10ba9c518",
+                "shasum": ""
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -7721,7 +7742,7 @@
                 "laravel/pennant": "^1.19",
                 "misaf/vendra-activity-log": "dev-master",
                 "misaf/vendra-permission": "dev-master",
-                "misaf/vendra-tenant": "^12.0",
+                "misaf/vendra-tenant": "dev-master",
                 "misaf/vendra-user": "dev-master",
                 "mokhosh/filament-jalali": "5.1",
                 "php": "^8.2",
@@ -7744,6 +7765,7 @@
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "pestphp/pest-plugin-type-coverage": "^4.0.3"
             },
+            "default-branch": true,
             "type": "vendra-module",
             "extra": {
                 "laravel": {
@@ -7756,24 +7778,11 @@
                 "psr-4": {
                     "Misaf\\VendraUserProfile\\": "src/",
                     "Misaf\\VendraUserProfile\\Tests\\": "tests/",
-                    "Misaf\\VendraUserProfile\\Database\\Factories\\": "database/factories/",
-                    "Misaf\\VendraUserProfile\\Database\\Seeders\\": "database/seeders/"
+                    "Misaf\\VendraUserProfile\\Database\\Seeders\\": "database/seeders/",
+                    "Misaf\\VendraUserProfile\\Database\\Factories\\": "database/factories/"
                 }
             },
-            "scripts": {
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -7797,99 +7806,7 @@
                 "issues": "https://github.com/misaf/vendra-user-profile/issues",
                 "source": "https://github.com/misaf/vendra-user-profile"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "mokhosh/filament-jalali",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "app-modules/filament-jalali",
-                "reference": "6946e574ea505e1dc7759e5e1061888e4c7f1529"
-            },
-            "require": {
-                "filament/filament": "^5.0",
-                "illuminate/contracts": "^11.28|^12.0",
-                "morilog/jalali": "^v3.4.2",
-                "php": "^8.2",
-                "spatie/laravel-package-tools": "^1.14.0"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^7.9|^8.0",
-                "orchestra/testbench": "^9.0|^10.0",
-                "pestphp/pest": "^3.7",
-                "pestphp/pest-plugin-arch": "^3.0",
-                "pestphp/pest-plugin-laravel": "^3.0"
-            },
-            "type": "library",
-            "extra": {
-                "phpstan": {
-                    "includes": [
-                        "extension.neon"
-                    ]
-                },
-                "laravel": {
-                    "providers": [
-                        "Mokhosh\\FilamentJalali\\FilamentJalaliServiceProvider"
-                    ],
-                    "aliases": {
-                        "FilamentJalali": "Mokhosh\\FilamentJalali\\Facades\\FilamentJalali"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Mokhosh\\FilamentJalali\\": "src/",
-                    "Mokhosh\\FilamentJalali\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Mokhosh\\FilamentJalali\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "post-autoload-dump": [
-                    "@php ./vendor/bin/testbench package:discover --ansi"
-                ],
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mo Khosh",
-                    "email": "mskhoshnazar@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Add Jalali datetime to your filament tables",
-            "homepage": "https://github.com/mokhosh/filament-jalali",
-            "keywords": [
-                "filament-jalali",
-                "laravel",
-                "mokhosh"
-            ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-05-09T14:17:26+00:00"
         },
         {
             "name": "moneyphp/money",
@@ -19831,17 +19748,11 @@
             "time": "2026-04-11T10:33:05+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "mokhosh/filament-jalali",
-            "version": "9999999-dev",
-            "alias": "5.1",
-            "alias_normalized": "5.1.0.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
         "misaf/vendra-activity-log": 20,
+        "misaf/vendra-affiliate": 20,
         "misaf/vendra-api": 20,
         "misaf/vendra-authify-log": 20,
         "misaf/vendra-blog": 20,
@@ -19850,6 +19761,8 @@
         "misaf/vendra-custom-page": 20,
         "misaf/vendra-faq": 20,
         "misaf/vendra-faq-api": 20,
+        "misaf/vendra-jalali": 20,
+        "misaf/vendra-multilang": 20,
         "misaf/vendra-multimedia": 20,
         "misaf/vendra-multimedia-api": 20,
         "misaf/vendra-newsletter": 20,
@@ -19857,7 +19770,9 @@
         "misaf/vendra-product": 20,
         "misaf/vendra-product-api": 20,
         "misaf/vendra-tagger": 20,
+        "misaf/vendra-tenant": 20,
         "misaf/vendra-testing": 20,
+        "misaf/vendra-transaction": 20,
         "misaf/vendra-user": 20,
         "misaf/vendra-user-profile": 20
     },
