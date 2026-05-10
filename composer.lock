@@ -6783,12 +6783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-multilang.git",
-                "reference": "6dc7b49a4538caa2c1a6093888ebedd67b5f2c4a"
+                "reference": "7e7dc0138c7d44d6a62324e38c4a3580a69f1999"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-multilang/zipball/6dc7b49a4538caa2c1a6093888ebedd67b5f2c4a",
-                "reference": "6dc7b49a4538caa2c1a6093888ebedd67b5f2c4a",
+                "url": "https://api.github.com/repos/misaf/vendra-multilang/zipball/7e7dc0138c7d44d6a62324e38c4a3580a69f1999",
+                "reference": "7e7dc0138c7d44d6a62324e38c4a3580a69f1999",
                 "shasum": ""
             },
             "require": {
@@ -6850,7 +6850,7 @@
                 "issues": "https://github.com/misaf/vendra-multilang/issues",
                 "source": "https://github.com/misaf/vendra-multilang/tree/master"
             },
-            "time": "2026-05-10T06:07:48+00:00"
+            "time": "2026-05-10T10:54:14+00:00"
         },
         {
             "name": "misaf/vendra-multimedia",
@@ -7653,12 +7653,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-user.git",
-                "reference": "1932f881b226f64f44617128c2af8ae48a9d85e7"
+                "reference": "d5c714c114bb0bec122bdad9cf127c0ffa6c0640"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-user/zipball/1932f881b226f64f44617128c2af8ae48a9d85e7",
-                "reference": "1932f881b226f64f44617128c2af8ae48a9d85e7",
+                "url": "https://api.github.com/repos/misaf/vendra-user/zipball/d5c714c114bb0bec122bdad9cf127c0ffa6c0640",
+                "reference": "d5c714c114bb0bec122bdad9cf127c0ffa6c0640",
                 "shasum": ""
             },
             "require": {
@@ -7720,7 +7720,7 @@
                 "issues": "https://github.com/misaf/vendra-user/issues",
                 "source": "https://github.com/misaf/vendra-user/tree/master"
             },
-            "time": "2026-05-10T06:12:27+00:00"
+            "time": "2026-05-10T08:11:49+00:00"
         },
         {
             "name": "misaf/vendra-user-profile",
