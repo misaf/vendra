@@ -5900,12 +5900,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-activity-log.git",
-                "reference": "31fae7a6281963b09f1cccfaa4d17223959093e5"
+                "reference": "23b7284c7c18a5b3b587e2ec4b4b175576412291"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-activity-log/zipball/31fae7a6281963b09f1cccfaa4d17223959093e5",
-                "reference": "31fae7a6281963b09f1cccfaa4d17223959093e5",
+                "url": "https://api.github.com/repos/misaf/vendra-activity-log/zipball/23b7284c7c18a5b3b587e2ec4b4b175576412291",
+                "reference": "23b7284c7c18a5b3b587e2ec4b4b175576412291",
                 "shasum": ""
             },
             "require": {
@@ -5971,7 +5971,7 @@
                 "issues": "https://github.com/misaf/vendra-activity-log/issues",
                 "source": "https://github.com/misaf/vendra-activity-log"
             },
-            "time": "2026-05-09T13:42:08+00:00"
+            "time": "2026-05-10T05:57:05+00:00"
         },
         {
             "name": "misaf/vendra-affiliate",
@@ -5979,12 +5979,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-affiliate.git",
-                "reference": "8c543e55b8f2f77207ecab3ce09d2e5ee251a074"
+                "reference": "8311b7f1f7f182797b3a37902214e9a9d4b60925"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-affiliate/zipball/8c543e55b8f2f77207ecab3ce09d2e5ee251a074",
-                "reference": "8c543e55b8f2f77207ecab3ce09d2e5ee251a074",
+                "url": "https://api.github.com/repos/misaf/vendra-affiliate/zipball/8311b7f1f7f182797b3a37902214e9a9d4b60925",
+                "reference": "8311b7f1f7f182797b3a37902214e9a9d4b60925",
                 "shasum": ""
             },
             "require": {
@@ -6042,7 +6042,7 @@
                 "issues": "https://github.com/misaf/vendra-affiliate/issues",
                 "source": "https://github.com/misaf/vendra-affiliate/tree/master"
             },
-            "time": "2026-05-07T09:14:57+00:00"
+            "time": "2026-05-10T05:58:09+00:00"
         },
         {
             "name": "misaf/vendra-api",
@@ -6126,12 +6126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-authify-log.git",
-                "reference": "518502d466f2447e7e070a7814bd9765686ef8fb"
+                "reference": "d3e86991918f17507fa60833dafd9a5405ba2b06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-authify-log/zipball/518502d466f2447e7e070a7814bd9765686ef8fb",
-                "reference": "518502d466f2447e7e070a7814bd9765686ef8fb",
+                "url": "https://api.github.com/repos/misaf/vendra-authify-log/zipball/d3e86991918f17507fa60833dafd9a5405ba2b06",
+                "reference": "d3e86991918f17507fa60833dafd9a5405ba2b06",
                 "shasum": ""
             },
             "require": {
@@ -6195,7 +6195,7 @@
                 "issues": "https://github.com/misaf/vendra-authify-log/issues",
                 "source": "https://github.com/misaf/vendra-authify-log/tree/master"
             },
-            "time": "2026-05-09T13:42:29+00:00"
+            "time": "2026-05-10T05:58:43+00:00"
         },
         {
             "name": "misaf/vendra-blog",
@@ -6203,12 +6203,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-blog.git",
-                "reference": "7c474c88947c7aec473c2097f6b7bf4c4b22f837"
+                "reference": "513affca49233a1bfa0edac68ff9b601b0787bee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-blog/zipball/7c474c88947c7aec473c2097f6b7bf4c4b22f837",
-                "reference": "7c474c88947c7aec473c2097f6b7bf4c4b22f837",
+                "url": "https://api.github.com/repos/misaf/vendra-blog/zipball/513affca49233a1bfa0edac68ff9b601b0787bee",
+                "reference": "513affca49233a1bfa0edac68ff9b601b0787bee",
                 "shasum": ""
             },
             "require": {
@@ -6280,7 +6280,7 @@
                 "issues": "https://github.com/misaf/vendra-blog/issues",
                 "source": "https://github.com/misaf/vendra-blog"
             },
-            "time": "2026-05-09T13:42:42+00:00"
+            "time": "2026-05-10T06:00:12+00:00"
         },
         {
             "name": "misaf/vendra-blog-api",
@@ -6366,12 +6366,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-currency.git",
-                "reference": "7c438655ae7d796770184241efb99f3bf4bfe5db"
+                "reference": "c318a3b2bcd96b5b4be2ad974cadbca48eb4be07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-currency/zipball/7c438655ae7d796770184241efb99f3bf4bfe5db",
-                "reference": "7c438655ae7d796770184241efb99f3bf4bfe5db",
+                "url": "https://api.github.com/repos/misaf/vendra-currency/zipball/c318a3b2bcd96b5b4be2ad974cadbca48eb4be07",
+                "reference": "c318a3b2bcd96b5b4be2ad974cadbca48eb4be07",
                 "shasum": ""
             },
             "require": {
@@ -6443,7 +6443,7 @@
                 "issues": "https://github.com/misaf/vendra-currency/issues",
                 "source": "https://github.com/misaf/vendra-currency/tree/master"
             },
-            "time": "2026-05-09T13:42:59+00:00"
+            "time": "2026-05-10T06:01:36+00:00"
         },
         {
             "name": "misaf/vendra-custom-page",
@@ -6451,12 +6451,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-custom-page.git",
-                "reference": "6ef627b914f8bcdfcba0375613ecb6a15286d40b"
+                "reference": "8f5d57149b09e3c681e86f0423dfa2f54125ccc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-custom-page/zipball/6ef627b914f8bcdfcba0375613ecb6a15286d40b",
-                "reference": "6ef627b914f8bcdfcba0375613ecb6a15286d40b",
+                "url": "https://api.github.com/repos/misaf/vendra-custom-page/zipball/8f5d57149b09e3c681e86f0423dfa2f54125ccc7",
+                "reference": "8f5d57149b09e3c681e86f0423dfa2f54125ccc7",
                 "shasum": ""
             },
             "require": {
@@ -6531,7 +6531,7 @@
                 "issues": "https://github.com/misaf/vendra-custom-page/issues",
                 "source": "https://github.com/misaf/vendra-custom-page"
             },
-            "time": "2026-05-09T13:43:12+00:00"
+            "time": "2026-05-10T06:04:03+00:00"
         },
         {
             "name": "misaf/vendra-faq",
@@ -6539,12 +6539,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-faq.git",
-                "reference": "9e984f0c923b7a572512c1266ead1bf24bd6bae7"
+                "reference": "de1e662b66a4e66f67315ca1b07de7b27df71596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-faq/zipball/9e984f0c923b7a572512c1266ead1bf24bd6bae7",
-                "reference": "9e984f0c923b7a572512c1266ead1bf24bd6bae7",
+                "url": "https://api.github.com/repos/misaf/vendra-faq/zipball/de1e662b66a4e66f67315ca1b07de7b27df71596",
+                "reference": "de1e662b66a4e66f67315ca1b07de7b27df71596",
                 "shasum": ""
             },
             "require": {
@@ -6618,7 +6618,7 @@
                 "issues": "https://github.com/misaf/vendra-faq/issues",
                 "source": "https://github.com/misaf/vendra-faq"
             },
-            "time": "2026-05-09T13:43:23+00:00"
+            "time": "2026-05-10T03:54:53+00:00"
         },
         {
             "name": "misaf/vendra-faq-api",
@@ -6783,12 +6783,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-multilang.git",
-                "reference": "e845de576a58d2a1309c5486189c56a6b03a595d"
+                "reference": "6dc7b49a4538caa2c1a6093888ebedd67b5f2c4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-multilang/zipball/e845de576a58d2a1309c5486189c56a6b03a595d",
-                "reference": "e845de576a58d2a1309c5486189c56a6b03a595d",
+                "url": "https://api.github.com/repos/misaf/vendra-multilang/zipball/6dc7b49a4538caa2c1a6093888ebedd67b5f2c4a",
+                "reference": "6dc7b49a4538caa2c1a6093888ebedd67b5f2c4a",
                 "shasum": ""
             },
             "require": {
@@ -6798,6 +6798,7 @@
                 "php": "^8.3",
                 "spatie/eloquent-sortable": "^5.0",
                 "spatie/laravel-activitylog": "^4.0",
+                "spatie/laravel-package-tools": "^1.0",
                 "spatie/laravel-sluggable": "^4.0",
                 "spatie/laravel-translation-loader": "^2.8.2"
             },
@@ -6849,7 +6850,7 @@
                 "issues": "https://github.com/misaf/vendra-multilang/issues",
                 "source": "https://github.com/misaf/vendra-multilang/tree/master"
             },
-            "time": "2026-05-09T13:13:26+00:00"
+            "time": "2026-05-10T06:07:48+00:00"
         },
         {
             "name": "misaf/vendra-multimedia",
@@ -6857,12 +6858,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-multimedia.git",
-                "reference": "f8279e522c5b7af252b9bd140aa4c6a599e63196"
+                "reference": "e24911287a62fa1b4b5115395517961b2145dc56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-multimedia/zipball/f8279e522c5b7af252b9bd140aa4c6a599e63196",
-                "reference": "f8279e522c5b7af252b9bd140aa4c6a599e63196",
+                "url": "https://api.github.com/repos/misaf/vendra-multimedia/zipball/e24911287a62fa1b4b5115395517961b2145dc56",
+                "reference": "e24911287a62fa1b4b5115395517961b2145dc56",
                 "shasum": ""
             },
             "require": {
@@ -6927,7 +6928,7 @@
                 "issues": "https://github.com/misaf/vendra-multimedia/issues",
                 "source": "https://github.com/misaf/vendra-multimedia"
             },
-            "time": "2026-05-09T13:43:39+00:00"
+            "time": "2026-05-10T06:08:16+00:00"
         },
         {
             "name": "misaf/vendra-multimedia-api",
@@ -7012,12 +7013,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-newsletter.git",
-                "reference": "36840400febe24181231893b61fe05f7d85c1cba"
+                "reference": "da26f3561b29d762ca519ababc980c94ab526345"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-newsletter/zipball/36840400febe24181231893b61fe05f7d85c1cba",
-                "reference": "36840400febe24181231893b61fe05f7d85c1cba",
+                "url": "https://api.github.com/repos/misaf/vendra-newsletter/zipball/da26f3561b29d762ca519ababc980c94ab526345",
+                "reference": "da26f3561b29d762ca519ababc980c94ab526345",
                 "shasum": ""
             },
             "require": {
@@ -7091,7 +7092,7 @@
                 "issues": "https://github.com/misaf/vendra-newsletter/issues",
                 "source": "https://github.com/misaf/vendra-newsletter"
             },
-            "time": "2026-05-09T13:43:54+00:00"
+            "time": "2026-05-10T06:08:41+00:00"
         },
         {
             "name": "misaf/vendra-permission",
@@ -7099,12 +7100,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-permission.git",
-                "reference": "20b73e8107de5d220f32cd67d281191b9edc9559"
+                "reference": "d404d63a9fd4a6d2b3f3786f6c078c7e75a88712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-permission/zipball/20b73e8107de5d220f32cd67d281191b9edc9559",
-                "reference": "20b73e8107de5d220f32cd67d281191b9edc9559",
+                "url": "https://api.github.com/repos/misaf/vendra-permission/zipball/d404d63a9fd4a6d2b3f3786f6c078c7e75a88712",
+                "reference": "d404d63a9fd4a6d2b3f3786f6c078c7e75a88712",
                 "shasum": ""
             },
             "require": {
@@ -7177,7 +7178,7 @@
                 "issues": "https://github.com/misaf/vendra-permission/issues",
                 "source": "https://github.com/misaf/vendra-permission"
             },
-            "time": "2026-05-09T13:44:04+00:00"
+            "time": "2026-05-10T06:09:22+00:00"
         },
         {
             "name": "misaf/vendra-product",
@@ -7185,12 +7186,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-product.git",
-                "reference": "3981e2fdb43302a6865190827c0c71fa3d8ba21f"
+                "reference": "74ce0eb02623760e69d3a4921718f5b0c3f65eb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-product/zipball/3981e2fdb43302a6865190827c0c71fa3d8ba21f",
-                "reference": "3981e2fdb43302a6865190827c0c71fa3d8ba21f",
+                "url": "https://api.github.com/repos/misaf/vendra-product/zipball/74ce0eb02623760e69d3a4921718f5b0c3f65eb9",
+                "reference": "74ce0eb02623760e69d3a4921718f5b0c3f65eb9",
                 "shasum": ""
             },
             "require": {
@@ -7267,7 +7268,7 @@
                 "issues": "https://github.com/misaf/vendra-product/issues",
                 "source": "https://github.com/misaf/vendra-product"
             },
-            "time": "2026-05-09T13:44:15+00:00"
+            "time": "2026-05-10T06:09:56+00:00"
         },
         {
             "name": "misaf/vendra-product-api",
@@ -7353,12 +7354,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-tagger.git",
-                "reference": "427d07f1f1b84e717514170f5874f8c9be4931e3"
+                "reference": "003c831153b1cb368ccfde04946abdf682ce0aca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-tagger/zipball/427d07f1f1b84e717514170f5874f8c9be4931e3",
-                "reference": "427d07f1f1b84e717514170f5874f8c9be4931e3",
+                "url": "https://api.github.com/repos/misaf/vendra-tagger/zipball/003c831153b1cb368ccfde04946abdf682ce0aca",
+                "reference": "003c831153b1cb368ccfde04946abdf682ce0aca",
                 "shasum": ""
             },
             "require": {
@@ -7426,7 +7427,7 @@
                 "issues": "https://github.com/misaf/vendra-tagger/issues",
                 "source": "https://github.com/misaf/vendra-tagger"
             },
-            "time": "2026-05-09T13:44:32+00:00"
+            "time": "2026-05-10T06:10:41+00:00"
         },
         {
             "name": "misaf/vendra-tenant",
@@ -7434,12 +7435,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-tenant.git",
-                "reference": "38446e061e34b41328d4e86a5709a954c12a4984"
+                "reference": "f3af8562f487c71705edf3f28598defc30b5ac61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/38446e061e34b41328d4e86a5709a954c12a4984",
-                "reference": "38446e061e34b41328d4e86a5709a954c12a4984",
+                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/f3af8562f487c71705edf3f28598defc30b5ac61",
+                "reference": "f3af8562f487c71705edf3f28598defc30b5ac61",
                 "shasum": ""
             },
             "require": {
@@ -7500,7 +7501,7 @@
                 "issues": "https://github.com/misaf/vendra-tenant/issues",
                 "source": "https://github.com/misaf/vendra-tenant/tree/master"
             },
-            "time": "2026-05-07T09:40:30+00:00"
+            "time": "2026-05-10T06:11:16+00:00"
         },
         {
             "name": "misaf/vendra-testing",
@@ -7579,12 +7580,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-transaction.git",
-                "reference": "feb4bff77e550adf50b884b9117b2c6acbb47835"
+                "reference": "37b34caab5dce9538046391f091ced3558e7d82e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-transaction/zipball/feb4bff77e550adf50b884b9117b2c6acbb47835",
-                "reference": "feb4bff77e550adf50b884b9117b2c6acbb47835",
+                "url": "https://api.github.com/repos/misaf/vendra-transaction/zipball/37b34caab5dce9538046391f091ced3558e7d82e",
+                "reference": "37b34caab5dce9538046391f091ced3558e7d82e",
                 "shasum": ""
             },
             "require": {
@@ -7644,7 +7645,7 @@
                 "issues": "https://github.com/misaf/vendra-transaction/issues",
                 "source": "https://github.com/misaf/vendra-transaction/tree/master"
             },
-            "time": "2026-05-09T14:22:04+00:00"
+            "time": "2026-05-10T06:11:50+00:00"
         },
         {
             "name": "misaf/vendra-user",
@@ -7652,12 +7653,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-user.git",
-                "reference": "79fe3ab6cb785f04aa621be6178c41c2a5a520ac"
+                "reference": "1932f881b226f64f44617128c2af8ae48a9d85e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-user/zipball/79fe3ab6cb785f04aa621be6178c41c2a5a520ac",
-                "reference": "79fe3ab6cb785f04aa621be6178c41c2a5a520ac",
+                "url": "https://api.github.com/repos/misaf/vendra-user/zipball/1932f881b226f64f44617128c2af8ae48a9d85e7",
+                "reference": "1932f881b226f64f44617128c2af8ae48a9d85e7",
                 "shasum": ""
             },
             "require": {
@@ -7719,7 +7720,7 @@
                 "issues": "https://github.com/misaf/vendra-user/issues",
                 "source": "https://github.com/misaf/vendra-user/tree/master"
             },
-            "time": "2026-05-09T13:45:02+00:00"
+            "time": "2026-05-10T06:12:27+00:00"
         },
         {
             "name": "misaf/vendra-user-profile",
@@ -7727,12 +7728,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-user-profile.git",
-                "reference": "03a20f4906a8578991c253335839fbb10ba9c518"
+                "reference": "e954adb28c1ba46d84467803e698b8a280354419"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-user-profile/zipball/03a20f4906a8578991c253335839fbb10ba9c518",
-                "reference": "03a20f4906a8578991c253335839fbb10ba9c518",
+                "url": "https://api.github.com/repos/misaf/vendra-user-profile/zipball/e954adb28c1ba46d84467803e698b8a280354419",
+                "reference": "e954adb28c1ba46d84467803e698b8a280354419",
                 "shasum": ""
             },
             "require": {
@@ -7806,7 +7807,7 @@
                 "issues": "https://github.com/misaf/vendra-user-profile/issues",
                 "source": "https://github.com/misaf/vendra-user-profile"
             },
-            "time": "2026-05-09T14:17:26+00:00"
+            "time": "2026-05-10T06:13:04+00:00"
         },
         {
             "name": "moneyphp/money",
