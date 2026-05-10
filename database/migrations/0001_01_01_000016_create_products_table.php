@@ -16,7 +16,7 @@ return new class () extends Migration {
         $this->createProductPricesTable();
         Schema::enableForeignKeyConstraints();
     }
-    
+
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
