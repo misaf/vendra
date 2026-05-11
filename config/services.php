@@ -52,22 +52,6 @@ return [
         'secret' => env('TURNSTILE_SECRET'),
     ],
 
-    'perfectmoney' => [
-        'host'     => env('PERFECTMONEY_HOST'),
-        'creation' => [
-            'account_id'    => env('PERFECTMONEY_CREATION_ACCOUNT_ID'),
-            'passphrase'    => env('PERFECTMONEY_CREATION_PASSPHRASE'),
-            'payee_account' => env('PERFECTMONEY_CREATION_PAYEE_ACCOUNT'),
-            'payer_account' => env('PERFECTMONEY_CREATION_PAYER_ACCOUNT'),
-        ],
-        'activation' => [
-            'account_id'    => env('PERFECTMONEY_ACTIVATION_ACCOUNT_ID'),
-            'passphrase'    => env('PERFECTMONEY_ACTIVATION_PASSPHRASE'),
-            'payee_account' => env('PERFECTMONEY_ACTIVATION_PAYEE_ACCOUNT'),
-            'payer_account' => env('PERFECTMONEY_ACTIVATION_PAYER_ACCOUNT'),
-        ],
-    ],
-
     'coinpayments' => [
         'host'   => env('COINPAYMENTS_HOST'),
         'key'    => env('COINPAYMENTS_KEY'),
