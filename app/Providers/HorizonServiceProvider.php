@@ -9,7 +9,7 @@ use Laravel\Horizon\Horizon;
 use Laravel\Horizon\HorizonApplicationServiceProvider;
 use Misaf\VendraUser\Models\User;
 
-class HorizonServiceProvider extends HorizonApplicationServiceProvider
+final class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     /**
      * Bootstrap any application services.
