@@ -6,8 +6,6 @@ namespace App\Providers;
 
 use App\Notifications\Auth\ResetPasswordNotification;
 use App\Notifications\Auth\VerifyEmailNotification;
-use BezhanSalleh\LanguageSwitch\Enums\Placement;
-use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
 use Filament\Auth\Notifications\ResetPassword;
 use Filament\Auth\Notifications\VerifyEmail;
@@ -23,7 +21,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use Misaf\VendraMultilang\Facades\LanguageService;
 use Misaf\VendraUser\Models\User;
 use Throwable;
 
@@ -51,7 +48,6 @@ final class AppServiceProvider extends ServiceProvider
         // };
 
         $this->configureTableDefaults();
-        $this->configureLanguageSwitch();
         $this->configurePanelSwitch();
     }
 
@@ -74,17 +70,6 @@ final class AppServiceProvider extends ServiceProvider
         });
     }
 
-    private function configureLanguageSwitch(): void
-    {
-        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
-            return $switch
-                ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER)
-                ->locales($this->availableLocales())
-                ->visible(outsidePanels: true)
-                ->outsidePanelPlacement(Placement::TopCenter);
-        });
-    }
-
     private function configurePanelSwitch(): void
     {
         PanelSwitch::configureUsing(function (PanelSwitch $panelSwitch) {
@@ -92,13 +77,5 @@ final class AppServiceProvider extends ServiceProvider
                 ->simple()
                 ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER);
         });
-    }
-
-    /**
-     * @return string[]
-     */
-    private function availableLocales(): array
-    {
-        return LanguageService::getAvailableLocales();
     }
 }
