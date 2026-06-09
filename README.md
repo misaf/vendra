@@ -29,6 +29,20 @@ npm install
 npm run build
 ```
 
+To populate a fresh installation with demo data, run these commands after migrating the database. Without this step, the website can run but will not have demo content:
+
+```bash
+php artisan db:seed --module=vendra-tenant --class=DemoContentSeeder
+php artisan vendra-permission:seed vendra all
+php artisan vendra-user:seed vendra all
+php artisan vendra-currency:seed vendra all
+php artisan vendra-product:seed vendra all
+php artisan vendra-faq:seed vendra all
+php artisan vendra-custom-page:seed vendra all
+php artisan vendra-tagger:seed vendra all
+php artisan vendra-language:seed vendra all
+```
+
 For local development:
 
 ```bash
