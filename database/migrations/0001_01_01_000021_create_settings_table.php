@@ -22,4 +22,9 @@ return new class () extends Migration {
             $table->unique(['group', 'name']);
         });
     }
+
+    public function down(): void
+    {
+        Schema::dropIfExists(config('settings.repositories.database.table') ?? 'settings');
+    }
 };
