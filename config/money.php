@@ -16,7 +16,7 @@ return [
         ? __DIR__ . '/../vendor/moneyphp/money/resources/currency.php'
         : __DIR__ . '/../../../moneyphp/money/resources/currency.php',
     'currencies' => [
-        'iso'     => '',
+        'iso'     => 'all',
         'bitcoin' => 'all',
         'custom'  => [
             'IRR' => 0,
