@@ -1,24 +1,15 @@
 # Vendra
 
-Vendra is a modular Laravel 12 application for e-commerce and marketplace use cases.
-
-## Tech Stack
-
-- PHP 8.2+
-- Laravel 12
-- Filament 5
-- Livewire 4
-- Pest 4
-- Tailwind CSS 4
+Vendra is a modular Laravel application for e-commerce and marketplace use cases.
 
 ## Requirements
 
-- PHP 8.2 or newer
+- PHP 8.2+
 - Composer
 - Node.js and npm
-- MySQL (or another configured Laravel-supported database)
+- MySQL or another Laravel-supported database
 
-## Quick Start
+## Local Development
 
 ```bash
 composer install
@@ -27,88 +18,35 @@ php artisan key:generate
 php artisan migrate
 npm install
 npm run build
-```
-
-To populate a fresh installation with demo data, run these commands after migrating the database. Without this step, the website can run but will not have demo content:
-
-```bash
-php artisan db:seed --module=vendra-tenant --class=DemoContentSeeder
-php artisan vendra-permission:seed vendra all
-php artisan vendra-user:seed vendra all
-php artisan vendra-currency:seed vendra all
-php artisan vendra-product:seed vendra all
-php artisan vendra-faq:seed vendra all
-php artisan vendra-custom-page:seed vendra all
-php artisan vendra-tagger:seed vendra all
-php artisan vendra-language:seed vendra all
-```
-
-For local development:
-
-```bash
 composer dev
 ```
 
-This starts the web server, queue listener, logs, and Vite in watch mode.
+`composer dev` starts the web server, queue listener, logs, and Vite in watch mode.
 
-## Repository Structure
+## Docker Development
 
-- `app/` main application code
-- `app-modules/` local path packages (modular features)
-- `config/` framework and package configuration
-- `database/` migrations, factories, seeders
-- `resources/` views, frontend assets
+Docker deployments use the container entrypoint for application bootstrap.
+No additional manual setup commands are required inside the container.
 
-## Modular Packages (`app-modules/*`)
+## Module Development
 
-This project uses Composer path repositories:
+Modules are developed locally through Composer path repositories in `app-modules/*`.
 
-```json
-{
-  "repositories": [
-    {
-      "type": "path",
-      "url": "app-modules/*",
-      "options": {
-        "symlink": true
-      }
-    }
-  ]
-}
-```
+Typical workflow:
 
-Each package in `app-modules/*` can be developed locally and consumed by the app as a Composer dependency.
-
-Typical package workflow:
-
-1. Edit package code inside `app-modules/<package-name>`.
+1. Edit the module inside `app-modules/<module-name>`.
 2. Ensure the package is required in root `composer.json`.
-3. Run `composer update <vendor/package>` (or `composer dump-autoload`) when needed.
-4. Run tests from the root app and/or package scope.
+3. Run `composer update <vendor/package>` or `composer dump-autoload` when needed.
+4. Run the relevant tests or static analysis.
 
-## SMS Gateway Packages in This Workspace
-
-- `misaf/laravel-sms-gateway` (core manager/facade/contracts)
-- `misaf/laravel-sms-gateway-ghasedak`
-- `misaf/laravel-sms-gateway-sunway`
-- `misaf/laravel-sms-gateway-kavenegar`
-- `misaf/laravel-sms-gateway-smsir`
-
-See `app-modules/laravel-sms-gateway/README.md` for full usage and extensibility details.
+For production builds, rely on installed Composer packages rather than local path repository workflows.
 
 ## Useful Commands
 
 ```bash
-# Test suite
 composer test
-
-# Laravel tests directly
 php artisan test --compact
-
-# Code style
 vendor/bin/pint --dirty --format agent
-
-# Static analysis (if configured)
 vendor/bin/phpstan analyse
 ```
 
