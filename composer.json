@@ -19,7 +19,6 @@
 		"filament/filament": "^5.6.6",
 		"filament/spatie-laravel-settings-plugin": "^5.6.6",
 		"flowframe/laravel-trend": ">=0.5",
-		"internachi/modular": "^3.0.2",
 		"laravel/framework": "^13.13",
 		"laravel/horizon": "^5.47.2",
 		"laravel/sanctum": "^4.3.2",
@@ -47,7 +46,7 @@
 		"misaf/vendra-transaction": "dev-master",
 		"misaf/vendra-user": "dev-master",
 		"misaf/vendra-user-profile": "dev-master",
-		"owenvoke/blade-fontawesome": "^3.2.2"
+		"owenvoke/blade-fontawesome": "^3.0"
 	},
 	"require-dev": {
 		"ergebnis/composer-normalize": "^2.52",
@@ -58,6 +57,7 @@
 		"laravel/pail": "^1.2.5",
 		"laravel/pao": "^1.0.6",
 		"laravel/pint": "^1.27",
+		"internachi/modular": "^3.0.2",
 		"mockery/mockery": "^1.6.12",
 		"nunomaduro/collision": "^8.9.4",
 		"orchestra/testbench": "^11.1",
