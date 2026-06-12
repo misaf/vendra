@@ -19,8 +19,10 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
@@ -30,6 +32,8 @@ use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 use Misaf\VendraTenant\Models\Tenant;
 use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
 use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
+use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -41,7 +45,7 @@ final class AdminPanelProvider extends PanelProvider
                 ? asset('images/' . Tenant::current()->slug . '.webp')
                 : null)
             ->brandLogoHeight('10rem')
-            ->brandName(fn(GeneralSettings $generalSettings) => $generalSettings->site_title)
+            ->brandName(fn(GeneralSettings $generalSettings) => $generalSettings?->site_title ?? 'Default')
             ->colors([
                 'primary' => Color::Gray
             ])
@@ -94,14 +98,68 @@ final class AdminPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->plugins([
                 SpatieTranslatablePlugin::make()
-                    ->defaultLocales(['en', 'fa']),
+                    ->defaultLocales(['en', 'fa', 'de']),
 
                 FilamentDeveloperLoginsPlugin::make()
-                    ->enabled(app()->environment('local'))
+                    ->enabled(fn(): bool => app()->environment('local') && $this->hasSuperAdminUser())
                     ->users(function (): array {
-                        return Config::string('auth.providers.users.model')::query()->role(Config::string('vendra-permission.super_admin_role'))->pluck('email', 'username')->toArray();
+                        $role = $this->superAdminRole();
+
+                        if (null === $role) {
+                            return [];
+                        }
+
+                        return $this->userModelClass()::query()
+                            ->role($role)
+                            ->pluck('email', 'username')
+                            ->toArray();
                     })
-                    ->modelClass(Config::string('auth.providers.users.model')),
+                    ->modelClass($this->userModelClass()),
             ]);
+    }
+
+    /**
+     * @return class-string<Model&Authenticatable>
+     */
+    private function userModelClass(): string
+    {
+        /** @var class-string<Model&Authenticatable> $modelClass */
+        $modelClass = Config::string('auth.providers.users.model');
+
+        return $modelClass;
+    }
+
+    private function hasSuperAdminUser(): bool
+    {
+        $role = $this->superAdminRole();
+
+        if (null === $role) {
+            return false;
+        }
+
+        return $this->userModelClass()::query()
+            ->role($role)
+            ->exists();
+    }
+
+    private function superAdminRole(): ?Role
+    {
+        /** @var class-string<Model&Role> $roleClass */
+        $roleClass = app(PermissionRegistrar::class)->getRoleClass();
+
+        return $roleClass::query()
+            ->where('name', $this->superAdminRoleName())
+            ->where('guard_name', $this->authGuardName())
+            ->first();
+    }
+
+    private function superAdminRoleName(): string
+    {
+        return Config::string('vendra-permission.super_admin_role');
+    }
+
+    private function authGuardName(): string
+    {
+        return Config::string('auth.defaults.guard');
     }
 }
