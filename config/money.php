@@ -20,6 +20,8 @@ return [
         'bitcoin' => 'all',
         'custom'  => [
             'IRR' => 0,
+            'BTC' => 8,
+            'ETH' => 8,
         ],
     ],
 ];
