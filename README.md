@@ -28,6 +28,14 @@ composer dev
 Docker deployments use the container entrypoint for application bootstrap.
 No additional manual setup commands are required inside the container.
 
+## Configuration
+
+Settings cache can be enabled with:
+
+```env
+SETTINGS_CACHE_ENABLED=true
+```
+
 ## Module Development
 
 Modules are developed locally through Composer path repositories in `app-modules/*`.
