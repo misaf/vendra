@@ -44,7 +44,6 @@ return [
         Misaf\VendraTenant\Tasks\SwitchAppTask::class,
         Misaf\VendraTenant\Tasks\SwitchFacadesTask::class,
         Misaf\VendraTenant\Tasks\SwitchMailTask::class,
-        Misaf\VendraTenant\Tasks\SwitchSettingsTask::class,
     ],
 
     /*
