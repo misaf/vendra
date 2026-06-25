@@ -69,7 +69,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'  => env('AUTH_MODEL', \Misaf\VendraUser\Models\User::class),
+            'model'  => env('AUTH_MODEL', Misaf\VendraUser\Models\User::class),
         ],
 
         // 'users' => [
