@@ -41,9 +41,13 @@ final class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('admin')
-            ->brandLogo(fn() => app()->environment('production')
-                ? asset('images/' . Tenant::current()->slug . '.webp')
-                : null)
+            ->brandLogo(function () {
+                $tenant = Tenant::current();
+
+                return app()->environment('production') && $tenant
+                    ? asset('images/' . $tenant->slug . '.webp')
+                    : null;
+            })
             ->brandLogoHeight('10rem')
             ->brandName(fn(GeneralSettings $generalSettings) => $generalSettings?->site_title ?? 'Default')
             ->colors([
@@ -70,15 +74,13 @@ final class AdminPanelProvider extends PanelProvider
                 ShareErrorsFromSession::class,
                 PreventRequestForgery::class,
                 SubstituteBindings::class,
+                NeedsTenant::class,
+                EnsureValidTenantSession::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->persistentMiddleware([
-                EnsureValidTenantSession::class,
-                NeedsTenant::class,
             ])
             ->navigationGroups([
                 NavigationGroup::make()->label(fn(): string => __('navigation.user_management'))->icon('heroicon-o-users')->collapsed(),
