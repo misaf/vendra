@@ -15,7 +15,6 @@
 		"php": "^8.3",
 		"bezhansalleh/filament-panel-switch": "^3.1",
 		"dedoc/scramble": "^0.13",
-		"dutchcodingcompany/filament-developer-logins": "^2.1",
 		"filament/filament": "^5.6.6",
 		"filament/spatie-laravel-settings-plugin": "^5.6.6",
 		"flowframe/laravel-trend": ">=0.5",
@@ -49,6 +48,7 @@
 		"owenvoke/blade-fontawesome": "^3.0"
 	},
 	"require-dev": {
+		"dutchcodingcompany/filament-developer-logins": "^2.1",
 		"ergebnis/composer-normalize": "^2.52",
 		"fakerphp/faker": "^1.24.1",
 		"fruitcake/laravel-debugbar": "^4.3.0",
