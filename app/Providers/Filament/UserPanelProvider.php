@@ -8,7 +8,6 @@ use App\Filament\User\Pages\Auth\EditProfile;
 use App\Filament\User\Pages\Auth\PasswordReset\RequestPasswordReset;
 use App\Filament\User\Pages\Auth\PasswordReset\ResetPassword;
 use App\Filament\User\Pages\Auth\Register;
-use App\Http\Middleware\PreventRequestByCountryMiddleware;
 use App\Settings\GeneralSettings;
 use Filament\Enums\ThemeMode;
 use Filament\FontProviders\LocalFontProvider;
@@ -64,21 +63,17 @@ final class UserPanelProvider extends PanelProvider
             ->homeUrl('/')
             ->maxContentWidth(Width::ScreenTwoExtraLarge)
             ->middleware([
-                NeedsTenant::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
-                EnsureValidTenantSession::class,
                 AuthenticateSession::class,
                 ShareErrorsFromSession::class,
                 PreventRequestForgery::class,
                 SubstituteBindings::class,
+                NeedsTenant::class,
+                EnsureValidTenantSession::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                // PreventRequestByCountryMiddleware::class,
-            ])
-            ->persistentMiddleware([
-                NeedsTenant::class,
             ])
             // ->navigationGroups([
             //     NavigationGroup::make()
