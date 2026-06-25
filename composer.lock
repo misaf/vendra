@@ -6643,12 +6643,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-tenant.git",
-                "reference": "b184d415ebf29af29b516d9cfbbb8d65e5a65ef0"
+                "reference": "0a9a14ab87e03ee9db142f765f764ab2d4adabb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/b184d415ebf29af29b516d9cfbbb8d65e5a65ef0",
-                "reference": "b184d415ebf29af29b516d9cfbbb8d65e5a65ef0",
+                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/0a9a14ab87e03ee9db142f765f764ab2d4adabb4",
+                "reference": "0a9a14ab87e03ee9db142f765f764ab2d4adabb4",
                 "shasum": ""
             },
             "require": {
@@ -6712,7 +6712,7 @@
                 "issues": "https://github.com/misaf/vendra-tenant/issues",
                 "source": "https://github.com/misaf/vendra-tenant/tree/master"
             },
-            "time": "2026-06-25T08:08:13+00:00"
+            "time": "2026-06-25T10:22:54+00:00"
         },
         {
             "name": "misaf/vendra-testing",
