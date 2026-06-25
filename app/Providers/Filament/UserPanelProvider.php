@@ -10,7 +10,6 @@ use App\Filament\User\Pages\Auth\PasswordReset\ResetPassword;
 use App\Filament\User\Pages\Auth\Register;
 use App\Http\Middleware\PreventRequestByCountryMiddleware;
 use App\Settings\GeneralSettings;
-use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Enums\ThemeMode;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;

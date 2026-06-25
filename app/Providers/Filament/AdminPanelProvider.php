@@ -7,7 +7,7 @@ namespace App\Providers\Filament;
 use App\Filament\Admin\Pages\Auth\EditProfile;
 use App\Filament\Admin\Pages\Auth\Login;
 use App\Settings\GeneralSettings;
-use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
+use Filament\Contracts\Plugin;
 use Filament\Enums\ThemeMode;
 use Filament\FontProviders\LocalFontProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -96,26 +96,40 @@ final class AdminPanelProvider extends PanelProvider
             ->tenant(Tenant::class)
             ->unsavedChangesAlerts()
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->plugins([
-                SpatieTranslatablePlugin::make()
-                    ->defaultLocales(['en', 'fa', 'de']),
+            ->plugins($this->plugins());
+    }
 
-                FilamentDeveloperLoginsPlugin::make()
-                    ->enabled(fn(): bool => app()->environment('local') && $this->hasSuperAdminUser())
-                    ->users(function (): array {
-                        $role = $this->superAdminRole();
+    /**
+     * @return array<int, Plugin>
+     */
+    private function plugins(): array
+    {
+        $plugins = [
+            SpatieTranslatablePlugin::make()
+                ->defaultLocales(['en', 'fa', 'de']),
+        ];
 
-                        if (null === $role) {
-                            return [];
-                        }
+        $developerLoginsPlugin = 'DutchCodingCompany\\FilamentDeveloperLogins\\FilamentDeveloperLoginsPlugin';
 
-                        return $this->userModelClass()::query()
-                            ->role($role)
-                            ->pluck('email', 'username')
-                            ->toArray();
-                    })
-                    ->modelClass($this->userModelClass()),
-            ]);
+        if (app()->environment('local') && class_exists($developerLoginsPlugin)) {
+            $plugins[] = $developerLoginsPlugin::make()
+                ->enabled(fn(): bool => $this->hasSuperAdminUser())
+                ->users(function (): array {
+                    $role = $this->superAdminRole();
+
+                    if (null === $role) {
+                        return [];
+                    }
+
+                    return $this->userModelClass()::query()
+                        ->role($role)
+                        ->pluck('email', 'username')
+                        ->toArray();
+                })
+                ->modelClass($this->userModelClass());
+        }
+
+        return $plugins;
     }
 
     /**
