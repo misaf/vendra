@@ -42,7 +42,6 @@ return [
         // \Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask::class,
         Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,
         Misaf\VendraTenant\Tasks\SwitchAppTask::class,
-        Misaf\VendraTenant\Tasks\SwitchFacadesTask::class,
         Misaf\VendraTenant\Tasks\SwitchMailTask::class,
     ],
 

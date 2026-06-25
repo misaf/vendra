@@ -148,12 +148,12 @@ final class AdminPanelProvider extends PanelProvider
         $roleClass = app(PermissionRegistrar::class)->getRoleClass();
 
         return $roleClass::query()
-            ->where('name', $this->superAdminRoleName())
+            ->where('name', $this->configuredSuperAdminRole())
             ->where('guard_name', $this->authGuardName())
             ->first();
     }
 
-    private function superAdminRoleName(): string
+    private function configuredSuperAdminRole(): string
     {
         return Config::string('vendra-permission.super_admin_role');
     }

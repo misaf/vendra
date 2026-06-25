@@ -37,7 +37,7 @@ final class AppServiceProvider extends ServiceProvider
     {
         URL::forceScheme('https');
         Model::shouldBeStrict();
-        DB::prohibitDestructiveCommands(app()->isProduction());
+        // DB::prohibitDestructiveCommands(app()->isProduction());
         Password::defaults(fn() => Password::min(8)->max(15));
 
         // Page::$reportValidationErrorUsing = function (Throwable $exception): void {
