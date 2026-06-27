@@ -1000,16 +1000,16 @@
         },
         {
             "name": "dedoc/scramble",
-            "version": "v0.13.29",
+            "version": "v0.13.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dedoc/scramble.git",
-                "reference": "5643a095818a22e48d82f59457068f34081fbcf4"
+                "reference": "e727d2ac2a7561528f90296226788727937f9a28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dedoc/scramble/zipball/5643a095818a22e48d82f59457068f34081fbcf4",
-                "reference": "5643a095818a22e48d82f59457068f34081fbcf4",
+                "url": "https://api.github.com/repos/dedoc/scramble/zipball/e727d2ac2a7561528f90296226788727937f9a28",
+                "reference": "e727d2ac2a7561528f90296226788727937f9a28",
                 "shasum": ""
             },
             "require": {
@@ -1023,6 +1023,7 @@
             "require-dev": {
                 "larastan/larastan": "^3.3",
                 "laravel/pint": "^v1.1.0",
+                "laravel/scout": "^10.0|^11.0",
                 "nunomaduro/collision": "^7.0|^8.0",
                 "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
                 "pestphp/pest": "^2.34|^3.7|^4.4",
@@ -1068,7 +1069,7 @@
             ],
             "support": {
                 "issues": "https://github.com/dedoc/scramble/issues",
-                "source": "https://github.com/dedoc/scramble/tree/v0.13.29"
+                "source": "https://github.com/dedoc/scramble/tree/v0.13.30"
             },
             "funding": [
                 {
@@ -1076,7 +1077,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-24T14:14:09+00:00"
+            "time": "2026-06-26T16:57:26+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -3781,16 +3782,16 @@
         },
         {
             "name": "laravel/prompts",
-            "version": "v0.3.20",
+            "version": "v0.3.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/prompts.git",
-                "reference": "6d53c826dfd33ec5f4ac91f816ff327727c7988b"
+                "reference": "7753c65c281c2550c7c183f14e18062073b7d821"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/prompts/zipball/6d53c826dfd33ec5f4ac91f816ff327727c7988b",
-                "reference": "6d53c826dfd33ec5f4ac91f816ff327727c7988b",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/7753c65c281c2550c7c183f14e18062073b7d821",
+                "reference": "7753c65c281c2550c7c183f14e18062073b7d821",
                 "shasum": ""
             },
             "require": {
@@ -3834,9 +3835,9 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
-                "source": "https://github.com/laravel/prompts/tree/v0.3.20"
+                "source": "https://github.com/laravel/prompts/tree/v0.3.21"
             },
-            "time": "2026-06-24T19:16:38+00:00"
+            "time": "2026-06-26T00:11:25+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -4823,16 +4824,16 @@
         },
         {
             "name": "livewire/livewire",
-            "version": "v4.3.1",
+            "version": "v4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/livewire.git",
-                "reference": "6a9dd03f45a4b200abfd0ff644745b23fa7baaaa"
+                "reference": "8021f2561865c4c297a3bfca37212a99034377e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/livewire/zipball/6a9dd03f45a4b200abfd0ff644745b23fa7baaaa",
-                "reference": "6a9dd03f45a4b200abfd0ff644745b23fa7baaaa",
+                "url": "https://api.github.com/repos/livewire/livewire/zipball/8021f2561865c4c297a3bfca37212a99034377e7",
+                "reference": "8021f2561865c4c297a3bfca37212a99034377e7",
                 "shasum": ""
             },
             "require": {
@@ -4887,7 +4888,7 @@
             "description": "A front-end framework for Laravel.",
             "support": {
                 "issues": "https://github.com/livewire/livewire/issues",
-                "source": "https://github.com/livewire/livewire/tree/v4.3.1"
+                "source": "https://github.com/livewire/livewire/tree/v4.3.3"
             },
             "funding": [
                 {
@@ -4895,7 +4896,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-02T08:58:52+00:00"
+            "time": "2026-06-27T03:16:11+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -5272,12 +5273,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-blog.git",
-                "reference": "04c600a7fa51d4962e3bbccc4f5a7594bdd1120f"
+                "reference": "4b6728a0230442272e0d049a180c79f8021fea70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-blog/zipball/04c600a7fa51d4962e3bbccc4f5a7594bdd1120f",
-                "reference": "04c600a7fa51d4962e3bbccc4f5a7594bdd1120f",
+                "url": "https://api.github.com/repos/misaf/vendra-blog/zipball/4b6728a0230442272e0d049a180c79f8021fea70",
+                "reference": "4b6728a0230442272e0d049a180c79f8021fea70",
                 "shasum": ""
             },
             "require": {
@@ -5351,7 +5352,7 @@
                 "issues": "https://github.com/misaf/vendra-blog/issues",
                 "source": "https://github.com/misaf/vendra-blog"
             },
-            "time": "2026-06-25T07:54:49+00:00"
+            "time": "2026-06-27T06:54:33+00:00"
         },
         {
             "name": "misaf/vendra-blog-api",
@@ -5359,12 +5360,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-blog-api.git",
-                "reference": "fe7a044ec4717498ffd47d7de6f9d8493b664a5c"
+                "reference": "eb8ee99c59577e5b454ff0df0beebe6d5c02f83e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-blog-api/zipball/fe7a044ec4717498ffd47d7de6f9d8493b664a5c",
-                "reference": "fe7a044ec4717498ffd47d7de6f9d8493b664a5c",
+                "url": "https://api.github.com/repos/misaf/vendra-blog-api/zipball/eb8ee99c59577e5b454ff0df0beebe6d5c02f83e",
+                "reference": "eb8ee99c59577e5b454ff0df0beebe6d5c02f83e",
                 "shasum": ""
             },
             "require": {
@@ -5429,7 +5430,7 @@
                 "issues": "https://github.com/misaf/vendra-blog-api/issues",
                 "source": "https://github.com/misaf/vendra-blog-api"
             },
-            "time": "2026-06-25T08:05:56+00:00"
+            "time": "2026-06-27T06:56:14+00:00"
         },
         {
             "name": "misaf/vendra-currency",
@@ -5437,12 +5438,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-currency.git",
-                "reference": "99f1e28ca1642751586cd33c529486ffb2d7ba36"
+                "reference": "ca808feabc701a8e33f8415a4ed8d8875743136e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-currency/zipball/99f1e28ca1642751586cd33c529486ffb2d7ba36",
-                "reference": "99f1e28ca1642751586cd33c529486ffb2d7ba36",
+                "url": "https://api.github.com/repos/misaf/vendra-currency/zipball/ca808feabc701a8e33f8415a4ed8d8875743136e",
+                "reference": "ca808feabc701a8e33f8415a4ed8d8875743136e",
                 "shasum": ""
             },
             "require": {
@@ -5516,7 +5517,7 @@
                 "issues": "https://github.com/misaf/vendra-currency/issues",
                 "source": "https://github.com/misaf/vendra-currency/tree/master"
             },
-            "time": "2026-06-25T07:55:28+00:00"
+            "time": "2026-06-27T06:56:51+00:00"
         },
         {
             "name": "misaf/vendra-custom-page",
@@ -5704,12 +5705,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-faq-api.git",
-                "reference": "31abd3c0612abe61d76f2b3f4b40a36f0ca6034f"
+                "reference": "e8052e939ddd30cd2942f0c1a54ad4a761717956"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-faq-api/zipball/31abd3c0612abe61d76f2b3f4b40a36f0ca6034f",
-                "reference": "31abd3c0612abe61d76f2b3f4b40a36f0ca6034f",
+                "url": "https://api.github.com/repos/misaf/vendra-faq-api/zipball/e8052e939ddd30cd2942f0c1a54ad4a761717956",
+                "reference": "e8052e939ddd30cd2942f0c1a54ad4a761717956",
                 "shasum": ""
             },
             "require": {
@@ -5774,7 +5775,7 @@
                 "issues": "https://github.com/misaf/vendra-faq-api/issues",
                 "source": "https://github.com/misaf/vendra-faq-api"
             },
-            "time": "2026-06-25T08:07:45+00:00"
+            "time": "2026-06-27T06:58:25+00:00"
         },
         {
             "name": "misaf/vendra-jalali",
@@ -6030,12 +6031,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-multimedia-api.git",
-                "reference": "5709e4bce0ced25238f2b0524f538aa96ac28d0b"
+                "reference": "b305072ab16e783e04981b0cc454c691de2c4945"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-multimedia-api/zipball/5709e4bce0ced25238f2b0524f538aa96ac28d0b",
-                "reference": "5709e4bce0ced25238f2b0524f538aa96ac28d0b",
+                "url": "https://api.github.com/repos/misaf/vendra-multimedia-api/zipball/b305072ab16e783e04981b0cc454c691de2c4945",
+                "reference": "b305072ab16e783e04981b0cc454c691de2c4945",
                 "shasum": ""
             },
             "require": {
@@ -6099,7 +6100,7 @@
                 "issues": "https://github.com/misaf/vendra-multimedia-api/issues",
                 "source": "https://github.com/misaf/vendra-multimedia-api"
             },
-            "time": "2026-06-25T08:06:12+00:00"
+            "time": "2026-06-27T06:57:59+00:00"
         },
         {
             "name": "misaf/vendra-newsletter",
@@ -6282,12 +6283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-product.git",
-                "reference": "35b55e830d2caa23b6c23ffa7dd776f95066c039"
+                "reference": "c8d818c596e2a284ca478cf796db45031005ba81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-product/zipball/35b55e830d2caa23b6c23ffa7dd776f95066c039",
-                "reference": "35b55e830d2caa23b6c23ffa7dd776f95066c039",
+                "url": "https://api.github.com/repos/misaf/vendra-product/zipball/c8d818c596e2a284ca478cf796db45031005ba81",
+                "reference": "c8d818c596e2a284ca478cf796db45031005ba81",
                 "shasum": ""
             },
             "require": {
@@ -6366,7 +6367,7 @@
                 "issues": "https://github.com/misaf/vendra-product/issues",
                 "source": "https://github.com/misaf/vendra-product"
             },
-            "time": "2026-06-25T08:03:03+00:00"
+            "time": "2026-06-27T06:59:26+00:00"
         },
         {
             "name": "misaf/vendra-product-api",
@@ -6374,12 +6375,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-product-api.git",
-                "reference": "e469c8cf037a1ec8e1b1a083ac7615a5931ef302"
+                "reference": "584b2a2acf67312b31fe14ad62cfaeeec134bed8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-product-api/zipball/e469c8cf037a1ec8e1b1a083ac7615a5931ef302",
-                "reference": "e469c8cf037a1ec8e1b1a083ac7615a5931ef302",
+                "url": "https://api.github.com/repos/misaf/vendra-product-api/zipball/584b2a2acf67312b31fe14ad62cfaeeec134bed8",
+                "reference": "584b2a2acf67312b31fe14ad62cfaeeec134bed8",
                 "shasum": ""
             },
             "require": {
@@ -6444,7 +6445,7 @@
                 "issues": "https://github.com/misaf/vendra-product-api/issues",
                 "source": "https://github.com/misaf/vendra-product-api"
             },
-            "time": "2026-06-25T08:04:49+00:00"
+            "time": "2026-06-27T06:59:48+00:00"
         },
         {
             "name": "misaf/vendra-support",
@@ -6576,12 +6577,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/vendra-tenant.git",
-                "reference": "0a9a14ab87e03ee9db142f765f764ab2d4adabb4"
+                "reference": "8e274b4b014c75c2c7be63e97ce58133b7d5e615"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/0a9a14ab87e03ee9db142f765f764ab2d4adabb4",
-                "reference": "0a9a14ab87e03ee9db142f765f764ab2d4adabb4",
+                "url": "https://api.github.com/repos/misaf/vendra-tenant/zipball/8e274b4b014c75c2c7be63e97ce58133b7d5e615",
+                "reference": "8e274b4b014c75c2c7be63e97ce58133b7d5e615",
                 "shasum": ""
             },
             "require": {
@@ -6645,7 +6646,7 @@
                 "issues": "https://github.com/misaf/vendra-tenant/issues",
                 "source": "https://github.com/misaf/vendra-tenant/tree/master"
             },
-            "time": "2026-06-25T10:22:54+00:00"
+            "time": "2026-06-27T07:00:27+00:00"
         },
         {
             "name": "misaf/vendra-testing",
@@ -7855,16 +7856,16 @@
         },
         {
             "name": "owenvoke/blade-fontawesome",
-            "version": "v3.2.2",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/owenvoke/blade-fontawesome.git",
-                "reference": "5a199630dd70c5133d58c158a974e12bcd8b3a71"
+                "reference": "b155b249742a49931c60a05cf43d33bc3f7c098e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/owenvoke/blade-fontawesome/zipball/5a199630dd70c5133d58c158a974e12bcd8b3a71",
-                "reference": "5a199630dd70c5133d58c158a974e12bcd8b3a71",
+                "url": "https://api.github.com/repos/owenvoke/blade-fontawesome/zipball/b155b249742a49931c60a05cf43d33bc3f7c098e",
+                "reference": "b155b249742a49931c60a05cf43d33bc3f7c098e",
                 "shasum": ""
             },
             "require": {
@@ -7899,7 +7900,7 @@
             "description": "A package to easily make use of Font Awesome in your Laravel Blade views",
             "support": {
                 "issues": "https://github.com/owenvoke/blade-fontawesome/issues",
-                "source": "https://github.com/owenvoke/blade-fontawesome/tree/v3.2.2"
+                "source": "https://github.com/owenvoke/blade-fontawesome/tree/v3.3.0"
             },
             "funding": [
                 {
@@ -7911,7 +7912,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-20T08:37:22+00:00"
+            "time": "2026-06-26T07:46:10+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -9331,21 +9332,21 @@
         },
         {
             "name": "spatie/image-optimizer",
-            "version": "1.8.1",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/image-optimizer.git",
-                "reference": "2ad9ac7c19501739183359ae64ea6c15869c23d9"
+                "reference": "6ad4d364e2fdfdfe7f2640d59e946c7fd7b8f3ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/2ad9ac7c19501739183359ae64ea6c15869c23d9",
-                "reference": "2ad9ac7c19501739183359ae64ea6c15869c23d9",
+                "url": "https://api.github.com/repos/spatie/image-optimizer/zipball/6ad4d364e2fdfdfe7f2640d59e946c7fd7b8f3ab",
+                "reference": "6ad4d364e2fdfdfe7f2640d59e946c7fd7b8f3ab",
                 "shasum": ""
             },
             "require": {
                 "ext-fileinfo": "*",
-                "php": "^7.3|^8.0",
+                "php": "^7.4|^8.0",
                 "psr/log": "^1.0 | ^2.0 | ^3.0",
                 "symfony/process": "^4.2|^5.0|^6.0|^7.0|^8.0"
             },
@@ -9380,9 +9381,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/image-optimizer/issues",
-                "source": "https://github.com/spatie/image-optimizer/tree/1.8.1"
+                "source": "https://github.com/spatie/image-optimizer/tree/1.9.0"
             },
-            "time": "2025-11-26T10:57:19+00:00"
+            "time": "2026-06-25T21:47:29+00:00"
         },
         {
             "name": "spatie/invade",
@@ -15850,16 +15851,16 @@
         },
         {
             "name": "laravel/mcp",
-            "version": "v0.8.1",
+            "version": "v0.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/mcp.git",
-                "reference": "fdc39c9e21048801508765cb4d72bd9e8501b51f"
+                "reference": "0c32bf369c6432cab21458f9f4479da33a49ba37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/mcp/zipball/fdc39c9e21048801508765cb4d72bd9e8501b51f",
-                "reference": "fdc39c9e21048801508765cb4d72bd9e8501b51f",
+                "url": "https://api.github.com/repos/laravel/mcp/zipball/0c32bf369c6432cab21458f9f4479da33a49ba37",
+                "reference": "0c32bf369c6432cab21458f9f4479da33a49ba37",
                 "shasum": ""
             },
             "require": {
@@ -15920,7 +15921,7 @@
                 "issues": "https://github.com/laravel/mcp/issues",
                 "source": "https://github.com/laravel/mcp"
             },
-            "time": "2026-06-11T13:59:49+00:00"
+            "time": "2026-06-25T14:00:45+00:00"
         },
         {
             "name": "laravel/pail",
@@ -16935,16 +16936,16 @@
         },
         {
             "name": "pestphp/pest",
-            "version": "v4.7.3",
+            "version": "v4.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "87882a8561bf3ddf230b9a6b764f367f687d5b2f"
+                "reference": "ee2e97e932d158faceeaa63a4dc17324b15152cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/87882a8561bf3ddf230b9a6b764f367f687d5b2f",
-                "reference": "87882a8561bf3ddf230b9a6b764f367f687d5b2f",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/ee2e97e932d158faceeaa63a4dc17324b15152cb",
+                "reference": "ee2e97e932d158faceeaa63a4dc17324b15152cb",
                 "shasum": ""
             },
             "require": {
@@ -16957,12 +16958,12 @@
                 "pestphp/pest-plugin-mutate": "^4.0.1",
                 "pestphp/pest-plugin-profanity": "^4.2.1",
                 "php": "^8.3.0",
-                "phpunit/phpunit": "^12.5.29",
+                "phpunit/phpunit": "^12.5.30",
                 "symfony/process": "^7.4.13|^8.1.0"
             },
             "conflict": {
                 "filp/whoops": "<2.18.3",
-                "phpunit/phpunit": ">12.5.29",
+                "phpunit/phpunit": ">12.5.30",
                 "sebastian/exporter": "<7.0.0",
                 "webmozart/assert": "<1.11.0"
             },
@@ -17038,7 +17039,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v4.7.3"
+                "source": "https://github.com/pestphp/pest/tree/v4.7.4"
             },
             "funding": [
                 {
@@ -17050,7 +17051,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-12T05:57:27+00:00"
+            "time": "2026-06-25T19:09:05+00:00"
         },
         {
             "name": "pestphp/pest-plugin",
@@ -18160,16 +18161,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.29",
+            "version": "12.5.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9aa66a47db3ea70f1a468e66dd969f67e594945a"
+                "reference": "900400a5b616d6fb306f9549f6da33ba615d3fbb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9aa66a47db3ea70f1a468e66dd969f67e594945a",
-                "reference": "9aa66a47db3ea70f1a468e66dd969f67e594945a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/900400a5b616d6fb306f9549f6da33ba615d3fbb",
+                "reference": "900400a5b616d6fb306f9549f6da33ba615d3fbb",
                 "shasum": ""
             },
             "require": {
@@ -18238,7 +18239,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.29"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.30"
             },
             "funding": [
                 {
@@ -18246,7 +18247,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2026-06-04T06:14:42+00:00"
+            "time": "2026-06-15T13:12:30+00:00"
         },
         {
             "name": "react/promise",
