@@ -60,7 +60,7 @@ final class AdminPanelProvider extends PanelProvider
             ->discoverPages(app_path('Filament/Admin/Pages'), 'App\\Filament\\Admin\\Pages')
             ->discoverResources(app_path('Filament/Admin/Resources'), 'App\\Filament\\Admin\\Resources')
             ->discoverWidgets(app_path('Filament/Admin/Widgets'), 'App\\Filament\\Admin\\Widgets')
-            // ->font('yekan', 'https://cdn.font-store.ir/yekan.css', LocalFontProvider::class)
+            ->font('yekan', 'https://cdn.font-store.ir/yekan.css', LocalFontProvider::class)
             ->globalSearchFieldKeyBindingSuffix()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->homeUrl('/')
