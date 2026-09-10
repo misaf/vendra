@@ -12,7 +12,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(config('settings.repositories.tenant.table') ?? 'settings', function (Blueprint $table): void {
+        Schema::create(config('settings.repositories.tenant.table', 'settings'), function (Blueprint $table): void {
             $table->id();
 
             /*
@@ -45,6 +45,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(config('settings.repositories.tenant.table') ?? 'settings');
+        Schema::dropIfExists(config('settings.repositories.tenant.table', 'settings'));
     }
 };
