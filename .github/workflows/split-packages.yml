@@ -30,7 +30,6 @@ jobs:
           - vendra-cart
           - vendra-cart-api
           - vendra-console
-          - vendra-container
           - vendra-currency
           - vendra-custom-page
           - vendra-custom-page-api
