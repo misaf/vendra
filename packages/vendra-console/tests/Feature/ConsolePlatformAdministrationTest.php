@@ -183,7 +183,6 @@ describe('operating store lifecycles', function (): void {
             'domain'        => 'acme.test',
             'configuration' => [
                 'slug'          => 'acme-flowers',
-                'theme'         => 'default',
                 'domain'        => 'acme.test',
                 'siteUrl'       => 'https://acme.test',
                 'businessType'  => 'Florist',
@@ -298,11 +297,12 @@ describe('platform dashboard', function (): void {
 
         livewire(ConsoleOverview::class)
             ->assertOk()
-            ->assertSee(__('console.provisioning'))
-            ->assertSee(__('console.storefronts_live'))
+            ->assertSee(__('console.stores_needing_attention'))
+            ->assertSee(__('console.stores_needing_attention_description'))
+            ->assertSee(__('console.storefronts_ready'))
+            ->assertSee(__('console.deployments_processing') . ': 0')
             ->assertSee(__('console.stores_active_suspended', ['active' => 2, 'suspended' => 1]))
-            ->assertSee(__('console.failed_stores') . ': 1')
-            ->assertSee(__('console.failed_deployments') . ': 1');
+            ->assertSee(__('console.failed_deployments'));
     });
 });
 
