@@ -12,6 +12,7 @@ use Misaf\VendraActivityLog\Models\ActivityLog;
 use Misaf\VendraConsole\Filament\Pages\ManagePlatformSettings;
 use Misaf\VendraConsole\Filament\Resources\ActivityLogs\ActivityLogResource;
 use Misaf\VendraConsole\Filament\Resources\ActivityLogs\Pages\ListActivityLogs;
+use Misaf\VendraConsole\Filament\Resources\Stores\Pages\EditStore;
 use Misaf\VendraConsole\Filament\Resources\Stores\Pages\ListStores;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource;
 use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
@@ -119,6 +120,21 @@ describe('assigning stores to resellers', function (): void {
             ->assertHasNoErrors();
 
         expect($store->fresh()?->reseller_id)->toBe($reseller->getKey());
+    });
+
+    it('reassigns a store from the edit page header action', function (): void {
+        $from = Reseller::factory()->create();
+        $to = Reseller::factory()->create();
+        Subscription::factory()->forSubscriber($to)->for(Plan::factory()->maxUnits(2))->create();
+        $store = Store::factory()->create(['reseller_id' => $from->getKey()]);
+
+        actAsPlatformOperator();
+
+        livewire(EditStore::class, ['record' => $store->getKey()])
+            ->callAction('assignReseller', ['reseller_id' => $to->getKey()])
+            ->assertHasNoErrors();
+
+        expect($store->fresh()?->reseller_id)->toBe($to->getKey());
     });
 });
 
