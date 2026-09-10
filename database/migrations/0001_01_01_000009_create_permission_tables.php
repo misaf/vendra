@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Contracts\Cache\Factory;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 
@@ -46,9 +46,11 @@ return new class extends Migration
             if (($teams || config('permission.testing')) && (! TenantSchema::enabled() || TenantSchema::column() !== $teamForeignKey)) { // permission.testing is a fix for sqlite testing
                 $table->unsignedBigInteger($teamForeignKey)->nullable();
             }
+
             if ($teams || config('permission.testing')) {
                 $table->index($teamForeignKey, 'roles_team_foreign_key_index');
             }
+
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('guard_name');
