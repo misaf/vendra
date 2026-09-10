@@ -62,7 +62,7 @@ return RectorConfig::configure()
         ApplyDefaultInsteadOfNullCoalesceRector::class,
         ArrayToArrGetRector::class,
         ConfigToTypedConfigMethodCallRector::class,
-        // DateWhereClauseToShorthandRector::class,
+        DateWhereClauseToShorthandRector::class,
         EloquentMagicMethodToQueryBuilderRector::class,
         EloquentOrderByToLatestOrOldestRector::class,
         EmptyToBlankAndFilledFuncRector::class,
@@ -83,4 +83,5 @@ return RectorConfig::configure()
     )
     ->withSkip([
         SeparateMultiUseImportsRector::class,
+        DateWhereClauseToShorthandRector::class,
     ]);
