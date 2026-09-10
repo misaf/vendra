@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\SettingsProperty;
 use App\Settings\SettingsScope;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -12,7 +13,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(config('settings.repositories.tenant.table', 'settings'), function (Blueprint $table): void {
+        Schema::create((new SettingsProperty)->getTable(), function (Blueprint $table): void {
             $table->id();
 
             /*
@@ -45,6 +46,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists(config('settings.repositories.tenant.table', 'settings'));
+        Schema::dropIfExists((new SettingsProperty)->getTable());
     }
 };
