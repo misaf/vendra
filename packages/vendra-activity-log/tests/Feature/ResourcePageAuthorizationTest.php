@@ -15,7 +15,7 @@ beforeEach(function (): void {
 it('renders the view activity log page under strict authorization', function (): void {
     Filament::getPanel('admin')->strictAuthorization();
 
-    $activityLog = ActivityLog::create([
+    $activityLog = ActivityLog::query()->create([
         'log_name' => 'default',
         'description' => 'test',
     ]);

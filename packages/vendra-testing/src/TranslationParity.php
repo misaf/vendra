@@ -77,7 +77,7 @@ final class TranslationParity
             return [];
         }
 
-        $locales = array_map(static fn (string $directory): string => basename($directory), $directories);
+        $locales = array_map(basename(...), $directories);
         sort($locales, SORT_STRING);
 
         return $locales;
@@ -183,7 +183,7 @@ final class TranslationParity
         $keys = array_map(static fn (string $key): string => (string) $key, array_keys($translations));
         $sortedKeys = $keys;
 
-        usort($sortedKeys, static fn (string $left, string $right): int => strcmp($left, $right));
+        usort($sortedKeys, strcmp(...));
 
         if ($keys !== $sortedKeys) {
             Assert::fail(sprintf(

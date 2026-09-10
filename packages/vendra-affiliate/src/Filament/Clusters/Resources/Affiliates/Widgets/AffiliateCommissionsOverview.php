@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Widgets;
 
+use Illuminate\Support\Facades\Date;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
@@ -31,18 +31,18 @@ final class AffiliateCommissionsOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $earnedTotal = (int) AffiliateCommission::whereIn('status', [
+        $earnedTotal = (int) AffiliateCommission::query()->whereIn('status', [
             CommissionStatusEnum::Approved,
             CommissionStatusEnum::Paid,
         ])->sum('amount');
 
         $trend = Trend::query(
-            AffiliateCommission::whereIn('status', [
+            AffiliateCommission::query()->whereIn('status', [
                 CommissionStatusEnum::Approved,
                 CommissionStatusEnum::Paid,
             ]),
         )
-            ->between(Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek())
+            ->between(Date::now()->startOfWeek(), Date::now()->endOfWeek())
             ->perDay()
             ->sum('amount');
 

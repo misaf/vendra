@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
 use Misaf\VendraSubscription\Exceptions\PlanInUseException;
 use Misaf\VendraSubscription\Models\Plan;
@@ -27,10 +27,10 @@ it('grants only its listed feature entitlements', function (): void {
 
 it('resolves the period end and the grace-adjusted suspend date', function (): void {
     $plan = Plan::factory()->period(PeriodUnit::Month, 2)->graceDays(7)->create();
-    $start = Carbon::parse('2026-01-01');
+    $start = Date::parse('2026-01-01');
 
     expect($plan->resolveEndDate($start)->toDateString())->toBe('2026-03-01')
-        ->and($plan->resolveSuspendDate(Carbon::parse('2026-03-01'))->toDateString())->toBe('2026-03-08');
+        ->and($plan->resolveSuspendDate(Date::parse('2026-03-01'))->toDateString())->toBe('2026-03-08');
 });
 
 it('filters by active state', function (): void {

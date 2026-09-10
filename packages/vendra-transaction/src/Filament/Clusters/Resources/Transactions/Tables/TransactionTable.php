@@ -51,11 +51,9 @@ final class TransactionTable
 
                 TextColumn::make('wallet.user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(function (Transaction $record): string {
-                        return (string) ($record->wallet->user?->getAttribute('username')
-                            ?? $record->wallet->user?->getAttribute('name')
-                            ?? "#{$record->wallet->user_id}");
-                    }),
+                    ->state(fn(Transaction $record): string => (string) ($record->wallet->user?->getAttribute('username')
+                        ?? $record->wallet->user?->getAttribute('name')
+                        ?? "#{$record->wallet->user_id}")),
 
                 TextColumn::make('wallet.currency_code')
                     ->badge()
@@ -115,7 +113,7 @@ final class TransactionTable
                                 ->label(__('vendra-transaction::attributes.status'))
                                 ->options(
                                     TransactionState::all()
-                                        ->mapWithKeys(fn (string $state): array => [$state::getMorphClass() => (new $state(new Transaction))->getLabel()])
+                                        ->mapWithKeys(fn (string $state): array => [$state::getMorphClass() => new $state(new Transaction)->getLabel()])
                                         ->all(),
                                 ),
 

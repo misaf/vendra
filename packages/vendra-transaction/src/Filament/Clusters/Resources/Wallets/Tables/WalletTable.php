@@ -34,11 +34,9 @@ final class WalletTable
 
                 TextColumn::make('user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(function (Wallet $record): string {
-                        return (string) ($record->user?->getAttribute('username')
-                            ?? $record->user?->getAttribute('name')
-                            ?? "#{$record->user_id}");
-                    }),
+                    ->state(fn(Wallet $record): string => (string) ($record->user?->getAttribute('username')
+                        ?? $record->user?->getAttribute('name')
+                        ?? "#{$record->user_id}")),
 
                 TextColumn::make('currency_code')
                     ->badge()

@@ -20,7 +20,7 @@ it('converts a cart into a pending order with snapshot lines', function (): void
     $cart = CartFactory::new()->forOwner($customer)->create();
     CartItemFactory::new()->forCart($cart)->create(['quantity' => 2]);
 
-    $order = app(PlaceOrderAction::class)->execute(
+    $order = resolve(PlaceOrderAction::class)->execute(
         cart: $cart,
         currencyCode: 'USD',
         lines: [
@@ -61,7 +61,7 @@ it('clears the converted cart items but keeps the cart', function (): void {
     $cart = CartFactory::new()->forOwner($customer)->create();
     CartItemFactory::new()->forCart($cart)->create();
 
-    app(PlaceOrderAction::class)->execute(
+    resolve(PlaceOrderAction::class)->execute(
         cart: $cart,
         currencyCode: 'USD',
         lines: [new OrderLineDraft($customer, ['en' => 'Bazaar Bunch'], 3800)],
@@ -75,25 +75,23 @@ it('clears the converted cart items but keeps the cart', function (): void {
 it('refuses to place an order without lines', function (): void {
     $cart = CartFactory::new()->create();
 
-    expect(fn (): Order => app(PlaceOrderAction::class)->execute(
+    expect(fn (): Order => resolve(PlaceOrderAction::class)->execute(
         cart: $cart,
         currencyCode: 'USD',
         lines: [],
-    ))->toThrow(ValidationException::class);
-
-    expect(Order::query()->count())->toBe(0);
+    ))->toThrow(ValidationException::class)
+        ->and(Order::query()->count())->toBe(0);
 });
 
 it('refuses a line with a quantity below one', function (): void {
     $customer = createTestUser();
     $cart = CartFactory::new()->forOwner($customer)->create();
 
-    expect(fn (): Order => app(PlaceOrderAction::class)->execute(
+    expect(fn (): Order => resolve(PlaceOrderAction::class)->execute(
         cart: $cart,
         currencyCode: 'USD',
         lines: [new OrderLineDraft($customer, ['en' => 'Winter Wheat'], 4400, 0)],
-    ))->toThrow(ValidationException::class);
-
-    expect(Order::query()->count())->toBe(0)
+    ))->toThrow(ValidationException::class)
+        ->and(Order::query()->count())->toBe(0)
         ->and(Validator::make([], [])->passes())->toBeTrue();
 });

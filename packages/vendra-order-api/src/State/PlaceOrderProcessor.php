@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraOrderApi\State;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use ApiPlatform\Laravel\ApiResource\ValidationError;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
@@ -210,7 +211,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         }
 
         $address = Address::query()
-            ->whereHas('userProfile', fn ($query) => $query->where('user_id', $user->getKey()))
+            ->whereHas('userProfile', fn (Builder $query) => $query->where('user_id', $user->getKey()))
             ->find($addressId);
 
         if (! $address instanceof Address) {

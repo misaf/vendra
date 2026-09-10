@@ -149,7 +149,7 @@ final class OrderTable
                 continue;
             }
 
-            $options[$state::getMorphClass()] = (new $state(new Order))->getLabel();
+            $options[$state::getMorphClass()] = new $state(new Order)->getLabel();
         }
 
         return $options;

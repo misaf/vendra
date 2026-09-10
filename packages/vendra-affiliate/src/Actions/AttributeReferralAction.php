@@ -26,7 +26,7 @@ final class AttributeReferralAction
 
     public function execute(string $code, User $user, ?int $clickId = null): ?AffiliateReferral
     {
-        $affiliate = Affiliate::where('code', $code)
+        $affiliate = Affiliate::query()->where('code', $code)
             ->where('status', AffiliateStatusEnum::Active)
             ->first();
 
@@ -35,20 +35,17 @@ final class AttributeReferralAction
         }
 
         /** @var AffiliateReferral $referral */
-        $referral = AffiliateReferral::firstOrCreate(
-            ['user_id' => $user->id],
-            [
-                'affiliate_id' => $affiliate->id,
-                'affiliate_click_id' => $clickId,
-                'attributed_at' => now(),
-            ],
-        );
+        $referral = AffiliateReferral::query()->firstOrCreate(['user_id' => $user->id], [
+            'affiliate_id' => $affiliate->id,
+            'affiliate_click_id' => $clickId,
+            'attributed_at' => now(),
+        ]);
 
         if (! $referral->wasRecentlyCreated) {
             return null;
         }
 
-        ReferralAttributedEvent::dispatch($affiliate->id, $user->id);
+        event(new ReferralAttributedEvent($affiliate->id, $user->id));
 
         if (ConversionTypeEnum::Signup->isEnabled()) {
             $this->creditCommission->execute(

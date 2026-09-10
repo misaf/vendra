@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAuthifyLog\Listeners;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Auth\Events\Attempting;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\CurrentDeviceLogout;
@@ -16,7 +18,6 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redis;
 use Misaf\LaravelAuthifyLog\Enums\AuthifyLogActionEnum;
 use Misaf\VendraAuthifyLog\Notifications\LoginNotification;
@@ -92,18 +93,18 @@ class AuthifyLogListener
         $this->store(AuthifyLogActionEnum::Login, $event);
     }
 
-    private function store(AuthifyLogActionEnum $action, object $event): void
+    private function store(AuthifyLogActionEnum $action, object $event, Request $request): void
     {
         $userId = isset($event->user) ? $event->user->id : null;
 
-        $timestamp = Carbon::now()->toDateTimeString();
+        $timestamp = Date::now()->toDateTimeString();
         $logEntry = [
             TenantSchema::column() => TenantAwareness::currentId(),
             'user_id' => $userId,
             'action' => $action->value,
-            'ip_address' => request()->ip(),
-            'ip_country' => request()->header('CF-IPCountry') ?? 'XX',
-            'user_agent' => request()->userAgent(),
+            'ip_address' => $request->ip(),
+            'ip_country' => $request->header('CF-IPCountry') ?? 'XX',
+            'user_agent' => $request->userAgent(),
             'created_at' => $timestamp,
             'updated_at' => $timestamp,
         ];

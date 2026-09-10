@@ -78,7 +78,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
      */
     private function releaseUniqueLock(object $job): void
     {
-        (new UniqueLock($this->laravel->make(Cache::class)))->release($job);
+        new UniqueLock($this->laravel->make(Cache::class))->release($job);
     }
 
     /**

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Support\Facades\Date;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -85,28 +87,31 @@ final class Plan extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param  Builder<Plan>  $query
-     * @return Builder<Plan>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('active', true);
     }
 
     /**
-     * @param  Builder<Plan>  $query
-     * @return Builder<Plan>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('active', false);
     }
 
     /**
-     * @param  Builder<Plan>  $query
-     * @return Builder<Plan>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeDefault(Builder $query): Builder
+    #[Scope]
+    protected function default(Builder $query): Builder
     {
         return $query->where('is_default', true);
     }
@@ -129,7 +134,7 @@ final class Plan extends Model implements ShouldLogActivity
      */
     public function resolveEndDate(Carbon $start): Carbon
     {
-        return Carbon::instance($this->period_unit->advance($start, $this->period_count));
+        return Date::instance($this->period_unit->advance($start, $this->period_count));
     }
 
     /**
@@ -152,7 +157,7 @@ final class Plan extends Model implements ShouldLogActivity
         }
 
         try {
-            return (new Money($this->price, $this->currency_code))->format();
+            return new Money($this->price, $this->currency_code)->format();
         } catch (Throwable) {
             return $this->formatPlainPrice().' '.$this->currency_code;
         }

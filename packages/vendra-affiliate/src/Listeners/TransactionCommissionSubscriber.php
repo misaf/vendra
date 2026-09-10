@@ -83,7 +83,7 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
 
     private function reverseDeposit(Transaction $transaction): void
     {
-        AffiliateCommission::where('conversion_type', ConversionTypeEnum::Deposit)
+        AffiliateCommission::query()->where('conversion_type', ConversionTypeEnum::Deposit)
             ->where('source_type', $transaction->getMorphClass())
             ->where('source_id', $transaction->getKey())
             ->whereIn('status', [CommissionStatusEnum::Pending, CommissionStatusEnum::Approved])

@@ -46,29 +46,27 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
     {
         return Cache::rememberForever(
             self::getCacheKey($group, $locale, $namespace),
-            function () use ($group, $locale, $namespace): array {
-                return static::query()
-                    ->where('namespace', $namespace)
-                    ->where('group', $group)
-                    ->get()
-                    ->reduce(function (array $lines, self $languageLine) use ($locale, $group): array {
-                        $translation = $languageLine->text[$locale] ?? null;
+            fn(): array => static::query()
+                ->where('namespace', $namespace)
+                ->where('group', $group)
+                ->get()
+                ->reduce(function (array $lines, self $languageLine) use ($locale, $group): array {
+                    $translation = $languageLine->text[$locale] ?? null;
 
-                        if (! is_string($translation) || blank($translation)) {
-                            return $lines;
-                        }
+                    if (! is_string($translation) || blank($translation)) {
+                        return $lines;
+                    }
 
-                        if ($group === '*') {
-                            $lines[$languageLine->key] = $translation;
-
-                            return $lines;
-                        }
-
-                        Arr::set($lines, $languageLine->key, $translation);
+                    if ($group === '*') {
+                        $lines[$languageLine->key] = $translation;
 
                         return $lines;
-                    }, []);
-            },
+                    }
+
+                    Arr::set($lines, $languageLine->key, $translation);
+
+                    return $lines;
+                }, []),
         );
     }
 

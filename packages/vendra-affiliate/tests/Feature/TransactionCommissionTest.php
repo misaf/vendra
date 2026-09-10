@@ -44,9 +44,9 @@ it('credits a commission when a referred deposit is approved', function (): void
 
     $transaction = referredDeposit(amount: 10_000, commissionPercent: 20);
 
-    app(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
+    resolve(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
 
-    $commission = AffiliateCommission::sole();
+    $commission = AffiliateCommission::query()->sole();
 
     expect($commission->conversion_type)->toBe(ConversionTypeEnum::Deposit)
         ->and($commission->amount)->toBe(2_000)
@@ -58,26 +58,26 @@ it('credits a repeated event only once', function (): void {
     config()->set('vendra-affiliate.conversions.deposit.enabled', true);
 
     $transaction = referredDeposit(amount: 10_000);
-    $subscriber = app(TransactionCommissionSubscriber::class);
+    $subscriber = resolve(TransactionCommissionSubscriber::class);
 
     $subscriber->transactionUpdated($transaction);
     $subscriber->transactionUpdated($transaction);
 
-    expect(AffiliateCommission::count())->toBe(1);
+    expect(AffiliateCommission::query()->count())->toBe(1);
 });
 
 it('reverses the unpaid commission when the deposit leaves the approved state', function (): void {
     config()->set('vendra-affiliate.conversions.deposit.enabled', true);
 
     $transaction = referredDeposit(amount: 10_000);
-    $subscriber = app(TransactionCommissionSubscriber::class);
+    $subscriber = resolve(TransactionCommissionSubscriber::class);
 
     $subscriber->transactionUpdated($transaction);
 
     $transaction->update(['status' => Declined::class]);
     $subscriber->transactionUpdated($transaction->refresh());
 
-    expect(AffiliateCommission::sole()->status)->toBe(CommissionStatusEnum::Reversed);
+    expect(AffiliateCommission::query()->sole()->status)->toBe(CommissionStatusEnum::Reversed);
 });
 
 it('ignores deposits when the deposit conversion is disabled', function (): void {
@@ -85,9 +85,9 @@ it('ignores deposits when the deposit conversion is disabled', function (): void
 
     $transaction = referredDeposit(amount: 10_000);
 
-    app(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
+    resolve(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
 
-    expect(AffiliateCommission::count())->toBe(0);
+    expect(AffiliateCommission::query()->count())->toBe(0);
 });
 
 it('ignores deposits from users without a referral', function (): void {
@@ -98,7 +98,7 @@ it('ignores deposits from users without a referral', function (): void {
         ->approved()
         ->create(['amount' => 10_000]);
 
-    app(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
+    resolve(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
 
-    expect(AffiliateCommission::count())->toBe(0);
+    expect(AffiliateCommission::query()->count())->toBe(0);
 });

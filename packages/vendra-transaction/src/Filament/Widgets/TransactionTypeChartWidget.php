@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Widgets;
 
+use Illuminate\Support\Facades\Date;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
@@ -54,7 +55,7 @@ final class TransactionTypeChartWidget extends ChartWidget
                 ],
             ],
             'labels' => $depositTrend
-                ->map(static fn (TrendValue $value): string => Carbon::parse($value->date)->translatedFormat('D'))
+                ->map(static fn (TrendValue $value): string => Date::parse($value->date)->translatedFormat('D'))
                 ->all(),
         ];
     }

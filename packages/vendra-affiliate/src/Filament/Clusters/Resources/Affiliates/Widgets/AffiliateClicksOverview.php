@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Widgets;
 
+use Illuminate\Support\Facades\Date;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 use Misaf\VendraAffiliate\Models\AffiliateClick;
@@ -31,12 +31,12 @@ final class AffiliateClicksOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         $trend = Trend::model(AffiliateClick::class)
-            ->between(Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek())
+            ->between(Date::now()->startOfWeek(), Date::now()->endOfWeek())
             ->perDay()
             ->count();
 
         return [
-            Stat::make('affiliate_click_stats', Number::format(AffiliateClick::count()))
+            Stat::make('affiliate_click_stats', Number::format(AffiliateClick::query()->count()))
                 ->chart($this->chartValues($trend))
                 ->color('primary')
                 ->description(__('vendra-affiliate::widgets.affiliate_click_stats_description'))

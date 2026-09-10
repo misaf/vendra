@@ -14,11 +14,11 @@ it('records a click, drops the attribution cookie, and redirects', function (): 
 
     $response = $this->get(route('affiliate.redirect', ['code' => $affiliate->code]));
 
-    $click = AffiliateClick::sole();
+    $click = AffiliateClick::query()->sole();
 
     $response->assertRedirect(config('vendra-affiliate.attribution.redirect_url'))
         ->assertCookie(
-            (string) config('vendra-affiliate.attribution.cookie_name'),
+            config()->string('vendra-affiliate.attribution.cookie_name'),
             sprintf('%s|%d', $affiliate->code, $click->id),
         );
 
@@ -30,9 +30,9 @@ it('redirects silently without recording anything for unknown codes', function (
     $response = $this->get(route('affiliate.redirect', ['code' => 'UNKNOWN1']));
 
     $response->assertRedirect(config('vendra-affiliate.attribution.redirect_url'))
-        ->assertCookieMissing((string) config('vendra-affiliate.attribution.cookie_name'));
+        ->assertCookieMissing(config()->string('vendra-affiliate.attribution.cookie_name'));
 
-    expect(AffiliateClick::count())->toBe(0);
+    expect(AffiliateClick::query()->count())->toBe(0);
 });
 
 it('does not track clicks for suspended affiliates', function (): void {
@@ -40,5 +40,5 @@ it('does not track clicks for suspended affiliates', function (): void {
 
     $this->get(route('affiliate.redirect', ['code' => $affiliate->code]));
 
-    expect(AffiliateClick::count())->toBe(0);
+    expect(AffiliateClick::query()->count())->toBe(0);
 });

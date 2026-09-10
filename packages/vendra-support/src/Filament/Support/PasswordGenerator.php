@@ -6,9 +6,9 @@ namespace Misaf\VendraSupport\Filament\Support;
 
 final class PasswordGenerator
 {
-    private const CHARACTERS = '123456789abcdefghijklmnopqrstuvwxyz';
+    private const string CHARACTERS = '123456789abcdefghijklmnopqrstuvwxyz';
 
-    private const DEFAULT_LENGTH = 8;
+    private const int DEFAULT_LENGTH = 8;
 
     public static function generate(?int $length = null): string
     {

@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Http\Request;
 use Illuminate\Log\Context\Repository;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Number;
 use Misaf\VendraLocalization\Contracts\LocaleResolver;
@@ -20,7 +21,7 @@ beforeEach(function (): void {
 
 function handleSetLocale(Request $request, string ...$sources): Response
 {
-    return app(SetLocale::class)->handle(
+    return resolve(SetLocale::class)->handle(
         $request,
         fn (Request $request): Response => new Response('ok'),
         ...$sources,
@@ -105,7 +106,7 @@ it('builds the resolver chain from middleware parameters', function (): void {
 });
 
 it('registers the vendra.locale middleware alias', function (): void {
-    expect(app('router')->getMiddleware())->toHaveKey('vendra.locale', SetLocale::class);
+    expect(resolve(Router::class)->getMiddleware())->toHaveKey('vendra.locale', SetLocale::class);
 });
 
 it('syncs the Carbon and Number locales when enabled', function (): void {
@@ -115,7 +116,7 @@ it('syncs the Carbon and Number locales when enabled', function (): void {
 
     handleSetLocale(Request::create('/'));
 
-    expect(Carbon::getLocale())
+    expect(Date::getLocale())
         ->toBe('fa')
         ->and(Number::defaultLocale())
         ->toBe('fa');
@@ -127,15 +128,15 @@ it('propagates the locale to queued execution as hidden context', function (): v
 
     handleSetLocale(Request::create('/'));
 
-    $repository = app(Repository::class);
+    $repository = resolve(Repository::class);
     $dehydrated = $repository->dehydrate();
 
     $repository->flush();
-    app(LocaleManager::class)->apply('en');
+    resolve(LocaleManager::class)->apply('en');
     $repository->hydrate($dehydrated);
 
     expect(app()->getLocale())->toBe('fa')
-        ->and(Carbon::getLocale())->toBe('fa')
+        ->and(Date::getLocale())->toBe('fa')
         ->and(Number::defaultLocale())->toBe('fa')
         ->and(Context::get(LocaleManager::CONTEXT_KEY))->toBeNull()
         ->and(Context::getHidden(LocaleManager::CONTEXT_KEY))->toBe('fa');

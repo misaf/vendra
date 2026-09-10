@@ -49,10 +49,9 @@ describe('requesting a deployment', function (): void {
         $form = storefrontRequestData();
         unset($form['storefront_contact_email'], $form['storefront_locality']);
 
-        expect(fn () => app(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', $form))
-            ->toThrow(ValidationException::class);
-
-        expect(StorefrontDeployment::query()->count())->toBe(0);
+        expect(fn () => resolve(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', $form))
+            ->toThrow(ValidationException::class)
+            ->and(StorefrontDeployment::query()->count())->toBe(0);
         Queue::assertNothingPushed();
     });
 });

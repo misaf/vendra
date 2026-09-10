@@ -15,7 +15,7 @@ beforeEach(function (): void {
 it('renders the view multimedia page under strict authorization', function (): void {
     Filament::getPanel('admin')->strictAuthorization();
 
-    $multimedia = Multimedia::create([
+    $multimedia = Multimedia::query()->create([
         'model_type' => 'dummy',
         'model_id' => 1,
         'collection_name' => 'default',

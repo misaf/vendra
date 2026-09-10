@@ -14,7 +14,7 @@ it('soft-deletes a property domains even when another tenant is current', functi
 
     $store->delete();
 
-    $persisted = StoreDomain::withoutGlobalScopes()->withTrashed()->find($domain->getKey());
+    $persisted = StoreDomain::query()->withoutGlobalScopes()->withTrashed()->find($domain->getKey());
 
     expect($store->fresh()?->trashed())->toBeTrue()
         ->and($persisted?->trashed())->toBeTrue();

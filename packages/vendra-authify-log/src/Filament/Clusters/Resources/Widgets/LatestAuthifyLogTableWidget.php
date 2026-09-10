@@ -40,7 +40,7 @@ final class LatestAuthifyLogTableWidget extends BaseWidget
     {
         return $table
             ->heading(__('vendra-authify-log::widgets.recent_authify_log_table'))
-            ->query(AuthifyLog::where('action', '<>', AuthifyLogActionEnum::Authenticated)->take(5))
+            ->query(AuthifyLog::query()->where('action', '<>', AuthifyLogActionEnum::Authenticated)->take(5))
             ->columns([
                 TextColumn::make('action')
                     ->alignCenter()
@@ -55,14 +55,12 @@ final class LatestAuthifyLogTableWidget extends BaseWidget
                     ->copyMessageDuration(1500)
                     ->extraCellAttributes(['dir' => 'ltr'])
                     ->label(__('vendra-authify-log::attributes.ip_address'))
-                    ->formatStateUsing(function (string $state, AuthifyLog $record): HtmlString {
-                        return new HtmlString(
-                            '<span class="flex items-center space-x-2">'
-                            .'<img src="'.asset('vendor/blade-country-flags/4x3-'.Str::lower($record->ip_country).'.svg').'" alt="'.$record->ip_country.'" title="'.$record->ip_country.'" class="w-4 inline-block" />'
-                            .'<span>'.$state.'</span>'
-                            .'</span>',
-                        );
-                    }),
+                    ->formatStateUsing(fn(string $state, AuthifyLog $record): HtmlString => new HtmlString(
+                        '<span class="flex items-center space-x-2">'
+                        .'<img src="'.asset('vendor/blade-country-flags/4x3-'.Str::lower($record->ip_country).'.svg').'" alt="'.$record->ip_country.'" title="'.$record->ip_country.'" class="w-4 inline-block" />'
+                        .'<span>'.$state.'</span>'
+                        .'</span>',
+                    )),
 
                 TextColumn::make('created_at')
                     ->extraCellAttributes(['dir' => 'ltr'])

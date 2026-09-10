@@ -69,7 +69,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'seeders' => fn () => $this->promptForSeeders(),
+            'seeders' => $this->promptForSeeders(...),
         ];
     }
 

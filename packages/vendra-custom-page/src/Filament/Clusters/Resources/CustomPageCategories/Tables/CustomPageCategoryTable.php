@@ -52,9 +52,7 @@ final class CustomPageCategoryTable
                 ->alignCenter()
                 ->collection(CustomPageCategory::MEDIA_COLLECTION)
                 ->conversion('thumb-table')
-                ->defaultImageUrl(function (CustomPageCategory $record, Livewire $livewire): string {
-                    return static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire));
-                })
+                ->defaultImageUrl(fn(CustomPageCategory $record, Livewire $livewire): string => static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire)))
                 ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                 ->label(__('vendra-custom-page::attributes.image'))
                 ->stacked(),

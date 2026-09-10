@@ -18,7 +18,7 @@ it('attributes a referred user to the affiliate behind the code', function (): v
     $affiliate = AffiliateFactory::new()->active()->create();
     $user = User::factory()->create();
 
-    $referral = app(AttributeReferralAction::class)->execute($affiliate->code, $user);
+    $referral = resolve(AttributeReferralAction::class)->execute($affiliate->code, $user);
 
     expect($referral)->toBeInstanceOf(AffiliateReferral::class)
         ->and($referral->affiliate_id)->toBe($affiliate->id)
@@ -29,18 +29,18 @@ it('ignores unknown and suspended affiliate codes', function (): void {
     $suspended = AffiliateFactory::new()->suspended()->create();
     $user = User::factory()->create();
 
-    expect(app(AttributeReferralAction::class)->execute('NOPE1234', $user))->toBeNull()
-        ->and(app(AttributeReferralAction::class)->execute($suspended->code, $user))->toBeNull()
-        ->and(AffiliateReferral::count())->toBe(0);
+    expect(resolve(AttributeReferralAction::class)->execute('NOPE1234', $user))->toBeNull()
+        ->and(resolve(AttributeReferralAction::class)->execute($suspended->code, $user))->toBeNull()
+        ->and(AffiliateReferral::query()->count())->toBe(0);
 });
 
 it('rejects self-referrals', function (): void {
     $affiliate = AffiliateFactory::new()->active()->create();
 
-    $referral = app(AttributeReferralAction::class)->execute($affiliate->code, $affiliate->user);
+    $referral = resolve(AttributeReferralAction::class)->execute($affiliate->code, $affiliate->user);
 
     expect($referral)->toBeNull()
-        ->and(AffiliateReferral::count())->toBe(0);
+        ->and(AffiliateReferral::query()->count())->toBe(0);
 });
 
 it('attributes each user at most once', function (): void {
@@ -48,12 +48,12 @@ it('attributes each user at most once', function (): void {
     $second = AffiliateFactory::new()->active()->create();
     $user = User::factory()->create();
 
-    app(AttributeReferralAction::class)->execute($first->code, $user);
-    $repeat = app(AttributeReferralAction::class)->execute($second->code, $user);
+    resolve(AttributeReferralAction::class)->execute($first->code, $user);
+    $repeat = resolve(AttributeReferralAction::class)->execute($second->code, $user);
 
     expect($repeat)->toBeNull()
-        ->and(AffiliateReferral::count())->toBe(1)
-        ->and(AffiliateReferral::sole()->affiliate_id)->toBe($first->id);
+        ->and(AffiliateReferral::query()->count())->toBe(1)
+        ->and(AffiliateReferral::query()->sole()->affiliate_id)->toBe($first->id);
 });
 
 it('credits a signup bounty when the signup conversion is enabled', function (): void {
@@ -62,9 +62,9 @@ it('credits a signup bounty when the signup conversion is enabled', function ():
     $affiliate = AffiliateFactory::new()->active()->withSignupBounty(500)->create();
     $user = User::factory()->create();
 
-    app(AttributeReferralAction::class)->execute($affiliate->code, $user);
+    resolve(AttributeReferralAction::class)->execute($affiliate->code, $user);
 
-    $commission = AffiliateCommission::sole();
+    $commission = AffiliateCommission::query()->sole();
 
     expect($commission->conversion_type)->toBe(ConversionTypeEnum::Signup)
         ->and($commission->amount)->toBe(500)
@@ -78,7 +78,7 @@ it('does not credit a signup bounty when the signup conversion is disabled', fun
     $affiliate = AffiliateFactory::new()->active()->withSignupBounty(500)->create();
     $user = User::factory()->create();
 
-    app(AttributeReferralAction::class)->execute($affiliate->code, $user);
+    resolve(AttributeReferralAction::class)->execute($affiliate->code, $user);
 
-    expect(AffiliateCommission::count())->toBe(0);
+    expect(AffiliateCommission::query()->count())->toBe(0);
 });

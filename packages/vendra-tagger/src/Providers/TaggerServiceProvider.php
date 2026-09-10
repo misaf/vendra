@@ -44,8 +44,7 @@ final class TaggerServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(
-            TagResolver::class,
-            function (): EloquentTagResolver {
+            function (): TagResolver {
                 $morphName = Config::string('tags.taggable.morph_name', 'taggable');
                 $pivotModel = Config::string('tags.taggable.class_name', MorphPivot::class);
 

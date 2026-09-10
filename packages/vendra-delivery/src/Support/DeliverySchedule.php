@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Support;
 
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 
@@ -21,7 +22,7 @@ final class DeliverySchedule
      */
     public function bookableDates(?Carbon $from = null): array
     {
-        $now = $from?->copy() ?? Carbon::now();
+        $now = $from?->copy() ?? Date::now();
         $advanceDays = max(1, Config::integer('vendra-delivery.schedule.advance_days', 14));
         $cutoffHour = Config::integer('vendra-delivery.schedule.same_day_cutoff_hour', 14);
 
