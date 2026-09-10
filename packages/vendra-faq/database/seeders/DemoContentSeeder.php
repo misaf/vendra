@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraFaq\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraFaq\Database\Factories\FaqCategoryFactory;
 use Misaf\VendraFaq\Database\Factories\FaqFactory;
@@ -55,14 +56,14 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        $faqCategory = FaqCategory::create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-            'active' => $data['active'],
+        $faqCategory = FaqCategory::query()->create([
+            'name' => Arr::get($data, 'name'),
+            'description' => Arr::get($data, 'description'),
+            'slug' => Arr::get($data, 'slug'),
+            'active' => Arr::get($data, 'active'),
         ]);
 
-        foreach ($data['faqs'] as $faqRecord) {
+        foreach (Arr::get($data, 'faqs') as $faqRecord) {
             $this->handleFaqFixtureRecord($faqCategory, $faqRecord);
         }
     }
@@ -78,10 +79,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleFaqFixtureRecord(FaqCategory $faqCategory, array $faqRecord): void
     {
         $faqCategory->faqs()->create([
-            'name' => $faqRecord['name'],
-            'description' => $faqRecord['description'],
-            'slug' => $faqRecord['slug'],
-            'active' => $faqRecord['active'],
+            'name' => Arr::get($faqRecord, 'name'),
+            'description' => Arr::get($faqRecord, 'description'),
+            'slug' => Arr::get($faqRecord, 'slug'),
+            'active' => Arr::get($faqRecord, 'active'),
         ]);
     }
 

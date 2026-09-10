@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Context;
 use Misaf\VendraSupport\Context\RequestJobContext;
 
@@ -42,33 +43,31 @@ it('omits absent identifiers and restores scoped visible and hidden values', fun
     Context::add(['tenant_id' => 10, 'payment_id' => 40]);
     Context::addHidden('idempotency_key', 'original');
 
-    $captured = (new RequestJobContext(
+    $captured = new RequestJobContext(
         idempotencyKey: 'scoped',
         metadata: [
             'reseller_id' => 20,
             'payment_id' => 41,
             'newsletter_id' => null,
         ],
-    ))->scope(function (): array {
-        return [
-            RequestJobContext::current(),
-            Context::all(),
-            Context::allHidden(),
-        ];
-    });
+    )->scope(fn(): array => [
+        RequestJobContext::current(),
+        Context::all(),
+        Context::allHidden(),
+    ]);
 
-    expect($captured[0]->tenantId)->toBe(10)
-        ->and($captured[0]->idempotencyKey)->toBe('scoped')
-        ->and($captured[0]->metadata)->toBe([
+    expect(Arr::get($captured, 0)->tenantId)->toBe(10)
+        ->and(Arr::get($captured, 0)->idempotencyKey)->toBe('scoped')
+        ->and(Arr::get($captured, 0)->metadata)->toBe([
             'payment_id' => 41,
             'reseller_id' => 20,
         ])
-        ->and($captured[1])->toBe([
+        ->and(Arr::get($captured, 1))->toBe([
             'tenant_id' => 10,
             'payment_id' => 41,
             'reseller_id' => 20,
         ])
-        ->and($captured[2])->toBe(['idempotency_key' => 'scoped'])
+        ->and(Arr::get($captured, 2))->toBe(['idempotency_key' => 'scoped'])
         ->and(Context::all())->toBe([
             'tenant_id' => 10,
             'payment_id' => 40,

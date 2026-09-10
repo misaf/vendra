@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -50,10 +51,10 @@ function storefrontRequest(array $overrides = []): StorefrontProvisionRequest
 {
     return new StorefrontProvisionRequest(
         tenantId: 1,
-        slug: $overrides['slug'] ?? 'acme-flowers',
-        domain: $overrides['domain'] ?? 'acme.test',
-        image: $overrides['image'] ?? 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123',
-        configuration: $overrides['configuration'] ?? storefrontConfiguration(),
+        slug: Arr::get($overrides, 'slug', 'acme-flowers'),
+        domain: Arr::get($overrides, 'domain', 'acme.test'),
+        image: Arr::get($overrides, 'image', 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123'),
+        configuration: Arr::get($overrides, 'configuration', storefrontConfiguration()),
     );
 }
 
@@ -76,13 +77,13 @@ beforeEach(function (): void {
 });
 
 it('resolves the docker provisioner', function (): void {
-    expect(app(StorefrontProvisioner::class))->toBeInstanceOf(ContainerStorefrontProvisioner::class);
+    expect(resolve(StorefrontProvisioner::class))->toBeInstanceOf(ContainerStorefrontProvisioner::class);
 });
 
 it('creates and starts a storefront container and reports it ready', function (): void {
     fakeDockerEngine();
 
-    $result = app(StorefrontProvisioner::class)->provision(storefrontRequest());
+    $result = resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
     expect($result->ready)->toBeTrue()
         ->and($result->reference)->toBe('vendra-storefront-acme-flowers')
@@ -99,7 +100,7 @@ it('creates and starts a storefront container and reports it ready', function ()
 it('replaces the existing container so a redeploy is idempotent', function (): void {
     fakeDockerEngine();
 
-    app(StorefrontProvisioner::class)->provision(storefrontRequest());
+    resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
     assertDockerRequestSent(fn (Request $request): bool => $request->method === 'DELETE'
         && Str::contains($request->target(), '/containers/vendra-storefront-acme-flowers')
@@ -109,24 +110,24 @@ it('replaces the existing container so a redeploy is idempotent', function (): v
 it('routes the container with traefik labels the proxy already understands', function (): void {
     fakeDockerEngine();
 
-    app(StorefrontProvisioner::class)->provision(storefrontRequest());
+    resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
     assertDockerRequestSent(function (Request $request): bool {
         if (! Str::contains($request->target(), '/containers/create')) {
             return false;
         }
 
-        $labels = $request->body['Labels'];
+        $labels = Arr::get($request->body, 'Labels');
 
-        return $labels['traefik.enable'] === 'true'
-            && $labels['traefik.docker.network'] === 'traefik-public'
-            && $labels['traefik.http.routers.acme-flowers.rule'] === 'Host(`acme.test`) || Host(`www.acme.test`)'
-            && $labels['traefik.http.routers.acme-flowers.entrypoints'] === 'websecure'
-            && $labels['traefik.http.routers.acme-flowers.tls.certresolver'] === 'letsencrypt'
-            && $labels['traefik.http.services.acme-flowers.loadbalancer.server.port'] === '3000'
-            && $labels['traefik.http.services.acme-flowers.loadbalancer.healthcheck.path'] === '/api/health'
-            && $labels['io.vendra.managed-by'] === 'vendra'
-            && $labels['io.vendra.domain'] === 'acme.test';
+        return Arr::get($labels, 'traefik.enable') === 'true'
+            && Arr::get($labels, 'traefik.docker.network') === 'traefik-public'
+            && Arr::get($labels, 'traefik.http.routers.acme-flowers.rule') === 'Host(`acme.test`) || Host(`www.acme.test`)'
+            && Arr::get($labels, 'traefik.http.routers.acme-flowers.entrypoints') === 'websecure'
+            && Arr::get($labels, 'traefik.http.routers.acme-flowers.tls.certresolver') === 'letsencrypt'
+            && Arr::get($labels, 'traefik.http.services.acme-flowers.loadbalancer.server.port') === '3000'
+            && Arr::get($labels, 'traefik.http.services.acme-flowers.loadbalancer.healthcheck.path') === '/api/health'
+            && Arr::get($labels, 'io.vendra.managed-by') === 'vendra'
+            && Arr::get($labels, 'io.vendra.domain') === 'acme.test';
     });
 });
 
@@ -135,7 +136,7 @@ it('passes the encoded configuration and estate settings as container environmen
 
     $request = storefrontRequest();
 
-    app(StorefrontProvisioner::class)->provision($request);
+    resolve(StorefrontProvisioner::class)->provision($request);
 
     assertDockerRequestSent(function (Request $sent) use ($request): bool {
         if (! Str::contains($sent->target(), '/containers/create')) {
@@ -144,13 +145,13 @@ it('passes the encoded configuration and estate settings as container environmen
 
         $data = $sent->body;
 
-        return in_array('STOREFRONT_CONFIG_BASE64='.$request->encodedConfiguration(), $data['Env'], true)
-            && in_array('VENDRA_API_URL=https://api.vendra.test', $data['Env'], true)
-            && in_array('NODE_EXTRA_CA_CERTS=/certs/vendra-ca.crt', $data['Env'], true)
-            && in_array('NODE_ENV=production', $data['Env'], true)
-            && ['/var/lib/vendra/certificates:/certs:ro'] === $data['HostConfig']['Binds']
-            && $data['HostConfig']['NetworkMode'] === 'traefik-public'
-            && ['no-new-privileges:true'] === $data['HostConfig']['SecurityOpt'];
+        return in_array('STOREFRONT_CONFIG_BASE64='.$request->encodedConfiguration(), Arr::get($data, 'Env'), true)
+            && in_array('VENDRA_API_URL=https://api.vendra.test', Arr::get($data, 'Env'), true)
+            && in_array('NODE_EXTRA_CA_CERTS=/certs/vendra-ca.crt', Arr::get($data, 'Env'), true)
+            && in_array('NODE_ENV=production', Arr::get($data, 'Env'), true)
+            && ['/var/lib/vendra/certificates:/certs:ro'] === Arr::get($data, 'HostConfig.Binds')
+            && Arr::get($data, 'HostConfig.NetworkMode') === 'traefik-public'
+            && ['no-new-privileges:true'] === Arr::get($data, 'HostConfig.SecurityOpt');
     });
 });
 
@@ -180,7 +181,7 @@ it('keeps a retrying deployment out of the failed state until the queue gives up
 
     $job = new ProvisionStorefrontJob($deployment->id);
 
-    expect(fn () => app()->call([$job, 'handle']))
+    expect(fn () => app()->call($job->handle(...)))
         ->toThrow(RuntimeException::class, 'exited while starting');
 
     // A thrown attempt is not a failed deployment: it is still Processing and
@@ -198,7 +199,7 @@ it('keeps a retrying deployment out of the failed state until the queue gives up
 it('refuses to invent a network the estate owns', function (): void {
     fakeDockerEngine(networkExists: false);
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
         ->toThrow(RuntimeException::class, 'does not exist');
 
     assertDockerRequestNotSent(fn (Request $request): bool => Str::contains($request->target(), '/containers/create'));
@@ -207,7 +208,7 @@ it('refuses to invent a network the estate owns', function (): void {
 it('names the daemon it asked when a network is missing', function (): void {
     fakeDockerEngine(networkExists: false, serverHeader: 'Docker/29.7.2 (linux)');
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
         ->toThrow(RuntimeException::class, 'does not exist on http://provisioner:8080 (Docker/29.7.2 (linux))');
 });
 
@@ -219,14 +220,14 @@ it('names the daemon it asked when a network is missing', function (): void {
 it('blames the daemon rather than the network when the endpoint is serving the other runtime', function (): void {
     fakeDockerEngine(networkExists: false, serverHeader: 'Libpod/5.8.6 (linux)');
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
         ->toThrow(RuntimeException::class, 'serving podman while CONTAINER_DRIVER is set to docker');
 });
 
 it('does not blame the daemon when the engine is the configured one', function (): void {
     fakeDockerEngine(networkExists: false, serverHeader: 'Docker/29.7.2 (linux)');
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
         ->toThrow(fn (RuntimeException $exception) => expect($exception->getMessage())->not->toContain('CONTAINER_DRIVER'));
 });
 
@@ -235,7 +236,7 @@ it('rejects a configuration the storefront image would refuse to boot on', funct
     $configuration = storefrontConfiguration();
     unset($configuration['businessType'], $configuration['contact']['email']);
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest([
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest([
         'configuration' => $configuration,
     ])))->toThrow(InvalidArgumentException::class, 'businessType, contact.email');
 
@@ -245,7 +246,7 @@ it('rejects a configuration the storefront image would refuse to boot on', funct
 it('rejects a configuration whose identity drifted from the deployment', function (): void {
     fakeDockerEngine();
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest([
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest([
         'configuration' => storefrontConfiguration(['domain' => 'other.test']),
     ])))->toThrow(InvalidArgumentException::class, 'identity does not match');
 });
@@ -280,7 +281,7 @@ it('resolves the digest from the pulled image when the reference is only a tag',
         };
     });
 
-    $result = app(StorefrontProvisioner::class)->provision(storefrontRequest([
+    $result = resolve(StorefrontProvisioner::class)->provision(storefrontRequest([
         'image' => 'ghcr.io/misaf/vendra-storefront-florist:1.x',
     ]));
 
@@ -299,7 +300,7 @@ it('surfaces a pull failure reported inside the progress stream', function (): v
         };
     });
 
-    expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+    expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
         ->toThrow(RuntimeException::class, 'manifest unknown');
 });
 
@@ -310,18 +311,18 @@ describe('resource caps', function (): void {
         Config::set('vendra-store.storefront.pids_limit', 512);
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
                 return false;
             }
 
-            $hostConfig = $request->body['HostConfig'];
+            $hostConfig = Arr::get($request->body, 'HostConfig');
 
-            return $hostConfig['NanoCpus'] === 500_000_000
-                && $hostConfig['Memory'] === 536_870_912
-                && $hostConfig['PidsLimit'] === 512;
+            return Arr::get($hostConfig, 'NanoCpus') === 500_000_000
+                && Arr::get($hostConfig, 'Memory') === 536_870_912
+                && Arr::get($hostConfig, 'PidsLimit') === 512;
         });
     });
 
@@ -332,14 +333,14 @@ describe('resource caps', function (): void {
         Config::set('vendra-store.storefront.pids_limit', 0);
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
                 return false;
             }
 
-            $hostConfig = $request->body['HostConfig'];
+            $hostConfig = Arr::get($request->body, 'HostConfig');
 
             return ! array_key_exists('NanoCpus', $hostConfig)
                 && ! array_key_exists('Memory', $hostConfig)
@@ -350,14 +351,14 @@ describe('resource caps', function (): void {
     it('caps the PID count from the shipped default when nothing overrides it', function (): void {
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
                 return false;
             }
 
-            return $request->body['HostConfig']['PidsLimit'] === 512;
+            return Arr::get($request->body, 'HostConfig.PidsLimit') === 512;
         });
     });
 
@@ -365,14 +366,14 @@ describe('resource caps', function (): void {
         Config::set('vendra-store.storefront.pids_limit', 128);
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
                 return false;
             }
 
-            return $request->body['HostConfig']['PidsLimit'] === 128;
+            return Arr::get($request->body, 'HostConfig.PidsLimit') === 128;
         });
     });
 });
@@ -381,7 +382,7 @@ describe('podman compatibility', function (): void {
     it('applies the docker log driver and its rotation limits by default', function (): void {
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
@@ -391,7 +392,7 @@ describe('podman compatibility', function (): void {
             return [
                 'Type' => 'json-file',
                 'Config' => ['max-size' => '10m', 'max-file' => '5'],
-            ] === $request->body['HostConfig']['LogConfig'];
+            ] === Arr::get($request->body, 'HostConfig.LogConfig');
         });
     });
 
@@ -401,14 +402,14 @@ describe('podman compatibility', function (): void {
         Config::set('vendra-store.storefront.log_driver', '');
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
                 return false;
             }
 
-            return ! array_key_exists('LogConfig', $request->body['HostConfig']);
+            return ! array_key_exists('LogConfig', Arr::get($request->body, 'HostConfig'));
         });
     });
 
@@ -417,25 +418,23 @@ describe('podman compatibility', function (): void {
         Config::set('vendra-store.storefront.log_options', []);
         fakeDockerEngine();
 
-        app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         assertDockerRequestSent(function (Request $request): bool {
             if (! Str::contains($request->target(), '/containers/create')) {
                 return false;
             }
 
-            return ['Type' => 'k8s-file'] === $request->body['HostConfig']['LogConfig'];
+            return ['Type' => 'k8s-file'] === Arr::get($request->body, 'HostConfig.LogConfig');
         });
     });
 
     it('surfaces an API version rejected by the configured driver', function (): void {
-        bindFakeDockerEngine(function (Request $request, bool $stream) {
-            return $stream
-                ? dockerStreamResponse('', 500)
-                : dockerResponse(['message' => 'client version 1.55 is too new'], 400);
-        });
+        bindFakeDockerEngine(fn(Request $request, bool $stream) => $stream
+            ? dockerStreamResponse('', 500)
+            : dockerResponse(['message' => 'client version 1.55 is too new'], 400));
 
-        expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+        expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
             ->toThrow(RuntimeException::class, 'client version 1.55 is too new');
     });
 
@@ -444,7 +443,7 @@ describe('podman compatibility', function (): void {
             ? dockerStreamResponse('', 500)
             : dockerResponse(['message' => 'The container runtime is not reachable.'], 500));
 
-        expect(fn () => app(StorefrontProvisioner::class)->provision(storefrontRequest()))
+        expect(fn () => resolve(StorefrontProvisioner::class)->provision(storefrontRequest()))
             ->toThrow(RuntimeException::class, 'is not reachable');
     });
 
@@ -455,7 +454,7 @@ describe('podman compatibility', function (): void {
         Log::spy();
         fakeDockerEngine(['Status' => 'running']);
 
-        $result = app(StorefrontProvisioner::class)->provision(storefrontRequest());
+        $result = resolve(StorefrontProvisioner::class)->provision(storefrontRequest());
 
         expect($result->ready)->toBeTrue();
         Log::shouldHaveReceived('warning')

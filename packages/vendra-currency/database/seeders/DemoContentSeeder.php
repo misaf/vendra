@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
@@ -48,14 +49,14 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        Currency::create([
-            'code' => $data['code'],
-            'name' => CurrencyRegistry::nameFor($data['code']),
-            'symbol' => $data['symbol'],
+        Currency::query()->create([
+            'code' => Arr::get($data, 'code'),
+            'name' => CurrencyRegistry::nameFor(Arr::get($data, 'code')),
+            'symbol' => Arr::get($data, 'symbol'),
             'decimal_places' => CurrencyRegistry::minorUnitFor($data['code']) ?? 2,
-            'type' => CurrencyRegistry::typeFor($data['code']),
-            'active' => $data['active'],
-            'is_default' => $data['is_default'],
+            'type' => CurrencyRegistry::typeFor(Arr::get($data, 'code')),
+            'active' => Arr::get($data, 'active'),
+            'is_default' => Arr::get($data, 'is_default'),
         ]);
     }
 

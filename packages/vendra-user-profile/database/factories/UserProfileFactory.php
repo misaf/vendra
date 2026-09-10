@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraUserProfile\Database\Factories;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +25,7 @@ final class UserProfileFactory extends Factory
             'user_id' => User::factory(),
             'name' => fake()->sentences(1, true),
             'description' => fake()->realTextBetween(100, 200),
-            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
+            'slug' => fn (array $attributes) => Str::slug(Arr::get($attributes, 'name')),
             'is_default' => fake()->boolean(1),
             'active' => fake()->boolean(80),
         ];

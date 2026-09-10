@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Filament\Concerns;
 
+use Illuminate\Support\Arr;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Throwable;
 
@@ -40,15 +41,15 @@ trait RendersRichContent
      */
     private static function normalizeRichDocument(array $document): array
     {
-        if (! is_array($document['content'] ?? null)) {
+        if (! is_array(Arr::get($document, 'content', null))) {
             return $document;
         }
 
         $document['content'] = array_map(
-            fn (mixed $node): mixed => is_array($node) && 'text' === ($node['type'] ?? null)
+            fn (mixed $node): mixed => is_array($node) && 'text' === (Arr::get($node, 'type', null))
                 ? ['type' => 'paragraph', 'content' => [$node]]
                 : $node,
-            $document['content'],
+            Arr::get($document, 'content'),
         );
 
         return $document;

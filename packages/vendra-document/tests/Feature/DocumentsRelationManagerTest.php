@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ToggleColumn;
@@ -15,7 +16,7 @@ it('uses a searchable localized country select for the issuing country', functio
 
     $relationManager = new DocumentsRelationManager;
     $schema = $relationManager->form(Schema::make($relationManager));
-    $field = $schema->getFlatFields()['issuing_country_code'];
+    $field = Arr::get($schema->getFlatFields(), 'issuing_country_code');
 
     expect($field)
         ->toBeInstanceOf(Select::class)

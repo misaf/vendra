@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Actions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
@@ -26,11 +27,11 @@ use Spatie\Permission\Guard;
  * owner they resolve — so the flow exists once instead of being copied into
  * each panel.
  */
-final class ProvisionStoreAction
+final readonly class ProvisionStoreAction
 {
     public function __construct(
-        private readonly CreateStoreAction $createStoreAction,
-        private readonly CreateRoleAction $createRoleAction,
+        private CreateStoreAction $createStoreAction,
+        private CreateRoleAction $createRoleAction,
     ) {}
 
     /**
@@ -46,28 +47,28 @@ final class ProvisionStoreAction
     public function execute(array $data, bool $shouldSeed = false, ?string $password = null, ?SubscriptionSubscriber $owner = null): array
     {
         $password ??= Str::password(length: 8, letters: true, numbers: true, symbols: false);
-        $domain = StoreDomain::normalizeDomain($data['domain']);
-        $name = $data['name'] ?? Str::headline(Str::before($domain, '.'));
-        $username = $data['username'] ?? $this->usernameFromEmail($data['email']);
+        $domain = StoreDomain::normalizeDomain(Arr::get($data, 'domain'));
+        $name = Arr::get($data, 'name', Str::headline(Str::before($domain, '.')));
+        $username = Arr::get($data, 'username', $this->usernameFromEmail(Arr::get($data, 'email')));
 
         $result = DB::transaction(function () use ($data, $domain, $name, $username, $password, $owner, $shouldSeed): array {
             $result = $this->createStoreAction->execute(
                 name: $name,
                 domain: $domain,
                 username: $username,
-                email: $data['email'],
+                email: Arr::get($data, 'email'),
                 password: $password,
                 owner: $owner,
                 shouldSeed: $shouldSeed,
             );
 
             $role = $this->createRoleAction->execute(
-                tenant: $result['store'],
+                tenant: Arr::get($result, 'store'),
                 name: Config::string('vendra-permission.admin_role'),
                 guardName: Guard::getDefaultName(User::class),
             );
 
-            $result['store']->execute(fn () => $result['user']->assignRole($role));
+            Arr::get($result, 'store')->execute(fn () => Arr::get($result, 'user')->assignRole($role));
 
             return [
                 ...$result,
@@ -75,13 +76,13 @@ final class ProvisionStoreAction
             ];
         });
 
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'store_provision_dispatch',
-            tenantId: $result['store']->id,
-            metadata: [ContextKeys::RESELLER_ID => $result['store']->reseller_id],
-        ))->scope(
-            fn () => CompleteStoreProvisioningJob::dispatch($result['store']->id)->afterCommit(),
+            tenantId: Arr::get($result, 'store')->id,
+            metadata: [ContextKeys::RESELLER_ID => Arr::get($result, 'store')->reseller_id],
+        )->scope(
+            fn () => dispatch(new CompleteStoreProvisioningJob(Arr::get($result, 'store')->id))->afterCommit(),
         );
 
         return $result;

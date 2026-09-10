@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +23,7 @@ beforeEach(function (): void {
 it('logs creation for a model that implements ShouldLogActivity', function (): void {
     Context::add(RequestJobContext::TRACE_ID, 'activity-trace');
 
-    $widget = LoggableWidget::create(['name' => 'Alpha', 'description' => 'first']);
+    $widget = LoggableWidget::query()->create(['name' => 'Alpha', 'description' => 'first']);
 
     $activity = DB::table('activity_log')->latest('id')->first();
 
@@ -35,31 +36,31 @@ it('logs creation for a model that implements ShouldLogActivity', function (): v
     $changes = json_decode($activity->attribute_changes, true);
     $properties = json_decode($activity->properties, true);
 
-    expect($changes['attributes'])->toBe(['name' => 'Alpha', 'description' => 'first'])
-        ->and($changes['attributes'])->not->toHaveKey('id')
+    expect(Arr::get($changes, 'attributes'))->toBe(['name' => 'Alpha', 'description' => 'first'])
+        ->and(Arr::get($changes, 'attributes'))->not->toHaveKey('id')
         ->and($properties[RequestJobContext::TRACE_ID])->toBe('activity-trace');
 });
 
 it('logs updates with both old and new attribute values', function (): void {
-    $widget = LoggableWidget::create(['name' => 'Alpha']);
+    $widget = LoggableWidget::query()->create(['name' => 'Alpha']);
     $widget->update(['name' => 'Beta']);
 
     $activity = DB::table('activity_log')->where('event', 'updated')->latest('id')->first();
     $changes = json_decode($activity->attribute_changes, true);
 
-    expect($changes['attributes']['name'])->toBe('Beta')
-        ->and($changes['old']['name'])->toBe('Alpha');
+    expect(Arr::get($changes, 'attributes.name'))->toBe('Beta')
+        ->and(Arr::get($changes, 'old.name'))->toBe('Alpha');
 });
 
 it('logs deletion', function (): void {
-    $widget = LoggableWidget::create(['name' => 'Alpha']);
+    $widget = LoggableWidget::query()->create(['name' => 'Alpha']);
     $widget->delete();
 
     expect(DB::table('activity_log')->where('event', 'deleted')->exists())->toBeTrue();
 });
 
 it('does not log models that do not implement ShouldLogActivity', function (): void {
-    PlainWidget::create(['name' => 'Quiet']);
+    PlainWidget::query()->create(['name' => 'Quiet']);
 
     expect(DB::table('activity_log')->count())->toBe(0);
 });
@@ -67,7 +68,7 @@ it('does not log models that do not implement ShouldLogActivity', function (): v
 it('records nothing while activity logging is disabled', function (): void {
     config()->set('activitylog.enabled', false);
 
-    LoggableWidget::create(['name' => 'Alpha']);
+    LoggableWidget::query()->create(['name' => 'Alpha']);
 
     expect(DB::table('activity_log')->count())->toBe(0);
 });

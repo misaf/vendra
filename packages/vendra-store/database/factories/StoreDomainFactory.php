@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Database\Factories;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ final class StoreDomainFactory extends Factory
             'store_id' => Store::factory(),
             'name' => fake()->unique()->sentence(3),
             'description' => fake()->text(),
-            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
+            'slug' => fn (array $attributes) => Str::slug(Arr::get($attributes, 'name')),
             'active' => fake()->boolean(),
         ];
     }

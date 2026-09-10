@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraActivityLog\Listeners;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Context;
@@ -37,7 +38,7 @@ final class LogModelActivity
      */
     public function handle(string $eventName, array $payload): void
     {
-        $model = $payload[0] ?? null;
+        $model = Arr::get($payload, 0, null);
 
         if (! $model instanceof Model || ! $model instanceof ShouldLogActivity) {
             return;

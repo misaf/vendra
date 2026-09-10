@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Actions;
 
+use Illuminate\Support\Arr;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Support\Icons\Heroicon;
@@ -26,7 +27,7 @@ final class InstallCurrenciesAction
                     ->searchable(),
             ])
             ->action(function (array $data): void {
-                collect($data['codes'] ?? [])
+                collect(Arr::get($data, 'codes', []))
                     ->filter(fn (mixed $code): bool => is_string($code) && CurrencyRegistry::isSupported($code))
                     ->reject(fn (string $code): bool => Currency::query()->where('code', mb_strtoupper($code))->exists())
                     ->each(fn (string $code) => Currency::query()->create([

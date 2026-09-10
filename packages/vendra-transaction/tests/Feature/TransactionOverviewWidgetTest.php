@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\TransactionBonusOverviewWidget;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\TransactionDepositOverviewWidget;
@@ -12,11 +13,11 @@ it('keeps transaction resource stats available', function (string $widget, strin
     makeCurrentTestTenant();
 
     /** @var array<int, Stat> $stats */
-    $stats = (new ReflectionMethod($widget, 'getStats'))->invoke(app($widget));
+    $stats = new ReflectionMethod($widget, 'getStats')->invoke(resolve($widget));
 
     expect($stats)->toHaveCount(1)
-        ->and($stats[0]->getLabel())->toBe($label)
-        ->and($stats[0]->getChart())->not->toBeEmpty();
+        ->and(Arr::get($stats, 0)->getLabel())->toBe($label)
+        ->and(Arr::get($stats, 0)->getChart())->not->toBeEmpty();
 })->with([
     'deposit' => [TransactionDepositOverviewWidget::class, 'Deposits'],
     'withdrawal' => [TransactionWithdrawalOverviewWidget::class, 'Withdrawals'],

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Actions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 
@@ -17,7 +18,7 @@ final class SubscribeNewsletterSubscriberAction
         return DB::transaction(function () use ($data): NewsletterSubscriber {
             $subscriber = NewsletterSubscriber::query()
                 ->withTrashed()
-                ->where('email', $data['email'])
+                ->where('email', Arr::get($data, 'email'))
                 ->lockForUpdate()
                 ->first();
 

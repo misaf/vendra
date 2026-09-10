@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -17,84 +18,84 @@ beforeEach(function (): void {
 });
 
 it('hashes a provided owner password', function (): void {
-    $result = app(ProvisionStoreAction::class)->execute([
+    $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
         'username' => 'admin_acme',
         'email' => 'admin@acme.test',
     ], password: 'secret-password');
 
-    expect($result['password'])->toBe('secret-password')
-        ->and(Hash::check('secret-password', $result['user']->password))->toBeTrue();
+    expect(Arr::get($result, 'password'))->toBe('secret-password')
+        ->and(Hash::check('secret-password', Arr::get($result, 'user')->password))->toBeTrue();
 });
 
 it('generates a random owner password when none is provided', function (): void {
-    $result = app(ProvisionStoreAction::class)->execute([
+    $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
         'username' => 'admin_acme',
         'email' => 'admin@acme.test',
     ]);
 
-    expect($result['password'])->toHaveLength(8)
-        ->and(Hash::check($result['password'], $result['user']->password))->toBeTrue();
+    expect(Arr::get($result, 'password'))->toHaveLength(8)
+        ->and(Hash::check(Arr::get($result, 'password'), Arr::get($result, 'user')->password))->toBeTrue();
 });
 
 it('assigns the owner role for the user guard when another guard is active', function (): void {
     Config::set('auth.defaults.guard', 'console');
 
-    $result = app(ProvisionStoreAction::class)->execute([
+    $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
         'username' => 'admin_acme',
         'email' => 'admin@acme.test',
     ]);
 
-    expect($result['user']->roles)->toHaveCount(1)
-        ->and($result['user']->roles->sole()->guard_name)->toBe('web');
+    expect(Arr::get($result, 'user')->roles)->toHaveCount(1)
+        ->and(Arr::get($result, 'user')->roles->sole()->guard_name)->toBe('web');
 });
 
 it('stamps the domain with the newly provisioned tenant even when another tenant is current', function (): void {
-    $first = app(ProvisionStoreAction::class)->execute([
+    $first = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'First',
         'domain' => 'first.test',
         'username' => 'admin_first',
         'email' => 'admin@first.test',
     ]);
 
-    switchToTestTenant($first['store']);
+    switchToTestTenant(Arr::get($first, 'store'));
 
-    $second = app(ProvisionStoreAction::class)->execute([
+    $second = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Second',
         'domain' => 'second.test',
         'username' => 'admin_second',
         'email' => 'admin@second.test',
     ]);
 
-    $domain = $second['store']->execute(
-        fn () => $second['store']->storeDomains()->first(),
+    $domain = Arr::get($second, 'store')->execute(
+        fn () => Arr::get($second, 'store')->storeDomains()->first(),
     );
 
     expect($domain)->not->toBeNull()
         ->and($domain->name)->toBe('second.test')
-        ->and($domain->store_id)->toBe($second['store']->getKey());
+        ->and($domain->store_id)->toBe(Arr::get($second, 'store')->getKey());
 });
 
 it('queues durable tenant provisioning after creating inactive records', function (): void {
-    $result = app(ProvisionStoreAction::class)->execute([
+    $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
         'username' => 'admin_acme',
         'email' => 'admin@acme.test',
     ], shouldSeed: true);
 
-    expect($result['store']->active)->toBeFalse()
-        ->and($result['store']->provisioning_status)->toBe(TenantProvisioningStatus::Pending)
-        ->and($result['store']->provisioning_should_seed)->toBeTrue();
+    expect(Arr::get($result, 'store')->active)->toBeFalse()
+        ->and(Arr::get($result, 'store')->provisioning_status)->toBe(TenantProvisioningStatus::Pending)
+        ->and(Arr::get($result, 'store')->provisioning_should_seed)->toBeTrue();
 
     Queue::assertPushed(
         CompleteStoreProvisioningJob::class,
-        fn (CompleteStoreProvisioningJob $job): bool => $job->tenantId === $result['store']->id,
+        fn (CompleteStoreProvisioningJob $job): bool => $job->tenantId === Arr::get($result, 'store')->id,
     );
     Event::assertNotDispatched(TenantProvisioned::class);
 });

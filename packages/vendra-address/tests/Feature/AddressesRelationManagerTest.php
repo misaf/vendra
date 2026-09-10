@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -20,14 +21,14 @@ it('uses a localized country select and free-text administrative fields', functi
     $schema = $relationManager->form(Schema::make($relationManager));
     $fields = $schema->getFlatFields();
 
-    expect($fields['country_code'])
+    expect(Arr::get($fields, 'country_code'))
         ->toBeInstanceOf(Select::class)
-        ->and($fields['country_code']->isSearchable())->toBeTrue()
-        ->and($fields['country_code']->getOptions())->toBe(Countries::options())
-        ->and($fields['administrative_area'])->toBeInstanceOf(TextInput::class)
-        ->and($fields['locality'])->toBeInstanceOf(TextInput::class)
-        ->and($fields['notes'])->toBeInstanceOf(Textarea::class)
-        ->and($fields['notes']->getColumnSpan())->toBe(['default' => 'full']);
+        ->and(Arr::get($fields, 'country_code')->isSearchable())->toBeTrue()
+        ->and(Arr::get($fields, 'country_code')->getOptions())->toBe(Countries::options())
+        ->and(Arr::get($fields, 'administrative_area'))->toBeInstanceOf(TextInput::class)
+        ->and(Arr::get($fields, 'locality'))->toBeInstanceOf(TextInput::class)
+        ->and(Arr::get($fields, 'notes'))->toBeInstanceOf(Textarea::class)
+        ->and(Arr::get($fields, 'notes')->getColumnSpan())->toBe(['default' => 'full']);
 });
 
 it('updates verification state from table toggle', function (): void {

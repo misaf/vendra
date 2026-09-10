@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCartApi\State;
 
+use Illuminate\Support\Arr;
 use ApiPlatform\Laravel\Eloquent\State\LinksHandlerInterface;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -33,9 +34,9 @@ final class CartLinksHandler implements LinksHandlerInterface
             ->where('owner_type', $user->getMorphClass())
             ->where('owner_id', $user->getAuthIdentifier());
 
-        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
-            $mcpData = $context['mcp_data'] ?? [];
-            $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
+        if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
+            $mcpData = Arr::get($context, 'mcp_data', []);
+            $builder->whereKey(Arr::get($uriVariables, 'id', is_array($mcpData) ? (Arr::get($mcpData, 'id', null)) : null));
         }
 
         return $builder;

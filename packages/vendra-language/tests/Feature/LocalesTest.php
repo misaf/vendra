@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Misaf\VendraLanguage\Support\Locales;
 
 it('lists the module shipped locales as supported web tags', function (): void {
@@ -34,7 +35,7 @@ it('builds select options keyed by tag with a localized label', function (): voi
     $options = Locales::options('en');
 
     expect($options)->toHaveKey('de')
-        ->and($options['de'])->toBe('German (de)');
+        ->and(Arr::get($options, 'de'))->toBe('German (de)');
 });
 
 it('labels a given set of locales for a select', function (): void {

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -75,10 +76,10 @@ it('is not tenant aware when the bound tenant resolver reports unavailable', fun
 });
 
 it('defines the expected blog relationships', function (): void {
-    expect((new ReflectionMethod(BlogPostCategory::class, 'blogPosts'))->getReturnType()?->getName())->toBe(HasMany::class)
-        ->and((new ReflectionMethod(BlogPostCategory::class, 'multimedia'))->getReturnType()?->getName())->toBe(MorphMany::class)
-        ->and((new ReflectionMethod(BlogPost::class, 'blogPostCategory'))->getReturnType()?->getName())->toBe(BelongsTo::class)
-        ->and((new ReflectionMethod(BlogPost::class, 'multimedia'))->getReturnType()?->getName())->toBe(MorphMany::class);
+    expect(new ReflectionMethod(BlogPostCategory::class, 'blogPosts')->getReturnType()?->getName())->toBe(HasMany::class)
+        ->and(new ReflectionMethod(BlogPostCategory::class, 'multimedia')->getReturnType()?->getName())->toBe(MorphMany::class)
+        ->and(new ReflectionMethod(BlogPost::class, 'blogPostCategory')->getReturnType()?->getName())->toBe(BelongsTo::class)
+        ->and(new ReflectionMethod(BlogPost::class, 'multimedia')->getReturnType()?->getName())->toBe(MorphMany::class);
 });
 
 it('resolves blog post relation manager badges from loaded relations or counts', function (): void {
@@ -98,10 +99,10 @@ it('resolves blog post relation manager badges from loaded relations or counts',
 });
 
 it('registers the cascade observer on blog post categories', function (): void {
-    $observerAttributes = (new ReflectionClass(BlogPostCategory::class))->getAttributes(ObservedBy::class);
+    $observerAttributes = new ReflectionClass(BlogPostCategory::class)->getAttributes(ObservedBy::class);
 
     expect($observerAttributes)->toHaveCount(1)
-        ->and($observerAttributes[0]->getArguments()[0])->toBe([BlogPostCategoryObserver::class]);
+        ->and(Arr::get(Arr::get($observerAttributes, 0)->getArguments(), 0))->toBe([BlogPostCategoryObserver::class]);
 });
 
 it('defines policy permissions for all blog resources', function (): void {

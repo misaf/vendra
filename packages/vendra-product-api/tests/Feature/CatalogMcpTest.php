@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Testing\TestResponse;
 use Misaf\VendraProduct\Database\Factories\ProductCategoryFactory;
@@ -73,9 +74,9 @@ function mcpInitialize(string $url = 'http://localhost/mcp'): string
         ],
     ], url: $url);
 
-    $result['response']->assertOk();
+    Arr::get($result, 'response')->assertOk();
 
-    $sessionId = $result['response']->headers->get('Mcp-Session-Id');
+    $sessionId = Arr::get($result, 'response')->headers->get('Mcp-Session-Id');
     expect($sessionId)->not->toBeNull();
 
     mcpCall(['jsonrpc' => '2.0', 'method' => 'notifications/initialized'], $sessionId, $url);
@@ -86,9 +87,9 @@ function mcpInitialize(string $url = 'http://localhost/mcp'): string
 it('advertises the product API operations with object input schemas', function (): void {
     $sessionId = mcpInitialize();
 
-    $body = mcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass], $sessionId)['body'];
+    $body = Arr::get(mcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass], $sessionId), 'body');
 
-    $tools = collect($body['result']['tools'] ?? []);
+    $tools = collect(Arr::get($body, 'result.tools', []));
     $names = $tools->pluck('name');
 
     expect($names)->toContain(
@@ -101,7 +102,7 @@ it('advertises the product API operations with object input schemas', function (
     );
 
     // MCP rejects any tool whose input schema is not a JSON object.
-    $tools->each(fn (array $tool) => expect($tool['inputSchema']['type'] ?? null)->toBe('object'));
+    $tools->each(fn (array $tool) => expect(Arr::get($tool, 'inputSchema.type', null))->toBe('object'));
 });
 
 it('returns active catalog products when the list_products tool is called', function (): void {
@@ -110,16 +111,16 @@ it('returns active catalog products when the list_products tool is called', func
 
     $sessionId = mcpInitialize();
 
-    $body = mcpCall([
+    $body = Arr::get(mcpCall([
         'jsonrpc' => '2.0',
         'id' => 3,
         'method' => 'tools/call',
         'params' => ['name' => 'list_products', 'arguments' => new stdClass],
-    ], $sessionId)['body'];
+    ], $sessionId), 'body');
 
-    expect($body['result']['isError'] ?? false)->toBeFalse();
+    expect(Arr::get($body, 'result.isError', false))->toBeFalse();
 
-    $structured = $body['result']['structuredContent'] ?? $body['result'] ?? [];
+    $structured = Arr::get($body, 'result.structuredContent', Arr::get($body, 'result', []));
 
     expect(json_encode($structured))->toContain((string) $product->id);
 });
@@ -129,13 +130,13 @@ it('gets one API resource by identifier', function (): void {
     $product = ProductFactory::new()->forCategory($group)->create();
     $sessionId = mcpInitialize();
 
-    $body = mcpCall([
+    $body = Arr::get(mcpCall([
         'jsonrpc' => '2.0',
         'id' => 3,
         'method' => 'tools/call',
         'params' => ['name' => 'get_product', 'arguments' => ['id' => $product->id]],
-    ], $sessionId)['body'];
+    ], $sessionId), 'body');
 
-    expect($body['result']['isError'] ?? false)->toBeFalse()
-        ->and(json_encode($body['result'] ?? []))->toContain((string) $product->id);
+    expect(Arr::get($body, 'result.isError', false))->toBeFalse()
+        ->and(json_encode(Arr::get($body, 'result', [])))->toContain((string) $product->id);
 });

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Filament\Pages;
 
+use Illuminate\Support\Arr;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Exceptions\Halt;
@@ -32,15 +33,13 @@ abstract class CreateStorePage extends CreateRecord
      */
     protected function handleRecordCreation(array $data): Model
     {
-        $domain = $data['domain'] ?? null;
-        $email = $data['email'] ?? null;
+        $domain = Arr::get($data, 'domain', null);
+        $email = Arr::get($data, 'email', null);
 
-        if (! is_string($domain) || ! is_string($email)) {
-            throw new InvalidArgumentException('Invalid store details provided.');
-        }
+        throw_if(! is_string($domain) || ! is_string($email), InvalidArgumentException::class, 'Invalid store details provided.');
 
         try {
-            $result = app(ProvisionStoreAction::class)->execute(
+            $result = resolve(ProvisionStoreAction::class)->execute(
                 data: [
                     'domain' => $domain,
                     'email' => $email,
@@ -61,21 +60,21 @@ abstract class CreateStorePage extends CreateRecord
             ->success()
             ->title(__('console.store_created'))
             ->body(__('console.owner_credentials', [
-                'username' => $result['user']->username,
-                'password' => $result['password'],
+                'username' => Arr::get($result, 'user')->username,
+                'password' => Arr::get($result, 'password'),
             ]))
             ->persistent()
             ->send();
 
         if ($this->shouldRequestStorefront($data)) {
-            app(RequestStorefrontDeploymentAction::class)->execute(
-                store: $result['store'],
+            resolve(RequestStorefrontDeploymentAction::class)->execute(
+                store: Arr::get($result, 'store'),
                 domain: $domain,
                 form: $data,
             );
         }
 
-        return $result['store'];
+        return Arr::get($result, 'store');
     }
 
     /**
@@ -97,6 +96,6 @@ abstract class CreateStorePage extends CreateRecord
      */
     protected function shouldRequestStorefront(array $data): bool
     {
-        return false !== ($data['create_storefront'] ?? true);
+        return false !== (Arr::get($data, 'create_storefront', true));
     }
 }

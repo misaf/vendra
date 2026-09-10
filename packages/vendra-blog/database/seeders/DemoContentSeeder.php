@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraBlog\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraBlog\Database\Factories\BlogPostCategoryFactory;
 use Misaf\VendraBlog\Database\Factories\BlogPostFactory;
@@ -66,14 +67,14 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        $blogPostCategory = BlogPostCategory::create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-            'active' => $data['active'],
+        $blogPostCategory = BlogPostCategory::query()->create([
+            'name' => Arr::get($data, 'name'),
+            'description' => Arr::get($data, 'description'),
+            'slug' => Arr::get($data, 'slug'),
+            'active' => Arr::get($data, 'active'),
         ]);
 
-        foreach ($data['blog_posts'] as $blogPostRecord) {
+        foreach (Arr::get($data, 'blog_posts') as $blogPostRecord) {
             $this->handleBlogPostFixtureRecord($blogPostCategory, $blogPostRecord);
         }
     }
@@ -89,10 +90,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleBlogPostFixtureRecord(BlogPostCategory $blogPostCategory, array $blogPostRecord): void
     {
         $blogPostCategory->blogPosts()->create([
-            'name' => $blogPostRecord['name'],
-            'description' => $blogPostRecord['description'],
-            'slug' => $blogPostRecord['slug'],
-            'active' => $blogPostRecord['active'],
+            'name' => Arr::get($blogPostRecord, 'name'),
+            'description' => Arr::get($blogPostRecord, 'description'),
+            'slug' => Arr::get($blogPostRecord, 'slug'),
+            'active' => Arr::get($blogPostRecord, 'active'),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
@@ -22,23 +23,23 @@ it('keeps an unconfigured deployment pending instead of pretending it succeeded'
     Config::set('container.drivers.docker.host', '');
     $tenant = createTestTenant();
 
-    $deployment = app(RequestStorefrontDeploymentAction::class)->execute(
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
         $tenant,
         'acme.test',
         storefrontRequestData(),
     );
 
     expect($deployment->status)->toBe(StorefrontDeploymentStatus::Pending)
-        ->and($deployment->configuration['name']['en'])->toBe('Acme Flowers')
-        ->and($deployment->configuration['priceCurrency'])->toBe('IRR')
-        ->and($deployment->configuration['address']['country'])->toBe('IR');
+        ->and(Arr::get($deployment->configuration, 'name.en'))->toBe('Acme Flowers')
+        ->and(Arr::get($deployment->configuration, 'priceCurrency'))->toBe('IRR')
+        ->and(Arr::get($deployment->configuration, 'address.country'))->toBe('IR');
     Queue::assertNothingPushed();
 });
 
 it('queues provisioning when the provider is configured', function (): void {
     $tenant = createTestTenant();
 
-    $deployment = app(RequestStorefrontDeploymentAction::class)->execute(
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
         $tenant,
         'acme.test',
         storefrontRequestData(),
@@ -118,7 +119,7 @@ it('retries only failed storefront deployments', function (): void {
 it('carries per-locale message overrides into the encoded configuration', function (): void {
     $tenant = createTestTenant();
 
-    $deployment = app(RequestStorefrontDeploymentAction::class)->execute(
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
         $tenant,
         'acme.test',
         [...storefrontRequestData(), 'storefront_messages' => [
@@ -127,15 +128,15 @@ it('carries per-locale message overrides into the encoded configuration', functi
         ]],
     );
 
-    expect($deployment->configuration['messages']['en']['products']['title'])->toBe('Our Breads')
-        ->and($deployment->configuration['messages']['fa']['products']['title'])->toBe('نان‌های ما');
+    expect(Arr::get($deployment->configuration, 'messages.en.products.title'))->toBe('Our Breads')
+        ->and(Arr::get($deployment->configuration, 'messages.fa.products.title'))->toBe('نان‌های ما');
 });
 
 it('omits messages entirely when none are supplied', function (): void {
     Config::set('container.drivers.docker.host', '');
     $tenant = createTestTenant();
 
-    $deployment = app(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', storefrontRequestData());
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', storefrontRequestData());
 
     expect($deployment->configuration)->not->toHaveKey('messages');
 });
@@ -144,7 +145,7 @@ it('drops malformed message overrides rather than shipping a configuration the s
     Config::set('container.drivers.docker.host', '');
     $tenant = createTestTenant();
 
-    $deployment = app(RequestStorefrontDeploymentAction::class)->execute(
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
         $tenant,
         'acme.test',
         [...storefrontRequestData(), 'storefront_messages' => [
@@ -154,5 +155,5 @@ it('drops malformed message overrides rather than shipping a configuration the s
         ]],
     );
 
-    expect($deployment->configuration['messages'])->toBe(['en' => ['products' => ['title' => 'Kept']]]);
+    expect(Arr::get($deployment->configuration, 'messages'))->toBe(['en' => ['products' => ['title' => 'Kept']]]);
 });

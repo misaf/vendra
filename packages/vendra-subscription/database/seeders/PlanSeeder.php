@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Seeder;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
 use Misaf\VendraSubscription\Models\Plan;
@@ -13,7 +14,7 @@ final class PlanSeeder extends Seeder
     public function run(): void
     {
         foreach ($this->plans() as $plan) {
-            Plan::query()->firstOrCreate(['slug' => $plan['slug']], $plan);
+            Plan::query()->firstOrCreate(['slug' => Arr::get($plan, 'slug')], $plan);
         }
     }
 

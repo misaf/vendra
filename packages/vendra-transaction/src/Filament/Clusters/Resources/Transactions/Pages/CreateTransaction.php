@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Pages;
 
+use Illuminate\Support\Arr;
 use Filament\Resources\Pages\CreateRecord;
 use Misaf\VendraTransaction\Facades\WalletResolver;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource;
@@ -23,16 +24,16 @@ final class CreateTransaction extends CreateRecord
      */
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $currencyCode = (string) $data['currency_code'];
+        $currencyCode = (string) Arr::get($data, 'currency_code');
 
         $data['wallet_id'] = WalletResolver::walletFor(
-            TransactionUsers::model()::query()->findOrFail($data['user_id']),
+            TransactionUsers::model()::query()->findOrFail(Arr::get($data, 'user_id')),
             $currencyCode,
         )->id;
 
-        if (! empty($data['counterparty_user_id'])) {
+        if (filled(Arr::get($data, 'counterparty_user_id'))) {
             $data['counterparty_wallet_id'] = WalletResolver::walletFor(
-                TransactionUsers::model()::query()->findOrFail($data['counterparty_user_id']),
+                TransactionUsers::model()::query()->findOrFail(Arr::get($data, 'counterparty_user_id')),
                 $currencyCode,
             )->id;
         }

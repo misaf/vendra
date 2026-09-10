@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Actions;
 
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,11 +25,11 @@ use Misaf\VendraSubscription\Support\SubscriptionRegistry;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Contracts\SubscriptionCharger;
 
-final class SubscribeAction
+final readonly class SubscribeAction
 {
     public function __construct(
-        private readonly SubscriptionCharger $subscriptionCharger,
-        private readonly SubscriptionRegistry $subscriptionRegistry,
+        private SubscriptionCharger $subscriptionCharger,
+        private SubscriptionRegistry $subscriptionRegistry,
     ) {}
 
     /**
@@ -46,7 +48,7 @@ final class SubscribeAction
             throw SubscriptionPaymentException::missingCurrency($plan);
         }
 
-        $startsAt ??= Carbon::now();
+        $startsAt ??= Date::now();
 
         $result = DB::transaction(function () use ($subscriber, $plan, $startsAt): array {
             $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
@@ -127,10 +129,10 @@ final class SubscribeAction
             return ['subscription' => $subscription, 'payment' => $payment];
         }, attempts: 5);
 
-        $subscription = $result['subscription'];
-        $payment = $result['payment'];
+        $subscription = Arr::get($result, 'subscription');
+        $payment = Arr::get($result, 'payment');
 
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'subscription_create',
             idempotencyKey: $payment?->idempotency_key,
@@ -138,13 +140,13 @@ final class SubscribeAction
                 SubscriptionContextKeys::SUBSCRIPTION_ID => $subscription->id,
                 SubscriptionContextKeys::PAYMENT_ID => $payment?->id,
             ],
-        ))->scope(function () use ($payment, $subscription): void {
+        )->scope(function () use ($payment, $subscription): void {
             if ($payment instanceof SubscriptionPayment && $payment->next_retry_at === null) {
-                ProcessSubscriptionPayment::dispatch($payment->id)->afterCommit();
+                dispatch(new ProcessSubscriptionPayment($payment->id))->afterCommit();
             }
 
             if ($subscription->status === SubscriptionStatus::Active) {
-                SubscriptionActivated::dispatch($subscription);
+                event(new SubscriptionActivated($subscription));
             }
         });
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
@@ -57,9 +58,9 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     {
         $this->createRoleAction->execute(
             tenant: $tenant,
-            name: $data['name'],
-            description: $data['description'] ?? null,
-            guardName: $data['guard_name'],
+            name: Arr::get($data, 'name'),
+            description: Arr::get($data, 'description', null),
+            guardName: Arr::get($data, 'guard_name'),
         );
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Support;
 
+use Illuminate\Support\Arr;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Money\Currencies\CryptoCurrencies;
 use Money\Currencies\ISOCurrencies;
@@ -40,10 +41,10 @@ final class CurrencyRegistry
     {
         return collect(self::all())
             ->when($type instanceof CurrencyType, fn ($entries) => $entries
-                ->filter(fn (array $entry): bool => $entry['type'] === $type))
-            ->map(fn (array $entry): string => $entry['name'] === $entry['code']
-                ? $entry['code']
-                : "{$entry['name']} ({$entry['code']})")
+                ->filter(fn (array $entry): bool => Arr::get($entry, 'type') === $type))
+            ->map(fn (array $entry): string => Arr::get($entry, 'name') === Arr::get($entry, 'code')
+                ? Arr::get($entry, 'code')
+                : "{Arr::get($entry, 'name')} ({Arr::get($entry, 'code')})")
             ->sort()
             ->all();
     }
@@ -73,17 +74,17 @@ final class CurrencyRegistry
 
     public static function nameFor(string $code): string
     {
-        return self::get($code)['name'] ?? mb_strtoupper($code);
+        return Arr::get(self::get($code), 'name', mb_strtoupper($code));
     }
 
     public static function minorUnitFor(string $code): ?int
     {
-        return self::get($code)['minor_unit'] ?? null;
+        return Arr::get(self::get($code), 'minor_unit', null);
     }
 
     public static function typeFor(string $code): ?CurrencyType
     {
-        return self::get($code)['type'] ?? null;
+        return Arr::get(self::get($code), 'type', null);
     }
 
     /**

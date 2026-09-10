@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
@@ -13,7 +14,7 @@ use Misaf\VendraPhone\Filament\RelationManagers\PhoneNumbersRelationManager;
 it('provides a notes field', function (): void {
     $relationManager = new PhoneNumbersRelationManager;
     $schema = $relationManager->form(Schema::make($relationManager));
-    $field = $schema->getFlatFields()['notes'];
+    $field = Arr::get($schema->getFlatFields(), 'notes');
 
     expect($field)
         ->toBeInstanceOf(Textarea::class)

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Filament\Actions;
 
+use Illuminate\Support\Arr;
 use Closure;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
@@ -43,13 +44,13 @@ abstract class ReplaceDomainAction extends Action
                         : StoreDomain::normalizeDomain($state)),
             ])
             ->action(function (Store $record, array $data): void {
-                $domain = $data['domain'];
+                $domain = Arr::get($data, 'domain');
 
                 if (! is_string($domain)) {
                     return;
                 }
 
-                app(ReplaceStoreDomainAction::class)->execute($record, $domain);
+                resolve(ReplaceStoreDomainAction::class)->execute($record, $domain);
 
                 Notification::make()
                     ->success()

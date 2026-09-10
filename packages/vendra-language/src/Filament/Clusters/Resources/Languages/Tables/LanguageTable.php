@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Tables;
 
+use Illuminate\Support\Arr;
 use Awcodes\BadgeableColumn\Components\Badge;
 use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\ActionGroup;
@@ -71,21 +72,21 @@ final class LanguageTable
                 ->color(function (Language $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLocale($record->locale);
 
-                    return static::progressColor($coverage['percentage'], $coverage['total']);
+                    return static::progressColor(Arr::get($coverage, 'percentage'), Arr::get($coverage, 'total'));
                 })
                 ->description(function (Language $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLocale($record->locale);
 
                     return __('vendra-language::messages.coverage_summary', [
-                        'percentage' => $coverage['percentage'],
-                        'remaining' => $coverage['remaining'],
+                        'percentage' => Arr::get($coverage, 'percentage'),
+                        'remaining' => Arr::get($coverage, 'remaining'),
                     ]);
                 })
                 ->label(__('vendra-language::attributes.translation_coverage'))
                 ->state(function (Language $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLocale($record->locale);
 
-                    return "{$coverage['translated']} / {$coverage['total']}";
+                    return "{Arr::get($coverage, 'translated')} / {Arr::get($coverage, 'total')}";
                 }),
 
             TextColumn::make('created_at')

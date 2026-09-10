@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Misaf\VendraPermission\Enums\PermissionFeatureEnum;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Pages\CreatePermission;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Pages\EditPermission;
@@ -35,10 +36,9 @@ it('wires permission resource pages correctly', function (): void {
         'create',
         'view',
         'edit',
-    ]);
-
-    expect($pages['index']->getPage())->toBe(ListPermissions::class);
-    expect($pages['create']->getPage())->toBe(CreatePermission::class);
-    expect($pages['view']->getPage())->toBe(ViewPermission::class);
-    expect($pages['edit']->getPage())->toBe(EditPermission::class);
+    ])
+        ->and(Arr::get($pages, 'index')->getPage())->toBe(ListPermissions::class)
+        ->and(Arr::get($pages, 'create')->getPage())->toBe(CreatePermission::class)
+        ->and(Arr::get($pages, 'view')->getPage())->toBe(ViewPermission::class)
+        ->and(Arr::get($pages, 'edit')->getPage())->toBe(EditPermission::class);
 });

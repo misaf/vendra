@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Actions;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraLanguage\Models\LanguageLine;
 use Misaf\VendraLanguage\Support\TranslationCatalog;
 
-final class SyncLanguageLinesAction
+final readonly class SyncLanguageLinesAction
 {
     public function __construct(
         private TranslationCatalog $catalog,
@@ -35,27 +36,27 @@ final class SyncLanguageLinesAction
             ];
 
             foreach ($catalogLines as $catalogLine) {
-                $identity = "{$catalogLine['namespace']}\0{$catalogLine['group']}\0{$catalogLine['key']}";
+                $identity = "{Arr::get($catalogLine, 'namespace')}\0{Arr::get($catalogLine, 'group')}\0{Arr::get($catalogLine, 'key')}";
                 $languageLine = $existingLanguageLines->get($identity);
 
                 if (! $languageLine instanceof LanguageLine) {
                     LanguageLine::query()->create($catalogLine);
-                    $result['created']++;
+                    Arr::get($result, 'created')++;
 
                     continue;
                 }
 
                 $text = $languageLine->text;
-                $mergedText = $text + $catalogLine['text'];
+                $mergedText = $text + Arr::get($catalogLine, 'text');
 
                 if ($mergedText === $text) {
-                    $result['unchanged']++;
+                    Arr::get($result, 'unchanged')++;
 
                     continue;
                 }
 
                 $languageLine->update(['text' => $mergedText]);
-                $result['updated']++;
+                Arr::get($result, 'updated')++;
             }
 
             return $result;

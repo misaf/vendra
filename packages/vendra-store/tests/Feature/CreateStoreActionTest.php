@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\QueryException;
 use Illuminate\Validation\ValidationException;
 use Misaf\VendraReseller\Models\Reseller;
@@ -29,7 +30,7 @@ function subscribedReseller(int $maxUnits): Reseller
 it('stamps the owning reseller on a store created under it', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);
 
-    $result = app(CreateStoreAction::class)->execute(
+    $result = resolve(CreateStoreAction::class)->execute(
         name: 'Acme Store',
         domain: 'acme.test',
         username: 'admin_acme',
@@ -38,14 +39,14 @@ it('stamps the owning reseller on a store created under it', function (): void {
         owner: $reseller,
     );
 
-    expect($result['store']->reseller_id)->toBe($reseller->getKey())
+    expect(Arr::get($result, 'store')->reseller_id)->toBe($reseller->getKey())
         ->and($reseller->stores()->count())->toBe(1);
 });
 
 it('rejects creating a store once the reseller reaches its plan limit', function (): void {
     $reseller = subscribedReseller(maxUnits: 1);
 
-    app(CreateStoreAction::class)->execute(
+    resolve(CreateStoreAction::class)->execute(
         name: 'First Store',
         domain: 'first.test',
         username: 'admin_first',
@@ -54,7 +55,7 @@ it('rejects creating a store once the reseller reaches its plan limit', function
         owner: $reseller,
     );
 
-    app(CreateStoreAction::class)->execute(
+    resolve(CreateStoreAction::class)->execute(
         name: 'Second Store',
         domain: 'second.test',
         username: 'admin_second',
@@ -68,7 +69,7 @@ it('keeps store owners separate from the reseller owner account', function (): v
     $reseller = subscribedReseller(maxUnits: 3);
     $owner = ResellerUser::factory()->forReseller($reseller)->create();
 
-    $first = app(CreateStoreAction::class)->execute(
+    $first = resolve(CreateStoreAction::class)->execute(
         name: 'First Store',
         domain: 'first.test',
         username: 'admin_first',
@@ -77,7 +78,7 @@ it('keeps store owners separate from the reseller owner account', function (): v
         owner: $reseller,
     );
 
-    $second = app(CreateStoreAction::class)->execute(
+    $second = resolve(CreateStoreAction::class)->execute(
         name: 'Second Store',
         domain: 'second.test',
         username: 'admin_second',
@@ -87,8 +88,8 @@ it('keeps store owners separate from the reseller owner account', function (): v
     );
 
     expect($owner->reseller_id)->toBe($reseller->getKey())
-        ->and($first['user'])->toBeInstanceOf(User::class)
-        ->and($second['user'])->toBeInstanceOf(User::class);
+        ->and(Arr::get($first, 'user'))->toBeInstanceOf(User::class)
+        ->and(Arr::get($second, 'user'))->toBeInstanceOf(User::class);
 });
 
 it('rejects assigning a second active owner to a reseller', function (): void {
@@ -111,7 +112,7 @@ it('allows replacing a soft-deleted reseller owner', function (): void {
 });
 
 it('still creates a store with no reseller for the legacy path', function (): void {
-    $result = app(CreateStoreAction::class)->execute(
+    $result = resolve(CreateStoreAction::class)->execute(
         name: 'Legacy Store',
         domain: 'legacy.test',
         username: 'admin_legacy',
@@ -119,15 +120,15 @@ it('still creates a store with no reseller for the legacy path', function (): vo
         password: 'secret-password',
     );
 
-    expect($result['store'])->toBeInstanceOf(Store::class)
-        ->and($result['store']->reseller_id)->toBeNull();
+    expect(Arr::get($result, 'store'))->toBeInstanceOf(Store::class)
+        ->and(Arr::get($result, 'store')->reseller_id)->toBeNull();
 });
 
 it('rejects invalid and duplicate active domains outside Filament', function (string $domain): void {
     $existingStore = Store::factory()->create();
     StoreDomain::factory()->for($existingStore)->create(['name' => 'taken.test', 'active' => true]);
 
-    app(CreateStoreAction::class)->execute(
+    resolve(CreateStoreAction::class)->execute(
         name: 'Rejected Store',
         domain: $domain,
         username: 'admin_rejected',
@@ -142,7 +143,7 @@ it('rejects invalid and duplicate active domains outside Filament', function (st
 it('slugifies the store name so its admin host resolves', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);
 
-    $result = app(CreateStoreAction::class)->execute(
+    $result = resolve(CreateStoreAction::class)->execute(
         name: 'Houshang Flowers',
         domain: 'houshang.test',
         username: 'admin_houshang',
@@ -151,6 +152,6 @@ it('slugifies the store name so its admin host resolves', function (): void {
         owner: $reseller,
     );
 
-    expect($result['store']->slug)->toBe('houshang-flowers')
+    expect(Arr::get($result, 'store')->slug)->toBe('houshang-flowers')
         ->and(StoreDomain::query()->where('name', 'houshang.test')->value('slug'))->toBe('houshangtest');
 });

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Misaf\VendraProduct\Database\Factories\ProductCategoryFactory;
 use Misaf\VendraProduct\Database\Factories\ProductFactory;
@@ -142,8 +143,8 @@ it('sorts catalog items with the API Platform order filter', function (string $d
 
     $this->getJson("/api/catalog/products?sort[id]={$direction}", ['Accept' => 'application/vnd.api+json'])
         ->assertOk()
-        ->assertJsonPath('data.0.attributes.id', $expectedIds[0])
-        ->assertJsonPath('data.1.attributes.id', $expectedIds[1]);
+        ->assertJsonPath('data.0.attributes.id', Arr::get($expectedIds, 0))
+        ->assertJsonPath('data.1.attributes.id', Arr::get($expectedIds, 1));
 })->with([
     'newest first' => ['desc', true],
     'oldest first' => ['asc', false],

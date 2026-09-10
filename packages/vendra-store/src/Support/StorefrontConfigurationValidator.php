@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Support;
 
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 
 /**
@@ -84,23 +85,15 @@ final class StorefrontConfigurationValidator
     /** @throws InvalidArgumentException */
     public function validate(StorefrontProvisionRequest $request): void
     {
-        if (preg_match(self::SLUG, $request->slug) !== 1) {
-            throw new InvalidArgumentException('The storefront slug must contain lowercase letters, digits, and hyphens.');
-        }
+        throw_if(preg_match(self::SLUG, $request->slug) !== 1, InvalidArgumentException::class, 'The storefront slug must contain lowercase letters, digits, and hyphens.');
 
-        if (preg_match(self::DOMAIN, $request->domain) !== 1) {
-            throw new InvalidArgumentException('The storefront domain is invalid.');
-        }
+        throw_if(preg_match(self::DOMAIN, $request->domain) !== 1, InvalidArgumentException::class, 'The storefront domain is invalid.');
 
-        if (mb_trim($request->image) === '') {
-            throw new InvalidArgumentException('A storefront image is required.');
-        }
+        throw_if(mb_trim($request->image) === '', InvalidArgumentException::class, 'A storefront image is required.');
 
         $configuration = $request->configuration;
 
-        if (($configuration['slug'] ?? null) !== $request->slug || ($configuration['domain'] ?? null) !== $request->domain) {
-            throw new InvalidArgumentException('The storefront configuration identity does not match the deployment.');
-        }
+        throw_if((Arr::get($configuration, 'slug', null)) !== $request->slug || (Arr::get($configuration, 'domain', null)) !== $request->domain, InvalidArgumentException::class, 'The storefront configuration identity does not match the deployment.');
 
         $missing = $this->missingFields($configuration);
 

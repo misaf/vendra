@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\DB;
@@ -53,7 +54,7 @@ it('queues a batch job per chunk of subscribers and marks the newsletter as sent
     NewsletterSubscriberFactory::new()->subscribed()->count(5)->create();
     NewsletterSubscriberFactory::new()->unsubscribed()->count(2)->create();
 
-    $queued = app(SendNewsletterAction::class)->execute($newsletter);
+    $queued = resolve(SendNewsletterAction::class)->execute($newsletter);
 
     expect($queued)->toBe(5)
         ->and($newsletter->refresh()->status)->toBe(NewsletterStatusEnum::Sent)
@@ -68,7 +69,7 @@ it('does not resend a newsletter that was already sent', function (): void {
     $newsletter = NewsletterFactory::new()->sent()->create();
     NewsletterSubscriberFactory::new()->subscribed()->count(3)->create();
 
-    $queued = app(SendNewsletterAction::class)->execute($newsletter);
+    $queued = resolve(SendNewsletterAction::class)->execute($newsletter);
 
     expect($queued)->toBe(0);
 
@@ -86,7 +87,7 @@ it('does not resend from a stale model after another process marks the newslette
         'sent_at' => now(),
     ]);
 
-    expect(app(SendNewsletterAction::class)->execute($newsletter))->toBe(0);
+    expect(resolve(SendNewsletterAction::class)->execute($newsletter))->toBe(0);
 
     Queue::assertNothingPushed();
 });
@@ -108,10 +109,10 @@ it('enforces unique subscriber emails per tenant and globally unique unsubscribe
     $indexes = collect(Schema::getIndexes('newsletter_subscribers'));
 
     expect($indexes->contains(
-        fn (array $index): bool => $index['unique'] === true && ['tenant_id', 'email'] === $index['columns'],
+        fn (array $index): bool => Arr::get($index, 'unique') === true && ['tenant_id', 'email'] === Arr::get($index, 'columns'),
     ))->toBeTrue()
         ->and($indexes->contains(
-            fn (array $index): bool => $index['unique'] === true && ['unsubscribe_token'] === $index['columns'],
+            fn (array $index): bool => Arr::get($index, 'unique') === true && ['unsubscribe_token'] === Arr::get($index, 'columns'),
         ))->toBeTrue();
 });
 
@@ -119,15 +120,15 @@ it('enforces one delivery receipt per newsletter recipient', function (): void {
     $indexes = collect(Schema::getIndexes('newsletter_deliveries'));
 
     expect($indexes->contains(
-        fn (array $index): bool => $index['unique'] === true
-            && ['newsletter_id', 'newsletter_subscriber_id'] === $index['columns'],
+        fn (array $index): bool => Arr::get($index, 'unique') === true
+            && ['newsletter_id', 'newsletter_subscriber_id'] === Arr::get($index, 'columns'),
     ))->toBeTrue();
 });
 
 it('fans a batch job out into per-recipient email jobs', function (): void {
     Queue::fake();
 
-    (new SendNewsletterBatchJob(newsletterId: 1, subscriberIds: [10, 20, 30]))->handle();
+    new SendNewsletterBatchJob(newsletterId: 1, subscriberIds: [10, 20, 30])->handle();
 
     Queue::assertPushed(SendNewsletterEmailJob::class, 3);
 });
@@ -138,7 +139,7 @@ it('delivers the newsletter mail to a subscribed recipient', function (): void {
     $newsletter = NewsletterFactory::new()->draft()->create();
     $subscriber = NewsletterSubscriberFactory::new()->subscribed()->create();
 
-    (new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey()))->handle();
+    new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey())->handle();
 
     Mail::assertSent(NewsletterMail::class, fn (NewsletterMail $mail): bool => $mail->hasTo($subscriber->email));
 });
@@ -159,7 +160,7 @@ it('scopes newsletter identifiers without exposing recipient data', function ():
         });
     Context::add(RequestJobContext::OPERATION, 'outer');
 
-    (new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey()))->handle();
+    new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey())->handle();
 
     expect($captured)->toMatchArray([
         RequestJobContext::OPERATION => 'newsletter_email',
@@ -219,7 +220,7 @@ it('skips delivery for an unsubscribed recipient', function (): void {
     $newsletter = NewsletterFactory::new()->draft()->create();
     $subscriber = NewsletterSubscriberFactory::new()->unsubscribed()->create();
 
-    (new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey()))->handle();
+    new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey())->handle();
 
     Mail::assertNothingSent();
 });

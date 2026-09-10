@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSocialite\Support\SocialiteRegistrar;
@@ -24,10 +25,10 @@ function fakeOauthUser(array $overrides = []): SocialiteUserContract
     ], $overrides);
 
     $oauthUser = Mockery::mock(SocialiteUserContract::class);
-    $oauthUser->shouldReceive('getId')->andReturn($data['id']);
-    $oauthUser->shouldReceive('getNickname')->andReturn($data['nickname']);
-    $oauthUser->shouldReceive('getName')->andReturn($data['name']);
-    $oauthUser->shouldReceive('getEmail')->andReturn($data['email']);
+    $oauthUser->shouldReceive('getId')->andReturn(Arr::get($data, 'id'));
+    $oauthUser->shouldReceive('getNickname')->andReturn(Arr::get($data, 'nickname'));
+    $oauthUser->shouldReceive('getName')->andReturn(Arr::get($data, 'name'));
+    $oauthUser->shouldReceive('getEmail')->andReturn(Arr::get($data, 'email'));
 
     return $oauthUser;
 }

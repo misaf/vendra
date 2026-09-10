@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateClickFactory;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateCommissionFactory;
@@ -74,14 +75,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $record): void
     {
-        Affiliate::firstOrCreate(
-            ['code' => $record['code']],
-            [
-                'user_id' => $record['user_id'],
-                'commission_percent' => $record['commission_percent'],
-                'status' => AffiliateStatusEnum::from($record['status']),
-            ],
-        );
+        Affiliate::query()->firstOrCreate(['code' => Arr::get($record, 'code')], [
+            'user_id' => Arr::get($record, 'user_id'),
+            'commission_percent' => Arr::get($record, 'commission_percent'),
+            'status' => AffiliateStatusEnum::from(Arr::get($record, 'status')),
+        ]);
     }
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraApi\Eloquent\Filter;
 
+use Illuminate\Support\Arr;
 use ApiPlatform\Laravel\Eloquent\Filter\FilterInterface;
 use ApiPlatform\Metadata\Parameter;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,14 +21,14 @@ final class LocalizedSearchFilter implements FilterInterface
      */
     public function apply(Builder $builder, mixed $values, Parameter $parameter, array $context = []): Builder
     {
-        $properties = $context['properties'] ?? [];
+        $properties = Arr::get($context, 'properties', []);
 
         if (! is_string($values) || $values === '' || $properties === []) {
             return $builder;
         }
 
         $locale = app()->getLocale();
-        $whereClause = $context['whereClause'] ?? 'where';
+        $whereClause = Arr::get($context, 'whereClause', 'where');
 
         return $builder->{$whereClause}(function (Builder $query) use ($locale, $properties, $values): void {
             foreach ($properties as $property => $localized) {

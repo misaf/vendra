@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\Schemas;
 
+use Illuminate\Support\Arr;
 use Closure;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
@@ -136,7 +137,7 @@ final class LanguageLineForm
 
         foreach ($state as $translation) {
             if (is_array($translation)) {
-                $translation = $translation['value'] ?? null;
+                $translation = Arr::get($translation, 'value', null);
             }
 
             if (is_string($translation) && Str::of($translation)->trim()->isNotEmpty()) {

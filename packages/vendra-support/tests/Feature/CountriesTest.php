@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Misaf\VendraSupport\Capabilities\Countries;
 
 it('provides official ISO countries with localized names', function (): void {
@@ -12,13 +13,13 @@ it('provides official ISO countries with localized names', function (): void {
         ->toHaveCount(249)
         ->not->toHaveKeys(['EU', 'UN', 'XK'])
         ->and(Countries::codes())->toHaveCount(249)->toContain('IR')
-        ->and($englishCountries['IR'])->toBe('Iran')
-        ->and($persianCountries['IR'])->toBe('ایران');
+        ->and(Arr::get($englishCountries, 'IR'))->toBe('Iran')
+        ->and(Arr::get($persianCountries, 'IR'))->toBe('ایران');
 });
 
 it('uses the application locale by default', function (): void {
     app()->setLocale('fa');
 
-    expect(Countries::options()['IR'])->toBe('ایران')
+    expect(Arr::get(Countries::options(), 'IR'))->toBe('ایران')
         ->and(Countries::name('IR'))->toBe('ایران');
 });

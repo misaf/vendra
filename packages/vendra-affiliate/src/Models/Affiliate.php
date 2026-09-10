@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Models;
 
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -110,7 +111,7 @@ final class Affiliate extends Model implements ShouldLogActivity
      */
     public function pendingBalance(): int
     {
-        $pendingBalance = $this->getAttributes()['pending_balance'] ?? null;
+        $pendingBalance = Arr::get($this->getAttributes(), 'pending_balance', null);
 
         if (is_numeric($pendingBalance)) {
             return (int) $pendingBalance;

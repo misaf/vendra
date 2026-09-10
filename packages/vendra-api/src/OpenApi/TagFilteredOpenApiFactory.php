@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraApi\OpenApi;
 
+use Illuminate\Support\Arr;
 use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\PathItem;
@@ -21,16 +22,16 @@ use Traversable;
  */
 final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterface
 {
-    private const QUERY_PARAMETER = 'tags';
+    private const string QUERY_PARAMETER = 'tags';
 
-    private const SCHEMA_REF_PREFIX = '#/components/schemas/';
+    private const string SCHEMA_REF_PREFIX = '#/components/schemas/';
 
     /**
      * Every HTTP method exposed by a path item, mapped to its accessor pair.
      *
      * @var array<int, string>
      */
-    private const METHODS = ['Get', 'Put', 'Post', 'Delete', 'Options', 'Head', 'Patch', 'Trace'];
+    private const array METHODS = ['Get', 'Put', 'Post', 'Delete', 'Options', 'Head', 'Patch', 'Trace'];
 
     public function __construct(private OpenApiFactoryInterface $decorated) {}
 
@@ -162,13 +163,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
      */
     private function matches(array $operationTags, array $requestedTags): bool
     {
-        foreach ($operationTags as $operationTag) {
-            if (in_array(mb_strtolower($operationTag), $requestedTags, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($operationTags, fn($operationTag) => in_array(mb_strtolower($operationTag), $requestedTags, true));
     }
 
     /**
@@ -177,7 +172,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
      */
     private function requestedTags(array $context): array
     {
-        $request = $context['request'] ?? null;
+        $request = Arr::get($context, 'request', null);
         $raw = $request instanceof Request ? $request->query->all()[self::QUERY_PARAMETER] ?? null : null;
 
         if ($raw === null || $raw === '' || $raw === []) {

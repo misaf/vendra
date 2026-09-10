@@ -4,29 +4,30 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
+use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use Misaf\VendraSubscription\Actions\EnforceSubscriptionsAction;
 use Misaf\VendraSupport\Context\RequestJobContext;
 
+#[Description('Expire lapsed subscriptions and suspend units past their grace period')]
+#[Signature('vendra-subscription:enforce-subscriptions')]
 final class EnforceSubscriptionsCommand extends Command
 {
-    protected $signature = 'vendra-subscription:enforce-subscriptions';
-
-    protected $description = 'Expire lapsed subscriptions and suspend units past their grace period';
-
     public function handle(EnforceSubscriptionsAction $enforceSubscriptionsAction): int
     {
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'subscription_enforcement',
-        ))->scope(function () use ($enforceSubscriptionsAction): void {
+        )->scope(function () use ($enforceSubscriptionsAction): void {
             $result = $enforceSubscriptionsAction->execute();
 
             $this->info('Subscriptions enforced.');
             $this->table(['Metric', 'Count'], [
-                ['Expired subscriptions', $result['expired']],
-                ['Expiry reminders sent', $result['reminded']],
-                ['Subscribers past grace', $result['grace_expired']],
+                ['Expired subscriptions', Arr::get($result, 'expired')],
+                ['Expiry reminders sent', Arr::get($result, 'reminded')],
+                ['Subscribers past grace', Arr::get($result, 'grace_expired')],
             ]);
         });
 

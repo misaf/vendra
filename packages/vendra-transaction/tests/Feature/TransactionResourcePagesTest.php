@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Filament\Schemas\Components\Tabs\Tab;
 use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 use Misaf\VendraTransaction\Actions\PostLedgerEntryAction;
@@ -43,7 +44,7 @@ it('defers transaction filter tab badge queries', function (): void {
             ->and($badgeProperty->getValue($tab))->toBeInstanceOf(Closure::class);
     }
 
-    expect($tabs['all']->getBadge())->toBe('3')
+    expect(Arr::get($tabs, 'all')->getBadge())->toBe('3')
         ->and($tabs[TransactionTypeEnum::Deposit->value]->getBadge())->toBe('2')
         ->and($tabs[TransactionTypeEnum::Withdrawal->value]->getBadge())->toBe('1')
         ->and($tabs[TransactionTypeEnum::Commission->value]->getBadge())->toBe('0')
@@ -127,7 +128,7 @@ it('declines a transaction from the view page without touching the ledger', func
 
 it('notifies instead of settling when the balance is insufficient', function (): void {
     $wallet = WalletFactory::new()->create();
-    app(PostLedgerEntryAction::class)->execute($wallet, 500);
+    resolve(PostLedgerEntryAction::class)->execute($wallet, 500);
 
     $transaction = TransactionFactory::new()->forWallet($wallet)->withdrawal()->create(['amount' => 2_000]);
 

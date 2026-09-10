@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraNewsletter\Database\Factories\NewsletterFactory;
 use Misaf\VendraNewsletter\Database\Factories\NewsletterSubscriberFactory;
@@ -50,12 +51,12 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     {
         $data = $this->validatedFixtureRecord($record);
 
-        Newsletter::create([
-            'subject' => $data['subject'],
-            'content' => $data['content'],
-            'status' => NewsletterStatusEnum::from($data['status']),
-            'scheduled_at' => $data['scheduled_at'],
-            'sent_at' => $data['sent_at'],
+        Newsletter::query()->create([
+            'subject' => Arr::get($data, 'subject'),
+            'content' => Arr::get($data, 'content'),
+            'status' => NewsletterStatusEnum::from(Arr::get($data, 'status')),
+            'scheduled_at' => Arr::get($data, 'scheduled_at'),
+            'sent_at' => Arr::get($data, 'sent_at'),
         ]);
     }
 
@@ -70,7 +71,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         ];
 
         foreach ($subscribers as $subscriber) {
-            NewsletterSubscriber::create($subscriber);
+            NewsletterSubscriber::query()->create($subscriber);
         }
     }
 

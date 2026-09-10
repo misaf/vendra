@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraUserProfile\Support;
 
+use Illuminate\Support\Arr;
 use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\RelationManagers\RelationManagerConfiguration;
@@ -34,7 +35,7 @@ final class UserProfileRelationManagers
     {
         usort(
             $this->relationManagers,
-            fn (array $left, array $right): int => $left['priority'] <=> $right['priority'],
+            fn (array $left, array $right): int => Arr::get($left, 'priority') <=> Arr::get($right, 'priority'),
         );
 
         return array_column($this->relationManagers, 'relationManager');

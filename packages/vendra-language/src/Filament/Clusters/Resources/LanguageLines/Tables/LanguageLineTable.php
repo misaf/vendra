@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\Tables;
 
+use Illuminate\Support\Arr;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -66,24 +67,24 @@ final class LanguageLineTable
                 ->color(function (LanguageLine $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLanguageLine($record);
 
-                    return static::progressColor($coverage['percentage'], $coverage['total']);
+                    return static::progressColor(Arr::get($coverage, 'percentage'), Arr::get($coverage, 'total'));
                 })
                 ->description(function (LanguageLine $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLanguageLine($record);
 
                     return __('vendra-language::messages.coverage_summary', [
-                        'percentage' => $coverage['percentage'],
-                        'remaining' => $coverage['remaining'],
+                        'percentage' => Arr::get($coverage, 'percentage'),
+                        'remaining' => Arr::get($coverage, 'remaining'),
                     ]);
                 })
                 ->label(__('vendra-language::attributes.translation_progress'))
                 ->state(function (LanguageLine $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLanguageLine($record);
 
-                    return "{$coverage['translated']} / {$coverage['total']}";
+                    return "{Arr::get($coverage, 'translated')} / {Arr::get($coverage, 'total')}";
                 })
                 ->tooltip(function (LanguageLine $record, TranslationProgress $progress): ?string {
-                    $missingLocales = $progress->forLanguageLine($record)['missing_locales'];
+                    $missingLocales = Arr::get($progress->forLanguageLine($record), 'missing_locales');
 
                     if ($missingLocales === []) {
                         return null;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Providers;
 
+use Illuminate\Support\Arr;
 use Composer\InstalledVersions;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -60,8 +61,8 @@ final class PermissionServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $tableNames = Config::array('permission.table_names');
-        $permissionsTable = $tableNames['permissions'] ?? null;
-        $rolesTable = $tableNames['roles'] ?? null;
+        $permissionsTable = Arr::get($tableNames, 'permissions', null);
+        $rolesTable = Arr::get($tableNames, 'roles', null);
 
         $this->app->make(TenantTableRegistry::class)->register(
             is_string($permissionsTable) ? $permissionsTable : 'permissions',
@@ -91,7 +92,7 @@ final class PermissionServiceProvider extends PackageServiceProvider
                 }
 
                 if (TenantAwareness::enabled()) {
-                    $tenantModel = app(TenantResolver::class)->modelClass();
+                    $tenantModel = resolve(TenantResolver::class)->modelClass();
 
                     if (! $scope instanceof $tenantModel) {
                         return false;

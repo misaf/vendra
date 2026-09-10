@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Misaf\VendraLanguage\Support\TranslationCatalog;
 
 it('registered translation namespaces are available as sorted select options', function (): void {
-    $options = app(TranslationCatalog::class)->namespaceOptions();
+    $options = resolve(TranslationCatalog::class)->namespaceOptions();
     $sortedNamespaces = array_keys($options);
     sort($sortedNamespaces);
 
@@ -16,27 +17,25 @@ it('registered translation namespaces are available as sorted select options', f
 });
 
 it('translation files and their keys are available as dependent select options', function (): void {
-    $catalog = app(TranslationCatalog::class);
+    $catalog = resolve(TranslationCatalog::class);
 
     expect($catalog->groupOptions('vendra-language'))
         ->toHaveKeys(['attributes', 'navigation'])
         ->and($catalog->keyOptions('vendra-language', 'navigation'))
         ->toHaveKeys(['language', 'language_line', 'language_management', 'languages'])
-        ->and($catalog->keyOptions('filament-panels', 'resources'))
-        ->toBe([])
-        ->and($catalog->keyOptions('vendra-language', '../composer'))
-        ->toBe([]);
+        ->and($catalog->keyOptions('filament-panels', 'resources'))->toBeEmpty()
+        ->and($catalog->keyOptions('vendra-language', '../composer'))->toBeEmpty();
 });
 
 it('translation files are exposed as locale-complete language lines', function (): void {
-    $languageLine = collect(app(TranslationCatalog::class)->languageLines())
-        ->first(fn (array $line): bool => $line['namespace'] === 'vendra-language'
-            && $line['group'] === 'navigation'
-            && $line['key'] === 'language');
+    $languageLine = collect(resolve(TranslationCatalog::class)->languageLines())
+        ->first(fn (array $line): bool => Arr::get($line, 'namespace') === 'vendra-language'
+            && Arr::get($line, 'group') === 'navigation'
+            && Arr::get($line, 'key') === 'language');
 
     expect($languageLine)
         ->toBeArray()
-        ->and($languageLine['text'])->toMatchArray([
+        ->and(Arr::get($languageLine, 'text'))->toMatchArray([
             'de' => 'Sprache',
             'en' => 'Language',
             'fa' => 'زبان',

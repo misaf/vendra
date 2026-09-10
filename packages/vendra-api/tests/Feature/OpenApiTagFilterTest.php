@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
+
 beforeEach(function (): void {
     makeCurrentTestTenant();
 });
@@ -20,18 +22,18 @@ it('restricts the documentation to the requested tag', function (): void {
         ->assertOk()
         ->json();
 
-    expect(array_keys($document['paths']))
+    expect(array_keys(Arr::get($document, 'paths')))
         ->toEqualCanonicalizing(['/api/catalog/products', '/api/catalog/products/{id}']);
 
-    foreach ($document['paths'] as $pathItem) {
+    foreach (Arr::get($document, 'paths') as $pathItem) {
         foreach ($pathItem as $operation) {
-            expect($operation['tags'])->toContain('Product');
+            expect(Arr::get($operation, 'tags'))->toContain('Product');
         }
     }
 
-    expect(array_column($document['tags'] ?? [], 'name'))->toEqual(['Product']);
+    expect(array_column(Arr::get($document, 'tags', []), 'name'))->toEqual(['Product']);
 
-    $schemas = array_keys($document['components']['schemas'] ?? []);
+    $schemas = array_keys(Arr::get($document, 'components.schemas', []));
 
     expect($schemas)->not->toBeEmpty()
         ->and($schemas)->toContain('Product.jsonld')

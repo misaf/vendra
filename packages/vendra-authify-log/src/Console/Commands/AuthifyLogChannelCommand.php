@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAuthifyLog\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
+use Illuminate\Support\Arr;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Redis\Connections\PhpRedisConnection;
@@ -15,18 +18,10 @@ use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 
+#[Description('Processes messages from the authify-log-channel and dispatches jobs.')]
+#[Signature('vendra-authify-log:channel')]
 class AuthifyLogChannelCommand extends Command
 {
-    /**
-     * @var string
-     */
-    protected $signature = 'vendra-authify-log:channel';
-
-    /**
-     * @var string
-     */
-    protected $description = 'Processes messages from the authify-log-channel and dispatches jobs.';
-
     public function handle(): void
     {
         $redisConnection = Redis::connection('authify_log_channel');
@@ -43,7 +38,7 @@ class AuthifyLogChannelCommand extends Command
 
             $entries = $this->getBatchEntries($cacheKey, $batchSize);
 
-            if (empty($entries)) {
+            if (blank($entries)) {
                 echo 'No entries to process.'.PHP_EOL;
 
                 return;
@@ -60,22 +55,20 @@ class AuthifyLogChannelCommand extends Command
     {
         $connection = Redis::connection('authify_log');
 
-        if (! $connection instanceof PhpRedisConnection) {
-            throw new Exception('The authify log connection must use the PhpRedis driver.');
-        }
+        throw_unless($connection instanceof PhpRedisConnection, Exception::class, 'The authify log connection must use the PhpRedis driver.');
 
         $result = $connection->transaction(function (\Redis $transaction) use ($cacheKey, $batchSize): void {
             $transaction->lrange($cacheKey, 0, $batchSize - 1);
             $transaction->ltrim($cacheKey, $batchSize, -1);
         });
 
-        if (! is_array($result) || ! isset($result[0]) || ! is_array($result[0])) {
+        if (! is_array($result) || ! isset($result[0]) || ! is_array(Arr::get($result, 0))) {
             return [];
         }
 
         return array_values(array_filter(
-            $result[0],
-            static fn (mixed $entry): bool => is_string($entry),
+            Arr::get($result, 0),
+            is_string(...),
         ));
     }
 
@@ -121,13 +114,13 @@ class AuthifyLogChannelCommand extends Command
      */
     private function dispatchJobForTenant(int $tenantId, array $groupedLogs): void
     {
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'authify_log_batch',
             tenantId: $tenantId,
-        ))->scope(function () use ($groupedLogs, $tenantId): void {
+        )->scope(function () use ($groupedLogs, $tenantId): void {
             try {
-                $tenants = app(TenantResolver::class);
+                $tenants = resolve(TenantResolver::class);
 
                 if (TenantAwareness::enabled()) {
                     $tenant = $tenants->findByKeyOrSlug($tenantId);

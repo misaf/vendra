@@ -100,7 +100,7 @@ final class StorefrontConfigurationMap
      */
     private static function messages(array $form): array
     {
-        $value = $form['storefront_messages'] ?? null;
+        $value = Arr::get($form, 'storefront_messages', null);
 
         if (! is_array($value)) {
             return [];

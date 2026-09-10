@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCustomPage\Database\Seeders;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraCustomPage\Database\Factories\CustomPageCategoryFactory;
 use Misaf\VendraCustomPage\Database\Factories\CustomPageFactory;
@@ -55,14 +56,14 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        $customPageCategory = CustomPageCategory::create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'slug' => $data['slug'],
-            'active' => $data['active'],
+        $customPageCategory = CustomPageCategory::query()->create([
+            'name' => Arr::get($data, 'name'),
+            'description' => Arr::get($data, 'description'),
+            'slug' => Arr::get($data, 'slug'),
+            'active' => Arr::get($data, 'active'),
         ]);
 
-        foreach ($data['custom_pages'] as $customPageRecord) {
+        foreach (Arr::get($data, 'custom_pages') as $customPageRecord) {
             $this->handleCustomPageFixtureRecord($customPageCategory, $customPageRecord);
         }
     }
@@ -78,10 +79,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleCustomPageFixtureRecord(CustomPageCategory $customPageCategory, array $customPageRecord): void
     {
         $customPageCategory->customPages()->create([
-            'name' => $customPageRecord['name'],
-            'description' => $customPageRecord['description'],
-            'slug' => $customPageRecord['slug'],
-            'active' => $customPageRecord['active'],
+            'name' => Arr::get($customPageRecord, 'name'),
+            'description' => Arr::get($customPageRecord, 'description'),
+            'slug' => Arr::get($customPageRecord, 'slug'),
+            'active' => Arr::get($customPageRecord, 'active'),
         ]);
     }
 
