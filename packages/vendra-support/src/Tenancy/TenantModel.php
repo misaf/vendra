@@ -9,6 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class TenantModel extends Model
 {
-    use HasFactory;
     use BelongsToTenant;
+    use HasFactory;
 }

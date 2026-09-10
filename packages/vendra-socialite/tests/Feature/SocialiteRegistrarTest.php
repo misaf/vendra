@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use Illuminate\Support\Arr;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSocialite\Support\SocialiteRegistrar;
 use Misaf\VendraUser\Models\User;

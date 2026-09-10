@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -100,7 +100,7 @@ final class Subscription extends Model implements ShouldLogActivity
     /**
      * Limit the query to subscriptions that are active right now.
      *
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -119,7 +119,7 @@ final class Subscription extends Model implements ShouldLogActivity
     /**
      * Limit the query to active subscriptions whose period has already lapsed.
      *
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -135,7 +135,7 @@ final class Subscription extends Model implements ShouldLogActivity
      * Limit the query to active subscriptions expiring within the given number
      * of days that have not yet had an expiry reminder sent.
      *
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]

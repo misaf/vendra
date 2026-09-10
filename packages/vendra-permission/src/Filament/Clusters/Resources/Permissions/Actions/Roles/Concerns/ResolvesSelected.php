@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Roles\Concerns;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Misaf\VendraPermission\Models\Role;
 
@@ -49,7 +49,7 @@ trait ResolvesSelected
                  * @param  Collection<int, Role>  $rolesInGuard
                  * @return list<ModelKey>
                  */
-                static fn(Collection $rolesInGuard): array => $rolesInGuard
+                static fn (Collection $rolesInGuard): array => $rolesInGuard
                     ->map(static fn (Role $role): int => $role->id)
                     ->values()
                     ->all()

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Misaf\VendraCart\Actions\AddCartItemAction;

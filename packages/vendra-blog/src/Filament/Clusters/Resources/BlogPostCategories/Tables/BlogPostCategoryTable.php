@@ -52,7 +52,7 @@ final class BlogPostCategoryTable
                 ->alignCenter()
                 ->collection(BlogPostCategory::MEDIA_COLLECTION)
                 ->conversion('thumb-table')
-                ->defaultImageUrl(fn(BlogPostCategory $record, Livewire $livewire): string => static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire)))
+                ->defaultImageUrl(fn (BlogPostCategory $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire)))
                 ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                 ->label(__('vendra-blog::attributes.image'))
                 ->stacked(),

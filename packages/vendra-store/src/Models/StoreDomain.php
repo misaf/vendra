@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -66,7 +66,7 @@ final class StoreDomain extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -76,7 +76,7 @@ final class StoreDomain extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]

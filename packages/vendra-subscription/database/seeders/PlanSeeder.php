@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Database\Seeders;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
 use Misaf\VendraSubscription\Models\Plan;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways;
 
-use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\RelationManagers\TransactionsRelationManager;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -18,6 +17,7 @@ use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Page
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Pages\EditTransactionGateway;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Pages\ListTransactionGateways;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Pages\ViewTransactionGateway;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\RelationManagers\TransactionsRelationManager;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Schemas\TransactionGatewayForm;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Schemas\TransactionGatewayInfolist;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Tables\TransactionGatewayTable;

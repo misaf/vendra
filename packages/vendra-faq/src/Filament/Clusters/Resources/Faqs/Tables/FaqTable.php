@@ -52,7 +52,7 @@ final class FaqTable
                 ->alignCenter()
                 ->collection(Faq::MEDIA_COLLECTION)
                 ->conversion('thumb-table')
-                ->defaultImageUrl(fn(Faq $record, Livewire $livewire): string => static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire)))
+                ->defaultImageUrl(fn (Faq $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire)))
                 ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                 ->label(__('vendra-faq::attributes.image'))
                 ->stacked(),
@@ -120,7 +120,7 @@ final class FaqTable
                                 ->label(__('vendra-faq::navigation.faq_category'))
                                 ->selectable(
                                     IsRelatedToOperator::make()
-                                        ->getOptionLabelFromRecordUsing(fn(FaqCategory $record, Livewire $livewire) => static::translatedAttribute($record, 'name', $livewire))
+                                        ->getOptionLabelFromRecordUsing(fn (FaqCategory $record, Livewire $livewire) => self::translatedAttribute($record, 'name', $livewire))
                                         ->preload()
                                         ->searchable()
                                         ->titleAttribute('name'),

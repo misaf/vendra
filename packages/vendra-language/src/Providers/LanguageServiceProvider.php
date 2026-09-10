@@ -141,7 +141,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
 
     private function configureLanguageSwitch(): void
     {
-        LanguageSwitch::configureUsing(fn(LanguageSwitch $switch) => $switch
+        LanguageSwitch::configureUsing(fn (LanguageSwitch $switch) => $switch
             ->locales(fn (): array => $this->availableLocales())
             ->visible());
     }

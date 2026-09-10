@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Providers;
 
-use Illuminate\Support\Arr;
 use Composer\InstalledVersions;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Pennant\Feature;

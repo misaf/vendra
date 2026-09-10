@@ -52,7 +52,7 @@ final class FaqCategoryTable
                 ->alignCenter()
                 ->collection(FaqCategory::MEDIA_COLLECTION)
                 ->conversion('thumb-table')
-                ->defaultImageUrl(fn(FaqCategory $record, Livewire $livewire): string => static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire)))
+                ->defaultImageUrl(fn (FaqCategory $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire)))
                 ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                 ->label(__('vendra-faq::attributes.image'))
                 ->stacked(),

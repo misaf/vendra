@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraWishlistApi\State;
 
-use Illuminate\Support\Arr;
-use Illuminate\Contracts\Database\Query\Builder;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Misaf\VendraWishlist\Models\WishlistItem;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

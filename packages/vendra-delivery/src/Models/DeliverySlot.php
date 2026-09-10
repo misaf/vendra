@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -102,7 +102,7 @@ final class DeliverySlot extends Model implements ShouldLogActivity, Sortable
     }
 
     /**
-     * @param Builder<self> $builder
+     * @param  Builder<self>  $builder
      */
     #[Scope]
     protected function active(Builder $builder): void

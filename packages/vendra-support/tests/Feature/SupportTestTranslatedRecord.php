@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 final class SupportTestTranslatedRecord extends Model
 {
     use HasFactory;
+
     /** @var array<string, array<string, mixed>> */
     public array $recordTranslations = [];
 

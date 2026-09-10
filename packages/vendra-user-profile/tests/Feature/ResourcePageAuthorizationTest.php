@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Illuminate\Support\Facades\Gate;
 use Misaf\VendraUserProfile\Database\Factories\UserProfileFactory;

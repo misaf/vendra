@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTagger\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Support\Str;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;

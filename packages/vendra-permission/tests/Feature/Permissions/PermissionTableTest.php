@@ -331,7 +331,7 @@ describe('column existence', function () use (&$tenant): void {
 
         livewire(ListPermissions::class)
             ->loadTable()
-            ->assertTableColumnExists('name', fn(TextColumn $column): bool => $column->getDescriptionBelow() === null, $permission);
+            ->assertTableColumnExists('name', fn (TextColumn $column): bool => $column->getDescriptionBelow() === null, $permission);
     });
 
     it('has configured columns', function (string $column): void {

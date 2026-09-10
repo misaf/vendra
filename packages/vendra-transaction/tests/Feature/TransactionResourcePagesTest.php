@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
 use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Support\Arr;
 use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 use Misaf\VendraTransaction\Actions\PostLedgerEntryAction;
 use Misaf\VendraTransaction\Database\Factories\TransactionFactory;

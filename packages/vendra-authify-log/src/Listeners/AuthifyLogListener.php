@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAuthifyLog\Listeners;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Auth\Events\Attempting;
 use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\CurrentDeviceLogout;
@@ -18,6 +16,8 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Redis;
 use Misaf\LaravelAuthifyLog\Enums\AuthifyLogActionEnum;
 use Misaf\VendraAuthifyLog\Notifications\LoginNotification;

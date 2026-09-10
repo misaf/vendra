@@ -26,7 +26,7 @@ it('warns and reports counts when a payment backlog exists', function (): void {
 
     Log::shouldHaveReceived('warning')
         ->once()
-        ->withArgs(fn (string $message, array $context): bool => 3 === Arr::get($context, 'needs_reconciliation') + Arr::get($context, 'stalled_processing') + Arr::get($context, 'activation_gap'));
+        ->withArgs(fn (string $message, array $context): bool => Arr::get($context, 'needs_reconciliation') + Arr::get($context, 'stalled_processing') + Arr::get($context, 'activation_gap') === 3);
 
     expect($paid->refresh()->status)->toBe(SubscriptionPaymentStatus::Paid);
 });

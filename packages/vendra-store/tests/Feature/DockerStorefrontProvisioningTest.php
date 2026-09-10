@@ -430,7 +430,7 @@ describe('podman compatibility', function (): void {
     });
 
     it('surfaces an API version rejected by the configured driver', function (): void {
-        bindFakeDockerEngine(fn(Request $request, bool $stream) => $stream
+        bindFakeDockerEngine(fn (Request $request, bool $stream) => $stream
             ? dockerStreamResponse('', 500)
             : dockerResponse(['message' => 'client version 1.55 is too new'], 400));
 

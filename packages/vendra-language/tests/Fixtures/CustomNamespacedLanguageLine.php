@@ -11,6 +11,7 @@ use Spatie\TranslationLoader\LanguageLine;
 final class CustomNamespacedLanguageLine extends LanguageLine implements NamespacedLanguageLine
 {
     use HasFactory;
+
     /**
      * @return array<string, string>
      */

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAuthifyLog\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
-use Illuminate\Support\Arr;
-use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Redis\Connections\PhpRedisConnection;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Misaf\LaravelAuthifyLog\Jobs\AuthifyLogJob;

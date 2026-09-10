@@ -50,7 +50,7 @@ final class CustomPageTable
                 ->alignCenter()
                 ->collection(CustomPage::MEDIA_COLLECTION)
                 ->conversion('thumb-table')
-                ->defaultImageUrl(fn(CustomPage $record, Livewire $livewire): string => static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire)))
+                ->defaultImageUrl(fn (CustomPage $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire)))
                 ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                 ->label(__('vendra-custom-page::attributes.image'))
                 ->stacked(),
@@ -111,7 +111,7 @@ final class CustomPageTable
                                 ->label(__('vendra-custom-page::navigation.custom_page_category'))
                                 ->selectable(
                                     IsRelatedToOperator::make()
-                                        ->getOptionLabelFromRecordUsing(fn(CustomPageCategory $record, Livewire $livewire) => static::translatedAttribute($record, 'name', $livewire))
+                                        ->getOptionLabelFromRecordUsing(fn (CustomPageCategory $record, Livewire $livewire) => self::translatedAttribute($record, 'name', $livewire))
                                         ->preload()
                                         ->searchable()
                                         ->titleAttribute('name'),

@@ -52,7 +52,7 @@ final class BlogPostTable
                 ->alignCenter()
                 ->collection(BlogPost::MEDIA_COLLECTION)
                 ->conversion('thumb-table')
-                ->defaultImageUrl(fn(BlogPost $record, Livewire $livewire): string => static::defaultAvatarImageUrl(static::translatedAttribute($record, 'name', $livewire)))
+                ->defaultImageUrl(fn (BlogPost $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire)))
                 ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                 ->label(__('vendra-blog::attributes.image'))
                 ->stacked(),
@@ -120,7 +120,7 @@ final class BlogPostTable
                                 ->label(__('vendra-blog::navigation.blog_post_category'))
                                 ->selectable(
                                     IsRelatedToOperator::make()
-                                        ->getOptionLabelFromRecordUsing(fn(BlogPostCategory $record, Livewire $livewire) => static::translatedAttribute($record, 'name', $livewire))
+                                        ->getOptionLabelFromRecordUsing(fn (BlogPostCategory $record, Livewire $livewire) => self::translatedAttribute($record, 'name', $livewire))
                                         ->preload()
                                         ->searchable()
                                         ->titleAttribute('name'),

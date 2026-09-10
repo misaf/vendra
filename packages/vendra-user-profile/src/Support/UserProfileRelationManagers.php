@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraUserProfile\Support;
 
-use Illuminate\Support\Arr;
 use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\RelationManagers\RelationManagerConfiguration;
+use Illuminate\Support\Arr;
 
 final class UserProfileRelationManagers
 {

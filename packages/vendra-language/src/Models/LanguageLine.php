@@ -46,7 +46,7 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
     {
         return Cache::rememberForever(
             self::getCacheKey($group, $locale, $namespace),
-            fn(): array => static::query()
+            fn (): array => self::query()
                 ->where('namespace', $namespace)
                 ->where('group', $group)
                 ->get()

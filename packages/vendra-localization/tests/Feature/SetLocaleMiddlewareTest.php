@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Http\Request;
 use Illuminate\Log\Context\Repository;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Context;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Number;
 use Misaf\VendraLocalization\Contracts\LocaleResolver;
 use Misaf\VendraLocalization\Http\Middleware\SetLocale;

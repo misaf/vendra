@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraInquiry\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -110,7 +110,7 @@ final class Inquiry extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $builder
+     * @param  Builder<self>  $builder
      */
     #[Scope]
     protected function unanswered(Builder $builder): void

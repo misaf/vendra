@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Actions;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;

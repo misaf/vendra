@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\PanelRegistry;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Pennant\Feature;

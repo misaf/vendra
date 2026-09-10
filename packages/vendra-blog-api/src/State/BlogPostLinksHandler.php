@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraBlogApi\State;
 
-use Illuminate\Support\Arr;
 use ApiPlatform\Laravel\Eloquent\State\LinksHandlerInterface;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Misaf\VendraBlog\Models\BlogPost;
 
 /**

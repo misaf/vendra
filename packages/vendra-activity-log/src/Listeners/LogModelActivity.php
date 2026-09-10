@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraActivityLog\Listeners;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Str;

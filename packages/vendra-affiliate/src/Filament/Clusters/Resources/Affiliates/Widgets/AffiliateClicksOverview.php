@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Widgets;
 
-use Illuminate\Support\Facades\Date;
 use Filament\Support\Enums\IconPosition;
 use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
@@ -12,6 +11,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Number;
 use Misaf\VendraAffiliate\Models\AffiliateClick;
 
