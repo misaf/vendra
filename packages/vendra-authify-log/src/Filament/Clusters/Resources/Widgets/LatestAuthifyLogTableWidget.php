@@ -55,7 +55,7 @@ final class LatestAuthifyLogTableWidget extends BaseWidget
                     ->copyMessageDuration(1500)
                     ->extraCellAttributes(['dir' => 'ltr'])
                     ->label(__('vendra-authify-log::attributes.ip_address'))
-                    ->formatStateUsing(fn(string $state, AuthifyLog $record): HtmlString => new HtmlString(
+                    ->formatStateUsing(fn (string $state, AuthifyLog $record): HtmlString => new HtmlString(
                         '<span class="flex items-center space-x-2">'
                         .'<img src="'.asset('vendor/blade-country-flags/4x3-'.Str::lower($record->ip_country).'.svg').'" alt="'.$record->ip_country.'" title="'.$record->ip_country.'" class="w-4 inline-block" />'
                         .'<span>'.$state.'</span>'

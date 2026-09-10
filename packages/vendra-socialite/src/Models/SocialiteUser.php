@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSocialite\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use DutchCodingCompany\FilamentSocialite\Models\SocialiteUser as BaseSocialiteUser;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
@@ -18,8 +18,8 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
  */
 final class SocialiteUser extends BaseSocialiteUser
 {
-    use HasFactory;
     use BelongsToTenant;
+    use HasFactory;
 
     public static function findForProvider(string $provider, SocialiteUserContract $oauthUser): ?self
     {

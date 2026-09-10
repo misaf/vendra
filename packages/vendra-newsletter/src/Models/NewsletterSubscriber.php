@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -74,7 +74,7 @@ final class NewsletterSubscriber extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -84,7 +84,7 @@ final class NewsletterSubscriber extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]

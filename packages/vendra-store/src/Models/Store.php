@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -124,7 +124,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -134,7 +134,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -146,7 +146,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     /**
      * Limit the query to stores that may currently serve requests.
      *
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -203,7 +203,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
      * The match arms above expressed as SQL, so a console filter and a status
      * badge cannot disagree about what "suspended" means.
      *
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]

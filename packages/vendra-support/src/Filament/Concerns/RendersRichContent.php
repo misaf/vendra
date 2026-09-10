@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Filament\Concerns;
 
-use Illuminate\Support\Arr;
 use Filament\Forms\Components\RichEditor\RichContentRenderer;
+use Illuminate\Support\Arr;
 use Throwable;
 
 trait RendersRichContent

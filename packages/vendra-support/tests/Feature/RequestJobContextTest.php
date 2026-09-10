@@ -50,7 +50,7 @@ it('omits absent identifiers and restores scoped visible and hidden values', fun
             'payment_id' => 41,
             'newsletter_id' => null,
         ],
-    )->scope(fn(): array => [
+    )->scope(fn (): array => [
         RequestJobContext::current(),
         Context::all(),
         Context::allHidden(),

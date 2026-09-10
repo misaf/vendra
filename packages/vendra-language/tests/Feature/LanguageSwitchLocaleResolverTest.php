@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Illuminate\Session\SessionManager;
 use Illuminate\Http\Request;
+use Illuminate\Session\SessionManager;
 use Misaf\VendraLanguage\Localization\LanguageSwitchLocaleResolver;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraSupport\Contracts\TenantResolver;

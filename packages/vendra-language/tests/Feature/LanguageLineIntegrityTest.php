@@ -159,7 +159,7 @@ it('overrides package translations from the database without losing file transla
         'text' => ['en' => 'Tenant Languages'],
     ]);
 
-    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
+    $translator = resolve(Illuminate\Contracts\Translation\Translator::class);
 
     expect($translator)->toBeInstanceOf(Translator::class);
 
@@ -181,7 +181,7 @@ it('keeps file translations when the requested database locale is missing or bla
         ],
     ]);
 
-    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
+    $translator = resolve(Illuminate\Contracts\Translation\Translator::class);
     $translator->setLocale('de');
     $translator->setLoaded([]);
 
@@ -195,7 +195,7 @@ it('loads application translations with a null namespace from the database', fun
         'text' => ['en' => 'Welcome!'],
     ]);
 
-    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
+    $translator = resolve(Illuminate\Contracts\Translation\Translator::class);
     $translator->setLocale('en');
     $translator->setLoaded([]);
 
@@ -214,7 +214,7 @@ it('applies additional configured translation loaders to namespaced groups', fun
         ],
     ]);
 
-    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
+    $translator = resolve(Illuminate\Contracts\Translation\Translator::class);
     $translator->setLocale('en');
     $translator->setLoaded([]);
 

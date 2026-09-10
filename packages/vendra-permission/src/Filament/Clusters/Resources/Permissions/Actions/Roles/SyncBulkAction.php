@@ -44,7 +44,7 @@ final class SyncBulkAction extends BulkAction
                         ->orderBy('name')
                         ->orderBy('guard_name')
                         ->get(['id', 'name', 'guard_name'])
-                        ->mapWithKeys(static fn(Role $role): array => [$role->id => "{$role->name} ({$role->guard_name})"])
+                        ->mapWithKeys(static fn (Role $role): array => [$role->id => "{$role->name} ({$role->guard_name})"])
                         ->all()
                 )
                 ->required(),

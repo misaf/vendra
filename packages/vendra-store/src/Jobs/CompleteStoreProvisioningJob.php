@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Jobs;
 
-use Illuminate\Queue\Attributes\Timeout;
-use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Support\Str;
 use Misaf\VendraStore\Contracts\StoreOwnerResolver;

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -79,7 +79,7 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
     ];
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]

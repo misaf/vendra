@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraOrder\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Cknow\Money\Casts\MoneyIntegerCast;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -170,7 +170,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $builder
+     * @param  Builder<self>  $builder
      */
     #[Scope]
     protected function pending(Builder $builder): void
@@ -179,7 +179,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $builder
+     * @param  Builder<self>  $builder
      */
     #[Scope]
     protected function confirmed(Builder $builder): void
@@ -188,7 +188,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $builder
+     * @param  Builder<self>  $builder
      */
     #[Scope]
     protected function completed(Builder $builder): void
@@ -197,7 +197,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $builder
+     * @param  Builder<self>  $builder
      */
     #[Scope]
     protected function cancelled(Builder $builder): void

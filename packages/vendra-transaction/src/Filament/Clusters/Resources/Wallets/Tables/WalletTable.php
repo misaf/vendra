@@ -34,7 +34,7 @@ final class WalletTable
 
                 TextColumn::make('user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(fn(Wallet $record): string => (string) ($record->user?->getAttribute('username')
+                    ->state(fn (Wallet $record): string => (string) ($record->user?->getAttribute('username')
                         ?? $record->user?->getAttribute('name')
                         ?? "#{$record->user_id}")),
 

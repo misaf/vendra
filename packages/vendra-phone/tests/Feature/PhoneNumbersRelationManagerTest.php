@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
 use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Arr;
 use Misaf\VendraPhone\Database\Factories\PhoneNumberFactory;
 use Misaf\VendraPhone\Filament\RelationManagers\PhoneNumbersRelationManager;
 

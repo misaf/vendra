@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraMultimediaApi\State;
 
-use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Attributes\Table;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
@@ -21,8 +21,8 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 #[Table(name: 'media')]
 final class PublicMultimedia extends Model
 {
-    use HasFactory;
     use BelongsToTenant;
+    use HasFactory;
 
     protected function casts(): array
     {

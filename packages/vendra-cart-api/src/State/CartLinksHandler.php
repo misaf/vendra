@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCartApi\State;
 
-use Illuminate\Support\Arr;
 use ApiPlatform\Laravel\Eloquent\State\LinksHandlerInterface;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Misaf\VendraCart\Models\Cart;
 

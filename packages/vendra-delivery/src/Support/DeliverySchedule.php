@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Support;
 
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 
 /**
  * The dates a customer may still choose from.

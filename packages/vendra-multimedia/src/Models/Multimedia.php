@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraMultimedia\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Spatie\MediaLibrary\MediaCollections\Models\Media as SpatieMediaLibrary;
 
@@ -15,8 +15,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media as SpatieMediaLibrary;
 #[Hidden(['tenant_id'])]
 final class Multimedia extends SpatieMediaLibrary
 {
-    use HasFactory;
     use BelongsToTenant;
+    use HasFactory;
 
     protected function casts(): array
     {

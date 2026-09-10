@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Date;
 use Misaf\VendraDelivery\Support\DeliverySchedule;
 
 it('offers today when the same-day cutoff has not passed', function (): void {

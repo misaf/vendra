@@ -10,6 +10,6 @@ use Misaf\VendraAttribute\Concerns\HasAttributeValues;
 
 abstract class AttributableModel extends Model
 {
-    use HasFactory;
     use HasAttributeValues;
+    use HasFactory;
 }

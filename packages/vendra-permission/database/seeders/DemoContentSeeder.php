@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Database\Seeders;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
 use Misaf\VendraPermission\Database\Factories\RoleFactory;

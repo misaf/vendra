@@ -48,7 +48,7 @@ final class LatestTransactionTableWidget extends BaseWidget
 
                 TextColumn::make('wallet.user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(fn(Transaction $record): string => (string) ($record->wallet->user?->getAttribute('username')
+                    ->state(fn (Transaction $record): string => (string) ($record->wallet->user?->getAttribute('username')
                         ?? $record->wallet->user?->getAttribute('name')
                         ?? "#{$record->wallet->user_id}")),
 

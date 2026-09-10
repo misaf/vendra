@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraApi\Eloquent\Filter;
 
-use Illuminate\Support\Arr;
 use ApiPlatform\Laravel\Eloquent\Filter\FilterInterface;
 use ApiPlatform\Metadata\Parameter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 final class LocalizedSearchFilter implements FilterInterface
 {

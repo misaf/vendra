@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
 use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -10,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Arr;
 use Misaf\VendraAddress\Database\Factories\AddressFactory;
 use Misaf\VendraAddress\Filament\RelationManagers\AddressesRelationManager;
 use Misaf\VendraSupport\Capabilities\Countries;

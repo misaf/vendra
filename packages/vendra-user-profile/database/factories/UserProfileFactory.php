@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraUserProfile\Database\Factories;
 
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraUser\Models\User;

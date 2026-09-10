@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraApi\OpenApi;
 
-use Illuminate\Support\Arr;
 use ApiPlatform\OpenApi\Factory\OpenApiFactoryInterface;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\PathItem;
@@ -12,6 +11,7 @@ use ApiPlatform\OpenApi\Model\Paths;
 use ApiPlatform\OpenApi\Model\Tag;
 use ApiPlatform\OpenApi\OpenApi;
 use ArrayObject;
+use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Request;
 use Traversable;
 
@@ -163,7 +163,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
      */
     private function matches(array $operationTags, array $requestedTags): bool
     {
-        return array_any($operationTags, fn($operationTag) => in_array(mb_strtolower($operationTag), $requestedTags, true));
+        return array_any($operationTags, fn ($operationTag) => in_array(mb_strtolower($operationTag), $requestedTags, true));
     }
 
     /**

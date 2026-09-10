@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Support\Facades\Date;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Number;
 use Misaf\VendraSubscription\Database\Factories\PlanFactory;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
@@ -87,7 +87,7 @@ final class Plan extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -97,7 +97,7 @@ final class Plan extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
@@ -107,7 +107,7 @@ final class Plan extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<self> $query
+     * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]

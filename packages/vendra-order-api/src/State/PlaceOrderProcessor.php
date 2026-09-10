@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraOrderApi\State;
 
-use Illuminate\Contracts\Database\Query\Builder;
 use ApiPlatform\Laravel\ApiResource\ValidationError;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Misaf\VendraAddress\Models\Address;
