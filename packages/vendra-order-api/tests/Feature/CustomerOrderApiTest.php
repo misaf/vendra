@@ -60,7 +60,7 @@ it('denies access to an order placed by another user', function (): void {
         ->assertNotFound();
 });
 
-it('converts the caller\'s cart into an order priced from the catalog', function (): void {
+it("converts the caller's cart into an order priced from the catalog", function (): void {
     $user = createTestUser();
     $product = orderApiProduct(price: 4800);
     $cart = CartFactory::new()->forOwner($user)->createOne();

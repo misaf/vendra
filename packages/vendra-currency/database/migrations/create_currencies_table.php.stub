@@ -7,7 +7,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         Schema::create('currencies', function (Blueprint $table): void {
@@ -23,7 +24,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('default_guard')
                 ->nullable()
                 ->virtualAs(TenantSchema::enabled()
-                    ? 'CASE WHEN is_default THEN ' . TenantSchema::column() . ' ELSE NULL END'
+                    ? 'CASE WHEN is_default THEN '.TenantSchema::column().' ELSE NULL END'
                     : 'CASE WHEN is_default THEN 1 ELSE NULL END');
             $table->unsignedBigInteger('position');
             $table->timestampsTz();

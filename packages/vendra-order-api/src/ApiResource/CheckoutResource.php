@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
     ],
     mcp: [
         'place_order' => new McpTool(
-            description: 'Convert the authenticated user\'s cart into an order.',
+            description: "Convert the authenticated user's cart into an order.",
             input: self::class,
             processor: PlaceOrderProcessor::class,
             validate: true,

@@ -41,7 +41,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
     ],
     mcp: [
         'save_wishlist_item' => new McpTool(
-            description: 'Save a product to the authenticated user\'s default wishlist.',
+            description: "Save a product to the authenticated user's default wishlist.",
             input: self::class,
             processor: SaveWishlistItemProcessor::class,
             validate: true,

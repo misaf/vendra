@@ -113,7 +113,7 @@ it('stores document files through Vendra Multimedia', function (): void {
         ->toContain("MEDIA_COLLECTION = 'documents'")
         ->and($relationManager)
         ->toContain("SpatieMediaLibraryFileUpload::make('file')")
-        ->toContain('->visibility(\'private\')')
+        ->toContain("->visibility('private')")
         ->and($migration)
         ->not->toContain("\$table->string('disk')")
         ->not->toContain("\$table->string('path')");
