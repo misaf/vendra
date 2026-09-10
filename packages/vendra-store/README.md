@@ -83,9 +83,9 @@ panels read. It lives here rather than in the console because
 `config/vendra-store.php` describes what a storefront *is*. Runtime drivers,
 endpoints, API negotiation, TLS, and timeouts belong to
 `misaf/laravel-docker-engine` and its `config/container.php`.
-Storefront container images and their supported themes are records in
+Storefront container images are records in
 `storefront_images`, managed by the console. Each deployment references the
-selected record, so different stores can run different approved builds.
+selected record, so different stores run different approved builds.
 
 ```dotenv
 STOREFRONT_NETWORK=traefik-public

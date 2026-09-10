@@ -20,7 +20,6 @@ function storefrontConfiguration(array $overrides = []): array
 {
     return [
         'slug'          => 'acme-flowers',
-        'theme'         => 'default',
         'domain'        => 'acme.test',
         'siteUrl'       => 'https://acme.test',
         'businessType'  => 'Florist',
@@ -53,9 +52,7 @@ function storefrontRequest(array $overrides = []): StorefrontProvisionRequest
         tenantId: 1,
         slug: $overrides['slug'] ?? 'acme-flowers',
         domain: $overrides['domain'] ?? 'acme.test',
-        theme: $overrides['theme'] ?? 'default',
         image: $overrides['image'] ?? 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123',
-        themes: $overrides['themes'] ?? ['default'],
         configuration: $overrides['configuration'] ?? storefrontConfiguration(),
     );
 }
@@ -163,7 +160,6 @@ it('records the deployment as requested when the container never turns healthy',
     $deployment = StorefrontDeployment::factory()->create([
         'slug'          => 'acme-flowers',
         'domain'        => 'acme.test',
-        'theme'         => 'default',
         'configuration' => storefrontConfiguration(),
     ]);
 
@@ -179,7 +175,6 @@ it('keeps a retrying deployment out of the failed state until the queue gives up
     $deployment = StorefrontDeployment::factory()->create([
         'slug'          => 'acme-flowers',
         'domain'        => 'acme.test',
-        'theme'         => 'default',
         'configuration' => storefrontConfiguration(),
     ]);
 
@@ -245,15 +240,6 @@ it('rejects a configuration the storefront image would refuse to boot on', funct
     ])))->toThrow(InvalidArgumentException::class, 'businessType, contact.email');
 
     assertNoDockerRequestsSent();
-});
-
-it('rejects a theme no published image carries', function (): void {
-    fakeDockerEngine();
-
-    expect(fn() => app(StorefrontProvisioner::class)->provision(storefrontRequest([
-        'theme'         => 'midnight',
-        'configuration' => storefrontConfiguration(['theme' => 'midnight']),
-    ])))->toThrow(InvalidArgumentException::class, 'Unsupported storefront theme [midnight]');
 });
 
 it('rejects a configuration whose identity drifted from the deployment', function (): void {

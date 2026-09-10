@@ -37,7 +37,6 @@ function reconcilableConfiguration(): array
 {
     return [
         'slug'          => 'acme-flowers',
-        'theme'         => 'default',
         'domain'        => 'acme.test',
         'siteUrl'       => 'https://acme.test',
         'businessType'  => 'Florist',
@@ -72,14 +71,13 @@ function reconcilable(array $attributes = []): StorefrontDeployment
 {
     $storefrontImage = StorefrontImage::query()->firstOrCreate(
         ['image' => RECONCILE_IMAGE],
-        ['name' => 'Florist storefront', 'themes' => ['default'], 'active' => true],
+        ['active' => true],
     );
 
     return StorefrontDeployment::factory()->create([
         'storefront_image_id' => $storefrontImage->id,
         'slug'                => 'acme-flowers',
         'domain'              => 'acme.test',
-        'theme'               => 'default',
         'status'              => StorefrontDeploymentStatus::Ready,
         'desired_state'       => StorefrontDesiredState::Running,
         'image'               => RECONCILE_IMAGE,

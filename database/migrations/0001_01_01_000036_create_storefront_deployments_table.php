@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->foreignId('storefront_image_id')->nullable()->constrained()->restrictOnDelete();
             $table->string('slug')->unique();
             $table->string('domain')->unique();
-            $table->string('theme');
             $table->json('configuration');
 
             // What the platform last observed.

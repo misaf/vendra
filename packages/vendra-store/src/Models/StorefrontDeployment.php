@@ -31,7 +31,6 @@ use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
  * @property int|null $storefront_image_id
  * @property string $slug
  * @property string $domain
- * @property string $theme
  * @property array<string, mixed> $configuration
  * @property StorefrontDeploymentStatus $status
  * @property StorefrontDesiredState $desired_state
@@ -46,7 +45,7 @@ use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
  * @property Carbon $updated_at
  */
 #[Fillable([
-    'store_id', 'storefront_image_id', 'slug', 'domain', 'theme', 'configuration', 'status', 'desired_state',
+    'store_id', 'storefront_image_id', 'slug', 'domain', 'configuration', 'status', 'desired_state',
     'container_name', 'image', 'image_digest', 'requested_at', 'deployed_at',
     'failed_at', 'error',
 ])]

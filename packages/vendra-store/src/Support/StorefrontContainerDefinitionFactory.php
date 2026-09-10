@@ -11,7 +11,7 @@ use JsonException;
  * container definition that should run for it.
  *
  * This is the seam between the two layers: everything above it is a store
- * with a domain, a theme, and a configuration; everything below it is a
+ * with a domain and a configuration; everything below it is a
  * container the runtime knows how to place. A mapper, not a builder — two typed
  * inputs in, one typed value out, no state of its own beyond the settings it is
  * constructed with.

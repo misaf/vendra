@@ -32,7 +32,7 @@ final class StorefrontConfigurationValidator
      *
      * @var list<string>
      */
-    private const array IDENTITY = ['slug', 'theme', 'domain', 'siteUrl'];
+    private const array IDENTITY = ['slug', 'domain', 'siteUrl'];
 
     /**
      * Fields the image requires at boot, mirroring its properties/schema.json.
@@ -43,7 +43,7 @@ final class StorefrontConfigurationValidator
      *
      * @var list<string>
      */
-    private const array REQUIRED_STRINGS = ['slug', 'theme', 'domain', 'siteUrl', 'businessType', 'priceCurrency'];
+    private const array REQUIRED_STRINGS = ['slug', 'domain', 'siteUrl', 'businessType', 'priceCurrency'];
 
     /** @var array<string, list<string>> */
     private const array REQUIRED_OBJECTS = [
@@ -94,20 +94,6 @@ final class StorefrontConfigurationValidator
 
         if ('' === mb_trim($request->image)) {
             throw new InvalidArgumentException('A storefront image is required.');
-        }
-
-        /*
-         | A theme is a property of the image: the storefront resolves it at build
-         | time, so a different theme means a different image. The platform records
-         | the theme and checks the configuration agrees, but cannot change it at
-         | deploy time.
-         */
-        if ( ! in_array($request->theme, $request->themes, true)) {
-            throw new InvalidArgumentException(sprintf(
-                'Unsupported storefront theme [%s]. Published themes: %s.',
-                '' === $request->theme ? 'null' : $request->theme,
-                implode(', ', $request->themes),
-            ));
         }
 
         $configuration = $request->configuration;

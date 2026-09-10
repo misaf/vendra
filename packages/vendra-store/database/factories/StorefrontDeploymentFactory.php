@@ -35,7 +35,6 @@ final class StorefrontDeploymentFactory extends Factory
             'storefront_image_id' => StorefrontImage::factory(),
             'slug'                => fake()->unique()->slug(2),
             'domain'              => fake()->unique()->domainName(),
-            'theme'               => 'default',
             'configuration'       => [
                 'name' => ['en' => fake()->company(), 'fa' => 'گل‌فروشی'],
             ],

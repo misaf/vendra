@@ -11,7 +11,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
 
@@ -63,35 +62,12 @@ final class StorefrontConfigurationFields
             Select::make('storefront_image_id')
                 ->label(__('console.storefront_image'))
                 ->helperText(__('console.storefront_image_hint'))
-                ->options(fn(): array => StorefrontImage::query()->active()->orderBy('name')->pluck('name', 'id')->all())
-                ->afterStateUpdated(fn(Set $set) => $set('storefront_theme', null))
+                ->options(fn(): array => StorefrontImage::query()->active()->orderBy('image')->pluck('image', 'id')->all())
                 ->required($required)
                 ->searchable()
                 ->preload()
                 ->native(false)
                 ->live(),
-            Select::make('storefront_theme')
-                ->label(__('console.storefront_theme'))
-                ->options(function (Get $get): array {
-                    $imageId = $get('storefront_image_id');
-
-                    if ( ! is_numeric($imageId)) {
-                        return [];
-                    }
-
-                    $image = StorefrontImage::query()->active()->whereKey((int) $imageId);
-
-                    if ( ! $image->exists()) {
-                        return [];
-                    }
-
-                    $themes = $image->firstOrFail()->themes;
-
-                    return array_combine($themes, $themes) ?: [];
-                })
-                ->required($required)
-                ->disabled(fn(Get $get): bool => ! is_numeric($get('storefront_image_id')))
-                ->native(false),
             TextInput::make('storefront_slug')
                 ->label(__('console.storefront_slug'))
                 ->helperText(__('console.storefront_slug_hint'))

@@ -34,9 +34,9 @@ describe('the form-to-configuration map', function (): void {
             ...StorefrontConfigurationFields::contactFields(optional: false),
             ...StorefrontConfigurationFields::locationAndSocialFields(optional: false),
         ])->map(fn($component): string => $component->getName())
-            // slug and theme identify the deployment row itself rather than
-            // travelling inside the encoded configuration.
-            ->reject(fn(string $name): bool => in_array($name, ['storefront_image_id', 'storefront_slug', 'storefront_theme'], true))
+            // slug identifies the deployment row itself rather than travelling
+            // inside the encoded configuration.
+            ->reject(fn(string $name): bool => in_array($name, ['storefront_image_id', 'storefront_slug'], true))
             ->all();
 
         expect($defined)->each->toBeIn(array_keys(StorefrontConfigurationMap::FIELDS));

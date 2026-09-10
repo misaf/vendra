@@ -54,7 +54,7 @@ description: "Create, modify, review, or test the Vendra Store module in package
 
 - `RequestStorefrontDeploymentAction` → `ProvisionStorefrontJob` → `StorefrontDeployment`. Reconciliation and retry go through `StorefrontDeploymentDispatchCommand`; do not add a second dispatch path.
 - `CreateStorePage` skips the request only for explicit `create_storefront=false`. The console wizard may expose this through `StorefrontConfigurationFields::creationToggle()` and must use optional storefront field rules; the reseller form remains mandatory.
-- `StorefrontImage` records the operator-approved immutable image reference and its built-in themes. New deployments may select only active catalog entries; existing deployments keep using their selected entry after it is disabled. Never reintroduce global `STOREFRONT_IMAGE` or `STOREFRONT_THEMES` configuration.
+- `StorefrontImage` records the operator-approved immutable image reference and optional notes. New deployments may select only active catalog entries; existing deployments keep using their selected entry after it is disabled. Never reintroduce global `STOREFRONT_IMAGE` configuration.
 - Write status only via `markProcessing()`, `markReady()`, `markRequested()`, `markFailed()`. `Enums\StorefrontDeploymentStatus::transitions()` is the transition table and `InvalidStorefrontTransitionException` is the rejection.
 - A failing attempt with retries left stays `Processing`; only `ProvisionStorefrontJob::failed()` writes `Failed`.
 - `ProvisionStorefrontJob` runs on its own `storefronts` queue, served by the single worker that holds a runtime socket. Do not move it onto a shared queue.

@@ -20,16 +20,13 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 final class StorefrontProvisionRequest
 {
     /**
-     * @param list<string> $themes themes built into the selected image
      * @param array<string, mixed> $configuration the configuration the storefront image boots on
      */
     public function __construct(
         public readonly int $tenantId,
         public readonly string $slug,
         public readonly string $domain,
-        public readonly string $theme,
         public readonly string $image,
-        public readonly array $themes,
         public readonly array $configuration,
     ) {}
 
@@ -52,12 +49,9 @@ final class StorefrontProvisionRequest
             tenantId: $deployment->store_id,
             slug: $deployment->slug,
             domain: $deployment->domain,
-            theme: $deployment->theme,
             image: $storefrontImage->image,
-            themes: $storefrontImage->themes,
             configuration: [
                 'slug'    => $deployment->slug,
-                'theme'   => $deployment->theme,
                 'domain'  => $deployment->domain,
                 'siteUrl' => 'https://' . $deployment->domain,
                 ...$deployment->configuration,

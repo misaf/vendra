@@ -14,17 +14,16 @@ use Illuminate\Support\Carbon;
 use Misaf\VendraStore\Database\Factories\StorefrontImageFactory;
 
 /**
- * An operator-approved storefront artifact and the themes built into it.
+ * An operator-approved storefront artifact.
  *
  * @property int $id
- * @property string $name
  * @property string $image
- * @property list<string> $themes
+ * @property string|null $notes
  * @property bool $active
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-#[Fillable(['name', 'image', 'themes', 'active'])]
+#[Fillable(['image', 'notes', 'active'])]
 #[UseFactory(StorefrontImageFactory::class)]
 final class StorefrontImage extends Model
 {
@@ -55,7 +54,6 @@ final class StorefrontImage extends Model
     protected function casts(): array
     {
         return [
-            'themes' => 'array',
             'active' => 'boolean',
         ];
     }

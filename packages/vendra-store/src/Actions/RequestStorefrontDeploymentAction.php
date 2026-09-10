@@ -55,19 +55,12 @@ final class RequestStorefrontDeploymentAction
             ],
         ])->validate();
         $storefrontImage = StorefrontImage::query()->findOrFail(Arr::integer($selection, 'storefront_image_id'));
-        $theme = Arr::string($form, 'storefront_theme');
-
-        Validator::make(
-            ['theme' => $theme],
-            ['theme' => ['required', 'string', Rule::in($storefrontImage->themes)]],
-        )->validate();
 
         $deployment = StorefrontDeployment::query()->create([
             'store_id'            => $store->id,
             'storefront_image_id' => $storefrontImage->id,
             'slug'                => Arr::string($form, 'storefront_slug'),
             'domain'              => $domain,
-            'theme'               => $theme,
             'configuration'       => $configuration,
             'status'              => StorefrontDeploymentStatus::Pending,
             'desired_state'       => StorefrontDesiredState::Running,

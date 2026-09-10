@@ -234,7 +234,6 @@ function storefrontRequestData(string $slug = 'acme-flowers'): array
     return [
         'storefront_image_id'           => StorefrontImage::factory()->create()->id,
         'storefront_slug'               => $slug,
-        'storefront_theme'              => 'default',
         'storefront_name_en'            => 'Acme Flowers',
         'storefront_name_fa'            => 'گل‌فروشی اکمی',
         'storefront_business_type'      => 'Florist',

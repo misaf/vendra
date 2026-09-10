@@ -11,9 +11,8 @@ return new class extends Migration {
     {
         Schema::create('storefront_images', function (Blueprint $table): void {
             $table->id();
-            $table->string('name');
             $table->string('image')->unique();
-            $table->json('themes');
+            $table->text('notes')->nullable();
             $table->boolean('active')->default(true)->index();
             $table->timestampsTz();
         });
