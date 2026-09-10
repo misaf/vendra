@@ -15,7 +15,7 @@ beforeEach(function (): void {
 it('resolves canonical and custom admin hosts to the property', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'acme']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'acme.example.com',
+        'name' => 'acme.example.com',
         'active' => true,
     ]);
 
@@ -30,7 +30,7 @@ it('resolves canonical and custom admin hosts to the property', function (): voi
 it('serves the admin login on canonical and custom property hosts', function (string $host): void {
     $tenant = Store::factory()->active()->create(['slug' => 'acme']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'acme.example.com',
+        'name' => 'acme.example.com',
         'active' => true,
     ]);
 
@@ -38,7 +38,7 @@ it('serves the admin login on canonical and custom property hosts', function (st
     $this->get("https://{$host}/login")->assertSuccessful();
 })->with([
     'canonical host' => 'acme.admin.vendra.test',
-    'custom host'    => 'admin.acme.example.com',
+    'custom host' => 'admin.acme.example.com',
 ]);
 
 it('serves the canonical admin host after tenant switching changes the application URL', function (): void {
@@ -52,7 +52,7 @@ it('serves the canonical admin host after tenant switching changes the applicati
 it('does not serve the admin panel on the storefront host', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'acme']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'acme.example.com',
+        'name' => 'acme.example.com',
         'active' => true,
     ]);
 
@@ -65,7 +65,7 @@ it('does not resolve manually inactive, billing suspended, or provisioning tenan
         ...$attributes,
     ]);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'acme.example.com',
+        'name' => 'acme.example.com',
         'active' => true,
     ]);
 
@@ -74,10 +74,10 @@ it('does not resolve manually inactive, billing suspended, or provisioning tenan
     expect($tenantFinder->findForAdminHost('acme.admin.vendra.test'))->toBeNull()
         ->and($tenantFinder->findForAdminHost('admin.acme.example.com'))->toBeNull();
 })->with([
-    'manual deactivation'  => [['active' => false]],
-    'billing suspension'   => [['billing_suspended_at' => now()]],
+    'manual deactivation' => [['active' => false]],
+    'billing suspension' => [['billing_suspended_at' => now()]],
     'pending provisioning' => [[
         'provisioning_status' => TenantProvisioningStatus::Pending,
-        'provisioned_at'      => null,
+        'provisioned_at' => null,
     ]],
 ]);

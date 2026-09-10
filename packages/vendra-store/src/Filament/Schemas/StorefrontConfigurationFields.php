@@ -34,7 +34,7 @@ final class StorefrontConfigurationFields
                             ...self::contactFields($optional),
                             ...self::locationAndSocialFields($optional),
                         ])
-                        ->visible(fn(Get $get): bool => ! $optional || true === $get('create_storefront'))
+                        ->visible(fn (Get $get): bool => ! $optional || $get('create_storefront') === true)
                         ->columnSpanFull(),
                 ])
                 ->visibleOn('create')
@@ -57,12 +57,13 @@ final class StorefrontConfigurationFields
      */
     public static function identityFields(bool $optional): array
     {
-        $required = fn(Get $get): bool => ! $optional || true === $get('create_storefront');
+        $required = fn (Get $get): bool => ! $optional || $get('create_storefront') === true;
+
         return [
             Select::make('storefront_image_id')
                 ->label(__('console.storefront_image'))
                 ->helperText(__('console.storefront_image_hint'))
-                ->options(fn(): array => StorefrontImage::query()->active()->orderBy('image')->pluck('image', 'id')->all())
+                ->options(fn (): array => StorefrontImage::query()->active()->orderBy('image')->pluck('image', 'id')->all())
                 ->required($required)
                 ->searchable()
                 ->preload()
@@ -106,7 +107,7 @@ final class StorefrontConfigurationFields
      */
     public static function contactFields(bool $optional): array
     {
-        $required = fn(Get $get): bool => ! $optional || true === $get('create_storefront');
+        $required = fn (Get $get): bool => ! $optional || $get('create_storefront') === true;
 
         return [
             TextInput::make('storefront_mobile_phone')
@@ -151,7 +152,7 @@ final class StorefrontConfigurationFields
      */
     public static function locationAndSocialFields(bool $optional): array
     {
-        $required = fn(Get $get): bool => ! $optional || true === $get('create_storefront');
+        $required = fn (Get $get): bool => ! $optional || $get('create_storefront') === true;
 
         return [
             TextInput::make('storefront_locality')

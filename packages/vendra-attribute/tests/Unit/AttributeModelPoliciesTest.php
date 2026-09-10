@@ -16,8 +16,8 @@ it('applies shared tenant ownership and soft deletes to attribute models', funct
 });
 
 it('hides the tenant association from attribute serialization', function (): void {
-    expect((new Attribute())->getHidden())->toContain('tenant_id', 'active_name_guard')
-        ->and((new AttributeValue())->getHidden())->toContain('tenant_id', 'attributable_type', 'attributable_id');
+    expect((new Attribute)->getHidden())->toContain('tenant_id', 'active_name_guard')
+        ->and((new AttributeValue)->getHidden())->toContain('tenant_id', 'attributable_type', 'attributable_id');
 });
 
 it('defines policy permissions for the attribute resource', function (): void {
@@ -44,6 +44,6 @@ it('uses kebab-case permission names scoped per model', function (): void {
 });
 
 it('logs activity for attribute models', function (): void {
-    expect(new Attribute())->toBeInstanceOf(ShouldLogActivity::class)
-        ->and(new AttributeValue())->toBeInstanceOf(ShouldLogActivity::class);
+    expect(new Attribute)->toBeInstanceOf(ShouldLogActivity::class)
+        ->and(new AttributeValue)->toBeInstanceOf(ShouldLogActivity::class);
 });

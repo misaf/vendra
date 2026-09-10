@@ -92,7 +92,7 @@ final class DeliveryResource extends Resource
     {
         return [
             'index' => ListDeliveries::route('/'),
-            'view'  => ViewDelivery::route('/{record}'),
+            'view' => ViewDelivery::route('/{record}'),
         ];
     }
 }

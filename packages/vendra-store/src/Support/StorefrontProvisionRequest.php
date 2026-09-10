@@ -20,7 +20,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 final class StorefrontProvisionRequest
 {
     /**
-     * @param array<string, mixed> $configuration the configuration the storefront image boots on
+     * @param  array<string, mixed>  $configuration  the configuration the storefront image boots on
      */
     public function __construct(
         public readonly int $tenantId,
@@ -41,7 +41,7 @@ final class StorefrontProvisionRequest
     {
         $storefrontImage = $deployment->storefrontImage;
 
-        if (null === $storefrontImage) {
+        if ($storefrontImage === null) {
             throw new InvalidArgumentException('Select a storefront image before deploying this storefront.');
         }
 
@@ -51,9 +51,9 @@ final class StorefrontProvisionRequest
             domain: $deployment->domain,
             image: $storefrontImage->image,
             configuration: [
-                'slug'    => $deployment->slug,
-                'domain'  => $deployment->domain,
-                'siteUrl' => 'https://' . $deployment->domain,
+                'slug' => $deployment->slug,
+                'domain' => $deployment->domain,
+                'siteUrl' => 'https://'.$deployment->domain,
                 ...$deployment->configuration,
             ],
         );

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Contracts;
 
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraStore\Support\NullStoreOwnerResolver;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 
 /**
@@ -17,7 +18,7 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
  * installable, and testable, without `misaf/vendra-reseller`.
  *
  * `misaf/vendra-reseller` binds the Eloquent implementation; without it the
- * {@see \Misaf\VendraStore\Support\NullStoreOwnerResolver} resolves nothing.
+ * {@see NullStoreOwnerResolver} resolves nothing.
  */
 interface StoreOwnerResolver
 {

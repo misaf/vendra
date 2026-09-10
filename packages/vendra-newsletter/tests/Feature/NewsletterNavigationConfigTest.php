@@ -30,7 +30,7 @@ it('resolves configured panel ids from an array, string, or legacy panel key', f
 
     config([
         'vendra-newsletter.panels' => null,
-        'vendra-newsletter.panel'  => 'legacy',
+        'vendra-newsletter.panel' => 'legacy',
     ]);
 
     expect($method->invoke($provider, 'vendra-newsletter'))->toBe(['legacy']);
@@ -48,7 +48,7 @@ it('places newsletters in the marketing domain', function (): void {
 it('lets the navigation group be overridden with a plugin option', function (): void {
     expect(NewsletterPlugin::make()->navigationGroup('Marketing')->getNavigationGroup())
         ->toBe('Marketing')
-        ->and(NewsletterPlugin::make()->navigationGroup(fn(): string => 'Grouped')->getNavigationGroup())
+        ->and(NewsletterPlugin::make()->navigationGroup(fn (): string => 'Grouped')->getNavigationGroup())
         ->toBe('Grouped');
 });
 
@@ -73,7 +73,7 @@ it('exposes a configurable, toggleable schedule', function (): void {
 
 it('registers the scheduled send command from the package', function (): void {
     $registered = collect(app(Schedule::class)->events())
-        ->contains(fn($event): bool => str_contains((string) $event->command, 'vendra-newsletter:send-scheduled'));
+        ->contains(fn ($event): bool => str_contains((string) $event->command, 'vendra-newsletter:send-scheduled'));
 
     expect($registered)->toBeTrue();
 });

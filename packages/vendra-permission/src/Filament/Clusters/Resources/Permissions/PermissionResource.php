@@ -21,7 +21,6 @@ use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Tables\Permis
 use Misaf\VendraPermission\Models\Permission;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Filament\Clusters\CustomersCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class PermissionResource extends Resource
@@ -69,10 +68,10 @@ final class PermissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListPermissions::route('/'),
+            'index' => ListPermissions::route('/'),
             'create' => CreatePermission::route('/create'),
-            'view'   => ViewPermission::route('/{record}'),
-            'edit'   => EditPermission::route('/{record}/edit'),
+            'view' => ViewPermission::route('/{record}'),
+            'edit' => EditPermission::route('/{record}/edit'),
         ];
     }
 

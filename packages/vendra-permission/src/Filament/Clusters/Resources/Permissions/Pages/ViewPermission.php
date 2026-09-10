@@ -14,7 +14,7 @@ final class ViewPermission extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-permission::navigation.permission');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-permission::navigation.permission');
     }
 
     protected function getHeaderActions(): array

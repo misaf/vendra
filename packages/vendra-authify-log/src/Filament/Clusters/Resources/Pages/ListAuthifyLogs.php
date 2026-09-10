@@ -13,6 +13,6 @@ final class ListAuthifyLogs extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-authify-log::navigation.authify_log');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-authify-log::navigation.authify_log');
     }
 }

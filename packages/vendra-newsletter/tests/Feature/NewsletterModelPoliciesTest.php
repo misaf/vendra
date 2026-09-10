@@ -31,14 +31,14 @@ function fakeNewsletterTenantResolver(bool $available, ?int $currentId = null): 
 }
 
 it('defines the expected fillable and hidden attributes', function (): void {
-    expect((new Newsletter())->getFillable())->toContain('subject', 'content', 'status', 'scheduled_at', 'sent_at')
-        ->and((new Newsletter())->getHidden())->toContain('tenant_id')
-        ->and((new NewsletterSubscriber())->getFillable())->toContain('email', 'name', 'subscribed_at', 'unsubscribed_at')
-        ->and((new NewsletterSubscriber())->getHidden())->toContain('tenant_id', 'unsubscribe_token');
+    expect((new Newsletter)->getFillable())->toContain('subject', 'content', 'status', 'scheduled_at', 'sent_at')
+        ->and((new Newsletter)->getHidden())->toContain('tenant_id')
+        ->and((new NewsletterSubscriber)->getFillable())->toContain('email', 'name', 'subscribed_at', 'unsubscribed_at')
+        ->and((new NewsletterSubscriber)->getHidden())->toContain('tenant_id', 'unsubscribe_token');
 });
 
 it('casts the newsletter status to its enum', function (): void {
-    $newsletter = new Newsletter();
+    $newsletter = new Newsletter;
     $newsletter->status = NewsletterStatusEnum::Scheduled;
 
     expect($newsletter->status)->toBe(NewsletterStatusEnum::Scheduled);
@@ -53,13 +53,13 @@ it('always registers tenant scopes that self-disable without a current tenant', 
     Newsletter::clearBootedModels();
     app()->instance(TenantResolver::class, fakeNewsletterTenantResolver(available: false));
 
-    expect(array_keys((new Newsletter())->getGlobalScopes()))->toContain(TenantScope::class, TeamScope::class);
+    expect(array_keys((new Newsletter)->getGlobalScopes()))->toContain(TenantScope::class, TeamScope::class);
 
     Newsletter::clearBootedModels();
 });
 
 it('reports a subscriber as subscribed only while it has no unsubscribed timestamp', function (): void {
-    $subscriber = new NewsletterSubscriber();
+    $subscriber = new NewsletterSubscriber;
 
     expect($subscriber->isSubscribed())->toBeTrue();
 
@@ -111,13 +111,13 @@ it('prevents sent newsletters from being updated', function (): void {
         ->with(NewsletterPolicyEnum::Update->value)
         ->andReturnTrue();
 
-    $draft = new Newsletter();
+    $draft = new Newsletter;
     $draft->status = NewsletterStatusEnum::Draft;
 
-    $sent = new Newsletter();
+    $sent = new Newsletter;
     $sent->status = NewsletterStatusEnum::Sent;
 
-    $policy = new NewsletterPolicy();
+    $policy = new NewsletterPolicy;
 
     expect($policy->update($user, $draft))->toBeTrue()
         ->and($policy->update($user, $sent))->toBeFalse();
@@ -130,20 +130,20 @@ it('authorizes newsletter sending through its dedicated permission', function ()
         ->with(NewsletterPolicyEnum::Send->value)
         ->andReturnTrue();
 
-    $draft = new Newsletter();
+    $draft = new Newsletter;
     $draft->status = NewsletterStatusEnum::Draft;
 
-    $sent = new Newsletter();
+    $sent = new Newsletter;
     $sent->status = NewsletterStatusEnum::Sent;
 
-    $policy = new NewsletterPolicy();
+    $policy = new NewsletterPolicy;
 
     expect($policy->send($user, $draft))->toBeTrue()
         ->and($policy->send($user, $sent))->toBeFalse();
 });
 
 it('wires the custom send action to policy authorization', function (): void {
-    $newsletter = new Newsletter();
+    $newsletter = new Newsletter;
     $newsletter->status = NewsletterStatusEnum::Draft;
 
     Gate::shouldReceive('allows')

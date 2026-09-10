@@ -45,8 +45,8 @@ use Misaf\VendraCustomPageApi\State\CustomPageCategoryMapper;
 final readonly class CustomPageCategoryResource
 {
     /**
-     * @param array<string, string> $name
-     * @param array<int, ResourceReference> $customPages
+     * @param  array<string, string>  $name
+     * @param  array<int, ResourceReference>  $customPages
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The custom page category unique identifier')]

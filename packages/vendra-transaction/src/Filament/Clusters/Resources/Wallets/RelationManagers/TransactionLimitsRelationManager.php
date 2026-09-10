@@ -48,16 +48,16 @@ final class TransactionLimitsRelationManager extends RelationManager
     {
         $tabs = [
             'all' => Tab::make()
-                ->badge(fn(): string => (string) Number::format($this->getOwnerRecord()->transactionLimits()->count()))
+                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactionLimits()->count()))
                 ->deferBadge(),
         ];
 
         foreach (TransactionTypeEnum::cases() as $type) {
             $tabs[$type->value] = Tab::make()
-                ->badge(fn(): string => (string) Number::format($this->getOwnerRecord()->transactionLimits()->where('transaction_type', $type)->count()))
+                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactionLimits()->where('transaction_type', $type)->count()))
                 ->deferBadge()
                 ->label($type->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('transaction_type', $type));
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('transaction_type', $type));
         }
 
         return $tabs;
@@ -72,7 +72,7 @@ final class TransactionLimitsRelationManager extends RelationManager
                     ->native(false)
                     ->options(TransactionTypeEnum::class)
                     ->required()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn($rule) => $rule->where('wallet_id', $this->getOwnerRecord()->getKey())),
+                    ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) => $rule->where('wallet_id', $this->getOwnerRecord()->getKey())),
 
                 TextInput::make('amount')
                     ->extraInputAttributes(['dir' => 'ltr'])

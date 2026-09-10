@@ -34,27 +34,27 @@ enum InquiryStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): array
     {
         return match ($this) {
-            self::New      => Color::Amber,
+            self::New => Color::Amber,
             self::Answered => Color::Green,
-            self::Closed   => Color::Gray,
+            self::Closed => Color::Gray,
         };
     }
 
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::New      => Heroicon::OutlinedInbox,
+            self::New => Heroicon::OutlinedInbox,
             self::Answered => Heroicon::OutlinedCheckCircle,
-            self::Closed   => Heroicon::OutlinedArchiveBox,
+            self::Closed => Heroicon::OutlinedArchiveBox,
         };
     }
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::New      => __('vendra-inquiry::enums.inquiry_status_new'),
+            self::New => __('vendra-inquiry::enums.inquiry_status_new'),
             self::Answered => __('vendra-inquiry::enums.inquiry_status_answered'),
-            self::Closed   => __('vendra-inquiry::enums.inquiry_status_closed'),
+            self::Closed => __('vendra-inquiry::enums.inquiry_status_closed'),
         };
     }
 }

@@ -35,7 +35,7 @@ it('restricts the documentation to the requested tag', function (): void {
 
     expect($schemas)->not->toBeEmpty()
         ->and($schemas)->toContain('Product.jsonld')
-        ->and(array_filter($schemas, fn(string $schema): bool => str_starts_with($schema, 'CustomPage')))->toBeEmpty();
+        ->and(array_filter($schemas, fn (string $schema): bool => str_starts_with($schema, 'CustomPage')))->toBeEmpty();
 });
 
 it('accepts several comma separated tags', function (): void {

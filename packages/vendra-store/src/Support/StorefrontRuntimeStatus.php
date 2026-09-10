@@ -22,7 +22,7 @@ final class StorefrontRuntimeStatus
         return match (true) {
             Str::contains((string) $this->server, 'libpod', ignoreCase: true) => 'podman',
             Str::contains((string) $this->server, 'docker', ignoreCase: true) => 'docker',
-            default                                                           => null,
+            default => null,
         };
     }
 
@@ -30,13 +30,13 @@ final class StorefrontRuntimeStatus
     {
         $reportedEngine = $this->reportedEngine();
 
-        return $this->reachable && null !== $reportedEngine && $reportedEngine !== $this->driver;
+        return $this->reachable && $reportedEngine !== null && $reportedEngine !== $this->driver;
     }
 
     public function describeDaemon(): string
     {
         $endpoint = $this->endpoint ?? 'an unconfigured endpoint';
 
-        return null === $this->server ? $endpoint : sprintf('%s (%s)', $endpoint, $this->server);
+        return $this->server === null ? $endpoint : sprintf('%s (%s)', $endpoint, $this->server);
     }
 }

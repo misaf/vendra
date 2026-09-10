@@ -5,11 +5,11 @@ declare(strict_types=1);
 return [
     'columns' => [
         'created_at' => 'Created At',
-        'name'       => 'Name',
+        'name' => 'Name',
         'updated_at' => 'Updated At',
-        'user'       => 'User',
+        'user' => 'User',
     ],
-    'groups'  => [
-        'user'       => 'User',
+    'groups' => [
+        'user' => 'User',
     ],
 ];

@@ -38,12 +38,12 @@ final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFi
     public function findForAdminHost(string $host): ?IsTenant
     {
         $host = Str::lower($host);
-        $adminDomain = 'admin.' . config()->string('vendra-tenant.central_host');
+        $adminDomain = 'admin.'.config()->string('vendra-tenant.central_host');
 
-        if (Str::endsWith($host, '.' . $adminDomain)) {
-            $storeSlug = Str::beforeLast($host, '.' . $adminDomain);
+        if (Str::endsWith($host, '.'.$adminDomain)) {
+            $storeSlug = Str::beforeLast($host, '.'.$adminDomain);
 
-            if ('' !== $storeSlug && ! str_contains($storeSlug, '.')) {
+            if ($storeSlug !== '' && ! str_contains($storeSlug, '.')) {
                 return Store::query()
                     ->accessible()
                     ->where('slug', $storeSlug)
@@ -70,7 +70,7 @@ final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFi
     {
         $host = parse_url($origin, PHP_URL_HOST);
 
-        if ( ! is_string($host) || '' === $host) {
+        if (! is_string($host) || $host === '') {
             return null;
         }
 
@@ -81,7 +81,7 @@ final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFi
     {
         return Store::query()
             ->accessible()
-            ->whereHas('storeDomains', fn(Builder $query): Builder => $query
+            ->whereHas('storeDomains', fn (Builder $query): Builder => $query
                 ->where('name', Str::lower($host))
                 ->where('active', true))
             ->first();

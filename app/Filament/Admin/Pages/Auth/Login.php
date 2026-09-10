@@ -69,7 +69,7 @@ final class Login extends \Filament\Auth\Pages\Login
     protected function getAuthenticateFormAction(): Action
     {
         return Action::make('authenticate')
-            ->disabled(fn() => ! $this->isTurnstileValidated)
+            ->disabled(fn () => ! $this->isTurnstileValidated)
             ->label(__('filament-panels::auth/pages/login.form.actions.authenticate.label'))
             ->submit('authenticate');
     }

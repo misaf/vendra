@@ -29,15 +29,15 @@ final class GeneratePasswordAction extends Action
 
         $this->label(__('vendra-support::forms.random_password'));
         $this->icon(Heroicon::OutlinedShieldCheck);
-        $this->iconPosition(fn(): IconPosition => app()->isLocale('fa') ? IconPosition::After : IconPosition::Before);
-        $this->disabled(fn(string $operation): bool => 'view' === $operation);
+        $this->iconPosition(fn (): IconPosition => app()->isLocale('fa') ? IconPosition::After : IconPosition::Before);
+        $this->disabled(fn (string $operation): bool => $operation === 'view');
 
         $this->action(function (Set $set): void {
             $password = PasswordGenerator::generate($this->length);
 
             $set($this->field, $password);
 
-            if (null !== $this->confirmationField) {
+            if ($this->confirmationField !== null) {
                 $set($this->confirmationField, $password);
             }
         });

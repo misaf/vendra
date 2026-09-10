@@ -30,7 +30,7 @@ final class Locales
      */
     public static function options(?string $displayLocale = null): array
     {
-        return collect(static::names(static::all(), $displayLocale))
+        return collect(self::names(self::all(), $displayLocale))
             ->sort()
             ->all();
     }
@@ -46,8 +46,8 @@ final class Locales
         $display = $displayLocale ?? app()->getLocale();
 
         return collect($locales)
-            ->mapWithKeys(fn(string $locale): array => [
-                $locale => static::name($locale, $display) . " ({$locale})",
+            ->mapWithKeys(fn (string $locale): array => [
+                $locale => self::name($locale, $display)." ({$locale})",
             ])
             ->all();
     }
@@ -60,7 +60,7 @@ final class Locales
         $display = $displayLocale ?? app()->getLocale();
 
         return rescue(
-            fn(): string => IntlLocales::getName(static::toIcu($locale), $display),
+            fn (): string => IntlLocales::getName(self::toIcu($locale), $display),
             $locale,
             report: false,
         );
@@ -73,7 +73,7 @@ final class Locales
      */
     public static function all(): array
     {
-        return array_values(static::catalog());
+        return array_values(self::catalog());
     }
 
     /**
@@ -84,19 +84,19 @@ final class Locales
     public static function configured(): array
     {
         $locales = collect(config()->array('vendra-language.locales', []))
-            ->map(fn(mixed $locale): ?string => is_string($locale) ? static::normalize($locale) : null)
+            ->map(fn (mixed $locale): ?string => is_string($locale) ? self::normalize($locale) : null)
             ->filter()
             ->unique()
             ->values()
             ->all();
 
-        if ([] !== $locales) {
+        if ($locales !== []) {
             return array_values($locales);
         }
 
-        $fallback = static::normalize(config()->string('app.fallback_locale'));
+        $fallback = self::normalize(config()->string('app.fallback_locale'));
 
-        return null === $fallback ? [] : [$fallback];
+        return $fallback === null ? [] : [$fallback];
     }
 
     /**
@@ -106,7 +106,7 @@ final class Locales
      */
     public static function translationDefaults(): array
     {
-        return array_fill_keys(static::configured(), '');
+        return array_fill_keys(self::configured(), '');
     }
 
     /**
@@ -114,7 +114,7 @@ final class Locales
      */
     public static function isSupported(string $locale): bool
     {
-        return filled(static::normalize($locale));
+        return filled(self::normalize($locale));
     }
 
     /**
@@ -126,7 +126,7 @@ final class Locales
     {
         $needle = Str::of($locale)->replace('_', '-')->lower()->value();
 
-        return static::catalog()[$needle] ?? null;
+        return self::catalog()[$needle] ?? null;
     }
 
     /**
@@ -137,10 +137,10 @@ final class Locales
      */
     private static function catalog(): array
     {
-        return once(fn(): array => collect(IntlLocales::getLocales())
-            ->map(fn(string $locale): string => static::toWeb($locale))
-            ->reject(fn(string $locale): bool => Str::length($locale) > static::MAX_LENGTH)
-            ->mapWithKeys(fn(string $locale): array => [Str::lower($locale) => $locale])
+        return once(fn (): array => collect(IntlLocales::getLocales())
+            ->map(fn (string $locale): string => self::toWeb($locale))
+            ->reject(fn (string $locale): bool => Str::length($locale) > self::MAX_LENGTH)
+            ->mapWithKeys(fn (string $locale): array => [Str::lower($locale) => $locale])
             ->all());
     }
 

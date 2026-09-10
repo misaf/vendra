@@ -40,7 +40,7 @@ final class PhoneNumber extends Model implements ShouldLogActivity
     use SoftDeletes;
 
     protected $attributes = [
-        'type'       => 'mobile',
+        'type' => 'mobile',
         'is_primary' => false,
     ];
 
@@ -54,18 +54,18 @@ final class PhoneNumber extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'              => 'integer',
-            'tenant_id'       => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
             'user_profile_id' => 'integer',
-            'type'            => 'string',
-            'label'           => 'string',
-            'country_code'    => 'string',
-            'number'          => 'string',
-            'extension'       => 'string',
-            'metadata'        => 'array',
-            'notes'           => 'string',
-            'is_primary'      => 'boolean',
-            'verified_at'     => 'datetime',
+            'type' => 'string',
+            'label' => 'string',
+            'country_code' => 'string',
+            'number' => 'string',
+            'extension' => 'string',
+            'metadata' => 'array',
+            'notes' => 'string',
+            'is_primary' => 'boolean',
+            'verified_at' => 'datetime',
         ];
     }
 }

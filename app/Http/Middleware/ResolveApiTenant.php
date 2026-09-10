@@ -32,17 +32,17 @@ final readonly class ResolveApiTenant
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): Response $next
+     * @param  Closure(Request): Response  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         /** @var IsTenant|null $resolvedTenant */
         $resolvedTenant = null;
 
-        if (null === $this->tenantResolver->current()) {
+        if ($this->tenantResolver->current() === null) {
             $tenant = $this->resolveTenant($request);
 
-            abort_if(null === $tenant, Response::HTTP_NOT_FOUND);
+            abort_if($tenant === null, Response::HTTP_NOT_FOUND);
 
             $tenant->makeCurrent();
             $resolvedTenant = $tenant;
@@ -67,7 +67,7 @@ final readonly class ResolveApiTenant
         // on the server sends it explicitly. Referer is the fallback for
         // navigations that carry no Origin.
         foreach ([$request->headers->get('Origin'), $request->headers->get('Referer')] as $origin) {
-            if ( ! is_string($origin) || '' === $origin) {
+            if (! is_string($origin) || $origin === '') {
                 continue;
             }
 
@@ -88,6 +88,6 @@ final readonly class ResolveApiTenant
     private function isCanonicalApiHost(Request $request): bool
     {
         return Str::lower($request->getHost())
-            === 'api.' . config()->string('vendra-tenant.central_host');
+            === 'api.'.config()->string('vendra-tenant.central_host');
     }
 }

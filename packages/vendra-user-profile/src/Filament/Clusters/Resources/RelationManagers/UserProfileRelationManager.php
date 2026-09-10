@@ -42,7 +42,7 @@ final class UserProfileRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! $ownerRecord instanceof User) {
+        if (! $ownerRecord instanceof User) {
             return (string) Number::format(0);
         }
 

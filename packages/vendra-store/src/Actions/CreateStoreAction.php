@@ -34,10 +34,9 @@ final class CreateStoreAction
     ) {}
 
     /**
-     * @param (Model&SubscriptionSubscriber)|null $owner the reseller billed for
-     *                                                   this store, or null for
-     *                                                   a direct console store
-     *
+     * @param  (Model&SubscriptionSubscriber)|null  $owner  the reseller billed for
+     *                                                      this store, or null for
+     *                                                      a direct console store
      * @return array{store: Store, user: User}
      */
     public function execute(
@@ -66,7 +65,7 @@ final class CreateStoreAction
         ): array {
             $ownerId = null;
 
-            if (null !== $owner) {
+            if ($owner !== null) {
                 /*
                  | Re-read the owner under a row lock before counting: two
                  | concurrent creations would otherwise both see the last free
@@ -74,8 +73,8 @@ final class CreateStoreAction
                  */
                 $lockedOwner = $owner->newQuery()->lockForUpdate()->whereKey($owner->getKey())->first();
 
-                if ( ! $lockedOwner instanceof Model || ! $lockedOwner instanceof SubscriptionSubscriber) {
-                    throw (new ModelNotFoundException())->setModel($owner::class);
+                if (! $lockedOwner instanceof Model || ! $lockedOwner instanceof SubscriptionSubscriber) {
+                    throw (new ModelNotFoundException)->setModel($owner::class);
                 }
 
                 $this->storeQuota->assertCanCreateStore($lockedOwner);
@@ -84,15 +83,15 @@ final class CreateStoreAction
             }
 
             $createdStore = Store::query()->create([
-                'reseller_id'              => $ownerId,
-                'name'                     => $name,
-                'active'                   => false,
-                'provisioning_status'      => TenantProvisioningStatus::Pending,
+                'reseller_id' => $ownerId,
+                'name' => $name,
+                'active' => false,
+                'provisioning_status' => TenantProvisioningStatus::Pending,
                 'provisioning_should_seed' => $shouldSeed,
             ]);
 
-            $createdStore->execute(fn() => $createdStore->storeDomains()->create([
-                'name'   => $domain,
+            $createdStore->execute(fn () => $createdStore->storeDomains()->create([
+                'name' => $domain,
                 'active' => true,
             ]));
 
@@ -108,7 +107,7 @@ final class CreateStoreAction
 
             return [
                 'store' => $createdStore,
-                'user'  => $createdUser,
+                'user' => $createdUser,
             ];
         }, attempts: 5);
     }

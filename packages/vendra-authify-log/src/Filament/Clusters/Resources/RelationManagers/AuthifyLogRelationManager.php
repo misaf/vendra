@@ -40,7 +40,7 @@ final class AuthifyLogRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! is_a($ownerRecord, AuthifyLogUsers::model())) {
+        if (! is_a($ownerRecord, AuthifyLogUsers::model())) {
             return (string) Number::format(0);
         }
 

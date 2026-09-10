@@ -17,21 +17,21 @@ final class TransactionLimitFactory extends Factory
     public function definition(): array
     {
         return [
-            'wallet_id'        => Wallet::factory(),
+            'wallet_id' => Wallet::factory(),
             'transaction_type' => fake()->randomElement(TransactionTypeEnum::cases()),
-            'amount'           => fake()->numberBetween(10_000, 10_000_000),
+            'amount' => fake()->numberBetween(10_000, 10_000_000),
         ];
     }
 
     public function forWallet(Wallet|int $wallet): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'wallet_id' => $wallet instanceof Wallet ? $wallet->id : $wallet,
         ]);
     }
 
     public function ofType(TransactionTypeEnum $transactionType): static
     {
-        return $this->state(fn(): array => ['transaction_type' => $transactionType]);
+        return $this->state(fn (): array => ['transaction_type' => $transactionType]);
     }
 }

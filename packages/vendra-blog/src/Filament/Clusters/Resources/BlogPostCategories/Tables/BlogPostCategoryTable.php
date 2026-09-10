@@ -65,7 +65,7 @@ final class BlogPostCategoryTable
                 ->icon(Heroicon::Tag)
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(BlogPostCategory $record): string => (string) Number::format(static::integerAttribute($record, 'blog_posts_count')))
+                        ->label(fn (BlogPostCategory $record): string => (string) Number::format(self::integerAttribute($record, 'blog_posts_count')))
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -73,7 +73,7 @@ final class BlogPostCategoryTable
             TextColumn::make('description')
                 ->label(__('vendra-blog::attributes.description'))
                 ->icon(Heroicon::DocumentText)
-                ->state(fn(BlogPostCategory $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                ->state(fn (BlogPostCategory $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('slug')
@@ -92,8 +92,8 @@ final class BlogPostCategoryTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -102,8 +102,8 @@ final class BlogPostCategoryTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
@@ -112,7 +112,7 @@ final class BlogPostCategoryTable
             ->emptyStateHeading(__('vendra-blog::tables.empty_state.heading.blog_post_categories'))
             ->emptyStateDescription(__('vendra-blog::tables.empty_state.description.blog_post_categories'))
             ->emptyStateIcon(Heroicon::OutlinedFolder)
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->withCount('blogPosts'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withCount('blogPosts'))
             ->columns($columns)
             ->filters(
                 [
@@ -143,5 +143,4 @@ final class BlogPostCategoryTable
             ->defaultSort(column: 'id', direction: 'desc')
             ->reorderable(column: 'position', direction: 'desc');
     }
-
 }

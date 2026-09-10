@@ -15,7 +15,7 @@ final class CreateNewsletterSubscriber extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-newsletter::navigation.newsletter_subscriber');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-newsletter::navigation.newsletter_subscriber');
     }
 
     /**

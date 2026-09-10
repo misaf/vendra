@@ -17,7 +17,7 @@ final class NewsletterSubscriberForm
         return $schema
             ->components([
                 TextInput::make('email')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.email'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.email'))
                     ->autofocus()
                     ->columnSpan(['lg' => 1])
                     ->email()
@@ -26,12 +26,12 @@ final class NewsletterSubscriberForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 TextInput::make('name')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.name'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.name'))
                     ->columnSpan(['lg' => 1])
                     ->label(__('vendra-newsletter::attributes.name'))
                     ->live(onBlur: true)

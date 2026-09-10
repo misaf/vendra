@@ -15,10 +15,10 @@ final class DeveloperLoginsRegistrar
     public static function make(): FilamentDeveloperLoginsPlugin
     {
         return FilamentDeveloperLoginsPlugin::make()
-            ->enabled(fn(): bool => self::isEnabled() && self::hasUsers())
+            ->enabled(fn (): bool => self::isEnabled() && self::hasUsers())
             ->switchable(Config::boolean('vendra-developer-logins.switchable', true))
             ->column(Config::string('vendra-developer-logins.column', 'email'))
-            ->users(fn(): array => self::users())
+            ->users(fn (): array => self::users())
             ->modelClass(DeveloperLoginsUsers::model());
     }
 
@@ -29,7 +29,7 @@ final class DeveloperLoginsRegistrar
     {
         $role = self::role();
 
-        if (null === $role) {
+        if ($role === null) {
             return [];
         }
 
@@ -45,7 +45,7 @@ final class DeveloperLoginsRegistrar
                 $credential = $user->getAttribute($credentialColumn);
                 $label = $user->getAttribute($labelColumn);
 
-                if ( ! is_string($credential) || '' === $credential || ! is_string($label) || '' === $label) {
+                if (! is_string($credential) || $credential === '' || ! is_string($label) || $label === '') {
                     return [];
                 }
 
@@ -56,7 +56,7 @@ final class DeveloperLoginsRegistrar
 
     public static function hasUsers(): bool
     {
-        return [] !== self::users();
+        return self::users() !== [];
     }
 
     private static function isEnabled(): bool
@@ -68,7 +68,7 @@ final class DeveloperLoginsRegistrar
     private static function role(): ?Role
     {
         $configuredRole = Config::get('vendra-developer-logins.role');
-        $roleName = is_string($configuredRole) && '' !== $configuredRole
+        $roleName = is_string($configuredRole) && $configuredRole !== ''
             ? $configuredRole
             : Config::string('vendra-permission.admin_role');
 

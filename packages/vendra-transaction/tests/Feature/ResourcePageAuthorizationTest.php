@@ -62,7 +62,7 @@ it('globally searches transactions by related users inside the current tenant', 
     $tenant = currentTestTenant();
     $user = createTestUser([
         'username' => 'transaction-search-user',
-        'email'    => 'transaction-search-user@example.test',
+        'email' => 'transaction-search-user@example.test',
     ]);
     $transaction = TransactionFactory::new()->forUser($user)->deposit()->createOne();
 
@@ -71,7 +71,7 @@ it('globally searches transactions by related users inside the current tenant', 
     switchToTestTenant($otherTenant);
     $otherUser = createTestUser([
         'username' => 'other-transaction-user',
-        'email'    => 'other-transaction-user@example.test',
+        'email' => 'other-transaction-user@example.test',
     ]);
     TransactionFactory::new()->forUser($otherUser)->deposit()->createOne();
     Filament::setTenant($tenant);

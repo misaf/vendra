@@ -54,20 +54,20 @@ final class TransactionLimitOverviewWidget extends StatsOverviewWidget
         $endOfWeek = now()->endOfWeek();
 
         $withdrawalTransactionStats = Trend::query(TransactionLimit::query()->where('transaction_type', TransactionTypeEnum::Withdrawal)
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
         $totalWithdrawalAmount = (int) TransactionLimit::query()->where('transaction_type', TransactionTypeEnum::Withdrawal)
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
             ->sum('amount');
 
         $transactionWithdrawal = Stat::make('withdrawal_transaction_stats', Number::format($totalWithdrawalAmount))
             ->label(__('vendra-transaction::widgets.withdrawal_transaction_stats'))
             ->description(__('vendra-transaction::widgets.withdrawal_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($withdrawalTransactionStats->map(fn(TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($withdrawalTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
             ->color('primary');
 
         return [$transactionWithdrawal];

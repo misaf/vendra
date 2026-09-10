@@ -25,7 +25,7 @@ final class WalletResolver
     public function walletFor(Model $user, string $currencyCode): Wallet
     {
         return Wallet::query()->firstOrCreate([
-            'user_id'       => $user->getKey(),
+            'user_id' => $user->getKey(),
             'currency_code' => Str::upper($currencyCode),
         ]);
     }

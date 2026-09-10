@@ -45,7 +45,7 @@ final class PermissionRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! $ownerRecord instanceof Role) {
+        if (! $ownerRecord instanceof Role) {
             return (string) Number::format(0);
         }
 

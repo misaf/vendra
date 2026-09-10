@@ -31,7 +31,7 @@ final class RequestStorefrontDeploymentAction
     public function __construct(private readonly StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * @param array<string, mixed> $form
+     * @param  array<string, mixed>  $form
      *
      * @throws ValidationException
      */
@@ -57,13 +57,13 @@ final class RequestStorefrontDeploymentAction
         $storefrontImage = StorefrontImage::query()->findOrFail(Arr::integer($selection, 'storefront_image_id'));
 
         $deployment = StorefrontDeployment::query()->create([
-            'store_id'            => $store->id,
+            'store_id' => $store->id,
             'storefront_image_id' => $storefrontImage->id,
-            'slug'                => Arr::string($form, 'storefront_slug'),
-            'domain'              => $domain,
-            'configuration'       => $configuration,
-            'status'              => StorefrontDeploymentStatus::Pending,
-            'desired_state'       => StorefrontDesiredState::Running,
+            'slug' => Arr::string($form, 'storefront_slug'),
+            'domain' => $domain,
+            'configuration' => $configuration,
+            'status' => StorefrontDeploymentStatus::Pending,
+            'desired_state' => StorefrontDesiredState::Running,
         ]);
 
         if ($this->runtime->isConfigured()) {

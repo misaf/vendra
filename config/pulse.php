@@ -4,7 +4,16 @@ declare(strict_types=1);
 
 use Laravel\Pulse\Http\Middleware\Authorize;
 use Laravel\Pulse\Pulse;
-use Laravel\Pulse\Recorders;
+use Laravel\Pulse\Recorders\CacheInteractions;
+use Laravel\Pulse\Recorders\Exceptions;
+use Laravel\Pulse\Recorders\Queues;
+use Laravel\Pulse\Recorders\Servers;
+use Laravel\Pulse\Recorders\SlowJobs;
+use Laravel\Pulse\Recorders\SlowOutgoingRequests;
+use Laravel\Pulse\Recorders\SlowQueries;
+use Laravel\Pulse\Recorders\SlowRequests;
+use Laravel\Pulse\Recorders\UserJobs;
+use Laravel\Pulse\Recorders\UserRequests;
 
 return [
 
@@ -67,7 +76,7 @@ return [
 
         'database' => [
             'connection' => env('PULSE_DB_CONNECTION'),
-            'chunk'      => 1000,
+            'chunk' => 1000,
         ],
     ],
 
@@ -89,12 +98,12 @@ return [
 
         'trim' => [
             'lottery' => [1, 1_000],
-            'keep'    => env('PULSE_INGEST_KEEP', '7 days'),
+            'keep' => env('PULSE_INGEST_KEEP', '7 days'),
         ],
 
         'redis' => [
             'connection' => env('PULSE_REDIS_CONNECTION'),
-            'chunk'      => 1000,
+            'chunk' => 1000,
         ],
     ],
 
@@ -139,10 +148,10 @@ return [
     */
 
     'recorders' => [
-        Recorders\CacheInteractions::class => [
-            'enabled'     => env('PULSE_CACHE_INTERACTIONS_ENABLED', true),
+        CacheInteractions::class => [
+            'enabled' => env('PULSE_CACHE_INTERACTIONS_ENABLED', true),
             'sample_rate' => env('PULSE_CACHE_INTERACTIONS_SAMPLE_RATE', 1),
-            'ignore'      => [
+            'ignore' => [
                 ...Pulse::defaultVendorCacheKeys(),
             ],
             'groups' => [
@@ -151,42 +160,42 @@ return [
             ],
         ],
 
-        Recorders\Exceptions::class => [
-            'enabled'     => env('PULSE_EXCEPTIONS_ENABLED', true),
+        Exceptions::class => [
+            'enabled' => env('PULSE_EXCEPTIONS_ENABLED', true),
             'sample_rate' => env('PULSE_EXCEPTIONS_SAMPLE_RATE', 1),
-            'location'    => env('PULSE_EXCEPTIONS_LOCATION', true),
-            'ignore'      => [
+            'location' => env('PULSE_EXCEPTIONS_LOCATION', true),
+            'ignore' => [
                 // '/^Package\\\\Exceptions\\\\/',
             ],
         ],
 
-        Recorders\Queues::class => [
-            'enabled'     => env('PULSE_QUEUES_ENABLED', true),
+        Queues::class => [
+            'enabled' => env('PULSE_QUEUES_ENABLED', true),
             'sample_rate' => env('PULSE_QUEUES_SAMPLE_RATE', 1),
-            'ignore'      => [
+            'ignore' => [
                 // '/^Package\\\\Jobs\\\\/',
             ],
         ],
 
-        Recorders\Servers::class => [
+        Servers::class => [
             'server_name' => env('PULSE_SERVER_NAME', gethostname()),
             'directories' => explode(':', env('PULSE_SERVER_DIRECTORIES', '/')),
         ],
 
-        Recorders\SlowJobs::class => [
-            'enabled'     => env('PULSE_SLOW_JOBS_ENABLED', true),
+        SlowJobs::class => [
+            'enabled' => env('PULSE_SLOW_JOBS_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_JOBS_SAMPLE_RATE', 1),
-            'threshold'   => env('PULSE_SLOW_JOBS_THRESHOLD', 1000),
-            'ignore'      => [
+            'threshold' => env('PULSE_SLOW_JOBS_THRESHOLD', 1000),
+            'ignore' => [
                 // '/^Package\\\\Jobs\\\\/',
             ],
         ],
 
-        Recorders\SlowOutgoingRequests::class => [
-            'enabled'     => env('PULSE_SLOW_OUTGOING_REQUESTS_ENABLED', true),
+        SlowOutgoingRequests::class => [
+            'enabled' => env('PULSE_SLOW_OUTGOING_REQUESTS_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_OUTGOING_REQUESTS_SAMPLE_RATE', 1),
-            'threshold'   => env('PULSE_SLOW_OUTGOING_REQUESTS_THRESHOLD', 1000),
-            'ignore'      => [
+            'threshold' => env('PULSE_SLOW_OUTGOING_REQUESTS_THRESHOLD', 1000),
+            'ignore' => [
                 // '#^http://127\.0\.0\.1:13714#', // Inertia SSR...
             ],
             'groups' => [
@@ -196,41 +205,41 @@ return [
             ],
         ],
 
-        Recorders\SlowQueries::class => [
-            'enabled'          => env('PULSE_SLOW_QUERIES_ENABLED', true),
-            'sample_rate'      => env('PULSE_SLOW_QUERIES_SAMPLE_RATE', 1),
-            'threshold'        => env('PULSE_SLOW_QUERIES_THRESHOLD', 1000),
-            'location'         => env('PULSE_SLOW_QUERIES_LOCATION', true),
+        SlowQueries::class => [
+            'enabled' => env('PULSE_SLOW_QUERIES_ENABLED', true),
+            'sample_rate' => env('PULSE_SLOW_QUERIES_SAMPLE_RATE', 1),
+            'threshold' => env('PULSE_SLOW_QUERIES_THRESHOLD', 1000),
+            'location' => env('PULSE_SLOW_QUERIES_LOCATION', true),
             'max_query_length' => env('PULSE_SLOW_QUERIES_MAX_QUERY_LENGTH'),
-            'ignore'           => [
+            'ignore' => [
                 '/(["`])pulse_[\w]+?\1/', // Pulse tables...
                 '/(["`])telescope_[\w]+?\1/', // Telescope tables...
             ],
         ],
 
-        Recorders\SlowRequests::class => [
-            'enabled'     => env('PULSE_SLOW_REQUESTS_ENABLED', true),
+        SlowRequests::class => [
+            'enabled' => env('PULSE_SLOW_REQUESTS_ENABLED', true),
             'sample_rate' => env('PULSE_SLOW_REQUESTS_SAMPLE_RATE', 1),
-            'threshold'   => env('PULSE_SLOW_REQUESTS_THRESHOLD', 1000),
-            'ignore'      => [
-                '#^/' . env('PULSE_PATH', 'pulse') . '$#', // Pulse dashboard...
+            'threshold' => env('PULSE_SLOW_REQUESTS_THRESHOLD', 1000),
+            'ignore' => [
+                '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
             ],
         ],
 
-        Recorders\UserJobs::class => [
-            'enabled'     => env('PULSE_USER_JOBS_ENABLED', true),
+        UserJobs::class => [
+            'enabled' => env('PULSE_USER_JOBS_ENABLED', true),
             'sample_rate' => env('PULSE_USER_JOBS_SAMPLE_RATE', 1),
-            'ignore'      => [
+            'ignore' => [
                 // '/^Package\\\\Jobs\\\\/',
             ],
         ],
 
-        Recorders\UserRequests::class => [
-            'enabled'     => env('PULSE_USER_REQUESTS_ENABLED', true),
+        UserRequests::class => [
+            'enabled' => env('PULSE_USER_REQUESTS_ENABLED', true),
             'sample_rate' => env('PULSE_USER_REQUESTS_SAMPLE_RATE', 1),
-            'ignore'      => [
-                '#^/' . env('PULSE_PATH', 'pulse') . '$#', // Pulse dashboard...
+            'ignore' => [
+                '#^/'.env('PULSE_PATH', 'pulse').'$#', // Pulse dashboard...
                 '#^/telescope#', // Telescope dashboard...
             ],
         ],

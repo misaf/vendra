@@ -77,7 +77,7 @@ it('derives the suspend date from its plan grace window', function (): void {
 it('enforces one active subscription per subscriber', function (): void {
     Subscription::factory()->forSubscriber(42)->create();
 
-    expect(fn(): Subscription => Subscription::factory()->forSubscriber(42)->create())
+    expect(fn (): Subscription => Subscription::factory()->forSubscriber(42)->create())
         ->toThrow(QueryException::class);
 });
 
@@ -103,7 +103,7 @@ it('persists auditable payment lifecycle data for a subscription', function (): 
 it('records payment processing through explicit lifecycle methods', function (): void {
     $subscription = Subscription::factory()->create(['status' => SubscriptionStatus::PendingPayment]);
     $payment = SubscriptionPayment::factory()->for($subscription)->create([
-        'failure_code'    => 'previous_failure',
+        'failure_code' => 'previous_failure',
         'failure_message' => 'Previous failure.',
     ]);
 
@@ -135,7 +135,7 @@ it('enforces unique payment idempotency keys', function (): void {
         'idempotency_key' => $idempotencyKey,
     ]);
 
-    expect(fn(): SubscriptionPayment => SubscriptionPayment::factory()->for($subscription)->create([
+    expect(fn (): SubscriptionPayment => SubscriptionPayment::factory()->for($subscription)->create([
         'idempotency_key' => $idempotencyKey,
     ]))->toThrow(QueryException::class);
 });
@@ -144,12 +144,12 @@ it('enforces unique provider payment identities', function (): void {
     $subscription = Subscription::factory()->create(['status' => SubscriptionStatus::PendingPayment]);
 
     SubscriptionPayment::factory()->for($subscription)->create([
-        'provider'           => 'gateway',
+        'provider' => 'gateway',
         'provider_reference' => 'provider-payment-1',
     ]);
 
-    expect(fn(): SubscriptionPayment => SubscriptionPayment::factory()->for($subscription)->create([
-        'provider'           => 'gateway',
+    expect(fn (): SubscriptionPayment => SubscriptionPayment::factory()->for($subscription)->create([
+        'provider' => 'gateway',
         'provider_reference' => 'provider-payment-1',
     ]))->toThrow(QueryException::class);
 });
@@ -158,5 +158,5 @@ it('prevents hard deletion of a subscription with payment history', function ():
     $subscription = Subscription::factory()->create(['status' => SubscriptionStatus::PendingPayment]);
     SubscriptionPayment::factory()->for($subscription)->create();
 
-    expect(fn(): ?bool => $subscription->forceDelete())->toThrow(QueryException::class);
+    expect(fn (): ?bool => $subscription->forceDelete())->toThrow(QueryException::class);
 });

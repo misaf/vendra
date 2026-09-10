@@ -44,17 +44,17 @@ final class TransactionServiceProvider extends PackageServiceProvider
         $this->app->singleton(TransactionGatewayRegistry::class);
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-transaction')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-transaction')) {
                 return;
             }
 
             $panel
                 ->discoverResources(
-                    in: __DIR__ . '/../Filament/Clusters/Resources',
+                    in: __DIR__.'/../Filament/Clusters/Resources',
                     for: 'Misaf\\VendraTransaction\\Filament\\Clusters\\Resources',
                 )
                 ->discoverWidgets(
-                    in: __DIR__ . '/../Filament/Widgets',
+                    in: __DIR__.'/../Filament/Widgets',
                     for: 'Misaf\\VendraTransaction\\Filament\\Widgets',
                 );
         });
@@ -64,7 +64,7 @@ final class TransactionServiceProvider extends PackageServiceProvider
     {
         $this->app->make(TenantTableRegistry::class)->register('transaction_gateways', 'wallets', 'transactions');
 
-        AboutCommand::add('Vendra Transaction', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-transaction')]);
+        AboutCommand::add('Vendra Transaction', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-transaction')]);
 
         $this->registerUserRelationships();
     }
@@ -79,7 +79,7 @@ final class TransactionServiceProvider extends PackageServiceProvider
 
         $userModel::resolveRelationUsing(
             'wallets',
-            fn(Model $user): HasMany => $user->hasMany(Wallet::class, 'user_id'),
+            fn (Model $user): HasMany => $user->hasMany(Wallet::class, 'user_id'),
         );
     }
 }

@@ -15,9 +15,9 @@ it('activates a single feature for the tenant by short value', function (): void
     Feature::for($tenant)->deactivate(PermissionFeatureEnum::RoleManagement->value);
 
     $this->artisan('vendra-permission:feature', [
-        'action'  => 'activate',
+        'action' => 'activate',
         'feature' => 'role-management',
-        'tenant'  => $tenant->slug,
+        'tenant' => $tenant->slug,
     ])->assertSuccessful();
 
     expect(Feature::for($tenant)->active(PermissionFeatureEnum::RoleManagement->value))->toBeTrue();
@@ -26,14 +26,14 @@ it('activates a single feature for the tenant by short value', function (): void
 it('deactivates every feature for the tenant with the all keyword', function (): void {
     $tenant = createTestTenant();
     Feature::for($tenant)->activate(array_map(
-        static fn(PermissionFeatureEnum $feature): string => $feature->value,
+        static fn (PermissionFeatureEnum $feature): string => $feature->value,
         PermissionFeatureEnum::cases(),
     ));
 
     $this->artisan('vendra-permission:feature', [
-        'action'  => 'deactivate',
+        'action' => 'deactivate',
         'feature' => 'all',
-        'tenant'  => (string) $tenant->id,
+        'tenant' => (string) $tenant->id,
     ])->assertSuccessful();
 
     foreach (PermissionFeatureEnum::cases() as $feature) {
@@ -45,9 +45,9 @@ it('rejects unknown actions', function (): void {
     $tenant = createTestTenant();
 
     $this->artisan('vendra-permission:feature', [
-        'action'  => 'enable',
+        'action' => 'enable',
         'feature' => 'all',
-        'tenant'  => $tenant->slug,
+        'tenant' => $tenant->slug,
     ])->assertFailed();
 });
 
@@ -55,9 +55,9 @@ it('rejects unknown features and lists the accepted values', function (): void {
     $tenant = createTestTenant();
 
     $this->artisan('vendra-permission:feature', [
-        'action'  => 'activate',
+        'action' => 'activate',
         'feature' => 'not-a-feature',
-        'tenant'  => $tenant->slug,
+        'tenant' => $tenant->slug,
     ])
         ->expectsOutputToContain('is invalid')
         ->assertFailed();
@@ -65,9 +65,9 @@ it('rejects unknown features and lists the accepted values', function (): void {
 
 it('fails for an unknown tenant', function (): void {
     $this->artisan('vendra-permission:feature', [
-        'action'  => 'activate',
+        'action' => 'activate',
         'feature' => 'all',
-        'tenant'  => 'missing-tenant',
+        'tenant' => 'missing-tenant',
     ])->assertFailed();
 });
 
@@ -76,8 +76,8 @@ it('refuses to run while feature resolution is disabled', function (): void {
     $tenant = createTestTenant();
 
     $this->artisan('vendra-permission:feature', [
-        'action'  => 'activate',
+        'action' => 'activate',
         'feature' => 'all',
-        'tenant'  => $tenant->slug,
+        'tenant' => $tenant->slug,
     ])->assertFailed();
 });

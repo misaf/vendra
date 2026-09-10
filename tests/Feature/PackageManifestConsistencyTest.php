@@ -8,7 +8,7 @@ declare(strict_types=1);
 function packageSourceBindsTenantProvider(string $packagePath): bool
 {
     foreach (glob("{$packagePath}/src/{,*/,*/*/,*/*/*/,*/*/*/*/,*/*/*/*/*/}*.php", GLOB_BRACE) ?: [] as $sourceFile) {
-        if (1 === preg_match('/^use Misaf\\\\VendraTenant\\\\/m', (string) file_get_contents($sourceFile))) {
+        if (preg_match('/^use Misaf\\\\VendraTenant\\\\/m', (string) file_get_contents($sourceFile)) === 1) {
             return true;
         }
     }
@@ -42,9 +42,9 @@ it('keeps package manifest metadata consistent', function (): void {
             ->license->toBe('MIT')
             ->keywords->not->toBeEmpty()
             ->authors->toBe([[
-                'name'  => 'Ehsan Mahmoodi',
+                'name' => 'Ehsan Mahmoodi',
                 'email' => 'misaf.1990@gmail.com',
-                'role'  => 'Developer',
+                'role' => 'Developer',
             ]])
             ->homepage->toBe($repository)
             ->support->toBe([
@@ -84,7 +84,7 @@ it('keeps package-only namespaces out of production autoloading', function (): v
             ->and($developmentPaths)
             ->not->toContain('tests/');
 
-        if (is_dir(dirname($manifestPath) . '/database/factories')) {
+        if (is_dir(dirname($manifestPath).'/database/factories')) {
             expect($developmentPaths)->toContain('database/factories/');
         } else {
             expect($manifest)->not->toHaveKey('autoload-dev');
@@ -111,13 +111,13 @@ it('keeps package test suites tenant-provider agnostic', function (): void {
         }
 
         foreach (glob("{$packagePath}/tests/{,*/,*/*/}*.php", GLOB_BRACE) ?: [] as $testFile) {
-            $importsTenant = 1 === preg_match(
+            $importsTenant = preg_match(
                 '/^use Misaf\\\\VendraTenant\\\\/m',
                 (string) file_get_contents($testFile),
-            );
+            ) === 1;
 
             if ($importsTenant) {
-                $offending[] = basename($packagePath) . '/' . basename($testFile);
+                $offending[] = basename($packagePath).'/'.basename($testFile);
             }
         }
     }
@@ -162,13 +162,13 @@ it('provides every Vendra module imported by package tests through the host', fu
                 }
 
                 foreach ($namespaces as $namespace) {
-                    $importsNamespace = 1 === preg_match(
-                        '/^use ' . preg_quote($namespace, '/') . '\\\\/m',
+                    $importsNamespace = preg_match(
+                        '/^use '.preg_quote($namespace, '/').'\\\\/m',
                         $contents,
-                    );
+                    ) === 1;
 
                     if ($importsNamespace) {
-                        $missingFromHost[basename($packagePath) . ' → ' . $package] = true;
+                        $missingFromHost[basename($packagePath).' → '.$package] = true;
                     }
                 }
             }
@@ -196,13 +196,13 @@ it('centralizes package test namespaces and mirrors factory namespaces in root a
         );
         $packageNamespace = array_search('src/', $manifest['autoload']['psr-4'] ?? [], true);
 
-        if ( ! is_string($packageNamespace)) {
+        if (! is_string($packageNamespace)) {
             $missing[] = "{$package} source namespace";
 
             continue;
         }
 
-        $testNamespace = $packageNamespace . 'Tests\\';
+        $testNamespace = $packageNamespace.'Tests\\';
         $expectedTestPath = "packages/{$package}/tests/";
 
         if (($rootAutoloadDev[$testNamespace] ?? null) !== $expectedTestPath) {
@@ -234,7 +234,7 @@ it('requires vendra-multimedia in every package whose src uses the Spatie media 
         $packagePath = dirname($manifestPath);
         $sourcePath = "{$packagePath}/src";
 
-        if ('vendra-multimedia' === basename($packagePath) || ! is_dir($sourcePath)) {
+        if (basename($packagePath) === 'vendra-multimedia' || ! is_dir($sourcePath)) {
             continue;
         }
 
@@ -244,7 +244,7 @@ it('requires vendra-multimedia in every package whose src uses the Spatie media 
         );
 
         foreach ($sourceFiles as $sourceFile) {
-            if ('php' !== $sourceFile->getExtension()) {
+            if ($sourceFile->getExtension() !== 'php') {
                 continue;
             }
 
@@ -253,14 +253,14 @@ it('requires vendra-multimedia in every package whose src uses the Spatie media 
                 (string) file_get_contents($sourceFile->getPathname()),
             );
 
-            if (1 === $matchesSurface) {
+            if ($matchesSurface === 1) {
                 $usesSpatieMediaSurface = true;
 
                 break;
             }
         }
 
-        if ( ! $usesSpatieMediaSurface) {
+        if (! $usesSpatieMediaSurface) {
             continue;
         }
 
@@ -270,7 +270,7 @@ it('requires vendra-multimedia in every package whose src uses the Spatie media 
             flags: JSON_THROW_ON_ERROR,
         );
 
-        if ( ! array_key_exists('misaf/vendra-multimedia', $manifest['require'] ?? [])) {
+        if (! array_key_exists('misaf/vendra-multimedia', $manifest['require'] ?? [])) {
             $undeclared[] = basename($packagePath);
         }
     }

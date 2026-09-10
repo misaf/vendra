@@ -38,6 +38,7 @@ final class AffiliatePayout extends Model implements ShouldLogActivity
 {
     use BelongsToAffiliate;
     use BelongsToTenant;
+
     /** @use HasFactory<AffiliatePayoutFactory> */
     use HasFactory;
 
@@ -47,13 +48,13 @@ final class AffiliatePayout extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'             => 'integer',
-            'tenant_id'      => 'integer',
-            'affiliate_id'   => 'integer',
-            'amount'         => 'integer',
-            'status'         => PayoutStatusEnum::class,
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'affiliate_id' => 'integer',
+            'amount' => 'integer',
+            'status' => PayoutStatusEnum::class,
             'transaction_id' => 'integer',
-            'processed_at'   => 'datetime',
+            'processed_at' => 'datetime',
         ];
     }
 

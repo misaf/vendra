@@ -8,6 +8,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraTransaction\Models\Transaction;
 use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
 
@@ -16,7 +17,7 @@ use Spatie\ModelStates\StateConfig;
  * Processing and Review, and terminates in Approved (settled to the
  * ledger), Declined, or Failed.
  *
- * @extends State<\Misaf\VendraTransaction\Models\Transaction>
+ * @extends State<Transaction>
  */
 abstract class TransactionState extends State implements HasColor, HasIcon, HasLabel
 {

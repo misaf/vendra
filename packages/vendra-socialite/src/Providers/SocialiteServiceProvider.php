@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraSocialite\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraSocialite\Support\SocialiteRegistrar;
@@ -33,7 +32,7 @@ final class SocialiteServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-socialite')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-socialite')) {
                 return;
             }
 
@@ -44,6 +43,6 @@ final class SocialiteServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('socialite_users');
-        AboutCommand::add('Vendra Socialite', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-socialite')]);
+        AboutCommand::add('Vendra Socialite', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-socialite')]);
     }
 }

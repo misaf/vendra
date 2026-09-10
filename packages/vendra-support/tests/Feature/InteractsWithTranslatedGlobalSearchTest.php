@@ -9,7 +9,7 @@ use Misaf\VendraSupport\Tests\Feature\SupportTestTranslatedRecord;
 it('scopes translated global search attributes and titles to the application locale', function (): void {
     App::setLocale('de');
 
-    $record = new SupportTestTranslatedRecord();
+    $record = new SupportTestTranslatedRecord;
     $record->recordTranslations = [
         'name' => [
             'en' => 'English name',

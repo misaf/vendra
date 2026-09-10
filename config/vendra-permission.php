@@ -33,10 +33,10 @@ return [
         'enabled' => env('VENDRA_PERMISSION_FEATURES_ENABLED', true),
 
         'defaults' => [
-            'vendra-permission.module-enabled'        => true,
-            'vendra-permission.role-management'       => true,
+            'vendra-permission.module-enabled' => true,
+            'vendra-permission.role-management' => true,
             'vendra-permission.permission-management' => true,
-            'vendra-permission.bulk-role-assignment'  => true,
+            'vendra-permission.bulk-role-assignment' => true,
         ],
     ],
 

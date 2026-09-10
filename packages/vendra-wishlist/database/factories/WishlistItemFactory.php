@@ -22,25 +22,25 @@ final class WishlistItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'wishlist_id'   => Wishlist::factory(),
+            'wishlist_id' => Wishlist::factory(),
             'sellable_type' => 'product',
-            'sellable_id'   => fake()->numberBetween(1, 1000),
-            'metadata'      => null,
+            'sellable_id' => fake()->numberBetween(1, 1000),
+            'metadata' => null,
         ];
     }
 
     public function forWishlist(Wishlist $wishlist): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'wishlist_id' => $wishlist->id,
         ]);
     }
 
     public function forSellable(Model $sellable): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'sellable_type' => $sellable->getMorphClass(),
-            'sellable_id'   => $sellable->getKey(),
+            'sellable_id' => $sellable->getKey(),
         ]);
     }
 }

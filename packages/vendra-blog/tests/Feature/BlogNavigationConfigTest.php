@@ -27,7 +27,7 @@ it('resolves configured panel ids from an array, string, or legacy panel key', f
 
     config([
         'vendra-blog.panels' => null,
-        'vendra-blog.panel'  => 'legacy',
+        'vendra-blog.panel' => 'legacy',
     ]);
 
     expect($method->invoke($provider, 'vendra-blog'))->toBe(['legacy']);
@@ -41,7 +41,7 @@ it('resolves the module-owned navigation group by default', function (): void {
 it('lets the navigation group be overridden with a plugin option', function (): void {
     expect(BlogPlugin::make()->navigationGroup('Content')->getNavigationGroup())
         ->toBe('Content')
-        ->and(BlogPlugin::make()->navigationGroup(fn(): string => 'Grouped')->getNavigationGroup())
+        ->and(BlogPlugin::make()->navigationGroup(fn (): string => 'Grouped')->getNavigationGroup())
         ->toBe('Grouped');
 });
 

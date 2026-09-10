@@ -102,10 +102,10 @@ final class AffiliateResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListAffiliates::route('/'),
+            'index' => ListAffiliates::route('/'),
             'create' => CreateAffiliate::route('/create'),
-            'view'   => ViewAffiliate::route('/{record}'),
-            'edit'   => EditAffiliate::route('/{record}/edit'),
+            'view' => ViewAffiliate::route('/{record}'),
+            'edit' => EditAffiliate::route('/{record}/edit'),
         ];
     }
 
@@ -135,7 +135,7 @@ final class AffiliateResource extends Resource
 
     private static function affiliate(Model $record): Affiliate
     {
-        if ( ! $record instanceof Affiliate) {
+        if (! $record instanceof Affiliate) {
             throw new InvalidArgumentException('Affiliate resources require an Affiliate record.');
         }
 

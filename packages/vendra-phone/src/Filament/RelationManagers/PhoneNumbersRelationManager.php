@@ -91,7 +91,7 @@ final class PhoneNumbersRelationManager extends RelationManager
                         ->label(__('vendra-phone::phone.fields.is_primary'))
                         ->color('success')
                         ->size(Size::ExtraSmall)
-                        ->hidden(fn(PhoneNumber $record): bool => ! $record->is_primary),
+                        ->hidden(fn (PhoneNumber $record): bool => ! $record->is_primary),
                 ]),
             TextColumn::make('type')
                 ->label(__('vendra-phone::phone.fields.type'))
@@ -103,10 +103,10 @@ final class PhoneNumbersRelationManager extends RelationManager
                 ->displayFormat(PhoneInputNumberType::INTERNATIONAL),
             TextColumn::make('extension')->label(__('vendra-phone::phone.fields.extension')),
             ToggleColumn::make('verified_at')
-                ->disabled(fn(PhoneNumber $record): bool => ! (auth()->user()?->can('update', $record) ?? false))
+                ->disabled(fn (PhoneNumber $record): bool => ! (auth()->user()?->can('update', $record) ?? false))
                 ->label(__('vendra-phone::phone.fields.verified_at'))
                 ->onIcon(Heroicon::Bolt)
-                ->state(fn(PhoneNumber $record): bool => null !== $record->verified_at)
+                ->state(fn (PhoneNumber $record): bool => $record->verified_at !== null)
                 ->updateStateUsing(function (PhoneNumber $record, bool $state): bool {
                     $record->update(['verified_at' => $state ? now() : null]);
 

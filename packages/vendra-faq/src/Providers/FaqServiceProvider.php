@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraFaq\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraFaq\Console\Commands\SeedCommand;
@@ -27,7 +26,7 @@ final class FaqServiceProvider extends PackageServiceProvider
             ->name('vendra-faq')
             ->hasTranslations()
             ->hasMigrations([
-                'create_faqs_table'
+                'create_faqs_table',
             ])
             ->hasCommands(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
@@ -38,7 +37,7 @@ final class FaqServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-faq')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-faq')) {
                 return;
             }
 
@@ -51,6 +50,6 @@ final class FaqServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('faq_categories', 'faqs');
         $this->app->make(TenantSeeders::class)->register('vendra-faq:seed', priority: 50);
 
-        AboutCommand::add('Vendra Faq', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-faq')]);
+        AboutCommand::add('Vendra Faq', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-faq')]);
     }
 }

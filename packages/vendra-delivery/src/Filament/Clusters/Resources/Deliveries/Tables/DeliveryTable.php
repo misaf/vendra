@@ -48,8 +48,8 @@ final class DeliveryTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDate('Y-m-d', latinNumbers: true),
-                        fn(TextColumn $column) => $column->date('Y-m-d'),
+                        fn (TextColumn $column) => $column->jalaliDate('Y-m-d', latinNumbers: true),
+                        fn (TextColumn $column) => $column->date('Y-m-d'),
                     ),
 
                 TextColumn::make('deliverySlot.name')
@@ -77,8 +77,8 @@ final class DeliveryTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->description(__('vendra-delivery::tables.description.deliveries'))
@@ -95,7 +95,7 @@ final class DeliveryTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->with(['order', 'deliverySlot', 'deliveryZone']))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with(['order', 'deliverySlot', 'deliveryZone']))
             ->filters([
                 QueryBuilder::make()
                     ->constraints([

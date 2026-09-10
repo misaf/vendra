@@ -27,7 +27,7 @@ it('attaches reusable attribute values to any model', function (): void {
 
     $value = $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => '1.2',
+        'value' => '1.2',
     ]);
 
     expect($record->attributeValues()->sole()->is($value))->toBeTrue()
@@ -41,12 +41,12 @@ it('rejects duplicate values for the same attribute and attributable', function 
 
     $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]);
 
-    expect(fn() => $record->attributeValues()->create([
+    expect(fn () => $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]))->toThrow(QueryException::class);
 });
 
@@ -56,12 +56,12 @@ it('allows reusing a value after the previous one is soft deleted', function ():
 
     $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ])->delete();
 
     $replacement = $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]);
 
     expect($replacement->exists)->toBeTrue();
@@ -74,12 +74,12 @@ it('allows the same value on the same attribute for a different attributable', f
 
     $first->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]);
 
     $duplicateElsewhere = $second->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]);
 
     expect($duplicateElsewhere->exists)->toBeTrue();

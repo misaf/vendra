@@ -13,6 +13,6 @@ final class ViewActivityLog extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-activity-log::navigation.activity_log');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-activity-log::navigation.activity_log');
     }
 }

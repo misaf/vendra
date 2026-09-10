@@ -29,7 +29,7 @@ final class RegistrationSubscriber
 
         $cookie = $this->referralCookie();
 
-        if (null === $cookie) {
+        if ($cookie === null) {
             return;
         }
 
@@ -44,7 +44,7 @@ final class RegistrationSubscriber
     public function subscribe(Dispatcher $events): array
     {
         return [
-            'eloquent.created: ' . User::class => 'userCreated',
+            'eloquent.created: '.User::class => 'userCreated',
         ];
     }
 
@@ -58,13 +58,13 @@ final class RegistrationSubscriber
         $request = app(Request::class);
         $value = $request->cookies->get(Config::string('vendra-affiliate.attribution.cookie_name', 'vendra_affiliate_ref'));
 
-        if ( ! is_string($value) || '' === $value) {
+        if (! is_string($value) || $value === '') {
             return null;
         }
 
         [$code, $clickId] = array_pad(explode('|', $value, 2), 2, null);
 
-        if ( ! is_string($code) || '' === $code) {
+        if (! is_string($code) || $code === '') {
             return null;
         }
 

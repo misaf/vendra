@@ -19,10 +19,10 @@ beforeEach(function (): void {
 
 function requestWithRouteLocale(?string $locale): Request
 {
-    $request = Request::create(null === $locale ? '/api/products' : "/api/{$locale}/products");
-    $route = new Route('GET', null === $locale ? '/api/products' : '/api/{locale}/products', []);
+    $request = Request::create($locale === null ? '/api/products' : "/api/{$locale}/products");
+    $route = new Route('GET', $locale === null ? '/api/products' : '/api/{locale}/products', []);
     $route->bind($request);
-    $request->setRouteResolver(fn(): Route => $route);
+    $request->setRouteResolver(fn (): Route => $route);
 
     return $request;
 }
@@ -31,8 +31,8 @@ function requestWithUserLocale(?string $locale): Request
 {
     $request = Request::create('/');
 
-    if (null !== $locale) {
-        $request->setUserResolver(fn(): object => (object) ['locale' => $locale]);
+    if ($locale !== null) {
+        $request->setUserResolver(fn (): object => (object) ['locale' => $locale]);
     }
 
     return $request;
@@ -42,7 +42,8 @@ function requestWithPreferredLocaleUser(string $locale): Request
 {
     $request = Request::create('/');
 
-    $request->setUserResolver(fn(): HasLocalePreference => new class ($locale) implements HasLocalePreference {
+    $request->setUserResolver(fn (): HasLocalePreference => new class($locale) implements HasLocalePreference
+    {
         public function __construct(
             private readonly string $locale,
         ) {}
@@ -89,29 +90,29 @@ it('registers every built-in resolver', function (string $resolver): void {
 it('resolves locales from each built-in resolver source', function (string $resolver, Request $request, string $expectedLocale): void {
     expect(app($resolver)->resolve($request))->toBe($expectedLocale);
 })->with([
-    'accept language header' => fn(): array => [
+    'accept language header' => fn (): array => [
         AcceptLanguageLocaleResolver::class,
         Request::create('/', server: [
             'HTTP_ACCEPT_LANGUAGE' => 'fr-CA,fr;q=0.9,de;q=0.8,en;q=0.7',
         ]),
         'fr',
     ],
-    'query string' => fn(): array => [
+    'query string' => fn (): array => [
         QueryLocaleResolver::class,
         Request::create('/?locale=de'),
         'de',
     ],
-    'route parameter' => fn(): array => [
+    'route parameter' => fn (): array => [
         RouteLocaleResolver::class,
         requestWithRouteLocale('fa'),
         'fa',
     ],
-    'user locale attribute' => fn(): array => [
+    'user locale attribute' => fn (): array => [
         UserLocaleResolver::class,
         requestWithUserLocale('de'),
         'de',
     ],
-    'user locale preference' => fn(): array => [
+    'user locale preference' => fn (): array => [
         UserLocaleResolver::class,
         requestWithPreferredLocaleUser('fa'),
         'fa',
@@ -121,21 +122,21 @@ it('resolves locales from each built-in resolver source', function (string $reso
 it('returns null when the resolver source has no value', function (string $resolver, Request $request): void {
     expect(app($resolver)->resolve($request))->toBeNull();
 })->with([
-    'accept language header' => fn(): array => [
+    'accept language header' => fn (): array => [
         AcceptLanguageLocaleResolver::class,
         Request::create('/', server: [
             'HTTP_ACCEPT_LANGUAGE' => '',
         ]),
     ],
-    'query string' => fn(): array => [
+    'query string' => fn (): array => [
         QueryLocaleResolver::class,
         Request::create('/'),
     ],
-    'route parameter' => fn(): array => [
+    'route parameter' => fn (): array => [
         RouteLocaleResolver::class,
         requestWithRouteLocale(null),
     ],
-    'authenticated user' => fn(): array => [
+    'authenticated user' => fn (): array => [
         UserLocaleResolver::class,
         requestWithUserLocale(null),
     ],

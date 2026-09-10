@@ -6,7 +6,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Pennant\Migrations\PennantMigration;
 
-return new class extends PennantMigration {
+return new class extends PennantMigration
+{
     public function up(): void
     {
         Schema::create('features', function (Blueprint $table): void {

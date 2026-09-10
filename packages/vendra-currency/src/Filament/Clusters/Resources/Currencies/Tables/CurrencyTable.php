@@ -59,7 +59,7 @@ final class CurrencyTable
                         ->label(__('vendra-currency::attributes.is_default'))
                         ->color('success')
                         ->size(Size::ExtraSmall)
-                        ->hidden(fn(Currency $record): bool => ! $record->is_default),
+                        ->hidden(fn (Currency $record): bool => ! $record->is_default),
                 ]),
 
             TextColumn::make('symbol')
@@ -69,7 +69,7 @@ final class CurrencyTable
 
             TextColumn::make('type')
                 ->badge()
-                ->color(fn(CurrencyType $state): string => CurrencyType::Fiat === $state ? 'success' : 'warning')
+                ->color(fn (CurrencyType $state): string => $state === CurrencyType::Fiat ? 'success' : 'warning')
                 ->label(__('vendra-currency::attributes.type'))
                 ->icon(Heroicon::Tag),
 
@@ -80,7 +80,7 @@ final class CurrencyTable
             ToggleColumn::make('active')
                 ->label(__('vendra-currency::attributes.active'))
                 ->onIcon(Heroicon::Bolt)
-                ->disabled(fn(Currency $record): bool => ! CurrencyResource::canEdit($record)),
+                ->disabled(fn (Currency $record): bool => ! CurrencyResource::canEdit($record)),
 
             TextColumn::make('created_at')
                 ->extraCellAttributes(['dir' => 'ltr'])
@@ -88,8 +88,8 @@ final class CurrencyTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -98,8 +98,8 @@ final class CurrencyTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

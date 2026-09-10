@@ -45,7 +45,7 @@ final class TransactionGatewayResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return [
-            ...static::getTranslatedGloballySearchableAttributes(),
+            ...self::getTranslatedGloballySearchableAttributes(),
             'slug',
         ];
     }
@@ -93,10 +93,10 @@ final class TransactionGatewayResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListTransactionGateways::route('/'),
+            'index' => ListTransactionGateways::route('/'),
             'create' => CreateTransactionGateway::route('/create'),
-            'view'   => ViewTransactionGateway::route('/{record}'),
-            'edit'   => EditTransactionGateway::route('/{record}/edit'),
+            'view' => ViewTransactionGateway::route('/{record}'),
+            'edit' => EditTransactionGateway::route('/{record}/edit'),
         ];
     }
 

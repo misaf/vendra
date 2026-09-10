@@ -14,9 +14,9 @@ it('stores and reads structured request and job identifiers', function (): void 
         tenantId: 10,
         idempotencyKey: 'payment-attempt-50',
         metadata: [
-            'reseller_id'     => 20,
+            'reseller_id' => 20,
             'subscription_id' => 30,
-            'payment_id'      => 40,
+            'payment_id' => 40,
         ],
     );
 
@@ -24,14 +24,14 @@ it('stores and reads structured request and job identifiers', function (): void 
 
     expect(RequestJobContext::current())->toEqual($context)
         ->and(Context::all())->toMatchArray([
-            'trace_id'        => 'trace-1',
-            'actor_id'        => 5,
-            'actor_type'      => 'web',
-            'operation'       => 'testing',
-            'tenant_id'       => 10,
-            'reseller_id'     => 20,
+            'trace_id' => 'trace-1',
+            'actor_id' => 5,
+            'actor_type' => 'web',
+            'operation' => 'testing',
+            'tenant_id' => 10,
+            'reseller_id' => 20,
             'subscription_id' => 30,
-            'payment_id'      => 40,
+            'payment_id' => 40,
         ])
         ->and(Context::allHidden())->toBe([
             'idempotency_key' => 'payment-attempt-50',
@@ -45,8 +45,8 @@ it('omits absent identifiers and restores scoped visible and hidden values', fun
     $captured = (new RequestJobContext(
         idempotencyKey: 'scoped',
         metadata: [
-            'reseller_id'   => 20,
-            'payment_id'    => 41,
+            'reseller_id' => 20,
+            'payment_id' => 41,
             'newsletter_id' => null,
         ],
     ))->scope(function (): array {
@@ -60,17 +60,17 @@ it('omits absent identifiers and restores scoped visible and hidden values', fun
     expect($captured[0]->tenantId)->toBe(10)
         ->and($captured[0]->idempotencyKey)->toBe('scoped')
         ->and($captured[0]->metadata)->toBe([
-            'payment_id'  => 41,
+            'payment_id' => 41,
             'reseller_id' => 20,
         ])
         ->and($captured[1])->toBe([
-            'tenant_id'   => 10,
-            'payment_id'  => 41,
+            'tenant_id' => 10,
+            'payment_id' => 41,
             'reseller_id' => 20,
         ])
         ->and($captured[2])->toBe(['idempotency_key' => 'scoped'])
         ->and(Context::all())->toBe([
-            'tenant_id'  => 10,
+            'tenant_id' => 10,
             'payment_id' => 40,
         ])
         ->and(Context::allHidden())->toBe(['idempotency_key' => 'original']);

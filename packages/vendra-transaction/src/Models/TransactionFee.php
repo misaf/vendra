@@ -36,9 +36,9 @@ final class TransactionFee extends Model
     protected function casts(): array
     {
         return [
-            'id'             => 'integer',
+            'id' => 'integer',
             'transaction_id' => 'integer',
-            'amount'         => 'integer',
+            'amount' => 'integer',
         ];
     }
 

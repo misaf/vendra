@@ -17,10 +17,9 @@ use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
+use Symfony\Component\HttpFoundation\Response;
 
 use function Pest\Laravel\actingAs;
-
-use Symfony\Component\HttpFoundation\Response;
 
 it('adds the authenticated reseller to the request and job context', function (): void {
     $reseller = Reseller::factory()->create();
@@ -32,7 +31,7 @@ it('adds the authenticated reseller to the request and job context', function ()
         function (Request $request) use ($reseller): Response {
             expect(RequestJobContext::current()->metadata[ContextKeys::RESELLER_ID])->toBe($reseller->getKey());
 
-            return new Response();
+            return new Response;
         },
     );
 });
@@ -48,7 +47,7 @@ it('uses a validated request identifier for context and the response', function 
             expect(RequestJobContext::current()->traceId)
                 ->toBe('d9428888-122b-11e1-b85c-61cd3cbb3210');
 
-            return new Response();
+            return new Response;
         },
     );
 
@@ -62,7 +61,7 @@ it('rejects an invalid incoming request identifier', function (): void {
 
     $response = app(AddRequestContext::class)->handle(
         $request,
-        fn(Request $request): Response => new Response(),
+        fn (Request $request): Response => new Response,
     );
 
     expect(RequestJobContext::current()->traceId)->toBeUuid()
@@ -80,7 +79,7 @@ it('adds the current panel id without storing personal data', function (): void 
                 ->and(Context::all())
                 ->not->toHaveKeys(['email', 'username']);
 
-            return new Response();
+            return new Response;
         },
     );
 });

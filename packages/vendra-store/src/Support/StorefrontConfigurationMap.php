@@ -24,21 +24,21 @@ final class StorefrontConfigurationMap
      * @var array<string, string>
      */
     public const array FIELDS = [
-        'storefront_name_en'            => 'name.en',
-        'storefront_name_fa'            => 'name.fa',
-        'storefront_business_type'      => 'businessType',
-        'storefront_price_currency'     => 'priceCurrency',
-        'storefront_og_image'           => 'ogImage',
-        'storefront_locality'           => 'address.locality',
-        'storefront_country'            => 'address.country',
-        'storefront_mobile_phone'       => 'contact.mobilePhone',
-        'storefront_office_phone'       => 'contact.officePhone',
-        'storefront_contact_email'      => 'contact.email',
-        'storefront_hours_open'         => 'contact.hoursOpen',
-        'storefront_hours_close'        => 'contact.hoursClose',
-        'storefront_map_query'          => 'contact.mapQuery',
-        'storefront_whatsapp_phone'     => 'social.whatsappPhone',
-        'storefront_telegram_username'  => 'social.telegramUsername',
+        'storefront_name_en' => 'name.en',
+        'storefront_name_fa' => 'name.fa',
+        'storefront_business_type' => 'businessType',
+        'storefront_price_currency' => 'priceCurrency',
+        'storefront_og_image' => 'ogImage',
+        'storefront_locality' => 'address.locality',
+        'storefront_country' => 'address.country',
+        'storefront_mobile_phone' => 'contact.mobilePhone',
+        'storefront_office_phone' => 'contact.officePhone',
+        'storefront_contact_email' => 'contact.email',
+        'storefront_hours_open' => 'contact.hoursOpen',
+        'storefront_hours_close' => 'contact.hoursClose',
+        'storefront_map_query' => 'contact.mapQuery',
+        'storefront_whatsapp_phone' => 'social.whatsappPhone',
+        'storefront_telegram_username' => 'social.telegramUsername',
         'storefront_instagram_username' => 'social.instagramUsername',
     ];
 
@@ -68,7 +68,7 @@ final class StorefrontConfigurationMap
         // treats an absent key and an empty object the same way.
         $messages = self::messages($form);
 
-        if ([] !== $messages) {
+        if ($messages !== []) {
             $configuration['messages'] = $messages;
         }
 
@@ -76,7 +76,7 @@ final class StorefrontConfigurationMap
     }
 
     /**
-     * @param array<string, mixed> $form
+     * @param  array<string, mixed>  $form
      */
     private static function value(array $form, string $field): string
     {
@@ -95,21 +95,21 @@ final class StorefrontConfigurationMap
      * than passed on, because the storefront validates the encoded
      * configuration at boot and refuses to render when it does not parse.
      *
-     * @param  array<string, mixed>                 $form
+     * @param  array<string, mixed>  $form
      * @return array<string, array<string, mixed>>
      */
     private static function messages(array $form): array
     {
         $value = $form['storefront_messages'] ?? null;
 
-        if ( ! is_array($value)) {
+        if (! is_array($value)) {
             return [];
         }
 
         $messages = [];
 
         foreach ($value as $locale => $overrides) {
-            if (is_string($locale) && '' !== $locale && is_array($overrides) && [] !== $overrides) {
+            if (is_string($locale) && $locale !== '' && is_array($overrides) && $overrides !== []) {
                 $messages[$locale] = $overrides;
             }
         }

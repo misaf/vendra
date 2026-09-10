@@ -29,7 +29,7 @@ it('creates a pending transaction with fee and metadata', function (): void {
         amount: 5_000,
         metadata: [
             'reference' => 'abc-123',
-            'context'   => ['source' => 'test'],
+            'context' => ['source' => 'test'],
         ],
         fee: 250,
     );
@@ -39,7 +39,7 @@ it('creates a pending transaction with fee and metadata', function (): void {
         ->and($transaction->amount)->toBe(5_000)
         ->and($transaction->transactionFee->amount)->toBe(250)
         ->and($transaction->transactionMetadatas()->pluck('key_value', 'key_name')->all())->toBe([
-            'context'   => '{"source":"test"}',
+            'context' => '{"source":"test"}',
             'reference' => 'abc-123',
         ])
         ->and($wallet->fresh()->balance)->toBe(0);
@@ -84,7 +84,7 @@ it('rejects an idempotency key reused for different transaction details', functi
         idempotencyKey: 'subscription:123',
     );
 
-    expect(fn() => app(CreateTransactionAction::class)->execute(
+    expect(fn () => app(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -98,7 +98,7 @@ it('enforces the per-wallet transaction limit at creation', function (): void {
     $wallet = WalletFactory::new()->create();
     TransactionLimitFactory::new()->forWallet($wallet)->ofType(TransactionTypeEnum::Withdrawal)->create(['amount' => 1_000]);
 
-    expect(fn() => app(CreateTransactionAction::class)->execute(
+    expect(fn () => app(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -113,7 +113,7 @@ it('resolves gateways by slug and ignores disabled ones', function (): void {
     expect(TransactionGatewayRegistry::hasActive('coinpayments'))->toBeFalse()
         ->and(TransactionGatewayRegistry::hasActive('internal-transactions'))->toBeTrue()
         ->and(TransactionGatewayRegistry::hasAnyActive())->toBeFalse()
-        ->and(fn() => TransactionGatewayRegistry::get('coinpayments'))->toThrow(RuntimeException::class);
+        ->and(fn () => TransactionGatewayRegistry::get('coinpayments'))->toThrow(RuntimeException::class);
 });
 
 it('provisions the default wallet in the resolved default currency', function (): void {

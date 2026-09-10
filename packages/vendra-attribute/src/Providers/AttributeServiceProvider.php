@@ -41,11 +41,11 @@ final class AttributeServiceProvider extends PackageServiceProvider
     {
         $this->app->singleton(
             AttributeResolver::class,
-            fn(): EloquentAttributeResolver => new EloquentAttributeResolver(Attribute::class, AttributeValue::class),
+            fn (): EloquentAttributeResolver => new EloquentAttributeResolver(Attribute::class, AttributeValue::class),
         );
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-attribute')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-attribute')) {
                 return;
             }
 
@@ -58,6 +58,6 @@ final class AttributeServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('attributes', 'attribute_values');
         $this->app->make(TenantSeeders::class)->register('vendra-attribute:seed', priority: 35);
 
-        AboutCommand::add('Vendra Attribute', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-attribute')]);
+        AboutCommand::add('Vendra Attribute', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-attribute')]);
     }
 }

@@ -33,7 +33,7 @@ it('records an enquiry exactly as it was written', function (): void {
 });
 
 it('refuses an enquiry without a usable email or message', function (array $overrides): void {
-    expect(fn(): Inquiry => app(SubmitInquiryAction::class)->execute(
+    expect(fn (): Inquiry => app(SubmitInquiryAction::class)->execute(
         name: $overrides['name'] ?? 'Nasrin K.',
         email: $overrides['email'] ?? 'nasrin@example.com',
         message: $overrides['message'] ?? 'Do you deliver on Fridays?',
@@ -41,7 +41,7 @@ it('refuses an enquiry without a usable email or message', function (array $over
 
     expect(Inquiry::query()->count())->toBe(0);
 })->with([
-    'missing name'  => [['name' => '']],
+    'missing name' => [['name' => '']],
     'invalid email' => [['email' => 'not-an-email']],
     'empty message' => [['message' => '']],
 ]);

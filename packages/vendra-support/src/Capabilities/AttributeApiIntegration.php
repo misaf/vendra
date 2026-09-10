@@ -42,6 +42,6 @@ final class AttributeApiIntegration
             return app(AttributeApiResolver::class);
         }
 
-        return new NullAttributeApiResolver();
+        return new NullAttributeApiResolver;
     }
 }

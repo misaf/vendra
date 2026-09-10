@@ -20,10 +20,10 @@ final class RecordAffiliateClickAction
         ?string $landingUrl = null,
     ): AffiliateClick {
         return $affiliate->clicks()->create([
-            'ip_address'  => $ipAddress,
-            'user_agent'  => null === $userAgent ? null : mb_substr($userAgent, 0, 255),
-            'referer'     => null === $referer ? null : mb_substr($referer, 0, 255),
-            'landing_url' => null === $landingUrl ? null : mb_substr($landingUrl, 0, 255),
+            'ip_address' => $ipAddress,
+            'user_agent' => $userAgent === null ? null : mb_substr($userAgent, 0, 255),
+            'referer' => $referer === null ? null : mb_substr($referer, 0, 255),
+            'landing_url' => $landingUrl === null ? null : mb_substr($landingUrl, 0, 255),
         ]);
     }
 }

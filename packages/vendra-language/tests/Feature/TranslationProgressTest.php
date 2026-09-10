@@ -27,8 +27,8 @@ beforeEach(function (): void {
 
     $this->completeLanguageLine = LanguageLine::query()->create([
         'group' => 'navigation',
-        'key'   => 'dashboard',
-        'text'  => [
+        'key' => 'dashboard',
+        'text' => [
             'en' => 'Dashboard',
             'de' => 'Instrumententafel',
         ],
@@ -36,8 +36,8 @@ beforeEach(function (): void {
 
     $this->partialLanguageLine = LanguageLine::query()->create([
         'group' => 'navigation',
-        'key'   => 'settings',
-        'text'  => [
+        'key' => 'settings',
+        'text' => [
             'en' => '  ',
             'de' => 'Einstellungen',
         ],
@@ -46,26 +46,26 @@ beforeEach(function (): void {
 
 it('calculates override coverage for a locale', function (): void {
     expect(app(TranslationProgress::class)->forLocale('en'))->toBe([
-        'translated'      => 1,
-        'total'           => 2,
-        'remaining'       => 1,
-        'percentage'      => 50,
+        'translated' => 1,
+        'total' => 2,
+        'remaining' => 1,
+        'percentage' => 50,
         'missing_locales' => [],
     ]);
 });
 
 it('calculates active locale progress and missing locales for a language line', function (): void {
     expect(app(TranslationProgress::class)->forLanguageLine($this->completeLanguageLine))->toBe([
-        'translated'      => 2,
-        'total'           => 2,
-        'remaining'       => 0,
-        'percentage'      => 100,
+        'translated' => 2,
+        'total' => 2,
+        'remaining' => 0,
+        'percentage' => 100,
         'missing_locales' => [],
     ])->and(app(TranslationProgress::class)->forLanguageLine($this->partialLanguageLine))->toBe([
-        'translated'      => 1,
-        'total'           => 2,
-        'remaining'       => 1,
-        'percentage'      => 50,
+        'translated' => 1,
+        'total' => 2,
+        'remaining' => 1,
+        'percentage' => 50,
         'missing_locales' => ['en'],
     ]);
 });

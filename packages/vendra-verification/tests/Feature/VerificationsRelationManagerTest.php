@@ -10,7 +10,7 @@ use Misaf\VendraVerification\Filament\RelationManagers\VerificationsRelationMana
 it('uses a searchable localized country select', function (): void {
     app()->setLocale('fa');
 
-    $relationManager = new VerificationsRelationManager();
+    $relationManager = new VerificationsRelationManager;
     $schema = $relationManager->form(Schema::make($relationManager));
     $field = $schema->getFlatFields()['country_code'];
 

@@ -11,7 +11,7 @@ it('applies shared tenant ownership to the currency model', function (): void {
 });
 
 it('hides tenant and internal guard attributes from currency serialization', function (): void {
-    expect((new Currency())->getHidden())->toContain('tenant_id', 'default_guard');
+    expect((new Currency)->getHidden())->toContain('tenant_id', 'default_guard');
 });
 
 it('defines policy permissions for the currency resource', function (): void {

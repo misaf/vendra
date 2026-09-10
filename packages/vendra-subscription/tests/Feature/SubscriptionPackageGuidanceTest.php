@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\File;
 
 it('describes the current generic polymorphic subscription architecture', function (): void {
     $packagePath = base_path('packages/vendra-subscription');
-    $manifest = json_decode(File::get($packagePath . '/composer.json'), true, flags: JSON_THROW_ON_ERROR);
-    $readme = File::get($packagePath . '/README.md');
-    $guideline = File::get($packagePath . '/resources/boost/guidelines/core.blade.php');
-    $skill = File::get($packagePath . '/resources/boost/skills/vendra-subscription-development/SKILL.md');
+    $manifest = json_decode(File::get($packagePath.'/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+    $readme = File::get($packagePath.'/README.md');
+    $guideline = File::get($packagePath.'/resources/boost/guidelines/core.blade.php');
+    $skill = File::get($packagePath.'/resources/boost/skills/vendra-subscription-development/SKILL.md');
 
     expect($manifest['description'])->toBe('Generic plans and polymorphic subscriptions for Vendra applications')
         ->and($readme)

@@ -36,10 +36,10 @@ it('queues replacement provisioning attempts while preventing concurrent process
 it('completes provisioning checkpoints before activating the tenant', function (): void {
     Event::fake([TenantProvisioned::class]);
     $tenant = Store::factory()->create([
-        'active'                   => false,
-        'provisioning_status'      => TenantProvisioningStatus::Pending,
+        'active' => false,
+        'provisioning_status' => TenantProvisioningStatus::Pending,
         'provisioning_should_seed' => true,
-        'provisioned_at'           => null,
+        'provisioned_at' => null,
     ]);
 
     (new CompleteStoreProvisioningJob($tenant->id))->handle();
@@ -56,7 +56,7 @@ it('completes provisioning checkpoints before activating the tenant', function (
 
     Event::assertDispatched(
         TenantProvisioned::class,
-        fn(TenantProvisioned $event): bool => $event->tenant->is($tenant) && $event->shouldSeed,
+        fn (TenantProvisioned $event): bool => $event->tenant->is($tenant) && $event->shouldSeed,
     );
 
     (new CompleteStoreProvisioningJob($tenant->id))->handle();
@@ -66,15 +66,15 @@ it('completes provisioning checkpoints before activating the tenant', function (
 
 it('records a failed checkpoint and safely retries unfinished work', function (): void {
     $tenant = Store::factory()->create([
-        'active'                   => false,
-        'provisioning_status'      => TenantProvisioningStatus::Pending,
+        'active' => false,
+        'provisioning_status' => TenantProvisioningStatus::Pending,
         'provisioning_should_seed' => true,
-        'provisioned_at'           => null,
+        'provisioned_at' => null,
     ]);
-    Event::listen(TenantProvisioned::class, fn(): never => throw new RuntimeException('Seeder failed.'));
+    Event::listen(TenantProvisioned::class, fn (): never => throw new RuntimeException('Seeder failed.'));
     $job = new CompleteStoreProvisioningJob($tenant->id);
 
-    expect(fn() => $job->handle())->toThrow(RuntimeException::class, 'Seeder failed.');
+    expect(fn () => $job->handle())->toThrow(RuntimeException::class, 'Seeder failed.');
 
     expect($tenant->refresh()->active)->toBeFalse()
         ->and($tenant->provisioning_status)->toBe(TenantProvisioningStatus::Failed)
@@ -94,11 +94,11 @@ it('activates an unsubscribed reseller property under billing suspension', funct
     Event::fake([TenantProvisioned::class]);
     $reseller = Reseller::factory()->create();
     $tenant = Store::factory()->create([
-        'reseller_id'              => $reseller->id,
-        'active'                   => false,
-        'provisioning_status'      => TenantProvisioningStatus::Pending,
+        'reseller_id' => $reseller->id,
+        'active' => false,
+        'provisioning_status' => TenantProvisioningStatus::Pending,
         'provisioning_should_seed' => false,
-        'provisioned_at'           => null,
+        'provisioned_at' => null,
     ]);
 
     (new CompleteStoreProvisioningJob($tenant->id))->handle();
@@ -114,11 +114,11 @@ it('scopes provisioning identifiers without leaking them afterward', function ()
     Event::fake([TenantProvisioned::class]);
     $reseller = Reseller::factory()->create();
     $tenant = Store::factory()->create([
-        'reseller_id'              => $reseller->id,
-        'active'                   => false,
-        'provisioning_status'      => TenantProvisioningStatus::Pending,
+        'reseller_id' => $reseller->id,
+        'active' => false,
+        'provisioning_status' => TenantProvisioningStatus::Pending,
         'provisioning_should_seed' => false,
-        'provisioned_at'           => null,
+        'provisioned_at' => null,
     ]);
     $captured = [];
 

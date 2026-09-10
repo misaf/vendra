@@ -21,7 +21,7 @@ it('rejects API resource requests that do not resolve a tenant', function (): vo
 it('resolves the tenant on the canonical API host from the storefront origin', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'flowers']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'flowers.example.com',
+        'name' => 'flowers.example.com',
         'active' => true,
     ]);
 
@@ -35,9 +35,9 @@ it('resolves the tenant on the canonical API host from the storefront origin', f
     forgetCurrentTestTenant();
 
     $this->getJson('https://api.vendra.test/api/catalog/products', [
-        'Accept'          => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json',
         'Accept-Language' => 'en',
-        'Origin'          => 'https://flowers.example.com',
+        'Origin' => 'https://flowers.example.com',
     ])
         ->assertSuccessful()
         ->assertJsonPath('meta.totalItems', 1)
@@ -49,14 +49,14 @@ it('resolves the tenant on the canonical API host from the storefront origin', f
 it('falls back to the referer when the canonical API host receives no origin', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'flowers']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'flowers.example.com',
+        'name' => 'flowers.example.com',
         'active' => true,
     ]);
 
     forgetCurrentTestTenant();
 
     $this->getJson('https://api.vendra.test/api/catalog/products', [
-        'Accept'  => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json',
         'Referer' => 'https://flowers.example.com/en/products',
     ])->assertSuccessful();
 });
@@ -64,7 +64,7 @@ it('falls back to the referer when the canonical API host receives no origin', f
 it('rejects a canonical API request whose origin is not an active tenant domain', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'flowers']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'flowers.example.com',
+        'name' => 'flowers.example.com',
         'active' => false,
     ]);
 
@@ -84,7 +84,7 @@ it('rejects a canonical API request whose origin is not an active tenant domain'
 it('does not accept an origin on host shapes other than the canonical API', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'flowers']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'flowers.example.com',
+        'name' => 'flowers.example.com',
         'active' => true,
     ]);
 
@@ -99,7 +99,7 @@ it('does not accept an origin on host shapes other than the canonical API', func
 it('resolves and isolates API resources by tenant domain', function (): void {
     $firstTenant = Store::factory()->active()->create(['slug' => 'flowers']);
     StoreDomain::factory()->for($firstTenant)->create([
-        'name'   => 'flowers.example.com',
+        'name' => 'flowers.example.com',
         'active' => true,
     ]);
 
@@ -121,7 +121,7 @@ it('resolves and isolates API resources by tenant domain', function (): void {
     forgetCurrentTestTenant();
 
     $this->getJson('https://admin.flowers.example.com/api/catalog/products', [
-        'Accept'          => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json',
         'Accept-Language' => 'en',
     ])
         ->assertSuccessful()

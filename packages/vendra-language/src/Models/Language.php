@@ -38,7 +38,7 @@ use Spatie\EloquentSortable\SortableTrait;
 #[Hidden(['tenant_id', 'default_guard'])]
 #[ObservedBy([LanguageObserver::class])]
 #[UseFactory(LanguageFactory::class)]
-final class Language extends Model implements Sortable, ShouldLogActivity
+final class Language extends Model implements ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
 
@@ -55,13 +55,13 @@ final class Language extends Model implements Sortable, ShouldLogActivity
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
     /** @var array<string, mixed> */
     protected $attributes = [
-        'active'     => true,
+        'active' => true,
         'is_default' => false,
     ];
 
@@ -88,12 +88,12 @@ final class Language extends Model implements Sortable, ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'         => 'integer',
-            'tenant_id'  => 'integer',
-            'locale'     => 'string',
-            'active'     => 'boolean',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'locale' => 'string',
+            'active' => 'boolean',
             'is_default' => 'boolean',
-            'position'   => 'integer',
+            'position' => 'integer',
         ];
     }
 }

@@ -53,20 +53,20 @@ final class TransactionBonusOverviewWidget extends StatsOverviewWidget
         $endOfWeek = now()->endOfWeek();
 
         $bonusTransactionStats = Trend::query(Transaction::query()->bonus()->approved()
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
         $totalBonusAmount = (int) Transaction::query()->bonus()->approved()
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
             ->sum('amount');
 
         $transactionBonus = Stat::make('bonus_transaction_stats', Number::format($totalBonusAmount))
             ->label(__('vendra-transaction::widgets.bonus_transaction_stats'))
             ->description(__('vendra-transaction::widgets.bonus_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($bonusTransactionStats->map(fn(TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($bonusTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
             ->color('primary');
 
         return [$transactionBonus];

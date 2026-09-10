@@ -64,7 +64,7 @@ final class TransactionTransferOverviewWidget extends StatsOverviewWidget
             ->label(__('vendra-transaction::widgets.transfer_transaction_stats'))
             ->description(__('vendra-transaction::widgets.transfer_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($transferTransactionStats->map(fn(TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($transferTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
             ->color('primary');
 
         return [$transactionTransfer];

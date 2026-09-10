@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
             'multitenancy.switch_tenant_tasks',
             array_values(array_filter(
                 config()->array('multitenancy.switch_tenant_tasks'),
-                static fn(mixed $task): bool => ! is_string($task) || SwitchRouteCacheTask::class !== $task,
+                static fn (mixed $task): bool => ! is_string($task) || $task !== SwitchRouteCacheTask::class,
             )),
         );
 

@@ -21,8 +21,7 @@ beforeEach(function (): void {
  * Perform a JSON-RPC call against the MCP endpoint, decoding the JSON or
  * Server-Sent-Events payload the streamable HTTP transport returns.
  *
- * @param array<string, mixed> $payload
- *
+ * @param  array<string, mixed>  $payload
  * @return array{response: TestResponse, body: array<string, mixed>}
  */
 function mcpCall(array $payload, ?string $sessionId = null, string $url = 'http://localhost/mcp'): array
@@ -30,10 +29,10 @@ function mcpCall(array $payload, ?string $sessionId = null, string $url = 'http:
     $host = parse_url($url, PHP_URL_HOST);
     $headers = [
         'Accept' => 'application/json, text/event-stream',
-        'Host'   => is_string($host) ? $host : 'localhost',
+        'Host' => is_string($host) ? $host : 'localhost',
     ];
 
-    if (null !== $sessionId) {
+    if ($sessionId !== null) {
         $headers['Mcp-Session-Id'] = $sessionId;
     }
 
@@ -45,7 +44,7 @@ function mcpCall(array $payload, ?string $sessionId = null, string $url = 'http:
     foreach (preg_split('/\r?\n/', $content) ?: [] as $line) {
         $line = str_starts_with($line, 'data:') ? mb_trim(mb_substr($line, 5)) : mb_trim($line);
 
-        if ('' === $line) {
+        if ($line === '') {
             continue;
         }
 
@@ -65,12 +64,12 @@ function mcpInitialize(string $url = 'http://localhost/mcp'): string
 {
     $result = mcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 1,
-        'method'  => 'initialize',
-        'params'  => [
+        'id' => 1,
+        'method' => 'initialize',
+        'params' => [
             'protocolVersion' => '2025-06-18',
-            'capabilities'    => new stdClass(),
-            'clientInfo'      => ['name' => 'pest', 'version' => '1.0'],
+            'capabilities' => new stdClass,
+            'clientInfo' => ['name' => 'pest', 'version' => '1.0'],
         ],
     ], url: $url);
 
@@ -87,7 +86,7 @@ function mcpInitialize(string $url = 'http://localhost/mcp'): string
 it('advertises the product API operations with object input schemas', function (): void {
     $sessionId = mcpInitialize();
 
-    $body = mcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass()], $sessionId)['body'];
+    $body = mcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass], $sessionId)['body'];
 
     $tools = collect($body['result']['tools'] ?? []);
     $names = $tools->pluck('name');
@@ -102,7 +101,7 @@ it('advertises the product API operations with object input schemas', function (
     );
 
     // MCP rejects any tool whose input schema is not a JSON object.
-    $tools->each(fn(array $tool) => expect($tool['inputSchema']['type'] ?? null)->toBe('object'));
+    $tools->each(fn (array $tool) => expect($tool['inputSchema']['type'] ?? null)->toBe('object'));
 });
 
 it('returns active catalog products when the list_products tool is called', function (): void {
@@ -113,9 +112,9 @@ it('returns active catalog products when the list_products tool is called', func
 
     $body = mcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 3,
-        'method'  => 'tools/call',
-        'params'  => ['name' => 'list_products', 'arguments' => new stdClass()],
+        'id' => 3,
+        'method' => 'tools/call',
+        'params' => ['name' => 'list_products', 'arguments' => new stdClass],
     ], $sessionId)['body'];
 
     expect($body['result']['isError'] ?? false)->toBeFalse();
@@ -132,9 +131,9 @@ it('gets one API resource by identifier', function (): void {
 
     $body = mcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 3,
-        'method'  => 'tools/call',
-        'params'  => ['name' => 'get_product', 'arguments' => ['id' => $product->id]],
+        'id' => 3,
+        'method' => 'tools/call',
+        'params' => ['name' => 'get_product', 'arguments' => ['id' => $product->id]],
     ], $sessionId)['body'];
 
     expect($body['result']['isError'] ?? false)->toBeFalse()

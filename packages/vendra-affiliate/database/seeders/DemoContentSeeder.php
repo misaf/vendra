@@ -36,7 +36,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
                     ->forAffiliate($affiliate)
                     ->count(2)
                     ->create()
-                    ->each(fn($referral): mixed => AffiliateCommissionFactory::new()
+                    ->each(fn ($referral): mixed => AffiliateCommissionFactory::new()
                         ->forAffiliate($affiliate)
                         ->approved()
                         ->state(['affiliate_referral_id' => $referral->id])
@@ -77,16 +77,15 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         Affiliate::firstOrCreate(
             ['code' => $record['code']],
             [
-                'user_id'            => $record['user_id'],
+                'user_id' => $record['user_id'],
                 'commission_percent' => $record['commission_percent'],
-                'status'             => AffiliateStatusEnum::from($record['status']),
+                'status' => AffiliateStatusEnum::from($record['status']),
             ],
         );
     }
 
     /**
-     * @param array<string, mixed> $record
-     *
+     * @param  array<string, mixed>  $record
      * @return array{
      *     user_id: int,
      *     code: string,
@@ -98,10 +97,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     {
         /** @var array{user_id: int, code: string, commission_percent: int, status: string} */
         return Validator::validate($record, [
-            'user_id'            => ['required', 'integer'],
-            'code'               => ['required', 'string', 'max:16'],
+            'user_id' => ['required', 'integer'],
+            'code' => ['required', 'string', 'max:16'],
             'commission_percent' => ['required', 'integer', 'between:0,100'],
-            'status'             => ['required', 'string', 'in:active,suspended'],
+            'status' => ['required', 'string', 'in:active,suspended'],
         ]);
     }
 }

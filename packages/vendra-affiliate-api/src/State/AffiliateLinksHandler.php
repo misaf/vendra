@@ -16,8 +16,7 @@ use Misaf\VendraAffiliate\Models\Affiliate;
 final class AffiliateLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<Affiliate> $builder
-     *
+     * @param  Builder<Affiliate>  $builder
      * @return Builder<Affiliate>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -26,7 +25,7 @@ final class AffiliateLinksHandler implements LinksHandlerInterface
             ->select(['id', 'user_id', 'code', 'commission_percent', 'signup_bounty', 'status', 'created_at'])
             ->where('status', AffiliateStatusEnum::Active);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

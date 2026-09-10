@@ -10,7 +10,8 @@ use Misaf\VendraSupport\Filament\Concerns\ResolvesPluginInstances;
 
 function makeConcernTestPlugin(): Plugin
 {
-    return new class implements Plugin {
+    return new class implements Plugin
+    {
         use HasPluginNavigationGroup;
         use ResolvesPluginInstances;
 
@@ -47,7 +48,7 @@ it('prefers the fluent navigation group override over config and defaults', func
 
     expect(makeConcernTestPlugin()->navigationGroup('Overridden')->getNavigationGroup())
         ->toBe('Overridden')
-        ->and(makeConcernTestPlugin()->navigationGroup(fn(): string => 'Deferred')->getNavigationGroup())
+        ->and(makeConcernTestPlugin()->navigationGroup(fn (): string => 'Deferred')->getNavigationGroup())
         ->toBe('Deferred');
 });
 

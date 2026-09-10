@@ -76,7 +76,7 @@ final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
     public function failed(?Throwable $exception): void
     {
         StorefrontDeployment::query()->find($this->deploymentId)?->markFailed(
-            null === $exception ? 'Storefront provisioning failed.' : $exception->getMessage(),
+            $exception === null ? 'Storefront provisioning failed.' : $exception->getMessage(),
         );
     }
 }

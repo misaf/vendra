@@ -19,7 +19,7 @@ return [
     'email' => [
         'webhooks' => [
             'default_provider' => env('EMAIL_WEBHOOKS_DEFAULT_PROVIDER', 'resend'),
-            'resend'           => [
+            'resend' => [
                 'webhook_path' => env('EMAIL_WEBHOOKS_RESEND_PATH', '/emails/webhooks/resend'),
                 'webhook_name' => env('EMAIL_WEBHOOKS_RESEND_NAME', 'resend'),
             ],
@@ -27,25 +27,25 @@ return [
     ],
 
     'google' => [
-        'client_id'     => env('GOOGLE_CLIENT_ID'),
+        'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect'      => env('GOOGLE_REDIRECT_URI'),
+        'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
     'github' => [
-        'client_id'     => env('GITHUB_CLIENT_ID'),
+        'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
-        'redirect'      => env('GITHUB_REDIRECT_URI'),
+        'redirect' => env('GITHUB_REDIRECT_URI'),
     ],
 
     'turnstile' => [
-        'key'    => env('TURNSTILE_KEY'),
+        'key' => env('TURNSTILE_KEY'),
         'secret' => env('TURNSTILE_SECRET'),
     ],
 
     'coinpayments' => [
-        'host'   => env('COINPAYMENTS_HOST'),
-        'key'    => env('COINPAYMENTS_KEY'),
+        'host' => env('COINPAYMENTS_HOST'),
+        'key' => env('COINPAYMENTS_KEY'),
         'secret' => env('COINPAYMENTS_SECRET'),
     ],
 

@@ -12,25 +12,25 @@ final class DefaultPathGenerator implements PathGenerator
 {
     public function getPath(Media $media): string
     {
-        return $this->getBasePath($media) . '/';
+        return $this->getBasePath($media).'/';
     }
 
     public function getPathForConversions(Media $media): string
     {
-        return $this->getBasePath($media) . '/conversions/';
+        return $this->getBasePath($media).'/conversions/';
     }
 
     public function getPathForResponsiveImages(Media $media): string
     {
-        return $this->getBasePath($media) . '/responsive-images/';
+        return $this->getBasePath($media).'/responsive-images/';
     }
 
     private function getBasePath(Media $media): string
     {
         $prefix = Config::string('media-library.prefix', '');
 
-        if ('' !== $prefix) {
-            return $prefix . '/' . $media->uuid;
+        if ($prefix !== '') {
+            return $prefix.'/'.$media->uuid;
         }
 
         return $media->uuid;

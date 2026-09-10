@@ -41,24 +41,24 @@ final class StorefrontLifecycleCommand extends Command
         $slug = (string) $this->argument('slug');
         $deployment = StorefrontDeployment::query()->where('slug', $slug)->first();
 
-        if ( ! $deployment instanceof StorefrontDeployment) {
+        if (! $deployment instanceof StorefrontDeployment) {
             $this->error("No storefront deployment named [{$slug}] exists.");
 
             return self::FAILURE;
         }
 
         return match ((string) $this->argument('action')) {
-            'start'   => $this->perform(fn() => $start->execute($deployment), "Storefront [{$slug}] started."),
-            'stop'    => $this->perform(fn() => $stop->execute($deployment), "Storefront [{$slug}] stopped."),
-            'restart' => $this->perform(fn() => $restart->execute($deployment), "Storefront [{$slug}] restarted."),
-            'status'  => $this->reportStatus($provisioner, $deployment),
-            'logs'    => $this->reportLogs($provisioner, $deployment),
-            default   => $this->unknownAction(),
+            'start' => $this->perform(fn () => $start->execute($deployment), "Storefront [{$slug}] started."),
+            'stop' => $this->perform(fn () => $stop->execute($deployment), "Storefront [{$slug}] stopped."),
+            'restart' => $this->perform(fn () => $restart->execute($deployment), "Storefront [{$slug}] restarted."),
+            'status' => $this->reportStatus($provisioner, $deployment),
+            'logs' => $this->reportLogs($provisioner, $deployment),
+            default => $this->unknownAction(),
         };
     }
 
     /**
-     * @param callable(): void $operation
+     * @param  callable(): void  $operation
      */
     private function perform(callable $operation, string $message): int
     {

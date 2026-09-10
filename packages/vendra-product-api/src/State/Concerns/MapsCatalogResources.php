@@ -48,14 +48,14 @@ trait MapsCatalogResources
             availabilityDate: $product->availability_date?->toAtomString(),
             productCategory: $this->categoryReference($product->productCategory),
             productPrices: $product->productPrices
-                ->map(fn(ProductPrice $price): ProductPriceResource => $this->toPriceResource($price, $product))
+                ->map(fn (ProductPrice $price): ProductPriceResource => $this->toPriceResource($price, $product))
                 ->all(),
             latestProductPrice: $product->latestProductPrice instanceof ProductPrice
                 ? $this->toPriceResource($product->latestProductPrice, $product)
                 : null,
             multimedia: $product->multimedia
-                ->filter(fn(Model $media): bool => PublicMultimedia::isPublic($media))
-                ->map(fn(Model $media): MultimediaResource => $this->toMultimediaResource($media))
+                ->filter(fn (Model $media): bool => PublicMultimedia::isPublic($media))
+                ->map(fn (Model $media): MultimediaResource => $this->toMultimediaResource($media))
                 ->values()
                 ->all(),
             options: $this->attributeReferences($product),
@@ -74,12 +74,12 @@ trait MapsCatalogResources
             position: $category->position,
             active: $category->active,
             products: $category->products
-                ->map(fn(Product $product): ResourceReference => $this->productReference($product))
+                ->map(fn (Product $product): ResourceReference => $this->productReference($product))
                 ->all(),
             multimedia: $category->relationLoaded('multimedia')
                 ? $category->multimedia
-                    ->filter(fn(Model $media): bool => PublicMultimedia::isPublic($media))
-                    ->map(fn(Model $media): MultimediaResource => $this->toMultimediaResource($media))
+                    ->filter(fn (Model $media): bool => PublicMultimedia::isPublic($media))
+                    ->map(fn (Model $media): MultimediaResource => $this->toMultimediaResource($media))
                     ->values()
                     ->all()
                 : [],
@@ -134,7 +134,7 @@ trait MapsCatalogResources
      */
     protected function attributeReferences(Product $product): array
     {
-        if ( ! AttributeIntegration::isAvailable()) {
+        if (! AttributeIntegration::isAvailable()) {
             return [];
         }
 
@@ -143,7 +143,7 @@ trait MapsCatalogResources
                 $identifier = $value->getKey();
                 $label = $value->getAttribute('value');
 
-                if ( ! is_int($identifier) && ! is_string($identifier)) {
+                if (! is_int($identifier) && ! is_string($identifier)) {
                     throw new UnexpectedValueException('Attribute value identifiers must be integers or strings.');
                 }
 

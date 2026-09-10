@@ -52,11 +52,11 @@ final class StoreObserver
 
     public function restored(Store $store): void
     {
-        $store->execute(fn() => $store->storeDomains()->onlyTrashed()->where('active', true)->restore());
+        $store->execute(fn () => $store->storeDomains()->onlyTrashed()->where('active', true)->restore());
 
         $deployment = $this->deploymentFor($store);
 
-        if (null === $deployment) {
+        if ($deployment === null) {
             return;
         }
 
@@ -66,13 +66,13 @@ final class StoreObserver
          | the intent is what makes that happen — convergence reads it and will
          | otherwise keep the storefront down for the same reason it took it down.
          */
-        $desiredState = StoreStatus::Active === $store->status()
+        $desiredState = $store->status() === StoreStatus::Active
             ? StorefrontDesiredState::Running
             : StorefrontDesiredState::Stopped;
 
         $deployment->markDesiredState($desiredState);
 
-        if (StorefrontDesiredState::Stopped === $desiredState) {
+        if ($desiredState === StorefrontDesiredState::Stopped) {
             return;
         }
 
@@ -91,7 +91,7 @@ final class StoreObserver
     {
         $deployment = $this->deploymentFor($store);
 
-        if (null === $deployment) {
+        if ($deployment === null) {
             return;
         }
 

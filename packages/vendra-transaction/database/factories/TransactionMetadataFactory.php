@@ -17,8 +17,8 @@ final class TransactionMetadataFactory extends Factory
     {
         return [
             'transaction_id' => Transaction::factory(),
-            'key_name'       => fake()->unique()->word(),
-            'key_value'      => fake()->word(),
+            'key_name' => fake()->unique()->word(),
+            'key_value' => fake()->word(),
         ];
     }
 }

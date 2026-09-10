@@ -47,7 +47,7 @@ return [
 
     'schedule' => [
         'enabled' => env('CART_SCHEDULE_ENABLED', true),
-        'cron'    => env('CART_SCHEDULE_CRON', '0 0 * * *'),
+        'cron' => env('CART_SCHEDULE_CRON', '0 0 * * *'),
     ],
 
 ];

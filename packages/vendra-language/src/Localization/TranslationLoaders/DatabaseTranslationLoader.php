@@ -18,7 +18,7 @@ final class DatabaseTranslationLoader implements TranslationLoader
      */
     public function loadTranslations(string $locale, string $group, ?string $namespace = null): array
     {
-        if ('' === $namespace || '*' === $namespace) {
+        if ($namespace === '' || $namespace === '*') {
             $namespace = null;
         }
 
@@ -28,7 +28,7 @@ final class DatabaseTranslationLoader implements TranslationLoader
             return $modelClass::getTranslationsForGroup($locale, $group, $namespace);
         }
 
-        if (null !== $namespace) {
+        if ($namespace !== null) {
             return [];
         }
 
@@ -42,7 +42,7 @@ final class DatabaseTranslationLoader implements TranslationLoader
     {
         $modelClass = config('translation-loader.model');
 
-        if ( ! is_string($modelClass) || ! is_a($modelClass, LanguageLine::class, true)) {
+        if (! is_string($modelClass) || ! is_a($modelClass, LanguageLine::class, true)) {
             throw InvalidConfiguration::invalidModel(is_string($modelClass) ? $modelClass : get_debug_type($modelClass));
         }
 

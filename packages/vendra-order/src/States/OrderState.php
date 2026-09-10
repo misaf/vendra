@@ -8,6 +8,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraOrder\Models\Order;
 use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
 
@@ -17,7 +18,7 @@ use Spatie\ModelStates\StateConfig;
  * Completed when it has been handed over — or Cancelled from either open
  * state.
  *
- * @extends State<\Misaf\VendraOrder\Models\Order>
+ * @extends State<Order>
  */
 abstract class OrderState extends State implements HasColor, HasIcon, HasLabel
 {

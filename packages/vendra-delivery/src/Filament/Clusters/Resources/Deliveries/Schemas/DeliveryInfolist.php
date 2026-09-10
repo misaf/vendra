@@ -46,8 +46,8 @@ final class DeliveryInfolist
             ->label(__("vendra-delivery::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDate('Y-m-d', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->date('Y-m-d'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDate('Y-m-d', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->date('Y-m-d'),
             );
     }
 }

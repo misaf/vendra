@@ -14,8 +14,8 @@ final class QuoteDeliveryRequest extends FormRequest
      * @var array<string, array<int, string|object>>
      */
     public const array RULES = [
-        'latitude'     => ['required', 'numeric', 'between:-90,90'],
-        'longitude'    => ['required', 'numeric', 'between:-180,180'],
+        'latitude' => ['required', 'numeric', 'between:-90,90'],
+        'longitude' => ['required', 'numeric', 'between:-180,180'],
         'currencyCode' => ['nullable', 'string', 'size:3'],
     ];
 

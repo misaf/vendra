@@ -60,11 +60,11 @@ it('provisions the wallet from the selected user and currency on create', functi
 
     livewire(CreateTransaction::class)
         ->fillForm([
-            'user_id'                => $user->getKey(),
-            'currency_code'          => $currencyCode,
+            'user_id' => $user->getKey(),
+            'currency_code' => $currencyCode,
             'transaction_gateway_id' => $gateway->id,
-            'transaction_type'       => TransactionTypeEnum::Deposit->value,
-            'amount'                 => 5_000,
+            'transaction_type' => TransactionTypeEnum::Deposit->value,
+            'amount' => 5_000,
         ])
         ->call('create')
         ->assertHasNoFormErrors();
@@ -83,12 +83,12 @@ it('provisions both wallets for a transfer created from the form', function (): 
 
     livewire(CreateTransaction::class)
         ->fillForm([
-            'user_id'                => $source->getKey(),
-            'currency_code'          => $currencyCode,
+            'user_id' => $source->getKey(),
+            'currency_code' => $currencyCode,
             'transaction_gateway_id' => $gateway->id,
-            'transaction_type'       => TransactionTypeEnum::Transfer->value,
-            'counterparty_user_id'   => $destination->getKey(),
-            'amount'                 => 1_000,
+            'transaction_type' => TransactionTypeEnum::Transfer->value,
+            'counterparty_user_id' => $destination->getKey(),
+            'amount' => 1_000,
         ])
         ->call('create')
         ->assertHasNoFormErrors();

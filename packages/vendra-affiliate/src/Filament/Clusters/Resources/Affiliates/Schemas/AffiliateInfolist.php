@@ -33,7 +33,7 @@ final class AffiliateInfolist
             TextEntry::make('pending_balance')
                 ->label(__('vendra-affiliate::attributes.pending_balance'))
                 ->numeric(locale: 'en', maxDecimalPlaces: 0)
-                ->state(fn(Affiliate $record): int => $record->pendingBalance()),
+                ->state(fn (Affiliate $record): int => $record->pendingBalance()),
 
             TextEntry::make('status')
                 ->badge()
@@ -61,8 +61,8 @@ final class AffiliateInfolist
             ->label(__("vendra-affiliate::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

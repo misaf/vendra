@@ -54,8 +54,8 @@ final class CartTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
 
                 TextColumn::make('created_at')
@@ -65,8 +65,8 @@ final class CartTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->description(__('vendra-cart::tables.description.carts'))
@@ -85,7 +85,7 @@ final class CartTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->with('owner'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with('owner'))
             ->filters([
                 QueryBuilder::make()
                     ->constraints([

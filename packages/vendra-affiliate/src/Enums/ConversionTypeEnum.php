@@ -36,8 +36,8 @@ enum ConversionTypeEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): array
     {
         return match ($this) {
-            self::Deposit  => Color::Green,
-            self::Signup   => Color::Blue,
+            self::Deposit => Color::Green,
+            self::Signup => Color::Blue,
             self::Checkout => Color::Purple,
         };
     }
@@ -45,8 +45,8 @@ enum ConversionTypeEnum: string implements HasColor, HasIcon, HasLabel
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::Deposit  => Heroicon::OutlinedCurrencyDollar,
-            self::Signup   => Heroicon::OutlinedUserPlus,
+            self::Deposit => Heroicon::OutlinedCurrencyDollar,
+            self::Signup => Heroicon::OutlinedUserPlus,
             self::Checkout => Heroicon::OutlinedShoppingCart,
         };
     }
@@ -54,8 +54,8 @@ enum ConversionTypeEnum: string implements HasColor, HasIcon, HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::Deposit  => __('vendra-affiliate::enums.conversion_type_deposit'),
-            self::Signup   => __('vendra-affiliate::enums.conversion_type_signup'),
+            self::Deposit => __('vendra-affiliate::enums.conversion_type_deposit'),
+            self::Signup => __('vendra-affiliate::enums.conversion_type_signup'),
             self::Checkout => __('vendra-affiliate::enums.conversion_type_checkout'),
         };
     }

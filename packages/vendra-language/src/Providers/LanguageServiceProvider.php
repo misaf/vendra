@@ -56,7 +56,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
         $this->configureTranslationLoader();
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-language')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-language')) {
                 return;
             }
 
@@ -73,7 +73,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
 
         $this->configureLocalization();
 
-        AboutCommand::add('Vendra Language', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-language')]);
+        AboutCommand::add('Vendra Language', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-language')]);
     }
 
     /**
@@ -94,7 +94,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
 
         config([
             'translation-loader.translation_loaders' => array_map(
-                static fn(string $translationLoader): string => Db::class === $translationLoader
+                static fn (string $translationLoader): string => $translationLoader === Db::class
                     ? DatabaseTranslationLoader::class
                     : $translationLoader,
                 $translationLoaders,
@@ -117,7 +117,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
      */
     private function configureLocalization(): void
     {
-        if ( ! interface_exists(LocaleResolver::class) || ! config()->has('vendra-localization.resolvers')) {
+        if (! interface_exists(LocaleResolver::class) || ! config()->has('vendra-localization.resolvers')) {
             return;
         }
 
@@ -125,14 +125,14 @@ final class LanguageServiceProvider extends PackageServiceProvider
 
         $resolvers = config()->array('vendra-localization.resolvers');
 
-        if ( ! in_array(LanguageSwitchLocaleResolver::class, $resolvers, true)) {
+        if (! in_array(LanguageSwitchLocaleResolver::class, $resolvers, true)) {
             $queryResolverIndex = array_search(QueryLocaleResolver::class, $resolvers, true);
             $offset = is_int($queryResolverIndex) ? $queryResolverIndex + 1 : 0;
 
             array_splice($resolvers, $offset, 0, [LanguageSwitchLocaleResolver::class]);
         }
 
-        if ( ! in_array(TenantLocaleResolver::class, $resolvers, true)) {
+        if (! in_array(TenantLocaleResolver::class, $resolvers, true)) {
             $resolvers[] = TenantLocaleResolver::class;
         }
 
@@ -143,7 +143,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
     {
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             return $switch
-                ->locales(fn(): array => $this->availableLocales())
+                ->locales(fn (): array => $this->availableLocales())
                 ->visible();
         });
     }

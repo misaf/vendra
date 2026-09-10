@@ -13,6 +13,6 @@ final class ViewAffiliatePayout extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-affiliate::navigation.affiliate_payout');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-affiliate::navigation.affiliate_payout');
     }
 }

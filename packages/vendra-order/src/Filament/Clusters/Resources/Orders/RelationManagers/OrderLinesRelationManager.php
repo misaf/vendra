@@ -56,7 +56,7 @@ final class OrderLinesRelationManager extends RelationManager
                     ->searchable(),
 
                 TextColumn::make('sellable_type')
-                    ->formatStateUsing(fn(string $state): string => class_basename($state))
+                    ->formatStateUsing(fn (string $state): string => class_basename($state))
                     ->icon(Heroicon::Tag)
                     ->label(__('vendra-order::attributes.sellable_type')),
 

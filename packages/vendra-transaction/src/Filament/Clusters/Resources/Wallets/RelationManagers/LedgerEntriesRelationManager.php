@@ -34,7 +34,7 @@ final class LedgerEntriesRelationManager extends RelationManager
                     ->sortable(['id']),
 
                 TextColumn::make('amount')
-                    ->color(fn(int $state): string => $state < 0 ? 'danger' : 'success')
+                    ->color(fn (int $state): string => $state < 0 ? 'danger' : 'success')
                     ->extraCellAttributes(['dir' => 'ltr'])
                     ->label(__('vendra-transaction::attributes.amount'))
                     ->numeric()
@@ -47,7 +47,7 @@ final class LedgerEntriesRelationManager extends RelationManager
 
                 TextColumn::make('source_type')
                     ->badge()
-                    ->formatStateUsing(fn(string $state): string => class_basename($state))
+                    ->formatStateUsing(fn (string $state): string => class_basename($state))
                     ->icon(Heroicon::Tag)
                     ->label(__('vendra-transaction::attributes.source')),
 
@@ -60,8 +60,8 @@ final class LedgerEntriesRelationManager extends RelationManager
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->defaultSort(column: 'id', direction: 'desc');

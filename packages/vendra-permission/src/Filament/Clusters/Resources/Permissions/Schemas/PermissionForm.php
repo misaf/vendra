@@ -25,21 +25,21 @@ final class PermissionForm
         return $schema
             ->components([
                 RolesSelect::make('roles')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.roles'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.roles'))
                     ->dehydrated(false)
-                    ->hidden(fn(Livewire $livewire, string $operation): bool => $livewire instanceof PermissionRelationManager || 'create' === $operation)
+                    ->hidden(fn (Livewire $livewire, string $operation): bool => $livewire instanceof PermissionRelationManager || $operation === 'create')
                     ->live()
                     ->relationship(
                         name: 'roles',
                         titleAttribute: 'name',
                         modifyQueryUsing: function (Builder $query, Get $get, string $operation, ?Permission $record): void {
-                            if ('edit' !== $operation) {
+                            if ($operation !== 'edit') {
                                 return;
                             }
 
                             $guardName = $get->string('guard_name', isNullable: true) ?? $record?->guard_name;
 
-                            if (null === $guardName) {
+                            if ($guardName === null) {
                                 return;
                             }
 
@@ -50,9 +50,9 @@ final class PermissionForm
                     ->saved(false),
 
                 TextInput::make('name')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.name'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.name'))
                     ->autofocus()
-                    ->columnSpan(fn(Get $get) => empty($get('roles')) ? ['lg' => 1] : 'full')
+                    ->columnSpan(fn (Get $get) => empty($get('roles')) ? ['lg' => 1] : 'full')
                     ->label(__('vendra-permission::attributes.name'))
                     ->live()
                     ->maxLength(255)
@@ -62,7 +62,7 @@ final class PermissionForm
                         modifyRuleUsing: function (Unique $rule, Get $get, string $operation): void {
                             TenantAwareness::constrainUniqueRule($rule);
 
-                            if ('create' === $operation && ! empty($get('roles'))) {
+                            if ($operation === 'create' && ! empty($get('roles'))) {
                                 $rule->where('id', 0);
 
                                 return;
@@ -70,14 +70,14 @@ final class PermissionForm
 
                             $guardName = $get->string('guard_name', isNullable: true);
 
-                            if (null !== $guardName) {
+                            if ($guardName !== null) {
                                 $rule->where('guard_name', $guardName);
                             }
                         },
                     ),
 
                 Select::make('guard_name')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.guard_name'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.guard_name'))
                     ->columnSpan(['lg' => 1])
                     ->helperText(__('vendra-permission::attributes.guard_name_helper_text'))
                     ->hiddenOn(PermissionRelationManager::class)
@@ -87,18 +87,18 @@ final class PermissionForm
                     ->options(
                         collect(Config::array('auth.guards'))
                             ->keys()
-                            ->mapWithKeys(fn($value): array => [$value => $value])
+                            ->mapWithKeys(fn ($value): array => [$value => $value])
                             ->all()
                     )
                     ->preload()
-                    ->required(fn(Get $get): bool => empty($get('roles')))
-                    ->saved(fn(Get $get) => empty($get('roles')))
+                    ->required(fn (Get $get): bool => empty($get('roles')))
+                    ->saved(fn (Get $get) => empty($get('roles')))
                     ->searchable()
                     ->string()
-                    ->visible(fn(Get $get) => empty($get('roles'))),
+                    ->visible(fn (Get $get) => empty($get('roles'))),
 
                 Textarea::make('description')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                     ->columnSpanFull()
                     ->label(__('vendra-permission::attributes.description'))
                     ->live()

@@ -23,18 +23,18 @@ enum NewsletterStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): string
     {
         return match ($this) {
-            self::Draft     => 'gray',
+            self::Draft => 'gray',
             self::Scheduled => 'warning',
-            self::Sent      => 'success',
+            self::Sent => 'success',
         };
     }
 
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::Draft     => Heroicon::OutlinedPencilSquare,
+            self::Draft => Heroicon::OutlinedPencilSquare,
             self::Scheduled => Heroicon::OutlinedClock,
-            self::Sent      => Heroicon::OutlinedPaperAirplane,
+            self::Sent => Heroicon::OutlinedPaperAirplane,
         };
     }
 }

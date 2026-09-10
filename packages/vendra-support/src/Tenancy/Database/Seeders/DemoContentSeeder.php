@@ -30,7 +30,7 @@ abstract class DemoContentSeeder extends Seeder
     abstract protected function seedFactories(): void;
 
     /**
-     * @param list<array<string, mixed>> $records
+     * @param  list<array<string, mixed>>  $records
      */
     abstract protected function seedFixtures(array $records): void;
 
@@ -50,12 +50,12 @@ abstract class DemoContentSeeder extends Seeder
             flags: JSON_THROW_ON_ERROR,
         );
 
-        if ( ! is_array($decodedRecords) || ! array_is_list($decodedRecords)) {
+        if (! is_array($decodedRecords) || ! array_is_list($decodedRecords)) {
             throw new UnexpectedValueException('Fixture file must contain a JSON array.');
         }
 
         foreach ($decodedRecords as $decodedRecord) {
-            if ( ! is_array($decodedRecord) || array_is_list($decodedRecord)) {
+            if (! is_array($decodedRecord) || array_is_list($decodedRecord)) {
                 throw new UnexpectedValueException('Each fixture record must be a JSON object.');
             }
         }
@@ -68,10 +68,10 @@ abstract class DemoContentSeeder extends Seeder
     {
         $fileName = (new ReflectionClass(static::class))->getFileName();
 
-        if (false === $fileName) {
+        if ($fileName === false) {
             throw new UnexpectedValueException(sprintf('Unable to resolve fixture path for %s.', static::class));
         }
 
-        return dirname($fileName) . '/../fixtures/' . static::FIXTURE_FILE;
+        return dirname($fileName).'/../fixtures/'.static::FIXTURE_FILE;
     }
 }

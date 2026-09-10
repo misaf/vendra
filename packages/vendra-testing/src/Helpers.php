@@ -8,6 +8,7 @@ use Filament\PanelRegistry;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Pennant\Feature;
 use Livewire\Livewire;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
@@ -33,7 +34,7 @@ function testTenantModel(): string
  */
 function createTestTenant(array $attributes = []): ?Model
 {
-    if ( ! TenantAwareness::enabled()) {
+    if (! TenantAwareness::enabled()) {
         return null;
     }
 
@@ -45,7 +46,7 @@ function createTestTenant(array $attributes = []): ?Model
 
     $tenant = $factory->create($attributes);
 
-    if ( ! $tenant instanceof Model) {
+    if (! $tenant instanceof Model) {
         Assert::fail('The tenant factory did not create a single tenant model.');
     }
 
@@ -78,7 +79,7 @@ function makeCurrentTestTenant(array $attributes = []): ?Model
  */
 function switchToTestTenant(Model|int|string|null $tenant): void
 {
-    if (null === $tenant) {
+    if ($tenant === null) {
         return;
     }
 
@@ -98,7 +99,7 @@ function currentTestTenant(): ?Model
  */
 function forgetCurrentTestTenant(): void
 {
-    if ( ! TenantAwareness::enabled()) {
+    if (! TenantAwareness::enabled()) {
         return;
     }
 
@@ -119,7 +120,7 @@ function testUserModel(): string
 {
     $modelClass = config('auth.providers.users.model');
 
-    if ( ! is_string($modelClass) || ! is_a($modelClass, Model::class, true)) {
+    if (! is_string($modelClass) || ! is_a($modelClass, Model::class, true)) {
         Assert::fail('The auth user provider does not define an Eloquent user model.');
     }
 
@@ -135,7 +136,7 @@ function createTestUser(array $attributes = []): Model
 {
     $user = vendraTestingModelFactory(testUserModel())->create($attributes);
 
-    if ( ! $user instanceof Model) {
+    if (! $user instanceof Model) {
         Assert::fail('The user factory did not create a single user model.');
     }
 
@@ -155,15 +156,15 @@ function makeCurrentTestTenantWithFeatures(array $features = []): Model
 {
     $tenant = makeCurrentTestTenant();
 
-    if ( ! $tenant instanceof Model) {
+    if (! $tenant instanceof Model) {
         Assert::fail('This helper requires an installed tenant provider.');
     }
 
-    if (class_exists(Laravel\Pennant\Feature::class)) {
+    if (class_exists(Feature::class)) {
         $configuredFeatures = array_keys((array) config('vendra-permission.features.defaults', []));
 
-        Laravel\Pennant\Feature::for($tenant)->deactivate(array_values(array_diff($configuredFeatures, $features)));
-        Laravel\Pennant\Feature::for($tenant)->activate($features);
+        Feature::for($tenant)->deactivate(array_values(array_diff($configuredFeatures, $features)));
+        Feature::for($tenant)->activate($features);
     }
 
     return $tenant;
@@ -194,10 +195,10 @@ function setUpFilamentAdminTestContext(array $resources = [], ?array $features =
 
     $user = $user->create([
         'username' => 'admin',
-        'email'    => 'admin@example.test',
+        'email' => 'admin@example.test',
     ]);
 
-    if ( ! $user instanceof Model) {
+    if (! $user instanceof Model) {
         Assert::fail('The user factory did not create a single user model.');
     }
 
@@ -253,7 +254,7 @@ function bootFilamentAdminPanel(Model $user, ?Model $tenant = null, array $resou
 
     app(PanelRegistry::class)->register($panel);
 
-    Table::configureUsing(static fn(Table $table): Table => $table
+    Table::configureUsing(static fn (Table $table): Table => $table
         ->paginationPageOptions([10, 25, 50])
         ->deferLoading());
 
@@ -266,7 +267,7 @@ function bootFilamentAdminPanel(Model $user, ?Model $tenant = null, array $resou
 
     Filament::bootCurrentPanel();
 
-    app('url')->resolveMissingNamedRoutesUsing(static fn(): string => '/');
+    app('url')->resolveMissingNamedRoutesUsing(static fn (): string => '/');
 }
 
 /**
@@ -275,13 +276,13 @@ function bootFilamentAdminPanel(Model $user, ?Model $tenant = null, array $resou
  */
 function vendraTestingModelFactory(string $modelClass): Factory
 {
-    if ( ! method_exists($modelClass, 'factory')) {
+    if (! method_exists($modelClass, 'factory')) {
         Assert::fail("The model [{$modelClass}] does not expose a factory.");
     }
 
     $factory = $modelClass::factory();
 
-    if ( ! $factory instanceof Factory) {
+    if (! $factory instanceof Factory) {
         Assert::fail("The model [{$modelClass}] did not resolve an Eloquent factory.");
     }
 

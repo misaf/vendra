@@ -68,8 +68,8 @@ final class UserProfileTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -78,8 +78,8 @@ final class UserProfileTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

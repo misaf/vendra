@@ -29,7 +29,7 @@ final class CurrencyForm
                     ->afterStateUpdated(function (Livewire $livewire, Set $set, ?string $state): void {
                         $livewire->validateOnly('data.code');
 
-                        if (null === $state || ! CurrencyRegistry::isSupported($state)) {
+                        if ($state === null || ! CurrencyRegistry::isSupported($state)) {
                             return;
                         }
 
@@ -40,32 +40,32 @@ final class CurrencyForm
                     ->label(__('vendra-currency::attributes.code'))
                     ->live()
                     ->native(false)
-                    ->options(fn(?Currency $record): array => static::installableCurrencyOptions($record))
+                    ->options(fn (?Currency $record): array => self::installableCurrencyOptions($record))
                     ->required()
                     ->rule(Rule::in(CurrencyRegistry::codes()))
                     ->searchable()
                     ->unique(
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
                     ),
 
                 TextInput::make('name')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.name'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.name'))
                     ->label(__('vendra-currency::attributes.name'))
                     ->live(onBlur: true)
                     ->maxLength(255)
                     ->required(),
 
                 TextInput::make('symbol')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.symbol'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.symbol'))
                     ->helperText(__('vendra-currency::attributes.symbol_helper_text'))
                     ->label(__('vendra-currency::attributes.symbol'))
                     ->live(onBlur: true)
                     ->maxLength(16),
 
                 TextInput::make('decimal_places')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.decimal_places'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.decimal_places'))
                     ->dehydrated()
-                    ->disabled(fn(Get $get): bool => CurrencyType::Fiat->value === $get('type'))
+                    ->disabled(fn (Get $get): bool => CurrencyType::Fiat->value === $get('type'))
                     ->helperText(__('vendra-currency::messages.decimal_places_fiat_hint'))
                     ->integer()
                     ->label(__('vendra-currency::attributes.decimal_places'))
@@ -84,7 +84,7 @@ final class CurrencyForm
                     ->required(),
 
                 Toggle::make('active')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                     ->columnSpanFull()
                     ->default(true)
                     ->label(__('vendra-currency::attributes.active'))
@@ -94,7 +94,7 @@ final class CurrencyForm
                     ->rules(['boolean']),
 
                 Toggle::make('is_default')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.is_default'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))
                     ->columnSpanFull()
                     ->default(false)
                     ->helperText(__('vendra-currency::attributes.is_default_helper_text'))
@@ -112,13 +112,13 @@ final class CurrencyForm
     {
         $installedCurrenciesQuery = Currency::query();
 
-        if (null !== $record) {
+        if ($record !== null) {
             $installedCurrenciesQuery->whereKeyNot($record->getKey());
         }
 
         $installedCodes = $installedCurrenciesQuery
             ->get(['code'])
-            ->map(fn(Currency $currency): string => $currency->code);
+            ->map(fn (Currency $currency): string => $currency->code);
 
         return collect(CurrencyRegistry::options())
             ->except($installedCodes)

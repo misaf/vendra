@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\ApiProperty;
 final readonly class OrderLine
 {
     /**
-     * @param array<string, mixed>|null $metadata
+     * @param  array<string, mixed>|null  $metadata
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The order line unique identifier')]

@@ -15,7 +15,7 @@ it('defines profile relationships for multiple profiles per user', function (): 
 });
 
 it('defines the expected profile model attributes', function (): void {
-    $profile = new UserProfile();
+    $profile = new UserProfile;
 
     expect($profile->getFillable())
         ->toBe(['tenant_id', 'user_id', 'name', 'description', 'slug', 'is_default', 'active'])
@@ -23,10 +23,10 @@ it('defines the expected profile model attributes', function (): void {
         ->toBe(['tenant_id', 'active_name_guard', 'active_slug_guard', 'default_user_guard'])
         ->and($profile->getCasts())
         ->toMatchArray([
-            'id'        => 'integer',
+            'id' => 'integer',
             'tenant_id' => 'integer',
-            'user_id'   => 'integer',
-            'name'      => 'string',
+            'user_id' => 'integer',
+            'name' => 'string',
         ]);
 });
 

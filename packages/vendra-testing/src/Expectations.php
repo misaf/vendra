@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Features\SupportTesting\Testable;
 use Misaf\VendraTesting\TableSorting;
 use Misaf\VendraTesting\TranslationParity;
@@ -48,7 +49,7 @@ if (function_exists('expect')) {
     /**
      * @param-closure-this Expectation<mixed> $this
      *
-     * @param  array<int, Illuminate\Database\Eloquent\Model>  $recordsInAscendingOrder
+     * @param  array<int, Model>  $recordsInAscendingOrder
      */
     expect()->extend('toSortByEverySortableColumn', function (array $recordsInAscendingOrder, bool $assertDescendingOrder = true): Expectation {
         TableSorting::assertSortsByEverySortableColumn(
@@ -63,7 +64,7 @@ if (function_exists('expect')) {
 
 function vendraTestingLanguageDirectory(mixed $languageDirectory): string
 {
-    if ( ! is_string($languageDirectory)) {
+    if (! is_string($languageDirectory)) {
         Assert::fail('The expectation value must be a language directory path string.');
     }
 
@@ -72,7 +73,7 @@ function vendraTestingLanguageDirectory(mixed $languageDirectory): string
 
 function vendraTestingListPage(mixed $listPage): Testable
 {
-    if ( ! $listPage instanceof Testable) {
+    if (! $listPage instanceof Testable) {
         Assert::fail('The expectation value must be a Livewire testable list page.');
     }
 

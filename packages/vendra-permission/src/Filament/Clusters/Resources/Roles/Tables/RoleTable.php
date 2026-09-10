@@ -50,7 +50,7 @@ final class RoleTable
                 ->searchable()
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(Role $record): string => (string) Number::format($record->permissions_count))
+                        ->label(fn (Role $record): string => (string) Number::format($record->permissions_count))
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -66,8 +66,8 @@ final class RoleTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -76,13 +76,13 @@ final class RoleTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
         return $table
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->withCount('permissions'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withCount('permissions'))
             ->columns($columns)
             ->filters(
                 [

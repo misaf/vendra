@@ -28,6 +28,6 @@ return [
     |
     */
 
-    'currency' => 'USD'
+    'currency' => 'USD',
 
 ];

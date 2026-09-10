@@ -73,10 +73,10 @@ final class AttributeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListAttributes::route('/'),
+            'index' => ListAttributes::route('/'),
             'create' => CreateAttribute::route('/create'),
-            'view'   => ViewAttribute::route('/{record}'),
-            'edit'   => EditAttribute::route('/{record}/edit'),
+            'view' => ViewAttribute::route('/{record}'),
+            'edit' => EditAttribute::route('/{record}/edit'),
         ];
     }
 

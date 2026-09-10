@@ -55,14 +55,14 @@ final class UserProfile extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'user_id'     => 'integer',
-            'name'        => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'user_id' => 'integer',
+            'name' => 'string',
             'description' => 'string',
-            'slug'        => 'string',
-            'is_default'  => 'boolean',
-            'active'      => 'boolean',
+            'slug' => 'string',
+            'is_default' => 'boolean',
+            'active' => 'boolean',
         ];
     }
 
@@ -72,7 +72,7 @@ final class UserProfile extends Model implements ShouldLogActivity
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn(): string => $this->name,
+            get: fn (): string => $this->name,
         );
     }
 
@@ -83,5 +83,4 @@ final class UserProfile extends Model implements ShouldLogActivity
             ->saveSlugsTo('slug')
             ->preventOverwrite();
     }
-
 }

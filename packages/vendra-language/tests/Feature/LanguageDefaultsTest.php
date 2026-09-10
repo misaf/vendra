@@ -29,9 +29,9 @@ beforeEach(function (): void {
 
 it('makes the first active language the default', function (): void {
     $language = Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => false,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     expect($language->is_default)->toBeTrue();
@@ -39,9 +39,9 @@ it('makes the first active language the default', function (): void {
 
 it('does not allow the only default language to be unset', function (): void {
     $language = Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => true,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     $language->update(['is_default' => false]);
@@ -51,15 +51,15 @@ it('does not allow the only default language to be unset', function (): void {
 
 it('promotes the first ordered language when the default is deleted', function (): void {
     $default = Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => true,
-        'position'   => 2,
+        'position' => 2,
     ]);
 
     $next = Language::query()->create([
-        'locale'     => 'de',
+        'locale' => 'de',
         'is_default' => false,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     $default->delete();
@@ -69,13 +69,13 @@ it('promotes the first ordered language when the default is deleted', function (
 
 it('promotes the first active language when the default becomes inactive', function (): void {
     $default = Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => true,
-        'position'   => 2,
+        'position' => 2,
     ]);
 
     $next = Language::query()->create([
-        'locale'   => 'de',
+        'locale' => 'de',
         'position' => 1,
     ]);
 
@@ -88,18 +88,18 @@ it('promotes the first active language when the default becomes inactive', funct
 
 it('switches the default language through the domain action', function (): void {
     $english = Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => true,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     $german = Language::query()->create([
-        'locale'     => 'de',
+        'locale' => 'de',
         'is_default' => false,
-        'position'   => 2,
+        'position' => 2,
     ]);
 
-    (new SetDefaultLanguageAction())->execute($german);
+    (new SetDefaultLanguageAction)->execute($german);
 
     expect($english->refresh()->is_default)->toBeFalse()
         ->and($german->refresh()->is_default)->toBeTrue();
@@ -121,23 +121,23 @@ it('keeps only one default language for the current tenant', function (): void {
     app()->instance(TenantResolver::class, $tenantResolver);
 
     $english = Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => true,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     $german = Language::query()->create([
-        'locale'     => 'de',
+        'locale' => 'de',
         'is_default' => true,
-        'position'   => 2,
+        'position' => 2,
     ]);
 
     $currentTenantId = 2;
 
     $persian = Language::query()->create([
-        'locale'     => 'fa',
+        'locale' => 'fa',
         'is_default' => true,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     expect($persian->refresh()->is_default)->toBeTrue()
@@ -188,23 +188,23 @@ it('resolves language switch locales after the current tenant is available', fun
     app()->instance(TenantResolver::class, $tenantResolver);
 
     Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => true,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     Language::query()->create([
-        'locale'     => 'de',
+        'locale' => 'de',
         'is_default' => false,
-        'position'   => 2,
+        'position' => 2,
     ]);
 
     $currentTenantId = 2;
 
     Language::query()->create([
-        'locale'     => 'fa',
+        'locale' => 'fa',
         'is_default' => true,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     $currentTenantId = 1;
@@ -232,28 +232,28 @@ it('rejects bulk updates that would create multiple default languages', function
     app()->instance(TenantResolver::class, $tenantResolver);
 
     Language::query()->create([
-        'locale'     => 'en',
+        'locale' => 'en',
         'is_default' => false,
-        'position'   => 1,
+        'position' => 1,
     ]);
 
     Language::query()->create([
-        'locale'     => 'de',
+        'locale' => 'de',
         'is_default' => false,
-        'position'   => 2,
+        'position' => 2,
     ]);
 
-    expect(fn(): int => Language::query()->update(['is_default' => true]))
+    expect(fn (): int => Language::query()->update(['is_default' => true]))
         ->toThrow(QueryException::class);
 });
 
 it('creates language tables without tenant columns when tenancy is unavailable', function (): void {
-    app()->instance(TenantResolver::class, new NullTenantResolver());
+    app()->instance(TenantResolver::class, new NullTenantResolver);
 
     Schema::dropIfExists('language_lines');
     Schema::dropIfExists('languages');
 
-    $migration = require __DIR__ . '/../../database/migrations/create_languages_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_languages_table.php.stub';
 
     $migration->up();
 

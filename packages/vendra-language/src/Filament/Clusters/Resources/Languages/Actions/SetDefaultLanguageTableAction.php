@@ -18,11 +18,11 @@ final class SetDefaultLanguageTableAction
                 $setDefaultLanguage->execute($record);
                 $action->success();
             })
-            ->authorize(fn(Language $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Language $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-language::actions.set_default'))
             ->requiresConfirmation()
             ->successNotificationTitle(__('vendra-language::messages.default_language_updated'))
-            ->visible(fn(Language $record): bool => ! $record->is_default);
+            ->visible(fn (Language $record): bool => ! $record->is_default);
     }
 }

@@ -32,7 +32,7 @@ final class VerificationServiceProvider extends PackageServiceProvider
 
         UserProfile::resolveRelationUsing(
             'verifications',
-            fn(UserProfile $profile) => $profile->hasMany(Verification::class),
+            fn (UserProfile $profile) => $profile->hasMany(Verification::class),
         );
 
         $this->app->make(UserProfileRelationManagers::class)

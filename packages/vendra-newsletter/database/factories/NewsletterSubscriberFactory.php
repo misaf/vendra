@@ -20,7 +20,7 @@ final class NewsletterSubscriberFactory extends Factory
     {
         return [
             'email' => fake()->unique()->safeEmail(),
-            'name'  => fake()->name(),
+            'name' => fake()->name(),
         ];
     }
 
@@ -29,27 +29,27 @@ final class NewsletterSubscriberFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function subscribed(): static
     {
-        return $this->state(fn(): array => [
-            'subscribed_at'   => now()->subMonth(),
+        return $this->state(fn (): array => [
+            'subscribed_at' => now()->subMonth(),
             'unsubscribed_at' => null,
         ]);
     }
 
     public function unsubscribed(): static
     {
-        return $this->state(fn(): array => [
-            'subscribed_at'   => now()->subMonths(2),
+        return $this->state(fn (): array => [
+            'subscribed_at' => now()->subMonths(2),
             'unsubscribed_at' => now()->subWeek(),
         ]);
     }

@@ -15,13 +15,13 @@ it('applies shared tenant ownership and soft deletes to custom page models', fun
 });
 
 it('defines translatable fields on custom page models', function (): void {
-    expect((new CustomPage())->translatable)->toBe(['name', 'description', 'slug'])
-        ->and((new CustomPageCategory())->translatable)->toBe(['name', 'description', 'slug']);
+    expect((new CustomPage)->translatable)->toBe(['name', 'description', 'slug'])
+        ->and((new CustomPageCategory)->translatable)->toBe(['name', 'description', 'slug']);
 });
 
 it('hides the tenant association from custom page serialization', function (): void {
-    expect((new CustomPage())->getHidden())->toContain('tenant_id')
-        ->and((new CustomPageCategory())->getHidden())->toContain('tenant_id');
+    expect((new CustomPage)->getHidden())->toContain('tenant_id')
+        ->and((new CustomPageCategory)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the custom page resource', function (): void {

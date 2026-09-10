@@ -24,11 +24,11 @@ final class SubscriptionFactory extends Factory
     {
         return [
             'subscriber_type' => 'subscriber',
-            'subscriber_id'   => fake()->unique()->numberBetween(1, 2_000_000_000),
-            'plan_id'         => Plan::factory(),
-            'status'          => SubscriptionStatus::Active,
-            'starts_at'       => now()->subDay(),
-            'ends_at'         => now()->addMonth(),
+            'subscriber_id' => fake()->unique()->numberBetween(1, 2_000_000_000),
+            'plan_id' => Plan::factory(),
+            'status' => SubscriptionStatus::Active,
+            'starts_at' => now()->subDay(),
+            'ends_at' => now()->addMonth(),
         ];
     }
 
@@ -39,31 +39,31 @@ final class SubscriptionFactory extends Factory
     public function forSubscriber(Model|int $subscriber): static
     {
         if ($subscriber instanceof Model) {
-            return $this->state(fn(): array => [
+            return $this->state(fn (): array => [
                 'subscriber_type' => $subscriber->getMorphClass(),
-                'subscriber_id'   => $subscriber->getKey(),
+                'subscriber_id' => $subscriber->getKey(),
             ]);
         }
 
-        return $this->state(fn(): array => ['subscriber_id' => $subscriber]);
+        return $this->state(fn (): array => ['subscriber_id' => $subscriber]);
     }
 
     public function expired(): static
     {
-        return $this->state(fn(): array => [
-            'status'    => SubscriptionStatus::Expired,
+        return $this->state(fn (): array => [
+            'status' => SubscriptionStatus::Expired,
             'starts_at' => now()->subMonths(2),
-            'ends_at'   => now()->subDay(),
+            'ends_at' => now()->subDay(),
         ]);
     }
 
     public function cancelled(): static
     {
-        return $this->state(fn(): array => ['status' => SubscriptionStatus::Cancelled]);
+        return $this->state(fn (): array => ['status' => SubscriptionStatus::Cancelled]);
     }
 
     public function neverExpires(): static
     {
-        return $this->state(fn(): array => ['ends_at' => null]);
+        return $this->state(fn (): array => ['ends_at' => null]);
     }
 }

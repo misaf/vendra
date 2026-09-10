@@ -17,15 +17,14 @@ use Misaf\VendraCart\Models\Cart;
 final class CartLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<Cart> $builder
-     *
+     * @param  Builder<Cart>  $builder
      * @return Builder<Cart>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
         $user = Auth::user();
 
-        if ( ! $user instanceof Authenticatable) {
+        if (! $user instanceof Authenticatable) {
             return $builder->whereRaw('1 = 0');
         }
 
@@ -34,7 +33,7 @@ final class CartLinksHandler implements LinksHandlerInterface
             ->where('owner_type', $user->getMorphClass())
             ->where('owner_id', $user->getAuthIdentifier());
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

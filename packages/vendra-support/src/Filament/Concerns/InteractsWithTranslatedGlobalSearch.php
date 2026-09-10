@@ -22,14 +22,14 @@ trait InteractsWithTranslatedGlobalSearch /** @phpstan-ignore trait.unused */
         $locale = App::getLocale();
 
         return array_map(
-            static fn(string $attribute): string => "{$attribute}->{$locale}",
+            static fn (string $attribute): string => "{$attribute}->{$locale}",
             static::translatableGlobalSearchAttributes(),
         );
     }
 
     public static function getGlobalSearchResultTitle(Model $record): string
     {
-        if ( ! method_exists($record, 'getTranslation')) {
+        if (! method_exists($record, 'getTranslation')) {
             return '';
         }
 

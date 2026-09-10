@@ -26,7 +26,7 @@ use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 abstract class CreateStorePage extends CreateRecord
 {
     /**
-     * @param  array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      *
      * @throws Halt
      */
@@ -35,7 +35,7 @@ abstract class CreateStorePage extends CreateRecord
         $domain = $data['domain'] ?? null;
         $email = $data['email'] ?? null;
 
-        if ( ! is_string($domain) || ! is_string($email)) {
+        if (! is_string($domain) || ! is_string($email)) {
             throw new InvalidArgumentException('Invalid store details provided.');
         }
 
@@ -43,7 +43,7 @@ abstract class CreateStorePage extends CreateRecord
             $result = app(ProvisionStoreAction::class)->execute(
                 data: [
                     'domain' => $domain,
-                    'email'  => $email,
+                    'email' => $email,
                 ],
                 owner: $this->resolveOwner($data),
             );
@@ -54,7 +54,7 @@ abstract class CreateStorePage extends CreateRecord
                 ->body($exception->getMessage())
                 ->send();
 
-            throw new Halt();
+            throw new Halt;
         }
 
         Notification::make()
@@ -82,8 +82,7 @@ abstract class CreateStorePage extends CreateRecord
      * The owner this store is billed to, or null for a store the platform owns
      * directly.
      *
-     * @param array<string, mixed> $data
-     *
+     * @param  array<string, mixed>  $data
      * @return (Model&SubscriptionSubscriber)|null
      */
     abstract protected function resolveOwner(array $data): ?SubscriptionSubscriber;
@@ -94,7 +93,7 @@ abstract class CreateStorePage extends CreateRecord
      * Forms that make the storefront mandatory omit the toggle entirely, so an
      * absent key means yes; only an explicit "off" skips it.
      *
-     * @param array<string, mixed> $data
+     * @param  array<string, mixed>  $data
      */
     protected function shouldRequestStorefront(array $data): bool
     {

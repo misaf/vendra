@@ -47,11 +47,11 @@ final class Newsletter extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'           => 'integer',
-            'tenant_id'    => 'integer',
-            'status'       => NewsletterStatusEnum::class,
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'status' => NewsletterStatusEnum::class,
             'scheduled_at' => 'datetime',
-            'sent_at'      => 'datetime',
+            'sent_at' => 'datetime',
         ];
     }
 

@@ -79,7 +79,7 @@ final class TransactionGateway extends Model implements HasMedia, ShouldLogActiv
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -99,14 +99,14 @@ final class TransactionGateway extends Model implements HasMedia, ShouldLogActiv
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'name'        => 'array',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'name' => 'array',
             'description' => 'array',
-            'slug'        => 'string',
-            'position'    => 'integer',
-            'active'      => 'boolean',
-            'is_default'  => 'boolean',
+            'slug' => 'string',
+            'position' => 'integer',
+            'active' => 'boolean',
+            'is_default' => 'boolean',
         ];
     }
 
@@ -137,7 +137,7 @@ final class TransactionGateway extends Model implements HasMedia, ShouldLogActiv
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom(fn(self $gateway): string => $gateway->getTranslation('name', config()->string('app.fallback_locale', 'en')))
+            ->generateSlugsFrom(fn (self $gateway): string => $gateway->getTranslation('name', config()->string('app.fallback_locale', 'en')))
             ->saveSlugsTo('slug')
             ->preventOverwrite();
     }

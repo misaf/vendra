@@ -19,13 +19,13 @@ final class UserProfileRelationManagers
     private array $relationManagers = [];
 
     /**
-     * @param class-string<RelationManager>|RelationGroup|RelationManagerConfiguration $relationManager
+     * @param  class-string<RelationManager>|RelationGroup|RelationManagerConfiguration  $relationManager
      */
     public function register(string|RelationGroup|RelationManagerConfiguration $relationManager, int $priority = 100): void
     {
         $this->relationManagers[] = [
             'relationManager' => $relationManager,
-            'priority'        => $priority,
+            'priority' => $priority,
         ];
     }
 
@@ -34,7 +34,7 @@ final class UserProfileRelationManagers
     {
         usort(
             $this->relationManagers,
-            fn(array $left, array $right): int => $left['priority'] <=> $right['priority'],
+            fn (array $left, array $right): int => $left['priority'] <=> $right['priority'],
         );
 
         return array_column($this->relationManagers, 'relationManager');

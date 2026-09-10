@@ -17,6 +17,6 @@ final class CustomNamespacedLanguageLine extends LanguageLine implements Namespa
         string $group,
         ?string $namespace = null,
     ): array {
-        return ['custom' => ($namespace ?? 'application') . ":{$locale}:{$group}"];
+        return ['custom' => ($namespace ?? 'application').":{$locale}:{$group}"];
     }
 }

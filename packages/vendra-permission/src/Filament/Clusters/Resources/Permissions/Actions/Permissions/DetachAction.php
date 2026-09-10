@@ -25,7 +25,7 @@ final class DetachAction extends Action
         $this->action(function (Permission $record): void {
             $livewire = $this->getLivewire();
 
-            if ( ! $livewire instanceof RelationManager) {
+            if (! $livewire instanceof RelationManager) {
                 return;
             }
 

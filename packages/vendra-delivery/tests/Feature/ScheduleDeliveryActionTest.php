@@ -56,7 +56,7 @@ it('keeps one delivery per order when it is rescheduled', function (): void {
 it('refuses to schedule an address that is quoted by hand', function (): void {
     $order = OrderFactory::new()->createOne();
 
-    expect(fn(): Delivery => app(ScheduleDeliveryAction::class)->execute(
+    expect(fn (): Delivery => app(ScheduleDeliveryAction::class)->execute(
         order: $order,
         quote: DeliveryQuote::outOfRange(430.0, 'USD'),
     ))->toThrow(RuntimeException::class);
@@ -70,7 +70,7 @@ it('refuses a date outside the bookable window', function (): void {
     $order = OrderFactory::new()->createOne();
     $zone = DeliveryZoneFactory::new()->freeWithin(12)->createOne();
 
-    expect(fn(): Delivery => app(ScheduleDeliveryAction::class)->execute(
+    expect(fn (): Delivery => app(ScheduleDeliveryAction::class)->execute(
         order: $order,
         quote: new DeliveryQuote($zone, 2.0, 0, 'USD', false),
         scheduledFor: now()->addMonths(2)->toDateString(),

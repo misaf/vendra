@@ -18,7 +18,7 @@ final class ListFaqs extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-faq::navigation.faq');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-faq::navigation.faq');
     }
 
     protected function getHeaderActions(): array

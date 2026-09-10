@@ -26,11 +26,11 @@ final class SyncLanguageLinesAction
                 ->whereIn('namespace', $namespaces)
                 ->get()
                 ->keyBy(
-                    fn(LanguageLine $languageLine): string => "{$languageLine->namespace}\0{$languageLine->group}\0{$languageLine->key}",
+                    fn (LanguageLine $languageLine): string => "{$languageLine->namespace}\0{$languageLine->group}\0{$languageLine->key}",
                 );
             $result = [
-                'created'   => 0,
-                'updated'   => 0,
+                'created' => 0,
+                'updated' => 0,
                 'unchanged' => 0,
             ];
 
@@ -38,7 +38,7 @@ final class SyncLanguageLinesAction
                 $identity = "{$catalogLine['namespace']}\0{$catalogLine['group']}\0{$catalogLine['key']}";
                 $languageLine = $existingLanguageLines->get($identity);
 
-                if ( ! $languageLine instanceof LanguageLine) {
+                if (! $languageLine instanceof LanguageLine) {
                     LanguageLine::query()->create($catalogLine);
                     $result['created']++;
 

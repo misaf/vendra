@@ -28,7 +28,7 @@ final class LocalizationServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->bind(LocaleResolver::class, fn(Application $app): LocaleResolver => ChainLocaleResolver::fromSources(
+        $this->app->bind(LocaleResolver::class, fn (Application $app): LocaleResolver => ChainLocaleResolver::fromSources(
             $app,
             Config::array('vendra-localization.resolvers'),
         ));
@@ -46,7 +46,7 @@ final class LocalizationServiceProvider extends PackageServiceProvider
         Context::hydrated(static function (Repository $context) use ($localeManager): void {
             $locale = $context->getHidden(LocaleManager::CONTEXT_KEY);
 
-            if (is_string($locale) && '' !== $locale) {
+            if (is_string($locale) && $locale !== '') {
                 $localeManager->apply($locale);
             }
         });

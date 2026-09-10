@@ -30,23 +30,23 @@ final class MultimediaResourceFactory
             $bytes = (int) $bytes;
         }
 
-        if ( ! is_int($id) || ! is_int($bytes)) {
+        if (! is_int($id) || ! is_int($bytes)) {
             throw new UnexpectedValueException('Media identifiers and sizes must be integers.');
         }
 
-        if ( ! is_string($uuid) || ! is_string($name) || ! is_string($fileName) || ! is_string($collection)) {
+        if (! is_string($uuid) || ! is_string($name) || ! is_string($fileName) || ! is_string($collection)) {
             throw new UnexpectedValueException('Media names and identifiers must be strings.');
         }
 
-        if (null !== $mimeType && ! is_string($mimeType)) {
+        if ($mimeType !== null && ! is_string($mimeType)) {
             throw new UnexpectedValueException('Media MIME types must be strings or null.');
         }
 
-        if (null === $generatedConversions) {
+        if ($generatedConversions === null) {
             $generatedConversions = [];
         }
 
-        if ( ! is_array($generatedConversions)) {
+        if (! is_array($generatedConversions)) {
             throw new UnexpectedValueException('Media generated conversions must be an array.');
         }
 
@@ -62,23 +62,23 @@ final class MultimediaResourceFactory
         $customProperties = $media->getAttribute('custom_properties');
         $responsiveImages = $media->getAttribute('responsive_images');
 
-        if ( ! is_string($disk)) {
+        if (! is_string($disk)) {
             $disk = '';
         }
 
-        if (null === $customProperties) {
+        if ($customProperties === null) {
             $customProperties = [];
         }
 
-        if ( ! is_array($customProperties)) {
+        if (! is_array($customProperties)) {
             $customProperties = [];
         }
 
-        if (null === $responsiveImages) {
+        if ($responsiveImages === null) {
             $responsiveImages = [];
         }
 
-        if ( ! is_array($responsiveImages)) {
+        if (! is_array($responsiveImages)) {
             $responsiveImages = [];
         }
 
@@ -100,7 +100,7 @@ final class MultimediaResourceFactory
 
     private static function safeUrl(Model $media): ?string
     {
-        if ( ! method_exists($media, 'getUrl')) {
+        if (! method_exists($media, 'getUrl')) {
             return null;
         }
 

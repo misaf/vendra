@@ -18,7 +18,7 @@ it('keeps transaction resource stats available', function (string $widget, strin
         ->and($stats[0]->getLabel())->toBe($label)
         ->and($stats[0]->getChart())->not->toBeEmpty();
 })->with([
-    'deposit'    => [TransactionDepositOverviewWidget::class, 'Deposits'],
+    'deposit' => [TransactionDepositOverviewWidget::class, 'Deposits'],
     'withdrawal' => [TransactionWithdrawalOverviewWidget::class, 'Withdrawals'],
-    'bonus'      => [TransactionBonusOverviewWidget::class, 'Bonuses'],
+    'bonus' => [TransactionBonusOverviewWidget::class, 'Bonuses'],
 ]);

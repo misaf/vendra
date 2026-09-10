@@ -76,10 +76,10 @@ final class BlogPostCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListBlogPostCategories::route('/'),
+            'index' => ListBlogPostCategories::route('/'),
             'create' => CreateBlogPostCategory::route('/create'),
-            'view'   => ViewBlogPostCategory::route('/{record}'),
-            'edit'   => EditBlogPostCategory::route('/{record}/edit'),
+            'view' => ViewBlogPostCategory::route('/{record}'),
+            'edit' => EditBlogPostCategory::route('/{record}/edit'),
         ];
     }
 

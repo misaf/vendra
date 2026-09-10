@@ -12,7 +12,7 @@ final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = DeliveryPlugin::ID;
 
-    protected $signature = self::MODULE_NAME . ':seed
+    protected $signature = self::MODULE_NAME.':seed
         {tenant? : Tenant ID or slug to seed delivery data for}
         {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}';
 

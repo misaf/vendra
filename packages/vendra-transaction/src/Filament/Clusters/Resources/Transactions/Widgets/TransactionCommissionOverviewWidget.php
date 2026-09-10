@@ -53,20 +53,20 @@ final class TransactionCommissionOverviewWidget extends StatsOverviewWidget
         $endOfWeek = now()->endOfWeek();
 
         $commissionTransactionStats = Trend::query(Transaction::query()->commission()->approved()
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
         $totalCommissionAmount = (int) Transaction::query()->commission()->approved()
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
             ->sum('amount');
 
         $transactionCommission = Stat::make('commission_transaction_stats', Number::format($totalCommissionAmount))
             ->label(__('vendra-transaction::widgets.commission_transaction_stats'))
             ->description(__('vendra-transaction::widgets.commission_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($commissionTransactionStats->map(fn(TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($commissionTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
             ->color('primary');
 
         return [$transactionCommission];

@@ -49,7 +49,7 @@ final class Attribute extends Model implements ShouldLogActivity, Sortable
 
     /** @var array{order_column_name: string, sort_when_creating: bool} */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -63,13 +63,13 @@ final class Attribute extends Model implements ShouldLogActivity, Sortable
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'name'        => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'name' => 'string',
             'description' => 'string',
-            'unit'        => 'string',
-            'position'    => 'integer',
-            'active'      => 'boolean',
+            'unit' => 'string',
+            'position' => 'integer',
+            'active' => 'boolean',
         ];
     }
 

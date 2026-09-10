@@ -6,11 +6,11 @@ return [
     'columns' => [
         'created_at' => 'تاریخ ایجاد',
         'guard_name' => 'نام گارد',
-        'name'       => 'نام',
-        'role'       => 'نقش ها',
+        'name' => 'نام',
+        'role' => 'نقش ها',
         'updated_at' => 'تاریخ بروزرسانی',
     ],
-    'groups'  => [
-        'guard'      => 'گارد',
+    'groups' => [
+        'guard' => 'گارد',
     ],
 ];

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraMultimedia\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
@@ -40,7 +39,7 @@ final class MultimediaServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-multimedia')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-multimedia')) {
                 return;
             }
 
@@ -65,26 +64,26 @@ final class MultimediaServiceProvider extends PackageServiceProvider
     {
         $mediaModel = Config::get('media-library.media_model');
 
-        if (null === $mediaModel || SpatieMedia::class === $mediaModel) {
+        if ($mediaModel === null || $mediaModel === SpatieMedia::class) {
             Config::set('media-library.media_model', Multimedia::class);
         }
 
         $pathGenerator = Config::get('media-library.path_generator');
 
-        if (null === $pathGenerator || SpatieDefaultPathGenerator::class === $pathGenerator) {
+        if ($pathGenerator === null || $pathGenerator === SpatieDefaultPathGenerator::class) {
             Config::set('media-library.path_generator', DefaultPathGenerator::class);
         }
 
         // Literals, not env(): env() returns its fallback once config is cached.
         Config::set([
             'media-library.queue_conversions_by_default' => false,
-            'media-library.moves_media_on_update'        => true,
+            'media-library.moves_media_on_update' => true,
         ]);
     }
 
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('media');
-        AboutCommand::add('Vendra Multimedia', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-multimedia')]);
+        AboutCommand::add('Vendra Multimedia', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-multimedia')]);
     }
 }

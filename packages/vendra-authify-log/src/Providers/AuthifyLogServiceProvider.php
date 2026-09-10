@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraAuthifyLog\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -46,7 +45,7 @@ final class AuthifyLogServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-authify-log')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-authify-log')) {
                 return;
             }
 
@@ -59,9 +58,9 @@ final class AuthifyLogServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('authify_logs');
         $this->app->make(TenantSeeders::class)->register('vendra-authify-log:seed', priority: 90);
 
-        AboutCommand::add('Vendra Authify Log', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-authify-log')]);
+        AboutCommand::add('Vendra Authify Log', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-authify-log')]);
 
         $userModel = AuthifyLogUsers::model();
-        $userModel::resolveRelationUsing('authifyLogs', fn(Model $user) => $user->hasMany(AuthifyLog::class));
+        $userModel::resolveRelationUsing('authifyLogs', fn (Model $user) => $user->hasMany(AuthifyLog::class));
     }
 }

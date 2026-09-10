@@ -35,10 +35,10 @@ final class WishlistItem extends Model
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
+            'id' => 'integer',
             'wishlist_id' => 'integer',
             'sellable_id' => 'integer',
-            'metadata'    => 'array',
+            'metadata' => 'array',
         ];
     }
 

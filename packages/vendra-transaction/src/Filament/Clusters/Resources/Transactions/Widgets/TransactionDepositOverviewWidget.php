@@ -53,20 +53,20 @@ final class TransactionDepositOverviewWidget extends StatsOverviewWidget
         $endOfWeek = now()->endOfWeek();
 
         $depositTransactionStats = Trend::query(Transaction::query()->deposit()->approved()
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
         $totalDepositAmount = (int) Transaction::query()->deposit()->approved()
-            ->when($this->record, fn(Builder $builder) => $builder->whereHas('wallet', fn(Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
+            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
             ->sum('amount');
 
         $transactionDeposit = Stat::make('deposit_transaction_stats', Number::format($totalDepositAmount))
             ->label(__('vendra-transaction::widgets.deposit_transaction_stats'))
             ->description(__('vendra-transaction::widgets.deposit_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($depositTransactionStats->map(fn(TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($depositTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
             ->color('primary');
 
         return [$transactionDeposit];

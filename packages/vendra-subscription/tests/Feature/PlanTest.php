@@ -45,12 +45,12 @@ it('blocks deletion while any subscription references it, even a trashed one', f
     $plan = Plan::factory()->create();
     $subscription = Subscription::factory()->for($plan)->create();
 
-    expect(fn(): bool => $plan->delete())->toThrow(PlanInUseException::class);
+    expect(fn (): bool => $plan->delete())->toThrow(PlanInUseException::class);
 
     $subscription->delete();
 
     expect($plan->isInUse())->toBeTrue()
-        ->and(fn(): bool => $plan->delete())->toThrow(PlanInUseException::class);
+        ->and(fn (): bool => $plan->delete())->toThrow(PlanInUseException::class);
 });
 
 it('formats the price using the plan currency', function (): void {

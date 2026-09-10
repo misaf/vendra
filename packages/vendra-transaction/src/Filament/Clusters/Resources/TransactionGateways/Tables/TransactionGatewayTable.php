@@ -50,7 +50,7 @@ final class TransactionGatewayTable
                     ->alignCenter()
                     ->collection(TransactionGateway::MEDIA_COLLECTION)
                     ->conversion('thumb-table')
-                    ->defaultImageUrl(fn(TransactionGateway $record): string => static::defaultAvatarImageUrl($record->name))
+                    ->defaultImageUrl(fn (TransactionGateway $record): string => self::defaultAvatarImageUrl($record->name))
                     ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
                     ->label(__('vendra-transaction::attributes.image'))
                     ->stacked(),
@@ -65,13 +65,13 @@ final class TransactionGatewayTable
                             ->label(__('vendra-transaction::attributes.is_default'))
                             ->color('success')
                             ->size(Size::ExtraSmall)
-                            ->hidden(fn(TransactionGateway $record): bool => ! $record->is_default),
+                            ->hidden(fn (TransactionGateway $record): bool => ! $record->is_default),
                     ]),
 
                 TextColumn::make('description')
                     ->label(__('vendra-transaction::attributes.description'))
                     ->icon(Heroicon::DocumentText)
-                    ->state(fn(TransactionGateway $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                    ->state(fn (TransactionGateway $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('slug')
@@ -97,8 +97,8 @@ final class TransactionGatewayTable
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
 
                 TextColumn::make('updated_at')
@@ -107,8 +107,8 @@ final class TransactionGatewayTable
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->filters(

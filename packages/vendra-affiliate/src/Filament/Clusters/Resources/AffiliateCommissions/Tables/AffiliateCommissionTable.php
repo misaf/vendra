@@ -67,8 +67,8 @@ final class AffiliateCommissionTable
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
             ])
             ->filters(
@@ -119,24 +119,24 @@ final class AffiliateCommissionTable
     private static function approveAction(): Action
     {
         return Action::make('approve')
-            ->authorize(fn(): bool => (bool) auth()->user()?->can(AffiliateCommissionPolicyEnum::Approve->value))
+            ->authorize(fn (): bool => (bool) auth()->user()?->can(AffiliateCommissionPolicyEnum::Approve->value))
             ->color('success')
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-affiliate::messages.approve_commission'))
             ->requiresConfirmation()
-            ->visible(fn(AffiliateCommission $record): bool => CommissionStatusEnum::Pending === $record->status)
-            ->action(fn(AffiliateCommission $record) => $record->update(['status' => CommissionStatusEnum::Approved]));
+            ->visible(fn (AffiliateCommission $record): bool => $record->status === CommissionStatusEnum::Pending)
+            ->action(fn (AffiliateCommission $record) => $record->update(['status' => CommissionStatusEnum::Approved]));
     }
 
     private static function reverseAction(): Action
     {
         return Action::make('reverse')
-            ->authorize(fn(): bool => (bool) auth()->user()?->can(AffiliateCommissionPolicyEnum::Reverse->value))
+            ->authorize(fn (): bool => (bool) auth()->user()?->can(AffiliateCommissionPolicyEnum::Reverse->value))
             ->color('danger')
             ->icon(Heroicon::OutlinedArrowUturnLeft)
             ->label(__('vendra-affiliate::messages.reverse_commission'))
             ->requiresConfirmation()
-            ->visible(fn(AffiliateCommission $record): bool => in_array($record->status, [CommissionStatusEnum::Pending, CommissionStatusEnum::Approved], true))
-            ->action(fn(AffiliateCommission $record) => $record->update(['status' => CommissionStatusEnum::Reversed]));
+            ->visible(fn (AffiliateCommission $record): bool => in_array($record->status, [CommissionStatusEnum::Pending, CommissionStatusEnum::Approved], true))
+            ->action(fn (AffiliateCommission $record) => $record->update(['status' => CommissionStatusEnum::Reversed]));
     }
 }

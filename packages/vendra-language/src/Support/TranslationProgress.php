@@ -33,7 +33,7 @@ final class TranslationProgress
 
         $languageLines = $this->languageLines();
         $translated = $languageLines
-            ->filter(fn(LanguageLine $languageLine): bool => $this->hasTranslation($languageLine, $locale))
+            ->filter(fn (LanguageLine $languageLine): bool => $this->hasTranslation($languageLine, $locale))
             ->count();
 
         return $this->localeProgress[$locale] = $this->summarize(
@@ -50,7 +50,7 @@ final class TranslationProgress
         $modelKey = $languageLine->getKey();
         $cacheKey = is_int($modelKey) || is_string($modelKey)
             ? (string) $modelKey
-            : 'object:' . spl_object_id($languageLine);
+            : 'object:'.spl_object_id($languageLine);
 
         if (array_key_exists($cacheKey, $this->languageLineProgress)) {
             return $this->languageLineProgress[$cacheKey];
@@ -59,7 +59,7 @@ final class TranslationProgress
         $activeLocales = $this->activeLocales();
         $missingLocales = array_values(array_filter(
             $activeLocales,
-            fn(string $locale): bool => ! $this->hasTranslation($languageLine, $locale),
+            fn (string $locale): bool => ! $this->hasTranslation($languageLine, $locale),
         ));
 
         return $this->languageLineProgress[$cacheKey] = $this->summarize(
@@ -99,10 +99,10 @@ final class TranslationProgress
     private function summarize(int $translated, int $total, array $missingLocales = []): array
     {
         return [
-            'translated'      => $translated,
-            'total'           => $total,
-            'remaining'       => $total - $translated,
-            'percentage'      => 0 === $total ? 0 : (int) round(($translated / $total) * 100),
+            'translated' => $translated,
+            'total' => $total,
+            'remaining' => $total - $translated,
+            'percentage' => $total === 0 ? 0 : (int) round(($translated / $total) * 100),
             'missing_locales' => $missingLocales,
         ];
     }

@@ -14,10 +14,9 @@ use Misaf\VendraLanguage\Tests\Fixtures\CustomLanguageLine;
 use Misaf\VendraLanguage\Tests\Fixtures\CustomNamespacedLanguageLine;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
+use Spatie\TranslationLoader\TranslationLoaders\Db;
 
 use function Pest\Laravel\mock;
-
-use Spatie\TranslationLoader\TranslationLoaders\Db;
 
 afterEach(function (): void {
     ArrayTranslationLoader::$translations = [];
@@ -33,7 +32,7 @@ beforeEach(function (): void {
 
     $tenantResolver->shouldReceive('current')->andReturnNull();
     $tenantResolver->shouldReceive('currentId')->andReturnUsing(
-        fn(): int => $this->currentTenantId,
+        fn (): int => $this->currentTenantId,
     );
 
     app()->instance(TenantResolver::class, $tenantResolver);
@@ -42,67 +41,67 @@ beforeEach(function (): void {
 it('allows the same translation key in different groups but rejects exact duplicates', function (): void {
     LanguageLine::query()->create([
         'group' => 'authentication',
-        'key'   => 'email',
-        'text'  => ['en' => 'Email'],
+        'key' => 'email',
+        'text' => ['en' => 'Email'],
     ]);
 
     LanguageLine::query()->create([
         'group' => 'validation',
-        'key'   => 'email',
-        'text'  => ['en' => 'The email field is required.'],
+        'key' => 'email',
+        'text' => ['en' => 'The email field is required.'],
     ]);
 
-    expect(fn(): LanguageLine => LanguageLine::query()->create([
+    expect(fn (): LanguageLine => LanguageLine::query()->create([
         'group' => 'authentication',
-        'key'   => 'email',
-        'text'  => ['en' => 'Email address'],
+        'key' => 'email',
+        'text' => ['en' => 'Email address'],
     ]))->toThrow(QueryException::class);
 });
 
 it('scopes translation uniqueness by namespace', function (): void {
     LanguageLine::query()->create([
         'namespace' => 'vendra-product',
-        'group'     => 'attributes',
-        'key'       => 'name',
-        'text'      => ['en' => 'Product name'],
+        'group' => 'attributes',
+        'key' => 'name',
+        'text' => ['en' => 'Product name'],
     ]);
 
     LanguageLine::query()->create([
         'namespace' => 'vendra-language',
-        'group'     => 'attributes',
-        'key'       => 'name',
-        'text'      => ['en' => 'Language name'],
+        'group' => 'attributes',
+        'key' => 'name',
+        'text' => ['en' => 'Language name'],
     ]);
 
-    expect(fn(): LanguageLine => LanguageLine::query()->create([
+    expect(fn (): LanguageLine => LanguageLine::query()->create([
         'namespace' => 'vendra-product',
-        'group'     => 'attributes',
-        'key'       => 'name',
-        'text'      => ['en' => 'Duplicate product name'],
+        'group' => 'attributes',
+        'key' => 'name',
+        'text' => ['en' => 'Duplicate product name'],
     ]))->toThrow(QueryException::class);
 });
 
 it('still rejects duplicate application translations with a null namespace', function (): void {
     LanguageLine::query()->create([
         'namespace' => null,
-        'group'     => 'validation',
-        'key'       => 'required',
-        'text'      => ['en' => 'Required'],
+        'group' => 'validation',
+        'key' => 'required',
+        'text' => ['en' => 'Required'],
     ]);
 
-    expect(fn(): LanguageLine => LanguageLine::query()->create([
+    expect(fn (): LanguageLine => LanguageLine::query()->create([
         'namespace' => null,
-        'group'     => 'validation',
-        'key'       => 'required',
-        'text'      => ['en' => 'This field is required'],
+        'group' => 'validation',
+        'key' => 'required',
+        'text' => ['en' => 'This field is required'],
     ]))->toThrow(QueryException::class);
 });
 
 it('invalidates cache entries for the original group and removed locales', function (): void {
     $languageLine = LanguageLine::query()->create([
         'group' => 'navigation',
-        'key'   => 'dashboard',
-        'text'  => [
+        'key' => 'dashboard',
+        'text' => [
             'en' => 'Dashboard',
             'de' => 'Instrumententafel',
         ],
@@ -113,7 +112,7 @@ it('invalidates cache entries for the original group and removed locales', funct
 
     $languageLine->update([
         'group' => 'modules',
-        'text'  => ['en' => 'Dashboard'],
+        'text' => ['en' => 'Dashboard'],
     ]);
 
     expect(Cache::has(LanguageLine::getCacheKey('navigation', 'en')))->toBeFalse()
@@ -139,9 +138,9 @@ it('uses namespace-qualified translation cache keys', function (): void {
 it('invalidates the original namespace cache when a line moves', function (): void {
     $languageLine = LanguageLine::query()->create([
         'namespace' => 'vendra-product',
-        'group'     => 'attributes',
-        'key'       => 'name',
-        'text'      => ['en' => 'Product name'],
+        'group' => 'attributes',
+        'key' => 'name',
+        'text' => ['en' => 'Product name'],
     ]);
 
     $cacheKey = LanguageLine::getCacheKey('attributes', 'en', 'vendra-product');
@@ -155,9 +154,9 @@ it('invalidates the original namespace cache when a line moves', function (): vo
 it('overrides package translations from the database without losing file translations', function (): void {
     LanguageLine::query()->create([
         'namespace' => 'vendra-language',
-        'group'     => 'navigation',
-        'key'       => 'language',
-        'text'      => ['en' => 'Tenant Languages'],
+        'group' => 'navigation',
+        'key' => 'language',
+        'text' => ['en' => 'Tenant Languages'],
     ]);
 
     $translator = app('translator');
@@ -174,9 +173,9 @@ it('overrides package translations from the database without losing file transla
 it('keeps file translations when the requested database locale is missing or blank', function (): void {
     LanguageLine::query()->create([
         'namespace' => 'vendra-language',
-        'group'     => 'navigation',
-        'key'       => 'language',
-        'text'      => [
+        'group' => 'navigation',
+        'key' => 'language',
+        'text' => [
             'en' => 'Tenant Languages',
             'de' => '  ',
         ],
@@ -192,8 +191,8 @@ it('keeps file translations when the requested database locale is missing or bla
 it('loads application translations with a null namespace from the database', function (): void {
     LanguageLine::query()->create([
         'group' => 'messages',
-        'key'   => 'welcome',
-        'text'  => ['en' => 'Welcome!'],
+        'key' => 'welcome',
+        'text' => ['en' => 'Welcome!'],
     ]);
 
     $translator = app('translator');
@@ -233,7 +232,7 @@ it('registers the namespaced database translation loader and language line model
 it('upgrades the stock Db loader while preserving host translation loader overrides', function (): void {
     config([
         'translation-loader.translation_loaders' => [Db::class, ArrayTranslationLoader::class],
-        'translation-loader.model'               => 'App\Models\CustomLanguageLine',
+        'translation-loader.model' => 'App\Models\CustomLanguageLine',
         'translation-loader.translation_manager' => 'App\Localization\CustomTranslationManager',
     ]);
 
@@ -248,7 +247,7 @@ it('upgrades the stock Db loader while preserving host translation loader overri
 it('uses a host model for application translations without sending unsupported namespaces', function (): void {
     config(['translation-loader.model' => CustomLanguageLine::class]);
 
-    $loader = new DatabaseTranslationLoader();
+    $loader = new DatabaseTranslationLoader;
 
     expect($loader->loadTranslations('en', 'messages'))->toBe(['custom' => 'en:messages'])
         ->and($loader->loadTranslations('en', 'navigation', 'vendra-language'))->toBe([]);
@@ -257,6 +256,6 @@ it('uses a host model for application translations without sending unsupported n
 it('sends namespaces to host models that implement the namespace contract', function (): void {
     config(['translation-loader.model' => CustomNamespacedLanguageLine::class]);
 
-    expect((new DatabaseTranslationLoader())->loadTranslations('en', 'navigation', 'vendra-language'))
+    expect((new DatabaseTranslationLoader)->loadTranslations('en', 'navigation', 'vendra-language'))
         ->toBe(['custom' => 'vendra-language:en:navigation']);
 });

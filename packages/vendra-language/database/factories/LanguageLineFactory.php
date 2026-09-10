@@ -18,9 +18,9 @@ final class LanguageLineFactory extends Factory
     {
         return [
             'namespace' => null,
-            'group'     => fake()->word(),
-            'key'       => fake()->word(),
-            'text'      => ['en' => fake()->word()],
+            'group' => fake()->word(),
+            'key' => fake()->word(),
+            'text' => ['en' => fake()->word()],
         ];
     }
 }

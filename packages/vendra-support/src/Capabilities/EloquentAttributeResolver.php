@@ -12,13 +12,13 @@ use Throwable;
 final class EloquentAttributeResolver implements AttributeResolver
 {
     /**
-     * @param class-string<Model> $attributeModel
-     * @param class-string<Model> $attributeValueModel
+     * @param  class-string<Model>  $attributeModel
+     * @param  class-string<Model>  $attributeValueModel
      */
     public function __construct(
         private readonly string $attributeModel,
         private readonly string $attributeValueModel,
-        private readonly AttributeResolver $fallback = new NullAttributeResolver(),
+        private readonly AttributeResolver $fallback = new NullAttributeResolver,
         private readonly string $nameColumn = 'name',
         private readonly string $unitColumn = 'unit',
         private readonly string $activeColumn = 'active',
@@ -48,15 +48,15 @@ final class EloquentAttributeResolver implements AttributeResolver
                     $name = $attribute->getAttribute($this->nameColumn);
                     $unit = $attribute->getAttribute($this->unitColumn);
 
-                    if (( ! is_int($key) && ! is_string($key)) || ! is_string($name) || '' === $name) {
+                    if ((! is_int($key) && ! is_string($key)) || ! is_string($name) || $name === '') {
                         return [];
                     }
 
-                    return [$key => is_string($unit) && '' !== $unit ? "{$name} ({$unit})" : $name];
+                    return [$key => is_string($unit) && $unit !== '' ? "{$name} ({$unit})" : $name];
                 })
                 ->all();
 
-            return [] !== $options ? $options : $this->fallback->options();
+            return $options !== [] ? $options : $this->fallback->options();
         } catch (Throwable) {
             return $this->fallback->options();
         }
@@ -65,6 +65,6 @@ final class EloquentAttributeResolver implements AttributeResolver
     /** @return Builder<Model> */
     private function query(): Builder
     {
-        return (new $this->attributeModel())->newQuery();
+        return (new $this->attributeModel)->newQuery();
     }
 }

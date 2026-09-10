@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\ApiProperty;
 final readonly class DeliverySlot
 {
     /**
-     * @param array<string, string> $name
+     * @param  array<string, string>  $name
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The delivery window unique identifier')]

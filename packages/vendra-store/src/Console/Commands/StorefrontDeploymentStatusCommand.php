@@ -31,10 +31,10 @@ final class StorefrontDeploymentStatusCommand extends Command
             return self::SUCCESS;
         }
 
-        if ( ! $this->option('runtime')) {
+        if (! $this->option('runtime')) {
             $this->table(
                 ['Slug', 'Domain', 'Status', 'Desired', 'Container', 'Image digest'],
-                $deployments->map(fn(StorefrontDeployment $deployment): array => [
+                $deployments->map(fn (StorefrontDeployment $deployment): array => [
                     ...$this->recordedColumns($deployment),
                     $deployment->image_digest ?? '—',
                 ])->all(),
@@ -44,12 +44,12 @@ final class StorefrontDeploymentStatusCommand extends Command
         }
 
         $observed = $deployments->mapWithKeys(
-            fn(StorefrontDeployment $deployment): array => [$deployment->slug => $this->observe($provisioner, $deployment)],
+            fn (StorefrontDeployment $deployment): array => [$deployment->slug => $this->observe($provisioner, $deployment)],
         );
 
         $this->table(
             ['Slug', 'Domain', 'Status', 'Desired', 'Container', 'Runtime'],
-            $deployments->map(fn(StorefrontDeployment $deployment): array => [
+            $deployments->map(fn (StorefrontDeployment $deployment): array => [
                 ...$this->recordedColumns($deployment),
                 $this->describeRuntime($deployment, $observed->get($deployment->slug)),
             ])->all(),
@@ -90,11 +90,11 @@ final class StorefrontDeploymentStatusCommand extends Command
 
     private function describeRuntime(StorefrontDeployment $deployment, ?StorefrontRuntimeState $state): string
     {
-        if (null === $state) {
+        if ($state === null) {
             return '<fg=yellow>unreachable</>';
         }
 
-        if (StorefrontRuntimeState::Absent !== $state) {
+        if ($state !== StorefrontRuntimeState::Absent) {
             return $state->value;
         }
 
@@ -111,14 +111,14 @@ final class StorefrontDeploymentStatusCommand extends Command
      * containers running on the old daemon, invisible and unmanaged, while every
      * deployment row reads as though it were fine.
      *
-     * @param Collection<int, StorefrontDeployment>               $deployments
-     * @param Collection<string, StorefrontRuntimeState|null>     $observed
+     * @param  Collection<int, StorefrontDeployment>  $deployments
+     * @param  Collection<string, StorefrontRuntimeState|null>  $observed
      */
     private function reportMissing(Collection $deployments, Collection $observed): int
     {
         $missing = $deployments
-            ->filter(fn(StorefrontDeployment $deployment): bool => $deployment->desired_state->expectsRunning()
-                && StorefrontRuntimeState::Absent === $observed->get($deployment->slug))
+            ->filter(fn (StorefrontDeployment $deployment): bool => $deployment->desired_state->expectsRunning()
+                && $observed->get($deployment->slug) === StorefrontRuntimeState::Absent)
             ->pluck('slug');
 
         if ($missing->isEmpty()) {
@@ -128,8 +128,8 @@ final class StorefrontDeploymentStatusCommand extends Command
         $this->newLine();
         $this->components->error(sprintf(
             'The runtime has no container for: %s. If the endpoint or runtime was changed, those containers are '
-            . 'still on the previous daemon — run container:status to confirm which one is answering, then '
-            . 'storefront:redeploy to place them here.',
+            .'still on the previous daemon — run container:status to confirm which one is answering, then '
+            .'storefront:redeploy to place them here.',
             $missing->implode(', '),
         ));
 

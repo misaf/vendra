@@ -19,12 +19,11 @@ use Misaf\VendraMultimediaApi\State\PublicMultimedia;
 trait MapsPublicMultimedia
 {
     /**
-     * @param bool $onlyWhenLoaded when true, an unloaded relation yields an
-     *                             empty list instead of being lazy-loaded — the
-     *                             category mappers rely on this to keep a
-     *                             collection response from issuing a query per
-     *                             row
-     *
+     * @param  bool  $onlyWhenLoaded  when true, an unloaded relation yields an
+     *                                empty list instead of being lazy-loaded — the
+     *                                category mappers rely on this to keep a
+     *                                collection response from issuing a query per
+     *                                row
      * @return list<MultimediaResource>
      */
     protected function publicMultimedia(Model $model, bool $onlyWhenLoaded = false, string $relation = 'multimedia'): array
@@ -34,8 +33,8 @@ trait MapsPublicMultimedia
         }
 
         return $model->{$relation}
-            ->filter(fn(Model $media): bool => PublicMultimedia::isPublic($media))
-            ->map(fn(Model $media): MultimediaResource => MultimediaResourceFactory::make($media))
+            ->filter(fn (Model $media): bool => PublicMultimedia::isPublic($media))
+            ->map(fn (Model $media): MultimediaResource => MultimediaResourceFactory::make($media))
             ->values()
             ->all();
     }

@@ -4,5 +4,5 @@ declare(strict_types=1);
 
 return [
     'authentication' => 'Authentication',
-    'general'        => 'General',
+    'general' => 'General',
 ];

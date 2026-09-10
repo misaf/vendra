@@ -19,7 +19,7 @@ abstract class PermissionPolicySeeder extends Seeder
     {
         $tenantKey = $this->currentTenantOrNull()?->getKey();
 
-        if (null !== $tenantKey && ! is_int($tenantKey) && ! is_string($tenantKey)) {
+        if ($tenantKey !== null && ! is_int($tenantKey) && ! is_string($tenantKey)) {
             throw new UnexpectedValueException('The current tenant key must be an integer or string.');
         }
 
@@ -42,11 +42,11 @@ abstract class PermissionPolicySeeder extends Seeder
             /** @var Model $permission */
             $permission = $permissionModel::query()->make();
             $permission->fill([
-                'name'       => $policy,
+                'name' => $policy,
                 'guard_name' => $guardName,
             ]);
 
-            if (null !== $tenantKey) {
+            if ($tenantKey !== null) {
                 $permission->setAttribute(TenantSchema::column(), $tenantKey);
             }
 

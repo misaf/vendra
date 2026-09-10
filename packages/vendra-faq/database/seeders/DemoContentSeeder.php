@@ -20,7 +20,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
             ->active()
             ->count(4)
             ->create()
-            ->each(fn(FaqCategory $faqCategory): mixed => FaqFactory::new()
+            ->each(fn (FaqCategory $faqCategory): mixed => FaqFactory::new()
                 ->forCategory($faqCategory)
                 ->active()
                 ->count(3)
@@ -28,7 +28,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * @param list<array<string, mixed>> $records
+     * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
     {
@@ -56,10 +56,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleSeedFixtureRecord(array $data): void
     {
         $faqCategory = FaqCategory::create([
-            'name'        => $data['name'],
+            'name' => $data['name'],
             'description' => $data['description'],
-            'slug'        => $data['slug'],
-            'active'      => $data['active'],
+            'slug' => $data['slug'],
+            'active' => $data['active'],
         ]);
 
         foreach ($data['faqs'] as $faqRecord) {
@@ -78,16 +78,15 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleFaqFixtureRecord(FaqCategory $faqCategory, array $faqRecord): void
     {
         $faqCategory->faqs()->create([
-            'name'        => $faqRecord['name'],
+            'name' => $faqRecord['name'],
             'description' => $faqRecord['description'],
-            'slug'        => $faqRecord['slug'],
-            'active'      => $faqRecord['active'],
+            'slug' => $faqRecord['slug'],
+            'active' => $faqRecord['active'],
         ]);
     }
 
     /**
-     * @param array<string, mixed> $record
-     *
+     * @param  array<string, mixed>  $record
      * @return array{
      *     name: non-empty-array<string, string>,
      *     description: non-empty-array<string, string>,
@@ -119,22 +118,22 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $validated = Validator::make(
             data: $record,
             rules: [
-                'name'                 => ['required', 'array', 'min:1'],
-                'name.*'               => ['required', 'string'],
-                'description'          => ['required', 'array', 'min:1'],
-                'description.*'        => ['required', 'string'],
-                'slug'                 => ['required', 'array', 'min:1'],
-                'slug.*'               => ['required', 'string'],
-                'active'               => ['required', 'boolean'],
-                'faqs'                 => ['required', 'array', 'list'],
-                'faqs.*'               => ['required', 'array:name,description,slug,active'],
-                'faqs.*.name'          => ['required', 'array', 'min:1'],
-                'faqs.*.name.*'        => ['required', 'string'],
-                'faqs.*.description'   => ['required', 'array', 'min:1'],
+                'name' => ['required', 'array', 'min:1'],
+                'name.*' => ['required', 'string'],
+                'description' => ['required', 'array', 'min:1'],
+                'description.*' => ['required', 'string'],
+                'slug' => ['required', 'array', 'min:1'],
+                'slug.*' => ['required', 'string'],
+                'active' => ['required', 'boolean'],
+                'faqs' => ['required', 'array', 'list'],
+                'faqs.*' => ['required', 'array:name,description,slug,active'],
+                'faqs.*.name' => ['required', 'array', 'min:1'],
+                'faqs.*.name.*' => ['required', 'string'],
+                'faqs.*.description' => ['required', 'array', 'min:1'],
                 'faqs.*.description.*' => ['required', 'string'],
-                'faqs.*.slug'          => ['required', 'array', 'min:1'],
-                'faqs.*.slug.*'        => ['required', 'string'],
-                'faqs.*.active'        => ['required', 'boolean'],
+                'faqs.*.slug' => ['required', 'array', 'min:1'],
+                'faqs.*.slug.*' => ['required', 'string'],
+                'faqs.*.active' => ['required', 'boolean'],
             ],
         )->validate();
 

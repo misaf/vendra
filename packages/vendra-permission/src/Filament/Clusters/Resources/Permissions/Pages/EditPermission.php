@@ -23,7 +23,7 @@ final class EditPermission extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-permission::navigation.permission');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-permission::navigation.permission');
     }
 
     protected function getHeaderActions(): array
@@ -59,13 +59,13 @@ final class EditPermission extends EditRecord
     {
         $selectedRoles = Arr::get($this->form->getRawState(), 'roles', []);
 
-        if ( ! is_array($selectedRoles)) {
+        if (! is_array($selectedRoles)) {
             $selectedRoles = [];
         }
 
         return array_values(array_filter(
-            array_map(static fn(mixed $roleId): int => (int) $roleId, $selectedRoles),
-            static fn(int $roleId): bool => $roleId > 0,
+            array_map(static fn (mixed $roleId): int => (int) $roleId, $selectedRoles),
+            static fn (int $roleId): bool => $roleId > 0,
         ));
     }
 }

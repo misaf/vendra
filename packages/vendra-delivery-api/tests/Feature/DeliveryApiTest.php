@@ -42,21 +42,21 @@ it('lists bookable dates and active delivery windows', function (): void {
 
 it('prices a pin inside a charged band', function (): void {
     DeliveryZoneFactory::new()->freeWithin(2)->createOne([
-        'name'             => ['en' => 'Free zone'],
-        'origin_latitude'  => 35.6892,
+        'name' => ['en' => 'Free zone'],
+        'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
-        'position'         => 1,
+        'position' => 1,
     ]);
     $paid = DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne([
-        'name'             => ['en' => 'Outside the free zone'],
-        'origin_latitude'  => 35.6892,
+        'name' => ['en' => 'Outside the free zone'],
+        'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
-        'position'         => 2,
+        'position' => 2,
     ]);
 
     $this->postJson('/api/delivery/quotes', [
-        'latitude'     => 35.7219,
-        'longitude'    => 51.2334,
+        'latitude' => 35.7219,
+        'longitude' => 51.2334,
         'currencyCode' => 'USD',
     ])
         ->assertOk()
@@ -68,9 +68,9 @@ it('prices a pin inside a charged band', function (): void {
 
 it('reports an address beyond every band as quoted by hand', function (): void {
     DeliveryZoneFactory::new()->freeWithin(12)->createOne([
-        'origin_latitude'  => 35.6892,
+        'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
-        'position'         => 1,
+        'position' => 1,
     ]);
 
     $this->postJson('/api/delivery/quotes', ['latitude' => 32.6546, 'longitude' => 51.6680])

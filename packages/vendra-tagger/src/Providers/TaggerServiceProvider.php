@@ -49,7 +49,7 @@ final class TaggerServiceProvider extends PackageServiceProvider
                 $morphName = Config::string('tags.taggable.morph_name', 'taggable');
                 $pivotModel = Config::string('tags.taggable.class_name', MorphPivot::class);
 
-                if ( ! is_a($pivotModel, MorphPivot::class, true)) {
+                if (! is_a($pivotModel, MorphPivot::class, true)) {
                     $pivotModel = MorphPivot::class;
                 }
 
@@ -64,7 +64,7 @@ final class TaggerServiceProvider extends PackageServiceProvider
         );
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-tagger')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-tagger')) {
                 return;
             }
 
@@ -77,6 +77,6 @@ final class TaggerServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('tags');
         $this->app->make(TenantSeeders::class)->register('vendra-tagger:seed', priority: 70);
 
-        AboutCommand::add('Vendra Tagger', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-tagger')]);
+        AboutCommand::add('Vendra Tagger', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-tagger')]);
     }
 }

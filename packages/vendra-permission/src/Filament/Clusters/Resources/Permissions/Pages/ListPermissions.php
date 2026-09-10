@@ -14,7 +14,7 @@ final class ListPermissions extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-permission::navigation.permission');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-permission::navigation.permission');
     }
 
     protected function getHeaderActions(): array

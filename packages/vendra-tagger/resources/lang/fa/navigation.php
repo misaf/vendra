@@ -3,6 +3,6 @@
 declare(strict_types=1);
 
 return [
-    'tagger'  => 'تگ',
+    'tagger' => 'تگ',
     'taggers' => 'تگ‌ها',
 ];

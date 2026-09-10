@@ -16,15 +16,15 @@ final class FakeLanguageDirectories
      */
     public static function create(array $localeFiles): string
     {
-        $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'vendra-testing-parity-' . bin2hex(random_bytes(8));
+        $directory = sys_get_temp_dir().DIRECTORY_SEPARATOR.'vendra-testing-parity-'.bin2hex(random_bytes(8));
         self::$directories[] = $directory;
 
         foreach ($localeFiles as $locale => $files) {
-            (new Filesystem())->ensureDirectoryExists($directory . DIRECTORY_SEPARATOR . $locale);
+            (new Filesystem)->ensureDirectoryExists($directory.DIRECTORY_SEPARATOR.$locale);
 
             foreach ($files as $relativePath => $source) {
-                $filePath = $directory . DIRECTORY_SEPARATOR . $locale . DIRECTORY_SEPARATOR . $relativePath;
-                (new Filesystem())->ensureDirectoryExists(dirname($filePath));
+                $filePath = $directory.DIRECTORY_SEPARATOR.$locale.DIRECTORY_SEPARATOR.$relativePath;
+                (new Filesystem)->ensureDirectoryExists(dirname($filePath));
                 file_put_contents($filePath, $source);
             }
         }
@@ -35,7 +35,7 @@ final class FakeLanguageDirectories
     public static function cleanup(): void
     {
         foreach (self::$directories as $directory) {
-            (new Filesystem())->deleteDirectory($directory);
+            (new Filesystem)->deleteDirectory($directory);
         }
 
         self::$directories = [];

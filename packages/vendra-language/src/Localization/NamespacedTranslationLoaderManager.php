@@ -14,17 +14,16 @@ final class NamespacedTranslationLoaderManager extends TranslationLoaderManager
     /**
      * Allow configured translation loaders to override package translations.
      *
-     * @param string $locale
-     * @param string $group
-     * @param string|null $namespace
-     *
+     * @param  string  $locale
+     * @param  string  $group
+     * @param  string|null  $namespace
      * @return array<mixed>
      */
     public function load($locale, $group, $namespace = null): array
     {
         $fileTranslations = parent::load($locale, $group, $namespace);
 
-        if ( ! is_string($namespace) || '' === $namespace || '*' === $namespace) {
+        if (! is_string($namespace) || $namespace === '' || $namespace === '*') {
             return $fileTranslations;
         }
 
@@ -46,10 +45,10 @@ final class NamespacedTranslationLoaderManager extends TranslationLoaderManager
     {
         $modelClass = config('translation-loader.model');
 
-        if ( ! is_string($modelClass) || ! is_a($modelClass, LanguageLine::class, true)) {
+        if (! is_string($modelClass) || ! is_a($modelClass, LanguageLine::class, true)) {
             return false;
         }
 
-        return ! Schema::hasTable((new $modelClass())->getTable());
+        return ! Schema::hasTable((new $modelClass)->getTable());
     }
 }

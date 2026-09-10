@@ -10,11 +10,11 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 it('applies shared tenant ownership and soft deletes to the address model', function (): void {
     expect(class_uses_recursive(Address::class))->toContain(BelongsToTenant::class, SoftDeletes::class)
-        ->and((new Address())->getHidden())->toContain('tenant_id');
+        ->and((new Address)->getHidden())->toContain('tenant_id');
 });
 
 it('keeps country-adaptable address fields fillable', function (): void {
-    expect((new Address())->getFillable())->toContain(
+    expect((new Address)->getFillable())->toContain(
         'user_profile_id',
         'line_one',
         'line_two',

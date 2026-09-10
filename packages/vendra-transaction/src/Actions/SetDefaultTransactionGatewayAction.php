@@ -17,7 +17,7 @@ final class SetDefaultTransactionGatewayAction
                 ->get(['id']);
 
             $gateway->update([
-                'active'     => true,
+                'active' => true,
                 'is_default' => true,
             ]);
         });

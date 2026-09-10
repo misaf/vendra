@@ -9,7 +9,7 @@ it('creates the inquiries table', function (): void {
     Schema::dropIfExists('inquiries');
 
     /** @var Migration $migration */
-    $migration = require __DIR__ . '/../../database/migrations/create_inquiries_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_inquiries_table.php.stub';
 
     $migration->up();
 

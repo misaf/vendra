@@ -24,7 +24,7 @@ final class DeliveryForm
 
                         Select::make('delivery_slot_id')
                             ->label(__('vendra-delivery::attributes.delivery_slot'))
-                            ->options(fn(): array => DeliverySlot::query()
+                            ->options(fn (): array => DeliverySlot::query()
                                 ->active()
                                 ->ordered()
                                 ->pluck('name', 'id')

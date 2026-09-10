@@ -25,21 +25,21 @@ final class SubscriptionPaymentFactory extends Factory
     {
         return [
             'subscription_id' => Subscription::factory(),
-            'payer_type'      => 'payer',
-            'payer_id'        => fake()->unique()->numberBetween(1, 2_000_000_000),
-            'provider'        => 'testing',
+            'payer_type' => 'payer',
+            'payer_id' => fake()->unique()->numberBetween(1, 2_000_000_000),
+            'provider' => 'testing',
             'idempotency_key' => (string) Str::uuid(),
-            'amount'          => 1_500,
-            'currency_code'   => 'USD',
-            'status'          => SubscriptionPaymentStatus::Pending,
+            'amount' => 1_500,
+            'currency_code' => 'USD',
+            'status' => SubscriptionPaymentStatus::Pending,
         ];
     }
 
     public function forPayer(Model $payer): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'payer_type' => $payer->getMorphClass(),
-            'payer_id'   => $payer->getKey(),
+            'payer_id' => $payer->getKey(),
         ]);
     }
 }

@@ -30,27 +30,27 @@ enum PayoutStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): array
     {
         return match ($this) {
-            self::Pending   => Color::Yellow,
+            self::Pending => Color::Yellow,
             self::Completed => Color::Green,
-            self::Failed    => Color::Red,
+            self::Failed => Color::Red,
         };
     }
 
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::Pending   => Heroicon::OutlinedClock,
+            self::Pending => Heroicon::OutlinedClock,
             self::Completed => Heroicon::OutlinedCheckCircle,
-            self::Failed    => Heroicon::OutlinedExclamationCircle,
+            self::Failed => Heroicon::OutlinedExclamationCircle,
         };
     }
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::Pending   => __('vendra-affiliate::enums.payout_status_pending'),
+            self::Pending => __('vendra-affiliate::enums.payout_status_pending'),
             self::Completed => __('vendra-affiliate::enums.payout_status_completed'),
-            self::Failed    => __('vendra-affiliate::enums.payout_status_failed'),
+            self::Failed => __('vendra-affiliate::enums.payout_status_failed'),
         };
     }
 }

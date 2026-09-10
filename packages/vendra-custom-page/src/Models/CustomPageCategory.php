@@ -44,10 +44,9 @@ use Spatie\Translatable\HasTranslations;
 #[Hidden(['tenant_id'])]
 #[ObservedBy([CustomPageCategoryObserver::class])]
 #[UseFactory(CustomPageCategoryFactory::class)]
-final class CustomPageCategory extends Model implements HasMedia, Sortable, ShouldLogActivity
+final class CustomPageCategory extends Model implements HasMedia, ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
-
     use HasDefaultMediaConversions, InteractsWithMedia {
         HasDefaultMediaConversions::registerMediaConversions insteadof InteractsWithMedia;
     }
@@ -59,6 +58,7 @@ final class CustomPageCategory extends Model implements HasMedia, Sortable, Shou
     use HasTranslations;
     use SoftDeletes;
     use SortableTrait;
+
     public const string MEDIA_COLLECTION = 'custom-pages/categories';
 
     /**
@@ -73,7 +73,7 @@ final class CustomPageCategory extends Model implements HasMedia, Sortable, Shou
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -88,13 +88,13 @@ final class CustomPageCategory extends Model implements HasMedia, Sortable, Shou
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'name'        => 'array',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'name' => 'array',
             'description' => 'array',
-            'slug'        => 'array',
-            'position'    => 'integer',
-            'active'      => 'boolean',
+            'slug' => 'array',
+            'position' => 'integer',
+            'active' => 'boolean',
         ];
     }
 

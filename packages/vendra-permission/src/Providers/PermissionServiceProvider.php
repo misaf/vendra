@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraPermission\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -50,7 +49,7 @@ final class PermissionServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-permission')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-permission')) {
                 return;
             }
 
@@ -70,10 +69,10 @@ final class PermissionServiceProvider extends PackageServiceProvider
         );
         $this->app->make(TenantSeeders::class)->register('vendra-permission:seed', priority: 10);
 
-        AboutCommand::add('Vendra Permission', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-permission')]);
+        AboutCommand::add('Vendra Permission', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-permission')]);
 
         Gate::after(function (Authenticatable $user): ?true {
-            if ( ! method_exists($user, 'hasRole')) {
+            if (! method_exists($user, 'hasRole')) {
                 return null;
             }
 
@@ -87,14 +86,14 @@ final class PermissionServiceProvider extends PackageServiceProvider
     {
         foreach (PermissionFeatureEnum::cases() as $feature) {
             Feature::define($feature->value, function (mixed $scope) use ($feature): bool {
-                if ( ! Config::boolean('vendra-permission.features.enabled', true)) {
+                if (! Config::boolean('vendra-permission.features.enabled', true)) {
                     return false;
                 }
 
                 if (TenantAwareness::enabled()) {
                     $tenantModel = app(TenantResolver::class)->modelClass();
 
-                    if ( ! $scope instanceof $tenantModel) {
+                    if (! $scope instanceof $tenantModel) {
                         return false;
                     }
                 }

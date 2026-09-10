@@ -39,11 +39,11 @@ trait BelongsToTenant
 
     protected static function bootBelongsToTenant(): void
     {
-        static::addGlobalScope(new TenantScope());
-        static::addGlobalScope(new TeamScope());
+        static::addGlobalScope(new TenantScope);
+        static::addGlobalScope(new TeamScope);
 
         static::creating(function (Model $model): void {
-            if ( ! TenantSchema::hasTenantColumn($model->getTable())) {
+            if (! TenantSchema::hasTenantColumn($model->getTable())) {
                 return;
             }
 

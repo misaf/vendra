@@ -30,7 +30,7 @@ final class FaqForm
     {
         $components = [
             Select::make('faq_category_id')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.faq_category_id'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.faq_category_id'))
                 ->columnSpanFull()
                 ->label(__('vendra-faq::navigation.faq_category'))
                 ->live()
@@ -55,13 +55,13 @@ final class FaqForm
                 ->maxLength(255)
                 ->required()
                 ->unique(
-                    column: fn(Livewire $livewire): string => 'name->' . self::activeFormLocale($livewire),
-                    modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                    column: fn (Livewire $livewire): string => 'name->'.self::activeFormLocale($livewire),
+                    modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                         ->withoutTrashed(),
                 ),
 
             TextInput::make('slug')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.slug'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.slug'))
                 ->columnSpan(['lg' => 1])
                 ->helperText(__('vendra-faq::attributes.slug_helper_text'))
                 ->label(__('vendra-faq::attributes.slug'))
@@ -69,13 +69,13 @@ final class FaqForm
                 ->maxLength(255)
                 ->required()
                 ->unique(
-                    column: fn(Livewire $livewire): string => 'slug->' . self::activeFormLocale($livewire),
-                    modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                    column: fn (Livewire $livewire): string => 'slug->'.self::activeFormLocale($livewire),
+                    modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                         ->withoutTrashed(),
                 ),
 
             RichEditor::make('description')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                 ->columnSpanFull()
                 ->label(__('vendra-faq::attributes.description'))
                 ->live(onBlur: true)
@@ -83,7 +83,7 @@ final class FaqForm
                 ->json(),
 
             SpatieMediaLibraryFileUpload::make('image')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.image'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
                 ->collection(Faq::MEDIA_COLLECTION)
                 ->columnSpanFull()
                 ->image()
@@ -93,7 +93,7 @@ final class FaqForm
                 ->responsiveImages(),
 
             Toggle::make('active')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                 ->columnSpanFull()
                 ->default(false)
                 ->label(__('vendra-faq::attributes.active'))
@@ -107,7 +107,7 @@ final class FaqForm
 
         if (TagIntegration::isAvailable()) {
             $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.tags'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
                 ->columnSpanFull()
                 ->label(__('vendra-support::attributes.tags'))
                 ->live()
@@ -117,5 +117,4 @@ final class FaqForm
         return $schema
             ->components($components);
     }
-
 }

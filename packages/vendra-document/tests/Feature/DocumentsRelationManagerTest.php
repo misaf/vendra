@@ -13,7 +13,7 @@ use Misaf\VendraSupport\Capabilities\Countries;
 it('uses a searchable localized country select for the issuing country', function (): void {
     app()->setLocale('fa');
 
-    $relationManager = new DocumentsRelationManager();
+    $relationManager = new DocumentsRelationManager;
     $schema = $relationManager->form(Schema::make($relationManager));
     $field = $schema->getFlatFields()['issuing_country_code'];
 
@@ -26,7 +26,7 @@ it('uses a searchable localized country select for the issuing country', functio
 it('updates verification state from the table toggle', function (): void {
     makeCurrentTestTenant();
 
-    $relationManager = new DocumentsRelationManager();
+    $relationManager = new DocumentsRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
     $document = DocumentFactory::new()->createOne();
     $verifiedColumn = $table->getColumn('verified_at');

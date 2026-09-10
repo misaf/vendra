@@ -30,9 +30,9 @@ it('renders activity identifiers as suffix badges', function (): void {
     $activityLog = ActivityLog::query()->firstOrFail();
     $activityLog->forceFill([
         'subject_type' => 'test-subject',
-        'subject_id'   => 42,
-        'causer_type'  => 'test-causer',
-        'causer_id'    => 24,
+        'subject_id' => 42,
+        'causer_type' => 'test-causer',
+        'causer_id' => 24,
     ])->save();
 
     $component = livewire(ListActivityLogs::class)->call('loadTable');

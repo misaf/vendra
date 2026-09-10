@@ -32,7 +32,7 @@ describe('soft delete', function (): void {
 
         Queue::assertPushed(
             ReconcileStorefrontJob::class,
-            fn(ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
+            fn (ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
         );
         Queue::assertNotPushed(DestroyStorefrontJob::class);
     });
@@ -57,7 +57,7 @@ describe('soft delete', function (): void {
             'desired_state' => StorefrontDesiredState::Running,
         ]);
 
-        DB::transaction(fn() => $store->delete());
+        DB::transaction(fn () => $store->delete());
 
         expect($deployment->fresh()?->desired_state)->toBe(StorefrontDesiredState::Stopped);
 
@@ -80,7 +80,7 @@ describe('force delete', function (): void {
 
         Queue::assertPushed(
             DestroyStorefrontJob::class,
-            fn(DestroyStorefrontJob $job): bool => 'closing-shop' === $job->slug,
+            fn (DestroyStorefrontJob $job): bool => $job->slug === 'closing-shop',
         );
         Queue::assertNotPushed(ReconcileStorefrontJob::class);
     });

@@ -97,7 +97,7 @@ final class Order extends Model implements ShouldLogActivity
 
     public static function generateNumber(): string
     {
-        return Str::upper(Config::string('vendra-order.number_prefix', 'ORD') . '-' . Str::random(10));
+        return Str::upper(Config::string('vendra-order.number_prefix', 'ORD').'-'.Str::random(10));
     }
 
     /**
@@ -106,18 +106,18 @@ final class Order extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                     => 'integer',
-            'tenant_id'              => 'integer',
-            'customer_id'            => 'integer',
-            'cart_id'                => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'customer_id' => 'integer',
+            'cart_id' => 'integer',
             'transaction_gateway_id' => 'integer',
-            'number'                 => 'string',
-            'status'                 => OrderState::class,
-            'currency_code'          => 'string',
-            'items_amount'           => MoneyIntegerCast::class . ':currency_code',
-            'delivery_amount'        => MoneyIntegerCast::class . ':currency_code',
-            'total_amount'           => MoneyIntegerCast::class . ':currency_code',
-            'placed_at'              => 'datetime',
+            'number' => 'string',
+            'status' => OrderState::class,
+            'currency_code' => 'string',
+            'items_amount' => MoneyIntegerCast::class.':currency_code',
+            'delivery_amount' => MoneyIntegerCast::class.':currency_code',
+            'total_amount' => MoneyIntegerCast::class.':currency_code',
+            'placed_at' => 'datetime',
         ];
     }
 
@@ -169,7 +169,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopePending(Builder $builder): void
     {
@@ -177,7 +177,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopeConfirmed(Builder $builder): void
     {
@@ -185,7 +185,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopeCompleted(Builder $builder): void
     {
@@ -193,7 +193,7 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopeCancelled(Builder $builder): void
     {
@@ -209,14 +209,14 @@ final class Order extends Model implements ShouldLogActivity
             get: function (): ?string {
                 $customer = $this->customer;
 
-                if ( ! $customer instanceof Model) {
+                if (! $customer instanceof Model) {
                     return null;
                 }
 
                 foreach (['username', 'name', 'email'] as $attribute) {
                     $value = $customer->getAttribute($attribute);
 
-                    if (is_string($value) && '' !== $value) {
+                    if (is_string($value) && $value !== '') {
                         return $value;
                     }
                 }

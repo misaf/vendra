@@ -23,7 +23,7 @@ final class AddRequestContext
     {
         $requestId = $this->requestId($request);
 
-        (new RequestJobContext(traceId: $requestId))->add();
+        new RequestJobContext(traceId: $requestId)->add();
 
         $response = $next($request);
         $response->headers->set(self::REQUEST_ID_HEADER, $requestId);

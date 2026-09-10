@@ -21,7 +21,7 @@ final class TenantAwareness
 
     public static function currentId(): ?int
     {
-        if ( ! self::enabled()) {
+        if (! self::enabled()) {
             return null;
         }
 
@@ -32,7 +32,7 @@ final class TenantAwareness
     {
         $tenantId = self::currentId();
 
-        if (null === $tenantId) {
+        if ($tenantId === null) {
             return $rule;
         }
 

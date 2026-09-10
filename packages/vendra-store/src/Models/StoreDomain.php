@@ -46,8 +46,8 @@ final class StoreDomain extends Model implements ShouldLogActivity
     use HasFactory;
 
     use HasSlug;
-
     use SoftDeletes;
+
     public const string DOMAIN_PATTERN = '/^(?!-)[A-Za-z0-9-]{1,63}(?<!-)(\.(?!-)[A-Za-z0-9-]{1,63}(?<!-))+$/';
 
     /**
@@ -56,11 +56,11 @@ final class StoreDomain extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'name'        => 'string',
+            'id' => 'integer',
+            'name' => 'string',
             'description' => 'string',
-            'slug'        => 'string',
-            'active'      => 'boolean',
+            'slug' => 'string',
+            'active' => 'boolean',
         ];
     }
 
@@ -91,7 +91,7 @@ final class StoreDomain extends Model implements ShouldLogActivity
             'required',
             'string',
             'max:255',
-            'regex:' . self::DOMAIN_PATTERN,
+            'regex:'.self::DOMAIN_PATTERN,
             Rule::unique(self::class, 'name')->where('active', true)->withoutTrashed(),
         ];
     }
@@ -115,7 +115,7 @@ final class StoreDomain extends Model implements ShouldLogActivity
     protected function name(): Attribute
     {
         return Attribute::make(
-            set: fn(string $value): string => self::normalizeDomain($value),
+            set: fn (string $value): string => self::normalizeDomain($value),
         );
     }
 }

@@ -22,7 +22,7 @@ final class NewsletterFactory extends Factory
         return [
             'subject' => fake()->sentence(6),
             'content' => fake()->realTextBetween(200, 400),
-            'status'  => NewsletterStatusEnum::Draft,
+            'status' => NewsletterStatusEnum::Draft,
         ];
     }
 
@@ -31,39 +31,39 @@ final class NewsletterFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function draft(): static
     {
-        return $this->state(fn(): array => [
-            'status'       => NewsletterStatusEnum::Draft,
+        return $this->state(fn (): array => [
+            'status' => NewsletterStatusEnum::Draft,
             'scheduled_at' => null,
-            'sent_at'      => null,
+            'sent_at' => null,
         ]);
     }
 
     public function scheduled(): static
     {
-        return $this->state(fn(): array => [
-            'status'       => NewsletterStatusEnum::Scheduled,
+        return $this->state(fn (): array => [
+            'status' => NewsletterStatusEnum::Scheduled,
             'scheduled_at' => now()->addDay(),
-            'sent_at'      => null,
+            'sent_at' => null,
         ]);
     }
 
     public function sent(): static
     {
-        return $this->state(fn(): array => [
-            'status'       => NewsletterStatusEnum::Sent,
+        return $this->state(fn (): array => [
+            'status' => NewsletterStatusEnum::Sent,
             'scheduled_at' => null,
-            'sent_at'      => now()->subDay(),
+            'sent_at' => now()->subDay(),
         ]);
     }
 }

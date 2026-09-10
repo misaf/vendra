@@ -16,7 +16,7 @@ final class EditNewsletter extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-newsletter::navigation.newsletter');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-newsletter::navigation.newsletter');
     }
 
     protected function getHeaderActions(): array

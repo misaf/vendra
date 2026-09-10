@@ -12,7 +12,7 @@ use ApiPlatform\Metadata\ApiProperty;
 final readonly class QuotedDelivery
 {
     /**
-     * @param array<string, string>|null $zoneName
+     * @param  array<string, string>|null  $zoneName
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The quoted delivery identifier')]

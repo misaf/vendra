@@ -37,7 +37,7 @@ final class ApiServiceProvider extends PackageServiceProvider
 
         Config::set('api-platform.resources', [
             ...Config::array('api-platform.resources', []),
-            dirname(__DIR__) . '/ApiResource',
+            dirname(__DIR__).'/ApiResource',
         ]);
     }
 
@@ -45,13 +45,13 @@ final class ApiServiceProvider extends PackageServiceProvider
     {
         $this->app->extend(
             OpenApiFactoryInterface::class,
-            fn(OpenApiFactoryInterface $factory): OpenApiFactoryInterface => new TagFilteredOpenApiFactory($factory),
+            fn (OpenApiFactoryInterface $factory): OpenApiFactoryInterface => new TagFilteredOpenApiFactory($factory),
         );
 
-        if ( ! $this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             return;
         }
 
-        AboutCommand::add('Vendra API', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-api')]);
+        AboutCommand::add('Vendra API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-api')]);
     }
 }

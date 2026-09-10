@@ -13,6 +13,6 @@ final class ViewAuthifyLog extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-authify-log::navigation.authify_log');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-authify-log::navigation.authify_log');
     }
 }

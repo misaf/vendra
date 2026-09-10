@@ -59,7 +59,7 @@ final class ActivityLogTable
                 ->label(__('vendra-activity-log::tables.subject_type'))
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(ActivityLog $record): string => Number::format((int) $record->subject_id) ?: '0')
+                        ->label(fn (ActivityLog $record): string => Number::format((int) $record->subject_id) ?: '0')
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -69,7 +69,7 @@ final class ActivityLogTable
                 ->label(__('vendra-activity-log::tables.causer_type'))
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(ActivityLog $record): string => Number::format((int) $record->causer_id) ?: '0')
+                        ->label(fn (ActivityLog $record): string => Number::format((int) $record->causer_id) ?: '0')
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -80,8 +80,8 @@ final class ActivityLogTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -90,8 +90,8 @@ final class ActivityLogTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

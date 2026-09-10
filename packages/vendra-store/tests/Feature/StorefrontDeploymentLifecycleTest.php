@@ -23,7 +23,7 @@ describe('the form-to-configuration map', function (): void {
             ...StorefrontConfigurationFields::identityFields(optional: false),
             ...StorefrontConfigurationFields::contactFields(optional: false),
             ...StorefrontConfigurationFields::locationAndSocialFields(optional: false),
-        ])->map(fn($component): string => $component->getName())->all();
+        ])->map(fn ($component): string => $component->getName())->all();
 
         expect(array_keys(StorefrontConfigurationMap::FIELDS))->each->toBeIn($defined);
     });
@@ -33,10 +33,10 @@ describe('the form-to-configuration map', function (): void {
             ...StorefrontConfigurationFields::identityFields(optional: false),
             ...StorefrontConfigurationFields::contactFields(optional: false),
             ...StorefrontConfigurationFields::locationAndSocialFields(optional: false),
-        ])->map(fn($component): string => $component->getName())
+        ])->map(fn ($component): string => $component->getName())
             // slug identifies the deployment row itself rather than travelling
             // inside the encoded configuration.
-            ->reject(fn(string $name): bool => in_array($name, ['storefront_image_id', 'storefront_slug'], true))
+            ->reject(fn (string $name): bool => in_array($name, ['storefront_image_id', 'storefront_slug'], true))
             ->all();
 
         expect($defined)->each->toBeIn(array_keys(StorefrontConfigurationMap::FIELDS));
@@ -49,7 +49,7 @@ describe('requesting a deployment', function (): void {
         $form = storefrontRequestData();
         unset($form['storefront_contact_email'], $form['storefront_locality']);
 
-        expect(fn() => app(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', $form))
+        expect(fn () => app(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', $form))
             ->toThrow(ValidationException::class);
 
         expect(StorefrontDeployment::query()->count())->toBe(0);
@@ -63,7 +63,7 @@ describe('the deployment state machine', function (): void {
             'status' => StorefrontDeploymentStatus::Pending,
         ]);
 
-        expect(fn() => $deployment->markFailed('boom'))
+        expect(fn () => $deployment->markFailed('boom'))
             ->toThrow(InvalidStorefrontTransitionException::class, 'from [pending] to [failed]');
     });
 
@@ -83,8 +83,8 @@ describe('the deployment state machine', function (): void {
 
     it('clears the previous failure when a retry starts', function (): void {
         $deployment = StorefrontDeployment::factory()->create([
-            'status'    => StorefrontDeploymentStatus::Failed,
-            'error'     => 'the container exited',
+            'status' => StorefrontDeploymentStatus::Failed,
+            'error' => 'the container exited',
             'failed_at' => now(),
         ]);
 

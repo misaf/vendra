@@ -31,7 +31,7 @@ it('rejects entries that would drive the balance negative', function (): void {
 
     $ledger->execute($wallet, 1_000);
 
-    expect(fn() => $ledger->execute($wallet, -1_001))
+    expect(fn () => $ledger->execute($wallet, -1_001))
         ->toThrow(InsufficientBalanceException::class)
         ->and($wallet->fresh()->balance)->toBe(1_000)
         ->and($wallet->ledgerEntries()->count())->toBe(1);
@@ -41,6 +41,6 @@ it('refuses to mutate or delete posted ledger entries', function (): void {
     $wallet = WalletFactory::new()->create();
     $entry = app(PostLedgerEntryAction::class)->execute($wallet, 1_000);
 
-    expect(fn() => $entry->update(['amount' => 9_999]))->toThrow(RuntimeException::class)
-        ->and(fn() => $entry->delete())->toThrow(RuntimeException::class);
+    expect(fn () => $entry->update(['amount' => 9_999]))->toThrow(RuntimeException::class)
+        ->and(fn () => $entry->delete())->toThrow(RuntimeException::class);
 });

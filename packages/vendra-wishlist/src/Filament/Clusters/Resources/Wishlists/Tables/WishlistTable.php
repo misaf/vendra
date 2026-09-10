@@ -55,8 +55,8 @@ final class WishlistTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->description(__('vendra-wishlist::tables.description.wishlists'))
@@ -75,7 +75,7 @@ final class WishlistTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->with('owner'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with('owner'))
             ->filters([
                 QueryBuilder::make()
                     ->constraints([

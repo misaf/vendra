@@ -16,8 +16,7 @@ use Misaf\VendraFaq\Models\FaqCategory;
 final class FaqCategoryLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<FaqCategory> $builder
-     *
+     * @param  Builder<FaqCategory>  $builder
      * @return Builder<FaqCategory>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -33,7 +32,7 @@ final class FaqCategoryLinksHandler implements LinksHandlerInterface
             ])
             ->where('active', true);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

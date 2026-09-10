@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraCart\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -42,7 +41,7 @@ final class CartServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), CartPlugin::ID)) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), CartPlugin::ID)) {
                 return;
             }
 
@@ -56,7 +55,7 @@ final class CartServiceProvider extends PackageServiceProvider
         $this->app->make(TenantSeeders::class)->register('vendra-cart:seed', priority: 58);
 
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
-            if ( ! Config::boolean('vendra-cart.schedule.enabled', true)) {
+            if (! Config::boolean('vendra-cart.schedule.enabled', true)) {
                 return;
             }
 
@@ -65,6 +64,6 @@ final class CartServiceProvider extends PackageServiceProvider
                 ->withoutOverlapping();
         });
 
-        AboutCommand::add('Vendra Cart', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-cart')]);
+        AboutCommand::add('Vendra Cart', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-cart')]);
     }
 }

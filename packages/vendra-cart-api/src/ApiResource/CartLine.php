@@ -9,7 +9,7 @@ use ApiPlatform\Metadata\ApiProperty;
 final readonly class CartLine
 {
     /**
-     * @param array<string, mixed>|null $metadata
+     * @param  array<string, mixed>|null  $metadata
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The cart line unique identifier')]

@@ -29,7 +29,7 @@ final class TransactionTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->with(['wallet.user', 'transactionGateway']))
+            ->modifyQueryUsing(fn ($query) => $query->with(['wallet.user', 'transactionGateway']))
             ->description(__('vendra-transaction::tables.description.transactions'))
             ->emptyStateHeading(__('vendra-transaction::tables.empty_state.heading.transactions'))
             ->emptyStateDescription(__('vendra-transaction::tables.empty_state.description.transactions'))
@@ -80,9 +80,9 @@ final class TransactionTable
 
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn(TransactionState $state): array => $state->getColor())
-                    ->formatStateUsing(fn(TransactionState $state): string => $state->getLabel())
-                    ->icon(fn(TransactionState $state) => $state->getIcon())
+                    ->color(fn (TransactionState $state): array => $state->getColor())
+                    ->formatStateUsing(fn (TransactionState $state): string => $state->getLabel())
+                    ->icon(fn (TransactionState $state) => $state->getIcon())
                     ->label(__('vendra-transaction::attributes.status')),
 
                 TextColumn::make('created_at')
@@ -92,8 +92,8 @@ final class TransactionTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->filters(
@@ -107,7 +107,7 @@ final class TransactionTable
                                 ->label(__('vendra-transaction::attributes.transaction_type'))
                                 ->options(
                                     collect(TransactionTypeEnum::cases())
-                                        ->mapWithKeys(fn(TransactionTypeEnum $type): array => [$type->value => $type->getLabel()])
+                                        ->mapWithKeys(fn (TransactionTypeEnum $type): array => [$type->value => $type->getLabel()])
                                         ->all(),
                                 ),
 
@@ -115,7 +115,7 @@ final class TransactionTable
                                 ->label(__('vendra-transaction::attributes.status'))
                                 ->options(
                                     TransactionState::all()
-                                        ->mapWithKeys(fn(string $state): array => [$state::getMorphClass() => (new $state(new Transaction()))->getLabel()])
+                                        ->mapWithKeys(fn (string $state): array => [$state::getMorphClass() => (new $state(new Transaction))->getLabel()])
                                         ->all(),
                                 ),
 

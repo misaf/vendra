@@ -53,10 +53,10 @@ use Misaf\VendraMultimediaApi\ApiResource\MultimediaResource;
 final readonly class CustomPageResource
 {
     /**
-     * @param array<string, string> $name
-     * @param array<string, array<array-key, mixed>|string> $description
-     * @param array<string, string> $slug
-     * @param array<int, MultimediaResource> $multimedia
+     * @param  array<string, string>  $name
+     * @param  array<string, array<array-key, mixed>|string>  $description
+     * @param  array<string, string>  $slug
+     * @param  array<int, MultimediaResource>  $multimedia
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The custom page unique identifier')]

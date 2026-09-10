@@ -95,7 +95,7 @@ it('rejects assigning a second active owner to a reseller', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);
     ResellerUser::factory()->forReseller($reseller)->create();
 
-    expect(fn(): ResellerUser => ResellerUser::factory()->forReseller($reseller)->create())
+    expect(fn (): ResellerUser => ResellerUser::factory()->forReseller($reseller)->create())
         ->toThrow(QueryException::class);
 });
 
@@ -135,7 +135,7 @@ it('rejects invalid and duplicate active domains outside Filament', function (st
         password: 'secret-password',
     );
 })->with([
-    'invalid format'   => 'not a domain',
+    'invalid format' => 'not a domain',
     'duplicate domain' => 'taken.test',
 ])->throws(ValidationException::class);
 

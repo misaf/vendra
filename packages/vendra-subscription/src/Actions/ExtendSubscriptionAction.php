@@ -21,11 +21,11 @@ final class ExtendSubscriptionAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if (SubscriptionStatus::Active !== $lockedSubscription->status) {
+            if ($lockedSubscription->status !== SubscriptionStatus::Active) {
                 throw new LogicException("Subscription [{$lockedSubscription->id}] must be active before it can be extended.");
             }
 
-            if (null === $lockedSubscription->ends_at) {
+            if ($lockedSubscription->ends_at === null) {
                 throw new LogicException("Subscription [{$lockedSubscription->id}] does not expire.");
             }
 
@@ -34,7 +34,7 @@ final class ExtendSubscriptionAction
             }
 
             $lockedSubscription->forceFill([
-                'ends_at'                 => $endsAt,
+                'ends_at' => $endsAt,
                 'expiry_reminder_sent_at' => null,
             ])->save();
 

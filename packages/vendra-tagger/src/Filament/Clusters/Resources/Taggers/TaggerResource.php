@@ -68,10 +68,10 @@ final class TaggerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListTaggers::route('/'),
+            'index' => ListTaggers::route('/'),
             'create' => CreateTagger::route('/create'),
-            'view'   => ViewTagger::route('/{record}'),
-            'edit'   => EditTagger::route('/{record}/edit'),
+            'view' => ViewTagger::route('/{record}'),
+            'edit' => EditTagger::route('/{record}/edit'),
         ];
     }
 

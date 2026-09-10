@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Misaf\VendraSupport\Tests\Feature;
 
 it('resolves the translation for the livewire active locale', function (): void {
-    $record = new SupportTestTranslatedRecord();
+    $record = new SupportTestTranslatedRecord;
     $record->recordTranslations = ['name' => ['en' => 'Hello', 'fa' => 'سلام']];
 
-    $livewire = new SupportTestTranslatedTableComponent();
+    $livewire = new SupportTestTranslatedTableComponent;
     $livewire->activeLocale = 'fa';
 
     expect(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'name', $livewire))->toBe('سلام');
@@ -17,10 +17,10 @@ it('resolves the translation for the livewire active locale', function (): void 
 it('falls back to the app locale when the livewire component has no active locale', function (): void {
     app()->setLocale('en');
 
-    $record = new SupportTestTranslatedRecord();
+    $record = new SupportTestTranslatedRecord;
     $record->recordTranslations = ['name' => ['en' => 'Hello', 'fa' => 'سلام']];
 
-    $livewire = new SupportTestTranslatedTableComponent();
+    $livewire = new SupportTestTranslatedTableComponent;
 
     expect(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'name', $livewire))->toBe('Hello');
 
@@ -30,10 +30,10 @@ it('falls back to the app locale when the livewire component has no active local
 });
 
 it('returns an empty string when the translation is missing or not a string', function (): void {
-    $record = new SupportTestTranslatedRecord();
+    $record = new SupportTestTranslatedRecord;
     $record->recordTranslations = ['name' => ['en' => ['unexpected' => 'shape']]];
 
-    $livewire = new SupportTestTranslatedTableComponent();
+    $livewire = new SupportTestTranslatedTableComponent;
     $livewire->activeLocale = 'en';
 
     expect(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'name', $livewire))->toBe('')
@@ -41,10 +41,10 @@ it('returns an empty string when the translation is missing or not a string', fu
 });
 
 it('coerces integer attributes', function (): void {
-    $record = new SupportTestTranslatedRecord();
+    $record = new SupportTestTranslatedRecord;
     $record->setRawAttributes([
-        'position'  => 7,
-        'numeric'   => '12',
+        'position' => 7,
+        'numeric' => '12',
         'malformed' => 'not-a-number',
     ]);
 

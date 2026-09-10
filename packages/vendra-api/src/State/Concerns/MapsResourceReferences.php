@@ -34,7 +34,7 @@ trait MapsResourceReferences
      */
     protected function expectModel(mixed $value, string $expected, string $message): void
     {
-        if ( ! $value instanceof $expected) {
+        if (! $value instanceof $expected) {
             throw new UnexpectedValueException($message);
         }
     }
@@ -58,8 +58,7 @@ trait MapsResourceReferences
     }
 
     /**
-     * @param iterable<array-key, Model> $related
-     *
+     * @param  iterable<array-key, Model>  $related
      * @return list<ResourceReference>
      */
     protected function referencesTo(iterable $related, string $type, string $labelAttribute = 'name'): array

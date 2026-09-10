@@ -14,8 +14,8 @@ it('applies shared tenant ownership to language models', function (): void {
 });
 
 it('hides tenant and internal guard attributes from language serialization', function (): void {
-    expect((new Language())->getHidden())->toContain('tenant_id', 'default_guard')
-        ->and((new LanguageLine())->getHidden())->toContain('tenant_id', 'namespace_guard');
+    expect((new Language)->getHidden())->toContain('tenant_id', 'default_guard')
+        ->and((new LanguageLine)->getHidden())->toContain('tenant_id', 'namespace_guard');
 });
 
 it('defines policy permissions for the language resource', function (): void {

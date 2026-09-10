@@ -11,19 +11,19 @@ use Misaf\VendraUser\Models\User;
 dataset('monitoring gates', ['viewPulse', 'viewHorizon']);
 
 it('allows anyone in the local environment', function (string $gate): void {
-    app()->detectEnvironment(fn(): string => 'local');
+    app()->detectEnvironment(fn (): string => 'local');
 
     expect(Gate::forUser(null)->allows($gate))->toBeTrue();
 })->with('monitoring gates');
 
 it('denies guests outside the local environment', function (string $gate): void {
-    app()->detectEnvironment(fn(): string => 'production');
+    app()->detectEnvironment(fn (): string => 'production');
 
     expect(Gate::forUser(null)->allows($gate))->toBeFalse();
 })->with('monitoring gates');
 
 it('denies tenant users outside the local environment', function (string $gate): void {
-    app()->detectEnvironment(fn(): string => 'production');
+    app()->detectEnvironment(fn (): string => 'production');
 
     $tenant = Store::factory()->create();
     $tenant->makeCurrent();
@@ -35,7 +35,7 @@ it('denies tenant users outside the local environment', function (string $gate):
 })->with('monitoring gates');
 
 it('allows console users outside the local environment', function (string $gate): void {
-    app()->detectEnvironment(fn(): string => 'production');
+    app()->detectEnvironment(fn (): string => 'production');
 
     Auth::guard('console')->setUser(ConsoleUser::factory()->create());
 

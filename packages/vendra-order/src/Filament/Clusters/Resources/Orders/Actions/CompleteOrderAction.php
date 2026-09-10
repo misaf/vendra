@@ -15,12 +15,12 @@ final class CompleteOrderAction
     public static function make(): Action
     {
         return Action::make('complete')
-            ->authorize(fn(Order $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Order $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('success')
             ->icon(Heroicon::OutlinedTruck)
             ->label(__('vendra-order::messages.complete'))
             ->requiresConfirmation()
-            ->visible(fn(Order $record): bool => $record->status->canTransitionTo(Completed::class))
+            ->visible(fn (Order $record): bool => $record->status->canTransitionTo(Completed::class))
             ->action(function (Order $record): void {
                 $record->complete();
 

@@ -35,7 +35,7 @@ class AuthifyLogChannelCommand extends Command
             $cacheKey = 'entries';
             $batchSize = 100;
 
-            echo "Received message: {$message}" . PHP_EOL;
+            echo "Received message: {$message}".PHP_EOL;
 
             if ($message < $batchSize) {
                 return;
@@ -44,7 +44,7 @@ class AuthifyLogChannelCommand extends Command
             $entries = $this->getBatchEntries($cacheKey, $batchSize);
 
             if (empty($entries)) {
-                echo 'No entries to process.' . PHP_EOL;
+                echo 'No entries to process.'.PHP_EOL;
 
                 return;
             }
@@ -60,7 +60,7 @@ class AuthifyLogChannelCommand extends Command
     {
         $connection = Redis::connection('authify_log');
 
-        if ( ! $connection instanceof PhpRedisConnection) {
+        if (! $connection instanceof PhpRedisConnection) {
             throw new Exception('The authify log connection must use the PhpRedis driver.');
         }
 
@@ -69,13 +69,13 @@ class AuthifyLogChannelCommand extends Command
             $transaction->ltrim($cacheKey, $batchSize, -1);
         });
 
-        if ( ! is_array($result) || ! isset($result[0]) || ! is_array($result[0])) {
+        if (! is_array($result) || ! isset($result[0]) || ! is_array($result[0])) {
             return [];
         }
 
         return array_values(array_filter(
             $result[0],
-            static fn(mixed $entry): bool => is_string($entry),
+            static fn (mixed $entry): bool => is_string($entry),
         ));
     }
 
@@ -90,13 +90,13 @@ class AuthifyLogChannelCommand extends Command
         foreach ($entries as $entry) {
             $decodedEntry = json_decode($entry, true);
 
-            if ( ! is_array($decodedEntry)) {
+            if (! is_array($decodedEntry)) {
                 continue;
             }
 
             $tenantId = $decodedEntry[TenantSchema::column()] ?? 0;
 
-            if ( ! is_int($tenantId) && ! is_string($tenantId)) {
+            if (! is_int($tenantId) && ! is_string($tenantId)) {
                 continue;
             }
 
@@ -132,7 +132,7 @@ class AuthifyLogChannelCommand extends Command
                 if (TenantAwareness::enabled()) {
                     $tenant = $tenants->findByKeyOrSlug($tenantId);
 
-                    if (null === $tenant) {
+                    if ($tenant === null) {
                         Log::error('Failed to dispatch job for tenant.', ["Tenant [{$tenantId}] was not found."]);
 
                         return;
@@ -140,7 +140,7 @@ class AuthifyLogChannelCommand extends Command
 
                     $tenants->execute(
                         $tenant,
-                        fn() => AuthifyLogJob::dispatch($groupedLogs),
+                        fn () => AuthifyLogJob::dispatch($groupedLogs),
                     );
 
                     return;

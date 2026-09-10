@@ -10,7 +10,7 @@ it('creates wishlists and their items without catalog tables', function (): void
     Schema::dropIfExists('wishlists');
 
     /** @var Migration $migration */
-    $migration = require __DIR__ . '/../../database/migrations/create_wishlists_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_wishlists_table.php.stub';
 
     $migration->up();
 

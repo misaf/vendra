@@ -18,15 +18,15 @@ final class LedgerEntryFactory extends Factory
         $amount = fake()->numberBetween(1, 100_000);
 
         return [
-            'wallet_id'     => Wallet::factory(),
-            'amount'        => $amount,
+            'wallet_id' => Wallet::factory(),
+            'amount' => $amount,
             'balance_after' => $amount,
         ];
     }
 
     public function forWallet(Wallet|int $wallet): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'wallet_id' => $wallet instanceof Wallet ? $wallet->id : $wallet,
         ]);
     }

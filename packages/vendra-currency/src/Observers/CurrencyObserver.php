@@ -10,20 +10,20 @@ final class CurrencyObserver
 {
     public function creating(Currency $currency): void
     {
-        if ( ! $currency->active) {
+        if (! $currency->active) {
             $currency->is_default = false;
 
             return;
         }
 
-        if ( ! Currency::query()->active()->exists()) {
+        if (! Currency::query()->active()->exists()) {
             $currency->is_default = true;
         }
     }
 
     public function saving(Currency $currency): void
     {
-        if ( ! $currency->active) {
+        if (! $currency->active) {
             $currency->is_default = false;
 
             return;
@@ -38,14 +38,14 @@ final class CurrencyObserver
             return;
         }
 
-        if ($currency->exists && true === $currency->getOriginal('is_default')) {
+        if ($currency->exists && $currency->getOriginal('is_default') === true) {
             $hasAnotherDefault = Currency::query()
                 ->active()
                 ->where('is_default', true)
                 ->whereKeyNot($currency->getKey())
                 ->exists();
 
-            if ( ! $hasAnotherDefault) {
+            if (! $hasAnotherDefault) {
                 $currency->is_default = true;
             }
         }
@@ -60,7 +60,7 @@ final class CurrencyObserver
 
     public function deleted(Currency $currency): void
     {
-        if ( ! $currency->is_default) {
+        if (! $currency->is_default) {
             return;
         }
 

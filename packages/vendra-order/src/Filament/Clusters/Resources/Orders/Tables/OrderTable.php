@@ -57,9 +57,9 @@ final class OrderTable
 
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn(OrderState $state): array => $state->getColor())
-                    ->formatStateUsing(fn(OrderState $state): string => $state->getLabel())
-                    ->icon(fn(OrderState $state) => $state->getIcon())
+                    ->color(fn (OrderState $state): array => $state->getColor())
+                    ->formatStateUsing(fn (OrderState $state): string => $state->getLabel())
+                    ->icon(fn (OrderState $state) => $state->getIcon())
                     ->label(__('vendra-order::attributes.status')),
 
                 TextColumn::make('payment_reference')
@@ -78,8 +78,8 @@ final class OrderTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
 
                 TextColumn::make('created_at')
@@ -89,8 +89,8 @@ final class OrderTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->description(__('vendra-order::tables.description.orders'))
@@ -113,7 +113,7 @@ final class OrderTable
                     DeleteBulkAction::make(),
                 ]),
             ])
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->with('customer'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with('customer'))
             ->filters([
                 QueryBuilder::make()
                     ->constraints([
@@ -145,11 +145,11 @@ final class OrderTable
         $options = [];
 
         foreach (OrderState::all() as $state) {
-            if ( ! is_string($state) || ! is_subclass_of($state, OrderState::class)) {
+            if (! is_string($state) || ! is_subclass_of($state, OrderState::class)) {
                 continue;
             }
 
-            $options[$state::getMorphClass()] = (new $state(new Order()))->getLabel();
+            $options[$state::getMorphClass()] = (new $state(new Order))->getLabel();
         }
 
         return $options;

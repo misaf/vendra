@@ -52,7 +52,7 @@ final class BlogPostRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! $ownerRecord instanceof BlogPostCategory) {
+        if (! $ownerRecord instanceof BlogPostCategory) {
             return (string) Number::format(0);
         }
 

@@ -30,7 +30,7 @@ final class RestoreOffboardedStoreAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if ( ! $lockedStore->trashed()) {
+            if (! $lockedStore->trashed()) {
                 return $lockedStore;
             }
 
@@ -39,11 +39,11 @@ final class RestoreOffboardedStoreAction
             $metadata = $lockedStore->metadata ?? [];
             Arr::set($metadata, 'offboarding.restored_at', now()->toIso8601String());
 
-            $shouldReactivate = TenantProvisioningStatus::Ready === $lockedStore->provisioning_status
-                && true === Arr::get($metadata, 'offboarding.previous_active', false);
+            $shouldReactivate = $lockedStore->provisioning_status === TenantProvisioningStatus::Ready
+                && Arr::get($metadata, 'offboarding.previous_active', false) === true;
 
             $lockedStore->forceFill([
-                'active'   => $shouldReactivate,
+                'active' => $shouldReactivate,
                 'metadata' => $metadata,
             ])->save();
             $lockedStore->restore();
@@ -54,19 +54,19 @@ final class RestoreOffboardedStoreAction
 
     private function assertOwnerHasRoom(Store $store): void
     {
-        if (null === $store->reseller_id) {
+        if ($store->reseller_id === null) {
             return;
         }
 
         $owner = $this->ownerResolver->find($store->reseller_id);
 
-        if ( ! $owner instanceof Model || ! $owner instanceof SubscriptionSubscriber) {
+        if (! $owner instanceof Model || ! $owner instanceof SubscriptionSubscriber) {
             throw new LogicException("Store [{$store->id}] cannot be restored because its billing owner is unavailable.");
         }
 
         $lockedOwner = $owner->newQuery()->whereKey($owner->getKey())->lockForUpdate()->firstOrFail();
 
-        if ( ! $lockedOwner instanceof SubscriptionSubscriber) {
+        if (! $lockedOwner instanceof SubscriptionSubscriber) {
             throw new LogicException("Store [{$store->id}] has an invalid billing owner.");
         }
 

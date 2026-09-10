@@ -39,14 +39,14 @@ final class LatestActivityLogTableWidget extends BaseWidget
     {
         return $table
             ->heading(__('vendra-activity-log::widgets.recent_activity_log_table'))
-            ->query(fn(): Builder => ActivityLog::query())
+            ->query(fn (): Builder => ActivityLog::query())
             ->columns([
                 BadgeableColumn::make('subject_type')
                     ->alignStart()
                     ->label(__('vendra-activity-log::tables.subject_type'))
                     ->suffixBadges([
                         Badge::make('count')
-                            ->label(fn(ActivityLog $record): string => Number::format((int) $record->subject_id) ?: '0')
+                            ->label(fn (ActivityLog $record): string => Number::format((int) $record->subject_id) ?: '0')
                             ->size(Size::Small),
                     ])
                     ->suffix(''),
@@ -56,13 +56,13 @@ final class LatestActivityLogTableWidget extends BaseWidget
                     ->label(__('vendra-activity-log::tables.causer_type'))
                     ->suffixBadges([
                         Badge::make('count')
-                            ->label(fn(ActivityLog $record): string => Number::format((int) $record->causer_id) ?: '0')
+                            ->label(fn (ActivityLog $record): string => Number::format((int) $record->causer_id) ?: '0')
                             ->size(Size::Small),
                     ])
                     ->suffix(''),
             ])
             ->recordActions([
-                ViewAction::make()
+                ViewAction::make(),
             ])
             ->defaultSort(column: 'id', direction: 'desc')
             ->paginationPageOptions([5]);

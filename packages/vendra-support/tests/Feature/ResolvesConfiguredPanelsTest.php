@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 
-$resolver = new class {
+$resolver = new class
+{
     use ResolvesConfiguredPanels;
 
     /**
@@ -40,7 +41,7 @@ it('resolves panels from a string or array config value', function () use ($reso
 it('falls back to the legacy panel key', function () use ($resolver): void {
     config([
         'vendra-example.panels' => null,
-        'vendra-example.panel'  => 'legacy',
+        'vendra-example.panel' => 'legacy',
     ]);
 
     expect($resolver->panelIds('vendra-example'))->toBe(['legacy'])

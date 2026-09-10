@@ -48,7 +48,7 @@ final class Address extends Model implements ShouldLogActivity
     use SoftDeletes;
 
     protected $attributes = [
-        'type'       => 'other',
+        'type' => 'other',
         'is_primary' => false,
     ];
 
@@ -62,26 +62,26 @@ final class Address extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                  => 'integer',
-            'tenant_id'           => 'integer',
-            'user_profile_id'     => 'integer',
-            'type'                => 'string',
-            'label'               => 'string',
-            'recipient_name'      => 'string',
-            'organization'        => 'string',
-            'line_one'            => 'string',
-            'line_two'            => 'string',
-            'line_three'          => 'string',
-            'locality'            => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'user_profile_id' => 'integer',
+            'type' => 'string',
+            'label' => 'string',
+            'recipient_name' => 'string',
+            'organization' => 'string',
+            'line_one' => 'string',
+            'line_two' => 'string',
+            'line_three' => 'string',
+            'locality' => 'string',
             'administrative_area' => 'string',
-            'postal_code'         => 'string',
-            'sorting_code'        => 'string',
-            'country_code'        => 'string',
-            'locale'              => 'string',
-            'metadata'            => 'array',
-            'notes'               => 'string',
-            'is_primary'          => 'boolean',
-            'verified_at'         => 'datetime',
+            'postal_code' => 'string',
+            'sorting_code' => 'string',
+            'country_code' => 'string',
+            'locale' => 'string',
+            'metadata' => 'array',
+            'notes' => 'string',
+            'is_primary' => 'boolean',
+            'verified_at' => 'datetime',
         ];
     }
 }

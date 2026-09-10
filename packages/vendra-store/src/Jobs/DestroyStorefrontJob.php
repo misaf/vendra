@@ -74,7 +74,7 @@ final class DestroyStorefrontJob implements NotTenantAware, ShouldBeUnique, Shou
     public function failed(?Throwable $exception): void
     {
         Log::error('Destroying a storefront failed; its container may still be running.', [
-            'slug'      => $this->slug,
+            'slug' => $this->slug,
             'exception' => $exception?->getMessage(),
         ]);
     }

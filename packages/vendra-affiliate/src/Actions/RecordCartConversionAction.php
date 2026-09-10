@@ -26,7 +26,7 @@ final class RecordCartConversionAction
 
     public function execute(User $buyer, Model $source, int $totalMinor): ?AffiliateCommission
     {
-        if ( ! ConversionTypeEnum::Checkout->isEnabled() || $totalMinor <= 0) {
+        if (! ConversionTypeEnum::Checkout->isEnabled() || $totalMinor <= 0) {
             return null;
         }
 
@@ -34,7 +34,7 @@ final class RecordCartConversionAction
             ->where('user_id', $buyer->id)
             ->first();
 
-        if ( ! $referral instanceof AffiliateReferral || null === $referral->affiliate) {
+        if (! $referral instanceof AffiliateReferral || $referral->affiliate === null) {
             return null;
         }
 

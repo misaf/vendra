@@ -1,10 +1,11 @@
 <?php
 
 declare(strict_types=1);
+use Monolog\Handler\NullHandler;
 
 it('discards expected exception reports while running tests', function (): void {
     expect(config('logging.default'))->toBe('testing')
-        ->and(config('logging.channels.testing.handler'))->toBe(Monolog\Handler\NullHandler::class);
+        ->and(config('logging.channels.testing.handler'))->toBe(NullHandler::class);
 });
 
 it('runs the host test script in parallel without changing diagnostic scripts', function (): void {
@@ -18,7 +19,7 @@ it('runs the host test script in parallel without changing diagnostic scripts', 
     expect($testCommand)->toContain('--parallel');
 
     foreach ($manifest['scripts'] ?? [] as $scriptName => $commands) {
-        if (1 !== preg_match('/coverage|profil|mutation|benchmark/i', $scriptName)) {
+        if (preg_match('/coverage|profil|mutation|benchmark/i', $scriptName) !== 1) {
             continue;
         }
 

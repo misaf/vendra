@@ -40,8 +40,7 @@ final class ProvisionStoreAction
      *     name?: string,
      *     username?: string
      * } $data
-     * @param (Model&SubscriptionSubscriber)|null $owner
-     *
+     * @param  (Model&SubscriptionSubscriber)|null  $owner
      * @return array{store: Store, user: User, password: string}
      */
     public function execute(array $data, bool $shouldSeed = false, ?string $password = null, ?SubscriptionSubscriber $owner = null): array
@@ -68,7 +67,7 @@ final class ProvisionStoreAction
                 guardName: Guard::getDefaultName(User::class),
             );
 
-            $result['store']->execute(fn() => $result['user']->assignRole($role));
+            $result['store']->execute(fn () => $result['user']->assignRole($role));
 
             return [
                 ...$result,
@@ -82,7 +81,7 @@ final class ProvisionStoreAction
             tenantId: $result['store']->id,
             metadata: [ContextKeys::RESELLER_ID => $result['store']->reseller_id],
         ))->scope(
-            fn() => CompleteStoreProvisioningJob::dispatch($result['store']->id)->afterCommit(),
+            fn () => CompleteStoreProvisioningJob::dispatch($result['store']->id)->afterCommit(),
         );
 
         return $result;

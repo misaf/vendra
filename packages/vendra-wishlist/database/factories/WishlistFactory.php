@@ -23,35 +23,35 @@ final class WishlistFactory extends Factory
     public function definition(): array
     {
         return [
-            'token'      => (string) Str::uuid(),
-            'name'       => 'Favourites',
+            'token' => (string) Str::uuid(),
+            'name' => 'Favourites',
             'is_default' => true,
         ];
     }
 
     public function forOwner(Model $owner): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'owner_type' => $owner->getMorphClass(),
-            'owner_id'   => $owner->getKey(),
+            'owner_id' => $owner->getKey(),
         ]);
     }
 
     public function named(string $name): static
     {
-        return $this->state(fn(): array => [
-            'name'       => $name,
+        return $this->state(fn (): array => [
+            'name' => $name,
             'is_default' => false,
         ]);
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }

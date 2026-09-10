@@ -12,17 +12,17 @@ use Illuminate\Database\Eloquent\Model;
 final class LocalizedEqualsFilter implements FilterInterface
 {
     /**
-     * @param Builder<Model> $builder
-     * @param array<string, mixed> $context
+     * @param  Builder<Model>  $builder
+     * @param  array<string, mixed>  $context
      */
     public function apply(Builder $builder, mixed $values, Parameter $parameter, array $context = []): Builder
     {
         $property = $parameter->getProperty();
 
-        if ( ! is_string($values) || '' === $values || ! is_string($property)) {
+        if (! is_string($values) || $values === '' || ! is_string($property)) {
             return $builder;
         }
 
-        return $builder->where("{$property}->" . app()->getLocale(), $values);
+        return $builder->where("{$property}->".app()->getLocale(), $values);
     }
 }

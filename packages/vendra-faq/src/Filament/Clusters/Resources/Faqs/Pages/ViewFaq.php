@@ -18,7 +18,7 @@ final class ViewFaq extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-faq::navigation.faq');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-faq::navigation.faq');
     }
 
     protected function getHeaderActions(): array
@@ -26,7 +26,7 @@ final class ViewFaq extends ViewRecord
         return [
             EditAction::make(),
 
-            LocaleSwitcher::make()
+            LocaleSwitcher::make(),
         ];
     }
 }

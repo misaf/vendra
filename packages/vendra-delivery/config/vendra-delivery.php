@@ -32,7 +32,7 @@ return [
     */
 
     'schedule' => [
-        'advance_days'         => (int) env('DELIVERY_ADVANCE_DAYS', 14),
+        'advance_days' => (int) env('DELIVERY_ADVANCE_DAYS', 14),
         'same_day_cutoff_hour' => (int) env('DELIVERY_SAME_DAY_CUTOFF_HOUR', 14),
     ],
 

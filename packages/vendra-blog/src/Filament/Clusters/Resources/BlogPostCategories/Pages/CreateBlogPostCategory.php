@@ -17,7 +17,7 @@ final class CreateBlogPostCategory extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-blog::navigation.blog_post_category');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-blog::navigation.blog_post_category');
     }
 
     protected function getHeaderActions(): array

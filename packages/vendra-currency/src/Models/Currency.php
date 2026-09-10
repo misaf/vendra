@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Observers\CurrencyObserver;
+use Misaf\VendraCurrency\Support\CurrencyRegistry;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Money\Currencies\CurrencyList;
@@ -28,7 +29,7 @@ use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * A currency a tenant has installed from the fiat/crypto catalog exposed by
- * {@see \Misaf\VendraCurrency\Support\CurrencyRegistry}. Name, symbol, and
+ * {@see CurrencyRegistry}. Name, symbol, and
  * decimal places are snapshotted at install time and remain editable, while
  * `active` controls availability and exactly one active row is the default.
  *
@@ -49,7 +50,7 @@ use Spatie\EloquentSortable\SortableTrait;
 #[Hidden(['tenant_id', 'default_guard'])]
 #[ObservedBy([CurrencyObserver::class])]
 #[UseFactory(CurrencyFactory::class)]
-final class Currency extends Model implements Sortable, ShouldLogActivity
+final class Currency extends Model implements ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
 
@@ -66,13 +67,13 @@ final class Currency extends Model implements Sortable, ShouldLogActivity
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
     /** @var array<string, mixed> */
     protected $attributes = [
-        'active'     => true,
+        'active' => true,
         'is_default' => false,
     ];
 
@@ -103,13 +104,13 @@ final class Currency extends Model implements Sortable, ShouldLogActivity
     {
         $money = $this->money($minorUnits);
 
-        if (CurrencyType::Fiat === $this->type) {
+        if ($this->type === CurrencyType::Fiat) {
             return $money->format();
         }
 
         $formatter = new DecimalMoneyFormatter(new CurrencyList([$this->code => $this->decimal_places]));
 
-        return "{$formatter->format($money->getMoney())} " . ($this->symbol ?? $this->code);
+        return "{$formatter->format($money->getMoney())} ".($this->symbol ?? $this->code);
     }
 
     /**
@@ -118,16 +119,16 @@ final class Currency extends Model implements Sortable, ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'             => 'integer',
-            'tenant_id'      => 'integer',
-            'code'           => 'string',
-            'name'           => 'string',
-            'symbol'         => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'code' => 'string',
+            'name' => 'string',
+            'symbol' => 'string',
             'decimal_places' => 'integer',
-            'type'           => CurrencyType::class,
-            'active'         => 'boolean',
-            'is_default'     => 'boolean',
-            'position'       => 'integer',
+            'type' => CurrencyType::class,
+            'active' => 'boolean',
+            'is_default' => 'boolean',
+            'position' => 'integer',
         ];
     }
 
@@ -137,7 +138,7 @@ final class Currency extends Model implements Sortable, ShouldLogActivity
     protected function code(): Attribute
     {
         return Attribute::make(
-            set: fn(string $value): string => Str::upper($value),
+            set: fn (string $value): string => Str::upper($value),
         );
     }
 }

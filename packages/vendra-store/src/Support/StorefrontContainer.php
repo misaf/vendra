@@ -39,7 +39,7 @@ final class StorefrontContainer
 
     public function isRunning(): bool
     {
-        return 'running' === $this->state;
+        return $this->state === 'running';
     }
 
     public function hasStopped(): bool
@@ -50,11 +50,11 @@ final class StorefrontContainer
     public function hasLabel(string $name, ?string $value = null): bool
     {
         return array_key_exists($name, $this->labels)
-            && (null === $value || $this->labels[$name] === $value);
+            && ($value === null || $this->labels[$name] === $value);
     }
 
     /**
-     * @param  array<array-key, mixed> $payload
+     * @param  array<array-key, mixed>  $payload
      * @return array<string, string>
      */
     private static function labels(array $payload): array
@@ -75,6 +75,6 @@ final class StorefrontContainer
     {
         $value = Arr::get($payload, $key);
 
-        return is_string($value) && '' !== $value ? $value : null;
+        return is_string($value) && $value !== '' ? $value : null;
     }
 }

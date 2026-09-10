@@ -22,26 +22,26 @@ final class CartItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'cart_id'       => Cart::factory(),
+            'cart_id' => Cart::factory(),
             'sellable_type' => 'product',
-            'sellable_id'   => fake()->numberBetween(1, 1000),
-            'quantity'      => fake()->numberBetween(1, 10),
-            'metadata'      => null,
+            'sellable_id' => fake()->numberBetween(1, 1000),
+            'quantity' => fake()->numberBetween(1, 10),
+            'metadata' => null,
         ];
     }
 
     public function forCart(Cart $cart): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'cart_id' => $cart->id,
         ]);
     }
 
     public function forSellable(Model $sellable): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'sellable_type' => $sellable->getMorphClass(),
-            'sellable_id'   => $sellable->getKey(),
+            'sellable_id' => $sellable->getKey(),
         ]);
     }
 }

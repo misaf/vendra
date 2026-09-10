@@ -29,11 +29,11 @@ final class SettingsScope
      */
     public static function forTenant(?int $tenantId): string
     {
-        return null === $tenantId ? self::PLATFORM : self::TENANT_PREFIX . $tenantId;
+        return $tenantId === null ? self::PLATFORM : self::TENANT_PREFIX.$tenantId;
     }
 
     public static function isPlatform(string $scope): bool
     {
-        return self::PLATFORM === $scope;
+        return $scope === self::PLATFORM;
     }
 }

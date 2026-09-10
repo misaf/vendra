@@ -49,28 +49,28 @@ it('embeds only public multimedia on catalog products', function (): void {
     $category = ProductCategoryFactory::new()->active()->create();
     $product = ProductFactory::new()->forCategory($category)->create();
     $mediaAttributes = [
-        'collection_name'       => 'catalog',
-        'mime_type'             => 'image/jpeg',
-        'size'                  => 2048,
-        'manipulations'         => [],
-        'custom_properties'     => [],
+        'collection_name' => 'catalog',
+        'mime_type' => 'image/jpeg',
+        'size' => 2048,
+        'manipulations' => [],
+        'custom_properties' => [],
         'generated_conversions' => [],
-        'responsive_images'     => [],
+        'responsive_images' => [],
     ];
     $publicAsset = $product->multimedia()->create([
         ...$mediaAttributes,
-        'uuid'             => (string) Str::uuid(),
-        'name'             => 'Public product image',
-        'file_name'        => 'public-product.jpg',
-        'disk'             => 'public',
+        'uuid' => (string) Str::uuid(),
+        'name' => 'Public product image',
+        'file_name' => 'public-product.jpg',
+        'disk' => 'public',
         'conversions_disk' => 'public',
     ]);
     $privateAsset = $product->multimedia()->create([
         ...$mediaAttributes,
-        'uuid'             => (string) Str::uuid(),
-        'name'             => 'Private product image',
-        'file_name'        => 'private-product.jpg',
-        'disk'             => 'private',
+        'uuid' => (string) Str::uuid(),
+        'name' => 'Private product image',
+        'file_name' => 'private-product.jpg',
+        'disk' => 'private',
         'conversions_disk' => 'private',
     ]);
 
@@ -112,7 +112,7 @@ it('looks up a product by its translatable slug and by token', function (): void
         'slug' => [$locale => 'tulip'],
     ]);
     $headers = [
-        'Accept'          => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json',
         'Accept-Language' => $locale,
     ];
 
@@ -163,9 +163,9 @@ it('validates and applies the random order filter', function (): void {
 
 it('exposes localized tiptap description documents on products and categories', function (): void {
     $document = [
-        'type'    => 'doc',
+        'type' => 'doc',
         'content' => [[
-            'type'    => 'paragraph',
+            'type' => 'paragraph',
             'content' => [['type' => 'text', 'text' => 'Hello']],
         ]],
     ];

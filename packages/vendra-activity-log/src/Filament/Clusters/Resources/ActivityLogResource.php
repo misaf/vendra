@@ -15,7 +15,6 @@ use Misaf\VendraActivityLog\Filament\Clusters\Resources\Schemas\ActivityLogInfol
 use Misaf\VendraActivityLog\Filament\Clusters\Resources\Tables\ActivityLogTable;
 use Misaf\VendraActivityLog\Models\ActivityLog;
 use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class ActivityLogResource extends Resource
@@ -64,7 +63,7 @@ final class ActivityLogResource extends Resource
     {
         return [
             'index' => ListActivityLogs::route('/'),
-            'view'  => ViewActivityLog::route('/{record}'),
+            'view' => ViewActivityLog::route('/{record}'),
         ];
     }
 

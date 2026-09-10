@@ -38,23 +38,23 @@ final class TransactionTypeChartWidget extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label'           => TransactionTypeEnum::Deposit->getLabel(),
-                    'data'            => $this->getTrendData($depositTrend),
+                    'label' => TransactionTypeEnum::Deposit->getLabel(),
+                    'data' => $this->getTrendData($depositTrend),
                     'backgroundColor' => '#22c55e',
                 ],
                 [
-                    'label'           => TransactionTypeEnum::Withdrawal->getLabel(),
-                    'data'            => $this->getTrendData($withdrawalTrend),
+                    'label' => TransactionTypeEnum::Withdrawal->getLabel(),
+                    'data' => $this->getTrendData($withdrawalTrend),
                     'backgroundColor' => '#ef4444',
                 ],
                 [
-                    'label'           => TransactionTypeEnum::Bonus->getLabel(),
-                    'data'            => $this->getTrendData($bonusTrend),
+                    'label' => TransactionTypeEnum::Bonus->getLabel(),
+                    'data' => $this->getTrendData($bonusTrend),
                     'backgroundColor' => '#a855f7',
                 ],
             ],
             'labels' => $depositTrend
-                ->map(static fn(TrendValue $value): string => Carbon::parse($value->date)->translatedFormat('D'))
+                ->map(static fn (TrendValue $value): string => Carbon::parse($value->date)->translatedFormat('D'))
                 ->all(),
         ];
     }
@@ -79,7 +79,7 @@ final class TransactionTypeChartWidget extends ChartWidget
     private function getTrendData(Collection $trend): array
     {
         return array_values($trend
-            ->map(static fn(TrendValue $value): int => is_numeric($value->aggregate) ? (int) $value->aggregate : 0)
+            ->map(static fn (TrendValue $value): int => is_numeric($value->aggregate) ? (int) $value->aggregate : 0)
             ->all());
     }
 

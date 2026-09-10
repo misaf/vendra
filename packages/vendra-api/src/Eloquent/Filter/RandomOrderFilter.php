@@ -13,12 +13,12 @@ use Illuminate\Database\Eloquent\Model;
 final class RandomOrderFilter implements FilterInterface, JsonSchemaFilterInterface
 {
     /**
-     * @param Builder<Model> $builder
-     * @param array<string, mixed> $context
+     * @param  Builder<Model>  $builder
+     * @param  array<string, mixed>  $context
      */
     public function apply(Builder $builder, mixed $values, Parameter $parameter, array $context = []): Builder
     {
-        if ( ! in_array($values, [true, 1, '1', 'true'], true)) {
+        if (! in_array($values, [true, 1, '1', 'true'], true)) {
             return $builder;
         }
 

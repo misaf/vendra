@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 final class LocalizedSearchFilter implements FilterInterface
 {
     /**
-     * @param Builder<Model> $builder
+     * @param  Builder<Model>  $builder
      * @param array{
      *     properties?: array<string, bool>,
      *     whereClause?: 'where'|'orWhere'
@@ -22,7 +22,7 @@ final class LocalizedSearchFilter implements FilterInterface
     {
         $properties = $context['properties'] ?? [];
 
-        if ( ! is_string($values) || '' === $values || [] === $properties) {
+        if (! is_string($values) || $values === '' || $properties === []) {
             return $builder;
         }
 

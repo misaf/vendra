@@ -75,7 +75,7 @@ it('clears the converted cart items but keeps the cart', function (): void {
 it('refuses to place an order without lines', function (): void {
     $cart = CartFactory::new()->create();
 
-    expect(fn(): Order => app(PlaceOrderAction::class)->execute(
+    expect(fn (): Order => app(PlaceOrderAction::class)->execute(
         cart: $cart,
         currencyCode: 'USD',
         lines: [],
@@ -88,7 +88,7 @@ it('refuses a line with a quantity below one', function (): void {
     $customer = createTestUser();
     $cart = CartFactory::new()->forOwner($customer)->create();
 
-    expect(fn(): Order => app(PlaceOrderAction::class)->execute(
+    expect(fn (): Order => app(PlaceOrderAction::class)->execute(
         cart: $cart,
         currencyCode: 'USD',
         lines: [new OrderLineDraft($customer, ['en' => 'Winter Wheat'], 4400, 0)],

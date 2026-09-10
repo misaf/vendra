@@ -40,7 +40,7 @@ final class TransactionGatewayForm
                     ->required(),
 
                 TextInput::make('slug')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.slug'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.slug'))
                     ->columnSpan(['lg' => 1])
                     ->extraInputAttributes(['dir' => 'ltr'])
                     ->helperText(__('vendra-transaction::attributes.slug_helper_text'))
@@ -49,12 +49,12 @@ final class TransactionGatewayForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 Textarea::make('description')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                     ->columnSpanFull()
                     ->label(__('vendra-transaction::attributes.description'))
                     ->live(onBlur: true)
@@ -62,7 +62,7 @@ final class TransactionGatewayForm
                     ->rows(3),
 
                 SpatieMediaLibraryFileUpload::make('image')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.image'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
                     ->collection(TransactionGateway::MEDIA_COLLECTION)
                     ->columnSpanFull()
                     ->image()
@@ -70,7 +70,7 @@ final class TransactionGatewayForm
                     ->live(),
 
                 Toggle::make('active')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                     ->columnSpanFull()
                     ->default(false)
                     ->label(__('vendra-transaction::attributes.active'))
@@ -80,7 +80,7 @@ final class TransactionGatewayForm
                     ->rules(['boolean']),
 
                 Toggle::make('is_default')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.is_default'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))
                     ->columnSpanFull()
                     ->default(false)
                     ->helperText(__('vendra-transaction::attributes.is_default_helper_text'))

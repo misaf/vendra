@@ -19,7 +19,6 @@ use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\Tab
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\Widgets\NewsletterSubscriberOverviewWidget;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 use Misaf\VendraSupport\Filament\Clusters\MarketingCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class NewsletterSubscriberResource extends Resource
@@ -67,10 +66,10 @@ final class NewsletterSubscriberResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListNewsletterSubscribers::route('/'),
+            'index' => ListNewsletterSubscribers::route('/'),
             'create' => CreateNewsletterSubscriber::route('/create'),
-            'view'   => ViewNewsletterSubscriber::route('/{record}'),
-            'edit'   => EditNewsletterSubscriber::route('/{record}/edit'),
+            'view' => ViewNewsletterSubscriber::route('/{record}'),
+            'edit' => EditNewsletterSubscriber::route('/{record}/edit'),
         ];
     }
 

@@ -15,7 +15,7 @@ final class EditLanguage extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-language::navigation.language');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-language::navigation.language');
     }
 
     protected function getHeaderActions(): array

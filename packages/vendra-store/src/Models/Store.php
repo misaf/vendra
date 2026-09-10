@@ -81,7 +81,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     use HasFactory;
 
     use HasFeatures;
-
     use HasSlug;
     use IsTenantModel;
     use SoftDeletes;
@@ -102,24 +101,24 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     protected function casts(): array
     {
         return [
-            'id'                       => 'integer',
-            'reseller_id'              => 'integer',
-            'name'                     => 'string',
-            'description'              => 'string',
-            'slug'                     => 'string',
-            'active'                   => 'boolean',
-            'locale'                   => 'string',
-            'currency'                 => 'string',
-            'timezone'                 => 'string',
-            'metadata'                 => 'array',
-            'billing_suspended_at'     => 'datetime',
-            'provisioning_status'      => TenantProvisioningStatus::class,
+            'id' => 'integer',
+            'reseller_id' => 'integer',
+            'name' => 'string',
+            'description' => 'string',
+            'slug' => 'string',
+            'active' => 'boolean',
+            'locale' => 'string',
+            'currency' => 'string',
+            'timezone' => 'string',
+            'metadata' => 'array',
+            'billing_suspended_at' => 'datetime',
+            'provisioning_status' => TenantProvisioningStatus::class,
             'provisioning_should_seed' => 'boolean',
-            'provisioning_seeded_at'   => 'datetime',
-            'routes_cached_at'         => 'datetime',
-            'provisioned_at'           => 'datetime',
-            'provisioning_failed_at'   => 'datetime',
-            'provisioning_error'       => 'string',
+            'provisioning_seeded_at' => 'datetime',
+            'routes_cached_at' => 'datetime',
+            'provisioned_at' => 'datetime',
+            'provisioning_failed_at' => 'datetime',
+            'provisioning_error' => 'string',
         ];
     }
 
@@ -186,11 +185,11 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     public function status(): StoreStatus
     {
         return match (true) {
-            TenantProvisioningStatus::Pending === $this->provisioning_status    => StoreStatus::Pending,
-            TenantProvisioningStatus::Processing === $this->provisioning_status => StoreStatus::Provisioning,
-            TenantProvisioningStatus::Failed === $this->provisioning_status     => StoreStatus::Failed,
-            ! $this->active, null !== $this->billing_suspended_at               => StoreStatus::Suspended,
-            default                                                             => StoreStatus::Active,
+            $this->provisioning_status === TenantProvisioningStatus::Pending => StoreStatus::Pending,
+            $this->provisioning_status === TenantProvisioningStatus::Processing => StoreStatus::Provisioning,
+            $this->provisioning_status === TenantProvisioningStatus::Failed => StoreStatus::Failed,
+            ! $this->active, $this->billing_suspended_at !== null => StoreStatus::Suspended,
+            default => StoreStatus::Active,
         };
     }
 
@@ -206,15 +205,15 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     public function scopeWithStatus(Builder $query, StoreStatus $status): Builder
     {
         return match ($status) {
-            StoreStatus::Pending      => $query->where('provisioning_status', TenantProvisioningStatus::Pending),
+            StoreStatus::Pending => $query->where('provisioning_status', TenantProvisioningStatus::Pending),
             StoreStatus::Provisioning => $query->where('provisioning_status', TenantProvisioningStatus::Processing),
-            StoreStatus::Failed       => $query->where('provisioning_status', TenantProvisioningStatus::Failed),
-            StoreStatus::Suspended    => $query
+            StoreStatus::Failed => $query->where('provisioning_status', TenantProvisioningStatus::Failed),
+            StoreStatus::Suspended => $query
                 ->where('provisioning_status', TenantProvisioningStatus::Ready)
-                ->where(fn(Builder $suspended): Builder => $suspended
+                ->where(fn (Builder $suspended): Builder => $suspended
                     ->where('active', false)
                     ->orWhereNotNull('billing_suspended_at')),
-            StoreStatus::Active       => $query->accessible(),
+            StoreStatus::Active => $query->accessible(),
         };
     }
 
@@ -280,7 +279,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     {
         $value = $this->getAttribute($attribute);
 
-        return is_string($value) && '' !== mb_trim($value) ? mb_trim($value) : null;
+        return is_string($value) && mb_trim($value) !== '' ? mb_trim($value) : null;
     }
 
     public function getSlugOptions(): SlugOptions

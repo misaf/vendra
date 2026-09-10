@@ -23,8 +23,8 @@ final class SendNewsletterTableAction
             ->requiresConfirmation()
             ->modalHeading(__('vendra-newsletter::actions.send'))
             ->modalDescription(__('vendra-newsletter::actions.send_confirmation'))
-            ->authorize(fn(Newsletter $record): bool => Gate::allows('send', $record))
-            ->visible(fn(Newsletter $record): bool => NewsletterStatusEnum::Sent !== $record->status)
+            ->authorize(fn (Newsletter $record): bool => Gate::allows('send', $record))
+            ->visible(fn (Newsletter $record): bool => $record->status !== NewsletterStatusEnum::Sent)
             ->action(function (Newsletter $record): void {
                 $recipients = app(SendNewsletterAction::class)->execute($record);
 

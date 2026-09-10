@@ -55,7 +55,7 @@ final class InquiryTable
                     ->label(__('vendra-inquiry::attributes.message'))
                     ->limit(60)
                     ->searchable()
-                    ->tooltip(fn(string $state): string => $state),
+                    ->tooltip(fn (string $state): string => $state),
 
                 TextColumn::make('created_at')
                     ->extraCellAttributes(['dir' => 'ltr'])
@@ -64,8 +64,8 @@ final class InquiryTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->description(__('vendra-inquiry::tables.description.inquiries'))

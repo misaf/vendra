@@ -43,11 +43,11 @@ final class CartItem extends Model
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'cart_id'     => 'integer',
+            'id' => 'integer',
+            'cart_id' => 'integer',
             'sellable_id' => 'integer',
-            'quantity'    => 'integer',
-            'metadata'    => 'array',
+            'quantity' => 'integer',
+            'metadata' => 'array',
         ];
     }
 

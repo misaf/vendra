@@ -22,17 +22,17 @@ final class StoreDomainFactory extends Factory
     public function definition(): array
     {
         return [
-            'store_id'    => Store::factory(),
-            'name'        => fake()->unique()->sentence(3),
+            'store_id' => Store::factory(),
+            'name' => fake()->unique()->sentence(3),
             'description' => fake()->text(),
-            'slug'        => fn(array $attributes) => Str::slug($attributes['name']),
-            'active'      => fake()->boolean(),
+            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
+            'active' => fake()->boolean(),
         ];
     }
 
     public function forStore(Store $store): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'store_id' => $store->id,
         ]);
     }

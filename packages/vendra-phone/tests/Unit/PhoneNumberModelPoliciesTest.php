@@ -10,11 +10,11 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 it('applies shared tenant ownership and soft deletes to the phone number model', function (): void {
     expect(class_uses_recursive(PhoneNumber::class))->toContain(BelongsToTenant::class, SoftDeletes::class)
-        ->and((new PhoneNumber())->getHidden())->toContain('tenant_id');
+        ->and((new PhoneNumber)->getHidden())->toContain('tenant_id');
 });
 
 it('keeps international phone fields fillable', function (): void {
-    expect((new PhoneNumber())->getFillable())->toContain(
+    expect((new PhoneNumber)->getFillable())->toContain(
         'user_profile_id',
         'type',
         'country_code',

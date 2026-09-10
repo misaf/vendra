@@ -24,17 +24,17 @@ final class PublicMultimedia extends Model
     protected function casts(): array
     {
         return [
-            'tenant_id'             => 'integer',
-            'manipulations'         => 'array',
-            'custom_properties'     => 'array',
+            'tenant_id' => 'integer',
+            'manipulations' => 'array',
+            'custom_properties' => 'array',
             'generated_conversions' => 'array',
-            'responsive_images'     => 'array',
+            'responsive_images' => 'array',
         ];
     }
 
     public function getUrl(): string
     {
-        $media = (new Multimedia())->newFromBuilder($this->getAttributes());
+        $media = (new Multimedia)->newFromBuilder($this->getAttributes());
 
         return $media->getUrl();
     }
@@ -42,7 +42,7 @@ final class PublicMultimedia extends Model
     /**
      * @template TModel of Model
      *
-     * @param Builder<TModel> $query
+     * @param  Builder<TModel>  $query
      * @return Builder<TModel>
      */
     public static function scope(Builder $query): Builder

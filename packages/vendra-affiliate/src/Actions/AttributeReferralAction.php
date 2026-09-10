@@ -30,7 +30,7 @@ final class AttributeReferralAction
             ->where('status', AffiliateStatusEnum::Active)
             ->first();
 
-        if ( ! $affiliate instanceof Affiliate || $affiliate->user_id === $user->id) {
+        if (! $affiliate instanceof Affiliate || $affiliate->user_id === $user->id) {
             return null;
         }
 
@@ -38,13 +38,13 @@ final class AttributeReferralAction
         $referral = AffiliateReferral::firstOrCreate(
             ['user_id' => $user->id],
             [
-                'affiliate_id'       => $affiliate->id,
+                'affiliate_id' => $affiliate->id,
                 'affiliate_click_id' => $clickId,
-                'attributed_at'      => now(),
+                'attributed_at' => now(),
             ],
         );
 
-        if ( ! $referral->wasRecentlyCreated) {
+        if (! $referral->wasRecentlyCreated) {
             return null;
         }
 

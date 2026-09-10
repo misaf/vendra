@@ -31,7 +31,7 @@ it('cancels a subscription and its unfinished payment idempotently', function ()
 
 it('extends only an active expiring subscription and clears its reminder', function (): void {
     $subscription = Subscription::factory()->create([
-        'ends_at'                 => now()->addMonth(),
+        'ends_at' => now()->addMonth(),
         'expiry_reminder_sent_at' => now(),
     ]);
     $newEnd = now()->addMonths(2)->startOfSecond();

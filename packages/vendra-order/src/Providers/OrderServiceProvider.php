@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraOrder\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -42,7 +41,7 @@ final class OrderServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), OrderPlugin::ID)) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), OrderPlugin::ID)) {
                 return;
             }
 
@@ -58,13 +57,13 @@ final class OrderServiceProvider extends PackageServiceProvider
          * FQCNs, so relocating a model class never orphans stored rows.
          */
         Relation::morphMap([
-            'order'      => Order::class,
+            'order' => Order::class,
             'order_line' => OrderLine::class,
         ]);
 
         $this->app->make(TenantTableRegistry::class)->register('orders');
         $this->app->make(TenantSeeders::class)->register('vendra-order:seed', priority: 59);
 
-        AboutCommand::add('Vendra Order', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-order')]);
+        AboutCommand::add('Vendra Order', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-order')]);
     }
 }

@@ -38,7 +38,7 @@ it('fails a pending-payment subscription and raises the failed event', function 
 
     expect($result->status)->toBe(SubscriptionPaymentStatus::Failed)
         ->and($subscription->refresh()->status)->toBe(SubscriptionStatus::Cancelled);
-    Event::assertDispatched(SubscriptionPaymentFailed::class, fn(SubscriptionPaymentFailed $event): bool => $event->payment->is($result));
+    Event::assertDispatched(SubscriptionPaymentFailed::class, fn (SubscriptionPaymentFailed $event): bool => $event->payment->is($result));
     Event::assertNotDispatched(SubscriptionPaymentPaid::class);
 });
 

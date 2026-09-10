@@ -55,13 +55,13 @@ final class AffiliateCommissionResource extends Resource
 
         return [
             __('vendra-affiliate::attributes.affiliate') => $commission->affiliate?->code ?? '',
-            __('vendra-user::attributes.email')          => $commission->affiliate?->user?->email ?? '',
+            __('vendra-user::attributes.email') => $commission->affiliate?->user?->email ?? '',
         ];
     }
 
     public static function getGlobalSearchResultTitle(Model $record): string
     {
-        return '#' . self::commission($record)->id;
+        return '#'.self::commission($record)->id;
     }
 
     public static function getBreadcrumb(): string
@@ -88,7 +88,7 @@ final class AffiliateCommissionResource extends Resource
     {
         return [
             'index' => ListAffiliateCommissions::route('/'),
-            'view'  => ViewAffiliateCommission::route('/{record}'),
+            'view' => ViewAffiliateCommission::route('/{record}'),
         ];
     }
 
@@ -111,7 +111,7 @@ final class AffiliateCommissionResource extends Resource
 
     private static function commission(Model $record): AffiliateCommission
     {
-        if ( ! $record instanceof AffiliateCommission) {
+        if (! $record instanceof AffiliateCommission) {
             throw new InvalidArgumentException('Affiliate Commission resources require an AffiliateCommission record.');
         }
 

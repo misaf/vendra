@@ -11,7 +11,7 @@ it('applies shared tenant ownership to the activity log model', function (): voi
 });
 
 it('hides the tenant association from activity log serialization', function (): void {
-    expect((new ActivityLog())->getHidden())->toContain('tenant_id');
+    expect((new ActivityLog)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the activity log resource', function (): void {

@@ -67,7 +67,7 @@ final class BlogPostTable
             TextColumn::make('description')
                 ->label(__('vendra-blog::attributes.description'))
                 ->icon(Heroicon::DocumentText)
-                ->state(fn(BlogPost $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                ->state(fn (BlogPost $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('slug')
@@ -86,8 +86,8 @@ final class BlogPostTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -96,8 +96,8 @@ final class BlogPostTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
@@ -155,5 +155,4 @@ final class BlogPostTable
             ->defaultSort(column: 'id', direction: 'desc')
             ->reorderable(column: 'position', direction: 'desc');
     }
-
 }

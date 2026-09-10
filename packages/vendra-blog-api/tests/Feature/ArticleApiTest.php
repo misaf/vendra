@@ -23,7 +23,7 @@ it('exposes and filters active blog posts with storefront metadata', function ()
     ]);
 
     $this->getJson("/api/content/blog-posts?categoryId={$section->id}&search=rose", [
-        'Accept'          => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json',
         'Accept-Language' => 'en',
     ])
         ->assertOk()

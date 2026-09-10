@@ -25,7 +25,7 @@ final class AffiliateApiServiceProvider extends PackageServiceProvider
     {
         Config::set('api-platform.resources', [
             ...Config::array('api-platform.resources', []),
-            dirname(__DIR__) . '/ApiResource',
+            dirname(__DIR__).'/ApiResource',
         ]);
 
         $this->app->tag(AffiliateLinksHandler::class, LinksHandlerInterface::class);
@@ -34,6 +34,6 @@ final class AffiliateApiServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        AboutCommand::add('Vendra Affiliate API', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-affiliate-api')]);
+        AboutCommand::add('Vendra Affiliate API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-affiliate-api')]);
     }
 }

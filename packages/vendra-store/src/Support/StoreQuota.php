@@ -17,13 +17,13 @@ final class StoreQuota
      */
     public function canCreateStore(SubscriptionSubscriber $subscriber): bool
     {
-        if ( ! $subscriber->isSubscriptionActive()) {
+        if (! $subscriber->isSubscriptionActive()) {
             return false;
         }
 
         $plan = $subscriber->activeSubscription()?->plan;
 
-        if (null === $plan) {
+        if ($plan === null) {
             return false;
         }
 
@@ -37,13 +37,13 @@ final class StoreQuota
      */
     public function remainingStores(SubscriptionSubscriber $subscriber): int
     {
-        if ( ! $subscriber->isSubscriptionActive()) {
+        if (! $subscriber->isSubscriptionActive()) {
             return 0;
         }
 
         $plan = $subscriber->activeSubscription()?->plan;
 
-        if (null === $plan) {
+        if ($plan === null) {
             return 0;
         }
 
@@ -57,13 +57,13 @@ final class StoreQuota
      */
     public function assertCanCreateStore(SubscriptionSubscriber $subscriber): void
     {
-        if ( ! $subscriber->isSubscriptionActive()) {
+        if (! $subscriber->isSubscriptionActive()) {
             throw SubscriptionLimitException::subscriberInactive($subscriber);
         }
 
         $plan = $subscriber->activeSubscription()?->plan;
 
-        if (null === $plan) {
+        if ($plan === null) {
             throw SubscriptionLimitException::noActiveSubscription($subscriber);
         }
 

@@ -28,7 +28,7 @@ final class AffiliateCommissionEarnedEvent implements ShouldBroadcast, ShouldDis
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('Affiliate.' . $this->userId),
+            new PrivateChannel('Affiliate.'.$this->userId),
         ];
     }
 

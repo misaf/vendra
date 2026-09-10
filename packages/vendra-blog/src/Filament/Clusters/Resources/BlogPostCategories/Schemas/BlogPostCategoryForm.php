@@ -42,13 +42,13 @@ final class BlogPostCategoryForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        column: fn(Livewire $livewire): string => 'name->' . self::activeFormLocale($livewire),
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        column: fn (Livewire $livewire): string => 'name->'.self::activeFormLocale($livewire),
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 TextInput::make('slug')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.slug'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.slug'))
                     ->columnSpan(['lg' => 1])
                     ->helperText(__('vendra-blog::attributes.slug_helper_text'))
                     ->label(__('vendra-blog::attributes.slug'))
@@ -56,13 +56,13 @@ final class BlogPostCategoryForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        column: fn(Livewire $livewire): string => 'slug->' . self::activeFormLocale($livewire),
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        column: fn (Livewire $livewire): string => 'slug->'.self::activeFormLocale($livewire),
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 Textarea::make('description')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                     ->columnSpanFull()
                     ->label(__('vendra-blog::attributes.description'))
                     ->live(onBlur: true)
@@ -70,7 +70,7 @@ final class BlogPostCategoryForm
                     ->rows(5),
 
                 SpatieMediaLibraryFileUpload::make('image')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.image'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
                     ->collection(BlogPostCategory::MEDIA_COLLECTION)
                     ->columnSpanFull()
                     ->image()
@@ -80,7 +80,7 @@ final class BlogPostCategoryForm
                     ->responsiveImages(),
 
                 Toggle::make('active')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                     ->columnSpanFull()
                     ->default(false)
                     ->label(__('vendra-blog::attributes.active'))
@@ -92,5 +92,4 @@ final class BlogPostCategoryForm
                     ]),
             ]);
     }
-
 }

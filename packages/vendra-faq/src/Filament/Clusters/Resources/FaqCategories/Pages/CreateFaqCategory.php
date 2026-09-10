@@ -17,7 +17,7 @@ final class CreateFaqCategory extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-faq::navigation.faq_category');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-faq::navigation.faq_category');
     }
 
     protected function getHeaderActions(): array

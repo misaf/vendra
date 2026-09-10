@@ -133,7 +133,7 @@ final class ContainerStorefrontProvisioner implements StorefrontProvisioner
     {
         $status = $this->runtime->status();
 
-        if ( ! $status->reachable) {
+        if (! $status->reachable) {
             throw new RuntimeException($status->message ?? 'The container runtime is not reachable.');
         }
 
@@ -152,13 +152,13 @@ final class ContainerStorefrontProvisioner implements StorefrontProvisioner
      */
     private function assertNetworkExists(StorefrontRuntimeStatus $status): void
     {
-        if (null !== $this->runtime->findNetwork($this->settings->network)) {
+        if ($this->runtime->findNetwork($this->settings->network) !== null) {
             return;
         }
 
         $message = sprintf(
             'The container network [%s] does not exist on %s. The platform manages storefront containers only — '
-            . 'create the network with the rest of the estate before provisioning.',
+            .'create the network with the rest of the estate before provisioning.',
             $this->settings->network,
             $status->describeDaemon(),
         );
@@ -166,7 +166,7 @@ final class ContainerStorefrontProvisioner implements StorefrontProvisioner
         if ($status->engineMismatch()) {
             $message .= sprintf(
                 ' That endpoint is serving %s while CONTAINER_DRIVER is set to %s, so this may be the wrong daemon '
-                . 'rather than a missing network.',
+                .'rather than a missing network.',
                 $status->reportedEngine(),
                 $status->driver,
             );
@@ -187,13 +187,13 @@ final class ContainerStorefrontProvisioner implements StorefrontProvisioner
     {
         $existing = $this->runtime->find($container);
 
-        if (null === $existing || $this->isPlatformOwned($existing)) {
+        if ($existing === null || $this->isPlatformOwned($existing)) {
             return;
         }
 
         throw new RuntimeException(sprintf(
             'The container [%s] already exists and was not placed by the platform. '
-            . 'Rename it, or change STOREFRONT_NAME_PREFIX, before deploying this storefront.',
+            .'Rename it, or change STOREFRONT_NAME_PREFIX, before deploying this storefront.',
             $container,
         ));
     }

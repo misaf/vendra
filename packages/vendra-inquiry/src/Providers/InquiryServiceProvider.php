@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraInquiry\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -41,7 +40,7 @@ final class InquiryServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), InquiryPlugin::ID)) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), InquiryPlugin::ID)) {
                 return;
             }
 
@@ -62,6 +61,6 @@ final class InquiryServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('inquiries');
         $this->app->make(TenantSeeders::class)->register('vendra-inquiry:seed', priority: 62);
 
-        AboutCommand::add('Vendra Inquiry', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-inquiry')]);
+        AboutCommand::add('Vendra Inquiry', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-inquiry')]);
     }
 }

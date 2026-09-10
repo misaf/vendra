@@ -29,7 +29,7 @@ final class WishlistInfolist
                 TextEntry::make('items_count')
                     ->badge()
                     ->label(__('vendra-wishlist::attributes.items'))
-                    ->state(fn(Wishlist $record): int => $record->items()->count()),
+                    ->state(fn (Wishlist $record): int => $record->items()->count()),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])
@@ -42,8 +42,8 @@ final class WishlistInfolist
             ->label(__("vendra-wishlist::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

@@ -63,10 +63,10 @@ final class Cart extends Model
     protected function casts(): array
     {
         return [
-            'id'         => 'integer',
-            'tenant_id'  => 'integer',
-            'owner_id'   => 'integer',
-            'token'      => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'owner_id' => 'integer',
+            'token' => 'string',
             'expires_at' => 'datetime',
         ];
     }
@@ -80,14 +80,14 @@ final class Cart extends Model
             get: function (): ?string {
                 $owner = $this->owner;
 
-                if ( ! $owner instanceof Model) {
+                if (! $owner instanceof Model) {
                     return null;
                 }
 
                 foreach (['username', 'name', 'email'] as $attribute) {
                     $value = $owner->getAttribute($attribute);
 
-                    if (is_string($value) && '' !== $value) {
+                    if (is_string($value) && $value !== '') {
                         return $value;
                     }
                 }

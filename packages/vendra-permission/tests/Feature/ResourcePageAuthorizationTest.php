@@ -75,8 +75,8 @@ it('limits permission and role descriptions to their database length', function 
 
     livewire(CreatePermission::class)
         ->fillForm([
-            'name'        => 'long-description-permission',
-            'guard_name'  => 'web',
+            'name' => 'long-description-permission',
+            'guard_name' => 'web',
             'description' => $description,
         ])
         ->call('create')
@@ -84,8 +84,8 @@ it('limits permission and role descriptions to their database length', function 
 
     livewire(CreateRole::class)
         ->fillForm([
-            'name'        => 'long-description-role',
-            'guard_name'  => 'web',
+            'name' => 'long-description-role',
+            'guard_name' => 'web',
             'description' => $description,
         ])
         ->call('create')

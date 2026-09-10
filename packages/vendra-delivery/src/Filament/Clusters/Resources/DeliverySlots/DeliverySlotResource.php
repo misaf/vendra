@@ -88,10 +88,10 @@ final class DeliverySlotResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListDeliverySlots::route('/'),
+            'index' => ListDeliverySlots::route('/'),
             'create' => CreateDeliverySlot::route('/create'),
-            'view'   => ViewDeliverySlot::route('/{record}'),
-            'edit'   => EditDeliverySlot::route('/{record}/edit'),
+            'view' => ViewDeliverySlot::route('/{record}'),
+            'edit' => EditDeliverySlot::route('/{record}/edit'),
         ];
     }
 }

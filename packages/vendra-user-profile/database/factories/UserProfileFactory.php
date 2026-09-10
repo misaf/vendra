@@ -21,12 +21,12 @@ final class UserProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'     => User::factory(),
-            'name'        => fake()->sentences(1, true),
+            'user_id' => User::factory(),
+            'name' => fake()->sentences(1, true),
             'description' => fake()->realTextBetween(100, 200),
-            'slug'        => fn(array $attributes) => Str::slug($attributes['name']),
-            'is_default'  => fake()->boolean(1),
-            'active'      => fake()->boolean(80),
+            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
+            'is_default' => fake()->boolean(1),
+            'active' => fake()->boolean(80),
         ];
     }
 
@@ -35,29 +35,29 @@ final class UserProfileFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function forUser(User|int $user): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'user_id' => $user instanceof User ? $user->id : $user,
         ]);
     }
 
     public function active(): static
     {
-        return $this->state(fn(): array => ['active' => true]);
+        return $this->state(fn (): array => ['active' => true]);
     }
 
     public function inactive(): static
     {
-        return $this->state(fn(): array => ['active' => false]);
+        return $this->state(fn (): array => ['active' => false]);
     }
 }

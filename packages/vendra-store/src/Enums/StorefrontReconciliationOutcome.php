@@ -24,6 +24,6 @@ enum StorefrontReconciliationOutcome: string
      */
     public function changedAnything(): bool
     {
-        return self::InSync !== $this;
+        return $this !== self::InSync;
     }
 }

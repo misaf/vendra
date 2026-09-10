@@ -18,7 +18,6 @@ use Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\Schemas\Langu
 use Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\Tables\LanguageLineTable;
 use Misaf\VendraLanguage\Models\LanguageLine;
 use Misaf\VendraSupport\Filament\Clusters\LocalizationCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class LanguageLineResource extends Resource
@@ -66,10 +65,10 @@ final class LanguageLineResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListLanguageLines::route('/'),
+            'index' => ListLanguageLines::route('/'),
             'create' => CreateLanguageLine::route('/create'),
-            'view'   => ViewLanguageLine::route('/{record}'),
-            'edit'   => EditLanguageLine::route('/{record}/edit'),
+            'view' => ViewLanguageLine::route('/{record}'),
+            'edit' => EditLanguageLine::route('/{record}/edit'),
         ];
     }
 

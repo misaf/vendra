@@ -15,13 +15,13 @@ it('applies shared tenant ownership and soft deletes to faq models', function ()
 });
 
 it('defines translatable fields on faq models', function (): void {
-    expect((new Faq())->translatable)->toBe(['name', 'description', 'slug'])
-        ->and((new FaqCategory())->translatable)->toBe(['name', 'description', 'slug']);
+    expect((new Faq)->translatable)->toBe(['name', 'description', 'slug'])
+        ->and((new FaqCategory)->translatable)->toBe(['name', 'description', 'slug']);
 });
 
 it('hides the tenant association from faq serialization', function (): void {
-    expect((new Faq())->getHidden())->toContain('tenant_id')
-        ->and((new FaqCategory())->getHidden())->toContain('tenant_id');
+    expect((new Faq)->getHidden())->toContain('tenant_id')
+        ->and((new FaqCategory)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the faq resource', function (): void {

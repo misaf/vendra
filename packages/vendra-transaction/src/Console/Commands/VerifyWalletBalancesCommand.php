@@ -43,7 +43,7 @@ final class VerifyWalletBalancesCommand extends Command
                 }
             });
 
-        if (0 === $drifted) {
+        if ($drifted === 0) {
             $this->info('All wallet balances match the ledger.');
 
             return self::SUCCESS;

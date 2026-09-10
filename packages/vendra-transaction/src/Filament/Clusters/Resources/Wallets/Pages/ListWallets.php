@@ -13,6 +13,6 @@ final class ListWallets extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-transaction::navigation.wallet');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-transaction::navigation.wallet');
     }
 }

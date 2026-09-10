@@ -31,8 +31,8 @@ final class EnforceSubscriptionsAction
     public function execute(): array
     {
         return [
-            'expired'       => $this->expireLapsedSubscriptions(),
-            'reminded'      => $this->remindExpiringSubscriptions(),
+            'expired' => $this->expireLapsedSubscriptions(),
+            'reminded' => $this->remindExpiringSubscriptions(),
             'grace_expired' => $this->flagPastGraceSubscribers(),
         ];
     }
@@ -91,11 +91,11 @@ final class EnforceSubscriptionsAction
                 foreach ($subscriptions as $subscription) {
                     $subscriber = $subscription->subscriber;
 
-                    if ( ! $subscriber instanceof SubscriptionSubscriber) {
+                    if (! $subscriber instanceof SubscriptionSubscriber) {
                         continue;
                     }
 
-                    $key = $subscription->subscriber_type . ':' . $subscription->subscriber_id;
+                    $key = $subscription->subscriber_type.':'.$subscription->subscriber_id;
 
                     if (isset($processed[$key])) {
                         continue;
@@ -103,14 +103,14 @@ final class EnforceSubscriptionsAction
 
                     $processed[$key] = true;
 
-                    if (0 === $subscriber->activeSubscribedUnitCount() || null !== $subscriber->activeSubscription()) {
+                    if ($subscriber->activeSubscribedUnitCount() === 0 || $subscriber->activeSubscription() !== null) {
                         continue;
                     }
 
                     $latest = $subscriber->latestSubscription();
                     $suspendAt = $latest?->suspendAt();
 
-                    if (null === $latest || null === $suspendAt || $suspendAt->isFuture()) {
+                    if ($latest === null || $suspendAt === null || $suspendAt->isFuture()) {
                         continue;
                     }
 

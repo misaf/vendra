@@ -52,30 +52,30 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
     {
         $store = Store::query()->findOrFail($this->tenantId);
 
-        $this->context($store)->scope(fn() => $this->provision($store));
+        $this->context($store)->scope(fn () => $this->provision($store));
     }
 
     private function provision(Store $store): void
     {
-        if (TenantProvisioningStatus::Ready === $store->provisioning_status) {
+        if ($store->provisioning_status === TenantProvisioningStatus::Ready) {
             return;
         }
 
         $store->forceFill([
-            'active'                 => false,
-            'provisioning_status'    => TenantProvisioningStatus::Processing,
+            'active' => false,
+            'provisioning_status' => TenantProvisioningStatus::Processing,
             'provisioning_failed_at' => null,
-            'provisioning_error'     => null,
+            'provisioning_error' => null,
         ])->save();
 
         try {
-            if ($store->provisioning_should_seed && null === $store->provisioning_seeded_at) {
+            if ($store->provisioning_should_seed && $store->provisioning_seeded_at === null) {
                 event(new TenantProvisioned($store, shouldSeed: true));
 
                 $store->forceFill(['provisioning_seeded_at' => now()])->save();
             }
 
-            if (null === $store->routes_cached_at) {
+            if ($store->routes_cached_at === null) {
                 CacheTenantRoutesJob::dispatchSync($store->id);
 
                 $store->forceFill(['routes_cached_at' => now()])->save();
@@ -86,12 +86,12 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
                 : null;
 
             $store->forceFill([
-                'active'                 => true,
-                'billing_suspended_at'   => $billingSuspendedAt,
-                'provisioning_status'    => TenantProvisioningStatus::Ready,
-                'provisioned_at'         => now(),
+                'active' => true,
+                'billing_suspended_at' => $billingSuspendedAt,
+                'provisioning_status' => TenantProvisioningStatus::Ready,
+                'provisioned_at' => now(),
                 'provisioning_failed_at' => null,
-                'provisioning_error'     => null,
+                'provisioning_error' => null,
             ])->save();
         } catch (Throwable $exception) {
             $this->markFailed($exception);
@@ -112,7 +112,7 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
     {
         $store = Store::query()->find($this->tenantId);
 
-        $this->context($store)->scope(fn() => $this->markFailed($exception));
+        $this->context($store)->scope(fn () => $this->markFailed($exception));
     }
 
     /**
@@ -125,15 +125,15 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
      */
     private function shouldStartBillingSuspended(Store $store): bool
     {
-        if (null === $store->reseller_id) {
+        if ($store->reseller_id === null) {
             return false;
         }
 
         $owner = app(StoreOwnerResolver::class)->find($store->reseller_id);
 
-        return null === $owner
+        return $owner === null
             || ! $owner->isSubscriptionActive()
-            || null === $owner->activeSubscription();
+            || $owner->activeSubscription() === null;
     }
 
     private function markFailed(?Throwable $exception): void
@@ -142,10 +142,10 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
             ->whereKey($this->tenantId)
             ->where('provisioning_status', '!=', TenantProvisioningStatus::Ready->value)
             ->update([
-                'active'                 => false,
-                'provisioning_status'    => TenantProvisioningStatus::Failed->value,
+                'active' => false,
+                'provisioning_status' => TenantProvisioningStatus::Failed->value,
                 'provisioning_failed_at' => now(),
-                'provisioning_error'     => null === $exception
+                'provisioning_error' => $exception === null
                     ? 'Store provisioning failed.'
                     : Str::limit($exception->getMessage(), 2000, ''),
             ]);

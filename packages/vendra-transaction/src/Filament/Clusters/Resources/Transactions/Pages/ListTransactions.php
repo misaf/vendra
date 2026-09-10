@@ -25,7 +25,7 @@ final class ListTransactions extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-transaction::navigation.transaction');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-transaction::navigation.transaction');
     }
 
     /**
@@ -35,38 +35,38 @@ final class ListTransactions extends ListRecords
     {
         return [
             'all' => Tab::make()
-                ->badge(static fn(): int => Transaction::count())
+                ->badge(static fn (): int => Transaction::count())
                 ->deferBadge(),
 
             TransactionTypeEnum::Deposit->value => Tab::make()
-                ->badge(static fn(): int => Transaction::deposit()->count())
+                ->badge(static fn (): int => Transaction::deposit()->count())
                 ->deferBadge()
                 ->label(TransactionTypeEnum::Deposit->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->deposit()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->deposit()),
 
             TransactionTypeEnum::Withdrawal->value => Tab::make()
-                ->badge(static fn(): int => Transaction::withdrawal()->count())
+                ->badge(static fn (): int => Transaction::withdrawal()->count())
                 ->deferBadge()
                 ->label(TransactionTypeEnum::Withdrawal->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->withdrawal()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->withdrawal()),
 
             TransactionTypeEnum::Commission->value => Tab::make()
-                ->badge(static fn(): int => Transaction::commission()->count())
+                ->badge(static fn (): int => Transaction::commission()->count())
                 ->deferBadge()
                 ->label(TransactionTypeEnum::Commission->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->commission()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->commission()),
 
             TransactionTypeEnum::Transfer->value => Tab::make()
-                ->badge(static fn(): int => Transaction::transfer()->count())
+                ->badge(static fn (): int => Transaction::transfer()->count())
                 ->deferBadge()
                 ->label(TransactionTypeEnum::Transfer->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->transfer()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->transfer()),
 
             TransactionTypeEnum::Bonus->value => Tab::make()
-                ->badge(static fn(): int => Transaction::bonus()->count())
+                ->badge(static fn (): int => Transaction::bonus()->count())
                 ->deferBadge()
                 ->label(TransactionTypeEnum::Bonus->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->bonus()),
+                ->modifyQueryUsing(fn (Builder $query) => $query->bonus()),
         ];
     }
 

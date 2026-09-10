@@ -12,11 +12,11 @@ use Throwable;
 final class EloquentCurrencyResolver implements CurrencyResolver
 {
     /**
-     * @param class-string<Model> $currencyModel
+     * @param  class-string<Model>  $currencyModel
      */
     public function __construct(
         private readonly string $currencyModel,
-        private readonly CurrencyResolver $fallback = new NullCurrencyResolver(),
+        private readonly CurrencyResolver $fallback = new NullCurrencyResolver,
         private readonly string $codeColumn = 'code',
         private readonly string $nameColumn = 'name',
         private readonly string $activeColumn = 'active',
@@ -37,7 +37,7 @@ final class EloquentCurrencyResolver implements CurrencyResolver
                 ->where($this->defaultColumn, true)
                 ->value($this->codeColumn);
 
-            if (is_string($defaultCode) && '' !== $defaultCode) {
+            if (is_string($defaultCode) && $defaultCode !== '') {
                 return $defaultCode;
             }
         } catch (Throwable) {
@@ -57,12 +57,12 @@ final class EloquentCurrencyResolver implements CurrencyResolver
                 ->where($this->activeColumn, true)
                 ->orderBy($this->positionColumn, 'desc')
                 ->pluck($this->nameColumn, $this->codeColumn)
-                ->mapWithKeys(fn(mixed $name, mixed $code): array => is_string($code) && '' !== $code
+                ->mapWithKeys(fn (mixed $name, mixed $code): array => is_string($code) && $code !== ''
                     ? [$code => is_string($name) ? $name : $code]
                     : [])
                 ->all();
 
-            if ([] !== $options) {
+            if ($options !== []) {
                 return $options;
             }
         } catch (Throwable) {
@@ -81,11 +81,11 @@ final class EloquentCurrencyResolver implements CurrencyResolver
             $currencyCodes = $this->query()
                 ->where($this->activeColumn, true)
                 ->pluck($this->codeColumn)
-                ->filter(fn(mixed $code): bool => is_string($code) && '' !== $code)
+                ->filter(fn (mixed $code): bool => is_string($code) && $code !== '')
                 ->values()
                 ->all();
 
-            return [] !== $currencyCodes ? array_values($currencyCodes) : $this->fallback->activeCodes();
+            return $currencyCodes !== [] ? array_values($currencyCodes) : $this->fallback->activeCodes();
         } catch (Throwable) {
             return $this->fallback->activeCodes();
         }
@@ -96,6 +96,6 @@ final class EloquentCurrencyResolver implements CurrencyResolver
      */
     private function query(): Builder
     {
-        return (new $this->currencyModel())->newQuery();
+        return (new $this->currencyModel)->newQuery();
     }
 }

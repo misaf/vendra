@@ -57,8 +57,8 @@ final class StoreServiceProvider extends PackageServiceProvider
          | an image, an operator reloading config — is picked up on the next
          | resolve rather than frozen at first use.
          */
-        $this->app->bind(StorefrontSettings::class, static fn(): StorefrontSettings => StorefrontSettings::fromConfig());
-        $this->app->bind(StorefrontRuntimeConfiguration::class, static fn(): StorefrontRuntimeConfiguration => StorefrontRuntimeConfiguration::fromConfig());
+        $this->app->bind(StorefrontSettings::class, static fn (): StorefrontSettings => StorefrontSettings::fromConfig());
+        $this->app->bind(StorefrontRuntimeConfiguration::class, static fn (): StorefrontRuntimeConfiguration => StorefrontRuntimeConfiguration::fromConfig());
 
         // One container per storefront, through the configured Laravel Docker Engine driver.
         $this->app->bind(StorefrontProvisioner::class, ContainerStorefrontProvisioner::class);
@@ -82,7 +82,7 @@ final class StoreServiceProvider extends PackageServiceProvider
     {
         StoreDomain::observe(StoreDomainObserver::class);
 
-        AboutCommand::add('Vendra Store', fn(): array => [
+        AboutCommand::add('Vendra Store', fn (): array => [
             'Version' => InstalledVersions::getPrettyVersion('misaf/vendra-store'),
         ]);
     }

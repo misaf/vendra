@@ -19,7 +19,7 @@ final class StorefrontReference
 {
     public function __construct(public readonly string $slug)
     {
-        if ('' === mb_trim($slug)) {
+        if (mb_trim($slug) === '') {
             throw new InvalidArgumentException('A storefront slug is required.');
         }
     }

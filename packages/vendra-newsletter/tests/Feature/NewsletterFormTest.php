@@ -29,10 +29,10 @@ it('creates a scheduled newsletter from the form', function (): void {
 
     livewire(CreateNewsletter::class)
         ->fillForm([
-            'subject'      => 'Scheduled newsletter',
-            'status'       => NewsletterStatusEnum::Scheduled->value,
+            'subject' => 'Scheduled newsletter',
+            'status' => NewsletterStatusEnum::Scheduled->value,
             'scheduled_at' => $scheduledAt,
-            'content'      => 'Newsletter content',
+            'content' => 'Newsletter content',
         ])
         ->call('create')
         ->assertHasNoFormErrors();

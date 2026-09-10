@@ -35,18 +35,18 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
     public function __construct(private OpenApiFactoryInterface $decorated) {}
 
     /**
-     * @param array<string, mixed> $context
+     * @param  array<string, mixed>  $context
      */
     public function __invoke(array $context = []): OpenApi
     {
         $openApi = ($this->decorated)($context);
         $tags = $this->requestedTags($context);
 
-        if ([] === $tags) {
+        if ($tags === []) {
             return $openApi;
         }
 
-        $paths = new Paths();
+        $paths = new Paths;
 
         foreach ($openApi->getPaths()->getPaths() as $path => $pathItem) {
             $filtered = $this->filterPathItem($pathItem, $tags);
@@ -60,7 +60,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
             ->withPaths($paths)
             ->withTags(array_values(array_filter(
                 $openApi->getTags(),
-                fn(Tag $tag): bool => $this->matches([$tag->getName()], $tags),
+                fn (Tag $tag): bool => $this->matches([$tag->getName()], $tags),
             )));
 
         return $this->pruneSchemas($openApi);
@@ -74,14 +74,14 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
         $components = $openApi->getComponents();
         $schemas = $components->getSchemas();
 
-        if (null === $schemas) {
+        if ($schemas === null) {
             return $openApi;
         }
 
         $reachable = [];
         $pending = $this->collectSchemaReferences($openApi->getPaths()->getPaths());
 
-        while ([] !== $pending) {
+        while ($pending !== []) {
             $name = array_pop($pending);
 
             if (isset($reachable[$name]) || ! isset($schemas[$name])) {
@@ -92,7 +92,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
             $pending = [...$pending, ...$this->collectSchemaReferences($schemas[$name])];
         }
 
-        $kept = new ArrayObject();
+        $kept = new ArrayObject;
 
         foreach ($schemas as $name => $schema) {
             if (isset($reachable[$name])) {
@@ -114,7 +114,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
             $value = $value instanceof Traversable ? iterator_to_array($value) : (array) $value;
         }
 
-        if ( ! is_array($value)) {
+        if (! is_array($value)) {
             return is_string($value) && str_starts_with($value, self::SCHEMA_REF_PREFIX)
                 ? [rawurldecode(mb_substr($value, mb_strlen(self::SCHEMA_REF_PREFIX)))]
                 : [];
@@ -130,7 +130,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
     }
 
     /**
-     * @param array<int, string> $tags
+     * @param  array<int, string>  $tags
      */
     private function filterPathItem(PathItem $pathItem, array $tags): ?PathItem
     {
@@ -138,9 +138,9 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
 
         foreach (self::METHODS as $method) {
             /** @var Operation|null $operation */
-            $operation = $pathItem->{'get' . $method}();
+            $operation = $pathItem->{'get'.$method}();
 
-            if ( ! $operation instanceof Operation) {
+            if (! $operation instanceof Operation) {
                 continue;
             }
 
@@ -150,15 +150,15 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
                 continue;
             }
 
-            $pathItem = $pathItem->{'with' . $method}(null);
+            $pathItem = $pathItem->{'with'.$method}(null);
         }
 
         return $kept ? $pathItem : null;
     }
 
     /**
-     * @param array<int, string> $operationTags
-     * @param array<int, string> $requestedTags
+     * @param  array<int, string>  $operationTags
+     * @param  array<int, string>  $requestedTags
      */
     private function matches(array $operationTags, array $requestedTags): bool
     {
@@ -172,8 +172,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
     }
 
     /**
-     * @param array<string, mixed> $context
-     *
+     * @param  array<string, mixed>  $context
      * @return array<int, string>
      */
     private function requestedTags(array $context): array
@@ -181,14 +180,14 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
         $request = $context['request'] ?? null;
         $raw = $request instanceof Request ? $request->query->all()[self::QUERY_PARAMETER] ?? null : null;
 
-        if (null === $raw || '' === $raw || [] === $raw) {
+        if ($raw === null || $raw === '' || $raw === []) {
             return [];
         }
 
         $values = is_array($raw) ? $raw : explode(',', (string) $raw);
 
         return array_values(array_unique(array_filter(array_map(
-            fn(mixed $value): string => mb_strtolower(mb_trim((string) $value)),
+            fn (mixed $value): string => mb_strtolower(mb_trim((string) $value)),
             $values,
         ))));
     }

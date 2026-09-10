@@ -15,8 +15,8 @@ final class SaveWishlistItemRequest extends FormRequest
      */
     public const array RULES = [
         'sellableType' => ['required', 'string', 'max:64'],
-        'sellableId'   => ['required', 'integer', 'min:1'],
-        'metadata'     => ['nullable', 'array'],
+        'sellableId' => ['required', 'integer', 'min:1'],
+        'metadata' => ['nullable', 'array'],
     ];
 
     public function authorize(): bool

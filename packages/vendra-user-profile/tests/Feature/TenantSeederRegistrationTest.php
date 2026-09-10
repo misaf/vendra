@@ -19,7 +19,7 @@ it('seeds its module permissions through the registered seed command', function 
     makeCurrentTestTenant();
 
     $exitCode = Artisan::call('vendra-user-profile:seed', [
-        'tenant'  => 1,
+        'tenant' => 1,
         'seeders' => ['all'],
     ]);
 

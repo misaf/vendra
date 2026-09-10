@@ -37,10 +37,10 @@ final class TransactionLimit extends Model
     protected function casts(): array
     {
         return [
-            'id'               => 'integer',
-            'wallet_id'        => 'integer',
+            'id' => 'integer',
+            'wallet_id' => 'integer',
             'transaction_type' => TransactionTypeEnum::class,
-            'amount'           => 'integer',
+            'amount' => 'integer',
         ];
     }
 

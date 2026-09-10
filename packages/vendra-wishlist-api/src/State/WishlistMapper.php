@@ -16,7 +16,7 @@ final class WishlistMapper implements ResourceMapper
 {
     public function map(Model $model): WishlistResource
     {
-        if ( ! $model instanceof Wishlist) {
+        if (! $model instanceof Wishlist) {
             throw new UnexpectedValueException('Expected a wishlist model.');
         }
 
@@ -26,7 +26,7 @@ final class WishlistMapper implements ResourceMapper
             name: $model->name,
             isDefault: $model->is_default,
             items: $model->items
-                ->map(fn(WishlistItem $item): SavedItem => new SavedItem(
+                ->map(fn (WishlistItem $item): SavedItem => new SavedItem(
                     id: $item->id,
                     sellableType: $item->sellable_type,
                     sellableId: $item->sellable_id,

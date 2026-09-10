@@ -15,7 +15,7 @@ final class RunTenantSeeders
 
     public function handle(TenantProvisioned $event): void
     {
-        if ( ! $event->shouldSeed) {
+        if (! $event->shouldSeed) {
             return;
         }
 
@@ -23,11 +23,11 @@ final class RunTenantSeeders
 
         foreach ($this->seeders->ordered() as $command) {
             $exitCode = Artisan::call($command, [
-                'tenant'  => $tenant,
+                'tenant' => $tenant,
                 'seeders' => ['all'],
             ]);
 
-            if (0 !== $exitCode) {
+            if ($exitCode !== 0) {
                 throw new RuntimeException(sprintf(
                     'Seed command [%s] failed with exit code [%d].',
                     $command,

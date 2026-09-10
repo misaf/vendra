@@ -23,7 +23,7 @@ final class AffiliateForm
     {
         $components = [
             Select::make('user_id')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.user_id'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.user_id'))
                 ->columnSpan(['lg' => 1])
                 ->label(__('vendra-affiliate::attributes.user'))
                 ->live()
@@ -32,12 +32,12 @@ final class AffiliateForm
                 ->required()
                 ->searchable()
                 ->unique(
-                    modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                    modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                         ->withoutTrashed(),
                 ),
 
             TextInput::make('code')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.code'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.code'))
                 ->columnSpan(['lg' => 1])
                 ->disabledOn('edit')
                 ->helperText(__('vendra-affiliate::attributes.code_helper_text'))
@@ -45,14 +45,14 @@ final class AffiliateForm
                 ->live(onBlur: true)
                 ->maxLength(16)
                 ->unique(
-                    modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                    modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                         ->withoutTrashed(),
                 ),
 
             TextInput::make('commission_percent')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.commission_percent'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.commission_percent'))
                 ->columnSpan(['lg' => 1])
-                ->default(fn(): int => Config::integer('vendra-affiliate.defaults.commission_percent', 20))
+                ->default(fn (): int => Config::integer('vendra-affiliate.defaults.commission_percent', 20))
                 ->integer()
                 ->label(__('vendra-affiliate::attributes.commission_percent'))
                 ->live(onBlur: true)
@@ -62,7 +62,7 @@ final class AffiliateForm
                 ->suffix('%'),
 
             TextInput::make('signup_bounty')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.signup_bounty'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.signup_bounty'))
                 ->columnSpan(['lg' => 1])
                 ->helperText(__('vendra-affiliate::attributes.signup_bounty_helper_text'))
                 ->integer()
@@ -71,7 +71,7 @@ final class AffiliateForm
                 ->minValue(0),
 
             ToggleButtons::make('status')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.status'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.status'))
                 ->columnSpanFull()
                 ->default(AffiliateStatusEnum::Active)
                 ->grouped()
@@ -83,7 +83,7 @@ final class AffiliateForm
 
         if (TagIntegration::isAvailable()) {
             $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.tags'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
                 ->columnSpanFull()
                 ->label(__('vendra-support::attributes.tags'))
                 ->live()
@@ -93,5 +93,4 @@ final class AffiliateForm
         return $schema
             ->components($components);
     }
-
 }

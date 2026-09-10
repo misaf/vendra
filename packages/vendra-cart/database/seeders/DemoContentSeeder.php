@@ -40,7 +40,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * @param list<array<string, mixed>> $records
+     * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
     {
@@ -69,8 +69,8 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     {
         $ownerModel = Config::string('auth.providers.users.model');
 
-        if ( ! is_subclass_of($ownerModel, Model::class)) {
-            return new Collection();
+        if (! is_subclass_of($ownerModel, Model::class)) {
+            return new Collection;
         }
 
         return $ownerModel::query()
@@ -79,8 +79,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * @param array<string, mixed> $record
-     *
+     * @param  array<string, mixed>  $record
      * @return array{token: string, expires_at: string|null}
      */
     private function validatedFixtureRecord(array $record): array
@@ -89,7 +88,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $validated = Validator::make(
             data: $record,
             rules: [
-                'token'      => ['required', 'uuid'],
+                'token' => ['required', 'uuid'],
                 'expires_at' => ['nullable', 'date'],
             ],
         )->validate();

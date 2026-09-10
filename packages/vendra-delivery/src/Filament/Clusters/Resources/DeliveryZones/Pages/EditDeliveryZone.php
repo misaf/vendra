@@ -19,7 +19,7 @@ final class EditDeliveryZone extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-delivery::navigation.delivery_zone');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-delivery::navigation.delivery_zone');
     }
 
     protected function getHeaderActions(): array

@@ -21,10 +21,10 @@ final class AffiliateClickFactory extends Factory
     {
         return [
             'affiliate_id' => Affiliate::factory(),
-            'ip_address'   => fake()->ipv4(),
-            'user_agent'   => fake()->userAgent(),
-            'referer'      => fake()->optional()->url(),
-            'landing_url'  => fake()->url(),
+            'ip_address' => fake()->ipv4(),
+            'user_agent' => fake()->userAgent(),
+            'referer' => fake()->optional()->url(),
+            'landing_url' => fake()->url(),
         ];
     }
 
@@ -33,18 +33,18 @@ final class AffiliateClickFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function forAffiliate(Model|int $affiliate): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'affiliate_id' => $affiliate instanceof Model ? $affiliate->getKey() : $affiliate,
         ]);
     }

@@ -15,7 +15,7 @@ final class ListLanguageLines extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-language::navigation.language');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-language::navigation.language');
     }
 
     protected function getHeaderActions(): array

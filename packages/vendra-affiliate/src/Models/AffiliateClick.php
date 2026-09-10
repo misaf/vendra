@@ -33,6 +33,7 @@ final class AffiliateClick extends Model
 {
     use BelongsToAffiliate;
     use BelongsToTenant;
+
     /** @use HasFactory<AffiliateClickFactory> */
     use HasFactory;
 
@@ -44,13 +45,13 @@ final class AffiliateClick extends Model
     protected function casts(): array
     {
         return [
-            'id'           => 'integer',
-            'tenant_id'    => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
             'affiliate_id' => 'integer',
-            'ip_address'   => 'string',
-            'user_agent'   => 'string',
-            'referer'      => 'string',
-            'landing_url'  => 'string',
+            'ip_address' => 'string',
+            'user_agent' => 'string',
+            'referer' => 'string',
+            'landing_url' => 'string',
         ];
     }
 }

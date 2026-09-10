@@ -11,8 +11,8 @@ use Misaf\VendraSupport\Authorization\ResolvesPolicyPermissions;
 use Mockery;
 
 it('authorizes trait abilities through the policy permission enum', function (): void {
-    $policy = new SupportTestPolicy();
-    $model = new SupportTestTag();
+    $policy = new SupportTestPolicy;
+    $model = new SupportTestTag;
 
     $user = Mockery::mock(Authorizable::class);
     $user->shouldReceive('can')->with('view-any-support-test')->andReturnTrue();
@@ -27,7 +27,8 @@ it('authorizes trait abilities through the policy permission enum', function ():
 });
 
 it('fails loudly when a composed ability has no matching enum case', function (): void {
-    $policy = new class {
+    $policy = new class
+    {
         use AuthorizesUpdateAbilities;
         use ResolvesPolicyPermissions;
 
@@ -39,5 +40,5 @@ it('fails loudly when a composed ability has no matching enum case', function ()
 
     $user = Mockery::mock(Authorizable::class);
 
-    expect(fn(): bool => $policy->update($user, new SupportTestTag()))->toThrow(Error::class);
+    expect(fn (): bool => $policy->update($user, new SupportTestTag))->toThrow(Error::class);
 });

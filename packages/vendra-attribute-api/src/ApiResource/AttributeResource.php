@@ -54,7 +54,7 @@ use Misaf\VendraAttributeApi\State\AttributeMapper;
 final readonly class AttributeResource
 {
     /**
-     * @param array<int, ResourceReference> $values
+     * @param  array<int, ResourceReference>  $values
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The attribute unique identifier')]

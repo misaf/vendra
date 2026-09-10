@@ -25,13 +25,13 @@ it('creates a selection linking an attribute value to any selectable model', fun
 
     $value = AttributeValue::factory()->forAttributable($record)->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]);
 
     $selection = AttributeValueSelection::query()->create([
         'attribute_value_id' => $value->id,
-        'selectable_type'    => $record->getMorphClass(),
-        'selectable_id'      => $record->id,
+        'selectable_type' => $record->getMorphClass(),
+        'selectable_id' => $record->id,
     ]);
 
     expect($selection->attributeValue->is($value))->toBeTrue()
@@ -44,19 +44,19 @@ it('enforces unique attribute-value/selectable pairs', function (): void {
 
     $value = AttributeValue::factory()->forAttributable($record)->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Large',
+        'value' => 'Large',
     ]);
 
     AttributeValueSelection::query()->create([
         'attribute_value_id' => $value->id,
-        'selectable_type'    => $record->getMorphClass(),
-        'selectable_id'      => $record->id,
+        'selectable_type' => $record->getMorphClass(),
+        'selectable_id' => $record->id,
     ]);
 
-    expect(fn() => AttributeValueSelection::query()->create([
+    expect(fn () => AttributeValueSelection::query()->create([
         'attribute_value_id' => $value->id,
-        'selectable_type'    => $record->getMorphClass(),
-        'selectable_id'      => $record->id,
+        'selectable_type' => $record->getMorphClass(),
+        'selectable_id' => $record->id,
     ]))->toThrow(QueryException::class);
 });
 
@@ -67,17 +67,17 @@ it('can query selections from the attribute value side', function (): void {
 
     $value = AttributeValue::factory()->forAttributable($first)->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Wood',
+        'value' => 'Wood',
     ]);
 
     $value->selections()->create([
         'selectable_type' => $first->getMorphClass(),
-        'selectable_id'   => $first->id,
+        'selectable_id' => $first->id,
     ]);
 
     $value->selections()->create([
         'selectable_type' => $second->getMorphClass(),
-        'selectable_id'   => $second->id,
+        'selectable_id' => $second->id,
     ]);
 
     expect($value->selections()->count())->toBe(2);
@@ -89,12 +89,12 @@ it('removes selections when the attribute value is soft deleted', function (): v
 
     $value = AttributeValue::factory()->forAttributable($record)->create([
         'attribute_id' => $attribute->id,
-        'value'        => '30',
+        'value' => '30',
     ]);
 
     $value->selections()->create([
         'selectable_type' => $record->getMorphClass(),
-        'selectable_id'   => $record->id,
+        'selectable_id' => $record->id,
     ]);
 
     $value->delete();
@@ -109,12 +109,12 @@ it('does not resurrect selections when a soft deleted attribute value is restore
 
     $value = AttributeValue::factory()->forAttributable($record)->create([
         'attribute_id' => $attribute->id,
-        'value'        => '20',
+        'value' => '20',
     ]);
 
     $value->selections()->create([
         'selectable_type' => $record->getMorphClass(),
-        'selectable_id'   => $record->id,
+        'selectable_id' => $record->id,
     ]);
 
     $value->delete();
@@ -130,12 +130,12 @@ it('cascades selections when the attribute value is deleted', function (): void 
 
     $value = AttributeValue::factory()->forAttributable($record)->create([
         'attribute_id' => $attribute->id,
-        'value'        => '1.5',
+        'value' => '1.5',
     ]);
 
     $value->selections()->create([
         'selectable_type' => $record->getMorphClass(),
-        'selectable_id'   => $record->id,
+        'selectable_id' => $record->id,
     ]);
 
     $value->forceDelete();

@@ -20,8 +20,8 @@ final class MultimediaInfolist
                 ImageEntry::make('preview')
                     ->columnSpanFull()
                     ->label(__('vendra-multimedia::attributes.name'))
-                    ->state(fn(Multimedia $record): string => $record->getUrl())
-                    ->visible(fn(Multimedia $record): bool => Str::startsWith((string) $record->mime_type, 'image/')),
+                    ->state(fn (Multimedia $record): string => $record->getUrl())
+                    ->visible(fn (Multimedia $record): bool => Str::startsWith((string) $record->mime_type, 'image/')),
 
                 TextEntry::make('model_type')
                     ->label(__('vendra-multimedia::attributes.model_type')),
@@ -49,7 +49,7 @@ final class MultimediaInfolist
                     ->label(__('vendra-multimedia::attributes.disk')),
 
                 TextEntry::make('size')
-                    ->formatStateUsing(fn(int $state): string => Number::fileSize($state))
+                    ->formatStateUsing(fn (int $state): string => Number::fileSize($state))
                     ->label(__('vendra-multimedia::attributes.size')),
 
                 TextEntry::make('order_column')
@@ -67,8 +67,8 @@ final class MultimediaInfolist
             ->label(__("vendra-multimedia::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

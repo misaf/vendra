@@ -15,12 +15,12 @@ final class ConfirmOrderAction
     public static function make(): Action
     {
         return Action::make('confirm')
-            ->authorize(fn(Order $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Order $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('success')
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-order::messages.confirm'))
             ->requiresConfirmation()
-            ->visible(fn(Order $record): bool => $record->status->canTransitionTo(Confirmed::class))
+            ->visible(fn (Order $record): bool => $record->status->canTransitionTo(Confirmed::class))
             ->action(function (Order $record): void {
                 $record->confirm();
 

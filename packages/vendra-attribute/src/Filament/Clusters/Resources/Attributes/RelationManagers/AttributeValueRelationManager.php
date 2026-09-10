@@ -47,7 +47,7 @@ final class AttributeValueRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! $ownerRecord instanceof Attribute) {
+        if (! $ownerRecord instanceof Attribute) {
             return (string) Number::format(0);
         }
 
@@ -64,7 +64,7 @@ final class AttributeValueRelationManager extends RelationManager
                     ->maxLength(255)
                     ->unique(
                         ignoreRecord: true,
-                        modifyRuleUsing: fn(Unique $rule, ?Model $record): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        modifyRuleUsing: fn (Unique $rule, ?Model $record): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->where('attribute_id', $record?->getAttribute('attribute_id'))
                             ->where('attributable_type', $record?->getAttribute('attributable_type'))
                             ->where('attributable_id', $record?->getAttribute('attributable_id'))

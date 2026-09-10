@@ -31,7 +31,7 @@ final class AffiliateRedirectController
             ->where('status', AffiliateStatusEnum::Active)
             ->first();
 
-        if ( ! $affiliate instanceof Affiliate) {
+        if (! $affiliate instanceof Affiliate) {
             return redirect($redirectUrl);
         }
 

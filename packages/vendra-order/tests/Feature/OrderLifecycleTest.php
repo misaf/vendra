@@ -37,19 +37,19 @@ it('cancels an order from either open state', function (string $state): void {
 
     expect($order->status)->toBeInstanceOf(Cancelled::class);
 })->with([
-    'pending'   => [Pending::class],
+    'pending' => [Pending::class],
     'confirmed' => [Confirmed::class],
 ]);
 
 it('refuses to complete an order that was never confirmed', function (): void {
     $order = OrderFactory::new()->createOne();
 
-    expect(fn(): mixed => $order->complete())->toThrow(TransitionNotFound::class);
+    expect(fn (): mixed => $order->complete())->toThrow(TransitionNotFound::class);
 });
 
 it('refuses to reopen a cancelled order', function (): void {
     $order = OrderFactory::new()->withStatus(Cancelled::class)->createOne();
 
-    expect(fn(): mixed => $order->confirm())->toThrow(TransitionNotFound::class)
+    expect(fn (): mixed => $order->confirm())->toThrow(TransitionNotFound::class)
         ->and($order->status->isFinal())->toBeTrue();
 });

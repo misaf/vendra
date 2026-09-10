@@ -34,8 +34,8 @@ final class NewsletterMail extends Mailable
         return new Content(
             view: 'vendra-newsletter::mail.newsletter',
             with: [
-                'newsletter'     => $this->newsletter,
-                'subscriber'     => $this->subscriber,
+                'newsletter' => $this->newsletter,
+                'subscriber' => $this->subscriber,
                 'unsubscribeUrl' => route('vendra-newsletter.unsubscribe', [
                     'token' => $this->subscriber->unsubscribe_token,
                 ]),

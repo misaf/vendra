@@ -19,32 +19,32 @@ final class WalletFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'       => TransactionUsers::model()::factory(),
+            'user_id' => TransactionUsers::model()::factory(),
             'currency_code' => 'USD',
         ];
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function forUser(Model|int $user): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'user_id' => $user instanceof Model ? $user->getKey() : $user,
         ]);
     }
 
     public function forCurrency(string $currencyCode): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'currency_code' => Str::upper($currencyCode),
         ]);
     }

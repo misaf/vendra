@@ -25,11 +25,11 @@ enum StorefrontDeploymentStatus: string
     public function transitions(): array
     {
         return match ($this) {
-            self::Pending    => [self::Processing],
+            self::Pending => [self::Processing],
             self::Processing => [self::Ready, self::Requested, self::Failed, self::Processing],
-            self::Requested  => [self::Processing, self::Ready, self::Failed],
-            self::Ready      => [self::Processing],
-            self::Failed     => [self::Processing],
+            self::Requested => [self::Processing, self::Ready, self::Failed],
+            self::Ready => [self::Processing],
+            self::Failed => [self::Processing],
         };
     }
 
@@ -45,7 +45,7 @@ enum StorefrontDeploymentStatus: string
     {
         return match ($this) {
             self::Ready, self::Failed => true,
-            default                   => false,
+            default => false,
         };
     }
 }

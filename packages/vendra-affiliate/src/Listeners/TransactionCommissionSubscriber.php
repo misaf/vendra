@@ -31,11 +31,11 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
 
     public function transactionUpdated(Transaction $transaction): void
     {
-        if (TransactionTypeEnum::Deposit !== $transaction->transaction_type) {
+        if ($transaction->transaction_type !== TransactionTypeEnum::Deposit) {
             return;
         }
 
-        if ( ! ConversionTypeEnum::Deposit->isEnabled()) {
+        if (! ConversionTypeEnum::Deposit->isEnabled()) {
             return;
         }
 
@@ -54,7 +54,7 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
     public function subscribe(Dispatcher $events): array
     {
         return [
-            'eloquent.updated: ' . Transaction::class => 'transactionUpdated',
+            'eloquent.updated: '.Transaction::class => 'transactionUpdated',
         ];
     }
 
@@ -66,7 +66,7 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
             ->where('user_id', $transaction->wallet->user_id)
             ->first();
 
-        if ( ! $referral instanceof AffiliateReferral || null === $referral->affiliate) {
+        if (! $referral instanceof AffiliateReferral || $referral->affiliate === null) {
             return;
         }
 

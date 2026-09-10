@@ -15,25 +15,25 @@ final class InstallCurrenciesAction
     public static function make(): Action
     {
         return Action::make('installCurrencies')
-            ->authorize(fn(): bool => auth()->user()?->can('create', Currency::class) ?? false)
+            ->authorize(fn (): bool => auth()->user()?->can('create', Currency::class) ?? false)
             ->schema([
                 Select::make('codes')
                     ->label(__('vendra-currency::attributes.code'))
                     ->multiple()
                     ->native(false)
-                    ->options(fn(): array => static::uninstalledCurrencyOptions())
+                    ->options(fn (): array => self::uninstalledCurrencyOptions())
                     ->required()
                     ->searchable(),
             ])
             ->action(function (array $data): void {
                 collect($data['codes'] ?? [])
-                    ->filter(fn(mixed $code): bool => is_string($code) && CurrencyRegistry::isSupported($code))
-                    ->reject(fn(string $code): bool => Currency::query()->where('code', mb_strtoupper($code))->exists())
-                    ->each(fn(string $code) => Currency::query()->create([
-                        'code'           => $code,
-                        'name'           => CurrencyRegistry::nameFor($code),
+                    ->filter(fn (mixed $code): bool => is_string($code) && CurrencyRegistry::isSupported($code))
+                    ->reject(fn (string $code): bool => Currency::query()->where('code', mb_strtoupper($code))->exists())
+                    ->each(fn (string $code) => Currency::query()->create([
+                        'code' => $code,
+                        'name' => CurrencyRegistry::nameFor($code),
                         'decimal_places' => CurrencyRegistry::minorUnitFor($code),
-                        'type'           => CurrencyRegistry::typeFor($code),
+                        'type' => CurrencyRegistry::typeFor($code),
                     ]));
             })
             ->icon(Heroicon::OutlinedSquaresPlus)
@@ -46,7 +46,7 @@ final class InstallCurrenciesAction
     {
         $installedCodes = Currency::query()
             ->get(['code'])
-            ->map(fn(Currency $currency): string => $currency->code);
+            ->map(fn (Currency $currency): string => $currency->code);
 
         return collect(CurrencyRegistry::options())
             ->except($installedCodes)

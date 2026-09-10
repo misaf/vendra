@@ -47,7 +47,7 @@ final class UserProfileServiceProvider extends PackageServiceProvider
         $this->app->singleton(UserProfileRelationManagers::class);
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-user-profile')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-user-profile')) {
                 return;
             }
 
@@ -60,10 +60,10 @@ final class UserProfileServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('user_profiles');
         $this->app->make(TenantSeeders::class)->register('vendra-user-profile:seed', priority: 21);
 
-        AboutCommand::add('Vendra User Profile', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-user-profile')]);
+        AboutCommand::add('Vendra User Profile', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-user-profile')]);
 
         Gate::after(function (Authenticatable $user): ?true {
-            if ( ! $user instanceof User) {
+            if (! $user instanceof User) {
                 return null;
             }
 
@@ -76,18 +76,17 @@ final class UserProfileServiceProvider extends PackageServiceProvider
 
     private function registerUserProfileRelationship(): void
     {
-        User::resolveRelationUsing('profiles', fn(User $user) => $user->hasMany(UserProfile::class));
-        User::resolveRelationUsing('userProfiles', fn(User $user) => $user->hasMany(UserProfile::class));
+        User::resolveRelationUsing('profiles', fn (User $user) => $user->hasMany(UserProfile::class));
+        User::resolveRelationUsing('userProfiles', fn (User $user) => $user->hasMany(UserProfile::class));
     }
 
     private function discoverPackageFeatures(): void
     {
         $featureNamespace = 'Misaf\\VendraUserProfile\\Features';
-        $featurePath = dirname(__DIR__) . '/Features';
+        $featurePath = dirname(__DIR__).'/Features';
 
         if (Config::boolean('vendra-user-profile.features_discover', false) && is_dir($featurePath)) {
             Feature::discover($featureNamespace, $featurePath);
         }
     }
-
 }

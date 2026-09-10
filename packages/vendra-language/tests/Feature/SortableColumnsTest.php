@@ -24,14 +24,14 @@ it('sorts the languages table by every sortable column following the stored valu
 it('sorts the language lines table by every sortable column following the stored values', function (): void {
     $first = LanguageLineFactory::new()->createOne([
         'namespace' => 'aaa-namespace',
-        'group'     => 'aaa-group',
-        'key'       => 'aaa-key',
+        'group' => 'aaa-group',
+        'key' => 'aaa-key',
     ]);
 
     $second = LanguageLineFactory::new()->createOne([
         'namespace' => 'bbb-namespace',
-        'group'     => 'bbb-group',
-        'key'       => 'bbb-key',
+        'group' => 'bbb-group',
+        'key' => 'bbb-key',
     ]);
 
     expect(livewire(ListLanguageLines::class)->call('loadTable'))

@@ -16,8 +16,8 @@ use Misaf\VendraUserProfile\Models\UserProfile;
 use function Pest\Livewire\livewire;
 
 beforeEach(function (): void {
-    if ( ! Schema::hasTable('user_profiles')) {
-        $migration = require __DIR__ . '/../../database/migrations/create_user_profiles_table.php.stub';
+    if (! Schema::hasTable('user_profiles')) {
+        $migration = require __DIR__.'/../../database/migrations/create_user_profiles_table.php.stub';
         $migration->up();
     }
 });
@@ -32,7 +32,7 @@ it('exposes the installed module by default', function (): void {
 
 it('lets the global module switch override a persisted inactive value', function (): void {
     Config::set('vendra-user-profile.features', [
-        'enabled'  => true,
+        'enabled' => true,
         'discover' => false,
     ]);
     Config::set('vendra-user-profile.features_enabled', true);
@@ -66,12 +66,12 @@ it('renders user profiles in the Filament resource table', function (): void {
     setUpFilamentAdminTestContext([UserProfileResource::class]);
 
     $profile = UserProfile::query()->create([
-        'user_id'     => User::query()->valueOrFail('id'),
-        'name'        => 'Primary Profile',
+        'user_id' => User::query()->valueOrFail('id'),
+        'name' => 'Primary Profile',
         'description' => 'Primary user profile',
-        'slug'        => 'primary-profile',
-        'is_default'  => true,
-        'active'      => true,
+        'slug' => 'primary-profile',
+        'is_default' => true,
+        'active' => true,
     ]);
 
     livewire(ListUserProfiles::class)

@@ -25,10 +25,10 @@ final class CreateRoleAction
             ? Config::string('auth.defaults.guard')
             : $guardName;
 
-        $create = static fn(): Role => Role::create([
-            'name'        => $name,
+        $create = static fn (): Role => Role::create([
+            'name' => $name,
             'description' => $description,
-            'guard_name'  => $guardName,
+            'guard_name' => $guardName,
         ]);
 
         if ($tenant instanceof Model && method_exists($tenant, 'execute')) {

@@ -35,13 +35,13 @@ trait HasPluginNavigationGroup
 
     public function getNavigationGroup(): string
     {
-        $group = $this->navigationGroup ?? Config::get($this->getId() . '.navigation_group');
+        $group = $this->navigationGroup ?? Config::get($this->getId().'.navigation_group');
 
         if ($group instanceof Closure) {
             $group = $group();
         }
 
-        if ( ! is_string($group) || '' === $group) {
+        if (! is_string($group) || $group === '') {
             $group = $this->defaultNavigationGroup();
         }
 

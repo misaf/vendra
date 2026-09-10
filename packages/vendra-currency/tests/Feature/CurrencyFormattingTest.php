@@ -8,10 +8,10 @@ use Misaf\VendraCurrency\Models\Currency;
 
 it('wraps minor units in a laravel-money value', function (): void {
     $currency = new Currency([
-        'code'           => 'USD',
-        'name'           => 'US Dollar',
+        'code' => 'USD',
+        'name' => 'US Dollar',
         'decimal_places' => 2,
-        'type'           => CurrencyType::Fiat,
+        'type' => CurrencyType::Fiat,
     ]);
 
     $money = $currency->money(1050);
@@ -23,10 +23,10 @@ it('wraps minor units in a laravel-money value', function (): void {
 
 it('formats fiat amounts through the intl formatter', function (): void {
     $currency = new Currency([
-        'code'           => 'USD',
-        'name'           => 'US Dollar',
+        'code' => 'USD',
+        'name' => 'US Dollar',
         'decimal_places' => 2,
-        'type'           => CurrencyType::Fiat,
+        'type' => CurrencyType::Fiat,
     ]);
 
     expect($currency->formatAmount(1050))->toBe('$10.50');
@@ -34,10 +34,10 @@ it('formats fiat amounts through the intl formatter', function (): void {
 
 it('formats crypto amounts using the stored decimal places and code', function (): void {
     $currency = new Currency([
-        'code'           => 'BTC',
-        'name'           => 'BTC',
+        'code' => 'BTC',
+        'name' => 'BTC',
         'decimal_places' => 8,
-        'type'           => CurrencyType::Crypto,
+        'type' => CurrencyType::Crypto,
     ]);
 
     expect($currency->formatAmount(150000))->toBe('0.00150000 BTC');
@@ -45,11 +45,11 @@ it('formats crypto amounts using the stored decimal places and code', function (
 
 it('prefers the stored symbol when formatting crypto amounts', function (): void {
     $currency = new Currency([
-        'code'           => 'BTC',
-        'name'           => 'Bitcoin',
-        'symbol'         => '₿',
+        'code' => 'BTC',
+        'name' => 'Bitcoin',
+        'symbol' => '₿',
         'decimal_places' => 8,
-        'type'           => CurrencyType::Crypto,
+        'type' => CurrencyType::Crypto,
     ]);
 
     expect($currency->formatAmount(100000000))->toBe('1.00000000 ₿');

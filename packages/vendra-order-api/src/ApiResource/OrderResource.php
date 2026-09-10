@@ -56,7 +56,7 @@ use Misaf\VendraOrderApi\State\OrderMapper;
 final readonly class OrderResource
 {
     /**
-     * @param array<int, OrderLine> $lines
+     * @param  array<int, OrderLine>  $lines
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The order unique identifier')]

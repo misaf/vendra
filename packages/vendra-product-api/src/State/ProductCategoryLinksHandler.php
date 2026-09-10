@@ -15,8 +15,7 @@ use Misaf\VendraProduct\Models\ProductCategory;
 final class ProductCategoryLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<ProductCategory> $builder
-     *
+     * @param  Builder<ProductCategory>  $builder
      * @return Builder<ProductCategory>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -28,7 +27,7 @@ final class ProductCategoryLinksHandler implements LinksHandlerInterface
             ])
             ->where('active', true);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

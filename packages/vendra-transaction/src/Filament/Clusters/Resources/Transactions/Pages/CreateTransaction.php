@@ -30,7 +30,7 @@ final class CreateTransaction extends CreateRecord
             $currencyCode,
         )->id;
 
-        if ( ! empty($data['counterparty_user_id'])) {
+        if (! empty($data['counterparty_user_id'])) {
             $data['counterparty_wallet_id'] = WalletResolver::walletFor(
                 TransactionUsers::model()::query()->findOrFail($data['counterparty_user_id']),
                 $currencyCode,

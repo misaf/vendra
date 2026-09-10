@@ -12,15 +12,15 @@ beforeEach(function (): void {
 });
 
 /**
- * @param array{id?: string, nickname?: ?string, name?: ?string, email?: ?string} $overrides
+ * @param  array{id?: string, nickname?: ?string, name?: ?string, email?: ?string}  $overrides
  */
 function fakeOauthUser(array $overrides = []): SocialiteUserContract
 {
     $data = array_merge([
-        'id'       => (string) fake()->unique()->randomNumber(6),
+        'id' => (string) fake()->unique()->randomNumber(6),
         'nickname' => 'Ada.Lovelace',
-        'name'     => 'Ada Lovelace',
-        'email'    => 'ada@example.test',
+        'name' => 'Ada Lovelace',
+        'email' => 'ada@example.test',
     ], $overrides);
 
     $oauthUser = Mockery::mock(SocialiteUserContract::class);

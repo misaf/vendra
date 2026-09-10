@@ -24,7 +24,7 @@ final class DetachBulkAction extends FilamentDetachBulkAction
         $this->action(function (): void {
             $livewire = $this->getLivewire();
 
-            if ( ! $livewire instanceof RelationManager) {
+            if (! $livewire instanceof RelationManager) {
                 return;
             }
 
@@ -33,7 +33,7 @@ final class DetachBulkAction extends FilamentDetachBulkAction
 
             $this->process(function (Collection $records) use ($ownerRecord): void {
                 foreach ($records as $record) {
-                    if ( ! $record instanceof Permission) {
+                    if (! $record instanceof Permission) {
                         continue;
                     }
 

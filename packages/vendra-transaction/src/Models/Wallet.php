@@ -53,11 +53,11 @@ final class Wallet extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'            => 'integer',
-            'tenant_id'     => 'integer',
-            'user_id'       => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'user_id' => 'integer',
             'currency_code' => 'string',
-            'balance'       => 'integer',
+            'balance' => 'integer',
         ];
     }
 
@@ -67,7 +67,7 @@ final class Wallet extends Model implements ShouldLogActivity
     protected function currencyCode(): Attribute
     {
         return Attribute::make(
-            set: fn(string $value): string => Str::upper($value),
+            set: fn (string $value): string => Str::upper($value),
         );
     }
 

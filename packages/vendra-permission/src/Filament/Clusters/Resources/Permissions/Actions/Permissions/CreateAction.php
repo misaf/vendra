@@ -23,7 +23,7 @@ final class CreateAction extends FilamentCreateAction
         $this->mutateDataUsing(function (array $data): array {
             $livewire = $this->getLivewire();
 
-            if ( ! $livewire instanceof RelationManager) {
+            if (! $livewire instanceof RelationManager) {
                 return $data;
             }
 
@@ -38,7 +38,7 @@ final class CreateAction extends FilamentCreateAction
         $this->after(function (Permission $record): void {
             $livewire = $this->getLivewire();
 
-            if ( ! $livewire instanceof RelationManager) {
+            if (! $livewire instanceof RelationManager) {
                 return;
             }
 

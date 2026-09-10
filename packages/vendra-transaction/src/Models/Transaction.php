@@ -65,6 +65,7 @@ final class Transaction extends Model implements ShouldLogActivity
     use HasOptionalTags;
     use HasStates;
     use SoftDeletes;
+
     private const string TOKEN_CHARACTERS = '123456789';
 
     private const int TOKEN_LENGTH = 20;
@@ -77,16 +78,16 @@ final class Transaction extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                     => 'integer',
-            'tenant_id'              => 'integer',
-            'wallet_id'              => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'wallet_id' => 'integer',
             'transaction_gateway_id' => 'integer',
             'counterparty_wallet_id' => 'integer',
-            'transaction_type'       => TransactionTypeEnum::class,
-            'token'                  => 'string',
-            'idempotency_key'        => 'string',
-            'amount'                 => 'integer',
-            'status'                 => TransactionState::class,
+            'transaction_type' => TransactionTypeEnum::class,
+            'token' => 'string',
+            'idempotency_key' => 'string',
+            'amount' => 'integer',
+            'status' => TransactionState::class,
         ];
     }
 

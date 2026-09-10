@@ -26,11 +26,11 @@ it('reports only the deployments the bus actually accepted', function (): void {
     Queue::fake();
 
     $queued = StorefrontDeployment::factory()->create([
-        'slug'          => 'acme-flowers',
+        'slug' => 'acme-flowers',
         'desired_state' => StorefrontDesiredState::Running,
     ]);
     $inFlight = StorefrontDeployment::factory()->create([
-        'slug'          => 'busy-florist',
+        'slug' => 'busy-florist',
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
@@ -52,7 +52,7 @@ it('does not claim to have queued anything when every dispatch was discarded', f
     Queue::fake();
 
     $deployment = StorefrontDeployment::factory()->create([
-        'slug'          => 'acme-flowers',
+        'slug' => 'acme-flowers',
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
@@ -68,7 +68,7 @@ it('says nothing about skipping when every dispatch was accepted', function (): 
     Queue::fake();
 
     StorefrontDeployment::factory()->create([
-        'slug'          => 'acme-flowers',
+        'slug' => 'acme-flowers',
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
@@ -82,7 +82,7 @@ it('breaks a stale lock only when asked to', function (): void {
     Queue::fake();
 
     $deployment = StorefrontDeployment::factory()->create([
-        'slug'          => 'acme-flowers',
+        'slug' => 'acme-flowers',
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 

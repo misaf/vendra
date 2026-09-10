@@ -18,7 +18,7 @@ final class ListDeliverySlots extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-delivery::navigation.delivery_slot');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-delivery::navigation.delivery_slot');
     }
 
     protected function getHeaderActions(): array

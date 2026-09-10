@@ -27,7 +27,7 @@ final class StorefrontImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'image'  => 'ghcr.io/misaf/vendra-storefront-' . fake()->unique()->slug() . '@sha256:' . fake()->sha256(),
+            'image' => 'ghcr.io/misaf/vendra-storefront-'.fake()->unique()->slug().'@sha256:'.fake()->sha256(),
             'active' => true,
         ];
     }

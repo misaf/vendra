@@ -18,7 +18,7 @@ final class ListTaggers extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-tagger::navigation.tagger');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-tagger::navigation.tagger');
     }
 
     protected function getHeaderActions(): array

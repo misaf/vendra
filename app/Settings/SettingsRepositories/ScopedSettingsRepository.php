@@ -38,10 +38,10 @@ abstract class ScopedSettingsRepository extends SpatieDatabaseSettingsRepository
     public function createProperty(string $group, string $name, $payload, bool $locked = false): void
     {
         $this->persist([[
-            'group'   => $group,
-            'name'    => $name,
+            'group' => $group,
+            'name' => $name,
             'payload' => $this->encode($payload),
-            'locked'  => $locked,
+            'locked' => $locked,
         ]], ['payload', 'locked']);
     }
 
@@ -54,13 +54,13 @@ abstract class ScopedSettingsRepository extends SpatieDatabaseSettingsRepository
 
         foreach ($properties as $name => $payload) {
             $rows[] = [
-                'group'   => $group,
-                'name'    => $name,
+                'group' => $group,
+                'name' => $name,
                 'payload' => $this->encode($payload),
             ];
         }
 
-        if ([] === $rows) {
+        if ($rows === []) {
             return;
         }
 

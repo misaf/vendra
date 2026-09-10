@@ -28,7 +28,7 @@ final class ChargeSubscriptionAction
      */
     public function execute(SubscriptionPayment $payment): void
     {
-        if (SubscriptionPaymentStatus::Paid === $payment->status) {
+        if ($payment->status === SubscriptionPaymentStatus::Paid) {
             SubscriptionPaymentPaid::dispatch($payment);
 
             return;
@@ -38,11 +38,11 @@ final class ChargeSubscriptionAction
             return;
         }
 
-        if (null !== $payment->next_retry_at && $payment->next_retry_at->isFuture()) {
+        if ($payment->next_retry_at !== null && $payment->next_retry_at->isFuture()) {
             return;
         }
 
-        if ( ! $this->subscriptionCharger->available()) {
+        if (! $this->subscriptionCharger->available()) {
             throw SubscriptionPaymentException::providerUnavailable();
         }
 
@@ -57,7 +57,7 @@ final class ChargeSubscriptionAction
                 ->firstOrFail();
 
             if ($lockedPayment->status->isTerminal()
-                || (null !== $lockedPayment->next_retry_at && $lockedPayment->next_retry_at->isFuture())) {
+                || ($lockedPayment->next_retry_at !== null && $lockedPayment->next_retry_at->isFuture())) {
                 return $lockedPayment;
             }
 
@@ -66,18 +66,18 @@ final class ChargeSubscriptionAction
             return $lockedPayment;
         });
 
-        if (SubscriptionPaymentStatus::Paid === $payment->status) {
+        if ($payment->status === SubscriptionPaymentStatus::Paid) {
             SubscriptionPaymentPaid::dispatch($payment);
 
             return;
         }
 
         if ($payment->status->isTerminal()
-            || (null !== $payment->next_retry_at && $payment->next_retry_at->isFuture())) {
+            || ($payment->next_retry_at !== null && $payment->next_retry_at->isFuture())) {
             return;
         }
 
-        if ( ! app()->runningUnitTests() && 0 !== DB::transactionLevel()) {
+        if (! app()->runningUnitTests() && DB::transactionLevel() !== 0) {
             throw new LogicException('Subscription providers must be called outside database transactions.');
         }
 
@@ -89,12 +89,12 @@ final class ChargeSubscriptionAction
             providerReference: $payment->provider_reference,
         );
 
-        $result = null === $payment->provider_reference
+        $result = $payment->provider_reference === null
             ? $this->subscriptionCharger->charge($charge)
             : $this->subscriptionCharger->retrieve($charge);
         $payment = $this->applySubscriptionPaymentResultAction->execute($payment, $result);
 
-        if (SubscriptionPaymentStatus::Paid === $payment->status) {
+        if ($payment->status === SubscriptionPaymentStatus::Paid) {
             SubscriptionPaymentPaid::dispatch($payment);
         }
     }

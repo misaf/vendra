@@ -31,14 +31,14 @@ final class StorefrontDeploymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'store_id'            => Store::factory(),
+            'store_id' => Store::factory(),
             'storefront_image_id' => StorefrontImage::factory(),
-            'slug'                => fake()->unique()->slug(2),
-            'domain'              => fake()->unique()->domainName(),
-            'configuration'       => [
+            'slug' => fake()->unique()->slug(2),
+            'domain' => fake()->unique()->domainName(),
+            'configuration' => [
                 'name' => ['en' => fake()->company(), 'fa' => 'گل‌فروشی'],
             ],
-            'status'        => StorefrontDeploymentStatus::Pending,
+            'status' => StorefrontDeploymentStatus::Pending,
             'desired_state' => StorefrontDesiredState::Running,
         ];
     }

@@ -47,18 +47,18 @@ use Spatie\Translatable\HasTranslations;
 final class BlogPostCategory extends Model implements HasMedia, ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
-
     use HasDefaultMediaConversions, InteractsWithMedia {
         HasDefaultMediaConversions::registerMediaConversions insteadof InteractsWithMedia;
     }
+
     /** @use HasFactory<BlogPostCategoryFactory> */
     use HasFactory;
 
     use HasTranslatableSlug;
-
     use HasTranslations;
     use SoftDeletes;
     use SortableTrait;
+
     public const string MEDIA_COLLECTION = 'blogs/categories';
 
     /**
@@ -78,7 +78,7 @@ final class BlogPostCategory extends Model implements HasMedia, ShouldLogActivit
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -88,13 +88,13 @@ final class BlogPostCategory extends Model implements HasMedia, ShouldLogActivit
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'name'        => 'array',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'name' => 'array',
             'description' => 'array',
-            'slug'        => 'array',
-            'position'    => 'integer',
-            'active'      => 'boolean',
+            'slug' => 'array',
+            'position' => 'integer',
+            'active' => 'boolean',
         ];
     }
 

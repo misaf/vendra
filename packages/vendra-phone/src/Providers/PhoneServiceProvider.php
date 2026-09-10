@@ -32,7 +32,7 @@ final class PhoneServiceProvider extends PackageServiceProvider
 
         UserProfile::resolveRelationUsing(
             'phoneNumbers',
-            fn(UserProfile $profile) => $profile->hasMany(PhoneNumber::class),
+            fn (UserProfile $profile) => $profile->hasMany(PhoneNumber::class),
         );
 
         $this->app->make(UserProfileRelationManagers::class)

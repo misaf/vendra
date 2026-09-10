@@ -24,7 +24,7 @@ final class AffiliateCodeService
         for ($attempt = 0; $attempt < self::MAX_ATTEMPTS; $attempt++) {
             $code = $this->randomCode();
 
-            if ( ! Affiliate::withTrashed()->where('code', $code)->exists()) {
+            if (! Affiliate::withTrashed()->where('code', $code)->exists()) {
                 return $code;
             }
         }

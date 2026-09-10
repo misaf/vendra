@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Context;
 
+use Misaf\VendraSupport\Context\RequestJobContext;
+
 /**
  * Subscription-owned observability context keys passed through
- * {@see \Misaf\VendraSupport\Context\RequestJobContext::$metadata}.
+ * {@see RequestJobContext::$metadata}.
  */
 final class SubscriptionContextKeys
 {

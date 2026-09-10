@@ -36,24 +36,24 @@ beforeEach(function (): void {
 function reconcilableConfiguration(): array
 {
     return [
-        'slug'          => 'acme-flowers',
-        'domain'        => 'acme.test',
-        'siteUrl'       => 'https://acme.test',
-        'businessType'  => 'Florist',
+        'slug' => 'acme-flowers',
+        'domain' => 'acme.test',
+        'siteUrl' => 'https://acme.test',
+        'businessType' => 'Florist',
         'priceCurrency' => 'IRR',
-        'name'          => ['en' => 'Acme Flowers'],
-        'address'       => ['locality' => 'Tehran', 'country' => 'IR'],
-        'contact'       => [
+        'name' => ['en' => 'Acme Flowers'],
+        'address' => ['locality' => 'Tehran', 'country' => 'IR'],
+        'contact' => [
             'mobilePhone' => '09120000000',
             'officePhone' => '02100000000',
-            'email'       => 'contact@acme.test',
-            'hoursOpen'   => '08:00',
-            'hoursClose'  => '21:00',
-            'mapQuery'    => '35.7,51.4',
+            'email' => 'contact@acme.test',
+            'hoursOpen' => '08:00',
+            'hoursClose' => '21:00',
+            'mapQuery' => '35.7,51.4',
         ],
         'social' => [
-            'whatsappPhone'     => '+989120000000',
-            'telegramUsername'  => 'acmeflowers',
+            'whatsappPhone' => '+989120000000',
+            'telegramUsername' => 'acmeflowers',
             'instagramUsername' => 'acmeflowers',
         ],
     ];
@@ -65,7 +65,7 @@ function reconcilableConfiguration(): array
  * Reconciliation reaches for a redeploy on several paths, and a half-filled
  * configuration would fail validation there rather than at the branch under test.
  *
- * @param array<string, mixed> $attributes
+ * @param  array<string, mixed>  $attributes
  */
 function reconcilable(array $attributes = []): StorefrontDeployment
 {
@@ -76,12 +76,12 @@ function reconcilable(array $attributes = []): StorefrontDeployment
 
     return StorefrontDeployment::factory()->create([
         'storefront_image_id' => $storefrontImage->id,
-        'slug'                => 'acme-flowers',
-        'domain'              => 'acme.test',
-        'status'              => StorefrontDeploymentStatus::Ready,
-        'desired_state'       => StorefrontDesiredState::Running,
-        'image'               => RECONCILE_IMAGE,
-        'configuration'       => reconcilableConfiguration(),
+        'slug' => 'acme-flowers',
+        'domain' => 'acme.test',
+        'status' => StorefrontDeploymentStatus::Ready,
+        'desired_state' => StorefrontDesiredState::Running,
+        'image' => RECONCILE_IMAGE,
+        'configuration' => reconcilableConfiguration(),
         ...$attributes,
     ]);
 }
@@ -165,11 +165,11 @@ it('never rewrites the intent it is converging towards', function (): void {
 });
 
 it('refuses to read an unreachable runtime as an absent storefront', function (): void {
-    bindFakeDockerEngine(fn($request, bool $stream) => $stream
+    bindFakeDockerEngine(fn ($request, bool $stream) => $stream
         ? dockerStreamResponse('', 500)
         : dockerResponse(['message' => 'boom'], 500));
 
-    expect(fn() => reconcile(reconcilable()))->toThrow(RuntimeException::class);
+    expect(fn () => reconcile(reconcilable()))->toThrow(RuntimeException::class);
 });
 
 describe('the reconcile command', function (): void {
@@ -180,8 +180,8 @@ describe('the reconcile command', function (): void {
     it('queues a convergence for every deployment, stopped ones included', function (): void {
         $running = reconcilable();
         $stopped = reconcilable([
-            'slug'          => 'beta-flowers',
-            'domain'        => 'beta.test',
+            'slug' => 'beta-flowers',
+            'domain' => 'beta.test',
             'desired_state' => StorefrontDesiredState::Stopped,
         ]);
 
@@ -192,7 +192,7 @@ describe('the reconcile command', function (): void {
         foreach ([$running, $stopped] as $deployment) {
             Queue::assertPushed(
                 ReconcileStorefrontJob::class,
-                fn(ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
+                fn (ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
             );
         }
 
@@ -208,7 +208,7 @@ describe('the reconcile command', function (): void {
 
         Queue::assertPushed(
             ProvisionStorefrontJob::class,
-            fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
+            fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
         );
         Queue::assertNotPushed(ReconcileStorefrontJob::class);
     });

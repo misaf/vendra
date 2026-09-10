@@ -25,7 +25,7 @@ return [
          */
         'name_prefix' => env('STOREFRONT_NAME_PREFIX', 'vendra-storefront-'),
 
-        'port'        => (int) env('STOREFRONT_PORT', 3000),
+        'port' => (int) env('STOREFRONT_PORT', 3000),
         'health_path' => env('STOREFRONT_HEALTH_PATH', '/api/health'),
 
         /*
@@ -42,7 +42,7 @@ return [
          | options are Docker's; Podman logs through k8s-file or journald. Empty
          | leaves logging to the runtime's own configuration.
          */
-        'log_driver'  => env('STOREFRONT_LOG_DRIVER', 'json-file') ?: '',
+        'log_driver' => env('STOREFRONT_LOG_DRIVER', 'json-file') ?: '',
         'log_options' => [
             'max-size' => env('STOREFRONT_LOG_MAX_SIZE', '10m'),
             'max-file' => env('STOREFRONT_LOG_MAX_FILE', '5'),
@@ -59,13 +59,13 @@ return [
          | stops is a runaway spawning until the host's own pid_max is gone,
          | which no other cap here prevents.
          */
-        'cpus'                         => (float) env('STOREFRONT_CPUS', 0.5),
-        'memory_megabytes'             => (int) env('STOREFRONT_MEMORY_MB', 512),
+        'cpus' => (float) env('STOREFRONT_CPUS', 0.5),
+        'memory_megabytes' => (int) env('STOREFRONT_MEMORY_MB', 512),
         'memory_reservation_megabytes' => (int) env('STOREFRONT_MEMORY_RESERVATION_MB', 0),
-        'pids_limit'                   => (int) env('STOREFRONT_PIDS_LIMIT', 512),
+        'pids_limit' => (int) env('STOREFRONT_PIDS_LIMIT', 512),
 
-        'base_domain'   => env('STOREFRONT_BASE_DOMAIN', '') ?: '',
-        'api_url'       => env('STOREFRONT_API_URL', '') ?: '',
+        'base_domain' => env('STOREFRONT_BASE_DOMAIN', '') ?: '',
+        'api_url' => env('STOREFRONT_API_URL', '') ?: '',
         'cert_resolver' => env('STOREFRONT_CERT_RESOLVER', '') ?: '',
 
         /*
@@ -76,10 +76,10 @@ return [
          | under ACME.
          */
         'certificates_path' => env('STOREFRONT_CERTIFICATES_PATH', '') ?: '',
-        'ca_file'           => env('STOREFRONT_CA_FILE', '') ?: '',
+        'ca_file' => env('STOREFRONT_CA_FILE', '') ?: '',
 
-        'storage_base_url'    => env('STOREFRONT_STORAGE_BASE_URL', '') ?: '',
-        'neshan_service_key'  => env('NESHAN_SERVICE_KEY', '') ?: '',
+        'storage_base_url' => env('STOREFRONT_STORAGE_BASE_URL', '') ?: '',
+        'neshan_service_key' => env('NESHAN_SERVICE_KEY', '') ?: '',
         'traefik_middlewares' => env(
             'STOREFRONT_TRAEFIK_MIDDLEWARES',
             'www-redirect@file,security-headers@file,compression@file',

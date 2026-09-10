@@ -52,8 +52,8 @@ use Misaf\VendraDeliveryApi\State\DeliveryZoneMapper;
 final readonly class DeliveryZoneResource
 {
     /**
-     * @param array<string, string> $name
-     * @param array<string, string>|null $description
+     * @param  array<string, string>  $name
+     * @param  array<string, string>|null  $description
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The delivery zone unique identifier')]

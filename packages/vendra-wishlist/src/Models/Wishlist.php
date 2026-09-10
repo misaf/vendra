@@ -53,11 +53,11 @@ final class Wishlist extends Model
     protected static function booted(): void
     {
         self::creating(function (self $wishlist): void {
-            if ( ! array_key_exists('token', $wishlist->getAttributes())) {
+            if (! array_key_exists('token', $wishlist->getAttributes())) {
                 $wishlist->token = (string) Str::uuid();
             }
 
-            if ( ! array_key_exists('name', $wishlist->getAttributes())) {
+            if (! array_key_exists('name', $wishlist->getAttributes())) {
                 $wishlist->name = Config::string('vendra-wishlist.default_name', 'Favourites');
             }
         });
@@ -74,12 +74,12 @@ final class Wishlist extends Model
         return self::query()->firstOrCreate(
             [
                 'owner_type' => $owner->getMorphClass(),
-                'owner_id'   => $owner->getKey(),
+                'owner_id' => $owner->getKey(),
                 'is_default' => true,
             ],
             [
                 'token' => (string) Str::uuid(),
-                'name'  => Config::string('vendra-wishlist.default_name', 'Favourites'),
+                'name' => Config::string('vendra-wishlist.default_name', 'Favourites'),
             ],
         );
     }
@@ -90,11 +90,11 @@ final class Wishlist extends Model
     protected function casts(): array
     {
         return [
-            'id'         => 'integer',
-            'tenant_id'  => 'integer',
-            'owner_id'   => 'integer',
-            'token'      => 'string',
-            'name'       => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'owner_id' => 'integer',
+            'token' => 'string',
+            'name' => 'string',
             'is_default' => 'boolean',
         ];
     }
@@ -132,14 +132,14 @@ final class Wishlist extends Model
             get: function (): ?string {
                 $owner = $this->owner;
 
-                if ( ! $owner instanceof Model) {
+                if (! $owner instanceof Model) {
                     return null;
                 }
 
                 foreach (['username', 'name', 'email'] as $attribute) {
                     $value = $owner->getAttribute($attribute);
 
-                    if (is_string($value) && '' !== $value) {
+                    if (is_string($value) && $value !== '') {
                         return $value;
                     }
                 }

@@ -22,40 +22,40 @@ final class DeliverySlotFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'      => ['en' => 'Morning'],
+            'name' => ['en' => 'Morning'],
             'starts_at' => '09:00:00',
-            'ends_at'   => '12:00:00',
-            'capacity'  => null,
-            'active'    => true,
+            'ends_at' => '12:00:00',
+            'capacity' => null,
+            'active' => true,
         ];
     }
 
     public function window(string $name, string $startsAt, string $endsAt): static
     {
-        return $this->state(fn(): array => [
-            'name'      => ['en' => $name],
+        return $this->state(fn (): array => [
+            'name' => ['en' => $name],
             'starts_at' => $startsAt,
-            'ends_at'   => $endsAt,
+            'ends_at' => $endsAt,
         ]);
     }
 
     public function withCapacity(int $capacity): static
     {
-        return $this->state(fn(): array => ['capacity' => $capacity]);
+        return $this->state(fn (): array => ['capacity' => $capacity]);
     }
 
     public function inactive(): static
     {
-        return $this->state(fn(): array => ['active' => false]);
+        return $this->state(fn (): array => ['active' => false]);
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }

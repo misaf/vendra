@@ -19,7 +19,7 @@ final class LanguageSwitchLocaleResolver implements LocaleResolver
 
         $locale ??= $request->cookie('filament_language_switch_locale');
 
-        if ( ! is_string($locale) || null === ($locale = Locales::normalize($locale))) {
+        if (! is_string($locale) || null === ($locale = Locales::normalize($locale))) {
             return null;
         }
 

@@ -33,7 +33,7 @@ enum TransactionTypeEnum: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::Deposit, self::Commission, self::Bonus => 1,
-            self::Withdrawal, self::Transfer             => -1,
+            self::Withdrawal, self::Transfer => -1,
         };
     }
 
@@ -43,33 +43,33 @@ enum TransactionTypeEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): array
     {
         return match ($this) {
-            self::Deposit    => Color::Green,
+            self::Deposit => Color::Green,
             self::Withdrawal => Color::Red,
             self::Commission => Color::Green,
-            self::Bonus      => Color::Purple,
-            self::Transfer   => Color::Blue,
+            self::Bonus => Color::Purple,
+            self::Transfer => Color::Blue,
         };
     }
 
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::Deposit    => Heroicon::OutlinedArrowDownTray,
+            self::Deposit => Heroicon::OutlinedArrowDownTray,
             self::Withdrawal => Heroicon::OutlinedArrowUpTray,
             self::Commission => Heroicon::OutlinedReceiptPercent,
-            self::Bonus      => Heroicon::OutlinedTrophy,
-            self::Transfer   => Heroicon::OutlinedArrowsRightLeft,
+            self::Bonus => Heroicon::OutlinedTrophy,
+            self::Transfer => Heroicon::OutlinedArrowsRightLeft,
         };
     }
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::Deposit    => __('vendra-transaction::enums.transaction_type_deposit'),
+            self::Deposit => __('vendra-transaction::enums.transaction_type_deposit'),
             self::Withdrawal => __('vendra-transaction::enums.transaction_type_withdrawal'),
             self::Commission => __('vendra-transaction::enums.transaction_type_commission'),
-            self::Bonus      => __('vendra-transaction::enums.transaction_type_bonus'),
-            self::Transfer   => __('vendra-transaction::enums.transaction_type_transfer'),
+            self::Bonus => __('vendra-transaction::enums.transaction_type_bonus'),
+            self::Transfer => __('vendra-transaction::enums.transaction_type_transfer'),
         };
     }
 }

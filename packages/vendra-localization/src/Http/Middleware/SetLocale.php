@@ -46,7 +46,7 @@ final readonly class SetLocale
      */
     private function supportedLocale(?string $locale): ?string
     {
-        if (null === $locale) {
+        if ($locale === null) {
             return null;
         }
 
@@ -66,7 +66,7 @@ final readonly class SetLocale
      */
     private function resolver(array $sources): LocaleResolver
     {
-        if ([] === $sources) {
+        if ($sources === []) {
             return $this->localeResolver;
         }
 
@@ -81,13 +81,13 @@ final readonly class SetLocale
 
     private function setVaryHeader(Response $response, LocaleResolver $resolver): void
     {
-        if ( ! $resolver instanceof ProvidesVaryHeaders) {
+        if (! $resolver instanceof ProvidesVaryHeaders) {
             return;
         }
 
         $headers = $resolver->varyHeaders();
 
-        if ([] === $headers) {
+        if ($headers === []) {
             return;
         }
 
@@ -102,7 +102,7 @@ final readonly class SetLocale
         $supportedLocales = [];
 
         foreach (Config::array('vendra-localization.supported_locales', []) as $locale) {
-            if (is_string($locale) && '' !== $locale) {
+            if (is_string($locale) && $locale !== '') {
                 $supportedLocales[$this->normalizeLocale($locale)] = $locale;
             }
         }

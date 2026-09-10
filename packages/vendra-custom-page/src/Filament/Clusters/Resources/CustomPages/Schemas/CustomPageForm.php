@@ -29,7 +29,7 @@ final class CustomPageForm
         return $schema
             ->components([
                 Select::make('custom_page_category_id')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.custom_page_category_id'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.custom_page_category_id'))
                     ->columnSpanFull()
                     ->label(__('vendra-custom-page::navigation.custom_page_category'))
                     ->live()
@@ -54,13 +54,13 @@ final class CustomPageForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        column: fn(Livewire $livewire): string => 'name->' . self::activeFormLocale($livewire),
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        column: fn (Livewire $livewire): string => 'name->'.self::activeFormLocale($livewire),
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 TextInput::make('slug')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.slug'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.slug'))
                     ->columnSpan(['lg' => 1])
                     ->helperText(__('vendra-custom-page::attributes.slug_helper_text'))
                     ->label(__('vendra-custom-page::attributes.slug'))
@@ -68,8 +68,8 @@ final class CustomPageForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        column: fn(Livewire $livewire): string => 'slug->' . self::activeFormLocale($livewire),
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        column: fn (Livewire $livewire): string => 'slug->'.self::activeFormLocale($livewire),
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
@@ -80,7 +80,7 @@ final class CustomPageForm
                     ->json(),
 
                 SpatieMediaLibraryFileUpload::make('image')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.image'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
                     ->collection(CustomPage::MEDIA_COLLECTION)
                     ->columnSpanFull()
                     ->image()
@@ -90,7 +90,7 @@ final class CustomPageForm
                     ->responsiveImages(),
 
                 Toggle::make('active')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                     ->columnSpanFull()
                     ->default(false)
                     ->label(__('vendra-custom-page::attributes.active'))
@@ -102,5 +102,4 @@ final class CustomPageForm
                     ]),
             ]);
     }
-
 }

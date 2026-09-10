@@ -53,8 +53,8 @@ final class ReferralsRelationManager extends RelationManager
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
             ])
             ->defaultSort(column: 'attributed_at', direction: 'desc');

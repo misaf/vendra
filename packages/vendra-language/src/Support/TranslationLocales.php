@@ -17,11 +17,11 @@ final class TranslationLocales
             ->active()
             ->ordered()
             ->pluck('locale')
-            ->filter(fn(mixed $locale): bool => is_string($locale))
+            ->filter(fn (mixed $locale): bool => is_string($locale))
             ->values()
             ->all();
 
-        return [] === $locales
+        return $locales === []
             ? [config()->string('app.fallback_locale')]
             : array_values($locales);
     }
@@ -33,7 +33,7 @@ final class TranslationLocales
     public static function merge(array $translations = []): array
     {
         return array_replace(
-            array_fill_keys(static::active(), ''),
+            array_fill_keys(self::active(), ''),
             $translations,
         );
     }

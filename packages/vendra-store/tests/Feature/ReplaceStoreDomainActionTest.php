@@ -23,7 +23,7 @@ it('activates a new domain and retains the previous one as trashed history', fun
         ->and($previous?->active)->toBeFalse();
 
     // Only one active, non-trashed domain resolves the property.
-    expect($store->execute(fn() => $store->storeDomains()->where('active', true)->count()))->toBe(1);
+    expect($store->execute(fn () => $store->storeDomains()->where('active', true)->count()))->toBe(1);
 });
 
 it('replaces the active domain even when another tenant is current', function (): void {
@@ -36,7 +36,7 @@ it('replaces the active domain even when another tenant is current', function ()
     $new = app(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
 
     expect($new->store_id)->toBe($store->getKey())
-        ->and($store->execute(fn() => $store->storeDomains()->where('active', true)->value('name')))->toBe('new.test');
+        ->and($store->execute(fn () => $store->storeDomains()->where('active', true)->value('name')))->toBe('new.test');
 });
 
 it('keeps replaced history when the property is soft-deleted and restored', function (): void {
@@ -48,8 +48,8 @@ it('keeps replaced history when the property is soft-deleted and restored', func
     $store->restore();
 
     // The active domain resolves again; the replaced one stays trashed history.
-    expect($store->execute(fn() => $store->storeDomains()->where('active', true)->value('name')))->toBe('new.test')
-        ->and($store->execute(fn() => $store->storeDomains()->onlyTrashed()->count()))->toBe(1);
+    expect($store->execute(fn () => $store->storeDomains()->where('active', true)->value('name')))->toBe('new.test')
+        ->and($store->execute(fn () => $store->storeDomains()->onlyTrashed()->count()))->toBe(1);
 });
 
 it('rejects a domain already active on another property', function (): void {

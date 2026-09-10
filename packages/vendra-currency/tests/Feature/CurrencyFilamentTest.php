@@ -9,7 +9,6 @@ use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Pages\CreateCurrency;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Pages\ListCurrencies;
-
 use Misaf\VendraCurrency\Models\Currency;
 
 use function Pest\Livewire\livewire;
@@ -35,7 +34,7 @@ it('offers every uninstalled catalog currency for installation', function (): vo
 it('installs a fiat currency and snapshots its catalog data', function (): void {
     livewire(CreateCurrency::class)
         ->fillForm([
-            'code'       => 'EUR',
+            'code' => 'EUR',
             'is_default' => false,
         ])
         ->call('create')
@@ -51,7 +50,7 @@ it('installs a fiat currency and snapshots its catalog data', function (): void 
 it('installs a crypto currency from the catalog', function (): void {
     livewire(CreateCurrency::class)
         ->fillForm([
-            'code'       => 'BTC',
+            'code' => 'BTC',
             'is_default' => false,
         ])
         ->call('create')

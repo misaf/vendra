@@ -11,7 +11,7 @@ return [
         'description' => [
             'orders' => 'Bestellungen erscheinen, sobald Kunden den Checkout abschließen.',
         ],
-        'heading'     => [
+        'heading' => [
             'orders' => 'Noch keine Bestellungen',
         ],
     ],

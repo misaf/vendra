@@ -6,7 +6,6 @@ namespace Misaf\VendraFaqApi\Providers;
 
 use ApiPlatform\Laravel\Eloquent\State\LinksHandlerInterface;
 use Composer\InstalledVersions;
-
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
 use Misaf\VendraFaqApi\State\FaqCategoryLinksHandler;
@@ -25,7 +24,7 @@ final class FaqApiServiceProvider extends PackageServiceProvider
     {
         Config::set('api-platform.resources', [
             ...Config::array('api-platform.resources', []),
-            dirname(__DIR__) . '/ApiResource',
+            dirname(__DIR__).'/ApiResource',
         ]);
 
         $this->app->tag([
@@ -36,6 +35,6 @@ final class FaqApiServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        AboutCommand::add('Vendra Faq API', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-faq-api')]);
+        AboutCommand::add('Vendra Faq API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-faq-api')]);
     }
 }

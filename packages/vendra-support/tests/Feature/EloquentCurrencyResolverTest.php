@@ -23,25 +23,25 @@ it('provides active currency values from an eloquent model', function (): void {
 
     SupportTestCurrency::query()->insert([
         [
-            'name'       => 'US Dollar',
-            'code'       => 'USD',
+            'name' => 'US Dollar',
+            'code' => 'USD',
             'is_default' => true,
-            'position'   => 1,
-            'active'     => true,
+            'position' => 1,
+            'active' => true,
         ],
         [
-            'name'       => 'Euro',
-            'code'       => 'EUR',
+            'name' => 'Euro',
+            'code' => 'EUR',
             'is_default' => false,
-            'position'   => 2,
-            'active'     => true,
+            'position' => 2,
+            'active' => true,
         ],
         [
-            'name'       => 'British Pound',
-            'code'       => 'GBP',
+            'name' => 'British Pound',
+            'code' => 'GBP',
             'is_default' => false,
-            'position'   => 3,
-            'active'     => false,
+            'position' => 3,
+            'active' => false,
         ],
     ]);
 

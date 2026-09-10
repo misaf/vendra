@@ -20,25 +20,25 @@ final class AddCartItemAction
      * transaction serializes them, and makes the "does a row already exist"
      * check hold until the write lands rather than letting both callers insert.
      *
-     * @param array<string, mixed>|null $metadata
+     * @param  array<string, mixed>|null  $metadata
      */
     public function execute(Cart $cart, Model $sellable, int $quantity = 1, ?array $metadata = null): CartItem
     {
         return DB::transaction(function () use ($cart, $sellable, $quantity, $metadata): CartItem {
             $attributes = [
                 'sellable_type' => $sellable->getMorphClass(),
-                'sellable_id'   => $sellable->getKey(),
+                'sellable_id' => $sellable->getKey(),
             ];
 
             $item = $cart->items()->where($attributes)->lockForUpdate()->first();
 
-            if ( ! $item instanceof CartItem) {
+            if (! $item instanceof CartItem) {
                 $item = $cart->items()->make($attributes);
             }
 
             $item->quantity = $item->exists ? $item->quantity + $quantity : $quantity;
 
-            if (null !== $metadata) {
+            if ($metadata !== null) {
                 $item->metadata = $metadata;
             }
 

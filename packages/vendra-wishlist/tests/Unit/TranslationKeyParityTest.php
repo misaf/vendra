@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 it('has at least two available locales', function (): void {
-    expect(__DIR__ . '/../../resources/lang')->toHaveAtLeastTwoLocales('vendra-wishlist');
+    expect(__DIR__.'/../../resources/lang')->toHaveAtLeastTwoLocales('vendra-wishlist');
 });
 
 it('keeps translation files and keys in sync across locales', function (): void {
-    expect(__DIR__ . '/../../resources/lang')->toHaveTranslationsInSync('vendra-wishlist');
+    expect(__DIR__.'/../../resources/lang')->toHaveTranslationsInSync('vendra-wishlist');
 });
 
 it('keeps translation file keys sorted', function (): void {
-    expect(__DIR__ . '/../../resources/lang')->toHaveSortedTranslationKeys('vendra-wishlist');
+    expect(__DIR__.'/../../resources/lang')->toHaveSortedTranslationKeys('vendra-wishlist');
 });

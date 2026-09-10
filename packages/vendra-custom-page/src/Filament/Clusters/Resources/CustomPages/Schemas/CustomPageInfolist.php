@@ -28,7 +28,7 @@ final class CustomPageInfolist
                     ->label(__('vendra-custom-page::attributes.active')),
                 TextEntry::make('description')
                     ->columnSpanFull()
-                    ->formatStateUsing(fn(array|string|null $state): string => self::renderRichContent($state))
+                    ->formatStateUsing(fn (array|string|null $state): string => self::renderRichContent($state))
                     ->html()
                     ->label(__('vendra-custom-page::attributes.description')),
                 SpatieMediaLibraryImageEntry::make('image')
@@ -47,9 +47,8 @@ final class CustomPageInfolist
             ->label(__("vendra-custom-page::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
-
 }

@@ -16,9 +16,9 @@ use Illuminate\Database\Eloquent\Model;
 final readonly class OrderLineDraft
 {
     /**
-     * @param array<string, string> $name       Translatable name keyed by locale.
-     * @param int                   $unitAmount Unit price in minor units.
-     * @param array<string, mixed>|null $metadata
+     * @param  array<string, string>  $name  Translatable name keyed by locale.
+     * @param  int  $unitAmount  Unit price in minor units.
+     * @param  array<string, mixed>|null  $metadata
      */
     public function __construct(
         public Model $sellable,
@@ -40,13 +40,13 @@ final readonly class OrderLineDraft
     {
         return [
             'sellable_type' => $this->sellable->getMorphClass(),
-            'sellable_id'   => $this->sellable->getKey(),
-            'name'          => $this->name,
+            'sellable_id' => $this->sellable->getKey(),
+            'name' => $this->name,
             'currency_code' => $currencyCode,
-            'quantity'      => $this->quantity,
-            'unit_amount'   => $this->unitAmount,
-            'line_amount'   => $this->lineAmount(),
-            'metadata'      => $this->metadata,
+            'quantity' => $this->quantity,
+            'unit_amount' => $this->unitAmount,
+            'line_amount' => $this->lineAmount(),
+            'metadata' => $this->metadata,
         ];
     }
 }

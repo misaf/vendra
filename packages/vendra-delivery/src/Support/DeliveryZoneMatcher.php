@@ -29,11 +29,11 @@ final class DeliveryZoneMatcher
         foreach ($zones as $zone) {
             $distance = $zone->distanceTo($latitude, $longitude);
 
-            if (null === $nearestDistance || $distance < $nearestDistance) {
+            if ($nearestDistance === null || $distance < $nearestDistance) {
                 $nearestDistance = $distance;
             }
 
-            if ( ! $zone->covers($distance)) {
+            if (! $zone->covers($distance)) {
                 continue;
             }
 

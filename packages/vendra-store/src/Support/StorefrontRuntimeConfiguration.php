@@ -24,7 +24,7 @@ final readonly class StorefrontRuntimeConfiguration
 
     public function isConfigured(): bool
     {
-        return '' !== $this->host;
+        return $this->host !== '';
     }
 
     public function misconfigurationMessage(): string

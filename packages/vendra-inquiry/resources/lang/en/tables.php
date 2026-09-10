@@ -11,7 +11,7 @@ return [
         'description' => [
             'inquiries' => 'Enquiries appear when someone writes in from the contact form.',
         ],
-        'heading'     => [
+        'heading' => [
             'inquiries' => 'No enquiries yet',
         ],
     ],

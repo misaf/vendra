@@ -21,11 +21,11 @@ final class AffiliatePayoutFactory extends Factory
     public function definition(): array
     {
         return [
-            'affiliate_id'   => Affiliate::factory(),
-            'amount'         => fake()->numberBetween(1_000, 500_000),
-            'status'         => PayoutStatusEnum::Pending,
+            'affiliate_id' => Affiliate::factory(),
+            'amount' => fake()->numberBetween(1_000, 500_000),
+            'status' => PayoutStatusEnum::Pending,
             'transaction_id' => null,
-            'processed_at'   => null,
+            'processed_at' => null,
         ];
     }
 
@@ -34,32 +34,32 @@ final class AffiliatePayoutFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function forAffiliate(Model|int $affiliate): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'affiliate_id' => $affiliate instanceof Model ? $affiliate->getKey() : $affiliate,
         ]);
     }
 
     public function completed(): static
     {
-        return $this->state(fn(): array => [
-            'status'       => PayoutStatusEnum::Completed,
+        return $this->state(fn (): array => [
+            'status' => PayoutStatusEnum::Completed,
             'processed_at' => now(),
         ]);
     }
 
     public function failed(): static
     {
-        return $this->state(fn(): array => ['status' => PayoutStatusEnum::Failed]);
+        return $this->state(fn (): array => ['status' => PayoutStatusEnum::Failed]);
     }
 }

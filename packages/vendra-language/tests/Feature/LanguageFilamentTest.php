@@ -12,7 +12,6 @@ use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Pages\CreateLangu
 use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Pages\ListLanguages;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraLanguage\Models\LanguageLine;
-
 use Misaf\VendraLanguage\Support\Locales;
 
 use function Pest\Livewire\livewire;
@@ -56,7 +55,7 @@ it('installs a Symfony Intl locale outside the configured catalog', function ():
 
     livewire(CreateLanguage::class)
         ->fillForm([
-            'locale'     => 'pt-BR',
+            'locale' => 'pt-BR',
             'is_default' => false,
         ])
         ->call('create')
@@ -86,9 +85,9 @@ it('creates a discovered translation override for active locales', function (): 
     livewire(CreateLanguageLine::class)
         ->fillForm([
             'namespace' => 'vendra-language',
-            'group'     => 'navigation',
-            'key'       => 'language',
-            'text'      => [
+            'group' => 'navigation',
+            'key' => 'language',
+            'text' => [
                 'en' => 'Tenant Languages',
                 'de' => '',
             ],
@@ -98,8 +97,8 @@ it('creates a discovered translation override for active locales', function (): 
 
     expect(LanguageLine::query()->where([
         'namespace' => 'vendra-language',
-        'group'     => 'navigation',
-        'key'       => 'language',
+        'group' => 'navigation',
+        'key' => 'language',
     ])->value('text'))->toBe([
         'en' => 'Tenant Languages',
         'de' => '',
@@ -113,8 +112,8 @@ it('accepts the browser state for a non-blank translation override', function ()
     livewire(CreateLanguageLine::class)
         ->fillForm([
             'namespace' => 'vendra-language',
-            'group'     => 'navigation',
-            'key'       => 'language',
+            'group' => 'navigation',
+            'key' => 'language',
         ])
         ->set('data.text', [
             ['key' => 'en', 'value' => 'Tenant Languages'],
@@ -125,8 +124,8 @@ it('accepts the browser state for a non-blank translation override', function ()
 
     expect(LanguageLine::query()->where([
         'namespace' => 'vendra-language',
-        'group'     => 'navigation',
-        'key'       => 'language',
+        'group' => 'navigation',
+        'key' => 'language',
     ])->value('text'))->toBe([
         'en' => 'Tenant Languages',
         'de' => '',
@@ -139,9 +138,9 @@ it('requires at least one non-blank translation override', function (): void {
     livewire(CreateLanguageLine::class)
         ->fillForm([
             'namespace' => 'vendra-language',
-            'group'     => 'navigation',
-            'key'       => 'language',
-            'text'      => ['en' => '  '],
+            'group' => 'navigation',
+            'key' => 'language',
+            'text' => ['en' => '  '],
         ])
         ->call('create')
         ->assertHasFormErrors(['text']);
@@ -153,9 +152,9 @@ it('rejects translation groups that are not discovered from translation files', 
     livewire(CreateLanguageLine::class)
         ->fillForm([
             'namespace' => 'vendra-language',
-            'group'     => 'not-a-translation-file',
-            'key'       => 'language',
-            'text'      => ['en' => 'Tenant Languages'],
+            'group' => 'not-a-translation-file',
+            'key' => 'language',
+            'text' => ['en' => 'Tenant Languages'],
         ])
         ->call('create')
         ->assertHasFormErrors(['group']);
@@ -167,9 +166,9 @@ it('hydrates active locales without dropping stored inactive locales', function 
 
     $languageLine = LanguageLine::query()->create([
         'namespace' => 'vendra-language',
-        'group'     => 'navigation',
-        'key'       => 'language',
-        'text'      => [
+        'group' => 'navigation',
+        'key' => 'language',
+        'text' => [
             'en' => 'Tenant Languages',
             'fa' => 'زبان‌های مستأجر',
         ],
@@ -217,8 +216,8 @@ it('shows locale coverage and language line progress in the tables', function ()
 
     $completeLanguageLine = LanguageLine::query()->create([
         'group' => 'navigation',
-        'key'   => 'dashboard',
-        'text'  => [
+        'key' => 'dashboard',
+        'text' => [
             'en' => 'Dashboard',
             'de' => 'Instrumententafel',
         ],
@@ -226,8 +225,8 @@ it('shows locale coverage and language line progress in the tables', function ()
 
     $partialLanguageLine = LanguageLine::query()->create([
         'group' => 'navigation',
-        'key'   => 'settings',
-        'text'  => [
+        'key' => 'settings',
+        'text' => [
             'en' => '',
             'de' => 'Einstellungen',
         ],

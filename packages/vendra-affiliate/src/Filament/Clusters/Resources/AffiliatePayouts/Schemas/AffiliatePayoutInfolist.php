@@ -40,8 +40,8 @@ final class AffiliatePayoutInfolist
             ->label(__("vendra-affiliate::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

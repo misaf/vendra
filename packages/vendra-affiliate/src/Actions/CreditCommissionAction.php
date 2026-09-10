@@ -44,21 +44,21 @@ final class CreditCommissionAction
             $commission = AffiliateCommission::withTrashed()->firstOrCreate(
                 [
                     'conversion_type' => $conversionType,
-                    'source_type'     => $source->getMorphClass(),
-                    'source_id'       => $source->getKey(),
+                    'source_type' => $source->getMorphClass(),
+                    'source_id' => $source->getKey(),
                 ],
                 [
-                    'affiliate_id'          => $affiliate->id,
+                    'affiliate_id' => $affiliate->id,
                     'affiliate_referral_id' => $referral?->id,
-                    'amount'                => $amount,
-                    'status'                => $status,
+                    'amount' => $amount,
+                    'status' => $status,
                 ],
             );
 
             return [$commission, $commission->wasRecentlyCreated];
         });
 
-        if ( ! $wasCredited) {
+        if (! $wasCredited) {
             return null;
         }
 

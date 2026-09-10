@@ -30,8 +30,8 @@ final class DatabaseSeeder extends Seeder
         foreach ($users as $user) {
             $userProfile = UserProfile::query()->firstOrCreate([
                 'user_id' => $user->id,
-                'name'    => $user->username,
-                'active'  => true,
+                'name' => $user->username,
+                'active' => true,
             ]);
 
             if ($userProfile->wasRecentlyCreated) {

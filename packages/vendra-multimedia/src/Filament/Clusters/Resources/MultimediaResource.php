@@ -15,7 +15,6 @@ use Misaf\VendraMultimedia\Filament\Clusters\Resources\Schemas\MultimediaInfolis
 use Misaf\VendraMultimedia\Filament\Clusters\Resources\Tables\MultimediaTable;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraSupport\Filament\Clusters\ContentCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class MultimediaResource extends Resource
@@ -64,7 +63,7 @@ final class MultimediaResource extends Resource
     {
         return [
             'index' => ListMultimedia::route('/'),
-            'view'  => ViewMultimedia::route('/{record}'),
+            'view' => ViewMultimedia::route('/{record}'),
         ];
     }
 

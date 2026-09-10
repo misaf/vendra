@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraCurrency\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraCurrency\Console\Commands\SeedCommand;
@@ -43,11 +42,11 @@ final class CurrencyServiceProvider extends PackageServiceProvider
     {
         $this->app->singleton(
             CurrencyResolver::class,
-            fn(): EloquentCurrencyResolver => new EloquentCurrencyResolver(Currency::class),
+            fn (): EloquentCurrencyResolver => new EloquentCurrencyResolver(Currency::class),
         );
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-currency')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-currency')) {
                 return;
             }
 
@@ -60,6 +59,6 @@ final class CurrencyServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('currencies');
         $this->app->make(TenantSeeders::class)->register('vendra-currency:seed', priority: 30);
 
-        AboutCommand::add('Vendra Currency', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-currency')]);
+        AboutCommand::add('Vendra Currency', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-currency')]);
     }
 }

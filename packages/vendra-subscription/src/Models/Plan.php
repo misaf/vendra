@@ -54,9 +54,10 @@ final class Plan extends Model implements ShouldLogActivity
 
     use HasSlug;
     use SoftDeletes;
+
     /** @var array<string, mixed> */
     protected $attributes = [
-        'active'     => true,
+        'active' => true,
         'is_default' => false,
     ];
 
@@ -66,20 +67,20 @@ final class Plan extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'             => 'integer',
-            'name'           => 'string',
-            'slug'           => 'string',
-            'description'    => 'string',
-            'max_units'      => 'integer',
-            'period_unit'    => PeriodUnit::class,
-            'period_count'   => 'integer',
-            'grace_days'     => 'integer',
-            'price'          => 'integer',
-            'currency_code'  => 'string',
-            'trial_days'     => 'integer',
-            'features'       => 'array',
-            'active'         => 'boolean',
-            'is_default'     => 'boolean',
+            'id' => 'integer',
+            'name' => 'string',
+            'slug' => 'string',
+            'description' => 'string',
+            'max_units' => 'integer',
+            'period_unit' => PeriodUnit::class,
+            'period_count' => 'integer',
+            'grace_days' => 'integer',
+            'price' => 'integer',
+            'currency_code' => 'string',
+            'trial_days' => 'integer',
+            'features' => 'array',
+            'active' => 'boolean',
+            'is_default' => 'boolean',
         ];
     }
 
@@ -136,7 +137,7 @@ final class Plan extends Model implements ShouldLogActivity
      */
     public function isFree(): bool
     {
-        return 0 === $this->price;
+        return $this->price === 0;
     }
 
     /**
@@ -146,14 +147,14 @@ final class Plan extends Model implements ShouldLogActivity
      */
     public function formattedPrice(): string
     {
-        if (null === $this->currency_code) {
+        if ($this->currency_code === null) {
             return $this->formatPlainPrice();
         }
 
         try {
             return (new Money($this->price, $this->currency_code))->format();
         } catch (Throwable) {
-            return $this->formatPlainPrice() . ' ' . $this->currency_code;
+            return $this->formatPlainPrice().' '.$this->currency_code;
         }
     }
 

@@ -51,16 +51,16 @@ final class Subscription extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                      => 'integer',
-            'subscriber_type'         => 'string',
-            'subscriber_id'           => 'integer',
-            'plan_id'                 => 'integer',
-            'status'                  => SubscriptionStatus::class,
-            'price'                   => 'integer',
-            'currency_code'           => 'string',
-            'trial_ends_at'           => 'datetime',
-            'starts_at'               => 'datetime',
-            'ends_at'                 => 'datetime',
+            'id' => 'integer',
+            'subscriber_type' => 'string',
+            'subscriber_id' => 'integer',
+            'plan_id' => 'integer',
+            'status' => SubscriptionStatus::class,
+            'price' => 'integer',
+            'currency_code' => 'string',
+            'trial_ends_at' => 'datetime',
+            'starts_at' => 'datetime',
+            'ends_at' => 'datetime',
             'expiry_reminder_sent_at' => 'datetime',
         ];
     }
@@ -152,7 +152,7 @@ final class Subscription extends Model implements ShouldLogActivity
     {
         $plan = $this->plan;
 
-        if (null === $this->ends_at || null === $plan) {
+        if ($this->ends_at === null || $plan === null) {
             return null;
         }
 
@@ -164,7 +164,7 @@ final class Subscription extends Model implements ShouldLogActivity
      */
     public function isOnTrial(): bool
     {
-        return null !== $this->trial_ends_at && $this->trial_ends_at->isFuture();
+        return $this->trial_ends_at !== null && $this->trial_ends_at->isFuture();
     }
 
     /**
@@ -172,7 +172,7 @@ final class Subscription extends Model implements ShouldLogActivity
      */
     public function isActive(): bool
     {
-        if (SubscriptionStatus::Active !== $this->status) {
+        if ($this->status !== SubscriptionStatus::Active) {
             return false;
         }
 
@@ -180,7 +180,7 @@ final class Subscription extends Model implements ShouldLogActivity
             return false;
         }
 
-        return null === $this->ends_at || $this->ends_at->isFuture();
+        return $this->ends_at === null || $this->ends_at->isFuture();
     }
 
     public function activate(): bool

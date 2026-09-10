@@ -40,7 +40,7 @@ final class StorefrontObservation
 
     public function isAbsent(): bool
     {
-        return StorefrontRuntimeState::Absent === $this->state;
+        return $this->state === StorefrontRuntimeState::Absent;
     }
 
     /**
@@ -57,7 +57,7 @@ final class StorefrontObservation
      */
     public function isServingOtherThan(string $image): bool
     {
-        return null !== $this->image && $this->image !== $image;
+        return $this->image !== null && $this->image !== $image;
     }
 
     /**
@@ -75,6 +75,6 @@ final class StorefrontObservation
      */
     public function isServingDomainOtherThan(string $domain): bool
     {
-        return null !== $this->domain && $this->domain !== $domain;
+        return $this->domain !== null && $this->domain !== $domain;
     }
 }

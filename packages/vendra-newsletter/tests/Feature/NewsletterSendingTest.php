@@ -18,18 +18,16 @@ use Misaf\VendraNewsletter\Jobs\SendNewsletterEmailJob;
 use Misaf\VendraNewsletter\Mail\NewsletterMail;
 use Misaf\VendraNewsletter\Models\Newsletter;
 use Misaf\VendraSupport\Context\RequestJobContext;
+use Spatie\Multitenancy\Tasks\SwitchRouteCacheTask;
 
 use function Pest\Laravel\assertDatabaseHas;
-
 use function Pest\Laravel\assertDatabaseMissing;
-
-use Spatie\Multitenancy\Tasks\SwitchRouteCacheTask;
 
 beforeEach(function (): void {
     config([
         'multitenancy.switch_tenant_tasks' => array_values(array_filter(
             config('multitenancy.switch_tenant_tasks'),
-            fn(string $task): bool => SwitchRouteCacheTask::class !== $task,
+            fn (string $task): bool => $task !== SwitchRouteCacheTask::class,
         )),
     ]);
 
@@ -38,7 +36,7 @@ beforeEach(function (): void {
 
 it('keeps production demo newsletters from being scheduled automatically', function (): void {
     $fixtures = json_decode(
-        File::get(__DIR__ . '/../../database/fixtures/demo-content.json'),
+        File::get(__DIR__.'/../../database/fixtures/demo-content.json'),
         associative: true,
         flags: JSON_THROW_ON_ERROR,
     );
@@ -84,7 +82,7 @@ it('does not resend from a stale model after another process marks the newslette
     NewsletterSubscriberFactory::new()->subscribed()->count(3)->create();
 
     Newsletter::query()->whereKey($newsletter->id)->update([
-        'status'  => NewsletterStatusEnum::Sent,
+        'status' => NewsletterStatusEnum::Sent,
         'sent_at' => now(),
     ]);
 
@@ -110,10 +108,10 @@ it('enforces unique subscriber emails per tenant and globally unique unsubscribe
     $indexes = collect(Schema::getIndexes('newsletter_subscribers'));
 
     expect($indexes->contains(
-        fn(array $index): bool => true === $index['unique'] && ['tenant_id', 'email'] === $index['columns'],
+        fn (array $index): bool => $index['unique'] === true && ['tenant_id', 'email'] === $index['columns'],
     ))->toBeTrue()
         ->and($indexes->contains(
-            fn(array $index): bool => true === $index['unique'] && ['unsubscribe_token'] === $index['columns'],
+            fn (array $index): bool => $index['unique'] === true && ['unsubscribe_token'] === $index['columns'],
         ))->toBeTrue();
 });
 
@@ -121,7 +119,7 @@ it('enforces one delivery receipt per newsletter recipient', function (): void {
     $indexes = collect(Schema::getIndexes('newsletter_deliveries'));
 
     expect($indexes->contains(
-        fn(array $index): bool => true === $index['unique']
+        fn (array $index): bool => $index['unique'] === true
             && ['newsletter_id', 'newsletter_subscriber_id'] === $index['columns'],
     ))->toBeTrue();
 });
@@ -142,7 +140,7 @@ it('delivers the newsletter mail to a subscribed recipient', function (): void {
 
     (new SendNewsletterEmailJob($newsletter->getKey(), $subscriber->getKey()))->handle();
 
-    Mail::assertSent(NewsletterMail::class, fn(NewsletterMail $mail): bool => $mail->hasTo($subscriber->email));
+    Mail::assertSent(NewsletterMail::class, fn (NewsletterMail $mail): bool => $mail->hasTo($subscriber->email));
 });
 
 it('scopes newsletter identifiers without exposing recipient data', function (): void {
@@ -165,8 +163,8 @@ it('scopes newsletter identifiers without exposing recipient data', function ():
 
     expect($captured)->toMatchArray([
         RequestJobContext::OPERATION => 'newsletter_email',
-        'newsletter_id'              => $newsletter->getKey(),
-        'subscriber_id'              => $subscriber->getKey(),
+        'newsletter_id' => $newsletter->getKey(),
+        'subscriber_id' => $subscriber->getKey(),
     ])
         ->not->toHaveKeys(['email', 'unsubscribe_token'])
         ->and(Context::get(RequestJobContext::OPERATION))->toBe('outer')
@@ -187,7 +185,7 @@ it('does not deliver again after a recipient delivery has completed', function (
     Mail::assertSent(NewsletterMail::class, 1);
 
     assertDatabaseHas('newsletter_deliveries', [
-        'newsletter_id'            => $newsletter->getKey(),
+        'newsletter_id' => $newsletter->getKey(),
         'newsletter_subscriber_id' => $subscriber->getKey(),
     ]);
 
@@ -207,10 +205,10 @@ it('does not record a completed delivery when mail sending fails', function (): 
         ->once()
         ->andThrow(new RuntimeException('Mail transport failed.'));
 
-    expect(fn() => $job->handle())->toThrow(RuntimeException::class, 'Mail transport failed.');
+    expect(fn () => $job->handle())->toThrow(RuntimeException::class, 'Mail transport failed.');
 
     assertDatabaseMissing('newsletter_deliveries', [
-        'newsletter_id'            => $newsletter->getKey(),
+        'newsletter_id' => $newsletter->getKey(),
         'newsletter_subscriber_id' => $subscriber->getKey(),
     ]);
 });
@@ -230,11 +228,11 @@ it('sends scheduled newsletters that are due and leaves future ones untouched', 
     Queue::fake();
 
     $due = NewsletterFactory::new()->create([
-        'status'       => NewsletterStatusEnum::Scheduled,
+        'status' => NewsletterStatusEnum::Scheduled,
         'scheduled_at' => now()->subMinute(),
     ]);
     $future = NewsletterFactory::new()->create([
-        'status'       => NewsletterStatusEnum::Scheduled,
+        'status' => NewsletterStatusEnum::Scheduled,
         'scheduled_at' => now()->addDay(),
     ]);
     NewsletterSubscriberFactory::new()->subscribed()->count(3)->create();
@@ -257,7 +255,7 @@ it('scopes each tenant\'s scheduled send to its own subscribers across all tenan
     /** @var array{0: Newsletter, 1: list<int>} $contextA */
     $contextA = $tenantA->execute(function (): array {
         $newsletter = NewsletterFactory::new()->create([
-            'status'       => NewsletterStatusEnum::Scheduled,
+            'status' => NewsletterStatusEnum::Scheduled,
             'scheduled_at' => now()->subMinute(),
         ]);
 
@@ -267,7 +265,7 @@ it('scopes each tenant\'s scheduled send to its own subscribers across all tenan
     /** @var array{0: Newsletter, 1: list<int>} $contextB */
     $contextB = $tenantB->execute(function (): array {
         $newsletter = NewsletterFactory::new()->create([
-            'status'       => NewsletterStatusEnum::Scheduled,
+            'status' => NewsletterStatusEnum::Scheduled,
             'scheduled_at' => now()->subMinute(),
         ]);
 
@@ -283,15 +281,15 @@ it('scopes each tenant\'s scheduled send to its own subscribers across all tenan
 
     Queue::assertPushed(
         SendNewsletterBatchJob::class,
-        fn(SendNewsletterBatchJob $job): bool => $job->newsletterId === $newsletterA->getKey()
-            && [] === array_diff($job->subscriberIds, $subscriberIdsA)
+        fn (SendNewsletterBatchJob $job): bool => $job->newsletterId === $newsletterA->getKey()
+            && array_diff($job->subscriberIds, $subscriberIdsA) === []
             && count($job->subscriberIds) === count($subscriberIdsA),
     );
 
     Queue::assertPushed(
         SendNewsletterBatchJob::class,
-        fn(SendNewsletterBatchJob $job): bool => $job->newsletterId === $newsletterB->getKey()
-            && [] === array_diff($job->subscriberIds, $subscriberIdsB)
+        fn (SendNewsletterBatchJob $job): bool => $job->newsletterId === $newsletterB->getKey()
+            && array_diff($job->subscriberIds, $subscriberIdsB) === []
             && count($job->subscriberIds) === count($subscriberIdsB),
     );
 });

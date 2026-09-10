@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Str;
+use Misaf\VendraActivityLog\Providers\ActivityLogServiceProvider;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 
@@ -15,7 +16,7 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
  * Records activity for any model implementing {@see ShouldLogActivity}.
  *
  * This listener is bound to the wildcard Eloquent lifecycle events by
- * {@see \Misaf\VendraActivityLog\Providers\ActivityLogServiceProvider}, which
+ * {@see ActivityLogServiceProvider}, which
  * means models opt into logging purely by implementing the marker contract and
  * never need to depend on this package directly. It mirrors the previous
  * Spatie `LogsActivity` behaviour of logging fillable attributes (except `id`).
@@ -38,11 +39,11 @@ final class LogModelActivity
     {
         $model = $payload[0] ?? null;
 
-        if ( ! $model instanceof Model || ! $model instanceof ShouldLogActivity) {
+        if (! $model instanceof Model || ! $model instanceof ShouldLogActivity) {
             return;
         }
 
-        if ( ! Config::boolean('activitylog.enabled', true)) {
+        if (! Config::boolean('activitylog.enabled', true)) {
             return;
         }
 
@@ -50,7 +51,7 @@ final class LogModelActivity
 
         $attributes = $this->loggableAttributes($model);
 
-        if ([] === $attributes) {
+        if ($attributes === []) {
             return;
         }
 
@@ -97,7 +98,7 @@ final class LogModelActivity
             $new[$attribute] = $model->getAttribute($attribute);
         }
 
-        if ('updated' === $event) {
+        if ($event === 'updated') {
             $old = [];
 
             foreach ($attributes as $attribute) {
@@ -107,7 +108,7 @@ final class LogModelActivity
             return ['attributes' => $new, 'old' => $old];
         }
 
-        if ('deleted' === $event) {
+        if ($event === 'deleted') {
             return ['attributes' => $new, 'old' => $new];
         }
 

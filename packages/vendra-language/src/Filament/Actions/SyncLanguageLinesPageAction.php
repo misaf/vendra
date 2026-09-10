@@ -22,8 +22,8 @@ final class SyncLanguageLinesPageAction
                     ->successNotificationTitle(__('vendra-language::messages.language_lines_synchronized', $result))
                     ->success();
             })
-            ->authorize(fn(): bool => LanguageLineResource::canCreate()
-                && (auth()->user()?->can('update', new LanguageLine()) ?? false))
+            ->authorize(fn (): bool => LanguageLineResource::canCreate()
+                && (auth()->user()?->can('update', new LanguageLine) ?? false))
             ->icon(Heroicon::OutlinedArrowPath)
             ->label(__('vendra-language::actions.sync_language_lines'))
             ->modalDescription(__('vendra-language::messages.sync_language_lines_description'))

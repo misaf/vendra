@@ -19,7 +19,7 @@ final class EditBlogPostCategory extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-blog::navigation.blog_post_category');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-blog::navigation.blog_post_category');
     }
 
     protected function getHeaderActions(): array

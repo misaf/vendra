@@ -25,7 +25,7 @@ final class SendNewsletterAction
                 ->lockForUpdate()
                 ->find($newsletter->id);
 
-            if ( ! $lockedNewsletter instanceof Newsletter || NewsletterStatusEnum::Sent === $lockedNewsletter->status) {
+            if (! $lockedNewsletter instanceof Newsletter || $lockedNewsletter->status === NewsletterStatusEnum::Sent) {
                 return 0;
             }
 
@@ -45,7 +45,7 @@ final class SendNewsletterAction
                 });
 
             $lockedNewsletter->forceFill([
-                'status'  => NewsletterStatusEnum::Sent,
+                'status' => NewsletterStatusEnum::Sent,
                 'sent_at' => now(),
             ])->save();
 

@@ -66,7 +66,7 @@ final class AddressesRelationManager extends RelationManager
             Select::make('country_code')
                 ->label(__('vendra-address::address.fields.country_code'))
                 ->native(false)
-                ->options(fn(): array => Countries::options())
+                ->options(fn (): array => Countries::options())
                 ->searchable()
                 ->required(),
             TextInput::make('locale')->label(__('vendra-address::address.fields.locale')),
@@ -95,16 +95,16 @@ final class AddressesRelationManager extends RelationManager
                             ->label(__('vendra-address::address.fields.is_primary'))
                             ->color('success')
                             ->size(Size::ExtraSmall)
-                            ->hidden(fn(Address $record): bool => ! $record->is_primary),
+                            ->hidden(fn (Address $record): bool => ! $record->is_primary),
                     ]),
                 TextColumn::make('line_one')->label(__('vendra-address::address.fields.line_one'))->icon(Heroicon::MapPin)->searchable(),
                 TextColumn::make('locality')->label(__('vendra-address::address.fields.locality'))->icon(Heroicon::MapPin)->searchable(),
                 TextColumn::make('country_code')->label(__('vendra-address::address.fields.country_code'))->icon(Heroicon::GlobeAlt)->badge(),
                 ToggleColumn::make('verified_at')
-                    ->disabled(fn(Address $record): bool => ! (auth()->user()?->can('update', $record) ?? false))
+                    ->disabled(fn (Address $record): bool => ! (auth()->user()?->can('update', $record) ?? false))
                     ->label(__('vendra-address::address.fields.verified_at'))
                     ->onIcon(Heroicon::Bolt)
-                    ->state(fn(Address $record): bool => null !== $record->verified_at)
+                    ->state(fn (Address $record): bool => $record->verified_at !== null)
                     ->updateStateUsing(function (Address $record, bool $state): bool {
                         $record->update(['verified_at' => $state ? now() : null]);
 

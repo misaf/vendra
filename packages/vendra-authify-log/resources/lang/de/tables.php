@@ -8,10 +8,10 @@ return [
     ],
 
     'empty_state' => [
-        'description'  => [
+        'description' => [
             'authify_logs' => 'Authentifizierungsprotokolle werden aufgezeichnet, wenn Benutzer sich an- oder abmelden.',
         ],
-        'heading'      => [
+        'heading' => [
             'authify_logs' => 'Noch keine Authentifizierungsprotokolle',
         ],
     ],

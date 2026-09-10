@@ -89,7 +89,7 @@ final class OrderResource extends Resource
 
         return [
             __('vendra-order::attributes.customer') => $order->customer_label ?? '—',
-            __('vendra-order::attributes.status')   => $order->status->getLabel(),
+            __('vendra-order::attributes.status') => $order->status->getLabel(),
         ];
     }
 
@@ -119,13 +119,13 @@ final class OrderResource extends Resource
     {
         return [
             'index' => ListOrders::route('/'),
-            'view'  => ViewOrder::route('/{record}'),
+            'view' => ViewOrder::route('/{record}'),
         ];
     }
 
     private static function order(Model $record): Order
     {
-        if ( ! $record instanceof Order) {
+        if (! $record instanceof Order) {
             throw new InvalidArgumentException('Order resources require an Order record.');
         }
 

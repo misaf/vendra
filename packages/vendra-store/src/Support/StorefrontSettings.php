@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Config;
 final class StorefrontSettings
 {
     /**
-     * @param array<string, string> $logOptions
+     * @param  array<string, string>  $logOptions
      */
     public function __construct(
         public readonly string $network,
@@ -79,7 +79,7 @@ final class StorefrontSettings
 
     public function containerName(string $slug): string
     {
-        return $this->namePrefix . $slug;
+        return $this->namePrefix.$slug;
     }
 
     /**
@@ -87,11 +87,11 @@ final class StorefrontSettings
      */
     public function resolvedApiUrl(): string
     {
-        if ('' !== $this->apiUrl) {
+        if ($this->apiUrl !== '') {
             return $this->apiUrl;
         }
 
-        return '' === $this->baseDomain ? '' : 'https://api.' . $this->baseDomain;
+        return $this->baseDomain === '' ? '' : 'https://api.'.$this->baseDomain;
     }
 
     /**
@@ -102,11 +102,11 @@ final class StorefrontSettings
      */
     public function resolvedCaFile(): string
     {
-        if ('' === $this->caFile) {
+        if ($this->caFile === '') {
             return '';
         }
 
-        return str_starts_with($this->caFile, '/') ? $this->caFile : '/certs/' . $this->caFile;
+        return str_starts_with($this->caFile, '/') ? $this->caFile : '/certs/'.$this->caFile;
     }
 
     /**
@@ -116,7 +116,7 @@ final class StorefrontSettings
      * to nothing: the operator-facing way to say "uncapped" is to empty the
      * environment variable.
      *
-     * @param array<array-key, mixed> $storefront
+     * @param  array<array-key, mixed>  $storefront
      */
     private static function resources(array $storefront): StorefrontContainerResources
     {
@@ -132,7 +132,7 @@ final class StorefrontSettings
     }
 
     /**
-     * @param array<array-key, mixed> $storefront
+     * @param  array<array-key, mixed>  $storefront
      */
     private static function optionalPositiveInteger(array $storefront, string $key): ?int
     {
@@ -142,7 +142,7 @@ final class StorefrontSettings
     }
 
     /**
-     * @param  array<array-key, mixed> $storefront
+     * @param  array<array-key, mixed>  $storefront
      * @return array<string, string>
      */
     private static function logOptions(array $storefront): array
@@ -151,7 +151,7 @@ final class StorefrontSettings
         $resolved = [];
 
         foreach (is_array($options) ? $options : [] as $key => $value) {
-            if (is_string($key) && is_scalar($value) && '' !== (string) $value) {
+            if (is_string($key) && is_scalar($value) && (string) $value !== '') {
                 $resolved[$key] = (string) $value;
             }
         }
@@ -160,17 +160,17 @@ final class StorefrontSettings
     }
 
     /**
-     * @param array<array-key, mixed> $storefront
+     * @param  array<array-key, mixed>  $storefront
      */
     private static function string(array $storefront, string $key, string $default = ''): string
     {
         $value = Arr::get($storefront, $key);
 
-        return is_string($value) && '' !== mb_trim($value) ? mb_trim($value) : $default;
+        return is_string($value) && mb_trim($value) !== '' ? mb_trim($value) : $default;
     }
 
     /**
-     * @param array<array-key, mixed> $storefront
+     * @param  array<array-key, mixed>  $storefront
      */
     private static function integer(array $storefront, string $key, int $default): int
     {

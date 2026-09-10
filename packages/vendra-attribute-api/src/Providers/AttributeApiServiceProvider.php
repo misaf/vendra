@@ -28,7 +28,7 @@ final class AttributeApiServiceProvider extends PackageServiceProvider
 
         Config::set('api-platform.resources', [
             ...Config::array('api-platform.resources', []),
-            dirname(__DIR__) . '/ApiResource',
+            dirname(__DIR__).'/ApiResource',
         ]);
 
         $this->app->tag([
@@ -39,6 +39,6 @@ final class AttributeApiServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        AboutCommand::add('Vendra Attribute API', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-attribute-api')]);
+        AboutCommand::add('Vendra Attribute API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-attribute-api')]);
     }
 }

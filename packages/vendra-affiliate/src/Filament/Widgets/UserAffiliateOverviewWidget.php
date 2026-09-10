@@ -14,7 +14,7 @@ final class UserAffiliateOverviewWidget extends AffiliateStatsOverviewWidget
 
     public static function canView(): bool
     {
-        return null !== self::authenticatedAffiliate();
+        return self::authenticatedAffiliate() !== null;
     }
 
     protected function getAffiliateId(): ?int
@@ -26,7 +26,7 @@ final class UserAffiliateOverviewWidget extends AffiliateStatsOverviewWidget
     {
         $user = filament()->auth()->user();
 
-        if (null === $user) {
+        if ($user === null) {
             return null;
         }
 

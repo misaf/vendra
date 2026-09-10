@@ -86,7 +86,7 @@ class AuthifyLogListener
         $user = $event->user;
 
         if ($user->hasVerifiedEmail()) {
-            $user->notify(new LoginNotification());
+            $user->notify(new LoginNotification);
         }
 
         $this->store(AuthifyLogActionEnum::Login, $event);
@@ -99,13 +99,13 @@ class AuthifyLogListener
         $timestamp = Carbon::now()->toDateTimeString();
         $logEntry = [
             TenantSchema::column() => TenantAwareness::currentId(),
-            'user_id'              => $userId,
-            'action'               => $action->value,
-            'ip_address'           => request()->ip(),
-            'ip_country'           => request()->header('CF-IPCountry') ?? 'XX',
-            'user_agent'           => request()->userAgent(),
-            'created_at'           => $timestamp,
-            'updated_at'           => $timestamp,
+            'user_id' => $userId,
+            'action' => $action->value,
+            'ip_address' => request()->ip(),
+            'ip_country' => request()->header('CF-IPCountry') ?? 'XX',
+            'user_agent' => request()->userAgent(),
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp,
         ];
 
         $authifyTransaction = Redis::connection('authify_log')->rpush('entries', json_encode($logEntry));

@@ -12,7 +12,7 @@ use Misaf\VendraSupport\Support\TagRelationship;
 use RuntimeException;
 
 it('falls back to unavailable tag integration', function (): void {
-    app()->instance(TagResolver::class, new NullTagResolver());
+    app()->instance(TagResolver::class, new NullTagResolver);
 
     expect(TagIntegration::isAvailable())->toBeFalse()
         ->and(TagIntegration::relationship())->toBeNull();
@@ -28,7 +28,8 @@ it('exposes relationship metadata from the bound tag resolver', function (): voi
 });
 
 it('falls back when the bound tag resolver throws', function (): void {
-    app()->instance(TagResolver::class, new class implements TagResolver {
+    app()->instance(TagResolver::class, new class implements TagResolver
+    {
         public function available(): bool
         {
             throw new RuntimeException('Resolver failed.');

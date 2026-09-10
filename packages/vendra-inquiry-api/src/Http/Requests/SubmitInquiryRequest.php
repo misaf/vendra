@@ -18,11 +18,11 @@ final class SubmitInquiryRequest extends FormRequest
      * @var array<string, array<int, string>>
      */
     public const array RULES = [
-        'name'            => ['required', 'string', 'max:255'],
-        'email'           => ['required', 'email', 'max:255'],
-        'message'         => ['required', 'string', 'max:5000'],
-        'phone'           => ['nullable', 'string', 'max:64'],
-        'occasion'        => ['nullable', 'string', 'max:64'],
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255'],
+        'message' => ['required', 'string', 'max:5000'],
+        'phone' => ['nullable', 'string', 'max:64'],
+        'occasion' => ['nullable', 'string', 'max:64'],
         'preferredLocale' => ['nullable', 'string', 'max:35'],
     ];
 

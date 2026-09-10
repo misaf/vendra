@@ -24,7 +24,7 @@ final class UserProfileForm
         return $schema
             ->components([
                 Select::make('user_id')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.user_id'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.user_id'))
                     ->columnSpanFull()
                     ->label(__('vendra-user-profile::attributes.user'))
                     ->live()
@@ -49,12 +49,12 @@ final class UserProfileForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 TextInput::make('slug')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.slug'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.slug'))
                     ->columnSpan(['lg' => 1])
                     ->helperText(__('vendra-user-profile::attributes.slug_helper_text'))
                     ->label(__('vendra-user-profile::attributes.slug'))
@@ -62,19 +62,19 @@ final class UserProfileForm
                     ->maxLength(255)
                     ->required()
                     ->unique(
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                             ->withoutTrashed(),
                     ),
 
                 Textarea::make('description')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                     ->columnSpanFull()
                     ->label(__('vendra-user-profile::attributes.description'))
                     ->live(onBlur: true)
                     ->maxLength(255),
 
                 Toggle::make('is_default')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.is_default'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))
                     ->columnSpanFull()
                     ->default(false)
                     ->label(__('vendra-user-profile::attributes.is_default'))
@@ -86,7 +86,7 @@ final class UserProfileForm
                     ]),
 
                 Toggle::make('active')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                     ->columnSpanFull()
                     ->default(false)
                     ->label(__('vendra-user-profile::attributes.active'))

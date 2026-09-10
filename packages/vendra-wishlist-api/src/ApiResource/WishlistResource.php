@@ -56,7 +56,7 @@ use Misaf\VendraWishlistApi\State\WishlistMapper;
 final readonly class WishlistResource
 {
     /**
-     * @param array<int, SavedItem> $items
+     * @param  array<int, SavedItem>  $items
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The wishlist unique identifier')]

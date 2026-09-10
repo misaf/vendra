@@ -43,7 +43,6 @@ final class SubscriptionRegistry
     /**
      * Create a subscription period owned by the subscriber.
      *
-     * @param  Model&SubscriptionSubscriber  $subscriber
      * @param  array<string, mixed>  $attributes
      */
     public function create(Model&SubscriptionSubscriber $subscriber, array $attributes): Subscription
@@ -58,7 +57,6 @@ final class SubscriptionRegistry
     /**
      * Cancel the subscriber's active subscriptions, optionally keeping one.
      *
-     * @param  Model&SubscriptionSubscriber  $subscriber
      * @return int the number of subscriptions cancelled
      */
     public function cancelActive(Model&SubscriptionSubscriber $subscriber, ?int $exceptKey = null): int
@@ -66,7 +64,7 @@ final class SubscriptionRegistry
         $query = $this->subscriptionsQuery($subscriber)
             ->where('status', SubscriptionStatus::Active->value);
 
-        if (null !== $exceptKey) {
+        if ($exceptKey !== null) {
             $query->whereKeyNot($exceptKey);
         }
 
@@ -76,7 +74,6 @@ final class SubscriptionRegistry
     /**
      * Cancel every non-terminal subscription held by a subscriber.
      *
-     * @param  Model&SubscriptionSubscriber  $subscriber
      * @return int the number of subscriptions cancelled
      */
     public function cancelOpen(Model&SubscriptionSubscriber $subscriber): int
@@ -93,7 +90,6 @@ final class SubscriptionRegistry
     /**
      * Cancel the subscriber's pending-payment subscriptions with the given keys.
      *
-     * @param  Model&SubscriptionSubscriber  $subscriber
      * @param  array<int, int>  $keys
      * @return int the number of subscriptions cancelled
      */
@@ -108,7 +104,6 @@ final class SubscriptionRegistry
     /**
      * Lock and return the subscriber's open (non-terminal) subscription payments.
      *
-     * @param  Model&SubscriptionSubscriber  $subscriber
      * @return Collection<int, SubscriptionPayment>
      */
     public function lockOpenPayments(Model&SubscriptionSubscriber $subscriber): Collection
@@ -126,7 +121,6 @@ final class SubscriptionRegistry
     }
 
     /**
-     * @param  Model&SubscriptionSubscriber  $subscriber
      * @return Builder<Subscription>
      */
     private function subscriptionsQuery(Model&SubscriptionSubscriber $subscriber): Builder

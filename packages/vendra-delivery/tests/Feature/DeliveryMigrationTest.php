@@ -11,7 +11,7 @@ it('creates delivery zones, windows and deliveries', function (): void {
     Schema::dropIfExists('delivery_zones');
 
     /** @var Migration $migration */
-    $migration = require __DIR__ . '/../../database/migrations/create_deliveries_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_deliveries_table.php.stub';
 
     $migration->up();
 

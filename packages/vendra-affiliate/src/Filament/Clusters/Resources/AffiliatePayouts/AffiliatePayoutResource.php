@@ -55,13 +55,13 @@ final class AffiliatePayoutResource extends Resource
 
         return [
             __('vendra-affiliate::attributes.affiliate') => $payout->affiliate?->code ?? '',
-            __('vendra-user::attributes.email')          => $payout->affiliate?->user?->email ?? '',
+            __('vendra-user::attributes.email') => $payout->affiliate?->user?->email ?? '',
         ];
     }
 
     public static function getGlobalSearchResultTitle(Model $record): string
     {
-        return '#' . self::payout($record)->id;
+        return '#'.self::payout($record)->id;
     }
 
     public static function getBreadcrumb(): string
@@ -88,7 +88,7 @@ final class AffiliatePayoutResource extends Resource
     {
         return [
             'index' => ListAffiliatePayouts::route('/'),
-            'view'  => ViewAffiliatePayout::route('/{record}'),
+            'view' => ViewAffiliatePayout::route('/{record}'),
         ];
     }
 
@@ -111,7 +111,7 @@ final class AffiliatePayoutResource extends Resource
 
     private static function payout(Model $record): AffiliatePayout
     {
-        if ( ! $record instanceof AffiliatePayout) {
+        if (! $record instanceof AffiliatePayout) {
             throw new InvalidArgumentException('Affiliate Payout resources require an AffiliatePayout record.');
         }
 

@@ -54,7 +54,7 @@ final class DocumentsRelationManager extends RelationManager
             Select::make('issuing_country_code')
                 ->label(__('vendra-document::document.fields.issuing_country_code'))
                 ->native(false)
-                ->options(fn(): array => Countries::options())
+                ->options(fn (): array => Countries::options())
                 ->searchable(),
             TextInput::make('number')->label(__('vendra-document::document.fields.number')),
             SpatieMediaLibraryFileUpload::make('file')
@@ -92,10 +92,10 @@ final class DocumentsRelationManager extends RelationManager
                     ->badge(),
                 TextColumn::make('expires_at')->label(__('vendra-document::document.fields.expires_at'))->date(),
                 ToggleColumn::make('verified_at')
-                    ->disabled(fn(Document $record): bool => ! (auth()->user()?->can('update', $record) ?? false))
+                    ->disabled(fn (Document $record): bool => ! (auth()->user()?->can('update', $record) ?? false))
                     ->label(__('vendra-document::document.fields.verified_at'))
                     ->onIcon(Heroicon::Bolt)
-                    ->state(fn(Document $record): bool => null !== $record->verified_at)
+                    ->state(fn (Document $record): bool => $record->verified_at !== null)
                     ->updateStateUsing(function (Document $record, bool $state): bool {
                         $record->update(['verified_at' => $state ? now() : null]);
 

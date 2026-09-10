@@ -18,7 +18,7 @@ final class ViewBlogPost extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-blog::navigation.blog_post');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-blog::navigation.blog_post');
     }
 
     protected function getHeaderActions(): array
@@ -26,7 +26,7 @@ final class ViewBlogPost extends ViewRecord
         return [
             EditAction::make(),
 
-            LocaleSwitcher::make()
+            LocaleSwitcher::make(),
         ];
     }
 }

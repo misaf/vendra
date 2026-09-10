@@ -89,13 +89,12 @@ abstract class AffiliateStatsOverviewWidget extends StatsOverviewWidget
     /**
      * @template TModel of Model
      *
-     * @param Builder<TModel> $query
-     *
+     * @param  Builder<TModel>  $query
      * @return Builder<TModel>
      */
     private function scopeToAffiliate(Builder $query): Builder
     {
-        if ( ! $this->isAffiliateScoped) {
+        if (! $this->isAffiliateScoped) {
             return $query;
         }
 
@@ -103,8 +102,7 @@ abstract class AffiliateStatsOverviewWidget extends StatsOverviewWidget
     }
 
     /**
-     * @param Collection<(int|string), mixed> $values
-     *
+     * @param  Collection<(int|string), mixed>  $values
      * @return list<float>
      */
     private function chartValues(Collection $values): array

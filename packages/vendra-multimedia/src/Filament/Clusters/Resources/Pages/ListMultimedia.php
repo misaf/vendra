@@ -13,6 +13,6 @@ final class ListMultimedia extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-multimedia::navigation.multimedia');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-multimedia::navigation.multimedia');
     }
 }

@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Scopes\StoreScope;
 use Misaf\VendraSupport\Contracts\TenantResolver;
+use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
  * For records that describe a Store rather than live inside one.
  *
  * Data belonging to a reusable domain package (products, posts, roles) is owned
  * through the generic `tenant_id` column and
- * {@see \Misaf\VendraSupport\Tenancy\BelongsToTenant}. Store-specific records —
+ * {@see BelongsToTenant}. Store-specific records —
  * domains, storefront deployments — name their owner outright with `store_id`
  * and use this instead.
  */
@@ -31,10 +32,10 @@ trait BelongsToStore
 
     protected static function bootBelongsToStore(): void
     {
-        static::addGlobalScope(new StoreScope());
+        static::addGlobalScope(new StoreScope);
 
         static::creating(function (Model $model): void {
-            if (null !== $model->getAttribute('store_id')) {
+            if ($model->getAttribute('store_id') !== null) {
                 return;
             }
 

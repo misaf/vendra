@@ -43,11 +43,11 @@ final class AuthifyLogTable
                 ->copyMessage(__('vendra-authify-log::messages.ip_address_copied'))
                 ->copyMessageDuration(1500)
                 ->extraCellAttributes(['dir' => 'ltr'])
-                ->formatStateUsing(fn(string $state, AuthifyLog $record): HtmlString => new HtmlString(
+                ->formatStateUsing(fn (string $state, AuthifyLog $record): HtmlString => new HtmlString(
                     '<span class="flex items-center space-x-2">'
-                    . '<img src="' . e(asset('vendor/blade-country-flags/4x3-' . Str::lower($record->ip_country) . '.svg')) . '" alt="' . e($record->ip_country) . '" title="' . e($record->ip_country) . '" class="w-4 inline-block" />'
-                    . '<span>' . e($state) . '</span>'
-                    . '</span>',
+                    .'<img src="'.e(asset('vendor/blade-country-flags/4x3-'.Str::lower($record->ip_country).'.svg')).'" alt="'.e($record->ip_country).'" title="'.e($record->ip_country).'" class="w-4 inline-block" />'
+                    .'<span>'.e($state).'</span>'
+                    .'</span>',
                 ))
                 ->label(__('vendra-authify-log::attributes.ip_address'))
                 ->searchable(),
@@ -58,8 +58,8 @@ final class AuthifyLogTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -68,8 +68,8 @@ final class AuthifyLogTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

@@ -28,15 +28,15 @@ final class StorefrontContainerHealthGate
                 throw new RuntimeException(sprintf(
                     'The container [%s] exited while starting with code %s.',
                     $definition->name,
-                    null === $container->exitCode ? 'unknown' : (string) $container->exitCode,
+                    $container->exitCode === null ? 'unknown' : (string) $container->exitCode,
                 ));
             }
 
-            if ('healthy' === $container->health) {
+            if ($container->health === 'healthy') {
                 return true;
             }
 
-            if (null === $container->health && $container->isRunning()) {
+            if ($container->health === null && $container->isRunning()) {
                 $this->logger->warning(
                     'Container reports no health state; treating it as ready once running.',
                     ['container' => $definition->name],

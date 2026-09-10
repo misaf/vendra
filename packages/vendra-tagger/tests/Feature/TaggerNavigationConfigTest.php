@@ -27,7 +27,7 @@ it('resolves configured panel ids from an array, string, or legacy panel key', f
 
     config([
         'vendra-tagger.panels' => null,
-        'vendra-tagger.panel'  => 'legacy',
+        'vendra-tagger.panel' => 'legacy',
     ]);
 
     expect($method->invoke($provider, 'vendra-tagger'))->toBe(['legacy']);
@@ -38,7 +38,7 @@ it('resolves and overrides the navigation group', function (): void {
         ->toBe(__('vendra-support::navigation.groups.Content'))
         ->and(TaggerPlugin::make()->navigationGroup('Content')->getNavigationGroup())
         ->toBe('Content')
-        ->and(TaggerPlugin::make()->navigationGroup(fn(): string => 'Grouped')->getNavigationGroup())
+        ->and(TaggerPlugin::make()->navigationGroup(fn (): string => 'Grouped')->getNavigationGroup())
         ->toBe('Grouped');
 });
 

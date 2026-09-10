@@ -7,7 +7,9 @@ use Filament\Panel;
 use Filament\Support\Enums\Width;
 use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 use Misaf\VendraConsole\Providers\ConsolePanelServiceProvider;
+use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraReseller\Providers\ResellerPanelServiceProvider;
+use Symfony\Component\HttpFoundation\Cookie;
 
 it('uses a compact sidebar width', function (): void {
     $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
@@ -32,27 +34,27 @@ it('uses dedicated domains and root paths for central panels', function (): void
 
 it('issues host-only session cookies for central panels', function (string $url): void {
     $sessionCookie = collect($this->get($url)->headers->getCookies())
-        ->first(fn(Symfony\Component\HttpFoundation\Cookie $cookie): bool => $cookie->getName() === config('session.cookie'));
+        ->first(fn (Cookie $cookie): bool => $cookie->getName() === config('session.cookie'));
 
     expect($sessionCookie)->not->toBeNull()
         ->and($sessionCookie?->getDomain())->toBeNull();
 })->with([
-    'console'  => 'https://console.vendra.test/login',
+    'console' => 'https://console.vendra.test/login',
     'reseller' => 'https://reseller.vendra.test/login',
 ]);
 
 it('generates central panel assets from the current panel domain', function (string $url, string $origin): void {
     $this->get($url)
         ->assertSuccessful()
-        ->assertSee($origin . '/images/vendra-logo.svg', escape: false)
-        ->assertSee('src="' . $origin . '/livewire-', escape: false)
-        ->assertSee('data-update-uri="' . $origin . '/livewire-', escape: false);
+        ->assertSee($origin.'/images/vendra-logo.svg', escape: false)
+        ->assertSee('src="'.$origin.'/livewire-', escape: false)
+        ->assertSee('data-update-uri="'.$origin.'/livewire-', escape: false);
 
     expect(config('app.url'))->toBe('https://vendra.test')
         ->and(config('app.asset_url'))->toBe('https://vendra.test')
         ->and(asset('images/vendra-logo.svg'))->toBe('https://vendra.test/images/vendra-logo.svg');
 })->with([
-    'console'  => ['https://console.vendra.test/login', 'https://console.vendra.test'],
+    'console' => ['https://console.vendra.test/login', 'https://console.vendra.test'],
     'reseller' => ['https://reseller.vendra.test/login', 'https://reseller.vendra.test'],
 ]);
 
@@ -60,21 +62,21 @@ it('keeps proxied central panel assets on https via X-Forwarded-Proto', function
     // Simulate Traefik: the request reaches the app as plain HTTP but carries
     // X-Forwarded-Proto: https. Trusted proxies must make asset URLs https,
     // otherwise the https page blocks them as mixed content.
-    $httpUrl = str_replace('https://', 'http://', $origin) . '/login';
+    $httpUrl = str_replace('https://', 'http://', $origin).'/login';
 
     $this->get($httpUrl, ['X-Forwarded-Proto' => 'https'])
         ->assertSuccessful()
-        ->assertSee($origin . '/images/vendra-logo.svg', escape: false)
-        ->assertSee('src="' . $origin . '/livewire-', escape: false)
-        ->assertDontSee(str_replace('https://', 'http://', $origin) . '/livewire-', escape: false);
+        ->assertSee($origin.'/images/vendra-logo.svg', escape: false)
+        ->assertSee('src="'.$origin.'/livewire-', escape: false)
+        ->assertDontSee(str_replace('https://', 'http://', $origin).'/livewire-', escape: false);
 })->with([
-    'console'  => 'https://console.vendra.test',
+    'console' => 'https://console.vendra.test',
     'reseller' => 'https://reseller.vendra.test',
 ]);
 
 it('isolates reseller authentication configuration', function (): void {
     expect(config('auth.guards.reseller.provider'))->toBe('reseller_users')
-        ->and(config('auth.providers.reseller_users.model'))->toBe(Misaf\VendraReseller\Models\ResellerUser::class)
+        ->and(config('auth.providers.reseller_users.model'))->toBe(ResellerUser::class)
         ->and(config('auth.passwords.reseller_users.table'))->toBe('reseller_password_reset_tokens');
 });
 
@@ -104,7 +106,7 @@ it('uses the font matching the application locale', function (string $locale, st
 })->with([
     'Persian' => ['fa', 'Vazirmatn'],
     'English' => ['en', 'Google'],
-    'German'  => ['de', 'Google'],
+    'German' => ['de', 'Google'],
 ]);
 
 it('uses the Vendra Language catalog for translatable resources', function (): void {

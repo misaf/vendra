@@ -65,7 +65,7 @@ final class CustomPageTable
             TextColumn::make('description')
                 ->label(__('vendra-custom-page::attributes.description'))
                 ->icon(Heroicon::DocumentText)
-                ->state(fn(CustomPage $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                ->state(fn (CustomPage $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('slug')
@@ -84,8 +84,8 @@ final class CustomPageTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -94,8 +94,8 @@ final class CustomPageTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

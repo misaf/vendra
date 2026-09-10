@@ -18,7 +18,7 @@ function vendraPackageDependencyGraph(): array
 
         $dependencyGraph[$manifest['name']] = array_values(array_filter(
             array_keys($manifest['require'] ?? []),
-            fn(string $package): bool => str_starts_with($package, 'misaf/vendra-'),
+            fn (string $package): bool => str_starts_with($package, 'misaf/vendra-'),
         ));
     }
 
@@ -36,7 +36,7 @@ function reachableVendraPackages(string $package, array $dependencyGraph): array
     $reachablePackages = [];
     $pendingPackages = $dependencyGraph[$package] ?? [];
 
-    while ([] !== $pendingPackages) {
+    while ($pendingPackages !== []) {
         $dependency = array_shift($pendingPackages);
 
         if (isset($reachablePackages[$dependency])) {
@@ -58,7 +58,7 @@ it('keeps the Vendra package dependency graph complete and acyclic', function ()
 
     foreach ($dependencyGraph as $package => $dependencies) {
         foreach ($dependencies as $dependency) {
-            if ( ! in_array($dependency, $knownPackages, true)) {
+            if (! in_array($dependency, $knownPackages, true)) {
                 $unknownDependencies[] = "{$package} → {$dependency}";
             }
         }
@@ -123,10 +123,10 @@ it('imports only Vendra namespaces reachable through declared package dependenci
     }
 
     foreach (array_keys($dependencyGraph) as $package) {
-        $packagePath = base_path('packages/' . mb_substr($package, mb_strlen('misaf/')));
+        $packagePath = base_path('packages/'.mb_substr($package, mb_strlen('misaf/')));
         $sourcePath = "{$packagePath}/src";
 
-        if ( ! is_dir($sourcePath)) {
+        if (! is_dir($sourcePath)) {
             continue;
         }
 
@@ -139,7 +139,7 @@ it('imports only Vendra namespaces reachable through declared package dependenci
             ...reachableVendraPackages($package, $dependencyGraph),
             ...array_values(array_filter(
                 array_keys($manifest['suggest'] ?? []),
-                fn(string $dependency): bool => str_starts_with($dependency, 'misaf/vendra-'),
+                fn (string $dependency): bool => str_starts_with($dependency, 'misaf/vendra-'),
             )),
         ];
         $sourceFiles = new RecursiveIteratorIterator(
@@ -147,7 +147,7 @@ it('imports only Vendra namespaces reachable through declared package dependenci
         );
 
         foreach ($sourceFiles as $sourceFile) {
-            if ('php' !== $sourceFile->getExtension()) {
+            if ($sourceFile->getExtension() !== 'php') {
                 continue;
             }
 
@@ -158,7 +158,7 @@ it('imports only Vendra namespaces reachable through declared package dependenci
                     continue;
                 }
 
-                if (1 === preg_match('/^use ' . preg_quote($namespace, '/') . '\\\\/m', $contents)) {
+                if (preg_match('/^use '.preg_quote($namespace, '/').'\\\\/m', $contents) === 1) {
                     $relativePath = mb_substr($sourceFile->getPathname(), mb_strlen(base_path()) + 1);
                     $unreachableImports[] = "{$relativePath} → {$namespacePackage}";
                 }

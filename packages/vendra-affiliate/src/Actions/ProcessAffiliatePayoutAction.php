@@ -38,15 +38,15 @@ final class ProcessAffiliatePayoutAction
                 ->lockForUpdate()
                 ->get();
 
-            $amount = (int) $commissions->sum(fn(AffiliateCommission $commission): int => $commission->amount);
+            $amount = (int) $commissions->sum(fn (AffiliateCommission $commission): int => $commission->amount);
 
-            if ($amount < Config::integer('vendra-affiliate.payout.minimum', 0) || 0 === $commissions->count()) {
+            if ($amount < Config::integer('vendra-affiliate.payout.minimum', 0) || $commissions->count() === 0) {
                 return null;
             }
 
             $affiliate->loadMissing('user');
 
-            if ( ! $affiliate->user instanceof User) {
+            if (! $affiliate->user instanceof User) {
                 /** @var AffiliatePayout */
                 return $affiliate->payouts()->create([
                     'amount' => $amount,
@@ -63,7 +63,7 @@ final class ProcessAffiliatePayoutAction
             $affiliate->commissions()
                 ->whereIn('id', $commissions->modelKeys())
                 ->update([
-                    'status'              => CommissionStatusEnum::Paid,
+                    'status' => CommissionStatusEnum::Paid,
                     'affiliate_payout_id' => $payout->id,
                 ]);
 
@@ -73,7 +73,7 @@ final class ProcessAffiliatePayoutAction
                 transactionType: TransactionTypeEnum::Commission,
                 amount: $payout->amount,
                 metadata: [
-                    'type'                => 'affiliate-commission',
+                    'type' => 'affiliate-commission',
                     'affiliate_payout_id' => $payout->id,
                 ],
             );
@@ -81,9 +81,9 @@ final class ProcessAffiliatePayoutAction
             $transaction->approve();
 
             $payout->update([
-                'status'         => PayoutStatusEnum::Completed,
+                'status' => PayoutStatusEnum::Completed,
                 'transaction_id' => $transaction->id,
-                'processed_at'   => now(),
+                'processed_at' => now(),
             ]);
 
             return $payout;

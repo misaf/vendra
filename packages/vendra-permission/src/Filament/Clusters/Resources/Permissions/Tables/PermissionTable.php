@@ -66,8 +66,8 @@ final class PermissionTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -76,8 +76,8 @@ final class PermissionTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
@@ -93,7 +93,7 @@ final class PermissionTable
                             SelectConstraint::make('guard_name')
                                 ->label(__('vendra-permission::table.columns.guard_name'))
                                 ->options(
-                                    collect(Config::array('auth.guards'))->keys()->mapWithKeys(fn($value): array => [$value => $value])->all()
+                                    collect(Config::array('auth.guards'))->keys()->mapWithKeys(fn ($value): array => [$value => $value])->all()
                                 )
                                 ->multiple(),
                         ]),
@@ -116,7 +116,7 @@ final class PermissionTable
             ->toolbarActions([
                 BulkActionGroup::make([
                     SyncBulkAction::make()
-                        ->visible(fn(): bool => self::canUseBulkRoleAssignment()),
+                        ->visible(fn (): bool => self::canUseBulkRoleAssignment()),
 
                     DeleteBulkAction::make(),
                 ]),

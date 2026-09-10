@@ -40,11 +40,11 @@ final class ActivityLogInfolist
                 KeyValueEntry::make('attribute_changes')
                     ->label(__('vendra-activity-log::attributes.attribute_changes'))
                     ->columnSpanFull()
-                    ->state(fn(ActivityLog $record): array => $record->attribute_changes?->all() ?? []),
+                    ->state(fn (ActivityLog $record): array => $record->attribute_changes?->all() ?? []),
 
                 KeyValueEntry::make('properties')
                     ->columnSpanFull()
-                    ->state(fn(ActivityLog $record): array => $record->properties?->all() ?? []),
+                    ->state(fn (ActivityLog $record): array => $record->properties?->all() ?? []),
 
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
@@ -58,8 +58,8 @@ final class ActivityLogInfolist
             ->label(__("vendra-activity-log::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

@@ -30,18 +30,18 @@ return [
     */
 
     'notifications' => [
-        'authenticated'         => LoginNotification::class,
-        'attempting'            => LoginNotification::class,
+        'authenticated' => LoginNotification::class,
+        'attempting' => LoginNotification::class,
         'current_device_logout' => LoginNotification::class,
-        'failed'                => LoginNotification::class,
-        'lockout'               => LoginNotification::class,
-        'other_device_logout'   => LoginNotification::class,
-        'password_reset'        => LoginNotification::class,
-        'registered'            => LoginNotification::class,
-        'logout'                => LoginNotification::class,
-        'validated'             => LoginNotification::class,
-        'verified'              => LoginNotification::class,
-        'login'                 => LoginNotification::class,
+        'failed' => LoginNotification::class,
+        'lockout' => LoginNotification::class,
+        'other_device_logout' => LoginNotification::class,
+        'password_reset' => LoginNotification::class,
+        'registered' => LoginNotification::class,
+        'logout' => LoginNotification::class,
+        'validated' => LoginNotification::class,
+        'verified' => LoginNotification::class,
+        'login' => LoginNotification::class,
     ],
 
 ];

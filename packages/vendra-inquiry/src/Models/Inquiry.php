@@ -76,10 +76,10 @@ final class Inquiry extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'status'      => InquiryStatusEnum::class,
-            'metadata'    => 'array',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'status' => InquiryStatusEnum::class,
+            'metadata' => 'array',
             'answered_at' => 'datetime',
         ];
     }
@@ -90,7 +90,7 @@ final class Inquiry extends Model implements ShouldLogActivity
     public function markAnswered(): void
     {
         $this->forceFill([
-            'status'      => InquiryStatusEnum::Answered,
+            'status' => InquiryStatusEnum::Answered,
             'answered_at' => now(),
         ])->save();
     }
@@ -103,13 +103,13 @@ final class Inquiry extends Model implements ShouldLogActivity
     public function reopen(): void
     {
         $this->forceFill([
-            'status'      => InquiryStatusEnum::New,
+            'status' => InquiryStatusEnum::New,
             'answered_at' => null,
         ])->save();
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopeUnanswered(Builder $builder): void
     {

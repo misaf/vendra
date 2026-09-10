@@ -12,10 +12,10 @@ it('persists addresses against the installed user profile', function (): void {
     $profile = UserProfile::factory()->forUser(createTestUser())->create();
 
     $address = Address::factory()->create([
-        'user_profile_id'     => $profile->id,
-        'country_code'        => 'JP',
+        'user_profile_id' => $profile->id,
+        'country_code' => 'JP',
         'administrative_area' => 'Tokyo',
-        'metadata'            => ['building' => 'North Tower'],
+        'metadata' => ['building' => 'North Tower'],
     ]);
 
     expect($profile->addresses())->toBeInstanceOf(HasMany::class)

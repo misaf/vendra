@@ -51,11 +51,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $data = $this->validatedFixtureRecord($record);
 
         Newsletter::create([
-            'subject'      => $data['subject'],
-            'content'      => $data['content'],
-            'status'       => NewsletterStatusEnum::from($data['status']),
+            'subject' => $data['subject'],
+            'content' => $data['content'],
+            'status' => NewsletterStatusEnum::from($data['status']),
             'scheduled_at' => $data['scheduled_at'],
-            'sent_at'      => $data['sent_at'],
+            'sent_at' => $data['sent_at'],
         ]);
     }
 
@@ -97,11 +97,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $validated = Validator::make(
             data: $record,
             rules: [
-                'subject'      => ['required', 'string'],
-                'content'      => ['required', 'string'],
-                'status'       => ['required', 'string', 'in:draft,scheduled,sent'],
+                'subject' => ['required', 'string'],
+                'content' => ['required', 'string'],
+                'status' => ['required', 'string', 'in:draft,scheduled,sent'],
                 'scheduled_at' => ['nullable', 'string'],
-                'sent_at'      => ['nullable', 'string'],
+                'sent_at' => ['nullable', 'string'],
             ],
         )->validate();
 

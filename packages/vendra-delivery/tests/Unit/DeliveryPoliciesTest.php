@@ -18,10 +18,10 @@ it('authorizes delivery zone abilities through permissions', function (string $m
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
     $arguments = in_array($method, ['view', 'update', 'delete'], true)
-        ? [$user, new DeliveryZone()]
+        ? [$user, new DeliveryZone]
         : [$user];
 
-    expect((new DeliveryZonePolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new DeliveryZonePolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', DeliveryZonePolicyEnum::View],
     ['viewAny', DeliveryZonePolicyEnum::ViewAny],
@@ -35,10 +35,10 @@ it('authorizes delivery slot abilities through permissions', function (string $m
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
     $arguments = in_array($method, ['view', 'update', 'delete'], true)
-        ? [$user, new DeliverySlot()]
+        ? [$user, new DeliverySlot]
         : [$user];
 
-    expect((new DeliverySlotPolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new DeliverySlotPolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', DeliverySlotPolicyEnum::View],
     ['viewAny', DeliverySlotPolicyEnum::ViewAny],
@@ -51,10 +51,10 @@ it('authorizes delivery abilities through permissions', function (string $method
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
     $arguments = in_array($method, ['view', 'update', 'delete'], true)
-        ? [$user, new Delivery()]
+        ? [$user, new Delivery]
         : [$user];
 
-    expect((new DeliveryPolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new DeliveryPolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', DeliveryPolicyEnum::View],
     ['viewAny', DeliveryPolicyEnum::ViewAny],
@@ -63,5 +63,5 @@ it('authorizes delivery abilities through permissions', function (string $method
 ]);
 
 it('does not allow deliveries to be created by hand', function (): void {
-    expect((new DeliveryPolicy())->create(Mockery::mock(Authorizable::class)))->toBeFalse();
+    expect((new DeliveryPolicy)->create(Mockery::mock(Authorizable::class)))->toBeFalse();
 });

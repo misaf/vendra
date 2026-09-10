@@ -6,7 +6,6 @@ namespace Misaf\VendraCartApi\Providers;
 
 use ApiPlatform\Laravel\Eloquent\State\LinksHandlerInterface;
 use Composer\InstalledVersions;
-
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Gate;
@@ -27,7 +26,7 @@ final class CartApiServiceProvider extends PackageServiceProvider
     {
         Config::set('api-platform.resources', [
             ...Config::array('api-platform.resources', []),
-            dirname(__DIR__) . '/ApiResource',
+            dirname(__DIR__).'/ApiResource',
         ]);
 
         Gate::policy(CartResource::class, ShoppingCartPolicy::class);
@@ -36,6 +35,6 @@ final class CartApiServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        AboutCommand::add('Vendra Cart API', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-cart-api')]);
+        AboutCommand::add('Vendra Cart API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-cart-api')]);
     }
 }

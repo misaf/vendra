@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraDeveloperLogins\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraDeveloperLogins\Support\DeveloperLoginsRegistrar;
@@ -31,7 +30,7 @@ final class DeveloperLoginsServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-developer-logins')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-developer-logins')) {
                 return;
             }
 
@@ -41,6 +40,6 @@ final class DeveloperLoginsServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        AboutCommand::add('Vendra Developer Logins', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-developer-logins')]);
+        AboutCommand::add('Vendra Developer Logins', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-developer-logins')]);
     }
 }

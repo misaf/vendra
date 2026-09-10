@@ -28,9 +28,9 @@ trait HasDefaultMediaConversions /** @phpstan-ignore trait.unused */
     {
         return [
             'thumb-table' => 48,
-            'small'       => 300,
-            'medium'      => 500,
-            'large'       => 800,
+            'small' => 300,
+            'medium' => 500,
+            'large' => 800,
             'extra-large' => 1200,
         ];
     }

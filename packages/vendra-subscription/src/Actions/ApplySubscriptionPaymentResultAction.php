@@ -23,17 +23,17 @@ final class ApplySubscriptionPaymentResultAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if (null !== $payment->provider_reference
-                && null !== $result->providerReference
+            if ($payment->provider_reference !== null
+                && $result->providerReference !== null
                 && $payment->provider_reference !== $result->providerReference) {
                 throw new LogicException("Provider reference changed for subscription payment [{$payment->id}].");
             }
 
             $status = match ($result->status) {
-                SubscriptionChargeStatus::Processing     => SubscriptionPaymentStatus::Processing,
+                SubscriptionChargeStatus::Processing => SubscriptionPaymentStatus::Processing,
                 SubscriptionChargeStatus::RequiresAction => SubscriptionPaymentStatus::RequiresAction,
-                SubscriptionChargeStatus::Paid           => SubscriptionPaymentStatus::Paid,
-                SubscriptionChargeStatus::Failed         => SubscriptionPaymentStatus::Failed,
+                SubscriptionChargeStatus::Paid => SubscriptionPaymentStatus::Paid,
+                SubscriptionChargeStatus::Failed => SubscriptionPaymentStatus::Failed,
             };
 
             if ($payment->status->isTerminal() && $payment->status !== $status) {
@@ -49,13 +49,13 @@ final class ApplySubscriptionPaymentResultAction
 
             $failed = false;
 
-            if (SubscriptionPaymentStatus::Failed === $status) {
+            if ($status === SubscriptionPaymentStatus::Failed) {
                 $failed = true;
                 $subscription = $payment->subscription()->firstOrFail();
 
-                if (SubscriptionStatus::PendingPayment === $subscription->status) {
+                if ($subscription->status === SubscriptionStatus::PendingPayment) {
                     $subscription->cancel();
-                } elseif (SubscriptionStatus::Active === $subscription->status) {
+                } elseif ($subscription->status === SubscriptionStatus::Active) {
                     $subscription->markPastDue();
                 }
             }

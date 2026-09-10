@@ -82,9 +82,9 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $validated = Validator::make(
             data: $record,
             rules: [
-                'name'        => ['required', 'string'],
+                'name' => ['required', 'string'],
                 'description' => ['nullable', 'string'],
-                'guard_name'  => ['required', 'string'],
+                'guard_name' => ['required', 'string'],
             ],
         )->validate();
 

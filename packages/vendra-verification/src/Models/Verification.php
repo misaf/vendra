@@ -53,18 +53,18 @@ final class Verification extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'              => 'integer',
-            'tenant_id'       => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
             'user_profile_id' => 'integer',
-            'type'            => 'string',
-            'status'          => 'string',
-            'provider'        => 'string',
-            'reference'       => 'string',
-            'country_code'    => 'string',
-            'metadata'        => 'array',
-            'verified_at'     => 'datetime',
-            'expires_at'      => 'datetime',
-            'notes'           => 'string',
+            'type' => 'string',
+            'status' => 'string',
+            'provider' => 'string',
+            'reference' => 'string',
+            'country_code' => 'string',
+            'metadata' => 'array',
+            'verified_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'notes' => 'string',
         ];
     }
 }

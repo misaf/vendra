@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 it('has at least two available locales', function (): void {
-    expect(__DIR__ . '/../../resources/lang')->toHaveAtLeastTwoLocales('vendra-permission');
+    expect(__DIR__.'/../../resources/lang')->toHaveAtLeastTwoLocales('vendra-permission');
 });
 
 it('keeps translation files and keys in sync across locales', function (): void {
-    expect(__DIR__ . '/../../resources/lang')->toHaveTranslationsInSync('vendra-permission');
+    expect(__DIR__.'/../../resources/lang')->toHaveTranslationsInSync('vendra-permission');
 });
 
 it('keeps translation file keys sorted', function (): void {
-    expect(__DIR__ . '/../../resources/lang')->toHaveSortedTranslationKeys('vendra-permission');
+    expect(__DIR__.'/../../resources/lang')->toHaveSortedTranslationKeys('vendra-permission');
 });

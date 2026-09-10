@@ -113,7 +113,7 @@ it('shows tenant-scoped affiliate metrics and earned commissions', function (): 
         ->invoke(app(AffiliateOverviewWidget::class));
 
     expect(array_map(
-        static fn(Stat $stat): mixed => $stat->getIcon(),
+        static fn (Stat $stat): mixed => $stat->getIcon(),
         $stats,
     ))->each->toBe(Heroicon::OutlinedLink);
 });
@@ -152,25 +152,25 @@ it('shows tenant-scoped commission and payout resource metrics', function (): vo
         ->invoke(app(AffiliatePayoutOverviewWidget::class));
 
     expect(array_map(
-        static fn(Stat $stat): mixed => $stat->getValue(),
+        static fn (Stat $stat): mixed => $stat->getValue(),
         $commissionStats,
     ))->toBe(['4', '1', '1'])
         ->and(array_map(
-            static fn(Stat $stat): mixed => $stat->getValue(),
+            static fn (Stat $stat): mixed => $stat->getValue(),
             $payoutStats,
         ))->toBe(['2', '1', '1']);
 
     foreach ([$commissionStats, $payoutStats] as $stats) {
         expect(array_map(
-            static fn(Stat $stat): mixed => $stat->getIcon(),
+            static fn (Stat $stat): mixed => $stat->getIcon(),
             $stats,
         ))->each->toBe(Heroicon::OutlinedLink)
             ->and(array_map(
-                static fn(Stat $stat): IconPosition|string => $stat->getDescriptionIconPosition(),
+                static fn (Stat $stat): IconPosition|string => $stat->getDescriptionIconPosition(),
                 $stats,
             ))->each->toBe(IconPosition::Before)
             ->and(array_map(
-                static fn(Stat $stat): int => count($stat->getChart() ?? []),
+                static fn (Stat $stat): int => count($stat->getChart() ?? []),
                 $stats,
             ))->each->toBeGreaterThan(0);
     }

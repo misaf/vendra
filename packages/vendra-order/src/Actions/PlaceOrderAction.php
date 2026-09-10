@@ -26,7 +26,7 @@ final class PlaceOrderAction
      * The cart row itself survives so its token stays usable for the next
      * order; only its items are cleared.
      *
-     * @param list<OrderLineDraft> $lines
+     * @param  list<OrderLineDraft>  $lines
      */
     public function execute(
         Cart $cart,
@@ -45,19 +45,19 @@ final class PlaceOrderAction
         }
 
         Validator::make([
-            'currency_code'     => $currencyCode,
-            'lines'             => $lines,
-            'delivery_amount'   => $deliveryAmount,
+            'currency_code' => $currencyCode,
+            'lines' => $lines,
+            'delivery_amount' => $deliveryAmount,
             'payment_reference' => $paymentReference,
-            'quantities'        => array_map(fn(OrderLineDraft $line): int => $line->quantity, $lines),
-            'unit_amounts'      => array_map(fn(OrderLineDraft $line): int => $line->unitAmount, $lines),
+            'quantities' => array_map(fn (OrderLineDraft $line): int => $line->quantity, $lines),
+            'unit_amounts' => array_map(fn (OrderLineDraft $line): int => $line->unitAmount, $lines),
         ], [
-            'currency_code'     => ['required', 'string', 'size:3'],
-            'lines'             => ['required', 'array', 'min:1'],
-            'delivery_amount'   => ['integer', 'min:0'],
+            'currency_code' => ['required', 'string', 'size:3'],
+            'lines' => ['required', 'array', 'min:1'],
+            'delivery_amount' => ['integer', 'min:0'],
             'payment_reference' => ['nullable', 'string', 'max:255'],
-            'quantities.*'      => ['integer', 'min:1'],
-            'unit_amounts.*'    => ['integer', 'min:0'],
+            'quantities.*' => ['integer', 'min:1'],
+            'unit_amounts.*' => ['integer', 'min:0'],
         ])->validate();
 
         return DB::transaction(function () use (
@@ -72,17 +72,17 @@ final class PlaceOrderAction
             $paymentReference,
         ): Order {
             $order = Order::query()->create([
-                'customer_type'          => $customer?->getMorphClass(),
-                'customer_id'            => $customer?->getKey(),
-                'cart_id'                => $cart->getKey(),
+                'customer_type' => $customer?->getMorphClass(),
+                'customer_id' => $customer?->getKey(),
+                'cart_id' => $cart->getKey(),
                 'transaction_gateway_id' => $transactionGateway?->getKey(),
-                'currency_code'          => $currencyCode,
-                'items_amount'           => $itemsAmount,
-                'delivery_amount'        => $deliveryAmount,
-                'total_amount'           => $itemsAmount + $deliveryAmount,
-                'payment_reference'      => $paymentReference,
-                'card_message'           => $cardMessage,
-                'placed_at'              => now(),
+                'currency_code' => $currencyCode,
+                'items_amount' => $itemsAmount,
+                'delivery_amount' => $deliveryAmount,
+                'total_amount' => $itemsAmount + $deliveryAmount,
+                'payment_reference' => $paymentReference,
+                'card_message' => $cardMessage,
+                'placed_at' => now(),
             ]);
 
             foreach ($lines as $line) {

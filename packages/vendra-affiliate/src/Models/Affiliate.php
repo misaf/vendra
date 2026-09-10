@@ -43,11 +43,13 @@ final class Affiliate extends Model implements ShouldLogActivity
 {
     use BelongsToTenant;
     use BelongsToUser;
+
     /** @use HasFactory<AffiliateFactory> */
     use HasFactory;
-    use HasOptionalTags;
 
+    use HasOptionalTags;
     use SoftDeletes;
+
     public const string TAG_TYPE = 'affiliate';
 
     /**
@@ -56,13 +58,13 @@ final class Affiliate extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                 => 'integer',
-            'tenant_id'          => 'integer',
-            'user_id'            => 'integer',
-            'code'               => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'user_id' => 'integer',
+            'code' => 'string',
             'commission_percent' => 'integer',
-            'signup_bounty'      => 'integer',
-            'status'             => AffiliateStatusEnum::class,
+            'signup_bounty' => 'integer',
+            'status' => AffiliateStatusEnum::class,
         ];
     }
 
@@ -100,7 +102,7 @@ final class Affiliate extends Model implements ShouldLogActivity
 
     public function isActive(): bool
     {
-        return AffiliateStatusEnum::Active === $this->status;
+        return $this->status === AffiliateStatusEnum::Active;
     }
 
     /**

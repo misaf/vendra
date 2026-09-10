@@ -15,17 +15,16 @@ use Misaf\VendraAttribute\Models\AttributeValue;
 final class AttributeValueLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<AttributeValue> $builder
-     *
+     * @param  Builder<AttributeValue>  $builder
      * @return Builder<AttributeValue>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
         $builder
             ->with('attribute:id,name')
-            ->whereHas('attribute', fn(Builder $query): Builder => $query->where('active', true));
+            ->whereHas('attribute', fn (Builder $query): Builder => $query->where('active', true));
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

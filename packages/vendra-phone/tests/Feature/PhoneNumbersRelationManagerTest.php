@@ -11,7 +11,7 @@ use Misaf\VendraPhone\Database\Factories\PhoneNumberFactory;
 use Misaf\VendraPhone\Filament\RelationManagers\PhoneNumbersRelationManager;
 
 it('provides a notes field', function (): void {
-    $relationManager = new PhoneNumbersRelationManager();
+    $relationManager = new PhoneNumbersRelationManager;
     $schema = $relationManager->form(Schema::make($relationManager));
     $field = $schema->getFlatFields()['notes'];
 
@@ -23,7 +23,7 @@ it('provides a notes field', function (): void {
 it('updates verification state from table toggle', function (): void {
     makeCurrentTestTenant();
 
-    $relationManager = new PhoneNumbersRelationManager();
+    $relationManager = new PhoneNumbersRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
     $phoneNumber = PhoneNumberFactory::new()->createOne();
     $verifiedColumn = $table->getColumn('verified_at');
@@ -42,7 +42,7 @@ it('updates verification state from table toggle', function (): void {
 it('shows primary badge on label column for primary phone numbers', function (): void {
     makeCurrentTestTenant();
 
-    $relationManager = new PhoneNumbersRelationManager();
+    $relationManager = new PhoneNumbersRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
     $phoneNumber = PhoneNumberFactory::new()->createOne(['is_primary' => true]);
     $labelColumn = $table->getColumn('label');

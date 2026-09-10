@@ -43,12 +43,12 @@ final class NewsletterSubscriber extends Model implements ShouldLogActivity
 
     protected static function booted(): void
     {
-        static::creating(function (NewsletterSubscriber $subscriber): void {
+        self::creating(function (NewsletterSubscriber $subscriber): void {
             if (blank($subscriber->unsubscribe_token)) {
                 $subscriber->unsubscribe_token = Str::random(48);
             }
 
-            if (null === $subscriber->subscribed_at && null === $subscriber->unsubscribed_at) {
+            if ($subscriber->subscribed_at === null && $subscriber->unsubscribed_at === null) {
                 $subscriber->subscribed_at = now();
             }
         });
@@ -60,16 +60,16 @@ final class NewsletterSubscriber extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'              => 'integer',
-            'tenant_id'       => 'integer',
-            'subscribed_at'   => 'datetime',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'subscribed_at' => 'datetime',
             'unsubscribed_at' => 'datetime',
         ];
     }
 
     public function isSubscribed(): bool
     {
-        return null === $this->unsubscribed_at;
+        return $this->unsubscribed_at === null;
     }
 
     /**

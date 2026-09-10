@@ -18,7 +18,7 @@ trait ResolvesSelected
     {
         $rawRoleIds = $data['roles'] ?? null;
 
-        if ( ! is_array($rawRoleIds)) {
+        if (! is_array($rawRoleIds)) {
             throw new InvalidArgumentException('Invalid roles provided.');
         }
 
@@ -33,7 +33,7 @@ trait ResolvesSelected
 
         $roleIds = array_values(array_unique($roleIds, SORT_REGULAR));
 
-        if ([] === $roleIds) {
+        if ($roleIds === []) {
             throw new InvalidArgumentException('Invalid roles provided.');
         }
 
@@ -56,7 +56,7 @@ trait ResolvesSelected
                  */
                 static function (Collection $rolesInGuard): array {
                     return $rolesInGuard
-                        ->map(static fn(Role $role): int => $role->id)
+                        ->map(static fn (Role $role): int => $role->id)
                         ->values()
                         ->all();
                 }

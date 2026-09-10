@@ -27,7 +27,7 @@ final class AttachAction extends FilamentAttachAction
         $this->recordSelectOptionsQuery(function (Builder $query): Builder {
             $livewire = $this->getLivewire();
 
-            if ( ! $livewire instanceof RelationManager) {
+            if (! $livewire instanceof RelationManager) {
                 return $query;
             }
 

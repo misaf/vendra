@@ -11,7 +11,7 @@ return [
         'description' => [
             'wishlists' => 'Wishlists appear when customers save something.',
         ],
-        'heading'     => [
+        'heading' => [
             'wishlists' => 'No wishlists yet',
         ],
     ],

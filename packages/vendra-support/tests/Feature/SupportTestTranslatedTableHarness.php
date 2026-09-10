@@ -14,11 +14,11 @@ final class SupportTestTranslatedTableHarness
 
     public static function resolveTranslatedAttribute(Model $record, string $attribute, Livewire $livewire): string
     {
-        return static::translatedAttribute($record, $attribute, $livewire);
+        return self::translatedAttribute($record, $attribute, $livewire);
     }
 
     public static function resolveIntegerAttribute(Model $record, string $attribute): int
     {
-        return static::integerAttribute($record, $attribute);
+        return self::integerAttribute($record, $attribute);
     }
 }

@@ -71,15 +71,15 @@ final class OrderLine extends Model
     protected function casts(): array
     {
         return [
-            'id'            => 'integer',
-            'order_id'      => 'integer',
-            'sellable_id'   => 'integer',
-            'name'          => 'array',
+            'id' => 'integer',
+            'order_id' => 'integer',
+            'sellable_id' => 'integer',
+            'name' => 'array',
             'currency_code' => 'string',
-            'quantity'      => 'integer',
-            'unit_amount'   => MoneyIntegerCast::class . ':currency_code',
-            'line_amount'   => MoneyIntegerCast::class . ':currency_code',
-            'metadata'      => 'array',
+            'quantity' => 'integer',
+            'unit_amount' => MoneyIntegerCast::class.':currency_code',
+            'line_amount' => MoneyIntegerCast::class.':currency_code',
+            'metadata' => 'array',
         ];
     }
 

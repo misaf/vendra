@@ -25,28 +25,27 @@ use Misaf\VendraSupport\Tenancy\TenantSchema;
 class TeamScope implements Scope
 {
     /**
-     * @param Builder<covariant Model> $builder
-     * @param Model $model
+     * @param  Builder<covariant Model>  $builder
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if ( ! TenantSchema::hasTenantColumn($model->getTable())) {
+        if (! TenantSchema::hasTenantColumn($model->getTable())) {
             return;
         }
 
-        if ( ! app()->bound(TenantResolver::class) || null !== app(TenantResolver::class)->current()) {
+        if (! app()->bound(TenantResolver::class) || app(TenantResolver::class)->current() !== null) {
             return;
         }
 
         $user = auth()->user();
 
-        if ( ! $user instanceof Model) {
+        if (! $user instanceof Model) {
             return;
         }
 
         $foreignKey = TenantSchema::column();
 
-        if ( ! array_key_exists($foreignKey, $user->getAttributes())) {
+        if (! array_key_exists($foreignKey, $user->getAttributes())) {
             return;
         }
 

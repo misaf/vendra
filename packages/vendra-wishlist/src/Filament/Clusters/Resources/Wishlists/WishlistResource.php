@@ -98,7 +98,7 @@ final class WishlistResource extends Resource
     {
         return [
             'index' => ListWishlists::route('/'),
-            'view'  => ViewWishlist::route('/{record}'),
+            'view' => ViewWishlist::route('/{record}'),
         ];
     }
 }

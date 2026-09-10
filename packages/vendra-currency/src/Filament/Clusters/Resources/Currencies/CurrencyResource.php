@@ -18,7 +18,6 @@ use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Schemas\Currency
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Tables\CurrencyTable;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraSupport\Filament\Clusters\SalesCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class CurrencyResource extends Resource
@@ -66,10 +65,10 @@ final class CurrencyResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListCurrencies::route('/'),
+            'index' => ListCurrencies::route('/'),
             'create' => CreateCurrency::route('/create'),
-            'view'   => ViewCurrency::route('/{record}'),
-            'edit'   => EditCurrency::route('/{record}/edit'),
+            'view' => ViewCurrency::route('/{record}'),
+            'edit' => EditCurrency::route('/{record}/edit'),
         ];
     }
 

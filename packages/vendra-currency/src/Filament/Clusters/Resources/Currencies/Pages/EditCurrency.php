@@ -15,7 +15,7 @@ final class EditCurrency extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-currency::navigation.currency');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-currency::navigation.currency');
     }
 
     protected function getHeaderActions(): array

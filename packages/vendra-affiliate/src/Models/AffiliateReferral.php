@@ -38,6 +38,7 @@ final class AffiliateReferral extends Model implements ShouldLogActivity
     use BelongsToAffiliate;
     use BelongsToTenant;
     use BelongsToUser;
+
     /** @use HasFactory<AffiliateReferralFactory> */
     use HasFactory;
 
@@ -47,12 +48,12 @@ final class AffiliateReferral extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                 => 'integer',
-            'tenant_id'          => 'integer',
-            'affiliate_id'       => 'integer',
-            'user_id'            => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'affiliate_id' => 'integer',
+            'user_id' => 'integer',
             'affiliate_click_id' => 'integer',
-            'attributed_at'      => 'datetime',
+            'attributed_at' => 'datetime',
         ];
     }
 

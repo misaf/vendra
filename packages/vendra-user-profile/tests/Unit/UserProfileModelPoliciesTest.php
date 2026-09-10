@@ -12,7 +12,7 @@ it('applies shared tenant ownership and soft deletes to the user profile model',
 });
 
 it('hides the tenant association from user profile serialization', function (): void {
-    expect((new UserProfile())->getHidden())->toContain('tenant_id');
+    expect((new UserProfile)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the user profile resource', function (): void {

@@ -11,7 +11,7 @@ return [
         'description' => [
             'inquiries' => 'Anfragen erscheinen, sobald jemand das Kontaktformular nutzt.',
         ],
-        'heading'     => [
+        'heading' => [
             'inquiries' => 'Noch keine Anfragen',
         ],
     ],

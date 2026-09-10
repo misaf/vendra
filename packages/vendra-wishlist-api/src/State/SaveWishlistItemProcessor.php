@@ -35,7 +35,7 @@ final readonly class SaveWishlistItemProcessor implements ProcessorInterface
     {
         $user = Auth::user();
 
-        if ( ! $user instanceof Model) {
+        if (! $user instanceof Model) {
             $this->reject('sellableId', __('vendra-wishlist-api::messages.sellable_not_found'));
         }
 
@@ -52,11 +52,11 @@ final readonly class SaveWishlistItemProcessor implements ProcessorInterface
      */
     private function resolveSellable(SavedItemResource $data): Model
     {
-        $product = 'product' === $data->sellableType
+        $product = $data->sellableType === 'product'
             ? Product::query()->find($data->sellableId)
             : null;
 
-        if ( ! $product instanceof Product) {
+        if (! $product instanceof Product) {
             $this->reject('sellableId', __('vendra-wishlist-api::messages.sellable_not_found'));
         }
 

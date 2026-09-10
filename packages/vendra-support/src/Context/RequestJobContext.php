@@ -75,7 +75,7 @@ final readonly class RequestJobContext
         Context::add($this->toArray());
         $hiddenContext = $this->toHiddenArray();
 
-        if ([] !== $hiddenContext) {
+        if ($hiddenContext !== []) {
             Context::addHidden($hiddenContext);
         }
     }
@@ -97,19 +97,19 @@ final readonly class RequestJobContext
         $context = [];
 
         foreach ([
-            self::TRACE_ID   => $this->traceId,
-            self::ACTOR_ID   => $this->actorId,
+            self::TRACE_ID => $this->traceId,
+            self::ACTOR_ID => $this->actorId,
             self::ACTOR_TYPE => $this->actorType,
-            self::OPERATION  => $this->operation,
-            self::TENANT_ID  => $this->tenantId,
+            self::OPERATION => $this->operation,
+            self::TENANT_ID => $this->tenantId,
         ] as $key => $value) {
-            if (null !== $value) {
+            if ($value !== null) {
                 $context[$key] = $value;
             }
         }
 
         foreach ($this->metadata as $key => $value) {
-            if (null !== $value) {
+            if ($value !== null) {
                 $context[$key] = $value;
             }
         }
@@ -122,7 +122,7 @@ final readonly class RequestJobContext
      */
     public function toHiddenArray(): array
     {
-        return null === $this->idempotencyKey
+        return $this->idempotencyKey === null
             ? []
             : [self::IDEMPOTENCY_KEY => $this->idempotencyKey];
     }

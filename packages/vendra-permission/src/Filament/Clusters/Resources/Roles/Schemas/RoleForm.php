@@ -21,7 +21,7 @@ final class RoleForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.name'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.name'))
                     ->autofocus()
                     ->columnSpan(['lg' => 1])
                     ->label(__('vendra-permission::attributes.name'))
@@ -35,27 +35,27 @@ final class RoleForm
 
                             $guardName = $get->string('guard_name', isNullable: true);
 
-                            if (null !== $guardName) {
+                            if ($guardName !== null) {
                                 $rule->where('guard_name', $guardName);
                             }
                         },
                     ),
 
                 Select::make('guard_name')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.guard_name'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.guard_name'))
                     ->columnSpan(['lg' => 1])
                     ->helperText(__('vendra-permission::attributes.guard_name_helper_text'))
                     ->label(__('vendra-permission::attributes.guard_name'))
                     ->live()
                     ->native(false)
-                    ->options(static::guardOptions())
+                    ->options(self::guardOptions())
                     ->preload()
                     ->required()
                     ->searchable()
                     ->string(),
 
                 Textarea::make('description')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                     ->columnSpanFull()
                     ->label(__('vendra-permission::attributes.description'))
                     ->live(debounce: 500)

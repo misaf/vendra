@@ -17,7 +17,7 @@ final class SetDefaultCurrencyAction
                 ->get(['id']);
 
             $currency->update([
-                'active'     => true,
+                'active' => true,
                 'is_default' => true,
             ]);
         });

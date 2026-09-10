@@ -22,13 +22,13 @@ final class WithinTransactionLimit implements ValidationRule
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ( ! is_numeric($value)) {
+        if (! is_numeric($value)) {
             return;
         }
 
         $limit = $this->wallet->limitFor($this->transactionType);
 
-        if (null !== $limit && abs((int) $value) > $limit->amount) {
+        if ($limit !== null && abs((int) $value) > $limit->amount) {
             $fail('vendra-transaction::validation.amount_exceeds_limit')->translate([
                 'limit' => $limit->amount,
             ]);

@@ -24,9 +24,9 @@ final class RoleFactory extends Factory
         $guardNames = $this->configuredGuardNames();
 
         return [
-            'name'        => fake()->sentences(1, true),
+            'name' => fake()->sentences(1, true),
             'description' => fake()->realTextBetween(100, 200),
-            'guard_name'  => Arr::random($guardNames),
+            'guard_name' => Arr::random($guardNames),
         ];
     }
 
@@ -35,11 +35,11 @@ final class RoleFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
@@ -48,11 +48,11 @@ final class RoleFactory extends Factory
     {
         $configuredGuardNames = $this->configuredGuardNames();
 
-        if ( ! in_array($guardName, $configuredGuardNames, true)) {
+        if (! in_array($guardName, $configuredGuardNames, true)) {
             throw new RuntimeException("The guard [{$guardName}] is not configured in auth.guards.");
         }
 
-        return $this->state(fn(): array => ['guard_name' => $guardName]);
+        return $this->state(fn (): array => ['guard_name' => $guardName]);
     }
 
     /**
@@ -62,7 +62,7 @@ final class RoleFactory extends Factory
     {
         $guardNames = array_keys(Config::array('auth.guards'));
 
-        if ([] === $guardNames) {
+        if ($guardNames === []) {
             throw new RuntimeException('No guards are configured in auth.guards.');
         }
 

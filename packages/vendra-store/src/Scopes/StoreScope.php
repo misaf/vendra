@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Misaf\VendraSupport\Contracts\TenantResolver;
+use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
 
 /**
  * Confines a Store-owned record to the current store.
  *
  * This is not a second tenancy mechanism competing with
- * {@see \Misaf\VendraSupport\Tenancy\Scopes\TenantScope}: reusable, tenant-aware
+ * {@see TenantScope}: reusable, tenant-aware
  * packages are owned through the neutral `tenant_id` column and scoped by that
  * one. A handful of tables — a store's domains, its storefront deployment —
  * describe the Store itself rather than data inside it, so they carry an
@@ -25,12 +26,11 @@ use Misaf\VendraSupport\Contracts\TenantResolver;
 final class StoreScope implements Scope
 {
     /**
-     * @param Builder<covariant Model> $builder
-     * @param Model $model
+     * @param  Builder<covariant Model>  $builder
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if ( ! app()->bound(TenantResolver::class)) {
+        if (! app()->bound(TenantResolver::class)) {
             return;
         }
 

@@ -22,20 +22,20 @@ final class PlanObserver
 
     public function creating(Plan $plan): void
     {
-        if ( ! $plan->active) {
+        if (! $plan->active) {
             $plan->is_default = false;
 
             return;
         }
 
-        if ( ! Plan::query()->active()->exists()) {
+        if (! Plan::query()->active()->exists()) {
             $plan->is_default = true;
         }
     }
 
     public function saving(Plan $plan): void
     {
-        if ( ! $plan->active) {
+        if (! $plan->active) {
             $plan->is_default = false;
 
             return;
@@ -50,14 +50,14 @@ final class PlanObserver
             return;
         }
 
-        if ($plan->exists && true === $plan->getOriginal('is_default')) {
+        if ($plan->exists && $plan->getOriginal('is_default') === true) {
             $hasAnotherDefault = Plan::query()
                 ->active()
                 ->where('is_default', true)
                 ->whereKeyNot($plan->getKey())
                 ->exists();
 
-            if ( ! $hasAnotherDefault) {
+            if (! $hasAnotherDefault) {
                 $plan->is_default = true;
             }
         }
@@ -72,7 +72,7 @@ final class PlanObserver
 
     public function deleted(Plan $plan): void
     {
-        if ( ! $plan->is_default) {
+        if (! $plan->is_default) {
             return;
         }
 

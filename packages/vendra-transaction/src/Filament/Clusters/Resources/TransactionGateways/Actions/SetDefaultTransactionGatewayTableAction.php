@@ -18,11 +18,11 @@ final class SetDefaultTransactionGatewayTableAction
                 $setDefaultTransactionGateway->execute($record);
                 $action->success();
             })
-            ->authorize(fn(TransactionGateway $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (TransactionGateway $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-transaction::actions.set_default'))
             ->requiresConfirmation()
             ->successNotificationTitle(__('vendra-transaction::messages.default_gateway_updated'))
-            ->visible(fn(TransactionGateway $record): bool => ! $record->is_default);
+            ->visible(fn (TransactionGateway $record): bool => ! $record->is_default);
     }
 }

@@ -23,13 +23,13 @@ final class PermissionModuleTestContext
     {
         $tenant = makeCurrentTestTenant();
 
-        if ( ! $tenant instanceof Model) {
+        if (! $tenant instanceof Model) {
             Assert::fail('Permission module tests require an installed tenant provider.');
         }
 
         // Every permission feature defaults to active in the real published config, so
         // deactivate whatever wasn't explicitly requested to keep tenant state deterministic.
-        $allFeatures = array_map(fn(PermissionFeatureEnum $feature): string => $feature->value, PermissionFeatureEnum::cases());
+        $allFeatures = array_map(fn (PermissionFeatureEnum $feature): string => $feature->value, PermissionFeatureEnum::cases());
 
         Feature::for($tenant)->deactivate(array_values(array_diff($allFeatures, $features)));
         Feature::for($tenant)->activate($features);
@@ -56,7 +56,7 @@ final class PermissionModuleTestContext
             ->forTenant($tenant)
             ->create([
                 'username' => 'admin',
-                'email'    => 'admin@example.test',
+                'email' => 'admin@example.test',
             ]);
 
         $user->assignRole($adminRole);

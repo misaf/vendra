@@ -33,7 +33,7 @@ final class ActivateSubscriptionAction
             $subscription = $payment->subscription()->firstOrFail();
             $subscriber = $subscription->subscriber()->firstOrFail();
 
-            if ( ! $subscriber instanceof SubscriptionSubscriber) {
+            if (! $subscriber instanceof SubscriptionSubscriber) {
                 throw new LogicException("Subscription [{$subscription->id}] has unsupported subscriber type [{$subscription->subscriber_type}]; subscribers must implement SubscriptionSubscriber to be activated.");
             }
 
@@ -47,8 +47,8 @@ final class ActivateSubscriptionAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if (SubscriptionPaymentStatus::Paid !== $lockedPayment->status
-                || SubscriptionStatus::PendingPayment !== $lockedSubscription->status) {
+            if ($lockedPayment->status !== SubscriptionPaymentStatus::Paid
+                || $lockedSubscription->status !== SubscriptionStatus::PendingPayment) {
                 return null;
             }
 

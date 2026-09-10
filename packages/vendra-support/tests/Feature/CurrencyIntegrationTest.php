@@ -11,7 +11,8 @@ it('falls back to configured currency through the null resolver', function (): v
     config(['app.currency' => 'GBP']);
     config(['money' => Arr::except(config('money', []), ['defaultCurrency'])]);
 
-    app()->instance(CurrencyResolver::class, new class implements CurrencyResolver {
+    app()->instance(CurrencyResolver::class, new class implements CurrencyResolver
+    {
         public function available(): bool
         {
             throw new RuntimeException('Resolver unavailable.');
@@ -40,7 +41,8 @@ it('falls back to configured currency through the null resolver', function (): v
 });
 
 it('uses the bound currency resolver when available', function (): void {
-    app()->instance(CurrencyResolver::class, new class implements CurrencyResolver {
+    app()->instance(CurrencyResolver::class, new class implements CurrencyResolver
+    {
         public function available(): bool
         {
             return true;
@@ -78,7 +80,8 @@ it('falls back when the bound resolver throws', function (): void {
     config(['app.currency' => 'CAD']);
     config(['money' => Arr::except(config('money', []), ['defaultCurrency'])]);
 
-    app()->instance(CurrencyResolver::class, new class implements CurrencyResolver {
+    app()->instance(CurrencyResolver::class, new class implements CurrencyResolver
+    {
         public function available(): bool
         {
             throw new RuntimeException('Resolver failed.');
@@ -109,7 +112,7 @@ it('falls back when the bound resolver throws', function (): void {
 it('uses the support null resolver fallback shape', function (): void {
     config(['app.currency' => 'USD']);
 
-    $resolver = new NullCurrencyResolver();
+    $resolver = new NullCurrencyResolver;
 
     expect($resolver->available())->toBeFalse()
         ->and($resolver->options())->toBe([$resolver->defaultCode() => $resolver->defaultCode()])

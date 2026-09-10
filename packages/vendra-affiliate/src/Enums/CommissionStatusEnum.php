@@ -31,9 +31,9 @@ enum CommissionStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): array
     {
         return match ($this) {
-            self::Pending  => Color::Yellow,
+            self::Pending => Color::Yellow,
             self::Approved => Color::Green,
-            self::Paid     => Color::Blue,
+            self::Paid => Color::Blue,
             self::Reversed => Color::Red,
         };
     }
@@ -41,9 +41,9 @@ enum CommissionStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::Pending  => Heroicon::OutlinedClock,
+            self::Pending => Heroicon::OutlinedClock,
             self::Approved => Heroicon::OutlinedCheckCircle,
-            self::Paid     => Heroicon::OutlinedBanknotes,
+            self::Paid => Heroicon::OutlinedBanknotes,
             self::Reversed => Heroicon::OutlinedArrowUturnLeft,
         };
     }
@@ -51,9 +51,9 @@ enum CommissionStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::Pending  => __('vendra-affiliate::enums.commission_status_pending'),
+            self::Pending => __('vendra-affiliate::enums.commission_status_pending'),
             self::Approved => __('vendra-affiliate::enums.commission_status_approved'),
-            self::Paid     => __('vendra-affiliate::enums.commission_status_paid'),
+            self::Paid => __('vendra-affiliate::enums.commission_status_paid'),
             self::Reversed => __('vendra-affiliate::enums.commission_status_reversed'),
         };
     }

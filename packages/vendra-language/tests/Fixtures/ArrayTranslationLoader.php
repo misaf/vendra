@@ -16,7 +16,7 @@ final class ArrayTranslationLoader implements TranslationLoader
      */
     public function loadTranslations(string $locale, string $group, ?string $namespace = null): array
     {
-        $key = null === $namespace ? $group : "{$namespace}::{$group}";
+        $key = $namespace === null ? $group : "{$namespace}::{$group}";
 
         return self::$translations[$key] ?? [];
     }

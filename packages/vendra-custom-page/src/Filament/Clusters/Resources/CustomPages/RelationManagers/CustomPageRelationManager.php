@@ -50,7 +50,7 @@ final class CustomPageRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! $ownerRecord instanceof CustomPageCategory) {
+        if (! $ownerRecord instanceof CustomPageCategory) {
             return (string) Number::format(0);
         }
 

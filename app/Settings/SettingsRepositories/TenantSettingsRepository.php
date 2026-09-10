@@ -57,7 +57,7 @@ final class TenantSettingsRepository extends ScopedSettingsRepository
             ->where('name', $name)
             ->value('payload');
 
-        if (null === $payload && ! $this->onPlatformScope()) {
+        if ($payload === null && ! $this->onPlatformScope()) {
             $payload = $this->platformBuilder()
                 ->where('group', $group)
                 ->where('name', $name)
@@ -69,7 +69,7 @@ final class TenantSettingsRepository extends ScopedSettingsRepository
 
     protected function tenantId(): ?int
     {
-        if ( ! app()->bound(TenantResolver::class)) {
+        if (! app()->bound(TenantResolver::class)) {
             return null;
         }
 

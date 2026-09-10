@@ -30,11 +30,11 @@ final class DeployStoreStorefrontAction
     ) {}
 
     /**
-     * @param bool $force redeploy even a storefront already recorded as ready
+     * @param  bool  $force  redeploy even a storefront already recorded as ready
      */
     public function execute(StorefrontDeployment $deployment, bool $force = false): StorefrontDeploymentStatus
     {
-        if ( ! $force && StorefrontDeploymentStatus::Ready === $deployment->status) {
+        if (! $force && $deployment->status === StorefrontDeploymentStatus::Ready) {
             return $deployment->status;
         }
 

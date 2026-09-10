@@ -7,8 +7,7 @@ namespace Misaf\VendraApi\State\Concerns;
 trait NormalizesResourceValues
 {
     /**
-     * @param array<array-key, mixed> $translations
-     *
+     * @param  array<array-key, mixed>  $translations
      * @return array<string, string>
      */
     protected function normalizeTranslations(array $translations): array
@@ -28,8 +27,7 @@ trait NormalizesResourceValues
      * Normalize rich-text translations that are stored as structured documents
      * (Tiptap JSON) rather than plain strings, keeping the document intact.
      *
-     * @param array<array-key, mixed> $translations
-     *
+     * @param  array<array-key, mixed>  $translations
      * @return array<string, array<array-key, mixed>|string>
      */
     protected function normalizeTranslationDocuments(array $translations): array
@@ -37,7 +35,7 @@ trait NormalizesResourceValues
         $normalizedTranslations = [];
 
         foreach ($translations as $locale => $translation) {
-            if ( ! is_string($locale)) {
+            if (! is_string($locale)) {
                 continue;
             }
 

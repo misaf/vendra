@@ -71,7 +71,7 @@ it('switches the default currency through the domain action', function (): void 
     $dollar = CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
     $euro = CurrencyFactory::new()->code('EUR')->createOne(['position' => 2]);
 
-    (new SetDefaultCurrencyAction())->execute($euro);
+    (new SetDefaultCurrencyAction)->execute($euro);
 
     expect($dollar->refresh()->is_default)->toBeFalse()
         ->and($euro->refresh()->is_default)->toBeTrue();
@@ -81,7 +81,7 @@ it('enables a disabled currency when it becomes the default', function (): void 
     CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
     $euro = CurrencyFactory::new()->code('EUR')->inactive()->createOne(['position' => 2]);
 
-    (new SetDefaultCurrencyAction())->execute($euro);
+    (new SetDefaultCurrencyAction)->execute($euro);
 
     expect($euro->refresh()->active)->toBeTrue()
         ->and($euro->is_default)->toBeTrue();
@@ -91,7 +91,7 @@ it('rejects bulk updates that would create multiple default currencies', functio
     CurrencyFactory::new()->code('USD')->createOne(['is_default' => false, 'position' => 1]);
     CurrencyFactory::new()->code('EUR')->createOne(['is_default' => false, 'position' => 2]);
 
-    expect(fn(): int => Currency::query()->update(['is_default' => true]))
+    expect(fn (): int => Currency::query()->update(['is_default' => true]))
         ->toThrow(QueryException::class);
 });
 
@@ -122,11 +122,11 @@ it('creates the fresh currency schema expected by the model', function (): void 
 });
 
 it('creates the currencies table without a tenant column when tenancy is unavailable', function (): void {
-    app()->instance(TenantResolver::class, new NullTenantResolver());
+    app()->instance(TenantResolver::class, new NullTenantResolver);
 
     Schema::dropIfExists('currencies');
 
-    $migration = require __DIR__ . '/../../database/migrations/create_currencies_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_currencies_table.php.stub';
 
     $migration->up();
 

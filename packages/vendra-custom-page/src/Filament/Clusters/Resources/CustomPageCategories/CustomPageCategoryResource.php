@@ -76,10 +76,10 @@ final class CustomPageCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListCustomPageCategories::route('/'),
+            'index' => ListCustomPageCategories::route('/'),
             'create' => CreateCustomPageCategory::route('/create'),
-            'view'   => ViewCustomPageCategory::route('/{record}'),
-            'edit'   => EditCustomPageCategory::route('/{record}/edit'),
+            'view' => ViewCustomPageCategory::route('/{record}'),
+            'edit' => EditCustomPageCategory::route('/{record}/edit'),
         ];
     }
 

@@ -18,7 +18,7 @@ final class ListTransactionGateways extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-transaction::navigation.transaction_gateway');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-transaction::navigation.transaction_gateway');
     }
 
     protected function getHeaderActions(): array

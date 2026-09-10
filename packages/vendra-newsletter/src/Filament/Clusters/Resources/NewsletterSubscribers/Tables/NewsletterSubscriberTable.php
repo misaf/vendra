@@ -50,13 +50,13 @@ final class NewsletterSubscriberTable
 
                 ToggleColumn::make('subscribed')
                     ->alignCenter()
-                    ->disabled(fn(NewsletterSubscriber $record): bool => ! NewsletterSubscriberResource::canEdit($record))
+                    ->disabled(fn (NewsletterSubscriber $record): bool => ! NewsletterSubscriberResource::canEdit($record))
                     ->label(__('vendra-newsletter::attributes.active'))
                     ->onIcon(Heroicon::Bolt)
-                    ->state(fn(NewsletterSubscriber $record): bool => $record->isSubscribed())
+                    ->state(fn (NewsletterSubscriber $record): bool => $record->isSubscribed())
                     ->updateStateUsing(function (NewsletterSubscriber $record, bool $state): bool {
                         $record->update([
-                            'subscribed_at'   => $state ? now() : $record->subscribed_at,
+                            'subscribed_at' => $state ? now() : $record->subscribed_at,
                             'unsubscribed_at' => $state ? null : now(),
                         ]);
 
@@ -72,8 +72,8 @@ final class NewsletterSubscriberTable
                     ->toggleable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
 
                 TextColumn::make('unsubscribed_at')
@@ -86,8 +86,8 @@ final class NewsletterSubscriberTable
                     ->toggleable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
 
                 TextColumn::make('created_at')
@@ -96,8 +96,8 @@ final class NewsletterSubscriberTable
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
             ])
             ->filters(
@@ -107,8 +107,8 @@ final class NewsletterSubscriberTable
                         ->trueLabel(__('vendra-newsletter::attributes.active'))
                         ->falseLabel(__('vendra-newsletter::attributes.inactive'))
                         ->queries(
-                            true: fn(Builder $query): Builder => $query->whereNull('unsubscribed_at'),
-                            false: fn(Builder $query): Builder => $query->whereNotNull('unsubscribed_at'),
+                            true: fn (Builder $query): Builder => $query->whereNull('unsubscribed_at'),
+                            false: fn (Builder $query): Builder => $query->whereNotNull('unsubscribed_at'),
                         ),
                     QueryBuilder::make()
                         ->constraints([

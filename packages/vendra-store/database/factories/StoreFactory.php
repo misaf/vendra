@@ -22,34 +22,34 @@ final class StoreFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'                     => fake()->unique()->sentence(3),
-            'description'              => fake()->text(),
-            'slug'                     => fn(array $attributes) => Str::slug($attributes['name']),
-            'active'                   => fake()->boolean(),
-            'locale'                   => null,
-            'currency'                 => null,
-            'timezone'                 => null,
-            'metadata'                 => null,
-            'billing_suspended_at'     => null,
-            'provisioning_status'      => TenantProvisioningStatus::Ready,
+            'name' => fake()->unique()->sentence(3),
+            'description' => fake()->text(),
+            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
+            'active' => fake()->boolean(),
+            'locale' => null,
+            'currency' => null,
+            'timezone' => null,
+            'metadata' => null,
+            'billing_suspended_at' => null,
+            'provisioning_status' => TenantProvisioningStatus::Ready,
             'provisioning_should_seed' => false,
-            'provisioned_at'           => now(),
+            'provisioned_at' => now(),
         ];
     }
 
     public function active(): static
     {
-        return $this->state(fn(): array => ['active' => true]);
+        return $this->state(fn (): array => ['active' => true]);
     }
 
     public function inactive(): static
     {
-        return $this->state(fn(): array => ['active' => false]);
+        return $this->state(fn (): array => ['active' => false]);
     }
 
     public function suspended(): static
     {
-        return $this->state(fn(): array => ['billing_suspended_at' => now()]);
+        return $this->state(fn (): array => ['billing_suspended_at' => now()]);
     }
 
     /**
@@ -57,7 +57,7 @@ final class StoreFactory extends Factory
      */
     public function provisioningPending(): static
     {
-        return $this->state(fn(): array => ['provisioning_status' => TenantProvisioningStatus::Pending]);
+        return $this->state(fn (): array => ['provisioning_status' => TenantProvisioningStatus::Pending]);
     }
 
     /**
@@ -65,7 +65,7 @@ final class StoreFactory extends Factory
      */
     public function provisioning(): static
     {
-        return $this->state(fn(): array => ['provisioning_status' => TenantProvisioningStatus::Processing]);
+        return $this->state(fn (): array => ['provisioning_status' => TenantProvisioningStatus::Processing]);
     }
 
     /**
@@ -73,6 +73,6 @@ final class StoreFactory extends Factory
      */
     public function provisioningFailed(): static
     {
-        return $this->state(fn(): array => ['provisioning_status' => TenantProvisioningStatus::Failed]);
+        return $this->state(fn (): array => ['provisioning_status' => TenantProvisioningStatus::Failed]);
     }
 }

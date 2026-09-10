@@ -32,7 +32,7 @@ enum StorefrontRuntimeState: string
      */
     public static function fromContainer(?StorefrontContainer $container): self
     {
-        if (null === $container) {
+        if ($container === null) {
             return self::Absent;
         }
 
@@ -40,14 +40,14 @@ enum StorefrontRuntimeState: string
             return self::Stopped;
         }
 
-        if ( ! $container->isRunning()) {
+        if (! $container->isRunning()) {
             return match ($container->state) {
                 'created' => self::Created,
-                default   => self::Unknown,
+                default => self::Unknown,
             };
         }
 
-        return 'unhealthy' === $container->health
+        return $container->health === 'unhealthy'
             ? self::Unhealthy
             : self::Running;
     }
@@ -57,6 +57,6 @@ enum StorefrontRuntimeState: string
      */
     public function isServing(): bool
     {
-        return self::Running === $this;
+        return $this === self::Running;
     }
 }

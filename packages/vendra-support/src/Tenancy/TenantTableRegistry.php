@@ -17,9 +17,9 @@ final class TenantTableRegistry
     public function registerOnConnection(?string $connection, string ...$tables): void
     {
         foreach ($tables as $table) {
-            if ('' !== $table) {
-                $this->tables[$connection . "\0" . $table] = [
-                    'table'      => $table,
+            if ($table !== '') {
+                $this->tables[$connection."\0".$table] = [
+                    'table' => $table,
                     'connection' => $connection,
                 ];
             }

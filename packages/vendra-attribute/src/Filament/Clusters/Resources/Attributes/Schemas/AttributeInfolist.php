@@ -31,7 +31,7 @@ final class AttributeInfolist
             TextEntry::make('values_count')
                 ->badge()
                 ->label(__('vendra-attribute::attributes.values'))
-                ->state(fn(Attribute $record): int => $record->values()->count()),
+                ->state(fn (Attribute $record): int => $record->values()->count()),
 
             TextEntry::make('description')
                 ->columnSpanFull()
@@ -60,8 +60,8 @@ final class AttributeInfolist
             ->label(__("vendra-attribute::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

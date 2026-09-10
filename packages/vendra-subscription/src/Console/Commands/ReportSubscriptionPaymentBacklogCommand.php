@@ -30,7 +30,7 @@ final class ReportSubscriptionPaymentBacklogCommand extends Command
         (new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'subscription_payment_backlog',
-        ))->scope(fn(): int => $this->report());
+        ))->scope(fn (): int => $this->report());
 
         return self::SUCCESS;
     }
@@ -53,7 +53,7 @@ final class ReportSubscriptionPaymentBacklogCommand extends Command
             ->where('status', SubscriptionPaymentStatus::Paid)
             ->whereHas(
                 'subscription',
-                fn(Builder $query): Builder => $query->where('status', SubscriptionStatus::PendingPayment),
+                fn (Builder $query): Builder => $query->where('status', SubscriptionStatus::PendingPayment),
             )
             ->count();
 
@@ -61,9 +61,9 @@ final class ReportSubscriptionPaymentBacklogCommand extends Command
 
         $context = [
             'needs_reconciliation' => $needsReconciliation,
-            'stalled_processing'   => $stalledProcessing,
-            'activation_gap'       => $activationGap,
-            'stale_minutes'        => $staleMinutes,
+            'stalled_processing' => $stalledProcessing,
+            'activation_gap' => $activationGap,
+            'stale_minutes' => $staleMinutes,
         ];
 
         if ($total > 0) {

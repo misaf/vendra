@@ -103,9 +103,9 @@ final class TransactionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListTransactions::route('/'),
+            'index' => ListTransactions::route('/'),
             'create' => CreateTransaction::route('/create'),
-            'view'   => ViewTransaction::route('/{record}'),
+            'view' => ViewTransaction::route('/{record}'),
         ];
     }
 
@@ -126,7 +126,7 @@ final class TransactionResource extends Resource
 
     private static function transaction(Model $record): Transaction
     {
-        if ( ! $record instanceof Transaction) {
+        if (! $record instanceof Transaction) {
             throw new InvalidArgumentException('Transaction resources require a Transaction record.');
         }
 

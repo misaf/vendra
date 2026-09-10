@@ -58,7 +58,7 @@ use Spatie\Translatable\HasTranslations;
 ])]
 #[Hidden(['tenant_id'])]
 #[UseFactory(DeliveryZoneFactory::class)]
-final class DeliveryZone extends Model implements Sortable, ShouldLogActivity
+final class DeliveryZone extends Model implements ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
 
@@ -73,7 +73,7 @@ final class DeliveryZone extends Model implements Sortable, ShouldLogActivity
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -88,18 +88,18 @@ final class DeliveryZone extends Model implements Sortable, ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'               => 'integer',
-            'tenant_id'        => 'integer',
-            'name'             => 'array',
-            'description'      => 'array',
-            'origin_latitude'  => 'float',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'name' => 'array',
+            'description' => 'array',
+            'origin_latitude' => 'float',
             'origin_longitude' => 'float',
-            'max_distance_km'  => 'float',
-            'currency_code'    => 'string',
-            'fee_amount'       => MoneyIntegerCast::class . ':currency_code',
-            'requires_quote'   => 'boolean',
-            'position'         => 'integer',
-            'active'           => 'boolean',
+            'max_distance_km' => 'float',
+            'currency_code' => 'string',
+            'fee_amount' => MoneyIntegerCast::class.':currency_code',
+            'requires_quote' => 'boolean',
+            'position' => 'integer',
+            'active' => 'boolean',
         ];
     }
 
@@ -129,11 +129,11 @@ final class DeliveryZone extends Model implements Sortable, ShouldLogActivity
      */
     public function covers(float $distanceKm): bool
     {
-        return null === $this->max_distance_km || $distanceKm <= $this->max_distance_km;
+        return $this->max_distance_km === null || $distanceKm <= $this->max_distance_km;
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopeActive(Builder $builder): void
     {

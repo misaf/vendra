@@ -43,7 +43,7 @@ it('renders the view user profile page under strict authorization', function ():
 });
 
 it('lets authorization for another guard principal fall through safely', function (): void {
-    Gate::define('foreign-principal-check', fn(): bool => false);
+    Gate::define('foreign-principal-check', fn (): bool => false);
 
     expect(Gate::forUser(new class extends AuthenticatableUser {})->allows('foreign-principal-check'))->toBeFalse();
 });

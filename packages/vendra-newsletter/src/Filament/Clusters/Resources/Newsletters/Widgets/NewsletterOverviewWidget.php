@@ -61,8 +61,7 @@ final class NewsletterOverviewWidget extends StatsOverviewWidget
     }
 
     /**
-     * @param Collection<(int|string), mixed> $values
-     *
+     * @param  Collection<(int|string), mixed>  $values
      * @return list<float>
      */
     private function chartValues(Collection $values): array

@@ -17,20 +17,20 @@ beforeEach(function (): void {
 function createMultimediaRecord(string $collectionName, int $size): Multimedia
 {
     return Multimedia::query()->create([
-        'model_type'            => 'test-model',
-        'model_id'              => 1,
-        'uuid'                  => (string) Str::uuid(),
-        'collection_name'       => $collectionName,
-        'name'                  => $collectionName,
-        'file_name'             => "{$collectionName}.jpg",
-        'mime_type'             => 'image/jpeg',
-        'disk'                  => 'public',
-        'conversions_disk'      => 'public',
-        'size'                  => $size,
-        'manipulations'         => [],
-        'custom_properties'     => [],
+        'model_type' => 'test-model',
+        'model_id' => 1,
+        'uuid' => (string) Str::uuid(),
+        'collection_name' => $collectionName,
+        'name' => $collectionName,
+        'file_name' => "{$collectionName}.jpg",
+        'mime_type' => 'image/jpeg',
+        'disk' => 'public',
+        'conversions_disk' => 'public',
+        'size' => $size,
+        'manipulations' => [],
+        'custom_properties' => [],
         'generated_conversions' => [],
-        'responsive_images'     => [],
+        'responsive_images' => [],
     ]);
 }
 

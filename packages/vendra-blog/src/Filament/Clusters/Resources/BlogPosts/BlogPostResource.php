@@ -68,10 +68,10 @@ final class BlogPostResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListBlogPosts::route('/'),
+            'index' => ListBlogPosts::route('/'),
             'create' => CreateBlogPost::route('/create'),
-            'view'   => ViewBlogPost::route('/{record}'),
-            'edit'   => EditBlogPost::route('/{record}/edit'),
+            'view' => ViewBlogPost::route('/{record}'),
+            'edit' => EditBlogPost::route('/{record}/edit'),
         ];
     }
 

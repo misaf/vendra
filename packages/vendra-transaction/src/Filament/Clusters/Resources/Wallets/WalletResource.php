@@ -55,7 +55,7 @@ final class WalletResource extends Resource
         $wallet = self::wallet($record);
 
         return [
-            __('vendra-user::attributes.email')           => (string) $wallet->user?->getAttribute('email'),
+            __('vendra-user::attributes.email') => (string) $wallet->user?->getAttribute('email'),
             __('vendra-transaction::attributes.currency') => $wallet->currency_code,
         ];
     }
@@ -67,7 +67,7 @@ final class WalletResource extends Resource
             ?? $wallet->user?->getAttribute('name')
             ?? "#{$wallet->user_id}";
 
-        if ( ! is_string($userName)) {
+        if (! is_string($userName)) {
             $userName = "#{$wallet->user_id}";
         }
 
@@ -111,7 +111,7 @@ final class WalletResource extends Resource
     {
         return [
             'index' => ListWallets::route('/'),
-            'view'  => ViewWallet::route('/{record}'),
+            'view' => ViewWallet::route('/{record}'),
         ];
     }
 
@@ -127,7 +127,7 @@ final class WalletResource extends Resource
 
     private static function wallet(Model $record): Wallet
     {
-        if ( ! $record instanceof Wallet) {
+        if (! $record instanceof Wallet) {
             throw new InvalidArgumentException('Wallet resources require a Wallet record.');
         }
 

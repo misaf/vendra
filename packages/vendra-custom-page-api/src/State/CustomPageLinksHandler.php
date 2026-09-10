@@ -15,18 +15,17 @@ use Misaf\VendraCustomPage\Models\CustomPage;
 final class CustomPageLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<CustomPage> $builder
-     *
+     * @param  Builder<CustomPage>  $builder
      * @return Builder<CustomPage>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
         $builder
             ->with(['customPageCategory:id,name', 'multimedia'])
-            ->whereHas('customPageCategory', fn(Builder $query): Builder => $query->where('active', true))
+            ->whereHas('customPageCategory', fn (Builder $query): Builder => $query->where('active', true))
             ->where('active', true);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

@@ -40,19 +40,19 @@ final class ScheduleDeliveryAction
         ?float $latitude = null,
         ?float $longitude = null,
     ): Delivery {
-        if ( ! $quote->isDeliverable()) {
+        if (! $quote->isDeliverable()) {
             throw new RuntimeException('The delivery address is outside the delivered range and must be quoted by hand.');
         }
 
         Validator::make([
-            'scheduled_for'  => $scheduledFor,
+            'scheduled_for' => $scheduledFor,
             'recipient_name' => $recipientName,
         ], [
-            'scheduled_for'  => ['nullable', 'date_format:Y-m-d'],
+            'scheduled_for' => ['nullable', 'date_format:Y-m-d'],
             'recipient_name' => ['nullable', 'string', 'max:255'],
         ])->validate();
 
-        if (null !== $scheduledFor && ! $this->schedule->isBookable($scheduledFor)) {
+        if ($scheduledFor !== null && ! $this->schedule->isBookable($scheduledFor)) {
             throw new RuntimeException(sprintf('Delivery date [%s] is not bookable.', $scheduledFor));
         }
 
@@ -69,21 +69,21 @@ final class ScheduleDeliveryAction
             $delivery = Delivery::query()
                 ->where('order_id', $order->getKey())
                 ->lockForUpdate()
-                ->first() ?? new Delivery();
+                ->first() ?? new Delivery;
 
             $delivery->fill([
-                'order_id'         => $order->getKey(),
-                'address_id'       => $address?->getKey(),
+                'order_id' => $order->getKey(),
+                'address_id' => $address?->getKey(),
                 'delivery_zone_id' => $quote->zone?->getKey(),
                 'delivery_slot_id' => $slot?->getKey(),
-                'scheduled_for'    => $scheduledFor,
-                'latitude'         => $latitude,
-                'longitude'        => $longitude,
-                'distance_km'      => $quote->distanceKm,
-                'currency_code'    => $quote->currencyCode,
-                'fee_amount'       => $quote->feeAmount,
-                'requires_quote'   => false,
-                'recipient_name'   => $recipientName,
+                'scheduled_for' => $scheduledFor,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'distance_km' => $quote->distanceKm,
+                'currency_code' => $quote->currencyCode,
+                'fee_amount' => $quote->feeAmount,
+                'requires_quote' => false,
+                'recipient_name' => $recipientName,
             ]);
 
             $delivery->save();

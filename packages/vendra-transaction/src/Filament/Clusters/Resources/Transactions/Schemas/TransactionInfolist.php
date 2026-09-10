@@ -24,7 +24,7 @@ final class TransactionInfolist
                     ->state(function (Transaction $record): string {
                         $wallet = $record->wallet;
 
-                        if (null === $wallet) {
+                        if ($wallet === null) {
                             return '—';
                         }
 
@@ -60,8 +60,8 @@ final class TransactionInfolist
                     ->placeholder('—'),
                 TextEntry::make('status')
                     ->badge()
-                    ->color(fn(Transaction $record): array => $record->status->getColor())
-                    ->formatStateUsing(fn(Transaction $record): string => $record->status->getLabel())
+                    ->color(fn (Transaction $record): array => $record->status->getColor())
+                    ->formatStateUsing(fn (Transaction $record): string => $record->status->getLabel())
                     ->label(__('vendra-transaction::attributes.status')),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
@@ -75,8 +75,8 @@ final class TransactionInfolist
             ->label(__("vendra-transaction::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

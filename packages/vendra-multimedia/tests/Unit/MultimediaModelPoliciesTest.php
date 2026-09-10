@@ -11,7 +11,7 @@ it('applies shared tenant ownership to the multimedia model', function (): void 
 });
 
 it('hides the tenant association from multimedia serialization', function (): void {
-    expect((new Multimedia())->getHidden())->toContain('tenant_id');
+    expect((new Multimedia)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the multimedia resource', function (): void {

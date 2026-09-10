@@ -18,7 +18,7 @@ final class ListBlogPosts extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-blog::navigation.blog_post');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-blog::navigation.blog_post');
     }
 
     protected function getHeaderActions(): array

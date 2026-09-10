@@ -22,7 +22,7 @@ final class CancelSubscriptionAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            if (SubscriptionStatus::Cancelled === $lockedSubscription->status) {
+            if ($lockedSubscription->status === SubscriptionStatus::Cancelled) {
                 return $lockedSubscription;
             }
 

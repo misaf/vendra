@@ -48,7 +48,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     {
         $user = Auth::user();
 
-        if ( ! $user instanceof Model) {
+        if (! $user instanceof Model) {
             $this->reject('cartToken', __('vendra-order-api::messages.cart_not_found'));
         }
 
@@ -67,7 +67,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             paymentReference: $data->paymentReference,
         );
 
-        if (null !== $quote) {
+        if ($quote !== null) {
             $this->scheduleDelivery->execute(
                 order: $order,
                 quote: $quote,
@@ -92,7 +92,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             ->where('owner_id', $user->getKey())
             ->first();
 
-        if ( ! $cart instanceof Cart || 0 === $cart->items->count()) {
+        if (! $cart instanceof Cart || $cart->items->count() === 0) {
             $this->reject('cartToken', __('vendra-order-api::messages.cart_not_found'));
         }
 
@@ -111,7 +111,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             $price = $product->productPrices
                 ->firstWhere('currency_code', $currencyCode);
 
-            if ( ! $price instanceof ProductPrice) {
+            if (! $price instanceof ProductPrice) {
                 $this->reject('cartToken', __('vendra-order-api::messages.price_missing', ['product' => $product->id]));
             }
 
@@ -129,15 +129,15 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
 
     private function resolveProduct(CartItem $item): Product
     {
-        $product = 'product' === $item->sellable_type
+        $product = $item->sellable_type === 'product'
             ? Product::query()->with('productPrices')->find($item->sellable_id)
             : null;
 
-        if ( ! $product instanceof Product) {
+        if (! $product instanceof Product) {
             $this->reject('cartToken', __('vendra-order-api::messages.sellable_unsupported', ['type' => $item->sellable_type]));
         }
 
-        if ( ! $product->in_stock || $product->quantity < $item->quantity) {
+        if (! $product->in_stock || $product->quantity < $item->quantity) {
             $this->reject('cartToken', __('vendra-order-api::messages.out_of_stock', ['product' => $product->id]));
         }
 
@@ -146,7 +146,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
 
     private function resolveGateway(?string $slug): ?TransactionGateway
     {
-        if (null === $slug || '' === $slug) {
+        if ($slug === null || $slug === '') {
             return null;
         }
 
@@ -155,7 +155,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             ->where('active', true)
             ->first();
 
-        if ( ! $gateway instanceof TransactionGateway) {
+        if (! $gateway instanceof TransactionGateway) {
             $this->reject('gateway', __('vendra-order-api::messages.gateway_unavailable', ['gateway' => $slug]));
         }
 
@@ -171,13 +171,13 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
      */
     private function resolveDeliveryQuote(CheckoutResource $data, string $currencyCode): ?DeliveryQuote
     {
-        if (null === $data->latitude || null === $data->longitude) {
+        if ($data->latitude === null || $data->longitude === null) {
             return null;
         }
 
         $quote = $this->zoneMatcher->quoteFor($data->latitude, $data->longitude, $currencyCode);
 
-        if ( ! $quote->isDeliverable()) {
+        if (! $quote->isDeliverable()) {
             $this->reject('latitude', __('vendra-order-api::messages.delivery_out_of_range'));
         }
 
@@ -186,13 +186,13 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
 
     private function resolveSlot(?int $slotId): ?DeliverySlot
     {
-        if (null === $slotId) {
+        if ($slotId === null) {
             return null;
         }
 
         $slot = DeliverySlot::query()->where('active', true)->find($slotId);
 
-        if ( ! $slot instanceof DeliverySlot) {
+        if (! $slot instanceof DeliverySlot) {
             $this->reject('deliverySlotId', __('vendra-order-api::messages.delivery_slot_unavailable'));
         }
 
@@ -205,15 +205,15 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
      */
     private function resolveAddress(?int $addressId, Model $user): ?Address
     {
-        if (null === $addressId) {
+        if ($addressId === null) {
             return null;
         }
 
         $address = Address::query()
-            ->whereHas('userProfile', fn($query) => $query->where('user_id', $user->getKey()))
+            ->whereHas('userProfile', fn ($query) => $query->where('user_id', $user->getKey()))
             ->find($addressId);
 
-        if ( ! $address instanceof Address) {
+        if (! $address instanceof Address) {
             $this->reject('addressId', __('vendra-order-api::messages.address_not_found'));
         }
 

@@ -19,7 +19,7 @@ trait ResolvesPolicyPermissions
 
     private function allowed(Authorizable $user, string $ability): bool
     {
-        $permission = constant(static::permissionEnum() . '::' . $ability);
+        $permission = constant(static::permissionEnum().'::'.$ability);
 
         return $permission instanceof BackedEnum && $user->can((string) $permission->value);
     }

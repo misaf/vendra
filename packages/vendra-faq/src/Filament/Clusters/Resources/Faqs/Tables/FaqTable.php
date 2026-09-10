@@ -67,7 +67,7 @@ final class FaqTable
             TextColumn::make('description')
                 ->label(__('vendra-faq::attributes.description'))
                 ->icon(Heroicon::DocumentText)
-                ->state(fn(Faq $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                ->state(fn (Faq $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('slug')
@@ -86,8 +86,8 @@ final class FaqTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -96,8 +96,8 @@ final class FaqTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

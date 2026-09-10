@@ -34,6 +34,6 @@ final class TagIntegration
             return app(TagResolver::class);
         }
 
-        return new NullTagResolver();
+        return new NullTagResolver;
     }
 }

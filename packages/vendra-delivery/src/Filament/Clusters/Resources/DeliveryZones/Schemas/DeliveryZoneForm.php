@@ -68,7 +68,7 @@ final class DeliveryZoneForm
                             ->required(),
 
                         TextInput::make('fee_amount')
-                            ->disabled(fn(Get $get): bool => (bool) $get('requires_quote'))
+                            ->disabled(fn (Get $get): bool => (bool) $get('requires_quote'))
                             ->helperText(__('vendra-delivery::attributes.fee_amount_hint'))
                             ->label(__('vendra-delivery::attributes.fee_amount'))
                             ->numeric()

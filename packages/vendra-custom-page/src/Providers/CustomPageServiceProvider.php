@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraCustomPage\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraCustomPage\Console\Commands\SeedCommand;
@@ -27,7 +26,7 @@ final class CustomPageServiceProvider extends PackageServiceProvider
             ->name('vendra-custom-page')
             ->hasTranslations()
             ->hasMigrations([
-                'create_custom_pages_table'
+                'create_custom_pages_table',
             ])
             ->hasCommands(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
@@ -38,7 +37,7 @@ final class CustomPageServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-custom-page')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-custom-page')) {
                 return;
             }
 
@@ -51,6 +50,6 @@ final class CustomPageServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('custom_page_categories', 'custom_pages');
         $this->app->make(TenantSeeders::class)->register('vendra-custom-page:seed', priority: 60);
 
-        AboutCommand::add('Vendra Custom Page', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-custom-page')]);
+        AboutCommand::add('Vendra Custom Page', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-custom-page')]);
     }
 }

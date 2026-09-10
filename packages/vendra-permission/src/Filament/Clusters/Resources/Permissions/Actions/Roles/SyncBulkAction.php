@@ -61,13 +61,13 @@ final class SyncBulkAction extends BulkAction
 
                 $this->process(static function (Collection $records) use ($rolesByGuard): void {
                     foreach ($records as $record) {
-                        if ( ! $record instanceof Permission) {
+                        if (! $record instanceof Permission) {
                             continue;
                         }
 
                         $roleIdsForGuard = $rolesByGuard[$record->guard_name] ?? null;
 
-                        if (null === $roleIdsForGuard) {
+                        if ($roleIdsForGuard === null) {
                             continue;
                         }
 

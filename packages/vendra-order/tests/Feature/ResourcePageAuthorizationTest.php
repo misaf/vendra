@@ -38,10 +38,10 @@ it('globally searches order references with customer context inside the current 
     $tenant = currentTestTenant();
     $customer = createTestUser([
         'username' => 'search-customer',
-        'email'    => 'search-customer@example.test',
+        'email' => 'search-customer@example.test',
     ]);
     $order = OrderFactory::new()->forCustomer($customer)->createOne([
-        'number'            => 'ORD-GLOBAL-SEARCH',
+        'number' => 'ORD-GLOBAL-SEARCH',
         'payment_reference' => 'PAY-GLOBAL-REFERENCE',
     ]);
 
@@ -62,7 +62,7 @@ it('globally searches order references with customer context inside the current 
         ->and($result->title)->toBe('ORD-GLOBAL-SEARCH')
         ->and($result->details)->toBe([
             __('vendra-order::attributes.customer') => 'search-customer',
-            __('vendra-order::attributes.status')   => $order->status->getLabel(),
+            __('vendra-order::attributes.status') => $order->status->getLabel(),
         ])
         ->and($loadedOrder->relationLoaded('customer'))->toBeTrue()
         ->and(OrderResource::getGlobalSearchResults('ORD-OTHER-TENANT'))->toBeEmpty();

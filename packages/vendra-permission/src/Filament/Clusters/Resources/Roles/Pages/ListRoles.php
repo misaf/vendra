@@ -14,7 +14,7 @@ final class ListRoles extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-permission::navigation.role');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-permission::navigation.role');
     }
 
     protected function getHeaderActions(): array

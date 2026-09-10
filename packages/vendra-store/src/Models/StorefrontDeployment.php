@@ -92,7 +92,7 @@ final class StorefrontDeployment extends Model
     {
         $this->transitionTo(StorefrontDeploymentStatus::Processing, [
             'failed_at' => null,
-            'error'     => null,
+            'error' => null,
         ]);
     }
 
@@ -103,10 +103,10 @@ final class StorefrontDeployment extends Model
     {
         $this->transitionTo(StorefrontDeploymentStatus::Ready, [
             'container_name' => $containerName,
-            'image'          => $image,
-            'image_digest'   => $imageDigest,
-            'requested_at'   => now(),
-            'deployed_at'    => now(),
+            'image' => $image,
+            'image_digest' => $imageDigest,
+            'requested_at' => now(),
+            'deployed_at' => now(),
         ]);
     }
 
@@ -117,10 +117,10 @@ final class StorefrontDeployment extends Model
     {
         $this->transitionTo(StorefrontDeploymentStatus::Requested, [
             'container_name' => $containerName,
-            'image'          => $image,
-            'image_digest'   => $imageDigest,
-            'requested_at'   => now(),
-            'deployed_at'    => null,
+            'image' => $image,
+            'image_digest' => $imageDigest,
+            'requested_at' => now(),
+            'deployed_at' => null,
         ]);
     }
 
@@ -132,7 +132,7 @@ final class StorefrontDeployment extends Model
     {
         $this->transitionTo(StorefrontDeploymentStatus::Failed, [
             'failed_at' => now(),
-            'error'     => Str::limit($error, 2000, ''),
+            'error' => Str::limit($error, 2000, ''),
         ]);
     }
 
@@ -154,14 +154,14 @@ final class StorefrontDeployment extends Model
     protected function casts(): array
     {
         return [
-            'store_id'            => 'integer',
+            'store_id' => 'integer',
             'storefront_image_id' => 'integer',
-            'configuration'       => 'array',
-            'status'              => StorefrontDeploymentStatus::class,
-            'desired_state'       => StorefrontDesiredState::class,
-            'requested_at'        => 'datetime',
-            'deployed_at'         => 'datetime',
-            'failed_at'           => 'datetime',
+            'configuration' => 'array',
+            'status' => StorefrontDeploymentStatus::class,
+            'desired_state' => StorefrontDesiredState::class,
+            'requested_at' => 'datetime',
+            'deployed_at' => 'datetime',
+            'failed_at' => 'datetime',
         ];
     }
 
@@ -169,13 +169,13 @@ final class StorefrontDeployment extends Model
      * Move to a status the current one allows, writing the attributes that go
      * with it in the same save.
      *
-     * @param array<string, mixed> $attributes
+     * @param  array<string, mixed>  $attributes
      *
      * @throws InvalidStorefrontTransitionException
      */
     private function transitionTo(StorefrontDeploymentStatus $status, array $attributes): void
     {
-        if ( ! $this->status->canTransitionTo($status)) {
+        if (! $this->status->canTransitionTo($status)) {
             throw InvalidStorefrontTransitionException::between($this->status, $status);
         }
 

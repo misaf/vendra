@@ -31,6 +31,6 @@ it('brings the storefront back up when a soft-deleted store is restored', functi
 
     Queue::assertPushed(
         ReconcileStorefrontJob::class,
-        fn(ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
+        fn (ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
     );
 });

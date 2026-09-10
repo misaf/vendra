@@ -51,25 +51,25 @@ use Misaf\VendraMultimediaApi\ApiResource\MultimediaResource;
     uriTemplate: '/content/faqs',
     order: ['position' => 'ASC'],
     parameters: [
-        'categoryId'      => new QueryParameter(key: 'categoryId', property: 'faq_category_id', filter: EqualsFilter::class, constraints: ['integer', 'min:1']),
-        'slug'            => new QueryParameter(key: 'slug', property: 'slug', filter: LocalizedEqualsFilter::class, constraints: ['string', 'max:255']),
-        'search'          => new QueryParameter(
+        'categoryId' => new QueryParameter(key: 'categoryId', property: 'faq_category_id', filter: EqualsFilter::class, constraints: ['integer', 'min:1']),
+        'slug' => new QueryParameter(key: 'slug', property: 'slug', filter: LocalizedEqualsFilter::class, constraints: ['string', 'max:255']),
+        'search' => new QueryParameter(
             key: 'search',
             filter: LocalizedSearchFilter::class,
             filterContext: ['properties' => ['name' => true, 'slug' => true]],
             constraints: ['string', 'max:255'],
         ),
-        'sort[position]'  => new QueryParameter(key: 'sort[position]', property: 'position', filter: OrderFilter::class),
+        'sort[position]' => new QueryParameter(key: 'sort[position]', property: 'position', filter: OrderFilter::class),
         'sort[createdAt]' => new QueryParameter(key: 'sort[createdAt]', property: 'created_at', filter: OrderFilter::class),
     ],
 )]
 final readonly class FaqResource
 {
     /**
-     * @param array<string, string> $name
-     * @param array<string, array<array-key, mixed>|string> $description
-     * @param array<string, string> $slug
-     * @param array<int, MultimediaResource> $multimedia
+     * @param  array<string, string>  $name
+     * @param  array<string, array<array-key, mixed>|string>  $description
+     * @param  array<string, string>  $slug
+     * @param  array<int, MultimediaResource>  $multimedia
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The FAQ unique identifier')]

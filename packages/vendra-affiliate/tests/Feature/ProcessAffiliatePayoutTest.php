@@ -66,7 +66,7 @@ it('rolls back the payout entirely when the commission transaction cannot be cre
 
     $affiliate = affiliateWithApprovedBalance(1_500);
 
-    expect(fn(): mixed => app(ProcessAffiliatePayoutAction::class)->execute($affiliate))
+    expect(fn (): mixed => app(ProcessAffiliatePayoutAction::class)->execute($affiliate))
         ->toThrow(RuntimeException::class)
         ->and($affiliate->payouts()->count())->toBe(0)
         ->and($affiliate->commissions()->where('status', CommissionStatusEnum::Approved)->whereNull('affiliate_payout_id')->count())->toBe(1)

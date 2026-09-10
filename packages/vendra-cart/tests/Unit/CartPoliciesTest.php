@@ -15,10 +15,10 @@ it('authorizes cart abilities through permissions', function (string $method, Ca
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
     $arguments = in_array($method, ['view', 'delete'], true)
-        ? [$user, new Cart()]
+        ? [$user, new Cart]
         : [$user];
 
-    expect((new CartPolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new CartPolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', CartPolicyEnum::View],
     ['viewAny', CartPolicyEnum::ViewAny],
@@ -31,10 +31,10 @@ it('authorizes cart item abilities through permissions', function (string $metho
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
     $arguments = in_array($method, ['view', 'delete'], true)
-        ? [$user, new CartItem()]
+        ? [$user, new CartItem]
         : [$user];
 
-    expect((new CartItemPolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new CartItemPolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', CartItemPolicyEnum::View],
     ['viewAny', CartItemPolicyEnum::ViewAny],
@@ -45,8 +45,8 @@ it('authorizes cart item abilities through permissions', function (string $metho
 it('does not allow carts or items to be created or updated through administration', function (): void {
     $user = Mockery::mock(Authorizable::class);
 
-    expect((new CartPolicy())->create($user))->toBeFalse()
-        ->and((new CartPolicy())->update($user, new Cart()))->toBeFalse()
-        ->and((new CartItemPolicy())->create($user))->toBeFalse()
-        ->and((new CartItemPolicy())->update($user, new CartItem()))->toBeFalse();
+    expect((new CartPolicy)->create($user))->toBeFalse()
+        ->and((new CartPolicy)->update($user, new Cart))->toBeFalse()
+        ->and((new CartItemPolicy)->create($user))->toBeFalse()
+        ->and((new CartItemPolicy)->update($user, new CartItem))->toBeFalse();
 });

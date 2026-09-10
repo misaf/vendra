@@ -22,7 +22,6 @@ use Misaf\VendraPermission\Filament\Clusters\Resources\Roles\Tables\RoleTable;
 use Misaf\VendraPermission\Models\Role;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Filament\Clusters\CustomersCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class RoleResource extends Resource
@@ -77,10 +76,10 @@ final class RoleResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListRoles::route('/'),
+            'index' => ListRoles::route('/'),
             'create' => CreateRole::route('/create'),
-            'view'   => ViewRole::route('/{record}'),
-            'edit'   => EditRole::route('/{record}/edit'),
+            'view' => ViewRole::route('/{record}'),
+            'edit' => EditRole::route('/{record}/edit'),
         ];
     }
 

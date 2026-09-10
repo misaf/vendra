@@ -43,10 +43,9 @@ use Spatie\Translatable\HasTranslations;
 #[Fillable(['faq_category_id', 'name', 'description', 'slug', 'position', 'active'])]
 #[Hidden(['tenant_id'])]
 #[UseFactory(FaqFactory::class)]
-final class Faq extends Model implements HasMedia, Sortable, ShouldLogActivity
+final class Faq extends Model implements HasMedia, ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
-
     use HasDefaultMediaConversions, InteractsWithMedia {
         HasDefaultMediaConversions::registerMediaConversions insteadof InteractsWithMedia;
     }
@@ -59,7 +58,9 @@ final class Faq extends Model implements HasMedia, Sortable, ShouldLogActivity
     use HasTranslations;
     use SoftDeletes;
     use SortableTrait;
+
     public const string TAG_TYPE = 'faq';
+
     public const string MEDIA_COLLECTION = 'faqs';
 
     /**
@@ -74,7 +75,7 @@ final class Faq extends Model implements HasMedia, Sortable, ShouldLogActivity
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -89,14 +90,14 @@ final class Faq extends Model implements HasMedia, Sortable, ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'              => 'integer',
-            'tenant_id'       => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
             'faq_category_id' => 'integer',
-            'name'            => 'array',
-            'description'     => 'array',
-            'slug'            => 'array',
-            'position'        => 'integer',
-            'active'          => 'boolean',
+            'name' => 'array',
+            'description' => 'array',
+            'slug' => 'array',
+            'position' => 'integer',
+            'active' => 'boolean',
         ];
     }
 

@@ -90,7 +90,7 @@ final class InquiryResource extends Resource
     {
         return [
             'index' => ListInquiries::route('/'),
-            'view'  => ViewInquiry::route('/{record}'),
+            'view' => ViewInquiry::route('/{record}'),
         ];
     }
 }

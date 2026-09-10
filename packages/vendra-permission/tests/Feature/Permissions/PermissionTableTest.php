@@ -59,14 +59,14 @@ describe('table rendering', function () use (&$tenant): void {
             ->count(10)
             ->forTenant($tenant)
             ->forGuard('web')
-            ->sequence(fn(Sequence $sequence): array => ['name' => sprintf('a-permission-%02d', $sequence->index)])
+            ->sequence(fn (Sequence $sequence): array => ['name' => sprintf('a-permission-%02d', $sequence->index)])
             ->create();
 
         $otherGroupPermissions = Permission::factory()
             ->count(10)
             ->forTenant($tenant)
             ->forGuard('web')
-            ->sequence(fn(Sequence $sequence): array => ['name' => sprintf('z-permission-%02d', $sequence->index)])
+            ->sequence(fn (Sequence $sequence): array => ['name' => sprintf('z-permission-%02d', $sequence->index)])
             ->create();
 
         livewire(ListPermissions::class)
@@ -97,9 +97,9 @@ describe('table columns', function () use (&$tenant): void {
             ->loadTable()
             ->assertCanRenderTableColumn($column);
     })->with([
-        'row column'         => 'row',
-        'roles relation'     => 'roles.name',
-        'name column'        => 'name',
+        'row column' => 'row',
+        'roles relation' => 'roles.name',
+        'name column' => 'name',
     ]);
 
     it('hides columns by default', function (string $column) use (&$tenant): void {
@@ -237,7 +237,7 @@ describe('column states', function () use (&$tenant): void {
             ->loadTable()
             ->assertTableColumnStateSet($column, $permission->{$column}, $permission);
     })->with([
-        'name column'       => 'name',
+        'name column' => 'name',
         'created at column' => 'created_at',
         'updated at column' => 'updated_at',
     ]);
@@ -332,7 +332,7 @@ describe('column existence', function () use (&$tenant): void {
         livewire(ListPermissions::class)
             ->loadTable()
             ->assertTableColumnExists('name', function (TextColumn $column): bool {
-                return null === $column->getDescriptionBelow();
+                return $column->getDescriptionBelow() === null;
             }, $permission);
     });
 
@@ -341,11 +341,11 @@ describe('column existence', function () use (&$tenant): void {
             ->loadTable()
             ->assertTableColumnExists($column);
     })->with([
-        'row column'         => 'row',
-        'roles relation'     => 'roles.name',
+        'row column' => 'row',
+        'roles relation' => 'roles.name',
         'description column' => 'description',
-        'created at column'  => 'created_at',
-        'updated at column'  => 'updated_at',
+        'created at column' => 'created_at',
+        'updated at column' => 'updated_at',
     ]);
 });
 
@@ -355,9 +355,9 @@ describe('column visibility', function (): void {
             ->loadTable()
             ->assertTableColumnVisible($column);
     })->with([
-        'row column'        => 'row',
-        'roles relation'    => 'roles.name',
-        'name column'       => 'name',
+        'row column' => 'row',
+        'roles relation' => 'roles.name',
+        'name column' => 'name',
         'created at column' => 'created_at',
         'updated at column' => 'updated_at',
     ]);
@@ -389,12 +389,12 @@ describe('column descriptions', function () use (&$tenant): void {
             ->loadTable()
             ->assertTableColumnDoesNotHaveDescription($column, $permission->description, $permission, 'below');
     })->with([
-        'row column'         => 'row',
-        'roles relation'     => 'roles.name',
-        'name column'        => 'name',
+        'row column' => 'row',
+        'roles relation' => 'roles.name',
+        'name column' => 'name',
         'description column' => 'description',
-        'created at column'  => 'created_at',
-        'updated at column'  => 'updated_at',
+        'created at column' => 'created_at',
+        'updated at column' => 'updated_at',
     ]);
 
     it('hides description above for all columns', function (string $column) use (&$tenant): void {
@@ -409,12 +409,12 @@ describe('column descriptions', function () use (&$tenant): void {
             ->loadTable()
             ->assertTableColumnDoesNotHaveDescription($column, $permission->description, $permission, 'above');
     })->with([
-        'row column'         => 'row',
-        'roles relation'     => 'roles.name',
-        'name column'        => 'name',
+        'row column' => 'row',
+        'roles relation' => 'roles.name',
+        'name column' => 'name',
         'description column' => 'description',
-        'created at column'  => 'created_at',
-        'updated at column'  => 'updated_at',
+        'created at column' => 'created_at',
+        'updated at column' => 'updated_at',
     ]);
 });
 

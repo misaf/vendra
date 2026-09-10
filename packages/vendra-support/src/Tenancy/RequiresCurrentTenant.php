@@ -14,7 +14,7 @@ trait RequiresCurrentTenant
     {
         $tenant = app(TenantResolver::class)->current();
 
-        if ( ! $tenant instanceof Model) {
+        if (! $tenant instanceof Model) {
             throw new RuntimeException(sprintf(
                 '%s seeding requires a current tenant.',
                 $this->tenantModuleName(),
@@ -33,7 +33,7 @@ trait RequiresCurrentTenant
      */
     protected function currentTenantOrNull(): ?Model
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return null;
         }
 
@@ -42,15 +42,15 @@ trait RequiresCurrentTenant
 
     private function tenantModuleName(): string
     {
-        $constant = static::class . '::MODULE_NAME';
+        $constant = static::class.'::MODULE_NAME';
 
-        if ( ! defined($constant)) {
+        if (! defined($constant)) {
             return static::class;
         }
 
         $moduleName = constant($constant);
 
-        if ( ! is_string($moduleName)) {
+        if (! is_string($moduleName)) {
             return static::class;
         }
 

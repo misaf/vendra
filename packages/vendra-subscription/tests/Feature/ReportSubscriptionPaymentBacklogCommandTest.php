@@ -13,7 +13,7 @@ it('warns and reports counts when a payment backlog exists', function (): void {
 
     SubscriptionPayment::factory()->create(['status' => SubscriptionPaymentStatus::NeedsReconciliation]);
     SubscriptionPayment::factory()->create([
-        'status'        => SubscriptionPaymentStatus::Processing,
+        'status' => SubscriptionPaymentStatus::Processing,
         'processing_at' => now()->subHour(),
     ]);
     $paid = SubscriptionPayment::factory()
@@ -25,7 +25,7 @@ it('warns and reports counts when a payment backlog exists', function (): void {
 
     Log::shouldHaveReceived('warning')
         ->once()
-        ->withArgs(fn(string $message, array $context): bool => 3 === $context['needs_reconciliation'] + $context['stalled_processing'] + $context['activation_gap']);
+        ->withArgs(fn (string $message, array $context): bool => 3 === $context['needs_reconciliation'] + $context['stalled_processing'] + $context['activation_gap']);
 
     expect($paid->refresh()->status)->toBe(SubscriptionPaymentStatus::Paid);
 });
@@ -35,7 +35,7 @@ it('does not warn when there is no backlog', function (): void {
 
     SubscriptionPayment::factory()->create(['status' => SubscriptionPaymentStatus::Paid]);
     SubscriptionPayment::factory()->create([
-        'status'        => SubscriptionPaymentStatus::Processing,
+        'status' => SubscriptionPaymentStatus::Processing,
         'processing_at' => now(),
     ]);
 
@@ -49,7 +49,7 @@ it('respects the stale-minutes threshold for stalled processing payments', funct
     Log::spy();
 
     SubscriptionPayment::factory()->create([
-        'status'        => SubscriptionPaymentStatus::Processing,
+        'status' => SubscriptionPaymentStatus::Processing,
         'processing_at' => now()->subMinutes(10),
     ]);
 

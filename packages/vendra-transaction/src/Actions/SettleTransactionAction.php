@@ -26,11 +26,11 @@ final class SettleTransactionAction
 
             $this->postLedgerEntry->execute($transaction->wallet, $signedAmount, $transaction);
 
-            if (TransactionTypeEnum::Transfer === $transaction->transaction_type && null !== $transaction->counterpartyWallet) {
+            if ($transaction->transaction_type === TransactionTypeEnum::Transfer && $transaction->counterpartyWallet !== null) {
                 $this->postLedgerEntry->execute($transaction->counterpartyWallet, $transaction->amount, $transaction);
             }
 
-            if (null !== $transaction->transactionFee && $transaction->transactionFee->amount > 0) {
+            if ($transaction->transactionFee !== null && $transaction->transactionFee->amount > 0) {
                 $this->postLedgerEntry->execute($transaction->wallet, -$transaction->transactionFee->amount, $transaction->transactionFee);
             }
         });

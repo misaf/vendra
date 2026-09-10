@@ -33,13 +33,13 @@ final class NewsletterPolicy
 
     public function send(Authorizable $user, Newsletter $newsletter): bool
     {
-        return NewsletterStatusEnum::Sent !== $newsletter->status
+        return $newsletter->status !== NewsletterStatusEnum::Sent
             && $this->allowed($user, 'Send');
     }
 
     public function update(Authorizable $user, Newsletter $newsletter): bool
     {
-        return NewsletterStatusEnum::Sent !== $newsletter->status
+        return $newsletter->status !== NewsletterStatusEnum::Sent
             && $this->allowed($user, 'Update');
     }
 }

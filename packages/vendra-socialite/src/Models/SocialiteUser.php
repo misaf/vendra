@@ -21,7 +21,7 @@ final class SocialiteUser extends BaseSocialiteUser
 
     public static function findForProvider(string $provider, SocialiteUserContract $oauthUser): ?self
     {
-        return static::query()
+        return self::query()
             ->where('provider', $provider)
             ->where('provider_id', $oauthUser->getId())
             ->first();
@@ -29,9 +29,9 @@ final class SocialiteUser extends BaseSocialiteUser
 
     public static function createForProvider(string $provider, SocialiteUserContract $oauthUser, Authenticatable $user): self
     {
-        return static::query()->create([
-            'user_id'     => $user->getKey(),
-            'provider'    => $provider,
+        return self::query()->create([
+            'user_id' => $user->getKey(),
+            'provider' => $provider,
             'provider_id' => $oauthUser->getId(),
         ]);
     }

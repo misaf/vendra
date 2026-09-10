@@ -50,7 +50,7 @@ final class AttributeValue extends Model implements ShouldLogActivity, Sortable
 
     /** @var array{order_column_name: string, sort_when_creating: bool} */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -87,13 +87,13 @@ final class AttributeValue extends Model implements ShouldLogActivity, Sortable
     protected function casts(): array
     {
         return [
-            'id'                => 'integer',
-            'tenant_id'         => 'integer',
-            'attribute_id'      => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'attribute_id' => 'integer',
             'attributable_type' => 'string',
-            'attributable_id'   => 'integer',
-            'value'             => 'string',
-            'position'          => 'integer',
+            'attributable_id' => 'integer',
+            'value' => 'string',
+            'position' => 'integer',
         ];
     }
 }

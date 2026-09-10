@@ -51,7 +51,7 @@ it('refuses an owner whose plan is already full', function (): void {
     $to = subscriberWithUnits(maxUnits: 1, existingStores: 1);
     $store = Store::factory()->create(['reseller_id' => null]);
 
-    expect(fn(): Store => app(AssignStoreOwnerAction::class)->execute($store, $to))
+    expect(fn (): Store => app(AssignStoreOwnerAction::class)->execute($store, $to))
         ->toThrow(SubscriptionLimitException::class)
         ->and($store->fresh()?->reseller_id)->toBeNull();
 });
@@ -74,6 +74,6 @@ it('refuses an owner whose subscription has lapsed', function (): void {
     Subscription::factory()->expired()->forSubscriber($to)->for(Plan::factory()->maxUnits(5))->create();
     $store = Store::factory()->create(['reseller_id' => null]);
 
-    expect(fn(): Store => app(AssignStoreOwnerAction::class)->execute($store, $to))
+    expect(fn (): Store => app(AssignStoreOwnerAction::class)->execute($store, $to))
         ->toThrow(SubscriptionLimitException::class);
 });

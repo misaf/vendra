@@ -18,7 +18,7 @@ final class ListCustomPages extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-custom-page::navigation.custom_page');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-custom-page::navigation.custom_page');
     }
 
     protected function getHeaderActions(): array

@@ -19,7 +19,7 @@ final class EditCustomPage extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-custom-page::navigation.custom_page');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-custom-page::navigation.custom_page');
     }
 
     protected function getHeaderActions(): array

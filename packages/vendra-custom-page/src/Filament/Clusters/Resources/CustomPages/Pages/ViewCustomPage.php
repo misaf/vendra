@@ -18,7 +18,7 @@ final class ViewCustomPage extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-custom-page::navigation.custom_page');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-custom-page::navigation.custom_page');
     }
 
     protected function getHeaderActions(): array
@@ -26,7 +26,7 @@ final class ViewCustomPage extends ViewRecord
         return [
             EditAction::make(),
 
-            LocaleSwitcher::make()
+            LocaleSwitcher::make(),
         ];
     }
 }

@@ -68,10 +68,10 @@ final class CustomPageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListCustomPages::route('/'),
+            'index' => ListCustomPages::route('/'),
             'create' => CreateCustomPage::route('/create'),
-            'view'   => ViewCustomPage::route('/{record}'),
-            'edit'   => EditCustomPage::route('/{record}/edit'),
+            'view' => ViewCustomPage::route('/{record}'),
+            'edit' => EditCustomPage::route('/{record}/edit'),
         ];
     }
 

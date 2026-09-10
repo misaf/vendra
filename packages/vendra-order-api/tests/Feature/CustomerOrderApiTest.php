@@ -27,7 +27,7 @@ function orderApiProduct(int $price = 4800, int $quantity = 10): Product
 
     ProductPriceFactory::new()->forProduct($product)->createOne([
         'currency_code' => 'USD',
-        'price'         => $price,
+        'price' => $price,
     ]);
 
     return $product;
@@ -68,10 +68,10 @@ it('converts the caller\'s cart into an order priced from the catalog', function
 
     $this->actingAs($user)
         ->postJson('/api/sales/checkout', [
-            'cartToken'        => $cart->token,
-            'currencyCode'     => 'USD',
+            'cartToken' => $cart->token,
+            'currencyCode' => 'USD',
             'paymentReference' => 'TRF-8891',
-            'cardMessage'      => 'Happy birthday.',
+            'cardMessage' => 'Happy birthday.',
         ])
         ->assertCreated()
         ->assertJsonPath('status', 'pending')
@@ -129,23 +129,23 @@ it('prices delivery from the dropped pin and schedules it', function (): void {
     CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne(['quantity' => 1]);
 
     DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne([
-        'name'             => ['en' => 'Outside the free zone'],
-        'origin_latitude'  => 35.6892,
+        'name' => ['en' => 'Outside the free zone'],
+        'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
-        'position'         => 1,
+        'position' => 1,
     ]);
     $slot = DeliverySlotFactory::new()->window('Afternoon', '12:00:00', '17:00:00')->createOne();
     $date = now()->addDay()->toDateString();
 
     $this->actingAs($user)
         ->postJson('/api/sales/checkout', [
-            'cartToken'      => $cart->token,
-            'currencyCode'   => 'USD',
-            'latitude'       => 35.7219,
-            'longitude'      => 51.2334,
-            'deliveryDate'   => $date,
+            'cartToken' => $cart->token,
+            'currencyCode' => 'USD',
+            'latitude' => 35.7219,
+            'longitude' => 51.2334,
+            'deliveryDate' => $date,
             'deliverySlotId' => $slot->id,
-            'recipientName'  => 'Nasrin K.',
+            'recipientName' => 'Nasrin K.',
         ])
         ->assertCreated()
         ->assertJsonPath('itemsAmount', 4800)
@@ -167,15 +167,15 @@ it('refuses checkout to an address beyond every delivery band', function (): voi
     CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne();
 
     DeliveryZoneFactory::new()->freeWithin(12)->createOne([
-        'origin_latitude'  => 35.6892,
+        'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
-        'position'         => 1,
+        'position' => 1,
     ]);
 
     $this->actingAs($user)
         ->postJson('/api/sales/checkout', [
             'cartToken' => $cart->token,
-            'latitude'  => 32.6546,
+            'latitude' => 32.6546,
             'longitude' => 51.6680,
         ])
         ->assertUnprocessable();

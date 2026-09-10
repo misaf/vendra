@@ -21,6 +21,6 @@ enum StorefrontDesiredState: string
      */
     public function expectsRunning(): bool
     {
-        return self::Running === $this;
+        return $this === self::Running;
     }
 }

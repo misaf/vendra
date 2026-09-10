@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraAffiliate\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -73,19 +72,19 @@ final class AffiliateServiceProvider extends PackageServiceProvider
         );
         $this->app->make(TenantSeeders::class)->register('vendra-affiliate:seed', priority: 75);
 
-        AboutCommand::add('Vendra Affiliate', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-affiliate')]);
+        AboutCommand::add('Vendra Affiliate', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-affiliate')]);
 
         Event::subscribe(RegistrationSubscriber::class);
         Event::subscribe(TransactionCommissionSubscriber::class);
 
         User::resolveRelationUsing(
             'affiliate',
-            fn(User $user): HasOne => $user->hasOne(Affiliate::class),
+            fn (User $user): HasOne => $user->hasOne(Affiliate::class),
         );
 
         User::resolveRelationUsing(
             'affiliateReferral',
-            fn(User $user): HasOne => $user->hasOne(AffiliateReferral::class),
+            fn (User $user): HasOne => $user->hasOne(AffiliateReferral::class),
         );
     }
 }

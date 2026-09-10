@@ -15,12 +15,12 @@ final class CloseInquiryAction
     public static function make(): Action
     {
         return Action::make('close')
-            ->authorize(fn(Inquiry $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Inquiry $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('gray')
             ->icon(Heroicon::OutlinedArchiveBox)
             ->label(__('vendra-inquiry::messages.close'))
             ->requiresConfirmation()
-            ->visible(fn(Inquiry $record): bool => InquiryStatusEnum::Closed !== $record->status)
+            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::Closed)
             ->action(function (Inquiry $record): void {
                 $record->close();
 

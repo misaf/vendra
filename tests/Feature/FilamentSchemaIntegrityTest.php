@@ -94,7 +94,7 @@ it('builds one transaction limit tab per type from wallet transaction limits', f
 
     $tabs = livewire(TransactionLimitsRelationManager::class, [
         'ownerRecord' => $wallet,
-        'pageClass'   => ViewWallet::class,
+        'pageClass' => ViewWallet::class,
     ])->instance()->getTabs();
     $badgeProperty = new ReflectionProperty(Tab::class, 'badge');
 
@@ -130,7 +130,7 @@ it('scopes gateway relation tabs to gateway transactions and keeps the user sele
 
     $component = livewire(TransactionsRelationManager::class, [
         'ownerRecord' => $gateway,
-        'pageClass'   => EditTransactionGateway::class,
+        'pageClass' => EditTransactionGateway::class,
     ]);
 
     $tabs = $component->instance()->getTabs();
@@ -155,7 +155,7 @@ it('scopes gateway relation tabs to gateway transactions and keeps the user sele
 function indexNames(string $table): array
 {
     return array_values(array_map(
-        static fn(array $index): string => (string) $index['name'],
+        static fn (array $index): string => (string) $index['name'],
         Schema::getIndexes($table),
     ));
 }

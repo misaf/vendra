@@ -80,9 +80,9 @@ final class StorefrontContainerDefinitionFactory
     private function environment(StorefrontProvisionRequest $request): array
     {
         return [
-            'NODE_ENV'                 => 'production',
+            'NODE_ENV' => 'production',
             'STOREFRONT_CONFIG_BASE64' => $request->encodedConfiguration(),
-            'VENDRA_API_URL'           => $this->settings->resolvedApiUrl(),
+            'VENDRA_API_URL' => $this->settings->resolvedApiUrl(),
 
             /*
              | When the estate terminates TLS with a certificate no public root
@@ -93,7 +93,7 @@ final class StorefrontContainerDefinitionFactory
              */
             'NODE_EXTRA_CA_CERTS' => $this->settings->resolvedCaFile(),
 
-            'STORAGE_BASE_URL'   => $this->settings->storageBaseUrl,
+            'STORAGE_BASE_URL' => $this->settings->storageBaseUrl,
             'NESHAN_SERVICE_KEY' => $this->settings->neshanServiceKey,
         ];
     }
@@ -112,30 +112,30 @@ final class StorefrontContainerDefinitionFactory
         $healthPath = $this->settings->healthPath;
 
         $labels = [
-            'traefik.enable'         => 'true',
+            'traefik.enable' => 'true',
             'traefik.docker.network' => $this->settings->network,
 
-            "traefik.http.services.{$slug}.loadbalancer.server.port"          => (string) $port,
-            "traefik.http.services.{$slug}.loadbalancer.healthcheck.path"     => $healthPath,
+            "traefik.http.services.{$slug}.loadbalancer.server.port" => (string) $port,
+            "traefik.http.services.{$slug}.loadbalancer.healthcheck.path" => $healthPath,
             "traefik.http.services.{$slug}.loadbalancer.healthcheck.interval" => '10s',
-            "traefik.http.services.{$slug}.loadbalancer.healthcheck.timeout"  => '3s',
+            "traefik.http.services.{$slug}.loadbalancer.healthcheck.timeout" => '3s',
 
-            "traefik.http.routers.{$slug}.rule"        => sprintf('Host(`%s`) || Host(`www.%s`)', $domain, $domain),
+            "traefik.http.routers.{$slug}.rule" => sprintf('Host(`%s`) || Host(`www.%s`)', $domain, $domain),
             "traefik.http.routers.{$slug}.entrypoints" => 'websecure',
-            "traefik.http.routers.{$slug}.tls"         => 'true',
+            "traefik.http.routers.{$slug}.tls" => 'true',
 
             // Ownership markers, so the platform can tell a container it placed
             // from one it did not and never replaces or removes somebody else's.
             self::MANAGED_BY_LABEL => self::MANAGED_BY,
-            'io.vendra.slug'       => $slug,
-            self::DOMAIN_LABEL     => $domain,
+            'io.vendra.slug' => $slug,
+            self::DOMAIN_LABEL => $domain,
         ];
 
-        if ('' !== $this->settings->certResolver) {
+        if ($this->settings->certResolver !== '') {
             $labels["traefik.http.routers.{$slug}.tls.certresolver"] = $this->settings->certResolver;
         }
 
-        if ('' !== $this->settings->traefikMiddlewares) {
+        if ($this->settings->traefikMiddlewares !== '') {
             $labels["traefik.http.routers.{$slug}.middlewares"] = $this->settings->traefikMiddlewares;
         }
 
@@ -161,6 +161,6 @@ final class StorefrontContainerDefinitionFactory
     {
         $certificates = $this->settings->certificatesPath;
 
-        return '' === $certificates ? [] : [sprintf('%s:/certs:ro', $certificates)];
+        return $certificates === '' ? [] : [sprintf('%s:/certs:ro', $certificates)];
     }
 }

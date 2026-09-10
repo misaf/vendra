@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\MorphPivot;
 final readonly class TagRelationship
 {
     /**
-     * @param class-string<Model> $model
-     * @param class-string<MorphPivot> $pivotModel
+     * @param  class-string<Model>  $model
+     * @param  class-string<MorphPivot>  $pivotModel
      */
     public function __construct(
         public string $model,

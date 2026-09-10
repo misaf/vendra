@@ -46,7 +46,7 @@ final class NewsletterServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-newsletter')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-newsletter')) {
                 return;
             }
 
@@ -60,7 +60,7 @@ final class NewsletterServiceProvider extends PackageServiceProvider
         $this->app->make(TenantSeeders::class)->register('vendra-newsletter:seed', priority: 70);
 
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
-            if ( ! Config::boolean('vendra-newsletter.schedule.enabled', true)) {
+            if (! Config::boolean('vendra-newsletter.schedule.enabled', true)) {
                 return;
             }
 
@@ -69,6 +69,6 @@ final class NewsletterServiceProvider extends PackageServiceProvider
                 ->withoutOverlapping();
         });
 
-        AboutCommand::add('Vendra Newsletter', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-newsletter')]);
+        AboutCommand::add('Vendra Newsletter', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-newsletter')]);
     }
 }

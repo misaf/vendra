@@ -33,12 +33,12 @@ function fakeTenantResolver(bool $available, ?int $currentId = null): TenantReso
 }
 
 it('defines the expected translatable blog models', function (): void {
-    expect((new BlogPostCategory())->translatable)->toBe(['name', 'description', 'slug'])
-        ->and((new BlogPost())->translatable)->toBe(['name', 'description', 'slug'])
-        ->and((new BlogPostCategory())->getFillable())->toContain('name', 'description', 'slug', 'position', 'active')
-        ->and((new BlogPost())->getFillable())->toContain('blog_post_category_id', 'name', 'description', 'slug', 'position', 'active')
-        ->and((new BlogPostCategory())->getHidden())->toContain('tenant_id')
-        ->and((new BlogPost())->getHidden())->toContain('tenant_id');
+    expect((new BlogPostCategory)->translatable)->toBe(['name', 'description', 'slug'])
+        ->and((new BlogPost)->translatable)->toBe(['name', 'description', 'slug'])
+        ->and((new BlogPostCategory)->getFillable())->toContain('name', 'description', 'slug', 'position', 'active')
+        ->and((new BlogPost)->getFillable())->toContain('blog_post_category_id', 'name', 'description', 'slug', 'position', 'active')
+        ->and((new BlogPostCategory)->getHidden())->toContain('tenant_id')
+        ->and((new BlogPost)->getHidden())->toContain('tenant_id');
 });
 
 it('applies shared tenant ownership to blog models', function (): void {
@@ -50,7 +50,7 @@ it('always registers tenant scopes that self-disable without a current tenant', 
     BlogPost::clearBootedModels();
     app()->instance(TenantResolver::class, fakeTenantResolver(available: false));
 
-    expect(array_keys((new BlogPost())->getGlobalScopes()))->toContain(TenantScope::class, TeamScope::class);
+    expect(array_keys((new BlogPost)->getGlobalScopes()))->toContain(TenantScope::class, TeamScope::class);
 
     BlogPost::clearBootedModels();
 });
@@ -82,14 +82,14 @@ it('defines the expected blog relationships', function (): void {
 });
 
 it('resolves blog post relation manager badges from loaded relations or counts', function (): void {
-    $categoryWithLoadedPosts = new BlogPostCategory();
+    $categoryWithLoadedPosts = new BlogPostCategory;
     $categoryWithLoadedPosts->setRelation('blogPosts', collect([
-        new BlogPost(),
-        new BlogPost(),
-        new BlogPost(),
+        new BlogPost,
+        new BlogPost,
+        new BlogPost,
     ]));
 
-    $categoryWithCount = new BlogPostCategory();
+    $categoryWithCount = new BlogPostCategory;
     $categoryWithCount->setAttribute('blog_posts_count', '7');
 
     expect(BlogPostRelationManager::getBadge($categoryWithLoadedPosts, ''))->toBe('3')

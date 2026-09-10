@@ -10,7 +10,7 @@ it('creates orders and order lines with immutable snapshot columns', function ()
     Schema::dropIfExists('orders');
 
     /** @var Migration $migration */
-    $migration = require __DIR__ . '/../../database/migrations/create_orders_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_orders_table.php.stub';
 
     $migration->up();
 

@@ -21,10 +21,10 @@ use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 use Symfony\Component\Serializer\NameConverter\SnakeCaseToCamelCaseNameConverter;
 
 return [
-    'title'       => 'Vendra API',
+    'title' => 'Vendra API',
     'description' => 'Package-oriented commerce and content API for Vendra.',
-    'version'     => '1.0.0',
-    'show_webby'  => false,
+    'version' => '1.0.0',
+    'show_webby' => false,
 
     'routes' => [
         'domain' => null,
@@ -39,9 +39,9 @@ return [
     'resources' => [],
 
     'formats' => [
-        'jsonld'  => ['application/ld+json'],
+        'jsonld' => ['application/ld+json'],
         'jsonapi' => ['application/vnd.api+json'],
-        'json'    => ['application/json'],
+        'json' => ['application/json'],
         // 'csv' => ['text/csv'],
     ],
 
@@ -54,9 +54,9 @@ return [
     'partial_patch_validation' => false,
 
     'docs_formats' => [
-        'jsonld'      => ['application/ld+json'],
+        'jsonld' => ['application/ld+json'],
         'jsonopenapi' => ['application/vnd.openapi+json'],
-        'html'        => ['text/html'],
+        'html' => ['text/html'],
     ],
 
     'error_formats' => [
@@ -64,15 +64,15 @@ return [
     ],
 
     'defaults' => [
-        'pagination_enabled'                => true,
-        'pagination_partial'                => false,
-        'pagination_client_enabled'         => false,
-        'pagination_client_items_per_page'  => true,
-        'pagination_client_partial'         => false,
-        'pagination_items_per_page'         => 30,
+        'pagination_enabled' => true,
+        'pagination_partial' => false,
+        'pagination_client_enabled' => false,
+        'pagination_client_items_per_page' => true,
+        'pagination_client_partial' => false,
+        'pagination_items_per_page' => 30,
         'pagination_maximum_items_per_page' => 100,
-        'route_prefix'                      => '/api',
-        'middleware'                        => [
+        'route_prefix' => '/api',
+        'middleware' => [
             ResolveApiTenant::class,
             NeedsTenant::class,
             SetLocale::class,
@@ -80,18 +80,18 @@ return [
     ],
 
     'pagination' => [
-        'page_parameter_name'           => 'page',
-        'enabled_parameter_name'        => 'pagination',
+        'page_parameter_name' => 'page',
+        'enabled_parameter_name' => 'pagination',
         'items_per_page_parameter_name' => 'itemsPerPage',
-        'partial_parameter_name'        => 'partial',
+        'partial_parameter_name' => 'partial',
     ],
 
     'graphql' => [
-        'enabled'              => false,
-        'nesting_separator'    => '__',
-        'introspection'        => ['enabled' => true],
+        'enabled' => false,
+        'nesting_separator' => '__',
+        'introspection' => ['enabled' => true],
         'max_query_complexity' => 500,
-        'max_query_depth'      => 200,
+        'max_query_depth' => 200,
         // 'middleware' => null,
     ],
 
@@ -106,7 +106,7 @@ return [
 
     'exception_to_status' => [
         AuthenticationException::class => 401,
-        AuthorizationException::class  => 403,
+        AuthorizationException::class => 403,
     ],
 
     'redoc' => [
@@ -114,7 +114,7 @@ return [
     ],
 
     'scalar' => [
-        'enabled'             => true,
+        'enabled' => true,
         'extra_configuration' => [],
     ],
 

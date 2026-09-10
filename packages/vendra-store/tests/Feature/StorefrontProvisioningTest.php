@@ -46,7 +46,7 @@ it('queues provisioning when the provider is configured', function (): void {
 
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
-        fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
+        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
     );
 });
 
@@ -63,21 +63,21 @@ it('reconciles every database deployment including ready storefronts', function 
     foreach ($deployments as $deployment) {
         Queue::assertPushed(
             ReconcileStorefrontJob::class,
-            fn(ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
+            fn (ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
         );
     }
 });
 
 it('lists the database-backed storefront fleet', function (): void {
     StorefrontDeployment::factory()->create([
-        'slug'               => 'beta-flowers',
-        'domain'             => 'beta.test',
-        'status'             => StorefrontDeploymentStatus::Ready,
-        'container_name'     => 'container-beta',
-        'image_digest'       => 'sha256:beta',
+        'slug' => 'beta-flowers',
+        'domain' => 'beta.test',
+        'status' => StorefrontDeploymentStatus::Ready,
+        'container_name' => 'container-beta',
+        'image_digest' => 'sha256:beta',
     ]);
     StorefrontDeployment::factory()->create([
-        'slug'   => 'alpha-flowers',
+        'slug' => 'alpha-flowers',
         'domain' => 'alpha.test',
         'status' => StorefrontDeploymentStatus::Pending,
     ]);
@@ -107,11 +107,11 @@ it('retries only failed storefront deployments', function (): void {
 
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
-        fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $failedDeployment->id,
+        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $failedDeployment->id,
     );
     Queue::assertNotPushed(
         ProvisionStorefrontJob::class,
-        fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $readyDeployment->id,
+        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $readyDeployment->id,
     );
 });
 
@@ -148,9 +148,9 @@ it('drops malformed message overrides rather than shipping a configuration the s
         $tenant,
         'acme.test',
         [...storefrontRequestData(), 'storefront_messages' => [
-            'en'  => ['products' => ['title' => 'Kept']],
+            'en' => ['products' => ['title' => 'Kept']],
             'bad' => 'not-an-array',
-            'fa'  => [],
+            'fa' => [],
         ]],
     );
 

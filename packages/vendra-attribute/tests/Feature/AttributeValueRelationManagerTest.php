@@ -28,12 +28,12 @@ it('manages attached attribute values without offering unattached creation', fun
 
     $attributeValue = $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => '1.2',
+        'value' => '1.2',
     ]);
 
     livewire(AttributeValueRelationManager::class, [
         'ownerRecord' => $attribute,
-        'pageClass'   => EditAttribute::class,
+        'pageClass' => EditAttribute::class,
     ])
         ->assertOk()
         ->call('loadTable')
@@ -53,17 +53,17 @@ it('rejects editing a value into a duplicate of a sibling value', function (): v
 
     $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Red',
+        'value' => 'Red',
     ]);
 
     $attributeValue = $record->attributeValues()->create([
         'attribute_id' => $attribute->id,
-        'value'        => 'Blue',
+        'value' => 'Blue',
     ]);
 
     livewire(AttributeValueRelationManager::class, [
         'ownerRecord' => $attribute,
-        'pageClass'   => EditAttribute::class,
+        'pageClass' => EditAttribute::class,
     ])
         ->call('loadTable')
         ->callAction(TestAction::make('edit')->table($attributeValue), [

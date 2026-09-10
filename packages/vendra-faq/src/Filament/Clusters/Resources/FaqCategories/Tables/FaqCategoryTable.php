@@ -65,7 +65,7 @@ final class FaqCategoryTable
                 ->icon(Heroicon::Tag)
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(FaqCategory $record): string => (string) Number::format(static::integerAttribute($record, 'faqs_count')))
+                        ->label(fn (FaqCategory $record): string => (string) Number::format(self::integerAttribute($record, 'faqs_count')))
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -73,7 +73,7 @@ final class FaqCategoryTable
             TextColumn::make('description')
                 ->label(__('vendra-faq::attributes.description'))
                 ->icon(Heroicon::DocumentText)
-                ->state(fn(FaqCategory $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                ->state(fn (FaqCategory $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('slug')
@@ -92,8 +92,8 @@ final class FaqCategoryTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -102,13 +102,13 @@ final class FaqCategoryTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
         return $table
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->withCount('faqs'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withCount('faqs'))
             ->columns($columns)
             ->description(__('vendra-faq::tables.description.faq_categories'))
             ->emptyStateHeading(__('vendra-faq::tables.empty_state.heading.faq_categories'))

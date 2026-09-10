@@ -10,7 +10,7 @@ it('creates carts and cart items without catalog tables', function (): void {
     Schema::dropIfExists('carts');
 
     /** @var Migration $migration */
-    $migration = require __DIR__ . '/../../database/migrations/create_carts_table.php.stub';
+    $migration = require __DIR__.'/../../database/migrations/create_carts_table.php.stub';
 
     $migration->up();
 

@@ -22,21 +22,21 @@ final class LanguageForm
         return $schema
             ->components([
                 Select::make('locale')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.locale'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.locale'))
                     ->columnSpanFull()
                     ->label(__('vendra-language::attributes.locale'))
                     ->live()
                     ->native(false)
-                    ->options(fn(?Language $record): array => static::installableLocaleOptions($record))
+                    ->options(fn (?Language $record): array => self::installableLocaleOptions($record))
                     ->required()
                     ->rule(Rule::in(Locales::all()))
                     ->searchable()
                     ->unique(
-                        modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
+                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
                     ),
 
                 Toggle::make('active')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                     ->columnSpanFull()
                     ->default(false)
                     ->label(__('vendra-language::attributes.active'))
@@ -46,7 +46,7 @@ final class LanguageForm
                     ->rules(['boolean']),
 
                 Toggle::make('is_default')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.is_default'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))
                     ->columnSpanFull()
                     ->default(false)
                     ->helperText(__('vendra-language::attributes.is_default_helper_text'))
@@ -63,13 +63,13 @@ final class LanguageForm
     {
         $installedLanguagesQuery = Language::query();
 
-        if (null !== $record) {
+        if ($record !== null) {
             $installedLanguagesQuery->whereKeyNot($record->getKey());
         }
 
         $installedLocales = $installedLanguagesQuery
             ->get(['locale'])
-            ->map(fn(Language $language): string => $language->locale);
+            ->map(fn (Language $language): string => $language->locale);
 
         return collect(Locales::options())
             ->except($installedLocales)

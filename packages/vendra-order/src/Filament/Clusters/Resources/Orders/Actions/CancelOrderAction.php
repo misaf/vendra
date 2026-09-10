@@ -15,12 +15,12 @@ final class CancelOrderAction
     public static function make(): Action
     {
         return Action::make('cancel')
-            ->authorize(fn(Order $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Order $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('danger')
             ->icon(Heroicon::OutlinedXCircle)
             ->label(__('vendra-order::messages.cancel'))
             ->requiresConfirmation()
-            ->visible(fn(Order $record): bool => $record->status->canTransitionTo(Cancelled::class))
+            ->visible(fn (Order $record): bool => $record->status->canTransitionTo(Cancelled::class))
             ->action(function (Order $record): void {
                 $record->cancel();
 

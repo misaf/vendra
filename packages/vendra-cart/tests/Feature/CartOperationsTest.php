@@ -18,7 +18,7 @@ it('adds a sellable to the cart', function (): void {
     $sellable = new class extends Model {};
     $sellable->setAttribute('id', 7);
 
-    $item = (new AddCartItemAction())->execute($cart, $sellable, quantity: 2, metadata: ['color' => 'red']);
+    $item = (new AddCartItemAction)->execute($cart, $sellable, quantity: 2, metadata: ['color' => 'red']);
 
     expect($item->exists)->toBeTrue()
         ->and($item->cart_id)->toBe($cart->id)
@@ -32,7 +32,7 @@ it('merges quantities when the sellable is already in the cart', function (): vo
     $cart = Cart::factory()->create();
     $sellable = new class extends Model {};
     $sellable->setAttribute('id', 7);
-    $action = new AddCartItemAction();
+    $action = new AddCartItemAction;
 
     $action->execute($cart, $sellable, quantity: 2);
     $item = $action->execute($cart, $sellable, quantity: 3);
@@ -65,7 +65,7 @@ it('defaults the cart expiry from configuration', function (): void {
 
 it('honours an explicit or disabled expiry', function (): void {
     $everlasting = Cart::query()->create([
-        'token'      => (string) Str::uuid(),
+        'token' => (string) Str::uuid(),
         'expires_at' => null,
     ]);
 
@@ -78,7 +78,7 @@ it('honours an explicit or disabled expiry', function (): void {
 
 it('schedules expired cart pruning daily', function (): void {
     $scheduled = collect(app(Schedule::class)->events())->filter(
-        fn(object $event): bool => str_contains((string) $event->command, 'vendra-cart:prune-expired'),
+        fn (object $event): bool => str_contains((string) $event->command, 'vendra-cart:prune-expired'),
     );
 
     expect($scheduled)->toHaveCount(1)

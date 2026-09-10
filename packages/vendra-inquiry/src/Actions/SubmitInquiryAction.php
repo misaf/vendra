@@ -19,7 +19,7 @@ final class SubmitInquiryAction
      * over HTTP, from a console command, or from a test is held to the same
      * shape.
      *
-     * @param array<string, mixed>|null $metadata
+     * @param  array<string, mixed>|null  $metadata
      */
     public function execute(
         string $name,
@@ -32,29 +32,29 @@ final class SubmitInquiryAction
         ?array $metadata = null,
     ): Inquiry {
         $attributes = [
-            'name'     => $name,
-            'email'    => $email,
-            'message'  => $message,
-            'phone'    => $phone,
+            'name' => $name,
+            'email' => $email,
+            'message' => $message,
+            'phone' => $phone,
             'occasion' => $occasion,
-            'source'   => $source,
-            'locale'   => $locale,
+            'source' => $source,
+            'locale' => $locale,
         ];
 
         Validator::make($attributes, [
-            'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'email', 'max:255'],
-            'message'  => ['required', 'string', 'max:5000'],
-            'phone'    => ['nullable', 'string', 'max:64'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'message' => ['required', 'string', 'max:5000'],
+            'phone' => ['nullable', 'string', 'max:64'],
             'occasion' => ['nullable', 'string', 'max:64'],
-            'source'   => ['nullable', 'string', 'max:64'],
-            'locale'   => ['nullable', 'string', 'max:35'],
+            'source' => ['nullable', 'string', 'max:64'],
+            'locale' => ['nullable', 'string', 'max:35'],
         ])->validate();
 
         return Inquiry::query()->create([
             ...$attributes,
             'metadata' => $metadata,
-            'status'   => InquiryStatusEnum::New,
+            'status' => InquiryStatusEnum::New,
         ]);
     }
 }

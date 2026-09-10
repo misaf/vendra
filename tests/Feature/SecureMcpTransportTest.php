@@ -13,7 +13,7 @@ use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 use Symfony\Component\HttpFoundation\Response;
 
 it('bypasses the secure transport pipeline for other paths', function (): void {
-    $expectedResponse = new Response();
+    $expectedResponse = new Response;
     $middleware = new SecureMcpTransport(
         Mockery::mock(Router::class),
         app(Pipeline::class),
@@ -21,7 +21,7 @@ it('bypasses the secure transport pipeline for other paths', function (): void {
 
     $response = $middleware->handle(
         Request::create('/health'),
-        fn(Request $request): Response => $expectedResponse,
+        fn (Request $request): Response => $expectedResponse,
     );
 
     expect($response)->toBe($expectedResponse);
@@ -47,7 +47,7 @@ it('passes mcp requests through the secure transport pipeline', function (): voi
             },
         ]);
 
-    $expectedResponse = new Response();
+    $expectedResponse = new Response;
     $middleware = new SecureMcpTransport($router, app(Pipeline::class));
 
     $response = $middleware->handle(
@@ -67,14 +67,14 @@ it('rejects invalid responses from the secure transport pipeline', function (): 
     $router->shouldReceive('resolveMiddleware')
         ->once()
         ->andReturn([
-            fn(Request $request, Closure $next): string => 'invalid response',
+            fn (Request $request, Closure $next): string => 'invalid response',
         ]);
 
     $middleware = new SecureMcpTransport($router, app(Pipeline::class));
 
-    expect(fn() => $middleware->handle(
+    expect(fn () => $middleware->handle(
         Request::create('/mcp'),
-        fn(Request $request): Response => new Response(),
+        fn (Request $request): Response => new Response,
     ))->toThrow(
         UnexpectedValueException::class,
         'The secure MCP transport pipeline must return a response.',

@@ -76,10 +76,10 @@ final class FaqCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListFaqCategories::route('/'),
+            'index' => ListFaqCategories::route('/'),
             'create' => CreateFaqCategory::route('/create'),
-            'view'   => ViewFaqCategory::route('/{record}'),
-            'edit'   => EditFaqCategory::route('/{record}/edit'),
+            'view' => ViewFaqCategory::route('/{record}'),
+            'edit' => EditFaqCategory::route('/{record}/edit'),
         ];
     }
 

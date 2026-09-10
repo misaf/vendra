@@ -14,11 +14,11 @@ trait RendersRichContent
      * as-is, TipTap documents are normalized first, and content the renderer
      * cannot parse degrades to escaped plain text instead of failing the page.
      *
-     * @param array<array-key, mixed>|string|null $state
+     * @param  array<array-key, mixed>|string|null  $state
      */
     protected static function renderRichContent(array|string|null $state): string
     {
-        if (null === $state || [] === $state || '' === $state) {
+        if ($state === null || $state === [] || $state === '') {
             return '';
         }
 
@@ -35,17 +35,17 @@ trait RendersRichContent
      * Wrap stray top-level text nodes in paragraphs so legacy documents match
      * the TipTap schema.
      *
-     * @param array<array-key, mixed> $document
+     * @param  array<array-key, mixed>  $document
      * @return array<array-key, mixed>
      */
     private static function normalizeRichDocument(array $document): array
     {
-        if ( ! is_array($document['content'] ?? null)) {
+        if (! is_array($document['content'] ?? null)) {
             return $document;
         }
 
         $document['content'] = array_map(
-            fn(mixed $node): mixed => is_array($node) && 'text' === ($node['type'] ?? null)
+            fn (mixed $node): mixed => is_array($node) && 'text' === ($node['type'] ?? null)
                 ? ['type' => 'paragraph', 'content' => [$node]]
                 : $node,
             $document['content'],
@@ -55,7 +55,7 @@ trait RendersRichContent
     }
 
     /**
-     * @param array<array-key, mixed>|string $state
+     * @param  array<array-key, mixed>|string  $state
      */
     private static function flattenRichText(array|string $state): string
     {
@@ -66,7 +66,7 @@ trait RendersRichContent
         $text = [];
 
         array_walk_recursive($state, function (mixed $value, mixed $key) use (&$text): void {
-            if ('text' === $key && is_string($value)) {
+            if ($key === 'text' && is_string($value)) {
                 $text[] = $value;
             }
         });

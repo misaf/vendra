@@ -31,9 +31,9 @@ it('does not resolve a customer tenant from platform hosts', function (string $h
     expect(app(StoreDomainFinder::class)->findForHost($host))->toBeNull();
 })->with([
     'canonical api host' => 'api.vendra.test',
-    'console host'       => 'console.vendra.test',
-    'reseller host'      => 'reseller.vendra.test',
-    'marketing apex'     => 'vendra.test',
+    'console host' => 'console.vendra.test',
+    'reseller host' => 'reseller.vendra.test',
+    'marketing apex' => 'vendra.test',
 ]);
 
 it('still resolves the tenant admin subdomain', function (): void {
@@ -46,7 +46,7 @@ it('still resolves the tenant admin subdomain', function (): void {
 it('still resolves a registered customer storefront domain', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'houshang']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'houshang-flowers.example.com',
+        'name' => 'houshang-flowers.example.com',
         'active' => true,
     ]);
 

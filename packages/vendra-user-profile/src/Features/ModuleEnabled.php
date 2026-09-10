@@ -18,12 +18,12 @@ final class ModuleEnabled
         if (TenantAwareness::enabled()) {
             $tenantModel = app(TenantResolver::class)->modelClass();
 
-            if ( ! $scope instanceof $tenantModel) {
+            if (! $scope instanceof $tenantModel) {
                 return false;
             }
         }
 
-        if ( ! Config::boolean('vendra-user-profile.features_enabled', true)) {
+        if (! Config::boolean('vendra-user-profile.features_enabled', true)) {
             return false;
         }
 

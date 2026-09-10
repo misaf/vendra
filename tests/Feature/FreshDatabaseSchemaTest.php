@@ -153,7 +153,7 @@ it('uses final create migrations instead of fresh-install follow-ups', function 
     $packageMigrations = glob(base_path('packages/*/database/migrations/*.stub')) ?: [];
     $followUpMigrations = array_filter(
         [...$rootMigrations, ...$packageMigrations],
-        static fn(string $path): bool => 1 === preg_match('/(?:^|_)(?:add|rename|backfill|enforce)_/', basename($path)),
+        static fn (string $path): bool => preg_match('/(?:^|_)(?:add|rename|backfill|enforce)_/', basename($path)) === 1,
     );
 
     expect(array_values($followUpMigrations))->toBe([]);
@@ -161,7 +161,7 @@ it('uses final create migrations instead of fresh-install follow-ups', function 
 
 it('keeps package migration stubs identical to application baselines', function (): void {
     $rootMigrations = collect(glob(database_path('migrations/*.php')) ?: [])
-        ->keyBy(fn(string $migration): string => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', basename($migration)) ?? basename($migration));
+        ->keyBy(fn (string $migration): string => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', basename($migration)) ?? basename($migration));
 
     $packageMigrations = glob(base_path('packages/*/database/migrations/*.stub')) ?: [];
 
@@ -191,8 +191,8 @@ it('registers every tenant-aware application table for legacy schema retrofits',
         ->values();
 
     $tenantAwareTables = collect(Schema::getTableListing(schemaQualified: false))
-        ->filter(fn(string $table): bool => Schema::hasColumn($table, 'tenant_id'))
-        ->reject(fn(string $table): bool => in_array($table, ['settings', 'store_domains', 'store_user'], true))
+        ->filter(fn (string $table): bool => Schema::hasColumn($table, 'tenant_id'))
+        ->reject(fn (string $table): bool => in_array($table, ['settings', 'store_domains', 'store_user'], true))
         ->values();
 
     expect($registeredTables->all())->toEqualCanonicalizing($tenantAwareTables->all());

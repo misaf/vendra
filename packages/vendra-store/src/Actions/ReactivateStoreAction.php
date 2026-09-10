@@ -20,13 +20,13 @@ final class ReactivateStoreAction
         return DB::transaction(function () use ($store): Store {
             $lockedStore = Store::query()->whereKey($store->getKey())->lockForUpdate()->firstOrFail();
 
-            if (TenantProvisioningStatus::Ready !== $lockedStore->provisioning_status) {
+            if ($lockedStore->provisioning_status !== TenantProvisioningStatus::Ready) {
                 throw new LogicException("Store [{$lockedStore->id}] must finish provisioning before it can be reactivated.");
             }
 
             $lockedStore->forceFill(['active' => true])->save();
 
-            if (StoreStatus::Active === $lockedStore->status()) {
+            if ($lockedStore->status() === StoreStatus::Active) {
                 $deployment = StorefrontDeployment::query()
                     ->where('store_id', $lockedStore->getKey())
                     ->first();

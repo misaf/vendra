@@ -25,7 +25,7 @@ use Misaf\VendraStore\Observers\StoreObserver;
 final class DeleteStoreAction
 {
     /**
-     * @param bool $force delete the store permanently rather than soft-deleting it
+     * @param  bool  $force  delete the store permanently rather than soft-deleting it
      */
     public function execute(Store $store, bool $force = false): void
     {

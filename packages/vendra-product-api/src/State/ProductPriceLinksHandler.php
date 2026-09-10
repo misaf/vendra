@@ -15,8 +15,7 @@ use Misaf\VendraProduct\Models\ProductPrice;
 final class ProductPriceLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<ProductPrice> $builder
-     *
+     * @param  Builder<ProductPrice>  $builder
      * @return Builder<ProductPrice>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -25,10 +24,10 @@ final class ProductPriceLinksHandler implements LinksHandlerInterface
             ->with('product:id,name')
             ->whereHas(
                 'product.productCategory',
-                fn(Builder $query): Builder => $query->where('active', true),
+                fn (Builder $query): Builder => $query->where('active', true),
             );
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

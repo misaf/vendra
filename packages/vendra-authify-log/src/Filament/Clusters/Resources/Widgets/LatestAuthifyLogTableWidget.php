@@ -58,9 +58,9 @@ final class LatestAuthifyLogTableWidget extends BaseWidget
                     ->formatStateUsing(function (string $state, AuthifyLog $record): HtmlString {
                         return new HtmlString(
                             '<span class="flex items-center space-x-2">'
-                            . '<img src="' . asset('vendor/blade-country-flags/4x3-' . Str::lower($record->ip_country) . '.svg') . '" alt="' . $record->ip_country . '" title="' . $record->ip_country . '" class="w-4 inline-block" />'
-                            . '<span>' . $state . '</span>'
-                            . '</span>',
+                            .'<img src="'.asset('vendor/blade-country-flags/4x3-'.Str::lower($record->ip_country).'.svg').'" alt="'.$record->ip_country.'" title="'.$record->ip_country.'" class="w-4 inline-block" />'
+                            .'<span>'.$state.'</span>'
+                            .'</span>',
                         );
                     }),
 
@@ -68,7 +68,7 @@ final class LatestAuthifyLogTableWidget extends BaseWidget
                     ->extraCellAttributes(['dir' => 'ltr'])
                     ->label(__('vendra-authify-log::attributes.created_at'))
                     ->sinceTooltip()
-                    ->when(app()->isLocale('fa'), fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d', latinNumbers: true)),
+                    ->when(app()->isLocale('fa'), fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d', latinNumbers: true)),
             ])
             ->searchable(false)
             ->paginated(false);

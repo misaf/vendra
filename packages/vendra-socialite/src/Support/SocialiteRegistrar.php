@@ -43,14 +43,14 @@ final class SocialiteRegistrar
                 ->icon('fab-google')
                 ->color(Color::hex('#ea4335'))
                 ->scopes(['openid', 'profile', 'email'])
-                ->visible(fn(): bool => filled(Config::get('services.google.client_id'))),
+                ->visible(fn (): bool => filled(Config::get('services.google.client_id'))),
 
             Provider::make('github')
                 ->label('GitHub')
                 ->icon('fab-github')
                 ->color(Color::hex('#181717'))
                 ->scopes(['read:user', 'user:email'])
-                ->visible(fn(): bool => filled(Config::get('services.github.client_id'))),
+                ->visible(fn (): bool => filled(Config::get('services.github.client_id'))),
         ];
     }
 
@@ -65,12 +65,12 @@ final class SocialiteRegistrar
             $raw = explode(',', $raw);
         }
 
-        if ( ! is_array($raw)) {
+        if (! is_array($raw)) {
             return [];
         }
 
         return array_values(array_filter(array_map(
-            static fn($domain): string => is_string($domain) ? mb_strtolower(mb_trim($domain)) : '',
+            static fn ($domain): string => is_string($domain) ? mb_strtolower(mb_trim($domain)) : '',
             $raw,
         )));
     }
@@ -83,10 +83,10 @@ final class SocialiteRegistrar
     public static function createUserUsing(string $provider, SocialiteUserContract $oauthUser, FilamentSocialitePlugin $plugin): User
     {
         return User::query()->create([
-            'username'          => self::generateUsername($oauthUser->getNickname() ?? $oauthUser->getName() ?? $oauthUser->getEmail()),
-            'email'             => $oauthUser->getEmail(),
+            'username' => self::generateUsername($oauthUser->getNickname() ?? $oauthUser->getName() ?? $oauthUser->getEmail()),
+            'email' => $oauthUser->getEmail(),
             'email_verified_at' => now(),
-            'password'          => Hash::make(Str::password(32)),
+            'password' => Hash::make(Str::password(32)),
         ]);
     }
 
@@ -111,7 +111,7 @@ final class SocialiteRegistrar
 
         while (User::query()->where('username', $candidate)->exists()) {
             $suffix = (string) random_int(10, 9999);
-            $candidate = mb_substr($base, 0, max(1, 12 - mb_strlen($suffix))) . $suffix;
+            $candidate = mb_substr($base, 0, max(1, 12 - mb_strlen($suffix))).$suffix;
         }
 
         return $candidate;

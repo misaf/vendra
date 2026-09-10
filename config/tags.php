@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Misaf\VendraTagger\Models\Tagger;
+
 return [
 
     /*
@@ -13,7 +16,7 @@ return [
     /*
      * The fully qualified class name of the tag model.
      */
-    'tag_model' => Misaf\VendraTagger\Models\Tagger::class,
+    'tag_model' => Tagger::class,
 
     /*
      * The name of the table associated with the taggable morph relation.
@@ -25,6 +28,6 @@ return [
         /*
          * The fully qualified class name of the pivot model.
          */
-        'class_name' => Illuminate\Database\Eloquent\Relations\MorphPivot::class,
-    ]
+        'class_name' => MorphPivot::class,
+    ],
 ];

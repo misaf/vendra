@@ -16,7 +16,7 @@ final class OrderMapper implements ResourceMapper
 {
     public function map(Model $model): OrderResource
     {
-        if ( ! $model instanceof Order) {
+        if (! $model instanceof Order) {
             throw new UnexpectedValueException('Expected an order model.');
         }
 
@@ -32,7 +32,7 @@ final class OrderMapper implements ResourceMapper
             cardMessage: $model->card_message,
             placedAt: $model->placed_at?->toAtomString(),
             lines: $model->lines
-                ->map(fn(OrderLineModel $line): OrderLine => new OrderLine(
+                ->map(fn (OrderLineModel $line): OrderLine => new OrderLine(
                     id: $line->id,
                     sellableType: $line->sellable_type,
                     sellableId: $line->sellable_id,

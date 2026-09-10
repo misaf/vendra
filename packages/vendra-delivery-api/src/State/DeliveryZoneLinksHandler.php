@@ -15,15 +15,14 @@ use Misaf\VendraDelivery\Models\DeliveryZone;
 final class DeliveryZoneLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<DeliveryZone> $builder
-     *
+     * @param  Builder<DeliveryZone>  $builder
      * @return Builder<DeliveryZone>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
         $builder->where('active', true);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

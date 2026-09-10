@@ -92,7 +92,7 @@ final class ReconcileStoreStorefrontAction
         StorefrontDeployment $deployment,
         StorefrontObservation $observed,
     ): StorefrontReconciliationOutcome {
-        if ($observed->isAbsent() || StorefrontRuntimeState::Stopped === $observed->state) {
+        if ($observed->isAbsent() || $observed->state === StorefrontRuntimeState::Stopped) {
             return StorefrontReconciliationOutcome::InSync;
         }
 
@@ -114,7 +114,7 @@ final class ReconcileStoreStorefrontAction
 
     private function desiredImage(StorefrontDeployment $deployment): string
     {
-        if ( ! $deployment->storefrontImage()->exists()) {
+        if (! $deployment->storefrontImage()->exists()) {
             throw new InvalidArgumentException('Select a storefront image before reconciling this storefront.');
         }
 

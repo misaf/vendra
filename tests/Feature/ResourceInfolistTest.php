@@ -41,7 +41,7 @@ use Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource;
 use Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource;
 
 it('uses an infolist for every resource view page', function (string $resource): void {
-    if ( ! is_subclass_of($resource, Resource::class)) {
+    if (! is_subclass_of($resource, Resource::class)) {
         throw new InvalidArgumentException("{$resource} is not a Filament resource.");
     }
 
@@ -90,7 +90,7 @@ it('uses an infolist for every resource view page', function (string $resource):
     WishlistResource::class,
 ]);
 
-/** @param class-string<Resource> $resource */
+/** @param class-string<resource> $resource */
 function configuredResourceInfolist(string $resource): Schema
 {
     return $resource::infolist(Schema::make());

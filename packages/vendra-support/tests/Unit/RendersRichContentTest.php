@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 use Misaf\VendraSupport\Filament\Concerns\RendersRichContent;
 
-$renderer = new class {
+$renderer = new class
+{
     use RendersRichContent;
 
     /** @param array<array-key, mixed>|string|null $state */
@@ -26,10 +27,10 @@ it('renders empty state as an empty string', function () use ($renderer): void {
 
 it('renders a valid tiptap document', function () use ($renderer): void {
     $html = $renderer::render([
-        'type'    => 'doc',
+        'type' => 'doc',
         'content' => [
             [
-                'type'    => 'paragraph',
+                'type' => 'paragraph',
                 'content' => [['type' => 'text', 'text' => 'Hello world']],
             ],
         ],
@@ -40,7 +41,7 @@ it('renders a valid tiptap document', function () use ($renderer): void {
 
 it('normalizes legacy documents with bare top-level text nodes', function () use ($renderer): void {
     $html = $renderer::render([
-        'type'    => 'doc',
+        'type' => 'doc',
         'content' => [['type' => 'text', 'text' => 'Bare text node']],
     ]);
 

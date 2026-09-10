@@ -27,39 +27,39 @@ final class TransactionForm
         return $schema
             ->components([
                 Select::make('user_id')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.user_id'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.user_id'))
                     ->columnSpan(['lg' => 1])
                     ->label(__('vendra-transaction::attributes.user'))
                     ->live()
                     ->native(false)
-                    ->options(fn(): array => self::userOptions())
+                    ->options(fn (): array => self::userOptions())
                     ->required()
                     ->searchable(),
 
                 Select::make('currency_code')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.currency_code'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.currency_code'))
                     ->columnSpan(['lg' => 1])
                     ->label(__('vendra-transaction::attributes.currency'))
                     ->live()
                     ->native(false)
-                    ->options(fn(): array => CurrencyIntegration::options())
+                    ->options(fn (): array => CurrencyIntegration::options())
                     ->required()
                     ->searchable(),
 
                 Select::make('transaction_gateway_id')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.transaction_gateway_id'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.transaction_gateway_id'))
                     ->columnSpan(['lg' => 1])
-                    ->getOptionLabelFromRecordUsing(fn(TransactionGateway $record): string => (string) $record->name)
+                    ->getOptionLabelFromRecordUsing(fn (TransactionGateway $record): string => (string) $record->name)
                     ->label(__('vendra-transaction::attributes.transaction_gateway'))
                     ->live()
                     ->native(false)
                     ->preload()
-                    ->relationship('transactionGateway', modifyQueryUsing: fn($query) => $query->active())
+                    ->relationship('transactionGateway', modifyQueryUsing: fn ($query) => $query->active())
                     ->required()
                     ->searchable(),
 
                 Select::make('transaction_type')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.transaction_type'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.transaction_type'))
                     ->columnSpan(['lg' => 1])
                     ->label(__('vendra-transaction::attributes.transaction_type'))
                     ->live()
@@ -68,19 +68,19 @@ final class TransactionForm
                     ->required(),
 
                 Select::make('counterparty_user_id')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.counterparty_user_id'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.counterparty_user_id'))
                     ->columnSpan(['lg' => 1])
                     ->different('user_id')
                     ->label(__('vendra-transaction::attributes.counterparty_wallet'))
                     ->live()
                     ->native(false)
-                    ->options(fn(): array => self::userOptions())
-                    ->required(fn(Get $get): bool => self::isTransfer($get))
+                    ->options(fn (): array => self::userOptions())
+                    ->required(fn (Get $get): bool => self::isTransfer($get))
                     ->searchable()
-                    ->visible(fn(Get $get): bool => self::isTransfer($get)),
+                    ->visible(fn (Get $get): bool => self::isTransfer($get)),
 
                 TextInput::make('amount')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.amount'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.amount'))
                     ->columnSpan(['lg' => 1])
                     ->extraInputAttributes(['dir' => 'ltr'])
                     ->helperText(__('vendra-transaction::attributes.amount_helper_text'))
@@ -101,11 +101,11 @@ final class TransactionForm
     {
         $type = $get('transaction_type');
 
-        if ( ! $type instanceof TransactionTypeEnum) {
+        if (! $type instanceof TransactionTypeEnum) {
             $type = TransactionTypeEnum::tryFrom((string) ($type ?? ''));
         }
 
-        return TransactionTypeEnum::Transfer === $type;
+        return $type === TransactionTypeEnum::Transfer;
     }
 
     /**
@@ -116,7 +116,7 @@ final class TransactionForm
         return TransactionUsers::model()::query()
             ->orderBy((new (TransactionUsers::model())())->getKeyName())
             ->get()
-            ->mapWithKeys(fn(Model $user): array => [
+            ->mapWithKeys(fn (Model $user): array => [
                 (int) $user->getKey() => (string) ($user->getAttribute('username')
                     ?? $user->getAttribute('name')
                     ?? "#{$user->getKey()}"),

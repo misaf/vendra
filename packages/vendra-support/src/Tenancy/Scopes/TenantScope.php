@@ -16,12 +16,11 @@ use Misaf\VendraSupport\Tenancy\TenantSchema;
 class TenantScope implements Scope
 {
     /**
-     * @param Builder<covariant Model> $builder
-     * @param Model $model
+     * @param  Builder<covariant Model>  $builder
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if ( ! TenantSchema::hasTenantColumn($model->getTable())) {
+        if (! TenantSchema::hasTenantColumn($model->getTable())) {
             return;
         }
 

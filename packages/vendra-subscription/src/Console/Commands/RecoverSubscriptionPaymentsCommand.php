@@ -53,7 +53,7 @@ final class RecoverSubscriptionPaymentsCommand extends Command
                         ->orWhere(function (Builder $query): void {
                             $query
                                 ->where('status', SubscriptionPaymentStatus::Paid)
-                                ->whereHas('subscription', fn(Builder $query): Builder => $query->where('status', SubscriptionStatus::PendingPayment));
+                                ->whereHas('subscription', fn (Builder $query): Builder => $query->where('status', SubscriptionStatus::PendingPayment));
                         });
                 })
                 ->select('id')

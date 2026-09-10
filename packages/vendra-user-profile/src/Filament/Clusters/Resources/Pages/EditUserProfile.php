@@ -15,7 +15,7 @@ final class EditUserProfile extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-user-profile::navigation.user_profile');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-user-profile::navigation.user_profile');
     }
 
     protected function getHeaderActions(): array

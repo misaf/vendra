@@ -47,9 +47,9 @@ use Misaf\VendraProductApi\State\ProductPriceMapper;
 #[GetCollection(
     uriTemplate: '/catalog/product-prices',
     parameters: [
-        'currency'    => new QueryParameter(key: 'currency', property: 'currency_code', filter: EqualsFilter::class, constraints: ['string', 'size:3']),
-        'productId'   => new QueryParameter(key: 'productId', property: 'product_id', filter: EqualsFilter::class, constraints: ['integer', 'min:1']),
-        'sort[id]'    => new QueryParameter(key: 'sort[id]', property: 'id', filter: OrderFilter::class),
+        'currency' => new QueryParameter(key: 'currency', property: 'currency_code', filter: EqualsFilter::class, constraints: ['string', 'size:3']),
+        'productId' => new QueryParameter(key: 'productId', property: 'product_id', filter: EqualsFilter::class, constraints: ['integer', 'min:1']),
+        'sort[id]' => new QueryParameter(key: 'sort[id]', property: 'id', filter: OrderFilter::class),
         'sort[price]' => new QueryParameter(key: 'sort[price]', property: 'price', filter: OrderFilter::class),
     ],
 )]

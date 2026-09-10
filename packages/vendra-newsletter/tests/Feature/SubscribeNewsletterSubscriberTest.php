@@ -13,7 +13,7 @@ beforeEach(function (): void {
 it('creates a new subscribed subscriber for an unknown email', function (): void {
     $subscriber = app(SubscribeNewsletterSubscriberAction::class)->execute([
         'email' => 'new@example.com',
-        'name'  => 'New subscriber',
+        'name' => 'New subscriber',
     ]);
 
     expect($subscriber->wasRecentlyCreated)->toBeTrue()
@@ -24,12 +24,12 @@ it('creates a new subscribed subscriber for an unknown email', function (): void
 it('returns the existing active subscriber unchanged for a repeat subscription', function (): void {
     $existing = NewsletterSubscriberFactory::new()->create([
         'email' => 'repeat@example.com',
-        'name'  => 'Original name',
+        'name' => 'Original name',
     ]);
 
     $subscriber = app(SubscribeNewsletterSubscriberAction::class)->execute([
         'email' => 'repeat@example.com',
-        'name'  => 'Other name',
+        'name' => 'Other name',
     ]);
 
     expect($subscriber->id)->toBe($existing->id)

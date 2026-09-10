@@ -42,7 +42,7 @@ final class SubscribeAction
      */
     public function execute(SubscriptionSubscriber $subscriber, Plan $plan, ?Carbon $startsAt = null): Subscription
     {
-        if ($plan->price > 0 && null === $plan->currency_code) {
+        if ($plan->price > 0 && $plan->currency_code === null) {
             throw SubscriptionPaymentException::missingCurrency($plan);
         }
 
@@ -59,7 +59,7 @@ final class SubscribeAction
 
             $openPayments = $this->subscriptionRegistry->lockOpenPayments($lockedSubscriber);
 
-            if ($openPayments->contains(fn(SubscriptionPayment $payment): bool => SubscriptionPaymentStatus::Pending !== $payment->status)) {
+            if ($openPayments->contains(fn (SubscriptionPayment $payment): bool => $payment->status !== SubscriptionPaymentStatus::Pending)) {
                 throw SubscriptionPaymentException::paymentInProgress();
             }
 
@@ -71,7 +71,7 @@ final class SubscribeAction
                 );
                 $this->subscriptionRegistry->cancelPending(
                     $lockedSubscriber,
-                    $openPayments->map(fn(SubscriptionPayment $payment): int => $payment->subscription_id)->all(),
+                    $openPayments->map(fn (SubscriptionPayment $payment): int => $payment->subscription_id)->all(),
                 );
             }
 
@@ -80,46 +80,46 @@ final class SubscribeAction
                 ? $startsAt->copy()->addDays($plan->trial_days)
                 : null;
             $requiresCollection = $plan->price > 0;
-            $requiresImmediatePayment = $requiresCollection && null === $trialEndsAt;
+            $requiresImmediatePayment = $requiresCollection && $trialEndsAt === null;
 
-            if ( ! $requiresImmediatePayment) {
+            if (! $requiresImmediatePayment) {
                 $this->subscriptionRegistry->cancelActive($lockedSubscriber);
             }
 
             $subscription = $this->subscriptionRegistry->create($lockedSubscriber, [
-                'plan_id'       => $plan->getKey(),
-                'status'        => $requiresImmediatePayment ? SubscriptionStatus::PendingPayment : SubscriptionStatus::Active,
-                'price'         => $plan->price,
+                'plan_id' => $plan->getKey(),
+                'status' => $requiresImmediatePayment ? SubscriptionStatus::PendingPayment : SubscriptionStatus::Active,
+                'price' => $plan->price,
                 'currency_code' => $plan->currency_code,
                 'trial_ends_at' => $trialEndsAt,
-                'starts_at'     => $startsAt,
-                'ends_at'       => $plan->resolveEndDate($startsAt),
+                'starts_at' => $startsAt,
+                'ends_at' => $plan->resolveEndDate($startsAt),
             ]);
 
-            if ( ! $requiresImmediatePayment) {
+            if (! $requiresImmediatePayment) {
                 $lockedSubscriber->reactivateSuspendedUnits();
 
-                if ( ! $requiresCollection) {
+                if (! $requiresCollection) {
                     return ['subscription' => $subscription, 'payment' => null];
                 }
             }
 
-            if ( ! $this->subscriptionCharger->available()) {
+            if (! $this->subscriptionCharger->available()) {
                 throw SubscriptionPaymentException::providerUnavailable();
             }
 
             $payer = $lockedSubscriber->subscriptionPayer();
 
-            if (null === $payer) {
+            if ($payer === null) {
                 throw SubscriptionPaymentException::missingPayer($subscription);
             }
 
             $payment = $subscription->payments()->make([
-                'provider'        => $this->subscriptionCharger->provider(),
+                'provider' => $this->subscriptionCharger->provider(),
                 'idempotency_key' => (string) Str::uuid(),
-                'amount'          => $subscription->price,
-                'currency_code'   => $subscription->currency_code,
-                'next_retry_at'   => $trialEndsAt,
+                'amount' => $subscription->price,
+                'currency_code' => $subscription->currency_code,
+                'next_retry_at' => $trialEndsAt,
             ]);
             $payment->payer()->associate($payer);
             $payment->save();
@@ -136,14 +136,14 @@ final class SubscribeAction
             idempotencyKey: $payment?->idempotency_key,
             metadata: [
                 SubscriptionContextKeys::SUBSCRIPTION_ID => $subscription->id,
-                SubscriptionContextKeys::PAYMENT_ID      => $payment?->id,
+                SubscriptionContextKeys::PAYMENT_ID => $payment?->id,
             ],
         ))->scope(function () use ($payment, $subscription): void {
-            if ($payment instanceof SubscriptionPayment && null === $payment->next_retry_at) {
+            if ($payment instanceof SubscriptionPayment && $payment->next_retry_at === null) {
                 ProcessSubscriptionPayment::dispatch($payment->id)->afterCommit();
             }
 
-            if (SubscriptionStatus::Active === $subscription->status) {
+            if ($subscription->status === SubscriptionStatus::Active) {
                 SubscriptionActivated::dispatch($subscription);
             }
         });

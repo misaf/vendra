@@ -29,7 +29,7 @@ final class LanguageLineForm
                     ->label(__('vendra-language::attributes.namespace'))
                     ->live()
                     ->native(false)
-                    ->options(fn(TranslationCatalog $catalog): array => $catalog->namespaceOptions())
+                    ->options(fn (TranslationCatalog $catalog): array => $catalog->namespaceOptions())
                     ->placeholder(__('vendra-language::attributes.namespace_none'))
                     ->preload()
                     ->searchable()
@@ -46,7 +46,7 @@ final class LanguageLineForm
                     ->label(__('vendra-language::attributes.group'))
                     ->live()
                     ->native(false)
-                    ->options(fn(Get $get, TranslationCatalog $catalog): array => $catalog->groupOptions(
+                    ->options(fn (Get $get, TranslationCatalog $catalog): array => $catalog->groupOptions(
                         $get->string('namespace', isNullable: true),
                     ))
                     ->preload()
@@ -67,7 +67,7 @@ final class LanguageLineForm
                     ->label(__('vendra-language::attributes.key'))
                     ->live()
                     ->native(false)
-                    ->options(fn(Get $get, TranslationCatalog $catalog): array => $catalog->keyOptions(
+                    ->options(fn (Get $get, TranslationCatalog $catalog): array => $catalog->keyOptions(
                         $get->string('namespace', isNullable: true),
                         $get->string('group', isNullable: true),
                     ))
@@ -80,13 +80,13 @@ final class LanguageLineForm
 
                             $group = $get->string('group', isNullable: true);
 
-                            if (null !== $group) {
+                            if ($group !== null) {
                                 $rule->where('group', $group);
                             }
 
                             $namespace = $get->string('namespace', isNullable: true);
 
-                            if (null === $namespace) {
+                            if ($namespace === null) {
                                 $rule->whereNull('namespace');
                             } else {
                                 $rule->where('namespace', $namespace);
@@ -96,7 +96,7 @@ final class LanguageLineForm
 
                 KeyValue::make('text')
                     ->addable(false)
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.text'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.text'))
                     ->live()
                     ->afterStateHydrated(function (KeyValue $component, mixed $state): void {
                         $translations = [];
@@ -112,15 +112,15 @@ final class LanguageLineForm
                         $component->state(TranslationLocales::merge($translations));
                     })
                     ->columnSpanFull()
-                    ->default(fn(): array => TranslationLocales::merge())
+                    ->default(fn (): array => TranslationLocales::merge())
                     ->deletable(false)
                     ->editableKeys(false)
                     ->keyLabel(__('vendra-language::attributes.locale'))
                     ->label(__('vendra-language::attributes.text'))
                     ->reorderable(false)
                     ->required()
-                    ->rule(fn(): Closure => function (string $attribute, mixed $value, Closure $fail): void {
-                        if ( ! self::hasTranslation($value)) {
+                    ->rule(fn (): Closure => function (string $attribute, mixed $value, Closure $fail): void {
+                        if (! self::hasTranslation($value)) {
                             $fail(__('vendra-language::validation.translation_required'));
                         }
                     })
@@ -130,7 +130,7 @@ final class LanguageLineForm
 
     private static function hasTranslation(mixed $state): bool
     {
-        if ( ! is_array($state)) {
+        if (! is_array($state)) {
             return false;
         }
 

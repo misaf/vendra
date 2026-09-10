@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraSubscription\Providers;
 
 use Composer\InstalledVersions;
-
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Event;
 use Misaf\VendraSubscription\Console\Commands\EnforceSubscriptionsCommand;
@@ -39,6 +38,6 @@ final class SubscriptionServiceProvider extends PackageServiceProvider
     {
         Event::listen(SubscriptionPaymentPaid::class, ActivateSubscriptionOnPayment::class);
 
-        AboutCommand::add('Vendra Subscription', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-subscription')]);
+        AboutCommand::add('Vendra Subscription', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-subscription')]);
     }
 }

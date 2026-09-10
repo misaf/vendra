@@ -32,19 +32,19 @@ final class TranslationCatalog
      */
     public function namespaceOptions(): array
     {
-        if (null !== $this->namespaceOptions) {
+        if ($this->namespaceOptions !== null) {
             return $this->namespaceOptions;
         }
 
         $loader = $this->fileLoader();
 
-        if (null === $loader) {
+        if ($loader === null) {
             return $this->namespaceOptions = [];
         }
 
         $namespaces = array_filter(
             array_keys($loader->namespaces()),
-            fn(string $namespace): bool => Str::startsWith($namespace, 'vendra-'),
+            fn (string $namespace): bool => Str::startsWith($namespace, 'vendra-'),
         );
 
         return $this->namespaceOptions = $this->options($namespaces);
@@ -75,13 +75,13 @@ final class TranslationCatalog
      */
     public function keyOptions(?string $namespace, ?string $group): array
     {
-        $cacheKey = ($namespace ?? '*') . '::' . ($group ?? '*');
+        $cacheKey = ($namespace ?? '*').'::'.($group ?? '*');
 
         if (array_key_exists($cacheKey, $this->keyOptions)) {
             return $this->keyOptions[$cacheKey];
         }
 
-        if (null === $group || ! array_key_exists($group, $this->groupOptions($namespace))) {
+        if ($group === null || ! array_key_exists($group, $this->groupOptions($namespace))) {
             return $this->keyOptions[$cacheKey] = [];
         }
 
@@ -120,21 +120,21 @@ final class TranslationCatalog
                 $group = $this->groupFromFile($file);
                 $translations = $this->files->getRequire($file->getRealPath());
 
-                if ( ! is_array($translations)) {
+                if (! is_array($translations)) {
                     continue;
                 }
 
                 foreach (Arr::dot($translations) as $key => $translation) {
-                    if ( ! is_string($key) || ! is_string($translation)) {
+                    if (! is_string($key) || ! is_string($translation)) {
                         continue;
                     }
 
                     $identity = "{$namespace}\0{$group}\0{$key}";
                     $languageLines[$identity] ??= [
                         'namespace' => $namespace,
-                        'group'     => $group,
-                        'key'       => $key,
-                        'text'      => [],
+                        'group' => $group,
+                        'key' => $key,
+                        'text' => [],
                     ];
                     $languageLines[$identity]['text'][$locale] = $translation;
                 }
@@ -165,18 +165,18 @@ final class TranslationCatalog
     {
         $loader = $this->fileLoader();
 
-        if (null === $loader) {
+        if ($loader === null) {
             return [];
         }
 
-        if (null === $namespace) {
+        if ($namespace === null) {
             return array_values(array_filter(
                 $loader->paths(),
                 is_string(...),
             ));
         }
 
-        if ( ! Str::startsWith($namespace, 'vendra-')) {
+        if (! Str::startsWith($namespace, 'vendra-')) {
             return [];
         }
 
@@ -193,12 +193,12 @@ final class TranslationCatalog
         $translationFiles = [];
 
         foreach ($this->paths($namespace) as $path) {
-            if ( ! $this->files->isDirectory($path)) {
+            if (! $this->files->isDirectory($path)) {
                 continue;
             }
 
             foreach ($this->files->allFiles($path) as $file) {
-                if ('php' === $file->getExtension() && Str::contains($file->getRelativePathname(), DIRECTORY_SEPARATOR)) {
+                if ($file->getExtension() === 'php' && Str::contains($file->getRelativePathname(), DIRECTORY_SEPARATOR)) {
                     $translationFiles[] = $file;
                 }
             }
@@ -224,8 +224,7 @@ final class TranslationCatalog
     }
 
     /**
-     * @param array<int, string> $values
-     *
+     * @param  array<int, string>  $values
      * @return array<string, string>
      */
     private function options(array $values): array

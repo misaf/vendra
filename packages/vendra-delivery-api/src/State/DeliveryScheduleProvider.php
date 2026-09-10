@@ -24,7 +24,7 @@ final readonly class DeliveryScheduleProvider implements ProviderInterface
             ->active()
             ->ordered()
             ->get()
-            ->map(fn(DeliverySlot $slot): DeliverySlotResource => new DeliverySlotResource(
+            ->map(fn (DeliverySlot $slot): DeliverySlotResource => new DeliverySlotResource(
                 id: $slot->id,
                 name: self::translations($slot),
                 startsAt: $slot->starts_at,

@@ -51,9 +51,9 @@ use Misaf\VendraMultimediaApi\State\PublicMultimedia;
 final readonly class MultimediaResource
 {
     /**
-     * @param array<string, mixed> $generatedConversions
-     * @param array<string, mixed> $customProperties
-     * @param array<string, mixed> $responsiveImages
+     * @param  array<string, mixed>  $generatedConversions
+     * @param  array<string, mixed>  $customProperties
+     * @param  array<string, mixed>  $responsiveImages
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The multimedia asset unique identifier')]

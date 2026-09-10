@@ -52,19 +52,19 @@ final class LanguageTable
             BadgeableColumn::make('name')
                 ->label(__('vendra-language::attributes.name'))
                 ->icon(Heroicon::Tag)
-                ->state(fn(Language $record): string => Locales::name($record->locale))
+                ->state(fn (Language $record): string => Locales::name($record->locale))
                 ->prefixBadges([
                     Badge::make('is_default')
                         ->label(__('vendra-language::attributes.is_default'))
                         ->color('success')
                         ->size(Size::ExtraSmall)
-                        ->hidden(fn(Language $record): bool => ! $record->is_default),
+                        ->hidden(fn (Language $record): bool => ! $record->is_default),
                 ]),
 
             ToggleColumn::make('active')
                 ->label(__('vendra-language::attributes.active'))
                 ->onIcon(Heroicon::Bolt)
-                ->disabled(fn(Language $record): bool => ! LanguageResource::canEdit($record)),
+                ->disabled(fn (Language $record): bool => ! LanguageResource::canEdit($record)),
 
             TextColumn::make('translation_coverage')
                 ->badge()
@@ -78,7 +78,7 @@ final class LanguageTable
 
                     return __('vendra-language::messages.coverage_summary', [
                         'percentage' => $coverage['percentage'],
-                        'remaining'  => $coverage['remaining'],
+                        'remaining' => $coverage['remaining'],
                     ]);
                 })
                 ->label(__('vendra-language::attributes.translation_coverage'))
@@ -94,8 +94,8 @@ final class LanguageTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -104,8 +104,8 @@ final class LanguageTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
@@ -157,10 +157,10 @@ final class LanguageTable
     private static function progressColor(int $percentage, int $total): string
     {
         return match (true) {
-            0 === $total         => 'gray',
-            100 === $percentage  => 'success',
-            $percentage > 0      => 'warning',
-            default              => 'danger',
+            $total === 0 => 'gray',
+            $percentage === 100 => 'success',
+            $percentage > 0 => 'warning',
+            default => 'danger',
         };
     }
 }

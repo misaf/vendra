@@ -32,7 +32,7 @@ final class Tagger extends SpatieTag
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -43,7 +43,7 @@ final class Tagger extends SpatieTag
     {
         return [
             'tenant_id' => 'integer',
-            'position'  => 'integer',
+            'position' => 'integer',
             ...parent::casts(),
         ];
     }

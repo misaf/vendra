@@ -15,7 +15,7 @@ final class ViewAffiliate extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-affiliate::navigation.affiliate');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-affiliate::navigation.affiliate');
     }
 
     protected function getHeaderActions(): array

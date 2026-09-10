@@ -2,15 +2,41 @@
 
 declare(strict_types=1);
 
+use App\Filament\Admin\Pages\ManageGeneralSettings;
 use App\Providers\Filament\AdminPanelServiceProvider;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Lang;
 use Misaf\VendraActivityLog\Filament\Clusters\Resources\ActivityLogResource;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
+use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource;
 use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\AuthifyLogResource;
+use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource;
+use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
+use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource;
+use Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\CustomPageCategoryResource;
+use Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\CustomPageResource;
+use Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\DeliveryResource;
+use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource;
+use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource;
+use Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\FaqCategoryResource;
+use Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\FaqResource;
+use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\InquiryResource;
+use Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\LanguageLineResource;
+use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource;
 use Misaf\VendraMultimedia\Filament\Clusters\Resources\MultimediaResource;
+use Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\NewsletterResource;
+use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource;
+use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource;
+use Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource;
+use Misaf\VendraProduct\Filament\Clusters\Resources\ProductCategories\ProductCategoryResource;
+use Misaf\VendraProduct\Filament\Clusters\Resources\ProductPrices\ProductPriceResource;
+use Misaf\VendraProduct\Filament\Clusters\Resources\Products\ProductResource;
 use Misaf\VendraSupport\Filament\Clusters\CatalogCluster;
 use Misaf\VendraSupport\Filament\Clusters\ContentCluster;
 use Misaf\VendraSupport\Filament\Clusters\CustomersCluster;
@@ -21,6 +47,12 @@ use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
 use Misaf\VendraSupport\Filament\Navigation\NavigationGroup;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 use Misaf\VendraTagger\Filament\Clusters\Resources\Taggers\TaggerResource;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\TransactionGatewayResource;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\WalletResource;
+use Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource;
+use Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource;
+use Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource;
 
 it('uses domain clusters as top-level navigation without redundant groups', function (): void {
     $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
@@ -31,13 +63,13 @@ it('uses domain clusters as top-level navigation without redundant groups', func
 it('orders domain clusters predictably', function (string $cluster, int $sort): void {
     expect($cluster::getNavigationSort())->toBe($sort);
 })->with([
-    'catalog'      => [CatalogCluster::class, 1],
-    'sales'        => [SalesCluster::class, 2],
-    'customers'    => [CustomersCluster::class, 3],
-    'content'      => [ContentCluster::class, 4],
-    'marketing'    => [MarketingCluster::class, 5],
+    'catalog' => [CatalogCluster::class, 1],
+    'sales' => [SalesCluster::class, 2],
+    'customers' => [CustomersCluster::class, 3],
+    'content' => [ContentCluster::class, 4],
+    'marketing' => [MarketingCluster::class, 5],
     'localization' => [LocalizationCluster::class, 6],
-    'system'       => [SystemCluster::class, 7],
+    'system' => [SystemCluster::class, 7],
 ]);
 
 it('places carts in the sales cluster', function (): void {
@@ -50,43 +82,43 @@ it('orders navigation resources by centralized priority', function (
 ): void {
     expect($resource::getNavigationSort())->toBe($priority->value);
 })->with([
-    'products'                  => [Misaf\VendraProduct\Filament\Clusters\Resources\Products\ProductResource::class, NavigationPriority::Products],
-    'product categories'        => [Misaf\VendraProduct\Filament\Clusters\Resources\ProductCategories\ProductCategoryResource::class, NavigationPriority::ProductCategories],
-    'product prices'            => [Misaf\VendraProduct\Filament\Clusters\Resources\ProductPrices\ProductPriceResource::class, NavigationPriority::ProductPrices],
-    'attributes'                => [Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource::class, NavigationPriority::Attributes],
-    'transactions'              => [Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource::class, NavigationPriority::Transactions],
-    'transaction gateways'      => [Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\TransactionGatewayResource::class, NavigationPriority::TransactionGateways],
-    'wallets'                   => [Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\WalletResource::class, NavigationPriority::Wallets],
-    'currencies'                => [Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource::class, NavigationPriority::Currencies],
-    'carts'                     => [CartResource::class, NavigationPriority::Carts],
-    'orders'                    => [Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource::class, NavigationPriority::Orders],
-    'delivery zones'            => [Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource::class, NavigationPriority::DeliveryZones],
-    'delivery windows'          => [Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource::class, NavigationPriority::DeliverySlots],
-    'deliveries'                => [Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\DeliveryResource::class, NavigationPriority::Deliveries],
-    'users'                     => [Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource::class, NavigationPriority::Users],
-    'user profiles'             => [Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource::class, NavigationPriority::UserProfiles],
-    'wishlists'                 => [Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource::class, NavigationPriority::Wishlists],
-    'enquiries'                 => [Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\InquiryResource::class, NavigationPriority::Inquiries],
-    'roles'                     => [Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource::class, NavigationPriority::Roles],
-    'permissions'               => [Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource::class, NavigationPriority::Permissions],
-    'blog posts'                => [Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource::class, NavigationPriority::BlogPosts],
-    'blog post categories'      => [Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource::class, NavigationPriority::BlogPostCategories],
-    'custom pages'              => [Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\CustomPageResource::class, NavigationPriority::CustomPages],
-    'custom page categories'    => [Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\CustomPageCategoryResource::class, NavigationPriority::CustomPageCategories],
-    'faqs'                      => [Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\FaqResource::class, NavigationPriority::Faqs],
-    'faq categories'            => [Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\FaqCategoryResource::class, NavigationPriority::FaqCategories],
-    'multimedia'                => [MultimediaResource::class, NavigationPriority::Multimedia],
-    'tags'                      => [TaggerResource::class, NavigationPriority::Tags],
-    'affiliates'                => [Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource::class, NavigationPriority::Affiliates],
-    'affiliate commissions'     => [Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource::class, NavigationPriority::AffiliateCommissions],
-    'affiliate payouts'         => [Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource::class, NavigationPriority::AffiliatePayouts],
-    'newsletters'               => [Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\NewsletterResource::class, NavigationPriority::Newsletters],
-    'newsletter subscribers'    => [Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource::class, NavigationPriority::NewsletterSubscribers],
-    'languages'                 => [Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource::class, NavigationPriority::Languages],
-    'language lines'            => [Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\LanguageLineResource::class, NavigationPriority::LanguageLines],
-    'general settings'          => [App\Filament\Admin\Pages\ManageGeneralSettings::class, NavigationPriority::GeneralSettings],
-    'activity logs'             => [ActivityLogResource::class, NavigationPriority::ActivityLogs],
-    'authentication logs'       => [AuthifyLogResource::class, NavigationPriority::AuthenticationLogs],
+    'products' => [ProductResource::class, NavigationPriority::Products],
+    'product categories' => [ProductCategoryResource::class, NavigationPriority::ProductCategories],
+    'product prices' => [ProductPriceResource::class, NavigationPriority::ProductPrices],
+    'attributes' => [AttributeResource::class, NavigationPriority::Attributes],
+    'transactions' => [TransactionResource::class, NavigationPriority::Transactions],
+    'transaction gateways' => [TransactionGatewayResource::class, NavigationPriority::TransactionGateways],
+    'wallets' => [WalletResource::class, NavigationPriority::Wallets],
+    'currencies' => [CurrencyResource::class, NavigationPriority::Currencies],
+    'carts' => [CartResource::class, NavigationPriority::Carts],
+    'orders' => [OrderResource::class, NavigationPriority::Orders],
+    'delivery zones' => [DeliveryZoneResource::class, NavigationPriority::DeliveryZones],
+    'delivery windows' => [DeliverySlotResource::class, NavigationPriority::DeliverySlots],
+    'deliveries' => [DeliveryResource::class, NavigationPriority::Deliveries],
+    'users' => [UserResource::class, NavigationPriority::Users],
+    'user profiles' => [UserProfileResource::class, NavigationPriority::UserProfiles],
+    'wishlists' => [WishlistResource::class, NavigationPriority::Wishlists],
+    'enquiries' => [InquiryResource::class, NavigationPriority::Inquiries],
+    'roles' => [RoleResource::class, NavigationPriority::Roles],
+    'permissions' => [PermissionResource::class, NavigationPriority::Permissions],
+    'blog posts' => [BlogPostResource::class, NavigationPriority::BlogPosts],
+    'blog post categories' => [BlogPostCategoryResource::class, NavigationPriority::BlogPostCategories],
+    'custom pages' => [CustomPageResource::class, NavigationPriority::CustomPages],
+    'custom page categories' => [CustomPageCategoryResource::class, NavigationPriority::CustomPageCategories],
+    'faqs' => [FaqResource::class, NavigationPriority::Faqs],
+    'faq categories' => [FaqCategoryResource::class, NavigationPriority::FaqCategories],
+    'multimedia' => [MultimediaResource::class, NavigationPriority::Multimedia],
+    'tags' => [TaggerResource::class, NavigationPriority::Tags],
+    'affiliates' => [AffiliateResource::class, NavigationPriority::Affiliates],
+    'affiliate commissions' => [AffiliateCommissionResource::class, NavigationPriority::AffiliateCommissions],
+    'affiliate payouts' => [AffiliatePayoutResource::class, NavigationPriority::AffiliatePayouts],
+    'newsletters' => [NewsletterResource::class, NavigationPriority::Newsletters],
+    'newsletter subscribers' => [NewsletterSubscriberResource::class, NavigationPriority::NewsletterSubscribers],
+    'languages' => [LanguageResource::class, NavigationPriority::Languages],
+    'language lines' => [LanguageLineResource::class, NavigationPriority::LanguageLines],
+    'general settings' => [ManageGeneralSettings::class, NavigationPriority::GeneralSettings],
+    'activity logs' => [ActivityLogResource::class, NavigationPriority::ActivityLogs],
+    'authentication logs' => [AuthifyLogResource::class, NavigationPriority::AuthenticationLogs],
 ]);
 
 it('assigns every navigation priority a unique sort value', function (): void {
@@ -117,42 +149,42 @@ it('uses concise singular and plural resource labels in every configured locale'
         app()->setLocale($originalLocale);
     }
 })->with([
-    'activity logs'         => [ActivityLogResource::class, 'vendra-activity-log::navigation.activity_log', 'vendra-activity-log::navigation.activity_logs'],
-    'affiliates'            => [Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource::class, 'vendra-affiliate::navigation.affiliate', 'vendra-affiliate::navigation.affiliates'],
-    'affiliate commissions' => [Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource::class, 'vendra-affiliate::navigation.affiliate_commission', 'vendra-affiliate::navigation.affiliate_commissions'],
-    'affiliate payouts'     => [Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource::class, 'vendra-affiliate::navigation.affiliate_payout', 'vendra-affiliate::navigation.affiliate_payouts'],
-    'attributes'            => [Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource::class, 'vendra-attribute::navigation.attribute', 'vendra-attribute::navigation.attributes'],
-    'authentication logs'   => [AuthifyLogResource::class, 'vendra-authify-log::navigation.authify_log', 'vendra-authify-log::navigation.authify_logs'],
-    'blog posts'            => [Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource::class, 'vendra-blog::navigation.blog_post', 'vendra-blog::navigation.blog_posts'],
-    'blog categories'       => [Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource::class, 'vendra-blog::navigation.blog_post_category', 'vendra-blog::navigation.blog_post_categories'],
-    'carts'                 => [CartResource::class, 'vendra-cart::navigation.cart', 'vendra-cart::navigation.carts'],
-    'currencies'            => [Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource::class, 'vendra-currency::navigation.currency', 'vendra-currency::navigation.currencies'],
-    'custom pages'          => [Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\CustomPageResource::class, 'vendra-custom-page::navigation.custom_page', 'vendra-custom-page::navigation.custom_pages'],
-    'page categories'       => [Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\CustomPageCategoryResource::class, 'vendra-custom-page::navigation.custom_page_category', 'vendra-custom-page::navigation.custom_page_categories'],
-    'faqs'                  => [Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\FaqResource::class, 'vendra-faq::navigation.faq', 'vendra-faq::navigation.faqs'],
-    'faq categories'        => [Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\FaqCategoryResource::class, 'vendra-faq::navigation.faq_category', 'vendra-faq::navigation.faq_categories'],
-    'languages'             => [Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource::class, 'vendra-language::navigation.language', 'vendra-language::navigation.languages'],
-    'translations'          => [Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\LanguageLineResource::class, 'vendra-language::navigation.language_line', 'vendra-language::navigation.language_lines'],
-    'media'                 => [MultimediaResource::class, 'vendra-multimedia::navigation.media_item', 'vendra-multimedia::navigation.media_items'],
-    'newsletters'           => [Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\NewsletterResource::class, 'vendra-newsletter::navigation.newsletter', 'vendra-newsletter::navigation.newsletters'],
-    'subscribers'           => [Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource::class, 'vendra-newsletter::navigation.newsletter_subscriber', 'vendra-newsletter::navigation.newsletter_subscribers'],
-    'orders'                => [Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource::class, 'vendra-order::navigation.order', 'vendra-order::navigation.orders'],
-    'delivery zones'        => [Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource::class, 'vendra-delivery::navigation.delivery_zone', 'vendra-delivery::navigation.delivery_zones'],
-    'delivery windows'      => [Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource::class, 'vendra-delivery::navigation.delivery_slot', 'vendra-delivery::navigation.delivery_slots'],
-    'deliveries'            => [Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\DeliveryResource::class, 'vendra-delivery::navigation.delivery', 'vendra-delivery::navigation.deliveries'],
-    'permissions'           => [Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource::class, 'vendra-permission::navigation.permission', 'vendra-permission::navigation.permissions'],
-    'roles'                 => [Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource::class, 'vendra-permission::navigation.role', 'vendra-permission::navigation.roles'],
-    'products'              => [Misaf\VendraProduct\Filament\Clusters\Resources\Products\ProductResource::class, 'vendra-product::navigation.product', 'vendra-product::navigation.products'],
-    'product categories'    => [Misaf\VendraProduct\Filament\Clusters\Resources\ProductCategories\ProductCategoryResource::class, 'vendra-product::navigation.product_category', 'vendra-product::navigation.product_categories'],
-    'product prices'        => [Misaf\VendraProduct\Filament\Clusters\Resources\ProductPrices\ProductPriceResource::class, 'vendra-product::navigation.product_price', 'vendra-product::navigation.product_prices'],
-    'tags'                  => [TaggerResource::class, 'vendra-tagger::navigation.tagger', 'vendra-tagger::navigation.taggers'],
-    'transactions'          => [Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource::class, 'vendra-transaction::navigation.transaction', 'vendra-transaction::navigation.transactions'],
-    'payment gateways'      => [Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\TransactionGatewayResource::class, 'vendra-transaction::navigation.transaction_gateway', 'vendra-transaction::navigation.transaction_gateways'],
-    'users'                 => [Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource::class, 'vendra-user::navigation.user', 'vendra-user::navigation.users'],
-    'user profiles'         => [Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource::class, 'vendra-user-profile::navigation.user_profile', 'vendra-user-profile::navigation.user_profiles'],
-    'wishlists'             => [Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource::class, 'vendra-wishlist::navigation.wishlist', 'vendra-wishlist::navigation.wishlists'],
-    'enquiries'             => [Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\InquiryResource::class, 'vendra-inquiry::navigation.inquiry', 'vendra-inquiry::navigation.inquiries'],
-    'wallets'               => [Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\WalletResource::class, 'vendra-transaction::navigation.wallet', 'vendra-transaction::navigation.wallets'],
+    'activity logs' => [ActivityLogResource::class, 'vendra-activity-log::navigation.activity_log', 'vendra-activity-log::navigation.activity_logs'],
+    'affiliates' => [AffiliateResource::class, 'vendra-affiliate::navigation.affiliate', 'vendra-affiliate::navigation.affiliates'],
+    'affiliate commissions' => [AffiliateCommissionResource::class, 'vendra-affiliate::navigation.affiliate_commission', 'vendra-affiliate::navigation.affiliate_commissions'],
+    'affiliate payouts' => [AffiliatePayoutResource::class, 'vendra-affiliate::navigation.affiliate_payout', 'vendra-affiliate::navigation.affiliate_payouts'],
+    'attributes' => [AttributeResource::class, 'vendra-attribute::navigation.attribute', 'vendra-attribute::navigation.attributes'],
+    'authentication logs' => [AuthifyLogResource::class, 'vendra-authify-log::navigation.authify_log', 'vendra-authify-log::navigation.authify_logs'],
+    'blog posts' => [BlogPostResource::class, 'vendra-blog::navigation.blog_post', 'vendra-blog::navigation.blog_posts'],
+    'blog categories' => [BlogPostCategoryResource::class, 'vendra-blog::navigation.blog_post_category', 'vendra-blog::navigation.blog_post_categories'],
+    'carts' => [CartResource::class, 'vendra-cart::navigation.cart', 'vendra-cart::navigation.carts'],
+    'currencies' => [CurrencyResource::class, 'vendra-currency::navigation.currency', 'vendra-currency::navigation.currencies'],
+    'custom pages' => [CustomPageResource::class, 'vendra-custom-page::navigation.custom_page', 'vendra-custom-page::navigation.custom_pages'],
+    'page categories' => [CustomPageCategoryResource::class, 'vendra-custom-page::navigation.custom_page_category', 'vendra-custom-page::navigation.custom_page_categories'],
+    'faqs' => [FaqResource::class, 'vendra-faq::navigation.faq', 'vendra-faq::navigation.faqs'],
+    'faq categories' => [FaqCategoryResource::class, 'vendra-faq::navigation.faq_category', 'vendra-faq::navigation.faq_categories'],
+    'languages' => [LanguageResource::class, 'vendra-language::navigation.language', 'vendra-language::navigation.languages'],
+    'translations' => [LanguageLineResource::class, 'vendra-language::navigation.language_line', 'vendra-language::navigation.language_lines'],
+    'media' => [MultimediaResource::class, 'vendra-multimedia::navigation.media_item', 'vendra-multimedia::navigation.media_items'],
+    'newsletters' => [NewsletterResource::class, 'vendra-newsletter::navigation.newsletter', 'vendra-newsletter::navigation.newsletters'],
+    'subscribers' => [NewsletterSubscriberResource::class, 'vendra-newsletter::navigation.newsletter_subscriber', 'vendra-newsletter::navigation.newsletter_subscribers'],
+    'orders' => [OrderResource::class, 'vendra-order::navigation.order', 'vendra-order::navigation.orders'],
+    'delivery zones' => [DeliveryZoneResource::class, 'vendra-delivery::navigation.delivery_zone', 'vendra-delivery::navigation.delivery_zones'],
+    'delivery windows' => [DeliverySlotResource::class, 'vendra-delivery::navigation.delivery_slot', 'vendra-delivery::navigation.delivery_slots'],
+    'deliveries' => [DeliveryResource::class, 'vendra-delivery::navigation.delivery', 'vendra-delivery::navigation.deliveries'],
+    'permissions' => [PermissionResource::class, 'vendra-permission::navigation.permission', 'vendra-permission::navigation.permissions'],
+    'roles' => [RoleResource::class, 'vendra-permission::navigation.role', 'vendra-permission::navigation.roles'],
+    'products' => [ProductResource::class, 'vendra-product::navigation.product', 'vendra-product::navigation.products'],
+    'product categories' => [ProductCategoryResource::class, 'vendra-product::navigation.product_category', 'vendra-product::navigation.product_categories'],
+    'product prices' => [ProductPriceResource::class, 'vendra-product::navigation.product_price', 'vendra-product::navigation.product_prices'],
+    'tags' => [TaggerResource::class, 'vendra-tagger::navigation.tagger', 'vendra-tagger::navigation.taggers'],
+    'transactions' => [TransactionResource::class, 'vendra-transaction::navigation.transaction', 'vendra-transaction::navigation.transactions'],
+    'payment gateways' => [TransactionGatewayResource::class, 'vendra-transaction::navigation.transaction_gateway', 'vendra-transaction::navigation.transaction_gateways'],
+    'users' => [UserResource::class, 'vendra-user::navigation.user', 'vendra-user::navigation.users'],
+    'user profiles' => [UserProfileResource::class, 'vendra-user-profile::navigation.user_profile', 'vendra-user-profile::navigation.user_profiles'],
+    'wishlists' => [WishlistResource::class, 'vendra-wishlist::navigation.wishlist', 'vendra-wishlist::navigation.wishlists'],
+    'enquiries' => [InquiryResource::class, 'vendra-inquiry::navigation.inquiry', 'vendra-inquiry::navigation.inquiries'],
+    'wallets' => [WalletResource::class, 'vendra-transaction::navigation.wallet', 'vendra-transaction::navigation.wallets'],
 ]);
 
 it('uses the domain label and icon for each cluster', function (
@@ -165,13 +197,13 @@ it('uses the domain label and icon for each cluster', function (
         ->and($cluster::getNavigationIcon())->toBe($icon)
         ->and($cluster::getNavigationGroup())->toBeNull();
 })->with([
-    'catalog'      => [CatalogCluster::class, NavigationGroup::Catalog, Heroicon::OutlinedSquares2x2],
-    'sales'        => [SalesCluster::class, NavigationGroup::Sales, Heroicon::OutlinedBanknotes],
-    'customers'    => [CustomersCluster::class, NavigationGroup::Customers, Heroicon::OutlinedUsers],
-    'content'      => [ContentCluster::class, NavigationGroup::Content, Heroicon::OutlinedNewspaper],
-    'marketing'    => [MarketingCluster::class, NavigationGroup::Marketing, Heroicon::OutlinedMegaphone],
+    'catalog' => [CatalogCluster::class, NavigationGroup::Catalog, Heroicon::OutlinedSquares2x2],
+    'sales' => [SalesCluster::class, NavigationGroup::Sales, Heroicon::OutlinedBanknotes],
+    'customers' => [CustomersCluster::class, NavigationGroup::Customers, Heroicon::OutlinedUsers],
+    'content' => [ContentCluster::class, NavigationGroup::Content, Heroicon::OutlinedNewspaper],
+    'marketing' => [MarketingCluster::class, NavigationGroup::Marketing, Heroicon::OutlinedMegaphone],
     'localization' => [LocalizationCluster::class, NavigationGroup::Localization, Heroicon::OutlinedLanguage],
-    'system'       => [SystemCluster::class, NavigationGroup::System, Heroicon::OutlinedCog6Tooth],
+    'system' => [SystemCluster::class, NavigationGroup::System, Heroicon::OutlinedCog6Tooth],
 ]);
 
 it('renders domain resources as top sub-navigation tabs', function (string $cluster): void {
@@ -186,83 +218,82 @@ it('renders domain resources as top sub-navigation tabs', function (string $clus
     SystemCluster::class,
 ]);
 
-
 it('keeps cluster resources ungrouped so priority controls visible order', function (string $resource): void {
     expect($resource::getNavigationGroup())->toBeNull();
 })->with([
-    'products'                => Misaf\VendraProduct\Filament\Clusters\Resources\Products\ProductResource::class,
-    'product categories'      => Misaf\VendraProduct\Filament\Clusters\Resources\ProductCategories\ProductCategoryResource::class,
-    'product prices'          => Misaf\VendraProduct\Filament\Clusters\Resources\ProductPrices\ProductPriceResource::class,
-    'attributes'              => Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource::class,
-    'transactions'            => Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource::class,
-    'transaction gateways'    => Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\TransactionGatewayResource::class,
-    'wallets'                 => Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\WalletResource::class,
-    'currencies'              => Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource::class,
-    'carts'                   => CartResource::class,
-    'orders'                  => Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource::class,
-    'delivery zones'          => Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource::class,
-    'delivery windows'        => Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource::class,
-    'deliveries'              => Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\DeliveryResource::class,
-    'users'                   => Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource::class,
-    'user profiles'           => Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource::class,
-    'wishlists'               => Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource::class,
-    'enquiries'               => Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\InquiryResource::class,
-    'roles'                   => Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource::class,
-    'permissions'             => Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource::class,
-    'blog posts'              => Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource::class,
-    'blog post categories'    => Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource::class,
-    'custom pages'            => Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\CustomPageResource::class,
-    'custom page categories'  => Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\CustomPageCategoryResource::class,
-    'faqs'                    => Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\FaqResource::class,
-    'faq categories'          => Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\FaqCategoryResource::class,
-    'multimedia'              => MultimediaResource::class,
-    'tags'                    => TaggerResource::class,
-    'affiliates'              => Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource::class,
-    'affiliate commissions'   => Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource::class,
-    'affiliate payouts'       => Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource::class,
-    'newsletters'             => Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\NewsletterResource::class,
-    'newsletter subscribers'  => Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource::class,
-    'languages'               => Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource::class,
-    'language lines'          => Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\LanguageLineResource::class,
+    'products' => ProductResource::class,
+    'product categories' => ProductCategoryResource::class,
+    'product prices' => ProductPriceResource::class,
+    'attributes' => AttributeResource::class,
+    'transactions' => TransactionResource::class,
+    'transaction gateways' => TransactionGatewayResource::class,
+    'wallets' => WalletResource::class,
+    'currencies' => CurrencyResource::class,
+    'carts' => CartResource::class,
+    'orders' => OrderResource::class,
+    'delivery zones' => DeliveryZoneResource::class,
+    'delivery windows' => DeliverySlotResource::class,
+    'deliveries' => DeliveryResource::class,
+    'users' => UserResource::class,
+    'user profiles' => UserProfileResource::class,
+    'wishlists' => WishlistResource::class,
+    'enquiries' => InquiryResource::class,
+    'roles' => RoleResource::class,
+    'permissions' => PermissionResource::class,
+    'blog posts' => BlogPostResource::class,
+    'blog post categories' => BlogPostCategoryResource::class,
+    'custom pages' => CustomPageResource::class,
+    'custom page categories' => CustomPageCategoryResource::class,
+    'faqs' => FaqResource::class,
+    'faq categories' => FaqCategoryResource::class,
+    'multimedia' => MultimediaResource::class,
+    'tags' => TaggerResource::class,
+    'affiliates' => AffiliateResource::class,
+    'affiliate commissions' => AffiliateCommissionResource::class,
+    'affiliate payouts' => AffiliatePayoutResource::class,
+    'newsletters' => NewsletterResource::class,
+    'newsletter subscribers' => NewsletterSubscriberResource::class,
+    'languages' => LanguageResource::class,
+    'language lines' => LanguageLineResource::class,
 ]);
 
 it('uses semantic icons for domain resources', function (string $resource, Heroicon $icon): void {
     expect($resource::getNavigationIcon())->toBe($icon);
 })->with([
-    'activity logs'          => [ActivityLogResource::class, Heroicon::OutlinedClipboardDocumentList],
-    'affiliate commissions'  => [Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource::class, Heroicon::OutlinedReceiptPercent],
-    'affiliate payouts'      => [Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource::class, Heroicon::OutlinedBanknotes],
-    'affiliates'             => [Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource::class, Heroicon::OutlinedLink],
-    'attributes'             => [Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource::class, Heroicon::OutlinedAdjustmentsHorizontal],
-    'authify logs'           => [AuthifyLogResource::class, Heroicon::OutlinedShieldCheck],
-    'blog post categories'   => [Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource::class, Heroicon::OutlinedFolder],
-    'blog posts'             => [Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource::class, Heroicon::OutlinedDocumentText],
-    'carts'                  => [CartResource::class, Heroicon::OutlinedShoppingCart],
-    'currencies'             => [Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource::class, Heroicon::OutlinedBanknotes],
-    'custom page categories' => [Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\CustomPageCategoryResource::class, Heroicon::OutlinedFolder],
-    'custom pages'           => [Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\CustomPageResource::class, Heroicon::OutlinedDocument],
-    'faq categories'         => [Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\FaqCategoryResource::class, Heroicon::OutlinedFolder],
-    'faqs'                   => [Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\FaqResource::class, Heroicon::OutlinedQuestionMarkCircle],
-    'language lines'         => [Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\LanguageLineResource::class, Heroicon::OutlinedChatBubbleBottomCenterText],
-    'languages'              => [Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource::class, Heroicon::OutlinedLanguage],
-    'multimedia'             => [MultimediaResource::class, Heroicon::OutlinedPhoto],
-    'newsletter subscribers' => [Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource::class, Heroicon::OutlinedUserGroup],
-    'newsletters'            => [Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\NewsletterResource::class, Heroicon::OutlinedEnvelope],
-    'orders'                 => [Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource::class, Heroicon::OutlinedShoppingBag],
-    'delivery zones'         => [Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource::class, Heroicon::OutlinedMapPin],
-    'delivery windows'       => [Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource::class, Heroicon::OutlinedClock],
-    'deliveries'             => [Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\DeliveryResource::class, Heroicon::OutlinedTruck],
-    'permissions'            => [Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource::class, Heroicon::OutlinedKey],
-    'product categories'     => [Misaf\VendraProduct\Filament\Clusters\Resources\ProductCategories\ProductCategoryResource::class, Heroicon::OutlinedSquares2x2],
-    'product prices'         => [Misaf\VendraProduct\Filament\Clusters\Resources\ProductPrices\ProductPriceResource::class, Heroicon::OutlinedCurrencyDollar],
-    'products'               => [Misaf\VendraProduct\Filament\Clusters\Resources\Products\ProductResource::class, Heroicon::OutlinedCube],
-    'roles'                  => [Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource::class, Heroicon::OutlinedShieldCheck],
-    'taggers'                => [TaggerResource::class, Heroicon::OutlinedHashtag],
-    'transaction gateways'   => [Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\TransactionGatewayResource::class, Heroicon::OutlinedCreditCard],
-    'transactions'           => [Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource::class, Heroicon::OutlinedArrowsRightLeft],
-    'user profiles'          => [Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource::class, Heroicon::OutlinedIdentification],
-    'users'                  => [Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource::class, Heroicon::OutlinedUserGroup],
-    'wallets'                => [Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\WalletResource::class, Heroicon::OutlinedWallet],
-    'wishlists'              => [Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource::class, Heroicon::OutlinedHeart],
-    'enquiries'              => [Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\InquiryResource::class, Heroicon::OutlinedInbox],
+    'activity logs' => [ActivityLogResource::class, Heroicon::OutlinedClipboardDocumentList],
+    'affiliate commissions' => [AffiliateCommissionResource::class, Heroicon::OutlinedReceiptPercent],
+    'affiliate payouts' => [AffiliatePayoutResource::class, Heroicon::OutlinedBanknotes],
+    'affiliates' => [AffiliateResource::class, Heroicon::OutlinedLink],
+    'attributes' => [AttributeResource::class, Heroicon::OutlinedAdjustmentsHorizontal],
+    'authify logs' => [AuthifyLogResource::class, Heroicon::OutlinedShieldCheck],
+    'blog post categories' => [BlogPostCategoryResource::class, Heroicon::OutlinedFolder],
+    'blog posts' => [BlogPostResource::class, Heroicon::OutlinedDocumentText],
+    'carts' => [CartResource::class, Heroicon::OutlinedShoppingCart],
+    'currencies' => [CurrencyResource::class, Heroicon::OutlinedBanknotes],
+    'custom page categories' => [CustomPageCategoryResource::class, Heroicon::OutlinedFolder],
+    'custom pages' => [CustomPageResource::class, Heroicon::OutlinedDocument],
+    'faq categories' => [FaqCategoryResource::class, Heroicon::OutlinedFolder],
+    'faqs' => [FaqResource::class, Heroicon::OutlinedQuestionMarkCircle],
+    'language lines' => [LanguageLineResource::class, Heroicon::OutlinedChatBubbleBottomCenterText],
+    'languages' => [LanguageResource::class, Heroicon::OutlinedLanguage],
+    'multimedia' => [MultimediaResource::class, Heroicon::OutlinedPhoto],
+    'newsletter subscribers' => [NewsletterSubscriberResource::class, Heroicon::OutlinedUserGroup],
+    'newsletters' => [NewsletterResource::class, Heroicon::OutlinedEnvelope],
+    'orders' => [OrderResource::class, Heroicon::OutlinedShoppingBag],
+    'delivery zones' => [DeliveryZoneResource::class, Heroicon::OutlinedMapPin],
+    'delivery windows' => [DeliverySlotResource::class, Heroicon::OutlinedClock],
+    'deliveries' => [DeliveryResource::class, Heroicon::OutlinedTruck],
+    'permissions' => [PermissionResource::class, Heroicon::OutlinedKey],
+    'product categories' => [ProductCategoryResource::class, Heroicon::OutlinedSquares2x2],
+    'product prices' => [ProductPriceResource::class, Heroicon::OutlinedCurrencyDollar],
+    'products' => [ProductResource::class, Heroicon::OutlinedCube],
+    'roles' => [RoleResource::class, Heroicon::OutlinedShieldCheck],
+    'taggers' => [TaggerResource::class, Heroicon::OutlinedHashtag],
+    'transaction gateways' => [TransactionGatewayResource::class, Heroicon::OutlinedCreditCard],
+    'transactions' => [TransactionResource::class, Heroicon::OutlinedArrowsRightLeft],
+    'user profiles' => [UserProfileResource::class, Heroicon::OutlinedIdentification],
+    'users' => [UserResource::class, Heroicon::OutlinedUserGroup],
+    'wallets' => [WalletResource::class, Heroicon::OutlinedWallet],
+    'wishlists' => [WishlistResource::class, Heroicon::OutlinedHeart],
+    'enquiries' => [InquiryResource::class, Heroicon::OutlinedInbox],
 ]);

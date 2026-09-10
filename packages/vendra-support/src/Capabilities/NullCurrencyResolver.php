@@ -18,7 +18,7 @@ final class NullCurrencyResolver implements CurrencyResolver
     {
         $configuredCurrency = Config::get('money.defaultCurrency', Config::get('app.currency', 'USD'));
 
-        if (is_string($configuredCurrency) && '' !== $configuredCurrency) {
+        if (is_string($configuredCurrency) && $configuredCurrency !== '') {
             return $configuredCurrency;
         }
 

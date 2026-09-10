@@ -18,6 +18,6 @@ final readonly class UserLocaleResolver implements LocaleResolver
             ? $user->preferredLocale()
             : data_get($user, 'locale');
 
-        return is_string($locale) && '' !== $locale ? $locale : null;
+        return is_string($locale) && $locale !== '' ? $locale : null;
     }
 }

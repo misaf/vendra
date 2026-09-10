@@ -38,14 +38,14 @@ abstract class ReplaceDomainAction extends Action
                     ->required()
                     ->maxLength(255)
                     ->rules(StoreDomain::activeDomainRules())
-                    ->dehydrateStateUsing(fn(?string $state): ?string => null === $state
+                    ->dehydrateStateUsing(fn (?string $state): ?string => $state === null
                         ? null
                         : StoreDomain::normalizeDomain($state)),
             ])
             ->action(function (Store $record, array $data): void {
                 $domain = $data['domain'];
 
-                if ( ! is_string($domain)) {
+                if (! is_string($domain)) {
                     return;
                 }
 
@@ -59,7 +59,7 @@ abstract class ReplaceDomainAction extends Action
 
         $authorization = $this->authorizationCallback();
 
-        if (null !== $authorization) {
+        if ($authorization !== null) {
             $this->authorize($authorization);
         }
     }

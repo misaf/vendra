@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Misaf\VendraConsole\Models\ConsoleUser;
+use Misaf\VendraReseller\Models\ResellerUser;
+use Misaf\VendraUser\Models\User;
+
 return [
 
     /*
@@ -16,7 +20,7 @@ return [
     */
 
     'defaults' => [
-        'guard'     => env('AUTH_GUARD', 'web'),
+        'guard' => env('AUTH_GUARD', 'web'),
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
@@ -39,22 +43,22 @@ return [
 
     'guards' => [
         'web' => [
-            'driver'   => 'session',
+            'driver' => 'session',
             'provider' => 'users',
         ],
 
         'console' => [
-            'driver'   => 'session',
+            'driver' => 'session',
             'provider' => 'console_users',
         ],
 
         'reseller' => [
-            'driver'   => 'session',
+            'driver' => 'session',
             'provider' => 'reseller_users',
         ],
 
         'sanctum' => [
-            'driver'   => 'sanctum',
+            'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],
@@ -79,17 +83,17 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model'  => env('AUTH_MODEL', Misaf\VendraUser\Models\User::class),
+            'model' => env('AUTH_MODEL', User::class),
         ],
 
         'console_users' => [
             'driver' => 'eloquent',
-            'model'  => Misaf\VendraConsole\Models\ConsoleUser::class,
+            'model' => ConsoleUser::class,
         ],
 
         'reseller_users' => [
             'driver' => 'eloquent',
-            'model'  => Misaf\VendraReseller\Models\ResellerUser::class,
+            'model' => ResellerUser::class,
         ],
     ],
 
@@ -115,22 +119,22 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table'    => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
-            'expire'   => 60,
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
             'throttle' => 60,
         ],
 
         'console_users' => [
             'provider' => 'console_users',
-            'table'    => 'console_password_reset_tokens',
-            'expire'   => 60,
+            'table' => 'console_password_reset_tokens',
+            'expire' => 60,
             'throttle' => 60,
         ],
 
         'reseller_users' => [
             'provider' => 'reseller_users',
-            'table'    => 'reseller_password_reset_tokens',
-            'expire'   => 60,
+            'table' => 'reseller_password_reset_tokens',
+            'expire' => 60,
             'throttle' => 60,
         ],
     ],

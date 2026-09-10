@@ -32,7 +32,7 @@ final class StorefrontOrigins
     public function all(): array
     {
         /** @var list<string> $origins */
-        $origins = Cache::rememberForever(self::CACHE_KEY, fn(): array => $this->query());
+        $origins = Cache::rememberForever(self::CACHE_KEY, fn (): array => $this->query());
 
         return $origins;
     }
@@ -62,13 +62,13 @@ final class StorefrontOrigins
         return array_values(
             $domains
                 ->flatMap(function (mixed $name): array {
-                    if ( ! is_string($name) || '' === $name) {
+                    if (! is_string($name) || $name === '') {
                         return [];
                     }
 
                     return [
-                        'https://' . $name,
-                        'https://www.' . $name,
+                        'https://'.$name,
+                        'https://www.'.$name,
                     ];
                 })
                 ->unique()

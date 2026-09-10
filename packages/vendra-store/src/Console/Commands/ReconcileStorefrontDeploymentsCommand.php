@@ -77,7 +77,7 @@ final class ReconcileStorefrontDeploymentsCommand extends StorefrontDeploymentDi
      * A count alone hides the only thing worth knowing about a converge pass:
      * which storefronts were actually touched.
      *
-     * @param list<mixed> $outcomes
+     * @param  list<mixed>  $outcomes
      */
     protected function reportOutcomes(array $outcomes): void
     {
@@ -89,7 +89,7 @@ final class ReconcileStorefrontDeploymentsCommand extends StorefrontDeploymentDi
             }
         }
 
-        if ([] === $tally) {
+        if ($tally === []) {
             return;
         }
 

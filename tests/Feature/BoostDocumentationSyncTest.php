@@ -13,8 +13,8 @@ it('keeps package guidelines and skills aligned with documented source contracts
     array $contractPhrases,
 ): void {
     $packagePath = base_path("packages/{$package}");
-    $guideline = File::get($packagePath . '/resources/boost/guidelines/core.blade.php');
-    $skillFiles = File::allFiles($packagePath . '/resources/boost/skills');
+    $guideline = File::get($packagePath.'/resources/boost/guidelines/core.blade.php');
+    $skillFiles = File::allFiles($packagePath.'/resources/boost/skills');
 
     expect($skillFiles)->toHaveCount(1);
 
@@ -65,14 +65,14 @@ it('keeps package guidelines and skills aligned with documented source contracts
 
 it('only configures Vendra package skills that have a canonical definition', function (): void {
     $canonicalSkills = collect(File::glob(base_path('packages/*/resources/boost/skills/*/SKILL.md')))
-        ->map(fn(string $path): string => basename(dirname($path)))
+        ->map(fn (string $path): string => basename(dirname($path)))
         ->sort()
         ->values()
         ->all();
 
     $boostConfig = json_decode(File::get(base_path('boost.json')), true, flags: JSON_THROW_ON_ERROR);
     $configuredSkills = collect($boostConfig['skills'])
-        ->filter(fn(string $skill): bool => Str::startsWith($skill, 'vendra-'))
+        ->filter(fn (string $skill): bool => Str::startsWith($skill, 'vendra-'))
         ->sort()
         ->values()
         ->all();
@@ -82,14 +82,14 @@ it('only configures Vendra package skills that have a canonical definition', fun
     // renamed or misspelled reference is still caught.
     expect(array_values(array_diff($configuredSkills, $canonicalSkills)))->toBe([]);
 })->skip(
-    fn(): bool => ! File::exists(base_path('boost.json')),
+    fn (): bool => ! File::exists(base_path('boost.json')),
     'boost.json is a local-only Laravel Boost artifact and is not present in CI.',
 );
 
 it('keeps the transaction package free of stale direct currency guidance', function (): void {
     $packagePath = base_path('packages/vendra-transaction/resources/boost');
-    $guideline = File::get($packagePath . '/guidelines/core.blade.php');
-    $skill = File::get($packagePath . '/skills/vendra-transaction-development/SKILL.md');
+    $guideline = File::get($packagePath.'/guidelines/core.blade.php');
+    $skill = File::get($packagePath.'/skills/vendra-transaction-development/SKILL.md');
 
     foreach ([$guideline, $skill] as $instruction) {
         expect($instruction)

@@ -26,7 +26,7 @@ trait InteractsWithTranslatedTableRecords /** @phpstan-ignore trait.unused */
     {
         $locale = data_get($livewire, 'activeLocale');
 
-        return is_string($locale) && '' !== $locale ? $locale : App::getLocale();
+        return is_string($locale) && $locale !== '' ? $locale : App::getLocale();
     }
 
     protected static function integerAttribute(Model $record, string $attribute): int

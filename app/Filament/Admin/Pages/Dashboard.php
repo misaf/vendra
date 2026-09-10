@@ -29,7 +29,7 @@ final class Dashboard extends \Filament\Pages\Dashboard
         return Grid::make([
             'lg' => 3,
         ])->schema([
-            Group::make(fn(): array => $this->getResponsiveWidgetsSchemaComponents())
+            Group::make(fn (): array => $this->getResponsiveWidgetsSchemaComponents())
                 ->columns([
                     'md' => 3,
                 ])
@@ -58,13 +58,13 @@ final class Dashboard extends \Filament\Pages\Dashboard
         $componentCount = count($components);
 
         foreach ($components as $index => $component) {
-            if ( ! $component instanceof Livewire) {
+            if (! $component instanceof Livewire) {
                 continue;
             }
 
             $widget = app($component->getComponent());
 
-            if ( ! $widget instanceof Widget) {
+            if (! $widget instanceof Widget) {
                 continue;
             }
 
@@ -74,7 +74,7 @@ final class Dashboard extends \Filament\Pages\Dashboard
                 ->columnStart($widget->getColumnStart())
                 ->columnOrder([
                     'default' => $componentCount - $index,
-                    'md'      => $index + 1,
+                    'md' => $index + 1,
                 ]);
         }
 

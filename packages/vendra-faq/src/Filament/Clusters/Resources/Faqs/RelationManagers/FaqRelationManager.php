@@ -50,7 +50,7 @@ final class FaqRelationManager extends RelationManager
 
     public static function getBadge(Model $ownerRecord, string $pageClass): string
     {
-        if ( ! $ownerRecord instanceof FaqCategory) {
+        if (! $ownerRecord instanceof FaqCategory) {
             return (string) Number::format(0);
         }
 

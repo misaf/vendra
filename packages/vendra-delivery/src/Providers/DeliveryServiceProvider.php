@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraDelivery\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -43,7 +42,7 @@ final class DeliveryServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), DeliveryPlugin::ID)) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), DeliveryPlugin::ID)) {
                 return;
             }
 
@@ -58,7 +57,7 @@ final class DeliveryServiceProvider extends PackageServiceProvider
          * FQCNs, so relocating a model class never orphans stored rows.
          */
         Relation::morphMap([
-            'delivery'      => Delivery::class,
+            'delivery' => Delivery::class,
             'delivery_slot' => DeliverySlot::class,
             'delivery_zone' => DeliveryZone::class,
         ]);
@@ -66,6 +65,6 @@ final class DeliveryServiceProvider extends PackageServiceProvider
         $this->app->make(TenantTableRegistry::class)->register('delivery_zones', 'delivery_slots', 'deliveries');
         $this->app->make(TenantSeeders::class)->register('vendra-delivery:seed', priority: 60);
 
-        AboutCommand::add('Vendra Delivery', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-delivery')]);
+        AboutCommand::add('Vendra Delivery', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-delivery')]);
     }
 }

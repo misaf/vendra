@@ -11,7 +11,7 @@ it('applies shared tenant ownership to the authify log model', function (): void
 });
 
 it('hides the tenant association from authify log serialization', function (): void {
-    expect((new AuthifyLog())->getHidden())->toContain('tenant_id');
+    expect((new AuthifyLog)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the authify log resource', function (): void {

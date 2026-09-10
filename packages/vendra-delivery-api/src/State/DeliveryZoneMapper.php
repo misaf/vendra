@@ -14,14 +14,14 @@ final class DeliveryZoneMapper implements ResourceMapper
 {
     public function map(Model $model): DeliveryZoneResource
     {
-        if ( ! $model instanceof DeliveryZone) {
+        if (! $model instanceof DeliveryZone) {
             throw new UnexpectedValueException('Expected a delivery zone model.');
         }
 
         return new DeliveryZoneResource(
             id: $model->id,
             name: self::translations($model, 'name'),
-            description: [] === self::translations($model, 'description')
+            description: self::translations($model, 'description') === []
                 ? null
                 : self::translations($model, 'description'),
             maxDistanceKm: $model->max_distance_km,

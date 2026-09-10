@@ -30,9 +30,9 @@ it('translation files and their keys are available as dependent select options',
 
 it('translation files are exposed as locale-complete language lines', function (): void {
     $languageLine = collect(app(TranslationCatalog::class)->languageLines())
-        ->first(fn(array $line): bool => 'vendra-language' === $line['namespace']
-            && 'navigation' === $line['group']
-            && 'language' === $line['key']);
+        ->first(fn (array $line): bool => $line['namespace'] === 'vendra-language'
+            && $line['group'] === 'navigation'
+            && $line['key'] === 'language');
 
     expect($languageLine)
         ->toBeArray()

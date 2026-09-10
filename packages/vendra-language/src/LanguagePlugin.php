@@ -22,7 +22,7 @@ final class LanguagePlugin implements Plugin
     public function register(Panel $panel): void
     {
         $panel->discoverResources(
-            in: __DIR__ . '/Filament/Clusters/Resources',
+            in: __DIR__.'/Filament/Clusters/Resources',
             for: 'Misaf\\VendraLanguage\\Filament\\Clusters\\Resources',
         );
     }

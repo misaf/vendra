@@ -37,7 +37,7 @@ final class LatestTransactionTableWidget extends BaseWidget
     {
         return $table
             ->heading(__('vendra-transaction::widgets.recent_transaction_table'))
-            ->query(fn(): Builder => Transaction::query()->with(['wallet.user']))
+            ->query(fn (): Builder => Transaction::query()->with(['wallet.user']))
             ->columns([
                 TextColumn::make('token')
                     ->extraCellAttributes(['dir' => 'ltr'])
@@ -66,8 +66,8 @@ final class LatestTransactionTableWidget extends BaseWidget
 
                 TextColumn::make('status')
                     ->badge()
-                    ->color(fn(TransactionState $state): array => $state->getColor())
-                    ->formatStateUsing(fn(TransactionState $state): string => $state->getLabel())
+                    ->color(fn (TransactionState $state): array => $state->getColor())
+                    ->formatStateUsing(fn (TransactionState $state): string => $state->getLabel())
                     ->label(__('vendra-transaction::attributes.status')),
 
                 TextColumn::make('created_at')
@@ -76,8 +76,8 @@ final class LatestTransactionTableWidget extends BaseWidget
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->defaultSort(column: 'id', direction: 'desc')

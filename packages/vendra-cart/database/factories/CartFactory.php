@@ -23,26 +23,26 @@ final class CartFactory extends Factory
     public function definition(): array
     {
         return [
-            'token'      => (string) Str::uuid(),
+            'token' => (string) Str::uuid(),
             'expires_at' => now()->addDays(7),
         ];
     }
 
     public function forOwner(Model $owner): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'owner_type' => $owner->getMorphClass(),
-            'owner_id'   => $owner->getKey(),
+            'owner_id' => $owner->getKey(),
         ]);
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }

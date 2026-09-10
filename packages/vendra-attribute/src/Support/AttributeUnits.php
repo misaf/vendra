@@ -14,11 +14,11 @@ final class AttributeUnits
         $units = [];
 
         foreach (Config::array('vendra-attribute.units') as $value => $label) {
-            if ( ! is_string($value) || '' === $value) {
+            if (! is_string($value) || $value === '') {
                 continue;
             }
 
-            $units[$value] = is_string($label) && '' !== $label ? $label : $value;
+            $units[$value] = is_string($label) && $label !== '' ? $label : $value;
         }
 
         return $units;

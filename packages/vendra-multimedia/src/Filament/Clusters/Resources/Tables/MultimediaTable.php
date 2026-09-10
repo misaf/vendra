@@ -41,7 +41,7 @@ final class MultimediaTable
                 ->label(__('vendra-multimedia::tables.model_type'))
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(Multimedia $record): string => Number::format((int) $record->model_id) ?: '0')
+                        ->label(fn (Multimedia $record): string => Number::format((int) $record->model_id) ?: '0')
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -54,7 +54,7 @@ final class MultimediaTable
 
             BadgeableColumn::make('collection_name')
                 ->alignCenter()
-                ->description(fn(Multimedia $record): string => $record->name)
+                ->description(fn (Multimedia $record): string => $record->name)
                 ->icon(Heroicon::QueueList)
                 ->label(__('vendra-multimedia::tables.collection_name'))
                 ->searchable()
@@ -74,7 +74,7 @@ final class MultimediaTable
 
             TextColumn::make('size')
                 ->alignEnd()
-                ->formatStateUsing(fn(int $state): string => Number::fileSize($state))
+                ->formatStateUsing(fn (int $state): string => Number::fileSize($state))
                 ->label(__('vendra-multimedia::tables.size'))
                 ->sortable()
                 ->toggleable(),
@@ -85,8 +85,8 @@ final class MultimediaTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -95,8 +95,8 @@ final class MultimediaTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 

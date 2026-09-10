@@ -17,7 +17,7 @@ final class CreateCustomPageCategory extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-custom-page::navigation.custom_page_category');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-custom-page::navigation.custom_page_category');
     }
 
     protected function getHeaderActions(): array

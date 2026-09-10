@@ -15,12 +15,12 @@ final class AnswerInquiryAction
     public static function make(): Action
     {
         return Action::make('answer')
-            ->authorize(fn(Inquiry $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Inquiry $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('success')
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-inquiry::messages.answer'))
             ->requiresConfirmation()
-            ->visible(fn(Inquiry $record): bool => InquiryStatusEnum::Answered !== $record->status)
+            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::Answered)
             ->action(function (Inquiry $record): void {
                 $record->markAnswered();
 

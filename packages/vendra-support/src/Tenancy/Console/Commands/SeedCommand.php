@@ -22,7 +22,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
 
         $requestedSeeders = $this->requestedSeeders();
 
-        if (null === $requestedSeeders) {
+        if ($requestedSeeders === null) {
             $this->error('Invalid seeder selection. Seeder names must be strings.');
 
             return self::FAILURE;
@@ -30,7 +30,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
 
         $seederClasses = $this->resolveSeederClasses($requestedSeeders);
 
-        if (null === $seederClasses) {
+        if ($seederClasses === null) {
             $this->error(sprintf(
                 'Invalid seeder selection. Available seeders: all, %s.',
                 implode(', ', array_keys($this->seeders())),
@@ -39,7 +39,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
             return self::FAILURE;
         }
 
-        if ( ! $this->prepareForSeeding()) {
+        if (! $this->prepareForSeeding()) {
             return self::FAILURE;
         }
 
@@ -49,7 +49,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
                 '--force' => true,
             ]);
 
-            if (self::SUCCESS !== $exitCode) {
+            if ($exitCode !== self::SUCCESS) {
                 $this->error(sprintf(
                     'Seeder [%s] failed with exit code [%d].',
                     $seederClass,
@@ -69,7 +69,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'seeders' => fn() => $this->promptForSeeders(),
+            'seeders' => fn () => $this->promptForSeeders(),
         ];
     }
 
@@ -101,13 +101,12 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
     }
 
     /**
-     * @param list<string> $seeders
-     *
+     * @param  list<string>  $seeders
      * @return list<class-string>|null
      */
     private function resolveSeederClasses(array $seeders): ?array
     {
-        if ([] === $seeders) {
+        if ($seeders === []) {
             return null;
         }
 
@@ -120,7 +119,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
         $classes = [];
 
         foreach ($seeders as $seeder) {
-            if ( ! array_key_exists($seeder, $available)) {
+            if (! array_key_exists($seeder, $available)) {
                 return null;
             }
 
@@ -137,12 +136,12 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
     {
         $seeders = $this->argument('seeders');
 
-        if ( ! is_array($seeders) || ! array_is_list($seeders)) {
+        if (! is_array($seeders) || ! array_is_list($seeders)) {
             return null;
         }
 
         foreach ($seeders as $seeder) {
-            if ( ! is_string($seeder)) {
+            if (! is_string($seeder)) {
                 return null;
             }
         }

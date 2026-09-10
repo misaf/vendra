@@ -26,7 +26,7 @@ final class OrderInfolist
                 TextEntry::make('lines_count')
                     ->badge()
                     ->label(__('vendra-order::attributes.lines'))
-                    ->state(fn(Order $record): int => $record->lines()->count()),
+                    ->state(fn (Order $record): int => $record->lines()->count()),
                 TextEntry::make('items_amount')
                     ->label(__('vendra-order::attributes.items_amount')),
                 TextEntry::make('delivery_amount')
@@ -57,8 +57,8 @@ final class OrderInfolist
             ->label(__("vendra-order::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

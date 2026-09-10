@@ -14,9 +14,9 @@ final readonly class ChainLocaleResolver implements LocaleResolver, ProvidesVary
 {
     public const array SOURCE_ALIASES = [
         'accept-language' => AcceptLanguageLocaleResolver::class,
-        'query'           => QueryLocaleResolver::class,
-        'route'           => RouteLocaleResolver::class,
-        'user'            => UserLocaleResolver::class,
+        'query' => QueryLocaleResolver::class,
+        'route' => RouteLocaleResolver::class,
+        'user' => UserLocaleResolver::class,
     ];
 
     /** @var list<LocaleResolver> */
@@ -49,7 +49,7 @@ final readonly class ChainLocaleResolver implements LocaleResolver, ProvidesVary
         foreach ($this->resolvers as $resolver) {
             $locale = $resolver->resolve($request);
 
-            if (null !== $locale) {
+            if ($locale !== null) {
                 return $locale;
             }
         }
@@ -73,9 +73,9 @@ final readonly class ChainLocaleResolver implements LocaleResolver, ProvidesVary
     private static function makeResolver(Container $container, mixed $source): LocaleResolver
     {
         $class = self::sourceClass($source);
-        $resolver = null === $class ? null : $container->make($class);
+        $resolver = $class === null ? null : $container->make($class);
 
-        if ( ! $resolver instanceof LocaleResolver) {
+        if (! $resolver instanceof LocaleResolver) {
             throw new InvalidArgumentException(sprintf(
                 'Locale resolver [%s] must implement [%s].',
                 $class ?? get_debug_type($source),
@@ -88,7 +88,7 @@ final readonly class ChainLocaleResolver implements LocaleResolver, ProvidesVary
 
     private static function sourceClass(mixed $source): ?string
     {
-        if ( ! is_string($source)) {
+        if (! is_string($source)) {
             return null;
         }
 

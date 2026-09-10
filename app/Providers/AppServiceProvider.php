@@ -66,7 +66,7 @@ final class AppServiceProvider extends ServiceProvider
         DevCommands::except('server', 'vite', 'horizon');
 
         Relation::morphMap([
-            'reseller'      => Reseller::class,
+            'reseller' => Reseller::class,
             'reseller_user' => ResellerUser::class,
         ]);
 
@@ -82,7 +82,7 @@ final class AppServiceProvider extends ServiceProvider
         URL::forceScheme('https');
         Model::shouldBeStrict();
         DB::prohibitDestructiveCommands(app()->isProduction());
-        Password::defaults(fn() => Password::min(8));
+        Password::defaults(fn () => Password::min(8));
 
         StoreDomain::observe(StoreDomainObserver::class);
 
@@ -101,7 +101,7 @@ final class AppServiceProvider extends ServiceProvider
     private function registerMcpControllerCompatibility(): void
     {
         $this->app->booted(function (Application $app): void {
-            $psr17Factory = new Psr17Factory();
+            $psr17Factory = new Psr17Factory;
             $psrHttpFactory = new PsrHttpFactory(
                 $psr17Factory,
                 $psr17Factory,
@@ -109,13 +109,13 @@ final class AppServiceProvider extends ServiceProvider
                 $psr17Factory,
             );
 
-            $app->singleton(McpController::class, static fn(Application $application): McpController => new McpController(
+            $app->singleton(McpController::class, static fn (Application $application): McpController => new McpController(
                 $application->make(Server::class),
                 $psrHttpFactory,
-                new HttpFoundationFactory(),
+                new HttpFoundationFactory,
                 $psr17Factory,
                 $psr17Factory,
-                new MiddlewareFactory(),
+                new MiddlewareFactory,
             ));
         });
     }
@@ -128,7 +128,7 @@ final class AppServiceProvider extends ServiceProvider
      */
     private function registerStorefrontProvisioning(): void
     {
-        $this->app->bind(StorefrontSettings::class, static fn(): StorefrontSettings => StorefrontSettings::fromConfig());
+        $this->app->bind(StorefrontSettings::class, static fn (): StorefrontSettings => StorefrontSettings::fromConfig());
 
         // The platform runs the storefront containers itself through the
         // default driver managed by misaf/laravel-docker-engine.
@@ -151,22 +151,22 @@ final class AppServiceProvider extends ServiceProvider
         Event::listen(Authenticated::class, static function (Authenticated $event): void {
             $actorId = $event->user->getAuthIdentifier();
 
-            (new RequestJobContext(
+            new RequestJobContext(
                 actorId: is_int($actorId) || is_string($actorId) ? $actorId : null,
                 actorType: $event->guard,
-            ))->add();
+            )->add();
         });
 
         Event::listen(Failed::class, static function (Failed $event): void {
-            (new RequestJobContext(
+            new RequestJobContext(
                 operation: 'auth_failed',
                 actorType: $event->guard,
-            ))->scope(static fn() => Log::warning('Authentication attempt failed.'));
+            )->scope(static fn () => Log::warning('Authentication attempt failed.'));
         });
 
         Event::listen(Lockout::class, static function (Lockout $event): void {
-            (new RequestJobContext(operation: 'auth_lockout'))
-                ->scope(static fn() => Log::warning('Authentication lockout triggered.'));
+            new RequestJobContext(operation: 'auth_lockout')
+                ->scope(static fn () => Log::warning('Authentication lockout triggered.'));
         });
     }
 }

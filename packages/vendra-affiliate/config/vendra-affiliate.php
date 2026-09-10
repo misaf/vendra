@@ -42,7 +42,7 @@ return [
 
     'defaults' => [
         'commission_percent' => 20,
-        'signup_bounty'      => 0,
+        'signup_bounty' => 0,
     ],
 
     /*
@@ -55,8 +55,8 @@ return [
     */
 
     'conversions' => [
-        'deposit'  => ['enabled' => true],
-        'signup'   => ['enabled' => false],
+        'deposit' => ['enabled' => true],
+        'signup' => ['enabled' => false],
         'checkout' => ['enabled' => false],
     ],
 
@@ -84,9 +84,9 @@ return [
     */
 
     'attribution' => [
-        'cookie_name'     => 'vendra_affiliate_ref',
+        'cookie_name' => 'vendra_affiliate_ref',
         'cookie_ttl_days' => 30,
-        'redirect_url'    => '/',
+        'redirect_url' => '/',
     ],
 
     /*
@@ -100,7 +100,7 @@ return [
     */
 
     'payout' => [
-        'minimum'             => 1000,
+        'minimum' => 1000,
         'transaction_gateway' => 'internal-transactions',
     ],
 

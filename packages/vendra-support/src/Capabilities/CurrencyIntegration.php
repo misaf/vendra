@@ -62,6 +62,6 @@ final class CurrencyIntegration
 
     private static function fallbackResolver(): CurrencyResolver
     {
-        return new NullCurrencyResolver();
+        return new NullCurrencyResolver;
     }
 }

@@ -16,12 +16,12 @@ final class ApproveTransactionAction
     public static function make(): Action
     {
         return Action::make('approve')
-            ->authorize(fn(Transaction $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Transaction $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('success')
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-transaction::messages.approve'))
             ->requiresConfirmation()
-            ->visible(fn(Transaction $record): bool => $record->status->canTransitionTo(Approved::class))
+            ->visible(fn (Transaction $record): bool => $record->status->canTransitionTo(Approved::class))
             ->action(function (Transaction $record): void {
                 try {
                     $record->approve();

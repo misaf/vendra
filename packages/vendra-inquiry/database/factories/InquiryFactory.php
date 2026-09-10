@@ -23,44 +23,44 @@ final class InquiryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'     => fake()->name(),
-            'email'    => fake()->safeEmail(),
-            'phone'    => null,
+            'name' => fake()->name(),
+            'email' => fake()->safeEmail(),
+            'phone' => null,
             'occasion' => fake()->randomElement(['wedding', 'event', 'sympathy', 'corporate', 'other']),
-            'message'  => fake()->paragraph(),
-            'status'   => InquiryStatusEnum::New,
-            'source'   => 'contact-form',
-            'locale'   => 'en',
+            'message' => fake()->paragraph(),
+            'status' => InquiryStatusEnum::New,
+            'source' => 'contact-form',
+            'locale' => 'en',
         ];
     }
 
     public function answered(): static
     {
-        return $this->state(fn(): array => [
-            'status'      => InquiryStatusEnum::Answered,
+        return $this->state(fn (): array => [
+            'status' => InquiryStatusEnum::Answered,
             'answered_at' => now(),
         ]);
     }
 
     public function closed(): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'status' => InquiryStatusEnum::Closed,
         ]);
     }
 
     public function forOccasion(string $occasion): static
     {
-        return $this->state(fn(): array => ['occasion' => $occasion]);
+        return $this->state(fn (): array => ['occasion' => $occasion]);
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }

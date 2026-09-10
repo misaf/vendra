@@ -14,8 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 final class MultimediaLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<PublicMultimedia> $builder
-     *
+     * @param  Builder<PublicMultimedia>  $builder
      * @return Builder<PublicMultimedia>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -27,7 +26,7 @@ final class MultimediaLinksHandler implements LinksHandlerInterface
 
         PublicMultimedia::scope($builder);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

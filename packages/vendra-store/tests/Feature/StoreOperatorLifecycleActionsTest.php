@@ -66,7 +66,7 @@ it('requeues failed or in-progress store provisioning without bypassing the job'
 
 it('queues storefront redeployment and failed retry through the existing provisioning job', function (): void {
     $deployment = StorefrontDeployment::factory()->create([
-        'status'        => StorefrontDeploymentStatus::Ready,
+        'status' => StorefrontDeploymentStatus::Ready,
         'desired_state' => StorefrontDesiredState::Stopped,
     ]);
     $failed = StorefrontDeployment::factory()->create([
@@ -80,11 +80,11 @@ it('queues storefront redeployment and failed retry through the existing provisi
 
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
-        fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
+        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
     );
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
-        fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $failed->id && ! $job->force,
+        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $failed->id && ! $job->force,
     );
 });
 
@@ -122,6 +122,6 @@ it('revalidates reseller quota before restoring an offboarded store', function (
     app(OffboardStoreAction::class)->execute($archived, 'Temporarily archived.');
     Store::factory()->active()->create(['reseller_id' => $reseller->id]);
 
-    expect(fn() => app(RestoreOffboardedStoreAction::class)->execute($archived))
+    expect(fn () => app(RestoreOffboardedStoreAction::class)->execute($archived))
         ->toThrow(SubscriptionLimitException::class);
 });

@@ -27,7 +27,7 @@ final class TableSorting
         bool $assertDescendingOrder = true,
     ): void {
         foreach ($listPage->instance()->getTable()->getColumns() as $column) {
-            if ( ! $column->isSortable()) {
+            if (! $column->isSortable()) {
                 continue;
             }
 

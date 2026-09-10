@@ -21,8 +21,7 @@ beforeEach(function (): void {
 });
 
 /**
- * @param array<string, mixed> $payload
- *
+ * @param  array<string, mixed>  $payload
  * @return array{response: TestResponse, body: array<string, mixed>}
  */
 function rootMcpCall(array $payload, ?string $sessionId = null, string $url = 'http://localhost/mcp'): array
@@ -30,10 +29,10 @@ function rootMcpCall(array $payload, ?string $sessionId = null, string $url = 'h
     $host = parse_url($url, PHP_URL_HOST);
     $headers = [
         'Accept' => 'application/json, text/event-stream',
-        'Host'   => is_string($host) ? $host : 'localhost',
+        'Host' => is_string($host) ? $host : 'localhost',
     ];
 
-    if (null !== $sessionId) {
+    if ($sessionId !== null) {
         $headers['Mcp-Session-Id'] = $sessionId;
     }
 
@@ -43,7 +42,7 @@ function rootMcpCall(array $payload, ?string $sessionId = null, string $url = 'h
     foreach (preg_split('/\r?\n/', $response->getContent()) ?: [] as $line) {
         $line = str_starts_with($line, 'data:') ? mb_trim(mb_substr($line, 5)) : mb_trim($line);
 
-        if ('' === $line) {
+        if ($line === '') {
             continue;
         }
 
@@ -61,12 +60,12 @@ function rootMcpInitialize(string $url = 'http://localhost/mcp'): string
 {
     $result = rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 1,
-        'method'  => 'initialize',
-        'params'  => [
+        'id' => 1,
+        'method' => 'initialize',
+        'params' => [
             'protocolVersion' => '2025-06-18',
-            'capabilities'    => new stdClass(),
-            'clientInfo'      => ['name' => 'pest', 'version' => '1.0'],
+            'capabilities' => new stdClass,
+            'clientInfo' => ['name' => 'pest', 'version' => '1.0'],
         ],
     ], url: $url);
 
@@ -85,19 +84,19 @@ it('requires authentication for the MCP transport', function (): void {
 
     rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 1,
-        'method'  => 'initialize',
-        'params'  => [
+        'id' => 1,
+        'method' => 'initialize',
+        'params' => [
             'protocolVersion' => '2025-06-18',
-            'capabilities'    => new stdClass(),
-            'clientInfo'      => ['name' => 'pest', 'version' => '1.0'],
+            'capabilities' => new stdClass,
+            'clientInfo' => ['name' => 'pest', 'version' => '1.0'],
         ],
     ])['response']->assertUnauthorized();
 });
 
 it('advertises every API operation with object input schemas', function (): void {
     $sessionId = rootMcpInitialize();
-    $body = rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass()], $sessionId)['body'];
+    $body = rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass], $sessionId)['body'];
     $tools = collect($body['result']['tools'] ?? []);
 
     expect($tools->pluck('name'))->toContain(
@@ -132,21 +131,21 @@ it('advertises every API operation with object input schemas', function (): void
         'list_product_prices',
     );
 
-    $tools->each(fn(array $tool) => expect($tool['inputSchema']['type'] ?? null)->toBe('object'));
+    $tools->each(fn (array $tool) => expect($tool['inputSchema']['type'] ?? null)->toBe('object'));
 });
 
 it('publishes readable API documentation as an MCP resource', function (): void {
     $sessionId = rootMcpInitialize();
-    $listed = rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'resources/list', 'params' => new stdClass()], $sessionId)['body'];
+    $listed = rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'resources/list', 'params' => new stdClass], $sessionId)['body'];
 
     expect(collect($listed['result']['resources'] ?? [])->pluck('uri'))
         ->toContain('resource://vendra/api-documentation');
 
     $read = rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 3,
-        'method'  => 'resources/read',
-        'params'  => ['uri' => 'resource://vendra/api-documentation'],
+        'id' => 3,
+        'method' => 'resources/read',
+        'params' => ['uri' => 'resource://vendra/api-documentation'],
     ], $sessionId)['body'];
 
     expect(json_encode($read))->toContain('Vendra API', '/mcp', 'jsonld');
@@ -161,9 +160,9 @@ it('enforces resource policies for authenticated MCP tools', function (): void {
 
     $body = rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 3,
-        'method'  => 'tools/call',
-        'params'  => ['name' => 'list_carts', 'arguments' => new stdClass()],
+        'id' => 3,
+        'method' => 'tools/call',
+        'params' => ['name' => 'list_carts', 'arguments' => new stdClass],
     ], $sessionId)['body'];
 
     $cartIds = collect($body['result']['structuredContent']['member'] ?? [])->pluck('id');
@@ -179,12 +178,12 @@ it('validates and invokes the existing affiliate mutation', function (): void {
 
     $body = rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 3,
-        'method'  => 'tools/call',
-        'params'  => [
-            'name'      => 'record_affiliate_visit',
+        'id' => 3,
+        'method' => 'tools/call',
+        'params' => [
+            'name' => 'record_affiliate_visit',
             'arguments' => [
-                'code'       => $affiliate->code,
+                'code' => $affiliate->code,
                 'landingUrl' => 'https://shop.test/products/1',
             ],
         ],
@@ -195,10 +194,10 @@ it('validates and invokes the existing affiliate mutation', function (): void {
 
     $invalid = rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 4,
-        'method'  => 'tools/call',
-        'params'  => [
-            'name'      => 'record_affiliate_visit',
+        'id' => 4,
+        'method' => 'tools/call',
+        'params' => [
+            'name' => 'record_affiliate_visit',
             'arguments' => ['code' => '', 'landingUrl' => 'not-a-url'],
         ],
     ], $sessionId)['body'];
@@ -213,7 +212,7 @@ it('resolves and isolates MCP calls by tenant domain', function (): void {
 
     $tenant = Store::factory()->active()->create(['slug' => 'flowers']);
     StoreDomain::factory()->for($tenant)->create([
-        'name'   => 'flowers.example.com',
+        'name' => 'flowers.example.com',
         'active' => true,
     ]);
 
@@ -237,9 +236,9 @@ it('resolves and isolates MCP calls by tenant domain', function (): void {
 
     $body = rootMcpCall([
         'jsonrpc' => '2.0',
-        'id'      => 3,
-        'method'  => 'tools/call',
-        'params'  => ['name' => 'list_products', 'arguments' => new stdClass()],
+        'id' => 3,
+        'method' => 'tools/call',
+        'params' => ['name' => 'list_products', 'arguments' => new stdClass],
     ], $sessionId, $url)['body'];
 
     $serialized = json_encode($body['result'] ?? []);

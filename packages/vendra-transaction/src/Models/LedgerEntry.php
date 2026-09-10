@@ -44,10 +44,10 @@ final class LedgerEntry extends Model
     protected function casts(): array
     {
         return [
-            'id'            => 'integer',
-            'wallet_id'     => 'integer',
-            'source_id'     => 'integer',
-            'amount'        => 'integer',
+            'id' => 'integer',
+            'wallet_id' => 'integer',
+            'source_id' => 'integer',
+            'amount' => 'integer',
             'balance_after' => 'integer',
         ];
     }
@@ -67,5 +67,4 @@ final class LedgerEntry extends Model
     {
         return $this->morphTo();
     }
-
 }

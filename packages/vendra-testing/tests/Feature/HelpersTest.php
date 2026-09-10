@@ -8,7 +8,7 @@ use Misaf\VendraSupport\Tenancy\NullTenantResolver;
 use Misaf\VendraTesting\Tests\Feature\HelpersTestUser;
 
 beforeEach(function (): void {
-    $this->app->instance(TenantResolver::class, new NullTenantResolver());
+    $this->app->instance(TenantResolver::class, new NullTenantResolver);
 });
 
 it('keeps tenant helpers a no-op when tenancy is disabled', function (): void {

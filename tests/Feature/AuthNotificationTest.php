@@ -11,11 +11,11 @@ use Misaf\VendraReseller\Models\ResellerUser;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 
 it('keeps authentication notifications independent of tenant context', function (): void {
-    expect(new VerifyEmailNotification())->toBeInstanceOf(NotTenantAware::class)
-        ->and(new VerifyEmailNotification())->toBeInstanceOf(ShouldQueueAfterCommit::class)
-        ->and(new ResetPasswordNotification())->toBeInstanceOf(NotTenantAware::class)
-        ->and(new ResetPasswordNotification())->toBeInstanceOf(ShouldQueueAfterCommit::class)
-        ->and(new LoginNotification())->toBeInstanceOf(ShouldQueueAfterCommit::class);
+    expect(new VerifyEmailNotification)->toBeInstanceOf(NotTenantAware::class)
+        ->and(new VerifyEmailNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class)
+        ->and(new ResetPasswordNotification)->toBeInstanceOf(NotTenantAware::class)
+        ->and(new ResetPasswordNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class)
+        ->and(new LoginNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class);
 });
 
 it('assigns transactional email to a Horizon supervisor', function (): void {
@@ -27,9 +27,9 @@ it('builds verification emails for console and reseller users', function (): voi
     foreach ([ConsoleUser::class, ResellerUser::class] as $userClass) {
         $user = new $userClass([
             'username' => 'nina',
-            'email'    => 'nina@local',
+            'email' => 'nina@local',
         ]);
-        $notification = new VerifyEmailNotification();
+        $notification = new VerifyEmailNotification;
         $notification->url = 'https://vendra.test/verify-email';
 
         $message = $notification->toMail($user);
@@ -43,9 +43,9 @@ it('builds password reset emails for console and reseller users', function (): v
     foreach ([ConsoleUser::class, ResellerUser::class] as $userClass) {
         $user = new $userClass([
             'username' => 'nina',
-            'email'    => 'nina@local',
+            'email' => 'nina@local',
         ]);
-        $notification = new ResetPasswordNotification();
+        $notification = new ResetPasswordNotification;
         $notification->url = 'https://vendra.test/reset-password';
 
         $message = $notification->toMail($user);

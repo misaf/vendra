@@ -21,17 +21,17 @@ final class SubscribeNewsletterSubscriberAction
                 ->lockForUpdate()
                 ->first();
 
-            if ( ! $subscriber instanceof NewsletterSubscriber) {
+            if (! $subscriber instanceof NewsletterSubscriber) {
                 return NewsletterSubscriber::query()->create($data);
             }
 
-            if ( ! $subscriber->trashed()) {
+            if (! $subscriber->trashed()) {
                 return $subscriber;
             }
 
             $subscriber->fill($data);
             $subscriber->forceFill([
-                'subscribed_at'   => now(),
+                'subscribed_at' => now(),
                 'unsubscribed_at' => null,
             ]);
             $subscriber->restore();

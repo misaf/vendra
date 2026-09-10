@@ -38,7 +38,7 @@ use Spatie\Translatable\HasTranslations;
 #[Fillable(['name', 'starts_at', 'ends_at', 'capacity', 'position', 'active'])]
 #[Hidden(['tenant_id'])]
 #[UseFactory(DeliverySlotFactory::class)]
-final class DeliverySlot extends Model implements Sortable, ShouldLogActivity
+final class DeliverySlot extends Model implements ShouldLogActivity, Sortable
 {
     use BelongsToTenant;
 
@@ -53,7 +53,7 @@ final class DeliverySlot extends Model implements Sortable, ShouldLogActivity
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
     public array $sortable = [
-        'order_column_name'  => 'position',
+        'order_column_name' => 'position',
         'sort_when_creating' => true,
     ];
 
@@ -68,14 +68,14 @@ final class DeliverySlot extends Model implements Sortable, ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'        => 'integer',
+            'id' => 'integer',
             'tenant_id' => 'integer',
-            'name'      => 'array',
+            'name' => 'array',
             'starts_at' => 'string',
-            'ends_at'   => 'string',
-            'capacity'  => 'integer',
-            'position'  => 'integer',
-            'active'    => 'boolean',
+            'ends_at' => 'string',
+            'capacity' => 'integer',
+            'position' => 'integer',
+            'active' => 'boolean',
         ];
     }
 
@@ -93,7 +93,7 @@ final class DeliverySlot extends Model implements Sortable, ShouldLogActivity
      */
     public function hasRoomOn(string $date): bool
     {
-        if (null === $this->capacity) {
+        if ($this->capacity === null) {
             return true;
         }
 
@@ -101,7 +101,7 @@ final class DeliverySlot extends Model implements Sortable, ShouldLogActivity
     }
 
     /**
-     * @param Builder<$this> $builder
+     * @param  Builder<$this>  $builder
      */
     public function scopeActive(Builder $builder): void
     {

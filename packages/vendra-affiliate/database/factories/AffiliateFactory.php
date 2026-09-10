@@ -21,11 +21,11 @@ final class AffiliateFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'            => User::factory(),
-            'code'               => mb_strtoupper(fake()->unique()->bothify('????####')),
+            'user_id' => User::factory(),
+            'code' => mb_strtoupper(fake()->unique()->bothify('????####')),
             'commission_percent' => fake()->randomElement([5, 10, 15, 20, 30, 40, 50]),
-            'signup_bounty'      => null,
-            'status'             => fake()->randomElement(AffiliateStatusEnum::cases()),
+            'signup_bounty' => null,
+            'status' => fake()->randomElement(AffiliateStatusEnum::cases()),
         ];
     }
 
@@ -34,34 +34,34 @@ final class AffiliateFactory extends Factory
      */
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function forUser(Model|int $user): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'user_id' => $user instanceof Model ? $user->getKey() : $user,
         ]);
     }
 
     public function active(): static
     {
-        return $this->state(fn(): array => ['status' => AffiliateStatusEnum::Active]);
+        return $this->state(fn (): array => ['status' => AffiliateStatusEnum::Active]);
     }
 
     public function suspended(): static
     {
-        return $this->state(fn(): array => ['status' => AffiliateStatusEnum::Suspended]);
+        return $this->state(fn (): array => ['status' => AffiliateStatusEnum::Suspended]);
     }
 
     public function withSignupBounty(int $amount): static
     {
-        return $this->state(fn(): array => ['signup_bounty' => $amount]);
+        return $this->state(fn (): array => ['signup_bounty' => $amount]);
     }
 }

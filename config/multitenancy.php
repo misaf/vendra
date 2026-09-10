@@ -2,18 +2,25 @@
 
 declare(strict_types=1);
 
+use App\Settings\Tasks\SwitchSettingsTask;
 use Illuminate\Broadcasting\BroadcastEvent;
 use Illuminate\Events\CallQueuedListener;
 use Illuminate\Mail\SendQueuedMailable;
 use Illuminate\Notifications\SendQueuedNotifications;
 use Illuminate\Queue\CallQueuedClosure;
+use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Services\StoreDomainFinder;
 use Misaf\VendraSubscription\Jobs\ProcessSubscriptionPayment;
+use Misaf\VendraTenant\Tasks\SwitchAppTask;
+use Misaf\VendraTenant\Tasks\SwitchMailTask;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
 use Spatie\Multitenancy\Actions\MakeQueueTenantAwareAction;
 use Spatie\Multitenancy\Actions\MakeTenantCurrentAction;
 use Spatie\Multitenancy\Actions\MigrateTenantAction;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Spatie\Multitenancy\Jobs\TenantAware;
+use Spatie\Multitenancy\Tasks\PrefixCacheTask;
+use Spatie\Multitenancy\Tasks\SwitchRouteCacheTask;
 
 return [
     /*
@@ -23,7 +30,7 @@ return [
      * This class should extend `Spatie\Multitenancy\TenantFinder\TenantFinder`
      *
      */
-    'tenant_finder' => Misaf\VendraStore\Services\StoreDomainFinder::class,
+    'tenant_finder' => StoreDomainFinder::class,
 
     /*
      * These fields are used by tenant:artisan command to match one or more tenant.
@@ -38,12 +45,12 @@ return [
      * A valid task is any class that implements Spatie\Multitenancy\Tasks\SwitchTenantTask
      */
     'switch_tenant_tasks' => [
-        Spatie\Multitenancy\Tasks\PrefixCacheTask::class,
+        PrefixCacheTask::class,
         // \Spatie\Multitenancy\Tasks\SwitchTenantDatabaseTask::class,
-        Spatie\Multitenancy\Tasks\SwitchRouteCacheTask::class,
-        Misaf\VendraTenant\Tasks\SwitchAppTask::class,
-        Misaf\VendraTenant\Tasks\SwitchMailTask::class,
-        App\Settings\Tasks\SwitchSettingsTask::class,
+        SwitchRouteCacheTask::class,
+        SwitchAppTask::class,
+        SwitchMailTask::class,
+        SwitchSettingsTask::class,
     ],
 
     /*
@@ -52,7 +59,7 @@ return [
      * It must  extend `Spatie\Multitenancy\Models\Tenant::class` or
      * implement `Spatie\Multitenancy\Contracts\IsTenant::class` interface
      */
-    'tenant_model' => Misaf\VendraStore\Models\Store::class,
+    'tenant_model' => Store::class,
 
     /*
      * If there is a current tenant when dispatching a job, the id of the current tenant
@@ -94,10 +101,10 @@ return [
      * Your custom action should always extend the default one.
      */
     'actions' => [
-        'make_tenant_current_action'     => MakeTenantCurrentAction::class,
-        'forget_current_tenant_action'   => ForgetCurrentTenantAction::class,
+        'make_tenant_current_action' => MakeTenantCurrentAction::class,
+        'forget_current_tenant_action' => ForgetCurrentTenantAction::class,
         'make_queue_tenant_aware_action' => MakeQueueTenantAwareAction::class,
-        'migrate_tenant'                 => MigrateTenantAction::class,
+        'migrate_tenant' => MigrateTenantAction::class,
     ],
 
     /*
@@ -107,11 +114,11 @@ return [
      * resolve JobDecorator to getAction() like so: JobDecorator::class => 'getAction'
      */
     'queueable_to_job' => [
-        SendQueuedMailable::class      => 'mailable',
+        SendQueuedMailable::class => 'mailable',
         SendQueuedNotifications::class => 'notification',
-        CallQueuedClosure::class       => 'closure',
-        CallQueuedListener::class      => 'class',
-        BroadcastEvent::class          => 'event',
+        CallQueuedClosure::class => 'closure',
+        CallQueuedListener::class => 'class',
+        BroadcastEvent::class => 'event',
     ],
 
     /*

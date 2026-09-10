@@ -17,21 +17,21 @@ final class VerificationFactory extends Factory
     {
         return [
             'user_profile_id' => UserProfile::factory(),
-            'type'            => fake()->randomElement(['identity', 'address', 'phone', 'document', 'kyc', 'other']),
-            'status'          => 'pending',
-            'provider'        => fake()->optional()->company(),
-            'reference'       => fake()->optional()->uuid(),
-            'country_code'    => fake()->optional()->countryCode(),
-            'metadata'        => ['source' => 'manual'],
-            'verified_at'     => null,
-            'expires_at'      => null,
-            'notes'           => fake()->optional()->sentence(),
+            'type' => fake()->randomElement(['identity', 'address', 'phone', 'document', 'kyc', 'other']),
+            'status' => 'pending',
+            'provider' => fake()->optional()->company(),
+            'reference' => fake()->optional()->uuid(),
+            'country_code' => fake()->optional()->countryCode(),
+            'metadata' => ['source' => 'manual'],
+            'verified_at' => null,
+            'expires_at' => null,
+            'notes' => fake()->optional()->sentence(),
         ];
     }
 
     public function forUserProfile(UserProfile $userProfile): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'user_profile_id' => $userProfile->id,
         ]);
     }

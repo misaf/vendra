@@ -58,10 +58,10 @@ return [
     */
 
     'queue' => [
-        'connection'    => env('NEWSLETTER_QUEUE_CONNECTION', ''),
-        'name'          => env('NEWSLETTER_QUEUE_NAME', 'default'),
-        'tries'         => (int) env('NEWSLETTER_QUEUE_TRIES', 3),
-        'timeout'       => (int) env('NEWSLETTER_QUEUE_TIMEOUT', 30),
+        'connection' => env('NEWSLETTER_QUEUE_CONNECTION', ''),
+        'name' => env('NEWSLETTER_QUEUE_NAME', 'default'),
+        'tries' => (int) env('NEWSLETTER_QUEUE_TRIES', 3),
+        'timeout' => (int) env('NEWSLETTER_QUEUE_TIMEOUT', 30),
         'email_timeout' => (int) env('NEWSLETTER_EMAIL_QUEUE_TIMEOUT', 30),
     ],
 
@@ -79,7 +79,7 @@ return [
 
     'schedule' => [
         'enabled' => env('NEWSLETTER_SCHEDULE_ENABLED', true),
-        'cron'    => env('NEWSLETTER_SCHEDULE_CRON', '* * * * *'),
+        'cron' => env('NEWSLETTER_SCHEDULE_CRON', '* * * * *'),
     ],
 
 ];

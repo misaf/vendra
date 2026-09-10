@@ -88,10 +88,10 @@ final class DeliveryZoneResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListDeliveryZones::route('/'),
+            'index' => ListDeliveryZones::route('/'),
             'create' => CreateDeliveryZone::route('/create'),
-            'view'   => ViewDeliveryZone::route('/{record}'),
-            'edit'   => EditDeliveryZone::route('/{record}/edit'),
+            'view' => ViewDeliveryZone::route('/{record}'),
+            'edit' => EditDeliveryZone::route('/{record}/edit'),
         ];
     }
 }

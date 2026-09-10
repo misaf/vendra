@@ -16,13 +16,13 @@ final class AttributeValueMapper implements ResourceMapper
 {
     public function map(Model $model): AttributeValueResource
     {
-        if ( ! $model instanceof AttributeValue) {
+        if (! $model instanceof AttributeValue) {
             throw new UnexpectedValueException('Expected an attribute value model.');
         }
 
         $attribute = $model->attribute;
 
-        if ( ! $attribute instanceof Attribute) {
+        if (! $attribute instanceof Attribute) {
             throw new UnexpectedValueException('An attribute value must belong to an attribute.');
         }
 

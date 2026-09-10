@@ -52,11 +52,11 @@ final class AffiliateTable
                 ->copyable()
                 ->copyMessage(__('vendra-affiliate::messages.link_copied'))
                 ->copyMessageDuration(1500)
-                ->copyableState(fn(Affiliate $record): string => $record->referralUrl())
+                ->copyableState(fn (Affiliate $record): string => $record->referralUrl())
                 ->label(__('vendra-affiliate::attributes.code'))
                 ->icon(Heroicon::CodeBracket)
                 ->searchable()
-                ->tooltip(fn(Affiliate $record): string => $record->referralUrl()),
+                ->tooltip(fn (Affiliate $record): string => $record->referralUrl()),
 
             TextColumn::make('commission_percent')
                 ->alignCenter()
@@ -69,7 +69,7 @@ final class AffiliateTable
                 ->extraCellAttributes(['dir' => 'ltr'])
                 ->label(__('vendra-affiliate::attributes.pending_balance'))
                 ->numeric(locale: 'en', maxDecimalPlaces: 0)
-                ->state(fn(Affiliate $record): int => $record->pendingBalance()),
+                ->state(fn (Affiliate $record): int => $record->pendingBalance()),
 
             TextColumn::make('status')
                 ->alignCenter()
@@ -82,8 +82,8 @@ final class AffiliateTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -92,8 +92,8 @@ final class AffiliateTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
@@ -105,8 +105,8 @@ final class AffiliateTable
         }
 
         return $table
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->withSum([
-                'commissions as pending_balance' => fn(Builder $commissionQuery): Builder => $commissionQuery
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withSum([
+                'commissions as pending_balance' => fn (Builder $commissionQuery): Builder => $commissionQuery
                     ->where('status', CommissionStatusEnum::Approved)
                     ->whereNull('affiliate_payout_id'),
             ], 'amount'))
@@ -161,6 +161,4 @@ final class AffiliateTable
             ])
             ->defaultSort(column: 'id', direction: 'desc');
     }
-
-
 }

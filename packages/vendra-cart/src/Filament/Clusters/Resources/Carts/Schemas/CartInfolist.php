@@ -22,7 +22,7 @@ final class CartInfolist
                 TextEntry::make('items_count')
                     ->badge()
                     ->label(__('vendra-cart::attributes.items'))
-                    ->state(fn(Cart $record): int => $record->items()->count()),
+                    ->state(fn (Cart $record): int => $record->items()->count()),
                 self::dateEntry('expires_at'),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
@@ -36,8 +36,8 @@ final class CartInfolist
             ->label(__("vendra-cart::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

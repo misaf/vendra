@@ -49,8 +49,8 @@ final class StorefrontConfigurationValidator
     private const array REQUIRED_OBJECTS = [
         'address' => ['locality', 'country'],
         'contact' => ['mobilePhone', 'officePhone', 'email', 'hoursOpen', 'hoursClose', 'mapQuery'],
-        'name'    => [],
-        'social'  => ['whatsappPhone', 'telegramUsername', 'instagramUsername'],
+        'name' => [],
+        'social' => ['whatsappPhone', 'telegramUsername', 'instagramUsername'],
     ];
 
     /**
@@ -65,7 +65,7 @@ final class StorefrontConfigurationValidator
         $rules = [];
 
         foreach (self::REQUIRED_STRINGS as $key) {
-            if ( ! in_array($key, self::IDENTITY, true)) {
+            if (! in_array($key, self::IDENTITY, true)) {
                 $rules[$key] = 'required|string';
             }
         }
@@ -74,7 +74,7 @@ final class StorefrontConfigurationValidator
             $rules[$key] = 'required|array';
 
             foreach ($fields as $field) {
-                $rules[$key . '.' . $field] = 'required|string';
+                $rules[$key.'.'.$field] = 'required|string';
             }
         }
 
@@ -84,15 +84,15 @@ final class StorefrontConfigurationValidator
     /** @throws InvalidArgumentException */
     public function validate(StorefrontProvisionRequest $request): void
     {
-        if (1 !== preg_match(self::SLUG, $request->slug)) {
+        if (preg_match(self::SLUG, $request->slug) !== 1) {
             throw new InvalidArgumentException('The storefront slug must contain lowercase letters, digits, and hyphens.');
         }
 
-        if (1 !== preg_match(self::DOMAIN, $request->domain)) {
+        if (preg_match(self::DOMAIN, $request->domain) !== 1) {
             throw new InvalidArgumentException('The storefront domain is invalid.');
         }
 
-        if ('' === mb_trim($request->image)) {
+        if (mb_trim($request->image) === '') {
             throw new InvalidArgumentException('A storefront image is required.');
         }
 
@@ -104,15 +104,15 @@ final class StorefrontConfigurationValidator
 
         $missing = $this->missingFields($configuration);
 
-        if ([] !== $missing) {
+        if ($missing !== []) {
             throw new InvalidArgumentException(
-                'The storefront configuration is missing required fields: ' . implode(', ', $missing) . '.',
+                'The storefront configuration is missing required fields: '.implode(', ', $missing).'.',
             );
         }
     }
 
     /**
-     * @param  array<array-key, mixed> $configuration
+     * @param  array<array-key, mixed>  $configuration
      * @return list<string>
      */
     private function missingFields(array $configuration): array
@@ -122,7 +122,7 @@ final class StorefrontConfigurationValidator
         foreach (self::REQUIRED_STRINGS as $key) {
             $value = $configuration[$key] ?? null;
 
-            if ( ! is_string($value) || '' === mb_trim($value)) {
+            if (! is_string($value) || mb_trim($value) === '') {
                 $missing[] = $key;
             }
         }
@@ -130,7 +130,7 @@ final class StorefrontConfigurationValidator
         foreach (self::REQUIRED_OBJECTS as $key => $fields) {
             $nested = $configuration[$key] ?? null;
 
-            if ( ! is_array($nested) || [] === $nested) {
+            if (! is_array($nested) || $nested === []) {
                 $missing[] = $key;
 
                 continue;
@@ -139,8 +139,8 @@ final class StorefrontConfigurationValidator
             foreach ($fields as $field) {
                 $value = $nested[$field] ?? null;
 
-                if ( ! is_string($value) || '' === mb_trim($value)) {
-                    $missing[] = $key . '.' . $field;
+                if (! is_string($value) || mb_trim($value) === '') {
+                    $missing[] = $key.'.'.$field;
                 }
             }
         }

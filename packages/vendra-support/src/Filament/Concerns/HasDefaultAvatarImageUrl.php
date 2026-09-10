@@ -11,9 +11,9 @@ trait HasDefaultAvatarImageUrl /** @phpstan-ignore trait.unused */
         $avatarName = str($name)
             ->trim()
             ->explode(' ')
-            ->map(static fn(string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
+            ->map(static fn (string $segment): string => filled($segment) ? mb_substr($segment, 0, 1) : '')
             ->join(' ');
 
-        return 'https://ui-avatars.com/api/?name=' . urlencode($avatarName) . '&color=FFFFFF';
+        return 'https://ui-avatars.com/api/?name='.urlencode($avatarName).'&color=FFFFFF';
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Config;
  */
 function packageConfigurationFiles(): array
 {
-    $configurationFiles = glob(dirname(__DIR__, 2) . '/packages/*/config/*.php');
+    $configurationFiles = glob(dirname(__DIR__, 2).'/packages/*/config/*.php');
 
     expect($configurationFiles)->not->toBeFalse();
 
@@ -23,7 +23,7 @@ it('loads every package configuration file through Laravel', function (string $c
     $configurationName = pathinfo($configurationFile, PATHINFO_FILENAME);
 
     expect(Config::has($configurationName))->toBeTrue();
-})->with(fn(): array => packageConfigurationFiles());
+})->with(fn (): array => packageConfigurationFiles());
 
 it('uses package-aligned filenames and strict PHP configuration', function (string $configurationFile): void {
     $configurationName = pathinfo($configurationFile, PATHINFO_FILENAME);
@@ -33,7 +33,7 @@ it('uses package-aligned filenames and strict PHP configuration', function (stri
     expect($configurationName)->toBe($packageName)
         ->and($contents)->not->toBeFalse()
         ->and($contents)->toContain('declare(strict_types=1);');
-})->with(fn(): array => packageConfigurationFiles());
+})->with(fn (): array => packageConfigurationFiles());
 
 it('keeps package configuration cache safe and lowercase', function (string $configurationFile): void {
     $configuration = require $configurationFile;
@@ -52,19 +52,19 @@ it('keeps package configuration cache safe and lowercase', function (string $con
                 continue;
             }
 
-            expect(is_scalar($value) || null === $value)->toBeTrue();
+            expect(is_scalar($value) || $value === null)->toBeTrue();
         }
     };
 
     $assertCacheSafe($configuration);
-})->with(fn(): array => packageConfigurationFiles());
+})->with(fn (): array => packageConfigurationFiles());
 
 it('casts newsletter environment settings for strict config accessors', function (): void {
     $environment = Env::getRepository();
     $variables = [
-        'NEWSLETTER_BATCH_CHUNK_SIZE'    => '250',
-        'NEWSLETTER_QUEUE_TRIES'         => '5',
-        'NEWSLETTER_QUEUE_TIMEOUT'       => '600',
+        'NEWSLETTER_BATCH_CHUNK_SIZE' => '250',
+        'NEWSLETTER_QUEUE_TRIES' => '5',
+        'NEWSLETTER_QUEUE_TIMEOUT' => '600',
         'NEWSLETTER_EMAIL_QUEUE_TIMEOUT' => '45',
     ];
 

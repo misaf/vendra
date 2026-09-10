@@ -55,7 +55,7 @@ final class StorefrontContainerRuntime
     public function pull(string $image): void
     {
         foreach ($this->containers->images()->pull($image) as $event) {
-            if (null !== $event->error) {
+            if ($event->error !== null) {
                 throw new RuntimeException(sprintf('Unable to pull image [%s]: %s.', $image, $event->error));
             }
         }
@@ -71,7 +71,7 @@ final class StorefrontContainerRuntime
         );
         $id = $response->json('Id');
 
-        if ( ! is_string($id) || '' === $id) {
+        if (! is_string($id) || $id === '') {
             throw new RuntimeException(sprintf('The runtime returned no id for container [%s].', $definition->name));
         }
 
@@ -96,9 +96,9 @@ final class StorefrontContainerRuntime
     public function remove(string $container): void
     {
         try {
-            $this->containers->raw()->request('DELETE', '/containers/' . rawurlencode($container), [
+            $this->containers->raw()->request('DELETE', '/containers/'.rawurlencode($container), [
                 'force' => true,
-                'v'     => true,
+                'v' => true,
             ]);
         } catch (NotFoundException) {
             // The requested end state is already satisfied.
@@ -115,7 +115,7 @@ final class StorefrontContainerRuntime
     {
         try {
             $payload = $this->containers->raw()
-                ->request('GET', '/containers/' . rawurlencode($container) . '/json')
+                ->request('GET', '/containers/'.rawurlencode($container).'/json')
                 ->json();
         } catch (NotFoundException) {
             return null;
@@ -151,7 +151,7 @@ final class StorefrontContainerRuntime
     {
         try {
             $payload = $this->containers->raw()
-                ->request('GET', '/networks/' . rawurlencode($name))
+                ->request('GET', '/networks/'.rawurlencode($name))
                 ->json();
         } catch (NotFoundException) {
             return null;
@@ -162,7 +162,7 @@ final class StorefrontContainerRuntime
 
         return new StorefrontNetwork(
             name: is_string($networkName) ? $networkName : $name,
-            driver: is_string($driver) && '' !== $driver ? $driver : null,
+            driver: is_string($driver) && $driver !== '' ? $driver : null,
         );
     }
 
@@ -174,7 +174,7 @@ final class StorefrontContainerRuntime
 
         try {
             $payload = $this->containers->raw()
-                ->request('GET', '/images/' . rawurlencode($image) . '/json')
+                ->request('GET', '/images/'.rawurlencode($image).'/json')
                 ->json();
         } catch (DockerException) {
             return null;
@@ -182,7 +182,7 @@ final class StorefrontContainerRuntime
 
         foreach ((array) Arr::get($payload, 'RepoDigests', []) as $digest) {
             if (is_string($digest) && Str::contains($digest, '@sha256:')) {
-                return 'sha256:' . Str::after($digest, '@sha256:');
+                return 'sha256:'.Str::after($digest, '@sha256:');
             }
         }
 
@@ -195,10 +195,10 @@ final class StorefrontContainerRuntime
         try {
             $this->containers->raw()->request(
                 $method,
-                '/containers/' . rawurlencode($container) . '/' . $operation,
+                '/containers/'.rawurlencode($container).'/'.$operation,
             );
         } catch (ApiException $exception) {
-            if ( ! in_array($exception->statusCode, $acceptedStatuses, true)) {
+            if (! in_array($exception->statusCode, $acceptedStatuses, true)) {
                 throw $exception;
             }
         }

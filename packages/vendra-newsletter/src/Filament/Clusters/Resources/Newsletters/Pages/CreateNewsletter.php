@@ -13,6 +13,6 @@ final class CreateNewsletter extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-newsletter::navigation.newsletter');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-newsletter::navigation.newsletter');
     }
 }

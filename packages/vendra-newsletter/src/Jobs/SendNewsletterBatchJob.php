@@ -34,7 +34,7 @@ final class SendNewsletterBatchJob implements ShouldBeUnique, ShouldQueue
     ) {
         $connection = Config::string('vendra-newsletter.queue.connection', '');
 
-        $this->onConnection('' === $connection ? null : $connection);
+        $this->onConnection($connection === '' ? null : $connection);
         $this->onQueue(Config::string('vendra-newsletter.queue.name', 'default'));
         $this->tries = Config::integer('vendra-newsletter.queue.tries', 3);
         $this->timeout = Config::integer('vendra-newsletter.queue.timeout', 30);
@@ -55,6 +55,6 @@ final class SendNewsletterBatchJob implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return $this->newsletterId . ':' . hash('sha256', implode(',', $this->subscriberIds));
+        return $this->newsletterId.':'.hash('sha256', implode(',', $this->subscriberIds));
     }
 }

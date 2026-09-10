@@ -54,8 +54,8 @@ it('shows tenant-scoped cart user and newsletter metrics', function (): void {
             return $stats;
         };
 
-        $valuesFor = static fn(string $widgetClass): array => array_map(
-            static fn(Stat $stat): mixed => $stat->getValue(),
+        $valuesFor = static fn (string $widgetClass): array => array_map(
+            static fn (Stat $stat): mixed => $stat->getValue(),
             $statsFor($widgetClass),
         );
 
@@ -65,23 +65,23 @@ it('shows tenant-scoped cart user and newsletter metrics', function (): void {
             ->and($valuesFor(NewsletterSubscriberOverviewWidget::class))->toBe(['3', '2', '1']);
 
         foreach ([
-            CartOverviewWidget::class                 => Heroicon::OutlinedShoppingCart,
-            UserOverviewWidget::class                 => Heroicon::OutlinedUsers,
-            NewsletterOverviewWidget::class           => Heroicon::OutlinedEnvelope,
+            CartOverviewWidget::class => Heroicon::OutlinedShoppingCart,
+            UserOverviewWidget::class => Heroicon::OutlinedUsers,
+            NewsletterOverviewWidget::class => Heroicon::OutlinedEnvelope,
             NewsletterSubscriberOverviewWidget::class => Heroicon::OutlinedEnvelope,
         ] as $widgetClass => $icon) {
             $stats = $statsFor($widgetClass);
 
             expect(array_map(
-                static fn(Stat $stat): mixed => $stat->getIcon(),
+                static fn (Stat $stat): mixed => $stat->getIcon(),
                 $stats,
             ))->each->toBe($icon)
                 ->and(array_map(
-                    static fn(Stat $stat): IconPosition => $stat->getDescriptionIconPosition(),
+                    static fn (Stat $stat): IconPosition => $stat->getDescriptionIconPosition(),
                     $stats,
                 ))->each->toBe(IconPosition::Before)
                 ->and(array_map(
-                    static fn(Stat $stat): int => count($stat->getChart() ?? []),
+                    static fn (Stat $stat): int => count($stat->getChart() ?? []),
                     $stats,
                 ))->each->toBeGreaterThan(0);
         }

@@ -18,12 +18,12 @@ final class OffboardStoreAction
     {
         $reason = mb_trim($reason);
 
-        if ('' === $reason) {
+        if ($reason === '') {
             throw new InvalidArgumentException('An offboarding reason is required.');
         }
 
         if (Str::length($reason) > self::MAX_REASON_LENGTH) {
-            throw new InvalidArgumentException('The offboarding reason may not exceed ' . self::MAX_REASON_LENGTH . ' characters.');
+            throw new InvalidArgumentException('The offboarding reason may not exceed '.self::MAX_REASON_LENGTH.' characters.');
         }
 
         return DB::transaction(function () use ($store, $reason): Store {
@@ -39,13 +39,13 @@ final class OffboardStoreAction
 
             $metadata = $lockedStore->metadata ?? [];
             Arr::set($metadata, 'offboarding', [
-                'reason'          => $reason,
-                'offboarded_at'   => now()->toIso8601String(),
+                'reason' => $reason,
+                'offboarded_at' => now()->toIso8601String(),
                 'previous_active' => $lockedStore->active,
             ]);
 
             $lockedStore->forceFill([
-                'active'   => false,
+                'active' => false,
                 'metadata' => $metadata,
             ])->save();
             $lockedStore->delete();

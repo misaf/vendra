@@ -42,7 +42,7 @@ final class TenantSchema
      */
     public static function column(): string
     {
-        if ( ! app()->bound(TenantResolver::class)) {
+        if (! app()->bound(TenantResolver::class)) {
             return self::DEFAULT_FOREIGN_KEY;
         }
 
@@ -51,7 +51,7 @@ final class TenantSchema
 
     public static function addTenantColumn(Blueprint $table, bool $nullable = false): void
     {
-        if ( ! self::enabled()) {
+        if (! self::enabled()) {
             return;
         }
 
@@ -60,7 +60,7 @@ final class TenantSchema
 
     public static function addTenantIndex(Blueprint $table): void
     {
-        if ( ! self::enabled()) {
+        if (! self::enabled()) {
             return;
         }
 
@@ -68,15 +68,14 @@ final class TenantSchema
     }
 
     /**
-     * @param string|list<string> $columns
-     *
+     * @param  string|list<string>  $columns
      * @return list<string>
      */
     public static function tenantIndex(string|array $columns): array
     {
         $columns = is_array($columns) ? $columns : [$columns];
 
-        if ( ! self::enabled()) {
+        if (! self::enabled()) {
             return $columns;
         }
 

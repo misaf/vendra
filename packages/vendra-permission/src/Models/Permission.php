@@ -30,18 +30,17 @@ final class Permission extends SpatiePermission implements ShouldLogActivity
     /** @use HasFactory<PermissionFactory> */
     use HasFactory;
 
-
     /**
      * @return array<string, string>
      */
     protected function casts(): array
     {
         return [
-            'id'          => 'integer',
-            'tenant_id'   => 'integer',
-            'name'        => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'name' => 'string',
             'description' => 'string',
-            'guard_name'  => 'string',
+            'guard_name' => 'string',
         ];
     }
 }

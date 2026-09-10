@@ -23,11 +23,11 @@ final readonly class SecureMcpTransport
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): Response $next
+     * @param  Closure(Request): Response  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ( ! $request->is('mcp')) {
+        if (! $request->is('mcp')) {
             return $next($request);
         }
 
@@ -43,9 +43,9 @@ final readonly class SecureMcpTransport
         $response = $this->pipeline
             ->send($request)
             ->through($middleware)
-            ->then(fn(Request $request): Response => $next($request));
+            ->then(fn (Request $request): Response => $next($request));
 
-        if ( ! $response instanceof Response) {
+        if (! $response instanceof Response) {
             throw new UnexpectedValueException('The secure MCP transport pipeline must return a response.');
         }
 

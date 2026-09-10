@@ -18,7 +18,7 @@ final class ViewDeliverySlot extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-delivery::navigation.delivery_slot');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-delivery::navigation.delivery_slot');
     }
 
     protected function getHeaderActions(): array

@@ -37,7 +37,7 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
     ) {
         $connection = Config::string('vendra-newsletter.queue.connection', '');
 
-        $this->onConnection('' === $connection ? null : $connection);
+        $this->onConnection($connection === '' ? null : $connection);
         $this->onQueue(Config::string('vendra-newsletter.queue.name', 'default'));
         $this->tries = Config::integer('vendra-newsletter.queue.tries', 3);
         $this->timeout = Config::integer('vendra-newsletter.queue.email_timeout', 30);
@@ -52,7 +52,7 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
                 NewsletterContextKeys::NEWSLETTER_ID => $this->newsletterId,
                 NewsletterContextKeys::SUBSCRIBER_ID => $this->subscriberId,
             ],
-        ))->scope(fn() => $this->send());
+        ))->scope(fn () => $this->send());
     }
 
     private function send(): void
@@ -60,17 +60,17 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
         $newsletter = Newsletter::query()->find($this->newsletterId);
         $subscriber = NewsletterSubscriber::query()->find($this->subscriberId);
 
-        if ( ! $newsletter instanceof Newsletter || ! $subscriber instanceof NewsletterSubscriber) {
+        if (! $newsletter instanceof Newsletter || ! $subscriber instanceof NewsletterSubscriber) {
             return;
         }
 
-        if ( ! $subscriber->isSubscribed()) {
+        if (! $subscriber->isSubscribed()) {
             return;
         }
 
         DB::transaction(function () use ($newsletter, $subscriber): void {
             DB::table('newsletter_deliveries')->insertOrIgnore([
-                'newsletter_id'            => $newsletter->getKey(),
+                'newsletter_id' => $newsletter->getKey(),
                 'newsletter_subscriber_id' => $subscriber->getKey(),
             ]);
 
@@ -80,11 +80,11 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
                 ->lockForUpdate()
                 ->first(['sent_at']);
 
-            if ( ! is_object($delivery)) {
+            if (! is_object($delivery)) {
                 throw new RuntimeException('Unable to create the newsletter delivery receipt.');
             }
 
-            if (null !== $delivery->sent_at) {
+            if ($delivery->sent_at !== null) {
                 return;
             }
 
@@ -99,6 +99,6 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return $this->newsletterId . ':' . $this->subscriberId;
+        return $this->newsletterId.':'.$this->subscriberId;
     }
 }

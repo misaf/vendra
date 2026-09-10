@@ -45,8 +45,8 @@ it('saves a product to the default list and answers with the whole list', functi
     $this->actingAs($user)
         ->postJson('/api/customers/saved-items', [
             'sellableType' => 'product',
-            'sellableId'   => $product->id,
-            'metadata'     => ['size' => 'large'],
+            'sellableId' => $product->id,
+            'metadata' => ['size' => 'large'],
         ])
         ->assertOk()
         ->assertJsonPath('isDefault', true)

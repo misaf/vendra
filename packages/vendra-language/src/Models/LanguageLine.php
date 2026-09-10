@@ -45,7 +45,7 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
     public static function getTranslationsForGroup(string $locale, string $group, ?string $namespace = null): array
     {
         return Cache::rememberForever(
-            static::getCacheKey($group, $locale, $namespace),
+            self::getCacheKey($group, $locale, $namespace),
             function () use ($group, $locale, $namespace): array {
                 return static::query()
                     ->where('namespace', $namespace)
@@ -54,11 +54,11 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
                     ->reduce(function (array $lines, self $languageLine) use ($locale, $group): array {
                         $translation = $languageLine->text[$locale] ?? null;
 
-                        if ( ! is_string($translation) || blank($translation)) {
+                        if (! is_string($translation) || blank($translation)) {
                             return $lines;
                         }
 
-                        if ('*' === $group) {
+                        if ($group === '*') {
                             $lines[$languageLine->key] = $translation;
 
                             return $lines;
@@ -75,9 +75,9 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
     public static function getCacheKey(string $group, string $locale, ?string $namespace = null): string
     {
         $tenantId = TenantAwareness::currentId();
-        $group = null === $namespace ? $group : "{$namespace}::{$group}";
+        $group = $namespace === null ? $group : "{$namespace}::{$group}";
 
-        if (null !== $tenantId) {
+        if ($tenantId !== null) {
             $group = "tenant-{$tenantId}.{$group}";
         }
 
@@ -88,7 +88,7 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
     {
         foreach ($this->getTranslatedLocales() as $locale) {
             if (is_string($locale)) {
-                Cache::forget(static::getCacheKey($this->group, $locale, $this->namespace));
+                Cache::forget(self::getCacheKey($this->group, $locale, $this->namespace));
             }
         }
     }
@@ -112,7 +112,7 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
         $namespace = $this->getRawOriginal('namespace');
         $text = $this->getRawOriginal('text');
 
-        if ( ! is_string($group)) {
+        if (! is_string($group)) {
             return;
         }
 
@@ -120,13 +120,13 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
             $text = json_decode($text, true);
         }
 
-        if ( ! is_array($text)) {
+        if (! is_array($text)) {
             return;
         }
 
         foreach (array_keys($text) as $locale) {
             if (is_string($locale)) {
-                Cache::forget(static::getCacheKey(
+                Cache::forget(self::getCacheKey(
                     $group,
                     $locale,
                     is_string($namespace) ? $namespace : null,

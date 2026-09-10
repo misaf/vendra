@@ -17,15 +17,14 @@ use Misaf\VendraOrder\Models\Order;
 final class OrderLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<Order> $builder
-     *
+     * @param  Builder<Order>  $builder
      * @return Builder<Order>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
         $user = Auth::user();
 
-        if ( ! $user instanceof Authenticatable) {
+        if (! $user instanceof Authenticatable) {
             return $builder->whereRaw('1 = 0');
         }
 
@@ -34,7 +33,7 @@ final class OrderLinksHandler implements LinksHandlerInterface
             ->where('customer_type', $user->getMorphClass())
             ->where('customer_id', $user->getAuthIdentifier());
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

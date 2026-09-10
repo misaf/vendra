@@ -16,7 +16,7 @@ use Misaf\VendraSupport\Capabilities\Countries;
 it('uses a localized country select and free-text administrative fields', function (): void {
     app()->setLocale('fa');
 
-    $relationManager = new AddressesRelationManager();
+    $relationManager = new AddressesRelationManager;
     $schema = $relationManager->form(Schema::make($relationManager));
     $fields = $schema->getFlatFields();
 
@@ -33,7 +33,7 @@ it('uses a localized country select and free-text administrative fields', functi
 it('updates verification state from table toggle', function (): void {
     makeCurrentTestTenant();
 
-    $relationManager = new AddressesRelationManager();
+    $relationManager = new AddressesRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
     $address = AddressFactory::new()->createOne();
     $verifiedColumn = $table->getColumn('verified_at');
@@ -52,7 +52,7 @@ it('updates verification state from table toggle', function (): void {
 it('shows primary badge on label column for primary addresses', function (): void {
     makeCurrentTestTenant();
 
-    $relationManager = new AddressesRelationManager();
+    $relationManager = new AddressesRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
     $address = AddressFactory::new()->createOne(['is_primary' => true]);
     $labelColumn = $table->getColumn('label');

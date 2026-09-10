@@ -30,12 +30,12 @@ it('orders admin dashboard widgets by unique priority', function (): void {
 
     $registeredWidgets = array_values(array_filter(
         Filament::getPanel('admin')->getWidgets(),
-        fn(mixed $widget): bool => is_string($widget) && in_array($widget, $expectedWidgets, true),
+        fn (mixed $widget): bool => is_string($widget) && in_array($widget, $expectedWidgets, true),
     ));
 
     expect($registeredWidgets)->toBe($expectedWidgets)
         ->and(array_map(
-            fn(string $widget): int => $widget::getSort(),
+            fn (string $widget): int => $widget::getSort(),
             $expectedWidgets,
         ))->toBe(range(1, 6));
 });
@@ -126,16 +126,16 @@ it('groups all dashboard widgets beside a transaction chart', function (): void 
             ->and($components[0]->getColumnSpan('lg'))->toBe(2)
             ->and($dashboardWidgets)->not->toBeEmpty()
             ->and(array_map(
-                static fn(Component $component): array|int|null => $component->getColumnOrder('default'),
+                static fn (Component $component): array|int|null => $component->getColumnOrder('default'),
                 $dashboardWidgets,
             ))->toBe(range(count($dashboardWidgets), 1))
             ->and(array_map(
-                static fn(Component $component): array|int|null => $component->getColumnOrder('md'),
+                static fn (Component $component): array|int|null => $component->getColumnOrder('md'),
                 $dashboardWidgets,
             ))->toBe(range(1, count($dashboardWidgets)))
             ->and(array_filter(
                 $dashboardWidgets,
-                static fn(Component $component): bool => $component->isLiberatedFromContainerGrid(),
+                static fn (Component $component): bool => $component->isLiberatedFromContainerGrid(),
             ))->toBeEmpty()
             ->and($components[1])->toBeInstanceOf(Livewire::class)
             ->and($components[1]->getComponent())->toBe(TransactionTypeChartWidget::class)

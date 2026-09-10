@@ -24,6 +24,6 @@ final class TenantLocaleResolver implements LocaleResolver
             ->ordered()
             ->value('locale');
 
-        return is_string($locale) && '' !== $locale ? $locale : null;
+        return is_string($locale) && $locale !== '' ? $locale : null;
     }
 }

@@ -32,7 +32,7 @@ final class FeatureToggleCommand extends Command
     {
         $actionInput = $this->getStringArgument('action');
 
-        if (null === $actionInput) {
+        if ($actionInput === null) {
             $this->error('Argument [action] must be a string.');
 
             return self::INVALID;
@@ -40,20 +40,20 @@ final class FeatureToggleCommand extends Command
 
         $action = Str::lower($actionInput);
 
-        if ( ! in_array($action, ['activate', 'deactivate'], true)) {
+        if (! in_array($action, ['activate', 'deactivate'], true)) {
             $this->error('Action must be one of: activate, deactivate.');
 
             return self::INVALID;
         }
 
-        if ( ! Config::boolean('vendra-permission.features.enabled', false)) {
+        if (! Config::boolean('vendra-permission.features.enabled', false)) {
             $this->error('Feature resolution is disabled via vendra-permission.features.enabled.');
             $this->info('Set VENDRA_PERMISSION_FEATURES_ENABLED=true and try again.');
 
             return self::INVALID;
         }
 
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             $this->error('This command requires a tenant provider to be installed.');
 
             return self::INVALID;
@@ -61,7 +61,7 @@ final class FeatureToggleCommand extends Command
 
         $tenantInput = $this->getStringArgument('tenant');
 
-        if (null === $tenantInput) {
+        if ($tenantInput === null) {
             $this->error('Argument [tenant] must be a string.');
 
             return self::INVALID;
@@ -69,7 +69,7 @@ final class FeatureToggleCommand extends Command
 
         $tenant = $this->resolveTenant($tenantInput);
 
-        if ( ! $tenant instanceof Model) {
+        if (! $tenant instanceof Model) {
             $this->error("Tenant [{$tenantInput}] was not found.");
 
             return self::FAILURE;
@@ -77,7 +77,7 @@ final class FeatureToggleCommand extends Command
 
         $featureInput = $this->getStringArgument('feature');
 
-        if (null === $featureInput) {
+        if ($featureInput === null) {
             $this->error('Argument [feature] must be a string.');
 
             return self::INVALID;
@@ -85,7 +85,7 @@ final class FeatureToggleCommand extends Command
 
         $features = $this->resolveFeatures($featureInput);
 
-        if ([] === $features) {
+        if ($features === []) {
             $this->error("Feature [{$featureInput}] is invalid.");
             $this->info('Accepted values:');
 
@@ -101,7 +101,7 @@ final class FeatureToggleCommand extends Command
         $interaction = Feature::for($tenant);
 
         foreach ($features as $feature) {
-            if ('activate' === $action) {
+            if ($action === 'activate') {
                 $interaction->activate($feature->value);
             } else {
                 $interaction->deactivate($feature->value);
@@ -112,16 +112,16 @@ final class FeatureToggleCommand extends Command
             'Tenant [%s] (%d): %s %d feature(s).',
             $tenant->slug,
             $tenant->id,
-            'activate' === $action ? 'activated' : 'deactivated',
+            $action === 'activate' ? 'activated' : 'deactivated',
             count($features),
         ));
 
         $this->table(
             ['Feature', 'Status'],
             array_map(
-                static fn(PermissionFeatureEnum $feature): array => [
+                static fn (PermissionFeatureEnum $feature): array => [
                     $feature->value,
-                    'activate' === $action ? 'active' : 'inactive',
+                    $action === 'activate' ? 'active' : 'inactive',
                 ],
                 $features,
             ),
@@ -142,7 +142,7 @@ final class FeatureToggleCommand extends Command
     {
         $normalizedInput = Str::of($featureInput)->trim()->lower()->value();
 
-        if ('all' === $normalizedInput) {
+        if ($normalizedInput === 'all') {
             return PermissionFeatureEnum::cases();
         }
 

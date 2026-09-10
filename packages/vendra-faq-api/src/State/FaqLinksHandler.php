@@ -15,8 +15,7 @@ use Misaf\VendraFaq\Models\Faq;
 final class FaqLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<Faq> $builder
-     *
+     * @param  Builder<Faq>  $builder
      * @return Builder<Faq>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -26,10 +25,10 @@ final class FaqLinksHandler implements LinksHandlerInterface
             // localized name — so selecting the rest of the row was dead weight
             // on every page of a collection response.
             ->with(['faqCategory:id,name', 'multimedia'])
-            ->whereHas('faqCategory', fn(Builder $query): Builder => $query->where('active', true))
+            ->whereHas('faqCategory', fn (Builder $query): Builder => $query->where('active', true))
             ->where('active', true);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

@@ -28,7 +28,7 @@ it('restores trashed domains when a property is restored', function (): void {
     $store->restore();
 
     expect($store->fresh()?->trashed())->toBeFalse()
-        ->and($store->execute(fn() => $store->storeDomains()->whereKey($domain->getKey())->exists()))->toBeTrue();
+        ->and($store->execute(fn () => $store->storeDomains()->whereKey($domain->getKey())->exists()))->toBeTrue();
 });
 
 it('permanently removes domains when a property is force-deleted', function (): void {

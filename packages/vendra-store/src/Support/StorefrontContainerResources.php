@@ -18,23 +18,23 @@ final class StorefrontContainerResources
         public readonly ?int $memoryReservationMegabytes = null,
         public readonly ?int $pidsLimit = null,
     ) {
-        if (null !== $cpus && $cpus <= 0) {
+        if ($cpus !== null && $cpus <= 0) {
             throw new InvalidArgumentException('A CPU limit must be greater than zero.');
         }
 
-        if (null !== $memoryMegabytes && $memoryMegabytes <= 0) {
+        if ($memoryMegabytes !== null && $memoryMegabytes <= 0) {
             throw new InvalidArgumentException('A memory limit must be greater than zero.');
         }
 
-        if (null !== $memoryReservationMegabytes && $memoryReservationMegabytes <= 0) {
+        if ($memoryReservationMegabytes !== null && $memoryReservationMegabytes <= 0) {
             throw new InvalidArgumentException('A memory reservation must be greater than zero.');
         }
 
-        if (null !== $pidsLimit && $pidsLimit <= 0) {
+        if ($pidsLimit !== null && $pidsLimit <= 0) {
             throw new InvalidArgumentException('A PID limit must be greater than zero.');
         }
 
-        if (null !== $memoryMegabytes && null !== $memoryReservationMegabytes && $memoryReservationMegabytes > $memoryMegabytes) {
+        if ($memoryMegabytes !== null && $memoryReservationMegabytes !== null && $memoryReservationMegabytes > $memoryMegabytes) {
             throw new InvalidArgumentException('A memory reservation may not exceed the memory limit.');
         }
     }
@@ -43,10 +43,10 @@ final class StorefrontContainerResources
     public function enginePayload(): array
     {
         return array_filter([
-            'NanoCpus'          => null === $this->cpus ? null : (int) round($this->cpus * self::NANO_CPUS),
-            'Memory'            => null === $this->memoryMegabytes ? null : $this->memoryMegabytes * self::BYTES_PER_MEGABYTE,
-            'MemoryReservation' => null === $this->memoryReservationMegabytes ? null : $this->memoryReservationMegabytes * self::BYTES_PER_MEGABYTE,
-            'PidsLimit'         => $this->pidsLimit,
-        ], static fn(?int $value): bool => null !== $value);
+            'NanoCpus' => $this->cpus === null ? null : (int) round($this->cpus * self::NANO_CPUS),
+            'Memory' => $this->memoryMegabytes === null ? null : $this->memoryMegabytes * self::BYTES_PER_MEGABYTE,
+            'MemoryReservation' => $this->memoryReservationMegabytes === null ? null : $this->memoryReservationMegabytes * self::BYTES_PER_MEGABYTE,
+            'PidsLimit' => $this->pidsLimit,
+        ], static fn (?int $value): bool => $value !== null);
     }
 }

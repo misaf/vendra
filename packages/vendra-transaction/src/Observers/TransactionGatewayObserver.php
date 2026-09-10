@@ -10,20 +10,20 @@ final class TransactionGatewayObserver
 {
     public function creating(TransactionGateway $gateway): void
     {
-        if ( ! $gateway->active) {
+        if (! $gateway->active) {
             $gateway->is_default = false;
 
             return;
         }
 
-        if ( ! TransactionGateway::query()->active()->exists()) {
+        if (! TransactionGateway::query()->active()->exists()) {
             $gateway->is_default = true;
         }
     }
 
     public function saving(TransactionGateway $gateway): void
     {
-        if ( ! $gateway->active) {
+        if (! $gateway->active) {
             $gateway->is_default = false;
 
             return;
@@ -38,14 +38,14 @@ final class TransactionGatewayObserver
             return;
         }
 
-        if ($gateway->exists && true === $gateway->getOriginal('is_default')) {
+        if ($gateway->exists && $gateway->getOriginal('is_default') === true) {
             $hasAnotherDefault = TransactionGateway::query()
                 ->active()
                 ->where('is_default', true)
                 ->whereKeyNot($gateway->getKey())
                 ->exists();
 
-            if ( ! $hasAnotherDefault) {
+            if (! $hasAnotherDefault) {
                 $gateway->is_default = true;
             }
         }
@@ -60,7 +60,7 @@ final class TransactionGatewayObserver
 
     public function deleted(TransactionGateway $gateway): void
     {
-        if ( ! $gateway->is_default) {
+        if (! $gateway->is_default) {
             return;
         }
 

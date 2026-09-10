@@ -40,7 +40,7 @@ it('rejects an inactive image for a new deployment', function (): void {
     ]);
     $store = createTestTenant();
 
-    expect(fn() => app(RequestStorefrontDeploymentAction::class)->execute(
+    expect(fn () => app(RequestStorefrontDeploymentAction::class)->execute(
         $store,
         'acme.test',
         [

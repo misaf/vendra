@@ -23,11 +23,11 @@ final class ActivityLogPlugin implements Plugin
     {
         $panel
             ->discoverResources(
-                in: __DIR__ . '/Filament/Clusters/Resources',
+                in: __DIR__.'/Filament/Clusters/Resources',
                 for: 'Misaf\\VendraActivityLog\\Filament\\Clusters\\Resources',
             )
             ->discoverWidgets(
-                in: __DIR__ . '/Filament/Widgets',
+                in: __DIR__.'/Filament/Widgets',
                 for: 'Misaf\\VendraActivityLog\\Filament\\Widgets',
             );
     }

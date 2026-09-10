@@ -68,7 +68,7 @@ final class ReconcileStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
     {
         Log::error('Reconciling a storefront failed; its runtime state is unknown.', [
             'deployment_id' => $this->deploymentId,
-            'exception'     => $exception?->getMessage(),
+            'exception' => $exception?->getMessage(),
         ]);
     }
 }

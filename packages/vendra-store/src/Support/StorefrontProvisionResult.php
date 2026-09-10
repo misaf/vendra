@@ -34,6 +34,6 @@ final class StorefrontProvisionResult
 
     private static function filled(?string $value): ?string
     {
-        return null !== $value && '' !== mb_trim($value) ? mb_trim($value) : null;
+        return $value !== null && mb_trim($value) !== '' ? mb_trim($value) : null;
     }
 }

@@ -14,8 +14,8 @@ it('applies shared tenant ownership to permission models', function (): void {
 });
 
 it('hides the tenant association from permission serialization', function (): void {
-    expect((new Permission())->getHidden())->toContain('tenant_id')
-        ->and((new Role())->getHidden())->toContain('tenant_id');
+    expect((new Permission)->getHidden())->toContain('tenant_id')
+        ->and((new Role)->getHidden())->toContain('tenant_id');
 });
 
 it('defines policy permissions for the permission resource', function (): void {

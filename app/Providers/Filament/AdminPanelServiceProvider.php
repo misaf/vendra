@@ -35,8 +35,8 @@ final class AdminPanelServiceProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         Schema::configureUsing(
-            static fn(Schema $schema): Schema => $schema->extraAttributes(
-                static fn(): array => 'headerWidgets' === $schema->getKey()
+            static fn (Schema $schema): Schema => $schema->extraAttributes(
+                static fn (): array => $schema->getKey() === 'headerWidgets'
                     ? ['class' => 'max-md:order-last']
                     : [],
                 merge: true,
@@ -46,10 +46,10 @@ final class AdminPanelServiceProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->brandLogo(fn() => asset('images/vendra-logo.svg'))
+            ->brandLogo(fn () => asset('images/vendra-logo.svg'))
             ->brandLogoHeight('2rem')
             ->brandName('Vendra')
-            ->darkModeBrandLogo(fn() => asset('images/vendra-logo-dark.svg'))
+            ->darkModeBrandLogo(fn () => asset('images/vendra-logo-dark.svg'))
             ->databaseNotifications()
             ->databaseTransactions()
             ->discoverClusters(app_path('Filament/Admin/Clusters'), 'App\\Filament\\Admin\\Clusters')
@@ -85,7 +85,7 @@ final class AdminPanelServiceProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->font(
-                fn(): string => app()->isLocale('fa') ? 'Vazirmatn' : 'Google',
+                fn (): string => app()->isLocale('fa') ? 'Vazirmatn' : 'Google',
                 provider: SpatieGoogleFontProvider::class,
             )
             ->path('')
@@ -101,11 +101,9 @@ final class AdminPanelServiceProvider extends PanelProvider
      */
     private function plugins(): array
     {
-        $plugins = [
+        return [
             SpatieTranslatablePlugin::make()
                 ->defaultLocales(Locales::configured()),
         ];
-
-        return $plugins;
     }
 }

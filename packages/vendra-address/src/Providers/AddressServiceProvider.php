@@ -32,7 +32,7 @@ final class AddressServiceProvider extends PackageServiceProvider
 
         UserProfile::resolveRelationUsing(
             'addresses',
-            fn(UserProfile $profile) => $profile->hasMany(Address::class),
+            fn (UserProfile $profile) => $profile->hasMany(Address::class),
         );
 
         $this->app->make(UserProfileRelationManagers::class)

@@ -17,9 +17,9 @@ const STUDIO_LONGITUDE = 51.3890;
 
 it('prices a pin inside the free band at nothing', function (): void {
     DeliveryZoneFactory::new()->freeWithin(12)->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 1,
+        'position' => 1,
     ]);
 
     $quote = app(DeliveryZoneMatcher::class)->quoteFor(35.6950, STUDIO_LONGITUDE, 'USD');
@@ -32,14 +32,14 @@ it('prices a pin inside the free band at nothing', function (): void {
 
 it('charges the first band that still covers the pin', function (): void {
     $free = DeliveryZoneFactory::new()->freeWithin(2)->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 1,
+        'position' => 1,
     ]);
     $paid = DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 2,
+        'position' => 2,
     ]);
 
     $quote = app(DeliveryZoneMatcher::class)->quoteFor(35.7219, 51.2334, 'USD');
@@ -52,9 +52,9 @@ it('charges the first band that still covers the pin', function (): void {
 
 it('marks an address beyond every band as quoted by hand', function (): void {
     DeliveryZoneFactory::new()->freeWithin(12)->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 1,
+        'position' => 1,
     ]);
 
     // Isfahan, several hundred kilometres from the studio.
@@ -68,14 +68,14 @@ it('marks an address beyond every band as quoted by hand', function (): void {
 
 it('uses the outermost quote-by-hand band when one is configured', function (): void {
     DeliveryZoneFactory::new()->freeWithin(12)->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 1,
+        'position' => 1,
     ]);
     $outer = DeliveryZoneFactory::new()->quotedByHand()->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 2,
+        'position' => 2,
     ]);
 
     $quote = app(DeliveryZoneMatcher::class)->quoteFor(32.6546, 51.6680, 'USD');
@@ -87,9 +87,9 @@ it('uses the outermost quote-by-hand band when one is configured', function (): 
 
 it('ignores inactive bands', function (): void {
     DeliveryZoneFactory::new()->freeWithin(12)->inactive()->createOne([
-        'origin_latitude'  => STUDIO_LATITUDE,
+        'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
-        'position'         => 1,
+        'position' => 1,
     ]);
 
     $quote = app(DeliveryZoneMatcher::class)->quoteFor(35.6950, STUDIO_LONGITUDE, 'USD');

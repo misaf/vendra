@@ -29,7 +29,7 @@ final class AddPanelToRequestJobContext
     {
         $panel = Filament::getCurrentPanel();
 
-        if (null !== $panel) {
+        if ($panel !== null) {
             (new RequestJobContext(
                 metadata: [ContextKeys::PANEL_ID => $panel->getId()],
             ))->add();

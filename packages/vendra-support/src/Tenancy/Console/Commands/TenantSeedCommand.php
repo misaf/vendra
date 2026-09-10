@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Tenancy\Console\Commands;
 
-use function Laravel\Prompts\search;
-
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+
+use function Laravel\Prompts\search;
 
 abstract class TenantSeedCommand extends SeedCommand
 {
@@ -20,20 +20,20 @@ abstract class TenantSeedCommand extends SeedCommand
      */
     protected function prepareForSeeding(): bool
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return true;
         }
 
         $tenantResolver = app(TenantResolver::class);
         $tenantInput = $this->resolveTenantInput($tenantResolver);
 
-        if ( ! is_int($tenantInput) && ! is_string($tenantInput)) {
+        if (! is_int($tenantInput) && ! is_string($tenantInput)) {
             $this->error('A tenant is required when a tenant provider is installed.');
 
             return false;
         }
 
-        if ( ! $tenantResolver->makeCurrent($tenantInput)) {
+        if (! $tenantResolver->makeCurrent($tenantInput)) {
             $this->error(sprintf('Tenant [%s] was not found.', $tenantInput));
 
             return false;
@@ -50,14 +50,14 @@ abstract class TenantSeedCommand extends SeedCommand
             return $tenantInput;
         }
 
-        if ( ! $this->input->isInteractive()) {
+        if (! $this->input->isInteractive()) {
             return null;
         }
 
         return search(
             label: 'Which tenant should receive seed data?',
             placeholder: 'Search tenant slug',
-            options: fn(string $value): array => $tenantResolver->searchOptions($value, self::TENANT_SEARCH_LIMIT),
+            options: fn (string $value): array => $tenantResolver->searchOptions($value, self::TENANT_SEARCH_LIMIT),
             hint: 'Seeders run only for the selected tenant.',
             scroll: self::TENANT_SEARCH_LIMIT,
         );

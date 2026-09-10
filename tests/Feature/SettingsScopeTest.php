@@ -20,7 +20,7 @@ function settingsRowCount(string $group, string $name, ?string $scope = null): i
 {
     $query = DB::table('settings')->where('group', $group)->where('name', $name);
 
-    if (null !== $scope) {
+    if ($scope !== null) {
         $query->where('scope', $scope);
     }
 

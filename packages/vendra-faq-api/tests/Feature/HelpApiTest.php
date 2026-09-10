@@ -23,7 +23,7 @@ it('exposes and filters active FAQs with storefront metadata', function (): void
     ]);
 
     $this->getJson("/api/content/faqs?categoryId={$topic->id}&search=roses&sort=position", [
-        'Accept'          => 'application/vnd.api+json',
+        'Accept' => 'application/vnd.api+json',
         'Accept-Language' => 'en',
     ])
         ->assertOk()

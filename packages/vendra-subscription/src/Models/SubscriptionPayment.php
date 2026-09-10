@@ -45,7 +45,7 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     use HasFactory;
 
     protected $attributes = [
-        'status'        => SubscriptionPaymentStatus::Pending->value,
+        'status' => SubscriptionPaymentStatus::Pending->value,
         'attempt_count' => 0,
     ];
 
@@ -56,15 +56,15 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     {
         return [
             'subscription_id' => 'integer',
-            'payer_id'        => 'integer',
-            'amount'          => 'integer',
-            'status'          => SubscriptionPaymentStatus::class,
-            'attempt_count'   => 'integer',
-            'metadata'        => 'array',
-            'processing_at'   => 'datetime',
-            'paid_at'         => 'datetime',
-            'failed_at'       => 'datetime',
-            'next_retry_at'   => 'datetime',
+            'payer_id' => 'integer',
+            'amount' => 'integer',
+            'status' => SubscriptionPaymentStatus::class,
+            'attempt_count' => 'integer',
+            'metadata' => 'array',
+            'processing_at' => 'datetime',
+            'paid_at' => 'datetime',
+            'failed_at' => 'datetime',
+            'next_retry_at' => 'datetime',
         ];
     }
 
@@ -87,11 +87,11 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     public function beginProcessing(): bool
     {
         return $this->forceFill([
-            'status'          => SubscriptionPaymentStatus::Processing,
-            'attempt_count'   => $this->attempt_count + 1,
-            'processing_at'   => now(),
-            'next_retry_at'   => null,
-            'failure_code'    => null,
+            'status' => SubscriptionPaymentStatus::Processing,
+            'attempt_count' => $this->attempt_count + 1,
+            'processing_at' => now(),
+            'next_retry_at' => null,
+            'failure_code' => null,
             'failure_message' => null,
         ])->save();
     }
@@ -103,23 +103,23 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
         ?string $failureMessage,
     ): bool {
         return $this->forceFill([
-            'status'             => $status,
+            'status' => $status,
             'provider_reference' => $this->provider_reference ?? $providerReference,
-            'failure_code'       => $failureCode,
-            'failure_message'    => $failureMessage,
-            'paid_at'            => SubscriptionPaymentStatus::Paid === $status ? ($this->paid_at ?? now()) : $this->paid_at,
-            'failed_at'          => SubscriptionPaymentStatus::Failed === $status ? ($this->failed_at ?? now()) : $this->failed_at,
-            'next_retry_at'      => SubscriptionPaymentStatus::Processing === $status ? now()->addMinutes(5) : null,
+            'failure_code' => $failureCode,
+            'failure_message' => $failureMessage,
+            'paid_at' => $status === SubscriptionPaymentStatus::Paid ? ($this->paid_at ?? now()) : $this->paid_at,
+            'failed_at' => $status === SubscriptionPaymentStatus::Failed ? ($this->failed_at ?? now()) : $this->failed_at,
+            'next_retry_at' => $status === SubscriptionPaymentStatus::Processing ? now()->addMinutes(5) : null,
         ])->save();
     }
 
     public function markNeedsReconciliation(string $failureCode, string $failureMessage): bool
     {
         return $this->forceFill([
-            'status'          => SubscriptionPaymentStatus::NeedsReconciliation,
-            'failure_code'    => $failureCode,
+            'status' => SubscriptionPaymentStatus::NeedsReconciliation,
+            'failure_code' => $failureCode,
             'failure_message' => $failureMessage,
-            'next_retry_at'   => now()->addMinutes(15),
+            'next_retry_at' => now()->addMinutes(15),
         ])->save();
     }
 

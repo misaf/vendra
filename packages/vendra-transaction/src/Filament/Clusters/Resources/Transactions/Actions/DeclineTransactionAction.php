@@ -15,12 +15,12 @@ final class DeclineTransactionAction
     public static function make(): Action
     {
         return Action::make('decline')
-            ->authorize(fn(Transaction $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Transaction $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('danger')
             ->icon(Heroicon::OutlinedXCircle)
             ->label(__('vendra-transaction::messages.decline'))
             ->requiresConfirmation()
-            ->visible(fn(Transaction $record): bool => $record->status->canTransitionTo(Declined::class))
+            ->visible(fn (Transaction $record): bool => $record->status->canTransitionTo(Declined::class))
             ->action(function (Transaction $record): void {
                 $record->decline();
 

@@ -12,15 +12,15 @@ use Misaf\VendraSupport\Support\TagRelationship;
 it('builds an faq typed tag relation through the support contract', function (): void {
     app()->instance(TagResolver::class, new EloquentTagResolver(new TagRelationship(FaqTestTag::class)));
 
-    $relation = (new Faq())->tags();
+    $relation = (new Faq)->tags();
 
     expect($relation->getRelated())->toBeInstanceOf(FaqTestTag::class)
         ->and($relation->getTable())->toBe('taggables')
         ->and($relation->toBase()->wheres)->toContainEqual([
-            'type'     => 'Basic',
-            'column'   => 'tags.type',
+            'type' => 'Basic',
+            'column' => 'tags.type',
             'operator' => '=',
-            'value'    => Faq::TAG_TYPE,
-            'boolean'  => 'and',
+            'value' => Faq::TAG_TYPE,
+            'boolean' => 'and',
         ]);
 });

@@ -6,7 +6,6 @@ namespace Misaf\VendraInquiryApi\Providers;
 
 use ApiPlatform\State\ProcessorInterface;
 use Composer\InstalledVersions;
-
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
 use Misaf\VendraInquiryApi\State\SubmitInquiryProcessor;
@@ -24,7 +23,7 @@ final class InquiryApiServiceProvider extends PackageServiceProvider
     {
         Config::set('api-platform.resources', [
             ...Config::array('api-platform.resources', []),
-            dirname(__DIR__) . '/ApiResource',
+            dirname(__DIR__).'/ApiResource',
         ]);
 
         $this->app->tag(SubmitInquiryProcessor::class, ProcessorInterface::class);
@@ -32,6 +31,6 @@ final class InquiryApiServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        AboutCommand::add('Vendra Inquiry API', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-inquiry-api')]);
+        AboutCommand::add('Vendra Inquiry API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-inquiry-api')]);
     }
 }

@@ -17,7 +17,7 @@ final class TransactionFeeFactory extends Factory
     {
         return [
             'transaction_id' => Transaction::factory(),
-            'amount'         => fake()->numberBetween(100, 10_000),
+            'amount' => fake()->numberBetween(100, 10_000),
         ];
     }
 }

@@ -41,10 +41,10 @@ final class AuthifyLog extends Model
     protected function casts(): array
     {
         return [
-            'id'         => 'integer',
-            'tenant_id'  => 'integer',
-            'user_id'    => 'integer',
-            'action'     => AuthifyLogActionEnum::class,
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'user_id' => 'integer',
+            'action' => AuthifyLogActionEnum::class,
             'ip_address' => 'string',
             'ip_country' => 'string',
             'user_agent' => 'string',

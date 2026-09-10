@@ -13,7 +13,7 @@ final class RetryFailedStorefrontDeploymentAction
 {
     public function execute(StorefrontDeployment $deployment): void
     {
-        if (StorefrontDeploymentStatus::Failed !== $deployment->status) {
+        if ($deployment->status !== StorefrontDeploymentStatus::Failed) {
             throw new LogicException("Storefront deployment [{$deployment->id}] is not failed.");
         }
 

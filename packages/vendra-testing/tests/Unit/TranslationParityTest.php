@@ -32,7 +32,7 @@ it('fails when a module has a single locale', function (): void {
         'en' => ['module.php' => "<?php return ['title' => 'Title'];"],
     ]);
 
-    expect(fn() => TranslationParity::assertModuleHasAtLeastTwoLocales('demo', $directory))
+    expect(fn () => TranslationParity::assertModuleHasAtLeastTwoLocales('demo', $directory))
         ->toThrow(AssertionFailedError::class, 'Module [demo] must have at least two locales.');
 });
 
@@ -49,12 +49,12 @@ it('fails when a locale is missing a translation file', function (): void {
     $directory = fakeLanguageDirectory([
         'en' => [
             'module.php' => "<?php return ['title' => 'Title'];",
-            'extra.php'  => "<?php return ['label' => 'Label'];",
+            'extra.php' => "<?php return ['label' => 'Label'];",
         ],
         'fa' => ['module.php' => "<?php return ['title' => 'عنوان'];"],
     ]);
 
-    expect(fn() => TranslationParity::assertModuleTranslationsAreInSync('demo', $directory))
+    expect(fn () => TranslationParity::assertModuleTranslationsAreInSync('demo', $directory))
         ->toThrow(AssertionFailedError::class, 'Module [demo] locale [fa] is missing file [extra.php] that exists in [en].');
 });
 
@@ -64,7 +64,7 @@ it('fails when a locale is missing nested translation keys', function (): void {
         'fa' => ['module.php' => "<?php return ['fields' => ['name' => 'نام']];"],
     ]);
 
-    expect(fn() => TranslationParity::assertModuleTranslationsAreInSync('demo', $directory))
+    expect(fn () => TranslationParity::assertModuleTranslationsAreInSync('demo', $directory))
         ->toThrow(AssertionFailedError::class, 'Module [demo] locale [fa] is missing keys from [en] in file [module.php]: fields.slug');
 });
 
@@ -74,7 +74,7 @@ it('fails when a translation file does not return an array', function (): void {
         'fa' => ['module.php' => "<?php return ['title' => 'عنوان'];"],
     ]);
 
-    expect(fn() => TranslationParity::assertModuleTranslationsAreInSync('demo', $directory))
+    expect(fn () => TranslationParity::assertModuleTranslationsAreInSync('demo', $directory))
         ->toThrow(AssertionFailedError::class, 'must return an array.');
 });
 
@@ -91,7 +91,7 @@ it('fails when top-level translation keys are unsorted', function (): void {
         'en' => ['module.php' => "<?php return ['title' => 'Title', 'fields' => ['name' => 'Name']];"],
     ]);
 
-    expect(fn() => TranslationParity::assertModuleTranslationKeysAreSorted('demo', $directory))
+    expect(fn () => TranslationParity::assertModuleTranslationKeysAreSorted('demo', $directory))
         ->toThrow(AssertionFailedError::class, 'Module [demo] locale [en] file [module.php] has unsorted keys.');
 });
 
@@ -100,7 +100,7 @@ it('fails when nested translation keys are unsorted', function (): void {
         'en' => ['module.php' => "<?php return ['fields' => ['slug' => 'Slug', 'name' => 'Name']];"],
     ]);
 
-    expect(fn() => TranslationParity::assertModuleTranslationKeysAreSorted('demo', $directory))
+    expect(fn () => TranslationParity::assertModuleTranslationKeysAreSorted('demo', $directory))
         ->toThrow(AssertionFailedError::class, 'Module [demo] locale [en] file [module.php].fields has unsorted keys.');
 });
 

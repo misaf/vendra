@@ -17,7 +17,7 @@ final class CreateTagger extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-tagger::navigation.tagger');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-tagger::navigation.tagger');
     }
 
     protected function getHeaderActions(): array

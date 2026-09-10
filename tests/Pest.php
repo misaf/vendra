@@ -12,8 +12,9 @@ use Misaf\LaravelDockerEngine\ContainerManager;
 use Misaf\VendraStore\Models\StorefrontImage;
 use Tests\Support\FakeDockerTransport;
 use Tests\Support\StringDockerStream;
+use Tests\TestCase;
 
-pest()->extend(Tests\TestCase::class)->in(
+pest()->extend(TestCase::class)->in(
     'Feature',
     '../packages/*/tests/Feature',
 );
@@ -31,7 +32,7 @@ pest()->extend(Tests\TestCase::class)->in(
  * correct. It is an object rather than an array on purpose: the fake mutates it
  * long after this function has returned, and a returned array would be a copy.
  *
- * @param  array<string, mixed>          $state
+ * @param  array<string, mixed>  $state
  * @return object{calls: list<string>, transport: FakeDockerTransport}
  */
 function fakeExistingStorefront(
@@ -40,7 +41,8 @@ function fakeExistingStorefront(
     bool $present = true,
     string $logs = '',
 ): object {
-    $recorder = new class {
+    $recorder = new class
+    {
         /** @var list<string> */
         public array $calls = [];
 
@@ -56,12 +58,12 @@ function fakeExistingStorefront(
             }
         }
 
-        if ('DELETE' === $request->method && Str::contains($path, '/containers/')) {
+        if ($request->method === 'DELETE' && Str::contains($path, '/containers/')) {
             $recorder->calls[] = 'remove';
         }
 
         if (Str::endsWith($path, '/logs')) {
-            $recorder->calls[] = 'logs:' . rawurldecode((string) Str::of($path)->between('/containers/', '/logs'));
+            $recorder->calls[] = 'logs:'.rawurldecode((string) Str::of($path)->between('/containers/', '/logs'));
         }
 
         // A created container exists from then on, so a deployment can inspect
@@ -71,29 +73,29 @@ function fakeExistingStorefront(
         }
 
         return match (true) {
-            Str::endsWith($path, '/_ping')                                        => dockerResponse('OK'),
-            Str::contains($path, '/networks/')                                    => dockerResponse(['Name' => 'traefik-public', 'Driver' => 'bridge']),
-            Str::endsWith($path, '/images/create') && $stream                     => dockerStreamResponse("{\"status\":\"Pulled\"}\n"),
-            Str::endsWith($path, '/logs') && $stream                              => dockerStreamResponse(dockerLogFrames($logs)),
-            Str::endsWith($path, '/containers/create')                            => dockerResponse(['Id' => 'container-abc'], 201),
+            Str::endsWith($path, '/_ping') => dockerResponse('OK'),
+            Str::contains($path, '/networks/') => dockerResponse(['Name' => 'traefik-public', 'Driver' => 'bridge']),
+            Str::endsWith($path, '/images/create') && $stream => dockerStreamResponse("{\"status\":\"Pulled\"}\n"),
+            Str::endsWith($path, '/logs') && $stream => dockerStreamResponse(dockerLogFrames($logs)),
+            Str::endsWith($path, '/containers/create') => dockerResponse(['Id' => 'container-abc'], 201),
             Str::endsWith($path, '/start'), Str::endsWith($path, '/stop'),
-            Str::endsWith($path, '/restart')                                      => dockerResponse('', 204),
+            Str::endsWith($path, '/restart') => dockerResponse('', 204),
             Str::contains($path, '/containers/') && Str::endsWith($path, '/json') => $present
                 ? dockerResponse([
-                    'Id'     => 'container-abc',
-                    'Name'   => '/vendra-storefront-acme-flowers',
+                    'Id' => 'container-abc',
+                    'Name' => '/vendra-storefront-acme-flowers',
                     'Config' => [
-                        'Image'  => $image,
+                        'Image' => $image,
                         'Labels' => [
                             'io.vendra.managed-by' => 'vendra',
-                            'io.vendra.slug'       => 'acme-flowers',
+                            'io.vendra.slug' => 'acme-flowers',
                         ],
                     ],
                     'State' => $state,
                 ])
                 : dockerResponse(['message' => 'no such container'], 404),
-            'DELETE' === $request->method  => dockerResponse('', 204),
-            default                        => $stream ? dockerStreamResponse('', 404) : dockerResponse('', 404),
+            $request->method === 'DELETE' => dockerResponse('', 204),
+            default => $stream ? dockerStreamResponse('', 404) : dockerResponse('', 404),
         };
     });
 
@@ -109,7 +111,7 @@ function fakeExistingStorefront(
  * way a real engine would; once `/containers/create` is seen the runtime's
  * inspects resolve to a placed, ownable container carrying the requested state.
  *
- * @param array<string, mixed> $state
+ * @param  array<string, mixed>  $state
  */
 function fakeDockerEngine(array $state = ['Status' => 'running', 'Health' => ['Status' => 'healthy']], bool $networkExists = true, ?string $serverHeader = null): FakeDockerTransport
 {
@@ -126,31 +128,31 @@ function fakeDockerEngine(array $state = ['Status' => 'running', 'Health' => ['S
         }
 
         return match (true) {
-            Str::endsWith($path, '/_ping')     => dockerResponse('OK', headers: null === $serverHeader ? [] : ['Server' => [$serverHeader]]),
+            Str::endsWith($path, '/_ping') => dockerResponse('OK', headers: $serverHeader === null ? [] : ['Server' => [$serverHeader]]),
             Str::contains($path, '/networks/') => dockerResponse(
                 $networkExists ? ['Name' => 'traefik-public', 'Driver' => 'bridge'] : ['message' => 'network not found'],
                 $networkExists ? 200 : 404,
             ),
-            Str::endsWith($path, '/images/create') && $stream                     => dockerStreamResponse("{\"status\":\"Pulled\"}\n"),
+            Str::endsWith($path, '/images/create') && $stream => dockerStreamResponse("{\"status\":\"Pulled\"}\n"),
             Str::endsWith($path, '/start'),
             Str::endsWith($path, '/stop'),
-            Str::endsWith($path, '/restart')                                      => dockerResponse('', 204),
+            Str::endsWith($path, '/restart') => dockerResponse('', 204),
             Str::contains($path, '/containers/') && Str::endsWith($path, '/json') => $created
                 ? dockerResponse([
-                    'Id'     => 'container-abc',
-                    'Name'   => '/vendra-storefront-acme-flowers',
+                    'Id' => 'container-abc',
+                    'Name' => '/vendra-storefront-acme-flowers',
                     'Config' => [
-                        'Image'  => 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123',
+                        'Image' => 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123',
                         'Labels' => [
                             'io.vendra.managed-by' => 'vendra',
-                            'io.vendra.slug'       => 'acme-flowers',
+                            'io.vendra.slug' => 'acme-flowers',
                         ],
                     ],
                     'State' => $state,
                 ])
                 : dockerResponse(['message' => 'no such container'], 404),
-            'DELETE' === $method => dockerResponse(['message' => 'no such container'], 404),
-            default              => $stream ? dockerStreamResponse('', 404) : dockerResponse('', 404),
+            $method === 'DELETE' => dockerResponse(['message' => 'no such container'], 404),
+            default => $stream ? dockerStreamResponse('', 404) : dockerResponse('', 404),
         };
     });
 }
@@ -162,7 +164,7 @@ function bindFakeDockerEngine(Closure $handler): FakeDockerTransport
     $manager = app(ContainerManager::class);
 
     $manager->forgetDrivers();
-    $manager->extend('docker', static fn(): DockerClient => new DockerClient($transport, ApiVersion::V1_55));
+    $manager->extend('docker', static fn (): DockerClient => new DockerClient($transport, ApiVersion::V1_55));
     currentFakeDockerEngine($transport);
 
     return $transport;
@@ -197,8 +199,8 @@ function assertNoDockerRequestsSent(): void
 }
 
 /**
- * @param array<array-key, mixed>|string $body
- * @param array<string, list<string>>    $headers
+ * @param  array<array-key, mixed>|string  $body
+ * @param  array<string, list<string>>  $headers
  */
 function dockerResponse(array|string $body, int $status = 200, array $headers = []): Response
 {
@@ -217,7 +219,7 @@ function dockerStreamResponse(string $body, int $status = 200, array $headers = 
 
 function dockerLogFrames(string $output): string
 {
-    return '' === $output ? '' : chr(1) . "\0\0\0" . pack('N', mb_strlen($output, '8bit')) . $output;
+    return $output === '' ? '' : chr(1)."\0\0\0".pack('N', mb_strlen($output, '8bit')).$output;
 }
 
 /**
@@ -232,23 +234,23 @@ function dockerLogFrames(string $output): string
 function storefrontRequestData(string $slug = 'acme-flowers'): array
 {
     return [
-        'storefront_image_id'           => StorefrontImage::factory()->create()->id,
-        'storefront_slug'               => $slug,
-        'storefront_name_en'            => 'Acme Flowers',
-        'storefront_name_fa'            => 'گل‌فروشی اکمی',
-        'storefront_business_type'      => 'Florist',
-        'storefront_price_currency'     => 'irr',
-        'storefront_og_image'           => '/images/og.webp',
-        'storefront_locality'           => 'Tehran',
-        'storefront_country'            => 'ir',
-        'storefront_mobile_phone'       => '09120000000',
-        'storefront_office_phone'       => '02100000000',
-        'storefront_contact_email'      => 'contact@acme.test',
-        'storefront_hours_open'         => '08:00',
-        'storefront_hours_close'        => '21:00',
-        'storefront_map_query'          => '35.7,51.4',
-        'storefront_whatsapp_phone'     => '+989120000000',
-        'storefront_telegram_username'  => 'acmeflowers',
+        'storefront_image_id' => StorefrontImage::factory()->create()->id,
+        'storefront_slug' => $slug,
+        'storefront_name_en' => 'Acme Flowers',
+        'storefront_name_fa' => 'گل‌فروشی اکمی',
+        'storefront_business_type' => 'Florist',
+        'storefront_price_currency' => 'irr',
+        'storefront_og_image' => '/images/og.webp',
+        'storefront_locality' => 'Tehran',
+        'storefront_country' => 'ir',
+        'storefront_mobile_phone' => '09120000000',
+        'storefront_office_phone' => '02100000000',
+        'storefront_contact_email' => 'contact@acme.test',
+        'storefront_hours_open' => '08:00',
+        'storefront_hours_close' => '21:00',
+        'storefront_map_query' => '35.7,51.4',
+        'storefront_whatsapp_phone' => '+989120000000',
+        'storefront_telegram_username' => 'acmeflowers',
         'storefront_instagram_username' => 'acmeflowers',
     ];
 }

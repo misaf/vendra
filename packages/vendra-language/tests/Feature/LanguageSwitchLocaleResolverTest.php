@@ -30,7 +30,7 @@ it('resolves the locale selected in the language switch session', function (): v
     $request->setLaravelSession(app('session')->driver());
     $request->session()->put('locale', 'de');
 
-    expect((new LanguageSwitchLocaleResolver())->resolve($request))->toBe('de');
+    expect((new LanguageSwitchLocaleResolver)->resolve($request))->toBe('de');
 });
 
 it('falls back to the language switch cookie', function (): void {
@@ -40,13 +40,13 @@ it('falls back to the language switch cookie', function (): void {
         'filament_language_switch_locale' => 'fa',
     ]);
 
-    expect((new LanguageSwitchLocaleResolver())->resolve($request))->toBe('fa');
+    expect((new LanguageSwitchLocaleResolver)->resolve($request))->toBe('fa');
 });
 
 it('ignores a language switch preference for an inactive language', function (): void {
     Language::query()->create([
-        'locale'   => 'de',
-        'active'   => false,
+        'locale' => 'de',
+        'active' => false,
         'position' => 1,
     ]);
 
@@ -54,5 +54,5 @@ it('ignores a language switch preference for an inactive language', function ():
     $request->setLaravelSession(app('session')->driver());
     $request->session()->put('locale', 'de');
 
-    expect((new LanguageSwitchLocaleResolver())->resolve($request))->toBeNull();
+    expect((new LanguageSwitchLocaleResolver)->resolve($request))->toBeNull();
 });

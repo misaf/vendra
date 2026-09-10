@@ -59,21 +59,21 @@ it('keeps user profile providers independently selectable', function (): void {
 
 it('enforces one-way provider boundaries', function (): void {
     $providers = [
-        'vendra-address'      => 'Misaf\\VendraAddress',
-        'vendra-phone'        => 'Misaf\\VendraPhone',
-        'vendra-document'     => 'Misaf\\VendraDocument',
+        'vendra-address' => 'Misaf\\VendraAddress',
+        'vendra-phone' => 'Misaf\\VendraPhone',
+        'vendra-document' => 'Misaf\\VendraDocument',
         'vendra-verification' => 'Misaf\\VendraVerification',
     ];
 
     $userProfileSource = collect(File::allFiles(base_path('packages/vendra-user-profile/src')))
-        ->map(fn(SplFileInfo $file): string => File::get($file->getPathname()))
+        ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
         ->implode("\n");
 
     foreach ($providers as $provider => $namespace) {
         expect($userProfileSource)->not->toContain($namespace);
 
         $providerSource = collect(File::allFiles(base_path("packages/{$provider}/src")))
-            ->map(fn(SplFileInfo $file): string => File::get($file->getPathname()))
+            ->map(fn (SplFileInfo $file): string => File::get($file->getPathname()))
             ->implode("\n");
 
         expect($providerSource)

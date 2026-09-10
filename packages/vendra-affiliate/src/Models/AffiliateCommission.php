@@ -55,6 +55,7 @@ final class AffiliateCommission extends Model implements ShouldLogActivity
 {
     use BelongsToAffiliate;
     use BelongsToTenant;
+
     /** @use HasFactory<AffiliateCommissionFactory> */
     use HasFactory;
 
@@ -66,15 +67,15 @@ final class AffiliateCommission extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                    => 'integer',
-            'tenant_id'             => 'integer',
-            'affiliate_id'          => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'affiliate_id' => 'integer',
             'affiliate_referral_id' => 'integer',
-            'conversion_type'       => ConversionTypeEnum::class,
-            'source_id'             => 'integer',
-            'amount'                => 'integer',
-            'status'                => CommissionStatusEnum::class,
-            'affiliate_payout_id'   => 'integer',
+            'conversion_type' => ConversionTypeEnum::class,
+            'source_id' => 'integer',
+            'amount' => 'integer',
+            'status' => CommissionStatusEnum::class,
+            'affiliate_payout_id' => 'integer',
         ];
     }
 
@@ -104,7 +105,7 @@ final class AffiliateCommission extends Model implements ShouldLogActivity
 
     public function isPayable(): bool
     {
-        return CommissionStatusEnum::Approved === $this->status
-            && null === $this->affiliate_payout_id;
+        return $this->status === CommissionStatusEnum::Approved
+            && $this->affiliate_payout_id === null;
     }
 }

@@ -14,7 +14,7 @@ final class ListUserProfiles extends ListRecords
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb') . ' ' . __('vendra-user-profile::navigation.user_profile');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/list-records.breadcrumb').' '.__('vendra-user-profile::navigation.user_profile');
     }
 
     protected function getHeaderActions(): array

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraUserProfile\Filament\Clusters\Resources;
 
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Clusters\Cluster;
 use Filament\Resources\Pages\PageRegistration;
 use Filament\Resources\RelationManagers\RelationGroup;
@@ -31,7 +32,6 @@ use Misaf\VendraUserProfile\Filament\Clusters\Resources\Schemas\UserProfileForm;
 use Misaf\VendraUserProfile\Filament\Clusters\Resources\Schemas\UserProfileInfolist;
 use Misaf\VendraUserProfile\Filament\Clusters\Resources\Tables\UserProfileTable;
 use Misaf\VendraUserProfile\Models\UserProfile;
-
 use Misaf\VendraUserProfile\Support\UserProfileRelationManagers;
 
 final class UserProfileResource extends Resource
@@ -80,7 +80,7 @@ final class UserProfileResource extends Resource
     }
 
     /**
-     * @return array<\Filament\Actions\Action>
+     * @return array<Action>
      */
     public static function getGlobalSearchResultActions(Model $record): array
     {
@@ -112,10 +112,10 @@ final class UserProfileResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListUserProfiles::route('/'),
+            'index' => ListUserProfiles::route('/'),
             'create' => CreateUserProfile::route('/create'),
-            'view'   => ViewUserProfile::route('/{record}'),
-            'edit'   => EditUserProfile::route('/{record}/edit'),
+            'view' => ViewUserProfile::route('/{record}'),
+            'edit' => EditUserProfile::route('/{record}/edit'),
         ];
     }
 
@@ -151,7 +151,7 @@ final class UserProfileResource extends Resource
 
     private static function profile(Model $record): UserProfile
     {
-        if ( ! $record instanceof UserProfile) {
+        if (! $record instanceof UserProfile) {
             throw new InvalidArgumentException('User Profile resources require a UserProfile record.');
         }
 

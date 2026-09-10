@@ -13,7 +13,7 @@ use ApiPlatform\Laravel\Eloquent\State\Options;
 final class EloquentResourceOptions extends Options
 {
     /**
-     * @param class-string<ResourceMapper>|null $mapper
+     * @param  class-string<ResourceMapper>|null  $mapper
      */
     public function __construct(
         ?string $modelClass = null,

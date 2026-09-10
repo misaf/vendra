@@ -33,7 +33,7 @@ final class AssignStoreOwnerAction
     public function __construct(private readonly StoreQuota $storeQuota) {}
 
     /**
-     * @param (Model&SubscriptionSubscriber)|null $owner
+     * @param  (Model&SubscriptionSubscriber)|null  $owner
      */
     public function execute(Store $store, ?SubscriptionSubscriber $owner): Store
     {
@@ -44,7 +44,7 @@ final class AssignStoreOwnerAction
                 ->lockForUpdate()
                 ->firstOrFail();
 
-            $ownerId = null === $owner ? null : $this->assertOwnerHasRoom($owner, $lockedStore);
+            $ownerId = $owner === null ? null : $this->assertOwnerHasRoom($owner, $lockedStore);
 
             if ($ownerId === $lockedStore->reseller_id) {
                 return $lockedStore;
@@ -63,14 +63,14 @@ final class AssignStoreOwnerAction
      * failure: re-selecting the current owner must not fail because they are at
      * their limit, since the store they are "gaining" is one they already have.
      *
-     * @param Model&SubscriptionSubscriber $owner
+     * @param  Model&SubscriptionSubscriber  $owner
      */
     private function assertOwnerHasRoom(SubscriptionSubscriber $owner, Store $store): mixed
     {
         $lockedOwner = $owner->newQuery()->lockForUpdate()->whereKey($owner->getKey())->first();
 
-        if ( ! $lockedOwner instanceof Model || ! $lockedOwner instanceof SubscriptionSubscriber) {
-            throw (new ModelNotFoundException())->setModel($owner::class);
+        if (! $lockedOwner instanceof Model || ! $lockedOwner instanceof SubscriptionSubscriber) {
+            throw (new ModelNotFoundException)->setModel($owner::class);
         }
 
         if ($lockedOwner->getKey() !== $store->reseller_id) {

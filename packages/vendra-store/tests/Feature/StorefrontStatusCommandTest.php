@@ -28,9 +28,9 @@ it('reports only what the database recorded by default', function (): void {
 
 it('asks the runtime what it actually has when told to', function (): void {
     StorefrontDeployment::factory()->create([
-        'slug'           => 'acme-flowers',
-        'status'         => StorefrontDeploymentStatus::Ready,
-        'desired_state'  => StorefrontDesiredState::Running,
+        'slug' => 'acme-flowers',
+        'status' => StorefrontDeploymentStatus::Ready,
+        'desired_state' => StorefrontDesiredState::Running,
         'container_name' => 'vendra-storefront-acme-flowers',
     ]);
 
@@ -49,9 +49,9 @@ it('asks the runtime what it actually has when told to', function (): void {
  */
 it('reports storefronts the runtime has nothing for', function (): void {
     StorefrontDeployment::factory()->create([
-        'slug'           => 'acme-flowers',
-        'status'         => StorefrontDeploymentStatus::Ready,
-        'desired_state'  => StorefrontDesiredState::Running,
+        'slug' => 'acme-flowers',
+        'status' => StorefrontDeploymentStatus::Ready,
+        'desired_state' => StorefrontDesiredState::Running,
         'container_name' => 'vendra-storefront-acme-flowers',
     ]);
 
@@ -64,8 +64,8 @@ it('reports storefronts the runtime has nothing for', function (): void {
 
 it('does not report a storefront that is absent because it is meant to be', function (): void {
     StorefrontDeployment::factory()->create([
-        'slug'          => 'acme-flowers',
-        'status'        => StorefrontDeploymentStatus::Ready,
+        'slug' => 'acme-flowers',
+        'status' => StorefrontDeploymentStatus::Ready,
         'desired_state' => StorefrontDesiredState::Stopped,
     ]);
 
@@ -79,7 +79,7 @@ it('does not report a storefront that is absent because it is meant to be', func
 it('still prints the recorded state when the runtime will not answer', function (): void {
     StorefrontDeployment::factory()->create(['slug' => 'acme-flowers']);
 
-    bindFakeDockerEngine(fn($request, bool $stream) => $stream
+    bindFakeDockerEngine(fn ($request, bool $stream) => $stream
         ? dockerStreamResponse('', 500)
         : dockerResponse(['message' => 'The fake runtime is configured as unreachable.'], 500));
 

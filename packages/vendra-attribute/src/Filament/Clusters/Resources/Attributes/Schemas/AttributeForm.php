@@ -24,19 +24,19 @@ final class AttributeForm
     {
         $components = [
             TextInput::make('name')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.name'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.name'))
                 ->autofocus()
                 ->label(__('vendra-attribute::attributes.name'))
                 ->live(onBlur: true)
                 ->maxLength(255)
                 ->required()
                 ->unique(
-                    modifyRuleUsing: fn(Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
+                    modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule)
                         ->withoutTrashed(),
                 ),
 
             Select::make('unit')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.unit'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.unit'))
                 ->label(__('vendra-attribute::attributes.unit'))
                 ->live()
                 ->native(false)
@@ -44,7 +44,7 @@ final class AttributeForm
                 ->searchable(),
 
             Textarea::make('description')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.description'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
                 ->columnSpanFull()
                 ->label(__('vendra-attribute::attributes.description'))
                 ->live(onBlur: true)
@@ -52,7 +52,7 @@ final class AttributeForm
                 ->rows(4),
 
             Toggle::make('active')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.active'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
                 ->columnSpanFull()
                 ->default(true)
                 ->label(__('vendra-attribute::attributes.active'))
@@ -66,7 +66,7 @@ final class AttributeForm
 
         if (TagIntegration::isAvailable()) {
             $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.tags'))
+                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
                 ->columnSpanFull()
                 ->label(__('vendra-support::attributes.tags'))
                 ->live()

@@ -37,24 +37,24 @@ it('validates and processes referral visits through the domain action', function
     $affiliate = AffiliateFactory::new()->active()->create();
 
     $this->postJson('/api/marketing/affiliate-clicks', [
-        'code'       => $affiliate->code,
+        'code' => $affiliate->code,
         'landingUrl' => 'https://shop.test/products/1',
     ])->assertNoContent();
 
     expect(AffiliateClick::query()->whereBelongsTo($affiliate)->count())->toBe(1);
 
     $this->postJson('/api/marketing/affiliate-clicks', [
-        'code'       => '',
+        'code' => '',
         'landingUrl' => 'not-a-url',
     ])->assertUnprocessable();
 });
 
 it('rejects landing URLs that cannot be stored without truncation', function (): void {
     $affiliate = AffiliateFactory::new()->active()->create();
-    $landingUrl = 'https://shop.test/' . str_repeat('a', 240);
+    $landingUrl = 'https://shop.test/'.str_repeat('a', 240);
 
     $this->postJson('/api/marketing/affiliate-clicks', [
-        'code'       => $affiliate->code,
+        'code' => $affiliate->code,
         'landingUrl' => $landingUrl,
     ])->assertUnprocessable();
 

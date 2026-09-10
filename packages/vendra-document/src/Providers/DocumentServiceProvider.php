@@ -32,7 +32,7 @@ final class DocumentServiceProvider extends PackageServiceProvider
 
         UserProfile::resolveRelationUsing(
             'documents',
-            fn(UserProfile $profile) => $profile->hasMany(Document::class),
+            fn (UserProfile $profile) => $profile->hasMany(Document::class),
         );
 
         $this->app->make(UserProfileRelationManagers::class)

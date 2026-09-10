@@ -14,7 +14,7 @@ final class ViewNewsletterSubscriber extends ViewRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb') . ' ' . __('vendra-newsletter::navigation.newsletter_subscriber');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/view-record.breadcrumb').' '.__('vendra-newsletter::navigation.newsletter_subscriber');
     }
 
     protected function getHeaderActions(): array

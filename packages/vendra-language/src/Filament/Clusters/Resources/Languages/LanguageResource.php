@@ -18,7 +18,6 @@ use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Schemas\LanguageI
 use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Tables\LanguageTable;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraSupport\Filament\Clusters\LocalizationCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class LanguageResource extends Resource
@@ -66,10 +65,10 @@ final class LanguageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListLanguages::route('/'),
+            'index' => ListLanguages::route('/'),
             'create' => CreateLanguage::route('/create'),
-            'view'   => ViewLanguage::route('/{record}'),
-            'edit'   => EditLanguage::route('/{record}/edit'),
+            'view' => ViewLanguage::route('/{record}'),
+            'edit' => EditLanguage::route('/{record}/edit'),
         ];
     }
 

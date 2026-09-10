@@ -43,7 +43,7 @@ final class ProcessSubscriptionPayment implements ShouldBeUnique, ShouldQueue
     {
         $payment = SubscriptionPayment::query()->find($this->paymentId);
 
-        if ( ! $payment instanceof SubscriptionPayment) {
+        if (! $payment instanceof SubscriptionPayment) {
             return;
         }
 
@@ -81,7 +81,7 @@ final class ProcessSubscriptionPayment implements ShouldBeUnique, ShouldQueue
                     ->lockForUpdate()
                     ->first();
 
-                if ( ! $payment instanceof SubscriptionPayment || $payment->status->isTerminal()) {
+                if (! $payment instanceof SubscriptionPayment || $payment->status->isTerminal()) {
                     return;
                 }
 
@@ -101,7 +101,7 @@ final class ProcessSubscriptionPayment implements ShouldBeUnique, ShouldQueue
             idempotencyKey: $payment->idempotency_key,
             metadata: [
                 SubscriptionContextKeys::SUBSCRIPTION_ID => $payment->subscription_id,
-                SubscriptionContextKeys::PAYMENT_ID      => $payment->id,
+                SubscriptionContextKeys::PAYMENT_ID => $payment->id,
             ],
         );
     }

@@ -35,7 +35,7 @@ it('becomes the current tenant and restores the previous context', function (): 
 
     expect($resolver->current())->toBeNull();
 
-    $seen = $resolver->execute($store->getKey(), fn(): ?int => $resolver->currentId());
+    $seen = $resolver->execute($store->getKey(), fn (): ?int => $resolver->currentId());
 
     expect($seen)->toBe($store->getKey())
         ->and($resolver->current())->toBeNull();
@@ -66,7 +66,7 @@ it('keeps its domains keyed by store_id and scoped to itself', function (): void
 
     $visible = app(TenantResolver::class)->execute(
         $first->getKey(),
-        fn(): array => StoreDomain::query()->pluck('name')->all(),
+        fn (): array => StoreDomain::query()->pluck('name')->all(),
     );
 
     expect($visible)->toBe(['first.example.com']);
@@ -113,7 +113,7 @@ it('keeps resolving through the generic resolver on id and slug', function (): v
  */
 it('presents its own locale and timezone to the tenancy engine', function (): void {
     $store = Store::factory()->active()->create([
-        'locale'   => 'en',
+        'locale' => 'en',
         'timezone' => 'Europe/Berlin',
     ]);
 
@@ -130,13 +130,13 @@ it('states no locale or timezone preference when its columns are blank', functio
 
 it('applies the store locale and timezone while it is the current tenant', function (): void {
     $store = Store::factory()->active()->create([
-        'locale'   => 'en',
+        'locale' => 'en',
         'timezone' => 'Europe/Berlin',
     ]);
 
     $applied = app(TenantResolver::class)->execute(
         $store->getKey(),
-        fn(): array => [Config::string('app.locale'), Config::string('app.timezone')],
+        fn (): array => [Config::string('app.locale'), Config::string('app.timezone')],
     );
 
     expect($applied)->toBe(['en', 'Europe/Berlin']);
@@ -147,7 +147,7 @@ it('falls back to the fleet defaults for a store with no preference', function (
 
     $applied = app(TenantResolver::class)->execute(
         $store->getKey(),
-        fn(): array => [Config::string('app.locale'), Config::string('app.timezone')],
+        fn (): array => [Config::string('app.locale'), Config::string('app.timezone')],
     );
 
     expect($applied)->toBe(['fa', 'Asia/Tehran']);

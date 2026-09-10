@@ -13,20 +13,20 @@ use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
  */
 it('derives each status from the columns that own it', function (TenantProvisioningStatus $provisioning, bool $active, bool $billingSuspended, StoreStatus $expected): void {
     $store = Store::factory()->create([
-        'provisioning_status'  => $provisioning,
-        'active'               => $active,
+        'provisioning_status' => $provisioning,
+        'active' => $active,
         'billing_suspended_at' => $billingSuspended ? now() : null,
     ]);
 
     expect($store->status())->toBe($expected);
 })->with([
-    'pending'                => [TenantProvisioningStatus::Pending, true, false, StoreStatus::Pending],
-    'provisioning'           => [TenantProvisioningStatus::Processing, true, false, StoreStatus::Provisioning],
-    'failed'                 => [TenantProvisioningStatus::Failed, true, false, StoreStatus::Failed],
-    'active'                 => [TenantProvisioningStatus::Ready, true, false, StoreStatus::Active],
-    'disabled by operator'   => [TenantProvisioningStatus::Ready, false, false, StoreStatus::Suspended],
-    'suspended by billing'   => [TenantProvisioningStatus::Ready, true, true, StoreStatus::Suspended],
-    'provisioning outranks'  => [TenantProvisioningStatus::Failed, false, true, StoreStatus::Failed],
+    'pending' => [TenantProvisioningStatus::Pending, true, false, StoreStatus::Pending],
+    'provisioning' => [TenantProvisioningStatus::Processing, true, false, StoreStatus::Provisioning],
+    'failed' => [TenantProvisioningStatus::Failed, true, false, StoreStatus::Failed],
+    'active' => [TenantProvisioningStatus::Ready, true, false, StoreStatus::Active],
+    'disabled by operator' => [TenantProvisioningStatus::Ready, false, false, StoreStatus::Suspended],
+    'suspended by billing' => [TenantProvisioningStatus::Ready, true, true, StoreStatus::Suspended],
+    'provisioning outranks' => [TenantProvisioningStatus::Failed, false, true, StoreStatus::Failed],
 ]);
 
 it('filters by the same rule its accessor reads', function (): void {

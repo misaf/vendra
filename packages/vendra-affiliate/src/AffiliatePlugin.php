@@ -33,7 +33,7 @@ final class AffiliatePlugin implements Plugin
     {
         if ($this->isConfiguredPanel($panel, 'vendra-affiliate.panels')) {
             $panel->discoverResources(
-                in: __DIR__ . '/Filament/Clusters/Resources',
+                in: __DIR__.'/Filament/Clusters/Resources',
                 for: 'Misaf\\VendraAffiliate\\Filament\\Clusters\\Resources',
             );
 

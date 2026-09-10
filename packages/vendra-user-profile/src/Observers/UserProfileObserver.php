@@ -17,7 +17,7 @@ final class UserProfileObserver
 {
     public function saving(UserProfile $userProfile): void
     {
-        if ( ! $userProfile->is_default) {
+        if (! $userProfile->is_default) {
             return;
         }
 

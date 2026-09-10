@@ -18,8 +18,7 @@ final class ProductLinksHandler implements LinksHandlerInterface
     use MapsCatalogResources;
 
     /**
-     * @param Builder<Product> $builder
-     *
+     * @param  Builder<Product>  $builder
      * @return Builder<Product>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -33,9 +32,9 @@ final class ProductLinksHandler implements LinksHandlerInterface
                 'multimedia',
                 ...$this->attributeRelations(),
             ])
-            ->whereHas('productCategory', fn(Builder $query): Builder => $query->where('active', true));
+            ->whereHas('productCategory', fn (Builder $query): Builder => $query->where('active', true));
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

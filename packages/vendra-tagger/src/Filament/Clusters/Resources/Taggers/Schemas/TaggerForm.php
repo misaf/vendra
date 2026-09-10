@@ -39,14 +39,14 @@ final class TaggerForm
 
                             $type = $get->string('type', isNullable: true);
 
-                            if (null !== $type) {
+                            if ($type !== null) {
                                 $rule->where('type', $type);
                             }
                         },
                     ),
 
                 TextInput::make('slug')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.slug'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.slug'))
                     ->columnSpan(['lg' => 1])
                     ->helperText(__('vendra-tagger::attributes.slug_helper_text'))
                     ->label(__('vendra-tagger::attributes.slug'))
@@ -59,14 +59,14 @@ final class TaggerForm
 
                             $type = $get->string('type', isNullable: true);
 
-                            if (null !== $type) {
+                            if ($type !== null) {
                                 $rule->where('type', $type);
                             }
                         },
                     ),
 
                 TextInput::make('type')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.type'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.type'))
                     ->columnSpanFull()
                     ->helperText(__('vendra-tagger::attributes.type_helper_text'))
                     ->label(__('vendra-tagger::attributes.type'))

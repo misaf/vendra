@@ -13,9 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class UseRequestUrl
 {
-    private const string ORIGINAL_ASSET_URL = self::class . '.original_asset_url';
+    private const string ORIGINAL_ASSET_URL = self::class.'.original_asset_url';
 
-    private const string ORIGINAL_URL = self::class . '.original_url';
+    private const string ORIGINAL_URL = self::class.'.original_url';
 
     /**
      * @param  Closure(Request): Response  $next
@@ -25,7 +25,7 @@ final class UseRequestUrl
         $originalUrl = Config::string('app.url');
         $appHost = Uri::of($originalUrl)->host();
 
-        if ( ! in_array($request->getHost(), ['console.' . $appHost, 'reseller.' . $appHost], true)) {
+        if (! in_array($request->getHost(), ['console.'.$appHost, 'reseller.'.$appHost], true)) {
             return $next($request);
         }
 
@@ -37,7 +37,7 @@ final class UseRequestUrl
         // prepended — it runs before TrustProxies — so $request->getScheme() may
         // still read http here. Pin the origin to https so central-panel assets
         // and URLs never fall back to http (mixed content on the https page).
-        $requestUrl = 'https://' . $request->getHttpHost();
+        $requestUrl = 'https://'.$request->getHttpHost();
 
         $request->attributes->set(self::ORIGINAL_URL, $originalUrl);
         $request->attributes->set(self::ORIGINAL_ASSET_URL, $originalAssetUrl);
@@ -50,12 +50,12 @@ final class UseRequestUrl
         return $next($request);
     }
 
-    public function terminate(Request $request, Response $response): void
+    public function terminate(Request $request): void
     {
         $originalUrl = $request->attributes->get(self::ORIGINAL_URL);
         $originalAssetUrl = $request->attributes->get(self::ORIGINAL_ASSET_URL);
 
-        if ( ! is_string($originalUrl)) {
+        if (! is_string($originalUrl)) {
             return;
         }
 

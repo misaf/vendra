@@ -71,13 +71,13 @@ final class TranslationParity
      */
     private static function availableLocales(string $languageDirectory): array
     {
-        $directories = glob($languageDirectory . DIRECTORY_SEPARATOR . '*', GLOB_ONLYDIR);
+        $directories = glob($languageDirectory.DIRECTORY_SEPARATOR.'*', GLOB_ONLYDIR);
 
-        if (false === $directories) {
+        if ($directories === false) {
             return [];
         }
 
-        $locales = array_map(static fn(string $directory): string => basename($directory), $directories);
+        $locales = array_map(static fn (string $directory): string => basename($directory), $directories);
         sort($locales, SORT_STRING);
 
         return $locales;
@@ -88,15 +88,15 @@ final class TranslationParity
      */
     private static function translationFilesForLocale(string $languageDirectory, string $locale): array
     {
-        $localeDirectory = $languageDirectory . DIRECTORY_SEPARATOR . $locale;
+        $localeDirectory = $languageDirectory.DIRECTORY_SEPARATOR.$locale;
 
-        if ( ! is_dir($localeDirectory)) {
+        if (! is_dir($localeDirectory)) {
             return [];
         }
 
         $files = array_map(
-            static fn(SplFileInfo $file): string => str_replace('\\', '/', $file->getRelativePathname()),
-            iterator_to_array((new Finder())->files()->name('*.php')->in($localeDirectory)),
+            static fn (SplFileInfo $file): string => str_replace('\\', '/', $file->getRelativePathname()),
+            iterator_to_array((new Finder)->files()->name('*.php')->in($localeDirectory)),
         );
 
         sort($files, SORT_STRING);
@@ -110,7 +110,7 @@ final class TranslationParity
     private static function translationKeysForFile(string $filePath, string $context): array
     {
         $translations = self::requireTranslationArray($filePath, $context);
-        $keys = array_map(static fn(string $key): string => (string) $key, array_keys(Arr::dot($translations)));
+        $keys = array_map(static fn (string $key): string => (string) $key, array_keys(Arr::dot($translations)));
         sort($keys, SORT_STRING);
 
         return $keys;
@@ -119,10 +119,10 @@ final class TranslationParity
     private static function localeFilePath(string $languageDirectory, string $locale, string $relativeFilePath): string
     {
         return $languageDirectory
-            . DIRECTORY_SEPARATOR
-            . $locale
-            . DIRECTORY_SEPARATOR
-            . str_replace('/', DIRECTORY_SEPARATOR, $relativeFilePath);
+            .DIRECTORY_SEPARATOR
+            .$locale
+            .DIRECTORY_SEPARATOR
+            .str_replace('/', DIRECTORY_SEPARATOR, $relativeFilePath);
     }
 
     private static function assertLocaleHasMatchingFilesAndKeys(
@@ -137,7 +137,7 @@ final class TranslationParity
             $sourceFilePath = self::localeFilePath($languageDirectory, $sourceLocale, $relativeFilePath);
             $targetFilePath = self::localeFilePath($languageDirectory, $targetLocale, $relativeFilePath);
 
-            if ( ! file_exists($targetFilePath)) {
+            if (! file_exists($targetFilePath)) {
                 Assert::fail(sprintf(
                     'Module [%s] locale [%s] is missing file [%s] that exists in [%s].',
                     $moduleName,
@@ -158,7 +158,7 @@ final class TranslationParity
 
             $missingKeys = array_values(array_diff($sourceKeys, $targetKeys));
 
-            if ([] !== $missingKeys) {
+            if ($missingKeys !== []) {
                 Assert::fail(sprintf(
                     'Module [%s] locale [%s] is missing keys from [%s] in file [%s]: %s',
                     $moduleName,
@@ -180,10 +180,10 @@ final class TranslationParity
             return;
         }
 
-        $keys = array_map(static fn(string $key): string => (string) $key, array_keys($translations));
+        $keys = array_map(static fn (string $key): string => (string) $key, array_keys($translations));
         $sortedKeys = $keys;
 
-        usort($sortedKeys, static fn(string $left, string $right): int => strcmp($left, $right));
+        usort($sortedKeys, static fn (string $left, string $right): int => strcmp($left, $right));
 
         if ($keys !== $sortedKeys) {
             Assert::fail(sprintf(
@@ -218,7 +218,7 @@ final class TranslationParity
      */
     private static function assertIsTranslationArray(mixed $translations, string $context): void
     {
-        if ( ! is_array($translations)) {
+        if (! is_array($translations)) {
             Assert::fail(sprintf('%s must return an array.', $context));
         }
     }

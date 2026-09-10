@@ -68,10 +68,10 @@ final class FaqResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => ListFaqs::route('/'),
+            'index' => ListFaqs::route('/'),
             'create' => CreateFaq::route('/create'),
-            'view'   => ViewFaq::route('/{record}'),
-            'edit'   => EditFaq::route('/{record}/edit'),
+            'view' => ViewFaq::route('/{record}'),
+            'edit' => EditFaq::route('/{record}/edit'),
         ];
     }
 

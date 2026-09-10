@@ -13,6 +13,6 @@ final class CreateUserProfile extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-user-profile::navigation.user_profile');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-user-profile::navigation.user_profile');
     }
 }

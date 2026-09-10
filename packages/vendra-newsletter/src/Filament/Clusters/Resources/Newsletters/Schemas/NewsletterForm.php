@@ -20,7 +20,7 @@ final class NewsletterForm
         return $schema
             ->components([
                 TextInput::make('subject')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.subject'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.subject'))
                     ->autofocus()
                     ->columnSpanFull()
                     ->label(__('vendra-newsletter::attributes.subject'))
@@ -29,26 +29,26 @@ final class NewsletterForm
                     ->required(),
 
                 Select::make('status')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.status'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.status'))
                     ->columnSpan(['lg' => 1])
                     ->default(NewsletterStatusEnum::Draft)
                     ->label(__('vendra-newsletter::attributes.status'))
                     ->live()
                     ->native(false)
                     ->options(NewsletterStatusEnum::class)
-                    ->disableOptionWhen(fn(string $value): bool => NewsletterStatusEnum::Sent->value === $value)
+                    ->disableOptionWhen(fn (string $value): bool => NewsletterStatusEnum::Sent->value === $value)
                     ->required()
                     ->selectablePlaceholder(false),
 
                 DateTimePicker::make('scheduled_at')
-                    ->afterStateUpdated(fn(Livewire $livewire) => $livewire->validateOnly('data.scheduled_at'))
+                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.scheduled_at'))
                     ->columnSpan(['lg' => 1])
                     ->label(__('vendra-newsletter::attributes.scheduled_at'))
                     ->live()
                     ->minDate(now())
-                    ->required(fn(Get $get): bool => NewsletterStatusEnum::Scheduled === $get('status'))
+                    ->required(fn (Get $get): bool => $get('status') === NewsletterStatusEnum::Scheduled)
                     ->seconds(false)
-                    ->visible(fn(Get $get): bool => NewsletterStatusEnum::Scheduled === $get('status')),
+                    ->visible(fn (Get $get): bool => $get('status') === NewsletterStatusEnum::Scheduled),
 
                 RichEditor::make('content')
                     ->columnSpanFull()

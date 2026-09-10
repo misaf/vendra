@@ -22,6 +22,8 @@ use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\Metadata\Resource\ResourceMetadataCollection;
 use ApiPlatform\OpenApi\Model\Operation as OpenApiOperation;
 use ApiPlatform\OpenApi\Model\Parameter as OpenApiParameter;
+use Carbon\CarbonImmutable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\In;
 use Misaf\VendraApi\State\EloquentResourceOptions;
@@ -68,27 +70,27 @@ return [
     'stores' => [
 
         'array' => [
-            'driver'    => 'array',
+            'driver' => 'array',
             'serialize' => false,
         ],
 
         'database' => [
-            'driver'          => 'database',
-            'connection'      => env('DB_CACHE_CONNECTION'),
-            'table'           => env('DB_CACHE_TABLE', 'cache'),
+            'driver' => 'database',
+            'connection' => env('DB_CACHE_CONNECTION'),
+            'table' => env('DB_CACHE_TABLE', 'cache'),
             'lock_connection' => env('DB_CACHE_LOCK_CONNECTION'),
-            'lock_table'      => env('DB_CACHE_LOCK_TABLE'),
+            'lock_table' => env('DB_CACHE_LOCK_TABLE'),
         ],
 
         'file' => [
-            'driver'    => 'file',
-            'path'      => storage_path('framework/cache/data'),
+            'driver' => 'file',
+            'path' => storage_path('framework/cache/data'),
             'lock_path' => storage_path('framework/cache/data'),
         ],
 
         'redis' => [
-            'driver'          => 'redis',
-            'connection'      => env('REDIS_CACHE_CONNECTION', 'cache'),
+            'driver' => 'redis',
+            'connection' => env('REDIS_CACHE_CONNECTION', 'cache'),
             'lock_connection' => env('REDIS_CACHE_LOCK_CONNECTION', 'default'),
         ],
 
@@ -113,7 +115,7 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')) . '-cache-'),
+    'prefix' => env('CACHE_PREFIX', Str::slug((string) env('APP_NAME', 'laravel')).'-cache-'),
 
     /*
     |--------------------------------------------------------------------------
@@ -138,8 +140,8 @@ return [
 
     'serializable_classes' => [
         stdClass::class,
-        Illuminate\Support\Collection::class,
-        Carbon\CarbonImmutable::class,
+        Collection::class,
+        CarbonImmutable::class,
 
         // API Platform resource/property metadata (see comment above).
         ApiProperty::class,

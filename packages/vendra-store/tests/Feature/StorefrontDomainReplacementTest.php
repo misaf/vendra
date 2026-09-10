@@ -47,7 +47,7 @@ it('forces a redeploy so the container is rebuilt with the new routing label', f
 
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
-        fn(ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
+        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
     );
 });
 
@@ -62,7 +62,7 @@ it('rejects a domain another store already runs its storefront on', function ():
 
     // Without the rule this reaches the database and comes back as a query
     // error mid-transaction rather than a message on the field.
-    expect(fn() => app(ReplaceStoreDomainAction::class)->execute($store, 'taken.test'))
+    expect(fn () => app(ReplaceStoreDomainAction::class)->execute($store, 'taken.test'))
         ->toThrow(ValidationException::class);
 });
 
@@ -102,7 +102,7 @@ describe('convergence', function (): void {
         $observed = new StorefrontObservation(
             state: StorefrontRuntimeState::Running,
             image: $deployment->storefrontImage?->image,
-            containerName: 'vendra-storefront-' . $deployment->slug,
+            containerName: 'vendra-storefront-'.$deployment->slug,
             domain: 'old.test',
         );
 
@@ -129,13 +129,13 @@ describe('convergence', function (): void {
         $provisioner->shouldReceive('observe')->once()->andReturn(new StorefrontObservation(
             state: StorefrontRuntimeState::Running,
             image: $deployment->storefrontImage?->image,
-            containerName: 'vendra-storefront-' . $deployment->slug,
+            containerName: 'vendra-storefront-'.$deployment->slug,
             domain: 'old.test',
         ));
         $provisioner->shouldReceive('provision')->once()->andReturn(
             StorefrontProvisionResult::make(
                 ready: true,
-                reference: 'vendra-storefront-' . $deployment->slug,
+                reference: 'vendra-storefront-'.$deployment->slug,
                 imageDigest: null,
             ),
         );

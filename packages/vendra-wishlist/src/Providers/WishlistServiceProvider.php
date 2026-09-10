@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraWishlist\Providers;
 
 use Composer\InstalledVersions;
-
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Console\AboutCommand;
@@ -42,7 +41,7 @@ final class WishlistServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), WishlistPlugin::ID)) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), WishlistPlugin::ID)) {
                 return;
             }
 
@@ -57,13 +56,13 @@ final class WishlistServiceProvider extends PackageServiceProvider
          * FQCNs, so relocating a model class never orphans stored rows.
          */
         Relation::morphMap([
-            'wishlist'      => Wishlist::class,
+            'wishlist' => Wishlist::class,
             'wishlist_item' => WishlistItem::class,
         ]);
 
         $this->app->make(TenantTableRegistry::class)->register('wishlists');
         $this->app->make(TenantSeeders::class)->register('vendra-wishlist:seed', priority: 61);
 
-        AboutCommand::add('Vendra Wishlist', fn(): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-wishlist')]);
+        AboutCommand::add('Vendra Wishlist', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-wishlist')]);
     }
 }

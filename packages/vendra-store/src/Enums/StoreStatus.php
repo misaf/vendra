@@ -40,7 +40,7 @@ enum StoreStatus: string
      */
     public function isServing(): bool
     {
-        return self::Active === $this;
+        return $this === self::Active;
     }
 
     /**
@@ -50,7 +50,7 @@ enum StoreStatus: string
     {
         return match ($this) {
             self::Pending, self::Provisioning => false,
-            default                           => true,
+            default => true,
         };
     }
 }

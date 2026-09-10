@@ -26,25 +26,25 @@ final class CurrencyFactory extends Factory
         );
 
         return [
-            'code'           => $code,
-            'name'           => CurrencyRegistry::nameFor($code),
-            'symbol'         => null,
+            'code' => $code,
+            'name' => CurrencyRegistry::nameFor($code),
+            'symbol' => null,
             'decimal_places' => CurrencyRegistry::minorUnitFor($code) ?? 2,
-            'type'           => CurrencyType::Fiat,
-            'active'         => true,
-            'is_default'     => false,
-            'position'       => $this->faker->numberBetween(1, 1000),
+            'type' => CurrencyType::Fiat,
+            'active' => true,
+            'is_default' => false,
+            'position' => $this->faker->numberBetween(1, 1000),
         ];
     }
 
     public function default(): static
     {
-        return $this->state(fn(): array => ['is_default' => true]);
+        return $this->state(fn (): array => ['is_default' => true]);
     }
 
     public function inactive(): static
     {
-        return $this->state(fn(): array => ['active' => false]);
+        return $this->state(fn (): array => ['active' => false]);
     }
 
     public function crypto(): static
@@ -55,21 +55,21 @@ final class CurrencyFactory extends Factory
             );
 
             return [
-                'code'           => $code,
-                'name'           => CurrencyRegistry::nameFor($code),
+                'code' => $code,
+                'name' => CurrencyRegistry::nameFor($code),
                 'decimal_places' => CurrencyRegistry::minorUnitFor($code) ?? 8,
-                'type'           => CurrencyType::Crypto,
+                'type' => CurrencyType::Crypto,
             ];
         });
     }
 
     public function code(string $code): static
     {
-        return $this->state(fn(): array => [
-            'code'           => $code,
-            'name'           => CurrencyRegistry::nameFor($code),
+        return $this->state(fn (): array => [
+            'code' => $code,
+            'name' => CurrencyRegistry::nameFor($code),
             'decimal_places' => CurrencyRegistry::minorUnitFor($code) ?? 2,
-            'type'           => CurrencyRegistry::typeFor($code) ?? CurrencyType::Fiat,
+            'type' => CurrencyRegistry::typeFor($code) ?? CurrencyType::Fiat,
         ]);
     }
 }

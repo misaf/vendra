@@ -31,7 +31,7 @@ class LoginNotification extends Notification implements ShouldQueueAfterCommit
 
     public function toMail(object $notifiable): MailMessage
     {
-        if ( ! $notifiable instanceof HasUsername) {
+        if (! $notifiable instanceof HasUsername) {
             throw new RuntimeException(
                 'Notifiable must implement HasUsername to receive LoginNotification.'
             );
@@ -40,7 +40,7 @@ class LoginNotification extends Notification implements ShouldQueueAfterCommit
         $username = $notifiable->getAuthifyLogUsername();
         $resetPasswordUrl = route('filament.panel-user.auth.password-reset.request');
 
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject(__('vendra-authify-log::successfull-login-notification.login_notification'))
             ->greeting(__('vendra-authify-log::successfull-login-notification.hello_user', ['user' => $username]))
             ->line(__('vendra-authify-log::successfull-login-notification.we_noticed_that_your_account_was_accessed_on_our_website'))
@@ -48,6 +48,6 @@ class LoginNotification extends Notification implements ShouldQueueAfterCommit
             ->line(__('vendra-authify-log::successfull-login-notification.if_this_was_not_you_please_reset_your_password_immediately_to_secure_your_account'))
             ->action(__('vendra-authify-log::successfull-login-notification.reset_your_password'), $resetPasswordUrl)
             ->line(__('vendra-authify-log::successfull-login-notification.thank_you_for_trusting_our_application'))
-            ->salutation(__('vendra-authify-log::successfull-login-notification.best_regards') . "\n" . Config::string('app.name'));
+            ->salutation(__('vendra-authify-log::successfull-login-notification.best_regards')."\n".Config::string('app.name'));
     }
 }

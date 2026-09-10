@@ -65,7 +65,7 @@ final class CustomPageCategoryTable
                 ->icon(Heroicon::Tag)
                 ->suffixBadges([
                     Badge::make('count')
-                        ->label(fn(CustomPageCategory $record): string => (string) Number::format(static::integerAttribute($record, 'custom_pages_count')))
+                        ->label(fn (CustomPageCategory $record): string => (string) Number::format(self::integerAttribute($record, 'custom_pages_count')))
                         ->size(Size::Small),
                 ])
                 ->suffix(''),
@@ -73,7 +73,7 @@ final class CustomPageCategoryTable
             TextColumn::make('description')
                 ->label(__('vendra-custom-page::attributes.description'))
                 ->icon(Heroicon::DocumentText)
-                ->state(fn(CustomPageCategory $record, Livewire $livewire): string => static::translatedAttribute($record, 'description', $livewire))
+                ->state(fn (CustomPageCategory $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('slug')
@@ -92,8 +92,8 @@ final class CustomPageCategoryTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
 
             TextColumn::make('updated_at')
@@ -102,13 +102,13 @@ final class CustomPageCategoryTable
                 ->sinceTooltip()
                 ->when(
                     app()->isLocale('fa'),
-                    fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                 ),
         ];
 
         return $table
-            ->modifyQueryUsing(fn(Builder $query): Builder => $query->withCount('customPages'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->withCount('customPages'))
             ->columns($columns)
             ->description(__('vendra-custom-page::tables.description.custom_page_categories'))
             ->emptyStateHeading(__('vendra-custom-page::tables.empty_state.heading.custom_page_categories'))

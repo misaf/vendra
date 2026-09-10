@@ -50,7 +50,7 @@ final class WishlistItemsRelationManager extends RelationManager
         return $table
             ->columns([
                 TextColumn::make('sellable_type')
-                    ->formatStateUsing(fn(string $state): string => class_basename($state))
+                    ->formatStateUsing(fn (string $state): string => class_basename($state))
                     ->icon(Heroicon::Tag)
                     ->label(__('vendra-wishlist::attributes.sellable_type'))
                     ->searchable(),
@@ -60,7 +60,7 @@ final class WishlistItemsRelationManager extends RelationManager
                     ->sortable(),
 
                 TextColumn::make('metadata')
-                    ->formatStateUsing(fn(?array $state): string => $state ? json_encode($state, JSON_THROW_ON_ERROR) : '—')
+                    ->formatStateUsing(fn (?array $state): string => $state ? json_encode($state, JSON_THROW_ON_ERROR) : '—')
                     ->label(__('vendra-wishlist::attributes.metadata')),
 
                 TextColumn::make('created_at')
@@ -72,8 +72,8 @@ final class WishlistItemsRelationManager extends RelationManager
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->recordActions([

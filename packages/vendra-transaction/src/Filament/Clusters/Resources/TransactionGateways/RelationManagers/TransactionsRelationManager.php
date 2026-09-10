@@ -56,16 +56,16 @@ final class TransactionsRelationManager extends RelationManager
     {
         $tabs = [
             'all' => Tab::make()
-                ->badge(fn(): string => (string) Number::format($this->getOwnerRecord()->transactions()->count()))
+                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactions()->count()))
                 ->deferBadge(),
         ];
 
         foreach (TransactionTypeEnum::cases() as $type) {
             $tabs[$type->value] = Tab::make()
-                ->badge(fn(): string => (string) Number::format($this->getOwnerRecord()->transactions()->ofType($type)->count()))
+                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactions()->ofType($type)->count()))
                 ->deferBadge()
                 ->label($type->getLabel())
-                ->modifyQueryUsing(fn(Builder $query) => $query->ofType($type));
+                ->modifyQueryUsing(fn (Builder $query) => $query->ofType($type));
         }
 
         return $tabs;

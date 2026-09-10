@@ -23,7 +23,7 @@ final class ResetPasswordNotification extends ResetPassword implements NotTenant
 
     public function toMail(mixed $notifiable): MailMessage
     {
-        if ( ! $notifiable instanceof HasName) {
+        if (! $notifiable instanceof HasName) {
             throw new InvalidArgumentException(sprintf(
                 'Expected a Filament user, got %s.',
                 get_debug_type($notifiable),
@@ -31,9 +31,9 @@ final class ResetPasswordNotification extends ResetPassword implements NotTenant
         }
 
         $guard = config('auth.defaults.passwords');
-        $expire = config('auth.passwords.' . (is_string($guard) ? $guard : '') . '.expire');
+        $expire = config('auth.passwords.'.(is_string($guard) ? $guard : '').'.expire');
 
-        return (new MailMessage())
+        return new MailMessage()
             ->subject(__('mail.reset_password.subject'))
             ->line(__('mail.reset_password.greeting', ['user' => $notifiable->getFilamentName()]))
             ->line(__('mail.reset_password.line'))

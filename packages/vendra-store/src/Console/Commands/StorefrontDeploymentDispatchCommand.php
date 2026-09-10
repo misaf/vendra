@@ -28,7 +28,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
 {
     public function handle(StorefrontRuntimeConfiguration $runtime): int
     {
-        if ( ! $runtime->isConfigured()) {
+        if (! $runtime->isConfigured()) {
             $this->error($runtime->misconfigurationMessage());
 
             return self::FAILURE;
@@ -101,7 +101,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     private function recordSkippedDispatches(): ArrayObject
     {
         /** @var ArrayObject<int, int> $skipped */
-        $skipped = new ArrayObject();
+        $skipped = new ArrayObject;
 
         Event::listen(static function (UniqueJobSkipped $event) use ($skipped): void {
             if (property_exists($event->job, 'deploymentId')) {
@@ -113,11 +113,11 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     }
 
     /**
-     * @param ArrayObject<int, int> $skipped
+     * @param  ArrayObject<int, int>  $skipped
      */
     private function reportSkipped(ArrayObject $skipped): void
     {
-        if (0 === $skipped->count()) {
+        if ($skipped->count() === 0) {
             return;
         }
 
@@ -131,9 +131,9 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
 
         $this->warn(sprintf(
             '%d skipped, already being provisioned: %s. A deployment holds its lock through every retry, so one that '
-            . 'is failing and backing off cannot be pushed again until the queue gives up on it.',
+            .'is failing and backing off cannot be pushed again until the queue gives up on it.',
             count($ids),
-            '' === $slugs ? implode(', ', $ids) : $slugs,
+            $slugs === '' ? implode(', ', $ids) : $slugs,
         ));
     }
 
@@ -182,7 +182,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
      * Only a `--sync` run has anything to report: a queued job has not run yet,
      * so there is no outcome to collect.
      *
-     * @param list<mixed> $outcomes
+     * @param  list<mixed>  $outcomes
      */
     protected function reportOutcomes(array $outcomes): void {}
 }

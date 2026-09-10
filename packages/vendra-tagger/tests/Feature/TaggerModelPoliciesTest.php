@@ -8,7 +8,7 @@ use Misaf\VendraTagger\Enums\TaggerPolicyEnum;
 use Misaf\VendraTagger\Models\Tagger;
 
 it('defines the expected tag model contract', function (): void {
-    $tag = new Tagger();
+    $tag = new Tagger;
 
     expect(class_uses_recursive(Tagger::class))->toContain(BelongsToTenant::class)
         ->and($tag->getTable())->toBe('tags')
@@ -16,7 +16,7 @@ it('defines the expected tag model contract', function (): void {
         ->and($tag->translatable)->toBe(['name', 'slug'])
         ->and($tag->getCasts())->toMatchArray([
             'tenant_id' => 'integer',
-            'position'  => 'integer',
+            'position' => 'integer',
         ])
         ->and($tag->determineOrderColumnName())->toBe('position')
         ->and($tag->shouldSortWhenCreating())->toBeTrue();

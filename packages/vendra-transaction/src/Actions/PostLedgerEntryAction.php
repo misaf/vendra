@@ -30,7 +30,7 @@ final class PostLedgerEntryAction
             }
 
             $entry = new LedgerEntry([
-                'amount'        => $amount,
+                'amount' => $amount,
                 'balance_after' => $balanceAfter,
             ]);
             $entry->wallet()->associate($locked);

@@ -29,7 +29,7 @@ enum AffiliateStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getColor(): array
     {
         return match ($this) {
-            self::Active    => Color::Green,
+            self::Active => Color::Green,
             self::Suspended => Color::Red,
         };
     }
@@ -37,7 +37,7 @@ enum AffiliateStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getIcon(): Heroicon
     {
         return match ($this) {
-            self::Active    => Heroicon::OutlinedCheckCircle,
+            self::Active => Heroicon::OutlinedCheckCircle,
             self::Suspended => Heroicon::OutlinedNoSymbol,
         };
     }
@@ -45,7 +45,7 @@ enum AffiliateStatusEnum: string implements HasColor, HasIcon, HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::Active    => __('vendra-affiliate::enums.affiliate_status_active'),
+            self::Active => __('vendra-affiliate::enums.affiliate_status_active'),
             self::Suspended => __('vendra-affiliate::enums.affiliate_status_suspended'),
         };
     }

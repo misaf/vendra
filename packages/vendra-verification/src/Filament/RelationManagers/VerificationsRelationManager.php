@@ -51,10 +51,10 @@ final class VerificationsRelationManager extends RelationManager
             Select::make('status')
                 ->label(__('vendra-verification::verification.fields.status'))
                 ->options([
-                    'pending'  => __('vendra-verification::verification.statuses.pending'),
+                    'pending' => __('vendra-verification::verification.statuses.pending'),
                     'approved' => __('vendra-verification::verification.statuses.approved'),
                     'rejected' => __('vendra-verification::verification.statuses.rejected'),
-                    'expired'  => __('vendra-verification::verification.statuses.expired'),
+                    'expired' => __('vendra-verification::verification.statuses.expired'),
                 ])
                 ->required(),
             TextInput::make('provider')->label(__('vendra-verification::verification.fields.provider')),
@@ -62,7 +62,7 @@ final class VerificationsRelationManager extends RelationManager
             Select::make('country_code')
                 ->label(__('vendra-verification::verification.fields.country_code'))
                 ->native(false)
-                ->options(fn(): array => Countries::options())
+                ->options(fn (): array => Countries::options())
                 ->searchable(),
             DateTimePicker::make('verified_at')->label(__('vendra-verification::verification.fields.verified_at')),
             DateTimePicker::make('expires_at')
@@ -98,8 +98,8 @@ final class VerificationsRelationManager extends RelationManager
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
                 TextColumn::make('expires_at')
                     ->alignCenter()
@@ -108,8 +108,8 @@ final class VerificationsRelationManager extends RelationManager
                     ->sinceTooltip()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i')
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
             ])
             ->headerActions([CreateAction::make()])

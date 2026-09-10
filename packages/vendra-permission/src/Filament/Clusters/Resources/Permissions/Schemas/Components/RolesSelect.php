@@ -14,7 +14,7 @@ final class RolesSelect
 {
     public static function make(string $name = 'roles'): Select
     {
-        $existsRule = Rule::exists((new Role())->getTable(), 'id');
+        $existsRule = Rule::exists((new Role)->getTable(), 'id');
 
         if (TenantAwareness::enabled()) {
             $existsRule->where(TenantSchema::column(), TenantAwareness::currentId());

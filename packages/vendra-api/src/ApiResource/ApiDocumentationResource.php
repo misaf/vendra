@@ -27,7 +27,7 @@ use Mcp\Schema\Result\ReadResourceResult;
 final readonly class ApiDocumentationResource
 {
     /**
-     * @param array<int, string> $formats
+     * @param  array<int, string>  $formats
      */
     public function __construct(
         public string $title,
@@ -38,19 +38,19 @@ final readonly class ApiDocumentationResource
     ) {}
 
     /**
-     * @param array<string, mixed> $uriVariables
-     * @param array<string, mixed> $context
+     * @param  array<string, mixed>  $uriVariables
+     * @param  array<string, mixed>  $context
      *
      * @throws JsonException
      */
     public static function provide(Operation $operation, array $uriVariables = [], array $context = []): ReadResourceResult
     {
         $documentation = json_encode([
-            'title'       => Config::string('api-platform.title', 'Vendra API'),
+            'title' => Config::string('api-platform.title', 'Vendra API'),
             'description' => Config::string('api-platform.description', ''),
-            'version'     => Config::string('api-platform.version', '1.0.0'),
+            'version' => Config::string('api-platform.version', '1.0.0'),
             'mcpEndpoint' => '/mcp',
-            'formats'     => array_keys(Config::array('api-platform.formats', [])),
+            'formats' => array_keys(Config::array('api-platform.formats', [])),
         ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
 
         return new ReadResourceResult([

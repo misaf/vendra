@@ -28,7 +28,7 @@ final readonly class QuoteDeliveryProcessor implements ProcessorInterface
         $quote = $this->zoneMatcher->quoteFor(
             latitude: $data->latitude,
             longitude: $data->longitude,
-            currencyCode: null === $data->currencyCode ? null : mb_strtoupper($data->currencyCode),
+            currencyCode: $data->currencyCode === null ? null : mb_strtoupper($data->currencyCode),
         );
 
         return new QuotedDelivery(

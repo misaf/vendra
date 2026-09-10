@@ -27,9 +27,9 @@ it('escapes dynamic authentication log table markup', function (): void {
     ]);
 
     $formattedState = '<span class="flex items-center space-x-2">'
-        . '<img src="' . e(asset('vendor/blade-country-flags/4x3-' . Str::lower($authifyLog->ip_country) . '.svg')) . '" alt="US" title="US" class="w-4 inline-block" />'
-        . '<span>&lt;script&gt;alert(1)&lt;/script&gt;</span>'
-        . '</span>';
+        .'<img src="'.e(asset('vendor/blade-country-flags/4x3-'.Str::lower($authifyLog->ip_country).'.svg')).'" alt="US" title="US" class="w-4 inline-block" />'
+        .'<span>&lt;script&gt;alert(1)&lt;/script&gt;</span>'
+        .'</span>';
 
     livewire(ListAuthifyLogs::class)
         ->call('loadTable')

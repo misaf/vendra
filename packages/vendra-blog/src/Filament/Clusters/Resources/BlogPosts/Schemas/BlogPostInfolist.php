@@ -35,7 +35,7 @@ final class BlogPostInfolist
 
             TextEntry::make('description')
                 ->columnSpanFull()
-                ->formatStateUsing(fn(array|string|null $state): string => self::renderRichContent($state))
+                ->formatStateUsing(fn (array|string|null $state): string => self::renderRichContent($state))
                 ->html()
                 ->label(__('vendra-blog::attributes.description')),
 
@@ -66,9 +66,8 @@ final class BlogPostInfolist
             ->label(__("vendra-blog::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
-
 }

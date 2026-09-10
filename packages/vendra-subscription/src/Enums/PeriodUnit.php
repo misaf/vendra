@@ -19,10 +19,10 @@ enum PeriodUnit: string
     public function advance(CarbonInterface $date, int $count): CarbonInterface
     {
         return match ($this) {
-            self::Day   => $date->copy()->addDays($count),
-            self::Week  => $date->copy()->addWeeks($count),
+            self::Day => $date->copy()->addDays($count),
+            self::Week => $date->copy()->addWeeks($count),
             self::Month => $date->copy()->addMonths($count),
-            self::Year  => $date->copy()->addYears($count),
+            self::Year => $date->copy()->addYears($count),
         };
     }
 }

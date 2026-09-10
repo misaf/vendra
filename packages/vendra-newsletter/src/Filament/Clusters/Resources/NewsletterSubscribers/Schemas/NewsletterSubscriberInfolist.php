@@ -22,7 +22,7 @@ final class NewsletterSubscriberInfolist
                 IconEntry::make('subscribed')
                     ->boolean()
                     ->label(__('vendra-newsletter::attributes.active'))
-                    ->state(fn(NewsletterSubscriber $record): bool => $record->isSubscribed()),
+                    ->state(fn (NewsletterSubscriber $record): bool => $record->isSubscribed()),
                 self::dateEntry('subscribed_at'),
                 self::dateEntry('unsubscribed_at'),
                 self::dateEntry('created_at'),
@@ -37,8 +37,8 @@ final class NewsletterSubscriberInfolist
             ->label(__("vendra-newsletter::attributes.{$name}"))
             ->when(
                 app()->isLocale('fa'),
-                fn(TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn(TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
+                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
             );
     }
 }

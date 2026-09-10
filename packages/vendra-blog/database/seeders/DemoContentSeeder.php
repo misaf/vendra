@@ -23,7 +23,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
             ->active()
             ->count(4)
             ->create()
-            ->each(fn(BlogPostCategory $blogPostCategory): mixed => BlogPostFactory::new()
+            ->each(fn (BlogPostCategory $blogPostCategory): mixed => BlogPostFactory::new()
                 ->forCategory($blogPostCategory)
                 ->active()
                 ->count(3)
@@ -67,10 +67,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleSeedFixtureRecord(array $data): void
     {
         $blogPostCategory = BlogPostCategory::create([
-            'name'        => $data['name'],
+            'name' => $data['name'],
             'description' => $data['description'],
-            'slug'        => $data['slug'],
-            'active'      => $data['active'],
+            'slug' => $data['slug'],
+            'active' => $data['active'],
         ]);
 
         foreach ($data['blog_posts'] as $blogPostRecord) {
@@ -89,10 +89,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     private function handleBlogPostFixtureRecord(BlogPostCategory $blogPostCategory, array $blogPostRecord): void
     {
         $blogPostCategory->blogPosts()->create([
-            'name'        => $blogPostRecord['name'],
+            'name' => $blogPostRecord['name'],
             'description' => $blogPostRecord['description'],
-            'slug'        => $blogPostRecord['slug'],
-            'active'      => $blogPostRecord['active'],
+            'slug' => $blogPostRecord['slug'],
+            'active' => $blogPostRecord['active'],
         ]);
     }
 
@@ -129,22 +129,22 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $validated = Validator::make(
             data: $record,
             rules: [
-                'name'                       => ['required', 'array', 'min:1'],
-                'name.*'                     => ['required', 'string'],
-                'description'                => ['required', 'array', 'min:1'],
-                'description.*'              => ['required', 'string'],
-                'slug'                       => ['required', 'array', 'min:1'],
-                'slug.*'                     => ['required', 'string'],
-                'active'                     => ['required', 'boolean'],
-                'blog_posts'                 => ['required', 'array', 'list'],
-                'blog_posts.*'               => ['required', 'array:name,description,slug,active'],
-                'blog_posts.*.name'          => ['required', 'array', 'min:1'],
-                'blog_posts.*.name.*'        => ['required', 'string'],
-                'blog_posts.*.description'   => ['required', 'array', 'min:1'],
+                'name' => ['required', 'array', 'min:1'],
+                'name.*' => ['required', 'string'],
+                'description' => ['required', 'array', 'min:1'],
+                'description.*' => ['required', 'string'],
+                'slug' => ['required', 'array', 'min:1'],
+                'slug.*' => ['required', 'string'],
+                'active' => ['required', 'boolean'],
+                'blog_posts' => ['required', 'array', 'list'],
+                'blog_posts.*' => ['required', 'array:name,description,slug,active'],
+                'blog_posts.*.name' => ['required', 'array', 'min:1'],
+                'blog_posts.*.name.*' => ['required', 'string'],
+                'blog_posts.*.description' => ['required', 'array', 'min:1'],
                 'blog_posts.*.description.*' => ['required', 'string'],
-                'blog_posts.*.slug'          => ['required', 'array', 'min:1'],
-                'blog_posts.*.slug.*'        => ['required', 'string'],
-                'blog_posts.*.active'        => ['required', 'boolean'],
+                'blog_posts.*.slug' => ['required', 'array', 'min:1'],
+                'blog_posts.*.slug.*' => ['required', 'string'],
+                'blog_posts.*.active' => ['required', 'boolean'],
             ],
         )->validate();
 

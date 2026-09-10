@@ -9,7 +9,7 @@ use Misaf\VendraLocalization\Contracts\LocaleResolver;
 use Misaf\VendraLocalization\Resolvers\QueryLocaleResolver;
 
 beforeEach(function (): void {
-    if ( ! interface_exists(LocaleResolver::class)) {
+    if (! interface_exists(LocaleResolver::class)) {
         $this->markTestSkipped('The optional misaf/vendra-localization package is not installed.');
     }
 });

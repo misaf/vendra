@@ -47,17 +47,17 @@ return [
     */
 
     'units' => [
-        'kg'    => 'Kilogram (kg)',
-        'g'     => 'Gram (g)',
-        'm'     => 'Meter (m)',
-        'cm'    => 'Centimeter (cm)',
-        'l'     => 'Liter (l)',
-        'ml'    => 'Milliliter (ml)',
-        'item'  => 'Item',
+        'kg' => 'Kilogram (kg)',
+        'g' => 'Gram (g)',
+        'm' => 'Meter (m)',
+        'cm' => 'Centimeter (cm)',
+        'l' => 'Liter (l)',
+        'ml' => 'Milliliter (ml)',
+        'item' => 'Item',
         'piece' => 'Piece',
-        'pack'  => 'Pack',
+        'pack' => 'Pack',
         'month' => 'Month',
-        'year'  => 'Year',
+        'year' => 'Year',
     ],
 
 ];

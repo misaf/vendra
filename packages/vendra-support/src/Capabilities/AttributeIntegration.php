@@ -45,6 +45,6 @@ final class AttributeIntegration
             return app(AttributeResolver::class);
         }
 
-        return new NullAttributeResolver();
+        return new NullAttributeResolver;
     }
 }

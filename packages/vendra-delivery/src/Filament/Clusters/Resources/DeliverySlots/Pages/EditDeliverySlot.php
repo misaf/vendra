@@ -19,7 +19,7 @@ final class EditDeliverySlot extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb') . ' ' . __('vendra-delivery::navigation.delivery_slot');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/edit-record.breadcrumb').' '.__('vendra-delivery::navigation.delivery_slot');
     }
 
     protected function getHeaderActions(): array

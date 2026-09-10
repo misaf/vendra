@@ -15,8 +15,7 @@ use Misaf\VendraAttribute\Models\Attribute;
 final class AttributeLinksHandler implements LinksHandlerInterface
 {
     /**
-     * @param Builder<Attribute> $builder
-     *
+     * @param  Builder<Attribute>  $builder
      * @return Builder<Attribute>
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
@@ -25,7 +24,7 @@ final class AttributeLinksHandler implements LinksHandlerInterface
             ->with('values:id,attribute_id,value,position')
             ->where('active', true);
 
-        if ( ! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
+        if (! ($context['operation'] ?? null) instanceof CollectionOperationInterface) {
             $mcpData = $context['mcp_data'] ?? [];
             $builder->whereKey($uriVariables['id'] ?? (is_array($mcpData) ? ($mcpData['id'] ?? null) : null));
         }

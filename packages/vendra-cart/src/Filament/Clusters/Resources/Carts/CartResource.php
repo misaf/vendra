@@ -106,7 +106,7 @@ final class CartResource extends Resource
     {
         return [
             'index' => ListCarts::route('/'),
-            'view'  => ViewCart::route('/{record}'),
+            'view' => ViewCart::route('/{record}'),
         ];
     }
 }

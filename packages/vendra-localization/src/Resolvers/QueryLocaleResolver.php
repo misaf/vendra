@@ -13,6 +13,6 @@ final readonly class QueryLocaleResolver implements LocaleResolver
     {
         $locale = $request->query('locale');
 
-        return is_string($locale) && '' !== $locale ? $locale : null;
+        return is_string($locale) && $locale !== '' ? $locale : null;
     }
 }

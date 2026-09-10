@@ -13,8 +13,8 @@ it('persists phone numbers against the installed user profile', function (): voi
 
     $phone = PhoneNumber::factory()->create([
         'user_profile_id' => $profile->id,
-        'country_code'    => 'DE',
-        'number'          => '+4930123456',
+        'country_code' => 'DE',
+        'number' => '+4930123456',
     ]);
 
     expect($profile->phoneNumbers())->toBeInstanceOf(HasMany::class)

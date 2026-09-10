@@ -26,8 +26,8 @@ describe('Filling a form in a test', function () use (&$tenant): void {
 
         livewire(CreatePermission::class)
             ->fillForm([
-                'name'        => $permission->name,
-                'guard_name'  => $permission->guard_name,
+                'name' => $permission->name,
+                'guard_name' => $permission->guard_name,
                 'description' => $permission->description,
             ])
             ->call('create');
@@ -35,8 +35,8 @@ describe('Filling a form in a test', function () use (&$tenant): void {
         expect(
             Permission::query()
                 ->where([
-                    'name'        => $permission->name,
-                    'guard_name'  => $permission->guard_name,
+                    'name' => $permission->name,
+                    'guard_name' => $permission->guard_name,
                     'description' => $permission->description,
                 ])
                 ->exists()
@@ -55,15 +55,15 @@ describe('Testing form validation', function () use (&$tenant): void {
 
         livewire(CreatePermission::class)
             ->fillForm([
-                'name'        => $permission->name,
-                'guard_name'  => $permission->guard_name,
+                'name' => $permission->name,
+                'guard_name' => $permission->guard_name,
                 'description' => $permission->description,
             ])
             ->call('create')
             ->assertHasNoFormErrors();
     })->with([
-        'name column'        => 'name',
-        'guard_name column'  => 'guard_name',
+        'name column' => 'name',
+        'guard_name column' => 'guard_name',
         'description column' => 'description',
     ]);
 
@@ -77,14 +77,14 @@ describe('Testing form validation', function () use (&$tenant): void {
 
         livewire(CreatePermission::class)
             ->fillForm([
-                'name'        => null,
-                'guard_name'  => $permission->guard_name,
+                'name' => null,
+                'guard_name' => $permission->guard_name,
                 'description' => $permission->description,
             ])
             ->call('create')
             ->assertHasFormErrors([$column => 'required']);
     })->with([
-        'name column'       => 'name',
+        'name column' => 'name',
         'guard_name column' => 'guard_name',
     ]);
 });

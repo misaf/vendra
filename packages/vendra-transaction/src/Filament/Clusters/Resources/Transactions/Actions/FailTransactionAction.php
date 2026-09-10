@@ -15,12 +15,12 @@ final class FailTransactionAction
     public static function make(): Action
     {
         return Action::make('fail')
-            ->authorize(fn(Transaction $record): bool => auth()->user()?->can('update', $record) ?? false)
+            ->authorize(fn (Transaction $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('gray')
             ->icon(Heroicon::OutlinedExclamationTriangle)
             ->label(__('vendra-transaction::messages.fail'))
             ->requiresConfirmation()
-            ->visible(fn(Transaction $record): bool => $record->status->canTransitionTo(Failed::class))
+            ->visible(fn (Transaction $record): bool => $record->status->canTransitionTo(Failed::class))
             ->action(function (Transaction $record): void {
                 $record->fail();
 

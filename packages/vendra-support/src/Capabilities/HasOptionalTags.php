@@ -17,11 +17,11 @@ trait HasOptionalTags
     {
         $relationship = TagIntegration::relationship();
 
-        if (null === $relationship) {
+        if ($relationship === null) {
             throw new LogicException('Install a tag provider to use tags.');
         }
 
-        $tagTable = (new $relationship->model())->getTable();
+        $tagTable = (new $relationship->model)->getTable();
 
         return $this->morphToMany(
             $relationship->model,
@@ -70,7 +70,7 @@ trait HasOptionalTags
     {
         $relationship = TagIntegration::relationship();
 
-        if (null === $relationship) {
+        if ($relationship === null) {
             throw new LogicException('Install a tag provider to use tags.');
         }
 
@@ -84,7 +84,7 @@ trait HasOptionalTags
      */
     private function assertTagType(?string $type): void
     {
-        if (null !== $type && $type !== $this->tagType()) {
+        if ($type !== null && $type !== $this->tagType()) {
             throw new LogicException(sprintf(
                 'Tag type [%s] does not match the [%s] type declared by %s.',
                 $type,

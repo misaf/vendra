@@ -15,10 +15,10 @@ it('authorizes order abilities through permissions', function (string $method, O
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
     $arguments = in_array($method, ['view', 'update', 'delete'], true)
-        ? [$user, new Order()]
+        ? [$user, new Order]
         : [$user];
 
-    expect((new OrderPolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new OrderPolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', OrderPolicyEnum::View],
     ['viewAny', OrderPolicyEnum::ViewAny],
@@ -31,11 +31,11 @@ it('authorizes order line abilities through permissions', function (string $meth
     $user = Mockery::mock(Authorizable::class);
     $user->shouldReceive('can')->once()->with($permission->value)->andReturnTrue();
 
-    $arguments = 'view' === $method
-        ? [$user, new OrderLine()]
+    $arguments = $method === 'view'
+        ? [$user, new OrderLine]
         : [$user];
 
-    expect((new OrderLinePolicy())->{$method}(...$arguments))->toBeTrue();
+    expect((new OrderLinePolicy)->{$method}(...$arguments))->toBeTrue();
 })->with([
     ['view', OrderLinePolicyEnum::View],
     ['viewAny', OrderLinePolicyEnum::ViewAny],
@@ -43,9 +43,9 @@ it('authorizes order line abilities through permissions', function (string $meth
 
 it('keeps order lines immutable through administration', function (): void {
     $user = Mockery::mock(Authorizable::class);
-    $policy = new OrderLinePolicy();
+    $policy = new OrderLinePolicy;
 
     expect($policy->create($user))->toBeFalse()
-        ->and($policy->update($user, new OrderLine()))->toBeFalse()
-        ->and($policy->delete($user, new OrderLine()))->toBeFalse();
+        ->and($policy->update($user, new OrderLine))->toBeFalse()
+        ->and($policy->delete($user, new OrderLine))->toBeFalse();
 });

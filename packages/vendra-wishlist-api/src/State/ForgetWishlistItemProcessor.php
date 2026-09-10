@@ -26,8 +26,8 @@ final readonly class ForgetWishlistItemProcessor implements ProcessorInterface
         $user = Auth::user();
         $itemId = $uriVariables['id'] ?? null;
 
-        if ( ! $user instanceof Model || ! is_numeric($itemId)) {
-            throw new NotFoundHttpException();
+        if (! $user instanceof Model || ! is_numeric($itemId)) {
+            throw new NotFoundHttpException;
         }
 
         $item = WishlistItem::query()
@@ -38,8 +38,8 @@ final readonly class ForgetWishlistItemProcessor implements ProcessorInterface
             })
             ->find((int) $itemId);
 
-        if ( ! $item instanceof WishlistItem) {
-            throw new NotFoundHttpException();
+        if (! $item instanceof WishlistItem) {
+            throw new NotFoundHttpException;
         }
 
         $item->delete();

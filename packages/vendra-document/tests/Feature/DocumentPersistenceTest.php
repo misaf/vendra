@@ -14,9 +14,9 @@ it('persists documents against the installed user profile', function (): void {
     $profile = UserProfile::factory()->forUser(createTestUser())->create();
 
     $document = Document::factory()->create([
-        'user_profile_id'      => $profile->id,
+        'user_profile_id' => $profile->id,
         'issuing_country_code' => 'IR',
-        'metadata'             => ['authority' => 'Civil Registry'],
+        'metadata' => ['authority' => 'Civil Registry'],
     ]);
 
     expect($profile->documents())->toBeInstanceOf(HasMany::class)

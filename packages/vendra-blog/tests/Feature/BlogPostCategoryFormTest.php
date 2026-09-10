@@ -14,7 +14,7 @@ beforeEach(function (): void {
     setUpFilamentAdminTestContext();
 
     $this->activeLocale = app()->getLocale();
-    $this->otherLocale = 'en' === $this->activeLocale ? 'de' : 'en';
+    $this->otherLocale = $this->activeLocale === 'en' ? 'de' : 'en';
 
     Filament::getPanel('admin')->plugin(
         SpatieTranslatablePlugin::make()->defaultLocales([$this->activeLocale, $this->otherLocale]),

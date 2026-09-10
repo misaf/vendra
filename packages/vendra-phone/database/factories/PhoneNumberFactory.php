@@ -17,21 +17,21 @@ final class PhoneNumberFactory extends Factory
     {
         return [
             'user_profile_id' => UserProfile::factory(),
-            'type'            => fake()->randomElement(['mobile', 'home', 'work', 'fax', 'other']),
-            'label'           => fake()->optional()->words(2, true),
-            'country_code'    => 'US',
-            'number'          => '+1' . fake()->numerify('##########'),
-            'extension'       => fake()->optional()->numerify('####'),
-            'metadata'        => [],
-            'notes'           => fake()->optional()->sentence(),
-            'is_primary'      => false,
-            'verified_at'     => null,
+            'type' => fake()->randomElement(['mobile', 'home', 'work', 'fax', 'other']),
+            'label' => fake()->optional()->words(2, true),
+            'country_code' => 'US',
+            'number' => '+1'.fake()->numerify('##########'),
+            'extension' => fake()->optional()->numerify('####'),
+            'metadata' => [],
+            'notes' => fake()->optional()->sentence(),
+            'is_primary' => false,
+            'verified_at' => null,
         ];
     }
 
     public function forUserProfile(UserProfile $userProfile): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'user_profile_id' => $userProfile->id,
         ]);
     }

@@ -18,26 +18,26 @@ final class TransactionGatewayFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'        => fake()->unique()->words(2, true),
+            'name' => fake()->unique()->words(2, true),
             'description' => fake()->optional()->sentence(),
-            'active'      => true,
+            'active' => true,
         ];
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }
 
     public function internal(): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'name' => 'Internal Transactions',
             'slug' => TransactionGatewayRegistry::INTERNAL_GATEWAY_SLUG,
         ]);
@@ -45,16 +45,16 @@ final class TransactionGatewayFactory extends Factory
 
     public function default(): static
     {
-        return $this->state(fn(): array => ['is_default' => true]);
+        return $this->state(fn (): array => ['is_default' => true]);
     }
 
     public function active(): static
     {
-        return $this->state(fn(): array => ['active' => true]);
+        return $this->state(fn (): array => ['active' => true]);
     }
 
     public function inactive(): static
     {
-        return $this->state(fn(): array => ['active' => false]);
+        return $this->state(fn (): array => ['active' => false]);
     }
 }

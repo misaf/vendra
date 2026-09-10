@@ -34,8 +34,8 @@ use Misaf\VendraDeliveryApi\State\DeliveryScheduleProvider;
 final readonly class DeliveryScheduleResource
 {
     /**
-     * @param list<string>              $dates
-     * @param array<int, DeliverySlot>  $slots
+     * @param  list<string>  $dates
+     * @param  array<int, DeliverySlot>  $slots
      */
     public function __construct(
         #[ApiProperty(identifier: true, description: 'The delivery schedule identifier')]

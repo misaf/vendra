@@ -69,7 +69,7 @@ final class ReplaceStoreDomainAction
             ->where('store_id', $store->getKey())
             ->first();
 
-        $storeDomain = $store->execute(fn(): StoreDomain => DB::transaction(function () use ($store, $domain, $deployment): StoreDomain {
+        $storeDomain = $store->execute(fn (): StoreDomain => DB::transaction(function () use ($store, $domain, $deployment): StoreDomain {
             $store->storeDomains()
                 ->where('active', true)
                 ->get()
@@ -79,7 +79,7 @@ final class ReplaceStoreDomainAction
                 });
 
             $created = $store->storeDomains()->create([
-                'name'   => $domain,
+                'name' => $domain,
                 'active' => true,
             ]);
 
@@ -94,7 +94,7 @@ final class ReplaceStoreDomainAction
             return $created;
         }));
 
-        if ( ! $storeDomain instanceof StoreDomain) {
+        if (! $storeDomain instanceof StoreDomain) {
             throw new UnexpectedValueException('Replacing a store domain did not return a domain model.');
         }
 

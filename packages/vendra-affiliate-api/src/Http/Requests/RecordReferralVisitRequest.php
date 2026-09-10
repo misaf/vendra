@@ -14,7 +14,7 @@ final class RecordReferralVisitRequest extends FormRequest
      * @var array<string, array<int, string>>
      */
     public const array RULES = [
-        'code'       => ['required', 'string', 'max:64'],
+        'code' => ['required', 'string', 'max:64'],
         'landingUrl' => ['nullable', 'url:http,https', 'max:255'],
     ];
 

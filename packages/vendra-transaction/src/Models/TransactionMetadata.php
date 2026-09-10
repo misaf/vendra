@@ -35,10 +35,10 @@ final class TransactionMetadata extends Model
     protected function casts(): array
     {
         return [
-            'id'             => 'integer',
+            'id' => 'integer',
             'transaction_id' => 'integer',
-            'key_name'       => 'string',
-            'key_value'      => 'string',
+            'key_name' => 'string',
+            'key_value' => 'string',
         ];
     }
 

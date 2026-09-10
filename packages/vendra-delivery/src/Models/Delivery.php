@@ -71,19 +71,19 @@ final class Delivery extends Model implements ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'               => 'integer',
-            'tenant_id'        => 'integer',
-            'order_id'         => 'integer',
-            'address_id'       => 'integer',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'order_id' => 'integer',
+            'address_id' => 'integer',
             'delivery_zone_id' => 'integer',
             'delivery_slot_id' => 'integer',
-            'scheduled_for'    => 'date',
-            'latitude'         => 'float',
-            'longitude'        => 'float',
-            'distance_km'      => 'float',
-            'currency_code'    => 'string',
-            'fee_amount'       => MoneyIntegerCast::class . ':currency_code',
-            'requires_quote'   => 'boolean',
+            'scheduled_for' => 'date',
+            'latitude' => 'float',
+            'longitude' => 'float',
+            'distance_km' => 'float',
+            'currency_code' => 'string',
+            'fee_amount' => MoneyIntegerCast::class.':currency_code',
+            'requires_quote' => 'boolean',
         ];
     }
 

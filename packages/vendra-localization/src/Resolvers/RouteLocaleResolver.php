@@ -13,6 +13,6 @@ final readonly class RouteLocaleResolver implements LocaleResolver
     {
         $locale = $request->route('locale');
 
-        return is_string($locale) && '' !== $locale ? $locale : null;
+        return is_string($locale) && $locale !== '' ? $locale : null;
     }
 }

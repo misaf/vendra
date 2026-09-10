@@ -22,28 +22,28 @@ final class FilamentDefaultsServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        Table::configureUsing(fn(Table $table): Table => $table
+        Table::configureUsing(fn (Table $table): Table => $table
             ->paginationPageOptions([10, 25, 50])
             ->deferLoading()
             ->defaultNumberLocale('en'));
 
-        DateTimePicker::configureUsing(fn(DateTimePicker $dateTimePicker): DateTimePicker => $dateTimePicker
+        DateTimePicker::configureUsing(fn (DateTimePicker $dateTimePicker): DateTimePicker => $dateTimePicker
             ->firstDayOfWeek(6)
             ->when(
                 app()->isLocale('fa'),
-                fn(DateTimePicker $component): DateTimePicker => $component
+                fn (DateTimePicker $component): DateTimePicker => $component
                     ->jalali()
-                    ->viewData(fn(DateTimePicker $component): array => [
+                    ->viewData(fn (DateTimePicker $component): array => [
                         'defaultFocusedDate' => $component->getDefaultFocusedDate(),
                     ]),
             )
             ->native(false));
 
-        DatePicker::configureUsing(fn(DatePicker $datePicker): DatePicker => $datePicker
+        DatePicker::configureUsing(fn (DatePicker $datePicker): DatePicker => $datePicker
             ->closeOnDateSelection()
             ->displayFormat('Y-m-d'));
 
-        PanelSwitch::configureUsing(fn(PanelSwitch $panelSwitch): PanelSwitch => $panelSwitch
+        PanelSwitch::configureUsing(fn (PanelSwitch $panelSwitch): PanelSwitch => $panelSwitch
             ->simple()
             ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER));
     }

@@ -6,11 +6,11 @@ return [
     'columns' => [
         'created_at' => 'Erstellt am',
         'guard_name' => 'Guard-Name',
-        'name'       => 'Name',
-        'role'       => 'Rollen',
+        'name' => 'Name',
+        'role' => 'Rollen',
         'updated_at' => 'Aktualisiert am',
     ],
-    'groups'  => [
-        'guard'      => 'Guard',
+    'groups' => [
+        'guard' => 'Guard',
     ],
 ];

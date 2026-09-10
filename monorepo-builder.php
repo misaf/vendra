@@ -11,7 +11,7 @@ use Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker;
 return static function (MBConfig $config): void {
     $config->defaultBranch('1.x');
     $config->packageDirectories([
-        __DIR__ . '/packages',
+        __DIR__.'/packages',
     ]);
     $config->composerSectionOrder(JsonSchema::getProperties());
     $config->disablePackageReplace();

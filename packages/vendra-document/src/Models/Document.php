@@ -60,17 +60,17 @@ final class Document extends Model implements HasMedia, ShouldLogActivity
     protected function casts(): array
     {
         return [
-            'id'                   => 'integer',
-            'tenant_id'            => 'integer',
-            'user_profile_id'      => 'integer',
-            'type'                 => 'string',
+            'id' => 'integer',
+            'tenant_id' => 'integer',
+            'user_profile_id' => 'integer',
+            'type' => 'string',
             'issuing_country_code' => 'string',
-            'number'               => 'string',
-            'issued_at'            => 'date',
-            'expires_at'           => 'date',
-            'verified_at'          => 'datetime',
-            'metadata'             => 'array',
-            'notes'                => 'string',
+            'number' => 'string',
+            'issued_at' => 'date',
+            'expires_at' => 'date',
+            'verified_at' => 'datetime',
+            'metadata' => 'array',
+            'notes' => 'string',
         ];
     }
 }

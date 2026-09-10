@@ -12,9 +12,9 @@ beforeEach(function (): void {
 it('filters catalog attributes and embeds option references', function (): void {
     $attribute = AttributeFactory::new()->active()->create(['name' => 'Material']);
     $option = AttributeValueFactory::new()->forAttribute($attribute)->create([
-        'value'             => 'Cotton',
+        'value' => 'Cotton',
         'attributable_type' => 'catalog-test',
-        'attributable_id'   => 1,
+        'attributable_id' => 1,
     ]);
     AttributeFactory::new()->active()->create(['name' => 'Colour']);
 

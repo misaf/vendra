@@ -19,30 +19,30 @@ final class AttributeValueFactory extends Factory
     {
         return [
             'attribute_id' => Attribute::factory(),
-            'value'        => fake()->word(),
+            'value' => fake()->word(),
         ];
     }
 
     public function forAttribute(Attribute $attribute): static
     {
-        return $this->state(fn(): array => ['attribute_id' => $attribute->id]);
+        return $this->state(fn (): array => ['attribute_id' => $attribute->id]);
     }
 
     public function forAttributable(Model $attributable): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'attributable_type' => $attributable->getMorphClass(),
-            'attributable_id'   => $attributable->getKey(),
+            'attributable_id' => $attributable->getKey(),
         ]);
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }

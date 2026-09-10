@@ -13,8 +13,8 @@ it('persists verifications against the installed user profile', function (): voi
 
     $verification = Verification::factory()->create([
         'user_profile_id' => $profile->id,
-        'country_code'    => 'AE',
-        'provider'        => 'Example KYC',
+        'country_code' => 'AE',
+        'provider' => 'Example KYC',
     ]);
 
     expect($profile->verifications())->toBeInstanceOf(HasMany::class)

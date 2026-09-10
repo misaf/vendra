@@ -22,30 +22,30 @@ final class PlanFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'           => fake()->unique()->words(2, true),
-            'slug'           => fn(array $attributes) => Str::slug($attributes['name']),
-            'description'    => fake()->text(),
-            'max_units'      => fake()->numberBetween(1, 10),
-            'period_unit'    => PeriodUnit::Month,
-            'period_count'   => 1,
-            'grace_days'     => 0,
-            'price'          => 0,
-            'currency_code'  => null,
-            'trial_days'     => 0,
-            'features'       => null,
-            'active'         => true,
-            'is_default'     => false,
+            'name' => fake()->unique()->words(2, true),
+            'slug' => fn (array $attributes) => Str::slug($attributes['name']),
+            'description' => fake()->text(),
+            'max_units' => fake()->numberBetween(1, 10),
+            'period_unit' => PeriodUnit::Month,
+            'period_count' => 1,
+            'grace_days' => 0,
+            'price' => 0,
+            'currency_code' => null,
+            'trial_days' => 0,
+            'features' => null,
+            'active' => true,
+            'is_default' => false,
         ];
     }
 
     public function default(): static
     {
-        return $this->state(fn(): array => ['is_default' => true]);
+        return $this->state(fn (): array => ['is_default' => true]);
     }
 
     public function trialDays(int $days): static
     {
-        return $this->state(fn(): array => ['trial_days' => $days]);
+        return $this->state(fn (): array => ['trial_days' => $days]);
     }
 
     /**
@@ -53,31 +53,31 @@ final class PlanFactory extends Factory
      */
     public function withFeatures(array $features): static
     {
-        return $this->state(fn(): array => ['features' => $features]);
+        return $this->state(fn (): array => ['features' => $features]);
     }
 
     public function graceDays(int $days): static
     {
-        return $this->state(fn(): array => ['grace_days' => $days]);
+        return $this->state(fn (): array => ['grace_days' => $days]);
     }
 
     public function priced(int $price, string $currencyCode = 'USD'): static
     {
-        return $this->state(fn(): array => [
-            'price'         => $price,
+        return $this->state(fn (): array => [
+            'price' => $price,
             'currency_code' => $currencyCode,
         ]);
     }
 
     public function maxUnits(int $count): static
     {
-        return $this->state(fn(): array => ['max_units' => $count]);
+        return $this->state(fn (): array => ['max_units' => $count]);
     }
 
     public function period(PeriodUnit $unit, int $count): static
     {
-        return $this->state(fn(): array => [
-            'period_unit'  => $unit,
+        return $this->state(fn (): array => [
+            'period_unit' => $unit,
             'period_count' => $count,
         ]);
     }

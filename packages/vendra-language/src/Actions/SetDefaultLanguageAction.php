@@ -17,7 +17,7 @@ final class SetDefaultLanguageAction
                 ->get(['id']);
 
             $language->update([
-                'active'     => true,
+                'active' => true,
                 'is_default' => true,
             ]);
         });

@@ -54,7 +54,7 @@ it('refuses to settle a withdrawal beyond the wallet balance and stays pending',
 
     $transaction = TransactionFactory::new()->forWallet($wallet)->withdrawal()->create(['amount' => 2_000]);
 
-    expect(fn() => $transaction->approve())->toThrow(InsufficientBalanceException::class)
+    expect(fn () => $transaction->approve())->toThrow(InsufficientBalanceException::class)
         ->and($transaction->fresh()->status)->toBeInstanceOf(Pending::class)
         ->and($wallet->fresh()->balance)->toBe(1_000);
 });
@@ -68,7 +68,7 @@ it('settles a transfer against both wallets atomically', function (): void {
         ->forWallet($source)
         ->transfer()
         ->create([
-            'amount'                 => 2_000,
+            'amount' => 2_000,
             'counterparty_wallet_id' => $destination->id,
         ]);
 
@@ -106,7 +106,7 @@ it('forbids transitions out of terminal states', function (): void {
     $transaction->decline();
 
     expect($transaction->fresh()->status)->toBeInstanceOf(Declined::class)
-        ->and(fn() => $transaction->approve())->toThrow(TransitionNotFound::class);
+        ->and(fn () => $transaction->approve())->toThrow(TransitionNotFound::class);
 });
 
 it('marks processing and review as intermediate states', function (): void {

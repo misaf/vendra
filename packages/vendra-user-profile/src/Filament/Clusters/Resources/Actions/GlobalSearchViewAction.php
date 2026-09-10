@@ -6,12 +6,13 @@ namespace Misaf\VendraUserProfile\Filament\Clusters\Resources\Actions;
 
 use Filament\Actions\Action;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource;
 
 final class GlobalSearchViewAction
 {
     public static function make(Model $record): Action
     {
         return Action::make('view')
-            ->url(\Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource::getUrl('view', ['record' => $record]));
+            ->url(UserProfileResource::getUrl('view', ['record' => $record]));
     }
 }

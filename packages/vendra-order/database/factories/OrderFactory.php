@@ -26,40 +26,40 @@ final class OrderFactory extends Factory
         $itemsAmount = fake()->randomElement([3800, 4800, 5600, 7200, 12000]);
 
         return [
-            'number'          => Order::generateNumber(),
-            'currency_code'   => Config::string('app.currency', 'USD'),
-            'items_amount'    => $itemsAmount,
+            'number' => Order::generateNumber(),
+            'currency_code' => Config::string('app.currency', 'USD'),
+            'items_amount' => $itemsAmount,
             'delivery_amount' => 0,
-            'total_amount'    => $itemsAmount,
-            'placed_at'       => now(),
+            'total_amount' => $itemsAmount,
+            'placed_at' => now(),
         ];
     }
 
     public function forCustomer(Model $customer): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'customer_type' => $customer->getMorphClass(),
-            'customer_id'   => $customer->getKey(),
+            'customer_id' => $customer->getKey(),
         ]);
     }
 
     /**
-     * @param class-string<OrderState> $state
+     * @param  class-string<OrderState>  $state
      */
     public function withStatus(string $state): static
     {
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'status' => $state,
         ]);
     }
 
     public function forTenant(Model|int $tenant): static
     {
-        if ( ! TenantAwareness::enabled()) {
+        if (! TenantAwareness::enabled()) {
             return $this;
         }
 
-        return $this->state(fn(): array => [
+        return $this->state(fn (): array => [
             'tenant_id' => $tenant instanceof Model ? $tenant->getKey() : $tenant,
         ]);
     }

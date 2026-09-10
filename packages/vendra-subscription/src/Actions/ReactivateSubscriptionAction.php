@@ -15,14 +15,14 @@ final class ReactivateSubscriptionAction
 
     public function execute(Subscription $subscription): Subscription
     {
-        if (SubscriptionStatus::Active === $subscription->status) {
+        if ($subscription->status === SubscriptionStatus::Active) {
             throw new LogicException("Subscription [{$subscription->id}] is already active.");
         }
 
         $subscriber = $subscription->subscriber()->firstOrFail();
         $plan = $subscription->plan()->firstOrFail();
 
-        if ( ! $subscriber instanceof SubscriptionSubscriber) {
+        if (! $subscriber instanceof SubscriptionSubscriber) {
             throw new LogicException("Subscription [{$subscription->id}] has an unsupported subscriber.");
         }
 

@@ -21,7 +21,7 @@ final class WalletTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn($query) => $query->with(['user'])->withCount('transactions'))
+            ->modifyQueryUsing(fn ($query) => $query->with(['user'])->withCount('transactions'))
             ->description(__('vendra-transaction::tables.description.wallets'))
             ->emptyStateHeading(__('vendra-transaction::tables.empty_state.heading.wallets'))
             ->emptyStateDescription(__('vendra-transaction::tables.empty_state.description.wallets'))
@@ -64,8 +64,8 @@ final class WalletTable
                     ->sortable()
                     ->when(
                         app()->isLocale('fa'),
-                        fn(TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn(TextColumn $column) => $column->dateTime('Y-m-d H:i'),
+                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
+                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
             ])
             ->filters(

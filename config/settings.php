@@ -6,6 +6,7 @@ use App\Models\SettingsProperty;
 use App\Settings\SettingsRepositories\GlobalSettingsRepository;
 use App\Settings\SettingsRepositories\TenantSettingsRepository;
 use Misaf\VendraStore\Settings\StoreCreationSettings;
+use Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository;
 
 return [
 
@@ -49,9 +50,9 @@ return [
          | platform row as the default.
          */
         'tenant' => [
-            'type'       => TenantSettingsRepository::class,
-            'model'      => SettingsProperty::class,
-            'table'      => null,
+            'type' => TenantSettingsRepository::class,
+            'model' => SettingsProperty::class,
+            'table' => null,
             'connection' => null,
         ],
 
@@ -60,16 +61,16 @@ return [
          | reseller panels run outside tenancy and read only these.
          */
         'global' => [
-            'type'       => GlobalSettingsRepository::class,
-            'model'      => SettingsProperty::class,
-            'table'      => null,
+            'type' => GlobalSettingsRepository::class,
+            'model' => SettingsProperty::class,
+            'table' => null,
             'connection' => null,
         ],
 
         'redis' => [
-            'type'       => Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository::class,
+            'type' => RedisSettingsRepository::class,
             'connection' => null,
-            'prefix'     => null,
+            'prefix' => null,
         ],
     ],
 

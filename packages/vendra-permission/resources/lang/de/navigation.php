@@ -3,9 +3,9 @@
 declare(strict_types=1);
 
 return [
-    'permission'            => 'Berechtigung',
+    'permission' => 'Berechtigung',
     'permission_management' => 'Berechtigungsverwaltung',
-    'permissions'           => 'Berechtigungen',
-    'role'                  => 'Rolle',
-    'roles'                 => 'Rollen',
+    'permissions' => 'Berechtigungen',
+    'role' => 'Rolle',
+    'roles' => 'Rollen',
 ];

@@ -11,7 +11,7 @@ beforeEach(function (): void {
     config([
         'multitenancy.switch_tenant_tasks' => array_values(array_filter(
             config('multitenancy.switch_tenant_tasks'),
-            fn(string $task): bool => SwitchRouteCacheTask::class !== $task,
+            fn (string $task): bool => $task !== SwitchRouteCacheTask::class,
         )),
     ]);
 
@@ -51,7 +51,7 @@ it('shows the unknown page and changes nothing for an invalid token', function (
 it('restores and resubscribes a soft-deleted subscriber instead of creating a duplicate', function (): void {
     $subscriber = NewsletterSubscriberFactory::new()->unsubscribed()->create([
         'email' => 'restored@example.com',
-        'name'  => 'Original name',
+        'name' => 'Original name',
     ]);
     $originalToken = $subscriber->unsubscribe_token;
 
@@ -59,7 +59,7 @@ it('restores and resubscribes a soft-deleted subscriber instead of creating a du
 
     $restoredSubscriber = app(SubscribeNewsletterSubscriberAction::class)->execute([
         'email' => 'restored@example.com',
-        'name'  => 'Restored name',
+        'name' => 'Restored name',
     ]);
 
     expect($restoredSubscriber->id)->toBe($subscriber->id)

@@ -31,9 +31,9 @@ final class SupportServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'vendra-support');
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'vendra-support');
 
-        $this->mergeConfigFrom(__DIR__ . '/../../config/vendra-support.php', 'vendra-support');
+        $this->mergeConfigFrom(__DIR__.'/../../config/vendra-support.php', 'vendra-support');
 
         $this->app->singletonIf(TenantResolver::class, NullTenantResolver::class);
         $this->app->singletonIf(AttributeApiResolver::class, NullAttributeApiResolver::class);
@@ -45,12 +45,12 @@ final class SupportServiceProvider extends ServiceProvider
         $this->app->singleton(TenantTableRegistry::class);
 
         Panel::configureUsing(function (Panel $panel): void {
-            if ( ! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-support')) {
+            if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-support')) {
                 return;
             }
 
             $panel->discoverClusters(
-                in: __DIR__ . '/../Filament/Clusters',
+                in: __DIR__.'/../Filament/Clusters',
                 for: 'Misaf\\VendraSupport\\Filament\\Clusters',
             );
         });
@@ -59,7 +59,7 @@ final class SupportServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../../config/vendra-support.php' => config_path('vendra-support.php'),
+            __DIR__.'/../../config/vendra-support.php' => config_path('vendra-support.php'),
         ], 'vendra-support-config');
 
         Event::listen(TenantProvisioned::class, RunTenantSeeders::class);

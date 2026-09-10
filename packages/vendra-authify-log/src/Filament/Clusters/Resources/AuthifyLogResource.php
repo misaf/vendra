@@ -15,7 +15,6 @@ use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\Schemas\AuthifyLogInfolis
 use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\Tables\AuthifyLogTable;
 use Misaf\VendraAuthifyLog\Models\AuthifyLog;
 use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
-
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
 final class AuthifyLogResource extends Resource
@@ -64,7 +63,7 @@ final class AuthifyLogResource extends Resource
     {
         return [
             'index' => ListAuthifyLogs::route('/'),
-            'view'  => ViewAuthifyLog::route('/{record}'),
+            'view' => ViewAuthifyLog::route('/{record}'),
         ];
     }
 

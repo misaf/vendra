@@ -17,7 +17,7 @@ final class CreateDeliveryZone extends CreateRecord
 
     public function getBreadcrumb(): string
     {
-        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb') . ' ' . __('vendra-delivery::navigation.delivery_zone');
+        return self::$breadcrumb ?? __('filament-panels::resources/pages/create-record.breadcrumb').' '.__('vendra-delivery::navigation.delivery_zone');
     }
 
     protected function getHeaderActions(): array

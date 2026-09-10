@@ -15,7 +15,7 @@ final readonly class AcceptLanguageLocaleResolver implements LocaleResolver, Pro
     {
         $header = (string) $request->headers->get('Accept-Language');
 
-        if ('' === $header) {
+        if ($header === '') {
             return null;
         }
 

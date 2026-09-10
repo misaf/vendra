@@ -23,7 +23,7 @@ final class DeleteBulkAction extends FilamentDeleteBulkAction
 
         $this->before(function (EloquentCollection|Collection|LazyCollection $records): void {
             foreach ($records as $record) {
-                if ( ! $record instanceof Permission) {
+                if (! $record instanceof Permission) {
                     continue;
                 }
 
