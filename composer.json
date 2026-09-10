@@ -119,6 +119,7 @@
         "symfony/mcp-bundle": "0.13.0"
     },
     "require-dev": {
+        "driftingly/rector-laravel": "^2.6",
         "ergebnis/composer-normalize": "^2.52",
         "fakerphp/faker": "^1.24.1",
         "fruitcake/laravel-debugbar": "^4.4.0",
@@ -136,8 +137,10 @@
         "pestphp/pest-plugin-laravel": "^5.0",
         "pestphp/pest-plugin-livewire": "^5.0",
         "pestphp/pest-plugin-profanity": "^5.0",
+        "pestphp/pest-plugin-rector": "^5.0",
         "pestphp/pest-plugin-type-coverage": "^5.0",
         "phpstan/extension-installer": "^1.4.3",
+        "rector/rector": "^2.6",
         "symplify/monorepo-builder": "^12.7.1"
     },
     "repositories": [
