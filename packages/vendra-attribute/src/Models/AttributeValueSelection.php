@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
 final class AttributeValueSelection extends Model
 {
     use HasFactory;
+
     /** @return BelongsTo<AttributeValue, $this> */
     public function attributeValue(): BelongsTo
     {

@@ -41,10 +41,10 @@ return RectorConfig::configure()
     ->withComposerBased(
         laravel: true,
     )
-    ->withTypeCoverageLevel(1)
-    ->withDeadCodeLevel(1)
-    ->withCodeQualityLevel(1)
-    ->withCodingStyleLevel(1)
+    ->withTypeCoverageLevel(5)
+    ->withDeadCodeLevel(5)
+    ->withCodeQualityLevel(5)
+    ->withCodingStyleLevel(5)
     ->withSets([
         LaravelSetList::ARRAY_STR_FUNCTIONS_TO_STATIC_CALL,
         LaravelSetList::LARAVEL_ARRAYACCESS_TO_METHOD_CALL,

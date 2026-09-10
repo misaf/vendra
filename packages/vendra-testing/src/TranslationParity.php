@@ -110,7 +110,7 @@ final class TranslationParity
     private static function translationKeysForFile(string $filePath, string $context): array
     {
         $translations = self::requireTranslationArray($filePath, $context);
-        $keys = array_map(static fn (string $key): string => (string) $key, array_keys(Arr::dot($translations)));
+        $keys = array_map(static fn (string $key): string => $key, array_keys(Arr::dot($translations)));
         sort($keys, SORT_STRING);
 
         return $keys;
@@ -180,7 +180,7 @@ final class TranslationParity
             return;
         }
 
-        $keys = array_map(static fn (string $key): string => (string) $key, array_keys($translations));
+        $keys = array_map(static fn (string $key): string => $key, array_keys($translations));
         $sortedKeys = $keys;
 
         usort($sortedKeys, strcmp(...));

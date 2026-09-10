@@ -186,6 +186,7 @@ final class ResellerOperatorActions
 
                     return;
                 }
+
                 self::success(__('console.plan_changed'));
             });
     }
@@ -201,6 +202,7 @@ final class ResellerOperatorActions
 
                     return;
                 }
+
                 resolve(SubscribeAction::class)->execute($record, $plan);
                 self::success(__('console.subscription_renewed'));
             });

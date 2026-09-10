@@ -10,6 +10,7 @@ use Spatie\TranslationLoader\LanguageLine;
 final class CustomLanguageLine extends LanguageLine
 {
     use HasFactory;
+
     /**
      * @return array<string, string>
      */

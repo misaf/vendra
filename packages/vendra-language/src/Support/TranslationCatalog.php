@@ -146,6 +146,7 @@ final class TranslationCatalog
         foreach ($languageLines as &$languageLine) {
             ksort(Arr::get($languageLine, 'text'));
         }
+
         unset($languageLine);
 
         return array_values($languageLines);

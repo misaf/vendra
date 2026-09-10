@@ -246,7 +246,7 @@ it('sends scheduled newsletters that are due and leaves future ones untouched', 
     Queue::assertPushed(SendNewsletterBatchJob::class, 1);
 });
 
-it('scopes each tenant\'s scheduled send to its own subscribers across all tenants', function (): void {
+it("scopes each tenant's scheduled send to its own subscribers across all tenants", function (): void {
     Queue::fake();
     forgetCurrentTestTenant();
 

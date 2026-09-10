@@ -464,7 +464,7 @@ it('shows an owner nothing once their reseller is gone, platform stores included
         ->assertCanNotSeeTableRecords([$ownedStore, $platformStore]);
 });
 
-it('keeps platform-owned stores out of an active owner\'s panel', function (): void {
+it("keeps platform-owned stores out of an active owner's panel", function (): void {
     $reseller = Reseller::factory()->create();
     $ownedStore = Store::factory()->create(['reseller_id' => $reseller->getKey(), 'active' => true]);
     $platformStore = Store::factory()->create(['reseller_id' => null, 'active' => true]);
