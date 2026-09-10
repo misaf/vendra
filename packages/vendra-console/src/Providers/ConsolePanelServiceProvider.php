@@ -24,12 +24,6 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Misaf\VendraLocalization\Http\Middleware\SetLocale;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
 
-/**
- * The console (platform admin) panel.
- *
- * Runs outside the tenant middleware stack so a console operator can manage
- * resellers, plans, subscriptions, and stores across every tenant.
- */
 final class ConsolePanelServiceProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
