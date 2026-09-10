@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Pest\Rector\Set\PestSetList;
+use Rector\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector;
 use Rector\Config\RectorConfig;
 use RectorLaravel\Rector\ArrayDimFetch\ArrayToArrGetRector;
 use RectorLaravel\Rector\Class_\AddHasFactoryToModelsRector;
@@ -31,6 +32,7 @@ return RectorConfig::configure()
         __DIR__.'/app',
         __DIR__.'/config',
         __DIR__.'/database',
+        __DIR__.'/packages',
         __DIR__.'/resources',
         __DIR__.'/routes',
         __DIR__.'/tests',
@@ -60,7 +62,7 @@ return RectorConfig::configure()
         ApplyDefaultInsteadOfNullCoalesceRector::class,
         ArrayToArrGetRector::class,
         ConfigToTypedConfigMethodCallRector::class,
-        DateWhereClauseToShorthandRector::class,
+        // DateWhereClauseToShorthandRector::class,
         EloquentMagicMethodToQueryBuilderRector::class,
         EloquentOrderByToLatestOrOldestRector::class,
         EmptyToBlankAndFilledFuncRector::class,
@@ -78,4 +80,7 @@ return RectorConfig::configure()
     ])
     ->withImportNames(
         removeUnusedImports: true,
-    );
+    )
+    ->withSkip([
+        SeparateMultiUseImportsRector::class,
+    ]);
