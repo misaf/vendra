@@ -34,7 +34,7 @@ final class StoreScope implements Scope
             return;
         }
 
-        if ($storeId = app(TenantResolver::class)->currentId()) {
+        if ($storeId = resolve(TenantResolver::class)->currentId()) {
             $builder->where($model->qualifyColumn('store_id'), $storeId);
         }
     }

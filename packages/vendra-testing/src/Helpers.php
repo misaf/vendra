@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Filament\Facades\Filament;
 use Filament\Panel;
 use Filament\PanelRegistry;
@@ -21,7 +22,7 @@ use PHPUnit\Framework\Assert;
  */
 function testTenantModel(): string
 {
-    return app(TenantResolver::class)->modelClass();
+    return resolve(TenantResolver::class)->modelClass();
 }
 
 /**
@@ -65,7 +66,7 @@ function makeCurrentTestTenant(array $attributes = []): ?Model
     $tenant = createTestTenant($attributes);
 
     if ($tenant instanceof Model) {
-        app(TenantResolver::class)->makeCurrent($tenant);
+        resolve(TenantResolver::class)->makeCurrent($tenant);
     }
 
     return $tenant;
@@ -83,7 +84,7 @@ function switchToTestTenant(Model|int|string|null $tenant): void
         return;
     }
 
-    app(TenantResolver::class)->makeCurrent($tenant);
+    resolve(TenantResolver::class)->makeCurrent($tenant);
 }
 
 /**
@@ -91,7 +92,7 @@ function switchToTestTenant(Model|int|string|null $tenant): void
  */
 function currentTestTenant(): ?Model
 {
-    return app(TenantResolver::class)->current();
+    return resolve(TenantResolver::class)->current();
 }
 
 /**
@@ -252,7 +253,7 @@ function bootFilamentAdminPanel(Model $user, ?Model $tenant = null, array $resou
         $panel->tenant(testTenantModel(), ownershipRelationship: 'tenant');
     }
 
-    app(PanelRegistry::class)->register($panel);
+    resolve(PanelRegistry::class)->register($panel);
 
     Table::configureUsing(static fn (Table $table): Table => $table
         ->paginationPageOptions([10, 25, 50])
@@ -267,7 +268,7 @@ function bootFilamentAdminPanel(Model $user, ?Model $tenant = null, array $resou
 
     Filament::bootCurrentPanel();
 
-    app('url')->resolveMissingNamedRoutesUsing(static fn (): string => '/');
+    resolve(UrlGenerator::class)->resolveMissingNamedRoutesUsing(static fn (): string => '/');
 }
 
 /**

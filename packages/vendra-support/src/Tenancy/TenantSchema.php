@@ -34,7 +34,7 @@ final class TenantSchema
 
     public static function enabled(): bool
     {
-        return app(TenantResolver::class)->available();
+        return resolve(TenantResolver::class)->available();
     }
 
     /**
@@ -46,7 +46,7 @@ final class TenantSchema
             return self::DEFAULT_FOREIGN_KEY;
         }
 
-        return app(TenantResolver::class)->foreignKey();
+        return resolve(TenantResolver::class)->foreignKey();
     }
 
     public static function addTenantColumn(Blueprint $table, bool $nullable = false): void

@@ -16,9 +16,7 @@ final class OrderMapper implements ResourceMapper
 {
     public function map(Model $model): OrderResource
     {
-        if (! $model instanceof Order) {
-            throw new UnexpectedValueException('Expected an order model.');
-        }
+        throw_unless($model instanceof Order, UnexpectedValueException::class, 'Expected an order model.');
 
         return new OrderResource(
             id: $model->id,

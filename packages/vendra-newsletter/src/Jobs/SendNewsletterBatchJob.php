@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Jobs;
 
-use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
 use Misaf\VendraNewsletter\Context\NewsletterContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
 
 final class SendNewsletterBatchJob implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
     use Queueable;
-    use SerializesModels;
 
     public int $tries;
 
@@ -42,13 +36,13 @@ final class SendNewsletterBatchJob implements ShouldBeUnique, ShouldQueue
 
     public function handle(): void
     {
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'newsletter_batch',
             metadata: [NewsletterContextKeys::NEWSLETTER_ID => $this->newsletterId],
-        ))->scope(function (): void {
+        )->scope(function (): void {
             foreach ($this->subscriberIds as $subscriberId) {
-                SendNewsletterEmailJob::dispatch($this->newsletterId, $subscriberId);
+                dispatch(new SendNewsletterEmailJob($this->newsletterId, $subscriberId));
             }
         });
     }

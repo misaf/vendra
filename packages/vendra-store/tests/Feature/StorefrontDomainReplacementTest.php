@@ -31,7 +31,7 @@ it('moves the storefront deployment to the new domain', function (): void {
     StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'old.test']);
 
-    app(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
+    resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
 
     expect($deployment->fresh()?->domain)->toBe('new.test');
 });
@@ -43,7 +43,7 @@ it('forces a redeploy so the container is rebuilt with the new routing label', f
     StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'old.test']);
 
-    app(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
+    resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
 
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
@@ -62,7 +62,7 @@ it('rejects a domain another store already runs its storefront on', function ():
 
     // Without the rule this reaches the database and comes back as a query
     // error mid-transaction rather than a message on the field.
-    expect(fn () => app(ReplaceStoreDomainAction::class)->execute($store, 'taken.test'))
+    expect(fn () => resolve(ReplaceStoreDomainAction::class)->execute($store, 'taken.test'))
         ->toThrow(ValidationException::class);
 });
 
@@ -74,7 +74,7 @@ it('still records the new domain when no container runtime is configured', funct
     StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'old.test']);
 
-    app(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
+    resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
 
     expect($deployment->fresh()?->domain)->toBe('new.test');
 
@@ -88,7 +88,7 @@ it('leaves a store with no storefront alone', function (): void {
     $store = Store::factory()->create();
     StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
 
-    $replaced = app(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
+    $replaced = resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
 
     expect($replaced->name)->toBe('new.test');
 
@@ -142,7 +142,7 @@ describe('convergence', function (): void {
 
         app()->instance(StorefrontProvisioner::class, $provisioner);
 
-        $outcome = app(ReconcileStoreStorefrontAction::class)->execute($deployment);
+        $outcome = resolve(ReconcileStoreStorefrontAction::class)->execute($deployment);
 
         expect($outcome)->toBe(StorefrontReconciliationOutcome::Redeployed);
     });

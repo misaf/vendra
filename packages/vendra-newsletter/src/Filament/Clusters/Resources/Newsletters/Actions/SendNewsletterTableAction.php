@@ -26,7 +26,7 @@ final class SendNewsletterTableAction
             ->authorize(fn (Newsletter $record): bool => Gate::allows('send', $record))
             ->visible(fn (Newsletter $record): bool => $record->status !== NewsletterStatusEnum::Sent)
             ->action(function (Newsletter $record): void {
-                $recipients = app(SendNewsletterAction::class)->execute($record);
+                $recipients = resolve(SendNewsletterAction::class)->execute($record);
 
                 Notification::make()
                     ->title(__('vendra-newsletter::actions.send_success', ['count' => $recipients]))

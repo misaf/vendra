@@ -46,9 +46,7 @@ final class TransactionGatewayRegistry
             ->where('slug', $slug)
             ->first();
 
-        if ($gateway === null) {
-            throw new RuntimeException("No active transaction gateway found for slug [{$slug}].");
-        }
+        throw_if($gateway === null, RuntimeException::class, "No active transaction gateway found for slug [{$slug}].");
 
         return $gateway;
     }

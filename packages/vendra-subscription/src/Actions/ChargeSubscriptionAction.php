@@ -13,11 +13,11 @@ use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSupport\Contracts\SubscriptionCharger;
 use Misaf\VendraSupport\Data\SubscriptionCharge;
 
-final class ChargeSubscriptionAction
+final readonly class ChargeSubscriptionAction
 {
     public function __construct(
-        private readonly SubscriptionCharger $subscriptionCharger,
-        private readonly ApplySubscriptionPaymentResultAction $applySubscriptionPaymentResultAction,
+        private SubscriptionCharger $subscriptionCharger,
+        private ApplySubscriptionPaymentResultAction $applySubscriptionPaymentResultAction,
     ) {}
 
     /**
@@ -29,7 +29,7 @@ final class ChargeSubscriptionAction
     public function execute(SubscriptionPayment $payment): void
     {
         if ($payment->status === SubscriptionPaymentStatus::Paid) {
-            SubscriptionPaymentPaid::dispatch($payment);
+            event(new SubscriptionPaymentPaid($payment));
 
             return;
         }
@@ -67,7 +67,7 @@ final class ChargeSubscriptionAction
         });
 
         if ($payment->status === SubscriptionPaymentStatus::Paid) {
-            SubscriptionPaymentPaid::dispatch($payment);
+            event(new SubscriptionPaymentPaid($payment));
 
             return;
         }
@@ -77,9 +77,7 @@ final class ChargeSubscriptionAction
             return;
         }
 
-        if (! app()->runningUnitTests() && DB::transactionLevel() !== 0) {
-            throw new LogicException('Subscription providers must be called outside database transactions.');
-        }
+        throw_if(! app()->runningUnitTests() && DB::transactionLevel() !== 0, LogicException::class, 'Subscription providers must be called outside database transactions.');
 
         $charge = new SubscriptionCharge(
             payer: $payment->payer()->firstOrFail(),
@@ -95,7 +93,7 @@ final class ChargeSubscriptionAction
         $payment = $this->applySubscriptionPaymentResultAction->execute($payment, $result);
 
         if ($payment->status === SubscriptionPaymentStatus::Paid) {
-            SubscriptionPaymentPaid::dispatch($payment);
+            event(new SubscriptionPaymentPaid($payment));
         }
     }
 }

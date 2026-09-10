@@ -39,7 +39,7 @@ final class AttributeApiIntegration
     private static function resolver(): AttributeApiResolver
     {
         if (app()->bound(AttributeApiResolver::class)) {
-            return app(AttributeApiResolver::class);
+            return resolve(AttributeApiResolver::class);
         }
 
         return new NullAttributeApiResolver;

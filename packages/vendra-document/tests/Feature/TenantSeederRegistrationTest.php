@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 
 it('registers its seed command for tenant provisioning', function (): void {
-    expect(app(TenantSeeders::class)->ordered())->toContain('vendra-document:seed');
+    expect(resolve(TenantSeeders::class)->ordered())->toContain('vendra-document:seed');
 });
 
 it('seeds its module permissions through the registered seed command', function (): void {

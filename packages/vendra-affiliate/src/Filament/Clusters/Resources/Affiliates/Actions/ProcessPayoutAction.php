@@ -27,7 +27,7 @@ final class ProcessPayoutAction
                 'amount' => $record->pendingBalance(),
             ]))
             ->action(function (Affiliate $record): void {
-                app(ProcessAffiliatePayoutAction::class)->onQueue()->execute($record);
+                resolve(ProcessAffiliatePayoutAction::class)->onQueue()->execute($record);
 
                 Notification::make()
                     ->success()

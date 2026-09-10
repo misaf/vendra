@@ -124,7 +124,7 @@ final class UserProfileResource extends Resource
      */
     public static function getRelations(): array
     {
-        return app(UserProfileRelationManagers::class)->all();
+        return resolve(UserProfileRelationManagers::class)->all();
     }
 
     public static function form(Schema $schema): Schema
@@ -144,16 +144,14 @@ final class UserProfileResource extends Resource
 
     public static function canAccess(): bool
     {
-        $tenant = app(TenantResolver::class)->current();
+        $tenant = resolve(TenantResolver::class)->current();
 
         return Feature::for($tenant)->active(ModuleEnabled::class);
     }
 
     private static function profile(Model $record): UserProfile
     {
-        if (! $record instanceof UserProfile) {
-            throw new InvalidArgumentException('User Profile resources require a UserProfile record.');
-        }
+        throw_unless($record instanceof UserProfile, InvalidArgumentException::class, 'User Profile resources require a UserProfile record.');
 
         return $record;
     }

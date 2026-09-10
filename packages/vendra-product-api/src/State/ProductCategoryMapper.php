@@ -17,9 +17,7 @@ final class ProductCategoryMapper implements ResourceMapper
 
     public function map(Model $model): ProductCategoryResource
     {
-        if (! $model instanceof ProductCategory) {
-            throw new UnexpectedValueException('Expected a product category model.');
-        }
+        throw_unless($model instanceof ProductCategory, UnexpectedValueException::class, 'Expected a product category model.');
 
         return $this->toCategoryResource($model);
     }

@@ -20,7 +20,7 @@ it('schedules a delivery against an order with the quoted fee', function (): voi
     $slot = DeliverySlotFactory::new()->window('Afternoon', '12:00:00', '17:00:00')->createOne();
     $date = now()->addDay()->toDateString();
 
-    $delivery = app(ScheduleDeliveryAction::class)->execute(
+    $delivery = resolve(ScheduleDeliveryAction::class)->execute(
         order: $order,
         quote: new DeliveryQuote($zone, 4.2, 1500, 'USD', false),
         scheduledFor: $date,
@@ -42,7 +42,7 @@ it('schedules a delivery against an order with the quoted fee', function (): voi
 it('keeps one delivery per order when it is rescheduled', function (): void {
     $order = OrderFactory::new()->createOne();
     $zone = DeliveryZoneFactory::new()->freeWithin(12)->createOne();
-    $action = app(ScheduleDeliveryAction::class);
+    $action = resolve(ScheduleDeliveryAction::class);
     $quote = new DeliveryQuote($zone, 2.0, 0, 'USD', false);
 
     $first = $action->execute($order, $quote, now()->addDay()->toDateString());
@@ -56,12 +56,11 @@ it('keeps one delivery per order when it is rescheduled', function (): void {
 it('refuses to schedule an address that is quoted by hand', function (): void {
     $order = OrderFactory::new()->createOne();
 
-    expect(fn (): Delivery => app(ScheduleDeliveryAction::class)->execute(
+    expect(fn (): Delivery => resolve(ScheduleDeliveryAction::class)->execute(
         order: $order,
         quote: DeliveryQuote::outOfRange(430.0, 'USD'),
-    ))->toThrow(RuntimeException::class);
-
-    expect(Delivery::query()->count())->toBe(0);
+    ))->toThrow(RuntimeException::class)
+        ->and(Delivery::query()->count())->toBe(0);
 });
 
 it('refuses a date outside the bookable window', function (): void {
@@ -70,13 +69,12 @@ it('refuses a date outside the bookable window', function (): void {
     $order = OrderFactory::new()->createOne();
     $zone = DeliveryZoneFactory::new()->freeWithin(12)->createOne();
 
-    expect(fn (): Delivery => app(ScheduleDeliveryAction::class)->execute(
+    expect(fn (): Delivery => resolve(ScheduleDeliveryAction::class)->execute(
         order: $order,
         quote: new DeliveryQuote($zone, 2.0, 0, 'USD', false),
         scheduledFor: now()->addMonths(2)->toDateString(),
-    ))->toThrow(RuntimeException::class);
-
-    expect(Delivery::query()->count())->toBe(0);
+    ))->toThrow(RuntimeException::class)
+        ->and(Delivery::query()->count())->toBe(0);
 });
 
 it('reports whether a capped window still has room on a date', function (): void {
@@ -86,7 +84,7 @@ it('reports whether a capped window still has room on a date', function (): void
 
     expect($slot->hasRoomOn($date))->toBeTrue();
 
-    app(ScheduleDeliveryAction::class)->execute(
+    resolve(ScheduleDeliveryAction::class)->execute(
         order: OrderFactory::new()->createOne(),
         quote: new DeliveryQuote($zone, 1.0, 0, 'USD', false),
         scheduledFor: $date,

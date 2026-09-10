@@ -12,7 +12,7 @@ beforeEach(function (): void {
 
 it('posts entries and keeps the cached wallet balance in lockstep', function (): void {
     $wallet = WalletFactory::new()->create();
-    $ledger = app(PostLedgerEntryAction::class);
+    $ledger = resolve(PostLedgerEntryAction::class);
 
     $first = $ledger->execute($wallet, 5_000);
     $second = $ledger->execute($wallet, -2_000);
@@ -27,7 +27,7 @@ it('posts entries and keeps the cached wallet balance in lockstep', function ():
 
 it('rejects entries that would drive the balance negative', function (): void {
     $wallet = WalletFactory::new()->create();
-    $ledger = app(PostLedgerEntryAction::class);
+    $ledger = resolve(PostLedgerEntryAction::class);
 
     $ledger->execute($wallet, 1_000);
 
@@ -39,7 +39,7 @@ it('rejects entries that would drive the balance negative', function (): void {
 
 it('refuses to mutate or delete posted ledger entries', function (): void {
     $wallet = WalletFactory::new()->create();
-    $entry = app(PostLedgerEntryAction::class)->execute($wallet, 1_000);
+    $entry = resolve(PostLedgerEntryAction::class)->execute($wallet, 1_000);
 
     expect(fn () => $entry->update(['amount' => 9_999]))->toThrow(RuntimeException::class)
         ->and(fn () => $entry->delete())->toThrow(RuntimeException::class);

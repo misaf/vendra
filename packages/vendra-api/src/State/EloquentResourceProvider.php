@@ -39,7 +39,7 @@ final class EloquentResourceProvider implements ProviderInterface
         $modelClass = $this->resolveModelClass($operation);
 
         if ($operation instanceof CollectionOperationInterface) {
-            $models = app(CollectionProvider::class)->provide($operation, $uriVariables, $context);
+            $models = resolve(CollectionProvider::class)->provide($operation, $uriVariables, $context);
 
             if ($models instanceof PaginatorInterface) {
                 return new Paginator(new LengthAwarePaginator(
@@ -55,7 +55,7 @@ final class EloquentResourceProvider implements ProviderInterface
                 : [];
         }
 
-        $model = app(ItemProvider::class)->provide($operation, $uriVariables, $context);
+        $model = resolve(ItemProvider::class)->provide($operation, $uriVariables, $context);
 
         return $model instanceof $modelClass ? $mapper->map($model) : null;
     }
@@ -87,7 +87,7 @@ final class EloquentResourceProvider implements ProviderInterface
             ));
         }
 
-        $mapper = app($mapperClass);
+        $mapper = resolve($mapperClass);
 
         if (! $mapper instanceof ResourceMapper) {
             throw new RuntimeException(sprintf(

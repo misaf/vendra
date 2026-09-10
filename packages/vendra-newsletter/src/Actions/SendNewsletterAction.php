@@ -39,7 +39,7 @@ final class SendNewsletterAction
                     /** @var list<int> $ids */
                     $ids = $subscribers->modelKeys();
 
-                    SendNewsletterBatchJob::dispatch($lockedNewsletter->id, $ids)->afterCommit();
+                    dispatch(new SendNewsletterBatchJob($lockedNewsletter->id, $ids))->afterCommit();
 
                     $queued += count($ids);
                 });

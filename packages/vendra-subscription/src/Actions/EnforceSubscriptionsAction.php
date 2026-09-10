@@ -65,7 +65,7 @@ final class EnforceSubscriptionsAction
                 foreach ($subscriptions as $subscription) {
                     $subscription->forceFill(['expiry_reminder_sent_at' => now()])->save();
 
-                    SubscriptionExpiringSoon::dispatch($subscription);
+                    event(new SubscriptionExpiringSoon($subscription));
                     $reminded++;
                 }
             });
@@ -114,7 +114,7 @@ final class EnforceSubscriptionsAction
                         continue;
                     }
 
-                    SubscriptionGraceExpired::dispatch($latest);
+                    event(new SubscriptionGraceExpired($latest));
                     $flagged++;
                 }
             });

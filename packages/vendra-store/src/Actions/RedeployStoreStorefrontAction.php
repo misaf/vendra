@@ -14,6 +14,6 @@ final class RedeployStoreStorefrontAction
     {
         $deployment->markDesiredState(StorefrontDesiredState::Running);
 
-        ProvisionStorefrontJob::dispatch($deployment->id, force: true)->afterCommit();
+        dispatch(new ProvisionStorefrontJob($deployment->id, force: true))->afterCommit();
     }
 }

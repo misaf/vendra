@@ -126,9 +126,7 @@ final class TransactionResource extends Resource
 
     private static function transaction(Model $record): Transaction
     {
-        if (! $record instanceof Transaction) {
-            throw new InvalidArgumentException('Transaction resources require a Transaction record.');
-        }
+        throw_unless($record instanceof Transaction, InvalidArgumentException::class, 'Transaction resources require a Transaction record.');
 
         return $record;
     }

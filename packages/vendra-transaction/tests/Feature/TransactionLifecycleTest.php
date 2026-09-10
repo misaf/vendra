@@ -39,7 +39,7 @@ it('starts pending and settles a deposit into the ledger on approval', function 
 
 it('settles a withdrawal as a negative ledger entry', function (): void {
     $wallet = WalletFactory::new()->create();
-    app(PostLedgerEntryAction::class)->execute($wallet, 10_000);
+    resolve(PostLedgerEntryAction::class)->execute($wallet, 10_000);
 
     $transaction = TransactionFactory::new()->forWallet($wallet)->withdrawal()->create(['amount' => 3_000]);
     $transaction->approve();
@@ -50,7 +50,7 @@ it('settles a withdrawal as a negative ledger entry', function (): void {
 
 it('refuses to settle a withdrawal beyond the wallet balance and stays pending', function (): void {
     $wallet = WalletFactory::new()->create();
-    app(PostLedgerEntryAction::class)->execute($wallet, 1_000);
+    resolve(PostLedgerEntryAction::class)->execute($wallet, 1_000);
 
     $transaction = TransactionFactory::new()->forWallet($wallet)->withdrawal()->create(['amount' => 2_000]);
 
@@ -62,7 +62,7 @@ it('refuses to settle a withdrawal beyond the wallet balance and stays pending',
 it('settles a transfer against both wallets atomically', function (): void {
     $source = WalletFactory::new()->create();
     $destination = WalletFactory::new()->create();
-    app(PostLedgerEntryAction::class)->execute($source, 5_000);
+    resolve(PostLedgerEntryAction::class)->execute($source, 5_000);
 
     $transaction = TransactionFactory::new()
         ->forWallet($source)

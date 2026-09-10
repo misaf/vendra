@@ -25,7 +25,7 @@ final class SuspendStoreAction
 
             if ($deployment instanceof StorefrontDeployment) {
                 $deployment->markDesiredState(StorefrontDesiredState::Stopped);
-                ReconcileStorefrontJob::dispatch($deployment->id)->afterCommit();
+                dispatch(new ReconcileStorefrontJob($deployment->id))->afterCommit();
             }
 
             return $lockedStore;

@@ -19,9 +19,7 @@ abstract class PermissionPolicySeeder extends Seeder
     {
         $tenantKey = $this->currentTenantOrNull()?->getKey();
 
-        if ($tenantKey !== null && ! is_int($tenantKey) && ! is_string($tenantKey)) {
-            throw new UnexpectedValueException('The current tenant key must be an integer or string.');
-        }
+        throw_if($tenantKey !== null && ! is_int($tenantKey) && ! is_string($tenantKey), UnexpectedValueException::class, 'The current tenant key must be an integer or string.');
 
         $this->seedPermissionPolicies($tenantKey);
     }

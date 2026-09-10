@@ -16,7 +16,7 @@ final class TenantAwareness
      */
     public static function enabled(): bool
     {
-        return app(TenantResolver::class)->available();
+        return resolve(TenantResolver::class)->available();
     }
 
     public static function currentId(): ?int
@@ -25,7 +25,7 @@ final class TenantAwareness
             return null;
         }
 
-        return app(TenantResolver::class)->currentId();
+        return resolve(TenantResolver::class)->currentId();
     }
 
     public static function constrainUniqueRule(Unique $rule): Unique

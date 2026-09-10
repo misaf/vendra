@@ -22,7 +22,7 @@ it('prices a pin inside the free band at nothing', function (): void {
         'position' => 1,
     ]);
 
-    $quote = app(DeliveryZoneMatcher::class)->quoteFor(35.6950, STUDIO_LONGITUDE, 'USD');
+    $quote = resolve(DeliveryZoneMatcher::class)->quoteFor(35.6950, STUDIO_LONGITUDE, 'USD');
 
     expect($quote->isDeliverable())->toBeTrue()
         ->and($quote->feeAmount)->toBe(0)
@@ -42,7 +42,7 @@ it('charges the first band that still covers the pin', function (): void {
         'position' => 2,
     ]);
 
-    $quote = app(DeliveryZoneMatcher::class)->quoteFor(35.7219, 51.2334, 'USD');
+    $quote = resolve(DeliveryZoneMatcher::class)->quoteFor(35.7219, 51.2334, 'USD');
 
     expect($quote->zone?->getKey())->toBe($paid->getKey())
         ->and($quote->zone?->getKey())->not->toBe($free->getKey())
@@ -58,7 +58,7 @@ it('marks an address beyond every band as quoted by hand', function (): void {
     ]);
 
     // Isfahan, several hundred kilometres from the studio.
-    $quote = app(DeliveryZoneMatcher::class)->quoteFor(32.6546, 51.6680, 'USD');
+    $quote = resolve(DeliveryZoneMatcher::class)->quoteFor(32.6546, 51.6680, 'USD');
 
     expect($quote->isDeliverable())->toBeFalse()
         ->and($quote->requiresQuote)->toBeTrue()
@@ -78,7 +78,7 @@ it('uses the outermost quote-by-hand band when one is configured', function (): 
         'position' => 2,
     ]);
 
-    $quote = app(DeliveryZoneMatcher::class)->quoteFor(32.6546, 51.6680, 'USD');
+    $quote = resolve(DeliveryZoneMatcher::class)->quoteFor(32.6546, 51.6680, 'USD');
 
     expect($quote->zone?->getKey())->toBe($outer->getKey())
         ->and($quote->requiresQuote)->toBeTrue()
@@ -92,7 +92,7 @@ it('ignores inactive bands', function (): void {
         'position' => 1,
     ]);
 
-    $quote = app(DeliveryZoneMatcher::class)->quoteFor(35.6950, STUDIO_LONGITUDE, 'USD');
+    $quote = resolve(DeliveryZoneMatcher::class)->quoteFor(35.6950, STUDIO_LONGITUDE, 'USD');
 
     expect($quote->requiresQuote)->toBeTrue()
         ->and($quote->zone)->toBeNull();

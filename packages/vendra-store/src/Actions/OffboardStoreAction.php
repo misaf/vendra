@@ -18,13 +18,9 @@ final class OffboardStoreAction
     {
         $reason = mb_trim($reason);
 
-        if ($reason === '') {
-            throw new InvalidArgumentException('An offboarding reason is required.');
-        }
+        throw_if($reason === '', InvalidArgumentException::class, 'An offboarding reason is required.');
 
-        if (Str::length($reason) > self::MAX_REASON_LENGTH) {
-            throw new InvalidArgumentException('The offboarding reason may not exceed '.self::MAX_REASON_LENGTH.' characters.');
-        }
+        throw_if(Str::length($reason) > self::MAX_REASON_LENGTH, InvalidArgumentException::class, 'The offboarding reason may not exceed '.self::MAX_REASON_LENGTH.' characters.');
 
         return DB::transaction(function () use ($store, $reason): Store {
             $lockedStore = Store::query()

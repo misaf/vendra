@@ -31,7 +31,7 @@ final class TagIntegration
     private static function resolver(): TagResolver
     {
         if (app()->bound(TagResolver::class)) {
-            return app(TagResolver::class);
+            return resolve(TagResolver::class);
         }
 
         return new NullTagResolver;

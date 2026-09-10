@@ -50,14 +50,10 @@ abstract class DemoContentSeeder extends Seeder
             flags: JSON_THROW_ON_ERROR,
         );
 
-        if (! is_array($decodedRecords) || ! array_is_list($decodedRecords)) {
-            throw new UnexpectedValueException('Fixture file must contain a JSON array.');
-        }
+        throw_if(! is_array($decodedRecords) || ! array_is_list($decodedRecords), UnexpectedValueException::class, 'Fixture file must contain a JSON array.');
 
         foreach ($decodedRecords as $decodedRecord) {
-            if (! is_array($decodedRecord) || array_is_list($decodedRecord)) {
-                throw new UnexpectedValueException('Each fixture record must be a JSON object.');
-            }
+            throw_if(! is_array($decodedRecord) || array_is_list($decodedRecord), UnexpectedValueException::class, 'Each fixture record must be a JSON object.');
         }
 
         /** @var list<array<string, mixed>> $decodedRecords */
@@ -66,7 +62,7 @@ abstract class DemoContentSeeder extends Seeder
 
     private function fixturePath(): string
     {
-        $fileName = (new ReflectionClass(static::class))->getFileName();
+        $fileName = new ReflectionClass(static::class)->getFileName();
 
         if ($fileName === false) {
             throw new UnexpectedValueException(sprintf('Unable to resolve fixture path for %s.', static::class));

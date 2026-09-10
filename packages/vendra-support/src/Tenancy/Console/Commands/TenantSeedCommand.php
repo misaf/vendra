@@ -24,7 +24,7 @@ abstract class TenantSeedCommand extends SeedCommand
             return true;
         }
 
-        $tenantResolver = app(TenantResolver::class);
+        $tenantResolver = resolve(TenantResolver::class);
         $tenantInput = $this->resolveTenantInput($tenantResolver);
 
         if (! is_int($tenantInput) && ! is_string($tenantInput)) {

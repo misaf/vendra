@@ -6,37 +6,27 @@ namespace Misaf\VendraStore\Support;
 
 use InvalidArgumentException;
 
-final class StorefrontContainerResources
+final readonly class StorefrontContainerResources
 {
     private const int BYTES_PER_MEGABYTE = 1024 * 1024;
 
     private const int NANO_CPUS = 1_000_000_000;
 
     public function __construct(
-        public readonly ?float $cpus = null,
-        public readonly ?int $memoryMegabytes = null,
-        public readonly ?int $memoryReservationMegabytes = null,
-        public readonly ?int $pidsLimit = null,
+        public ?float $cpus = null,
+        public ?int $memoryMegabytes = null,
+        public ?int $memoryReservationMegabytes = null,
+        public ?int $pidsLimit = null,
     ) {
-        if ($cpus !== null && $cpus <= 0) {
-            throw new InvalidArgumentException('A CPU limit must be greater than zero.');
-        }
+        throw_if($cpus !== null && $cpus <= 0, InvalidArgumentException::class, 'A CPU limit must be greater than zero.');
 
-        if ($memoryMegabytes !== null && $memoryMegabytes <= 0) {
-            throw new InvalidArgumentException('A memory limit must be greater than zero.');
-        }
+        throw_if($memoryMegabytes !== null && $memoryMegabytes <= 0, InvalidArgumentException::class, 'A memory limit must be greater than zero.');
 
-        if ($memoryReservationMegabytes !== null && $memoryReservationMegabytes <= 0) {
-            throw new InvalidArgumentException('A memory reservation must be greater than zero.');
-        }
+        throw_if($memoryReservationMegabytes !== null && $memoryReservationMegabytes <= 0, InvalidArgumentException::class, 'A memory reservation must be greater than zero.');
 
-        if ($pidsLimit !== null && $pidsLimit <= 0) {
-            throw new InvalidArgumentException('A PID limit must be greater than zero.');
-        }
+        throw_if($pidsLimit !== null && $pidsLimit <= 0, InvalidArgumentException::class, 'A PID limit must be greater than zero.');
 
-        if ($memoryMegabytes !== null && $memoryReservationMegabytes !== null && $memoryReservationMegabytes > $memoryMegabytes) {
-            throw new InvalidArgumentException('A memory reservation may not exceed the memory limit.');
-        }
+        throw_if($memoryMegabytes !== null && $memoryReservationMegabytes !== null && $memoryReservationMegabytes > $memoryMegabytes, InvalidArgumentException::class, 'A memory reservation may not exceed the memory limit.');
     }
 
     /** @return array<string, int> */

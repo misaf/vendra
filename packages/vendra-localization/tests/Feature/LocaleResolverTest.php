@@ -42,10 +42,10 @@ function requestWithPreferredLocaleUser(string $locale): Request
 {
     $request = Request::create('/');
 
-    $request->setUserResolver(fn (): HasLocalePreference => new class($locale) implements HasLocalePreference
+    $request->setUserResolver(fn (): HasLocalePreference => new readonly class($locale) implements HasLocalePreference
     {
         public function __construct(
-            private readonly string $locale,
+            private string $locale,
         ) {}
 
         public function preferredLocale(): string
@@ -62,7 +62,7 @@ it('binds the configured resolver chain', function (): void {
 
     app()->forgetInstance(LocaleResolver::class);
 
-    $resolver = app(LocaleResolver::class);
+    $resolver = resolve(LocaleResolver::class);
 
     expect($resolver)
         ->toBeInstanceOf(ChainLocaleResolver::class)
@@ -75,11 +75,11 @@ it('rejects configured resolvers that do not implement the contract', function (
 
     app()->forgetInstance(LocaleResolver::class);
 
-    app(LocaleResolver::class);
+    resolve(LocaleResolver::class);
 })->throws(InvalidArgumentException::class);
 
 it('registers every built-in resolver', function (string $resolver): void {
-    expect(app($resolver))->toBeInstanceOf(LocaleResolver::class);
+    expect(resolve($resolver))->toBeInstanceOf(LocaleResolver::class);
 })->with([
     AcceptLanguageLocaleResolver::class,
     QueryLocaleResolver::class,
@@ -88,7 +88,7 @@ it('registers every built-in resolver', function (string $resolver): void {
 ]);
 
 it('resolves locales from each built-in resolver source', function (string $resolver, Request $request, string $expectedLocale): void {
-    expect(app($resolver)->resolve($request))->toBe($expectedLocale);
+    expect(resolve($resolver)->resolve($request))->toBe($expectedLocale);
 })->with([
     'accept language header' => fn (): array => [
         AcceptLanguageLocaleResolver::class,
@@ -120,7 +120,7 @@ it('resolves locales from each built-in resolver source', function (string $reso
 ]);
 
 it('returns null when the resolver source has no value', function (string $resolver, Request $request): void {
-    expect(app($resolver)->resolve($request))->toBeNull();
+    expect(resolve($resolver)->resolve($request))->toBeNull();
 })->with([
     'accept language header' => fn (): array => [
         AcceptLanguageLocaleResolver::class,

@@ -23,6 +23,6 @@ final class CreateNewsletterSubscriber extends CreateRecord
      */
     protected function handleRecordCreation(array $data): Model
     {
-        return app(SubscribeNewsletterSubscriberAction::class)->execute($data);
+        return resolve(SubscribeNewsletterSubscriberAction::class)->execute($data);
     }
 }

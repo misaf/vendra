@@ -14,9 +14,9 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use UnexpectedValueException;
 
-final class ReplaceStoreDomainAction
+final readonly class ReplaceStoreDomainAction
 {
-    public function __construct(private readonly StorefrontRuntimeConfiguration $runtime) {}
+    public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
      * Replace a store's active domain, retaining the previous one as history.
@@ -94,9 +94,7 @@ final class ReplaceStoreDomainAction
             return $created;
         }));
 
-        if (! $storeDomain instanceof StoreDomain) {
-            throw new UnexpectedValueException('Replacing a store domain did not return a domain model.');
-        }
+        throw_unless($storeDomain instanceof StoreDomain, UnexpectedValueException::class, 'Replacing a store domain did not return a domain model.');
 
         /*
          | Forced, because the deployment is already recorded as Ready and an
@@ -108,7 +106,7 @@ final class ReplaceStoreDomainAction
          | rebuilds the storefront on it once the estate is up.
          */
         if ($deployment instanceof StorefrontDeployment && $this->runtime->isConfigured()) {
-            ProvisionStorefrontJob::dispatch($deployment->id, force: true)->afterCommit();
+            dispatch(new ProvisionStorefrontJob($deployment->id, force: true))->afterCommit();
         }
 
         return $storeDomain;

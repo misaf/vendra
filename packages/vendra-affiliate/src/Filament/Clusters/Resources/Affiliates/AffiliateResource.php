@@ -135,9 +135,7 @@ final class AffiliateResource extends Resource
 
     private static function affiliate(Model $record): Affiliate
     {
-        if (! $record instanceof Affiliate) {
-            throw new InvalidArgumentException('Affiliate resources require an Affiliate record.');
-        }
+        throw_unless($record instanceof Affiliate, InvalidArgumentException::class, 'Affiliate resources require an Affiliate record.');
 
         return $record;
     }

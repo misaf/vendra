@@ -17,18 +17,18 @@ use Spatie\ModelStates\Transition;
  */
 final class ApproveTransactionTransition extends Transition
 {
-    public function __construct(private Transaction $transaction) {}
+    public function __construct(private readonly Transaction $transaction) {}
 
     public function handle(): Transaction
     {
         DB::transaction(function (): void {
-            app(SettleTransactionAction::class)->execute($this->transaction);
+            resolve(SettleTransactionAction::class)->execute($this->transaction);
 
             $this->transaction->status = new Approved($this->transaction);
             $this->transaction->save();
         });
 
-        TransactionApproved::dispatch($this->transaction);
+        event(new TransactionApproved($this->transaction));
 
         return $this->transaction;
     }

@@ -20,8 +20,8 @@ it('cancels a subscription and its unfinished payment idempotently', function ()
         'status' => SubscriptionPaymentStatus::Pending,
     ]);
 
-    app(CancelSubscriptionAction::class)->execute($subscription);
-    app(CancelSubscriptionAction::class)->execute($subscription->refresh());
+    resolve(CancelSubscriptionAction::class)->execute($subscription);
+    resolve(CancelSubscriptionAction::class)->execute($subscription->refresh());
 
     expect($subscription->refresh()->status)->toBe(SubscriptionStatus::Cancelled)
         ->and($payment->refresh()->status)->toBe(SubscriptionPaymentStatus::Cancelled);
@@ -36,7 +36,7 @@ it('extends only an active expiring subscription and clears its reminder', funct
     ]);
     $newEnd = now()->addMonths(2)->startOfSecond();
 
-    app(ExtendSubscriptionAction::class)->execute($subscription, $newEnd);
+    resolve(ExtendSubscriptionAction::class)->execute($subscription, $newEnd);
 
     expect($subscription->refresh()->ends_at?->equalTo($newEnd))->toBeTrue()
         ->and($subscription->expiry_reminder_sent_at)->toBeNull();

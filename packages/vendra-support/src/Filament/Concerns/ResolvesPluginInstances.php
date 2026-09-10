@@ -14,7 +14,7 @@ trait ResolvesPluginInstances
     public static function make(): static
     {
         /** @var static $plugin */
-        $plugin = app(static::class);
+        $plugin = resolve(static::class);
 
         return $plugin;
     }

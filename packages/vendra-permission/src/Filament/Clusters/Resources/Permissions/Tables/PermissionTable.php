@@ -126,7 +126,7 @@ final class PermissionTable
 
     private static function canUseBulkRoleAssignment(): bool
     {
-        $tenant = app(TenantResolver::class)->current();
+        $tenant = resolve(TenantResolver::class)->current();
 
         return Feature::for($tenant)->active(PermissionFeatureEnum::ModuleEnabled->value)
             && Feature::for($tenant)->active(PermissionFeatureEnum::BulkRoleAssignment->value);

@@ -88,7 +88,7 @@ function reconcilable(array $attributes = []): StorefrontDeployment
 
 function reconcile(StorefrontDeployment $deployment): StorefrontReconciliationOutcome
 {
-    return app(ReconcileStoreStorefrontAction::class)->execute($deployment);
+    return resolve(ReconcileStoreStorefrontAction::class)->execute($deployment);
 }
 
 describe('a storefront meant to be running', function (): void {
@@ -96,7 +96,7 @@ describe('a storefront meant to be running', function (): void {
         $engine = fakeExistingStorefront();
 
         expect(reconcile(reconcilable()))->toBe(StorefrontReconciliationOutcome::InSync)
-            ->and($engine->calls)->toBe([]);
+            ->and($engine->calls)->toBeEmpty();
     });
 
     it('starts a stopped storefront instead of rebuilding it', function (): void {
@@ -133,7 +133,7 @@ describe('a storefront meant to be running', function (): void {
         $engine = fakeExistingStorefront(['Status' => 'running']);
 
         expect(reconcile(reconcilable()))->toBe(StorefrontReconciliationOutcome::InSync)
-            ->and($engine->calls)->toBe([]);
+            ->and($engine->calls)->toBeEmpty();
     });
 });
 
@@ -151,7 +151,7 @@ describe('a storefront meant to be stopped', function (): void {
         $deployment = reconcilable(['desired_state' => StorefrontDesiredState::Stopped]);
 
         expect(reconcile($deployment))->toBe(StorefrontReconciliationOutcome::InSync)
-            ->and($engine->calls)->toBe([]);
+            ->and($engine->calls)->toBeEmpty();
     });
 });
 

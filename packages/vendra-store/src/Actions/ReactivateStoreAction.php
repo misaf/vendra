@@ -33,7 +33,7 @@ final class ReactivateStoreAction
 
                 if ($deployment instanceof StorefrontDeployment) {
                     $deployment->markDesiredState(StorefrontDesiredState::Running);
-                    ReconcileStorefrontJob::dispatch($deployment->id)->afterCommit();
+                    dispatch(new ReconcileStorefrontJob($deployment->id))->afterCommit();
                 }
             }
 

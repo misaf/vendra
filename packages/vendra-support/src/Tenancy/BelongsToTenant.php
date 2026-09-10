@@ -47,7 +47,7 @@ trait BelongsToTenant
                 return;
             }
 
-            if ($tenantId = app(TenantResolver::class)->currentId()) {
+            if ($tenantId = resolve(TenantResolver::class)->currentId()) {
                 $model->setAttribute(TenantSchema::column(), $tenantId);
             }
         });
@@ -66,6 +66,6 @@ trait BelongsToTenant
      */
     private function tenantModelClass(): string
     {
-        return app(TenantResolver::class)->modelClass();
+        return resolve(TenantResolver::class)->modelClass();
     }
 }

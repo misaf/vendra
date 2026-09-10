@@ -34,9 +34,7 @@ trait MapsResourceReferences
      */
     protected function expectModel(mixed $value, string $expected, string $message): void
     {
-        if (! $value instanceof $expected) {
-            throw new UnexpectedValueException($message);
-        }
+        throw_unless($value instanceof $expected, UnexpectedValueException::class, $message);
     }
 
     /**

@@ -39,7 +39,7 @@ trait BelongsToStore
                 return;
             }
 
-            if ($storeId = app(TenantResolver::class)->currentId()) {
+            if ($storeId = resolve(TenantResolver::class)->currentId()) {
                 $model->setAttribute('store_id', $storeId);
             }
         });

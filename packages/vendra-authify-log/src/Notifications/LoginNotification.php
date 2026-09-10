@@ -31,11 +31,7 @@ class LoginNotification extends Notification implements ShouldQueueAfterCommit
 
     public function toMail(object $notifiable): MailMessage
     {
-        if (! $notifiable instanceof HasUsername) {
-            throw new RuntimeException(
-                'Notifiable must implement HasUsername to receive LoginNotification.'
-            );
-        }
+        throw_unless($notifiable instanceof HasUsername, RuntimeException::class, 'Notifiable must implement HasUsername to receive LoginNotification.');
 
         $username = $notifiable->getAuthifyLogUsername();
         $resetPasswordUrl = route('filament.panel-user.auth.password-reset.request');

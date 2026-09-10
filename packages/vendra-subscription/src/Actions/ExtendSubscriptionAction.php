@@ -29,9 +29,7 @@ final class ExtendSubscriptionAction
                 throw new LogicException("Subscription [{$lockedSubscription->id}] does not expire.");
             }
 
-            if ($endsAt->lessThanOrEqualTo($lockedSubscription->ends_at)) {
-                throw new InvalidArgumentException('The new subscription end must be later than the current end.');
-            }
+            throw_if($endsAt->lessThanOrEqualTo($lockedSubscription->ends_at), InvalidArgumentException::class, 'The new subscription end must be later than the current end.');
 
             $lockedSubscription->forceFill([
                 'ends_at' => $endsAt,

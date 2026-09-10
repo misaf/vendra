@@ -17,9 +17,7 @@ final class ProductPriceMapper implements ResourceMapper
 
     public function map(Model $model): ProductPriceResource
     {
-        if (! $model instanceof ProductPrice) {
-            throw new UnexpectedValueException('Expected a product price model.');
-        }
+        throw_unless($model instanceof ProductPrice, UnexpectedValueException::class, 'Expected a product price model.');
 
         return $this->toPriceResource($model);
     }

@@ -20,7 +20,7 @@ it('stores the selected image and derives provisioning data from its catalog ent
     ]);
     $store = createTestTenant();
 
-    $deployment = app(RequestStorefrontDeploymentAction::class)->execute(
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
         $store,
         'acme.test',
         [
@@ -40,7 +40,7 @@ it('rejects an inactive image for a new deployment', function (): void {
     ]);
     $store = createTestTenant();
 
-    expect(fn () => app(RequestStorefrontDeploymentAction::class)->execute(
+    expect(fn () => resolve(RequestStorefrontDeploymentAction::class)->execute(
         $store,
         'acme.test',
         [

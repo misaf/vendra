@@ -64,7 +64,7 @@ final class ApplySubscriptionPaymentResultAction
         });
 
         if ($failed) {
-            SubscriptionPaymentFailed::dispatch($payment);
+            event(new SubscriptionPaymentFailed($payment));
         }
 
         return $payment;

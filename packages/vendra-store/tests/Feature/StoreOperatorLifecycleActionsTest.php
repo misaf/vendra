@@ -35,12 +35,12 @@ it('suspends and reactivates a ready store while converging its storefront inten
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
-    app(SuspendStoreAction::class)->execute($store);
+    resolve(SuspendStoreAction::class)->execute($store);
 
     expect($store->refresh()->status())->toBe(StoreStatus::Suspended)
         ->and($deployment->refresh()->desired_state)->toBe(StorefrontDesiredState::Stopped);
 
-    app(ReactivateStoreAction::class)->execute($store);
+    resolve(ReactivateStoreAction::class)->execute($store);
 
     expect($store->refresh()->status())->toBe(StoreStatus::Active)
         ->and($deployment->refresh()->desired_state)->toBe(StorefrontDesiredState::Running);
@@ -54,8 +54,8 @@ it('requeues failed or in-progress store provisioning without bypassing the job'
     ]);
     $processing = Store::factory()->provisioning()->inactive()->create();
 
-    app(RetryStoreProvisioningAction::class)->execute($failed);
-    app(RetryStoreProvisioningAction::class)->execute($processing);
+    resolve(RetryStoreProvisioningAction::class)->execute($failed);
+    resolve(RetryStoreProvisioningAction::class)->execute($processing);
 
     expect($failed->refresh()->provisioning_status)->toBe(TenantProvisioningStatus::Pending)
         ->and($failed->provisioning_error)->toBeNull()
@@ -73,8 +73,8 @@ it('queues storefront redeployment and failed retry through the existing provisi
         'status' => StorefrontDeploymentStatus::Failed,
     ]);
 
-    app(RedeployStoreStorefrontAction::class)->execute($deployment);
-    app(RetryFailedStorefrontDeploymentAction::class)->execute($failed);
+    resolve(RedeployStoreStorefrontAction::class)->execute($deployment);
+    resolve(RetryFailedStorefrontDeploymentAction::class)->execute($failed);
 
     expect($deployment->refresh()->desired_state)->toBe(StorefrontDesiredState::Running);
 
@@ -95,7 +95,7 @@ it('offboards and restores a store while preserving its history and stopping its
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
-    app(OffboardStoreAction::class)->execute($store, 'Merchant requested closure.');
+    resolve(OffboardStoreAction::class)->execute($store, 'Merchant requested closure.');
 
     $archived = Store::query()->withTrashed()->findOrFail($store->id);
 
@@ -105,7 +105,7 @@ it('offboards and restores a store while preserving its history and stopping its
         ->and($domain->fresh()?->trashed())->toBeTrue()
         ->and($deployment->refresh()->desired_state)->toBe(StorefrontDesiredState::Stopped);
 
-    app(RestoreOffboardedStoreAction::class)->execute($archived);
+    resolve(RestoreOffboardedStoreAction::class)->execute($archived);
 
     expect($archived->refresh()->trashed())->toBeFalse()
         ->and($archived->active)->toBeTrue()
@@ -119,9 +119,9 @@ it('revalidates reseller quota before restoring an offboarded store', function (
     Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->maxUnits(1))->create();
     $archived = Store::factory()->active()->create(['reseller_id' => $reseller->id]);
 
-    app(OffboardStoreAction::class)->execute($archived, 'Temporarily archived.');
+    resolve(OffboardStoreAction::class)->execute($archived, 'Temporarily archived.');
     Store::factory()->active()->create(['reseller_id' => $reseller->id]);
 
-    expect(fn () => app(RestoreOffboardedStoreAction::class)->execute($archived))
+    expect(fn () => resolve(RestoreOffboardedStoreAction::class)->execute($archived))
         ->toThrow(SubscriptionLimitException::class);
 });

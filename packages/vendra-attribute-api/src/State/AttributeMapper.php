@@ -16,9 +16,7 @@ final class AttributeMapper implements ResourceMapper
 {
     public function map(Model $model): AttributeResource
     {
-        if (! $model instanceof Attribute) {
-            throw new UnexpectedValueException('Expected an attribute model.');
-        }
+        throw_unless($model instanceof Attribute, UnexpectedValueException::class, 'Expected an attribute model.');
 
         return new AttributeResource(
             id: $model->id,

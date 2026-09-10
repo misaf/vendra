@@ -127,9 +127,7 @@ final class WalletResource extends Resource
 
     private static function wallet(Model $record): Wallet
     {
-        if (! $record instanceof Wallet) {
-            throw new InvalidArgumentException('Wallet resources require a Wallet record.');
-        }
+        throw_unless($record instanceof Wallet, InvalidArgumentException::class, 'Wallet resources require a Wallet record.');
 
         return $record;
     }

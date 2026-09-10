@@ -54,7 +54,7 @@ final class CurrencyIntegration
     private static function resolver(): CurrencyResolver
     {
         if (app()->bound(CurrencyResolver::class)) {
-            return app(CurrencyResolver::class);
+            return resolve(CurrencyResolver::class);
         }
 
         return self::fallbackResolver();

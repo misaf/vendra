@@ -30,7 +30,7 @@ final class RetryStoreProvisioningAction
                 ])->save();
             }
 
-            CompleteStoreProvisioningJob::dispatch($lockedStore->id)->afterCommit();
+            dispatch(new CompleteStoreProvisioningJob($lockedStore->id))->afterCommit();
 
             return $lockedStore;
         });

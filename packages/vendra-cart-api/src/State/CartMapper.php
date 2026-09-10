@@ -16,9 +16,7 @@ final class CartMapper implements ResourceMapper
 {
     public function map(Model $model): CartResource
     {
-        if (! $model instanceof Cart) {
-            throw new UnexpectedValueException('Expected a cart model.');
-        }
+        throw_unless($model instanceof Cart, UnexpectedValueException::class, 'Expected a cart model.');
 
         return new CartResource(
             id: $model->id,

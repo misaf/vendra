@@ -125,9 +125,7 @@ final class OrderResource extends Resource
 
     private static function order(Model $record): Order
     {
-        if (! $record instanceof Order) {
-            throw new InvalidArgumentException('Order resources require an Order record.');
-        }
+        throw_unless($record instanceof Order, InvalidArgumentException::class, 'Order resources require an Order record.');
 
         return $record;
     }

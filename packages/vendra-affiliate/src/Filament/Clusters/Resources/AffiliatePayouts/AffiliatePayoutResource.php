@@ -111,9 +111,7 @@ final class AffiliatePayoutResource extends Resource
 
     private static function payout(Model $record): AffiliatePayout
     {
-        if (! $record instanceof AffiliatePayout) {
-            throw new InvalidArgumentException('Affiliate Payout resources require an AffiliatePayout record.');
-        }
+        throw_unless($record instanceof AffiliatePayout, InvalidArgumentException::class, 'Affiliate Payout resources require an AffiliatePayout record.');
 
         return $record;
     }

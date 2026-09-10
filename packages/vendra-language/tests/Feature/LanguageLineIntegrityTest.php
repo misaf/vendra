@@ -159,7 +159,7 @@ it('overrides package translations from the database without losing file transla
         'text' => ['en' => 'Tenant Languages'],
     ]);
 
-    $translator = app('translator');
+    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
 
     expect($translator)->toBeInstanceOf(Translator::class);
 
@@ -181,7 +181,7 @@ it('keeps file translations when the requested database locale is missing or bla
         ],
     ]);
 
-    $translator = app('translator');
+    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
     $translator->setLocale('de');
     $translator->setLoaded([]);
 
@@ -195,7 +195,7 @@ it('loads application translations with a null namespace from the database', fun
         'text' => ['en' => 'Welcome!'],
     ]);
 
-    $translator = app('translator');
+    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
     $translator->setLocale('en');
     $translator->setLoaded([]);
 
@@ -214,7 +214,7 @@ it('applies additional configured translation loaders to namespaced groups', fun
         ],
     ]);
 
-    $translator = app('translator');
+    $translator = resolve(\Illuminate\Contracts\Translation\Translator::class);
     $translator->setLocale('en');
     $translator->setLoaded([]);
 
@@ -226,7 +226,7 @@ it('registers the namespaced database translation loader and language line model
         ->and(in_array(Db::class, config('translation-loader.translation_loaders'), true))->toBeFalse()
         ->and(config('translation-loader.model'))->toBe(LanguageLine::class)
         ->and(config('translation-loader.translation_manager'))->toBe(NamespacedTranslationLoaderManager::class)
-        ->and(app('translation.loader'))->toBeInstanceOf(NamespacedTranslationLoaderManager::class);
+        ->and(resolve('translation.loader'))->toBeInstanceOf(NamespacedTranslationLoaderManager::class);
 });
 
 it('upgrades the stock Db loader while preserving host translation loader overrides', function (): void {
@@ -250,7 +250,7 @@ it('uses a host model for application translations without sending unsupported n
     $loader = new DatabaseTranslationLoader;
 
     expect($loader->loadTranslations('en', 'messages'))->toBe(['custom' => 'en:messages'])
-        ->and($loader->loadTranslations('en', 'navigation', 'vendra-language'))->toBe([]);
+        ->and($loader->loadTranslations('en', 'navigation', 'vendra-language'))->toBeEmpty();
 });
 
 it('sends namespaces to host models that implement the namespace contract', function (): void {

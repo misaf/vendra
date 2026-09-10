@@ -28,12 +28,12 @@ it('registers admin management separately from the personal user widget', functi
     AffiliatePlugin::make()->register($adminPanel);
     AffiliatePlugin::make()->register($userPanel);
 
-    expect($adminPanel->getWidgets())->toContain(AffiliateOverviewWidget::class);
-    expect(in_array(UserAffiliateOverviewWidget::class, $adminPanel->getWidgets(), true))->toBeFalse();
-    expect($adminPanel->getClusters())->not->toBeEmpty();
-    expect($userPanel->getWidgets())->toContain(UserAffiliateOverviewWidget::class);
-    expect(in_array(AffiliateOverviewWidget::class, $userPanel->getWidgets(), true))->toBeFalse();
-    expect($userPanel->getClusters())->toBeEmpty();
+    expect($adminPanel->getWidgets())->toContain(AffiliateOverviewWidget::class)
+        ->and(UserAffiliateOverviewWidget::class)->not->toBeIn($adminPanel->getWidgets())
+        ->and($adminPanel->getClusters())->not->toBeEmpty()
+        ->and($userPanel->getWidgets())->toContain(UserAffiliateOverviewWidget::class)
+        ->and(AffiliateOverviewWidget::class)->not->toBeIn($userPanel->getWidgets())
+        ->and($userPanel->getClusters())->toBeEmpty();
 });
 
 it('shows tenant-scoped affiliate metrics and earned commissions', function (): void {
@@ -109,8 +109,8 @@ it('shows tenant-scoped affiliate metrics and earned commissions', function (): 
         ]);
 
     /** @var array<int, Stat> $stats */
-    $stats = (new ReflectionMethod(AffiliateOverviewWidget::class, 'getStats'))
-        ->invoke(app(AffiliateOverviewWidget::class));
+    $stats = new ReflectionMethod(AffiliateOverviewWidget::class, 'getStats')
+        ->invoke(resolve(AffiliateOverviewWidget::class));
 
     expect(array_map(
         static fn (Stat $stat): mixed => $stat->getIcon(),
@@ -144,12 +144,12 @@ it('shows tenant-scoped commission and payout resource metrics', function (): vo
     switchToTestTenant($tenant);
 
     /** @var array<int, Stat> $commissionStats */
-    $commissionStats = (new ReflectionMethod(AffiliateCommissionOverviewWidget::class, 'getStats'))
-        ->invoke(app(AffiliateCommissionOverviewWidget::class));
+    $commissionStats = new ReflectionMethod(AffiliateCommissionOverviewWidget::class, 'getStats')
+        ->invoke(resolve(AffiliateCommissionOverviewWidget::class));
 
     /** @var array<int, Stat> $payoutStats */
-    $payoutStats = (new ReflectionMethod(AffiliatePayoutOverviewWidget::class, 'getStats'))
-        ->invoke(app(AffiliatePayoutOverviewWidget::class));
+    $payoutStats = new ReflectionMethod(AffiliatePayoutOverviewWidget::class, 'getStats')
+        ->invoke(resolve(AffiliatePayoutOverviewWidget::class));
 
     expect(array_map(
         static fn (Stat $stat): mixed => $stat->getValue(),

@@ -44,7 +44,7 @@ final class CancelSubscriptionAction
         });
 
         if ($cancelled) {
-            SubscriptionCancelled::dispatch($result);
+            event(new SubscriptionCancelled($result));
         }
 
         return $result;

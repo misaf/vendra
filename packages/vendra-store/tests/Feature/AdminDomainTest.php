@@ -19,7 +19,7 @@ it('resolves canonical and custom admin hosts to the property', function (): voi
         'active' => true,
     ]);
 
-    $tenantFinder = app(StoreDomainFinder::class);
+    $tenantFinder = resolve(StoreDomainFinder::class);
 
     expect($tenantFinder->findForAdminHost('acme.admin.vendra.test')?->getKey())->toBe($tenant->getKey())
         ->and($tenantFinder->findForAdminHost('admin.acme.example.com')?->getKey())->toBe($tenant->getKey())
@@ -69,7 +69,7 @@ it('does not resolve manually inactive, billing suspended, or provisioning tenan
         'active' => true,
     ]);
 
-    $tenantFinder = app(StoreDomainFinder::class);
+    $tenantFinder = resolve(StoreDomainFinder::class);
 
     expect($tenantFinder->findForAdminHost('acme.admin.vendra.test'))->toBeNull()
         ->and($tenantFinder->findForAdminHost('admin.acme.example.com'))->toBeNull();

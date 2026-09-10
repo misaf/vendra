@@ -11,7 +11,7 @@ beforeEach(function (): void {
 });
 
 it('creates a new subscribed subscriber for an unknown email', function (): void {
-    $subscriber = app(SubscribeNewsletterSubscriberAction::class)->execute([
+    $subscriber = resolve(SubscribeNewsletterSubscriberAction::class)->execute([
         'email' => 'new@example.com',
         'name' => 'New subscriber',
     ]);
@@ -27,7 +27,7 @@ it('returns the existing active subscriber unchanged for a repeat subscription',
         'name' => 'Original name',
     ]);
 
-    $subscriber = app(SubscribeNewsletterSubscriberAction::class)->execute([
+    $subscriber = resolve(SubscribeNewsletterSubscriberAction::class)->execute([
         'email' => 'repeat@example.com',
         'name' => 'Other name',
     ]);

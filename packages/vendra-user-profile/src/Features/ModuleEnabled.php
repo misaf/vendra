@@ -16,7 +16,7 @@ final class ModuleEnabled
     public function before(mixed $scope): ?bool
     {
         if (TenantAwareness::enabled()) {
-            $tenantModel = app(TenantResolver::class)->modelClass();
+            $tenantModel = resolve(TenantResolver::class)->modelClass();
 
             if (! $scope instanceof $tenantModel) {
                 return false;

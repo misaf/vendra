@@ -16,7 +16,7 @@ use Misaf\VendraSupport\Enums\SubscriptionChargeStatus;
 it('marks a payment paid and lets the engine raise the paid event', function (): void {
     $payment = SubscriptionPayment::factory()->create(['status' => SubscriptionPaymentStatus::Processing]);
 
-    $result = app(ApplySubscriptionPaymentResultAction::class)->execute(
+    $result = resolve(ApplySubscriptionPaymentResultAction::class)->execute(
         $payment,
         new SubscriptionChargeResult(SubscriptionChargeStatus::Paid, providerReference: 'ref-1'),
     );
@@ -31,14 +31,14 @@ it('fails a pending-payment subscription and raises the failed event', function 
     $subscription = Subscription::factory()->create(['status' => SubscriptionStatus::PendingPayment]);
     $payment = SubscriptionPayment::factory()->for($subscription)->create(['status' => SubscriptionPaymentStatus::Processing]);
 
-    $result = app(ApplySubscriptionPaymentResultAction::class)->execute(
+    $result = resolve(ApplySubscriptionPaymentResultAction::class)->execute(
         $payment,
         new SubscriptionChargeResult(SubscriptionChargeStatus::Failed, errorCode: 'declined', errorMessage: 'Card declined.'),
     );
 
     expect($result->status)->toBe(SubscriptionPaymentStatus::Failed)
         ->and($subscription->refresh()->status)->toBe(SubscriptionStatus::Cancelled);
-    Event::assertDispatched(SubscriptionPaymentFailed::class, fn (SubscriptionPaymentFailed $event): bool => $event->payment->is($result));
+    Event::assertDispatched(fn (SubscriptionPaymentFailed $event): bool => $event->payment->is($result));
     Event::assertNotDispatched(SubscriptionPaymentPaid::class);
 });
 
@@ -46,7 +46,7 @@ it('moves an active subscription to past due when its renewal payment fails', fu
     $subscription = Subscription::factory()->create(['status' => SubscriptionStatus::Active]);
     $payment = SubscriptionPayment::factory()->for($subscription)->create(['status' => SubscriptionPaymentStatus::Processing]);
 
-    app(ApplySubscriptionPaymentResultAction::class)->execute(
+    resolve(ApplySubscriptionPaymentResultAction::class)->execute(
         $payment,
         new SubscriptionChargeResult(SubscriptionChargeStatus::Failed, errorCode: 'declined'),
     );

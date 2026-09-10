@@ -27,7 +27,7 @@ it('resolves the default currency code from the database', function (): void {
     CurrencyFactory::new()->code('EUR')->createOne(['position' => 1]);
     CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 2]);
 
-    expect(app(CurrencyResolver::class)->defaultCode())->toBe('USD');
+    expect(resolve(CurrencyResolver::class)->defaultCode())->toBe('USD');
 });
 
 it('resolves options and active codes from active currencies only', function (): void {
@@ -35,7 +35,7 @@ it('resolves options and active codes from active currencies only', function ():
     CurrencyFactory::new()->code('EUR')->createOne(['position' => 2]);
     CurrencyFactory::new()->code('GBP')->inactive()->createOne(['position' => 3]);
 
-    $resolver = app(CurrencyResolver::class);
+    $resolver = resolve(CurrencyResolver::class);
 
     expect($resolver->options())->toBe([
         'EUR' => 'Euro',

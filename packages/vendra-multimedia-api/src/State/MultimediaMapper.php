@@ -13,9 +13,7 @@ final class MultimediaMapper implements ResourceMapper
 {
     public function map(Model $model): MultimediaResource
     {
-        if (! $model instanceof PublicMultimedia) {
-            throw new UnexpectedValueException('Expected a public multimedia model.');
-        }
+        throw_unless($model instanceof PublicMultimedia, UnexpectedValueException::class, 'Expected a public multimedia model.');
 
         return MultimediaResourceFactory::make($model);
     }

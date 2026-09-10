@@ -42,7 +42,7 @@ final class AttributeIntegration
     private static function resolver(): AttributeResolver
     {
         if (app()->bound(AttributeResolver::class)) {
-            return app(AttributeResolver::class);
+            return resolve(AttributeResolver::class);
         }
 
         return new NullAttributeResolver;

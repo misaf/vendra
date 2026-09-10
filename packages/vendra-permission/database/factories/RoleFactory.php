@@ -48,9 +48,7 @@ final class RoleFactory extends Factory
     {
         $configuredGuardNames = $this->configuredGuardNames();
 
-        if (! in_array($guardName, $configuredGuardNames, true)) {
-            throw new RuntimeException("The guard [{$guardName}] is not configured in auth.guards.");
-        }
+        throw_unless(in_array($guardName, $configuredGuardNames, true), RuntimeException::class, "The guard [{$guardName}] is not configured in auth.guards.");
 
         return $this->state(fn (): array => ['guard_name' => $guardName]);
     }
@@ -62,9 +60,7 @@ final class RoleFactory extends Factory
     {
         $guardNames = array_keys(Config::array('auth.guards'));
 
-        if ($guardNames === []) {
-            throw new RuntimeException('No guards are configured in auth.guards.');
-        }
+        throw_if($guardNames === [], RuntimeException::class, 'No guards are configured in auth.guards.');
 
         return $guardNames;
     }

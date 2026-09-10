@@ -14,9 +14,7 @@ final class AffiliateMapper implements ResourceMapper
 {
     public function map(Model $model): AffiliateResource
     {
-        if (! $model instanceof Affiliate) {
-            throw new UnexpectedValueException('Expected an affiliate model.');
-        }
+        throw_unless($model instanceof Affiliate, UnexpectedValueException::class, 'Expected an affiliate model.');
 
         return new AffiliateResource(
             id: $model->id,

@@ -52,7 +52,7 @@ final class PermissionForm
                 TextInput::make('name')
                     ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.name'))
                     ->autofocus()
-                    ->columnSpan(fn (Get $get) => empty($get('roles')) ? ['lg' => 1] : 'full')
+                    ->columnSpan(fn (Get $get) => blank($get('roles')) ? ['lg' => 1] : 'full')
                     ->label(__('vendra-permission::attributes.name'))
                     ->live()
                     ->maxLength(255)
@@ -62,7 +62,7 @@ final class PermissionForm
                         modifyRuleUsing: function (Unique $rule, Get $get, string $operation): void {
                             TenantAwareness::constrainUniqueRule($rule);
 
-                            if ($operation === 'create' && ! empty($get('roles'))) {
+                            if ($operation === 'create' && filled($get('roles'))) {
                                 $rule->where('id', 0);
 
                                 return;
@@ -91,11 +91,11 @@ final class PermissionForm
                             ->all()
                     )
                     ->preload()
-                    ->required(fn (Get $get): bool => empty($get('roles')))
-                    ->saved(fn (Get $get) => empty($get('roles')))
+                    ->required(fn (Get $get): bool => blank($get('roles')))
+                    ->saved(fn (Get $get) => blank($get('roles')))
                     ->searchable()
                     ->string()
-                    ->visible(fn (Get $get) => empty($get('roles'))),
+                    ->visible(fn (Get $get) => blank($get('roles'))),
 
                 Textarea::make('description')
                     ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))

@@ -17,9 +17,7 @@ trait HasOptionalTags
     {
         $relationship = TagIntegration::relationship();
 
-        if ($relationship === null) {
-            throw new LogicException('Install a tag provider to use tags.');
-        }
+        throw_if($relationship === null, LogicException::class, 'Install a tag provider to use tags.');
 
         $tagTable = (new $relationship->model)->getTable();
 
@@ -70,9 +68,7 @@ trait HasOptionalTags
     {
         $relationship = TagIntegration::relationship();
 
-        if ($relationship === null) {
-            throw new LogicException('Install a tag provider to use tags.');
-        }
+        throw_if($relationship === null, LogicException::class, 'Install a tag provider to use tags.');
 
         return $relationship->model;
     }

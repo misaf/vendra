@@ -62,7 +62,7 @@ final class CreditCommissionAction
             return null;
         }
 
-        AffiliateCommissionEarnedEvent::dispatch($affiliate->user_id, $amount);
+        event(new AffiliateCommissionEarnedEvent($affiliate->user_id, $amount));
 
         return $commission;
     }

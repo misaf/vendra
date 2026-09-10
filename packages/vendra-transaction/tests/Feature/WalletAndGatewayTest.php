@@ -22,7 +22,7 @@ it('creates a pending transaction with fee and metadata', function (): void {
     $gateway = TransactionGatewayFactory::new()->active()->create(['slug' => 'shetab']);
     $wallet = WalletFactory::new()->create();
 
-    $transaction = app(CreateTransactionAction::class)->execute(
+    $transaction = resolve(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Deposit,
@@ -49,7 +49,7 @@ it('returns the original transaction when an idempotency key is retried', functi
     TransactionGatewayFactory::new()->active()->create(['slug' => 'shetab']);
     $wallet = WalletFactory::new()->create();
 
-    $first = app(CreateTransactionAction::class)->execute(
+    $first = resolve(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -57,7 +57,7 @@ it('returns the original transaction when an idempotency key is retried', functi
         metadata: ['reference' => 'subscription:123'],
         idempotencyKey: 'subscription:123',
     );
-    $retried = app(CreateTransactionAction::class)->execute(
+    $retried = resolve(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -76,7 +76,7 @@ it('rejects an idempotency key reused for different transaction details', functi
     TransactionGatewayFactory::new()->active()->create(['slug' => 'shetab']);
     $wallet = WalletFactory::new()->create();
 
-    app(CreateTransactionAction::class)->execute(
+    resolve(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -84,7 +84,7 @@ it('rejects an idempotency key reused for different transaction details', functi
         idempotencyKey: 'subscription:123',
     );
 
-    expect(fn () => app(CreateTransactionAction::class)->execute(
+    expect(fn () => resolve(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -98,7 +98,7 @@ it('enforces the per-wallet transaction limit at creation', function (): void {
     $wallet = WalletFactory::new()->create();
     TransactionLimitFactory::new()->forWallet($wallet)->ofType(TransactionTypeEnum::Withdrawal)->create(['amount' => 1_000]);
 
-    expect(fn () => app(CreateTransactionAction::class)->execute(
+    expect(fn () => resolve(CreateTransactionAction::class)->execute(
         transactionGateway: 'shetab',
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Withdrawal,
@@ -129,13 +129,13 @@ it('identifies internal transactions by the internal gateway', function (): void
     $external = TransactionGatewayFactory::new()->active()->create(['slug' => 'shetab']);
     $wallet = WalletFactory::new()->create();
 
-    $internalTransaction = app(CreateTransactionAction::class)->execute(
+    $internalTransaction = resolve(CreateTransactionAction::class)->execute(
         transactionGateway: $internal,
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Deposit,
         amount: 1_000,
     );
-    $externalTransaction = app(CreateTransactionAction::class)->execute(
+    $externalTransaction = resolve(CreateTransactionAction::class)->execute(
         transactionGateway: $external,
         wallet: $wallet,
         transactionType: TransactionTypeEnum::Deposit,

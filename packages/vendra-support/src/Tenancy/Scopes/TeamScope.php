@@ -33,7 +33,7 @@ class TeamScope implements Scope
             return;
         }
 
-        if (! app()->bound(TenantResolver::class) || app(TenantResolver::class)->current() !== null) {
+        if (! app()->bound(TenantResolver::class) || resolve(TenantResolver::class)->current() !== null) {
             return;
         }
 

@@ -111,9 +111,7 @@ final class AffiliateCommissionResource extends Resource
 
     private static function commission(Model $record): AffiliateCommission
     {
-        if (! $record instanceof AffiliateCommission) {
-            throw new InvalidArgumentException('Affiliate Commission resources require an AffiliateCommission record.');
-        }
+        throw_unless($record instanceof AffiliateCommission, InvalidArgumentException::class, 'Affiliate Commission resources require an AffiliateCommission record.');
 
         return $record;
     }

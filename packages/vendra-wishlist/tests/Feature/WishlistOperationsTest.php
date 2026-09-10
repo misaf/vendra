@@ -35,7 +35,7 @@ it('keeps separate default lists for separate owners', function (): void {
 it('saves a sellable only once however often the heart is tapped', function (): void {
     $user = createTestUser();
     $wishlist = Wishlist::defaultFor($user);
-    $action = app(AddWishlistItemAction::class);
+    $action = resolve(AddWishlistItemAction::class);
 
     $first = $action->execute($wishlist, $user);
     $second = $action->execute($wishlist, $user);
@@ -49,7 +49,7 @@ it('keeps selection metadata on a saved item', function (): void {
     $user = createTestUser();
     $wishlist = Wishlist::defaultFor($user);
 
-    $item = app(AddWishlistItemAction::class)->execute($wishlist, $user, ['size' => 'large']);
+    $item = resolve(AddWishlistItemAction::class)->execute($wishlist, $user, ['size' => 'large']);
 
     expect($item->metadata)->toBe(['size' => 'large']);
 });
@@ -57,9 +57,9 @@ it('keeps selection metadata on a saved item', function (): void {
 it('removes a saved sellable and tolerates removing it twice', function (): void {
     $user = createTestUser();
     $wishlist = Wishlist::defaultFor($user);
-    $remove = app(RemoveWishlistItemAction::class);
+    $remove = resolve(RemoveWishlistItemAction::class);
 
-    app(AddWishlistItemAction::class)->execute($wishlist, $user);
+    resolve(AddWishlistItemAction::class)->execute($wishlist, $user);
 
     expect($remove->execute($wishlist, $user))->toBeTrue()
         ->and($remove->execute($wishlist, $user))->toBeFalse()
@@ -70,7 +70,7 @@ it('cascades saved items when a list is deleted', function (): void {
     $user = createTestUser();
     $wishlist = WishlistFactory::new()->forOwner($user)->createOne();
 
-    app(AddWishlistItemAction::class)->execute($wishlist, $user);
+    resolve(AddWishlistItemAction::class)->execute($wishlist, $user);
 
     $wishlist->delete();
 

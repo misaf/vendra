@@ -143,9 +143,7 @@ trait MapsCatalogResources
                 $identifier = $value->getKey();
                 $label = $value->getAttribute('value');
 
-                if (! is_int($identifier) && ! is_string($identifier)) {
-                    throw new UnexpectedValueException('Attribute value identifiers must be integers or strings.');
-                }
+                throw_if(! is_int($identifier) && ! is_string($identifier), UnexpectedValueException::class, 'Attribute value identifiers must be integers or strings.');
 
                 return new ResourceReference(
                     $identifier,

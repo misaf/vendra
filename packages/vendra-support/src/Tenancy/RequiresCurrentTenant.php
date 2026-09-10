@@ -12,7 +12,7 @@ trait RequiresCurrentTenant
 {
     protected function currentTenant(): Model
     {
-        $tenant = app(TenantResolver::class)->current();
+        $tenant = resolve(TenantResolver::class)->current();
 
         if (! $tenant instanceof Model) {
             throw new RuntimeException(sprintf(

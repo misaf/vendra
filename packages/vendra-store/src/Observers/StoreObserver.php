@@ -76,7 +76,7 @@ final class StoreObserver
             return;
         }
 
-        ReconcileStorefrontJob::dispatch($deployment->id)->afterCommit();
+        dispatch(new ReconcileStorefrontJob($deployment->id))->afterCommit();
     }
 
     /**
@@ -102,7 +102,7 @@ final class StoreObserver
              | behind by the time it runs. That is the whole reason this job is
              | addressed by slug: it has to outlive the record that describes it.
              */
-            DestroyStorefrontJob::dispatch($deployment->slug)->afterCommit();
+            dispatch(new DestroyStorefrontJob($deployment->slug))->afterCommit();
 
             return;
         }
@@ -115,7 +115,7 @@ final class StoreObserver
          */
         $deployment->markDesiredState(StorefrontDesiredState::Stopped);
 
-        ReconcileStorefrontJob::dispatch($deployment->id)->afterCommit();
+        dispatch(new ReconcileStorefrontJob($deployment->id))->afterCommit();
     }
 
     /**

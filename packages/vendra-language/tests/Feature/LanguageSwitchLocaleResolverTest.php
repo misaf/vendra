@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Session\SessionManager;
 use Illuminate\Http\Request;
 use Misaf\VendraLanguage\Localization\LanguageSwitchLocaleResolver;
 use Misaf\VendraLanguage\Models\Language;
@@ -27,7 +28,7 @@ it('resolves the locale selected in the language switch session', function (): v
     Language::query()->create(['locale' => 'de', 'position' => 1]);
 
     $request = Request::create('/');
-    $request->setLaravelSession(app('session')->driver());
+    $request->setLaravelSession(resolve(SessionManager::class)->driver());
     $request->session()->put('locale', 'de');
 
     expect((new LanguageSwitchLocaleResolver)->resolve($request))->toBe('de');
@@ -51,7 +52,7 @@ it('ignores a language switch preference for an inactive language', function ():
     ]);
 
     $request = Request::create('/');
-    $request->setLaravelSession(app('session')->driver());
+    $request->setLaravelSession(resolve(SessionManager::class)->driver());
     $request->session()->put('locale', 'de');
 
     expect((new LanguageSwitchLocaleResolver)->resolve($request))->toBeNull();

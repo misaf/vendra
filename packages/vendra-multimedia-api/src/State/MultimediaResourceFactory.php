@@ -30,25 +30,15 @@ final class MultimediaResourceFactory
             $bytes = (int) $bytes;
         }
 
-        if (! is_int($id) || ! is_int($bytes)) {
-            throw new UnexpectedValueException('Media identifiers and sizes must be integers.');
-        }
+        throw_if(! is_int($id) || ! is_int($bytes), UnexpectedValueException::class, 'Media identifiers and sizes must be integers.');
 
-        if (! is_string($uuid) || ! is_string($name) || ! is_string($fileName) || ! is_string($collection)) {
-            throw new UnexpectedValueException('Media names and identifiers must be strings.');
-        }
+        throw_if(! is_string($uuid) || ! is_string($name) || ! is_string($fileName) || ! is_string($collection), UnexpectedValueException::class, 'Media names and identifiers must be strings.');
 
-        if ($mimeType !== null && ! is_string($mimeType)) {
-            throw new UnexpectedValueException('Media MIME types must be strings or null.');
-        }
+        throw_if($mimeType !== null && ! is_string($mimeType), UnexpectedValueException::class, 'Media MIME types must be strings or null.');
 
-        if ($generatedConversions === null) {
-            $generatedConversions = [];
-        }
+        $generatedConversions ??= [];
 
-        if (! is_array($generatedConversions)) {
-            throw new UnexpectedValueException('Media generated conversions must be an array.');
-        }
+        throw_unless(is_array($generatedConversions), UnexpectedValueException::class, 'Media generated conversions must be an array.');
 
         $normalizedConversions = [];
 
@@ -66,17 +56,13 @@ final class MultimediaResourceFactory
             $disk = '';
         }
 
-        if ($customProperties === null) {
-            $customProperties = [];
-        }
+        $customProperties ??= [];
 
         if (! is_array($customProperties)) {
             $customProperties = [];
         }
 
-        if ($responsiveImages === null) {
-            $responsiveImages = [];
-        }
+        $responsiveImages ??= [];
 
         if (! is_array($responsiveImages)) {
             $responsiveImages = [];

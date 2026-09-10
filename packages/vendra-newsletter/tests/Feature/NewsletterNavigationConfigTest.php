@@ -72,7 +72,7 @@ it('exposes a configurable, toggleable schedule', function (): void {
 });
 
 it('registers the scheduled send command from the package', function (): void {
-    $registered = collect(app(Schedule::class)->events())
+    $registered = collect(resolve(Schedule::class)->events())
         ->contains(fn ($event): bool => str_contains((string) $event->command, 'vendra-newsletter:send-scheduled'));
 
     expect($registered)->toBeTrue();

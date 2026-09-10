@@ -10,7 +10,7 @@ beforeEach(function (): void {
 });
 
 it('generates codes from the unambiguous alphabet', function (): void {
-    $code = app(AffiliateCodeService::class)->generate();
+    $code = resolve(AffiliateCodeService::class)->generate();
 
     expect($code)->toHaveLength(8)
         ->toMatch('/^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{8}$/');

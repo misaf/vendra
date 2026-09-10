@@ -13,14 +13,14 @@ beforeEach(function (): void {
 
 it('passes when cached balances match the ledger', function (): void {
     $wallet = WalletFactory::new()->create();
-    app(PostLedgerEntryAction::class)->execute($wallet, 2_500);
+    resolve(PostLedgerEntryAction::class)->execute($wallet, 2_500);
 
     artisan('vendra-transaction:verify-balances')->assertSuccessful();
 });
 
 it('fails on drifted balances and repairs them on demand', function (): void {
     $wallet = WalletFactory::new()->create();
-    app(PostLedgerEntryAction::class)->execute($wallet, 2_500);
+    resolve(PostLedgerEntryAction::class)->execute($wallet, 2_500);
 
     $wallet->newQuery()->whereKey($wallet->id)->toBase()->update(['balance' => 9_999]);
 

@@ -57,7 +57,7 @@ it('restores and resubscribes a soft-deleted subscriber instead of creating a du
 
     $subscriber->delete();
 
-    $restoredSubscriber = app(SubscribeNewsletterSubscriberAction::class)->execute([
+    $restoredSubscriber = resolve(SubscribeNewsletterSubscriberAction::class)->execute([
         'email' => 'restored@example.com',
         'name' => 'Restored name',
     ]);

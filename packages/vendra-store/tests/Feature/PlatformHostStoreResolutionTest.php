@@ -28,7 +28,7 @@ it('does not resolve a customer tenant from platform hosts', function (string $h
     // A live tenant exists, yet none of the platform hosts belong to it.
     Store::factory()->active()->create(['slug' => 'acme']);
 
-    expect(app(StoreDomainFinder::class)->findForHost($host))->toBeNull();
+    expect(resolve(StoreDomainFinder::class)->findForHost($host))->toBeNull();
 })->with([
     'canonical api host' => 'api.vendra.test',
     'console host' => 'console.vendra.test',
@@ -39,7 +39,7 @@ it('does not resolve a customer tenant from platform hosts', function (string $h
 it('still resolves the tenant admin subdomain', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'acme']);
 
-    expect(app(StoreDomainFinder::class)->findForHost('acme.admin.vendra.test')?->getKey())
+    expect(resolve(StoreDomainFinder::class)->findForHost('acme.admin.vendra.test')?->getKey())
         ->toBe($tenant->getKey());
 });
 
@@ -50,6 +50,6 @@ it('still resolves a registered customer storefront domain', function (): void {
         'active' => true,
     ]);
 
-    expect(app(StoreDomainFinder::class)->findForHost('houshang-flowers.example.com')?->getKey())
+    expect(resolve(StoreDomainFinder::class)->findForHost('houshang-flowers.example.com')?->getKey())
         ->toBe($tenant->getKey());
 });

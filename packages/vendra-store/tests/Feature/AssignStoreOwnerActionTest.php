@@ -33,7 +33,7 @@ it('moves a store to an owner with room in their plan', function (): void {
     $to = subscriberWithUnits(maxUnits: 2);
     $store = Store::factory()->create(['reseller_id' => $from->getKey()]);
 
-    app(AssignStoreOwnerAction::class)->execute($store, $to);
+    resolve(AssignStoreOwnerAction::class)->execute($store, $to);
 
     expect($store->fresh()?->reseller_id)->toBe($to->getKey());
 });
@@ -42,7 +42,7 @@ it('hands a store back to the platform when no owner is given', function (): voi
     $owner = subscriberWithUnits(maxUnits: 2);
     $store = Store::factory()->create(['reseller_id' => $owner->getKey()]);
 
-    app(AssignStoreOwnerAction::class)->execute($store, null);
+    resolve(AssignStoreOwnerAction::class)->execute($store, null);
 
     expect($store->fresh()?->reseller_id)->toBeNull();
 });
@@ -51,7 +51,7 @@ it('refuses an owner whose plan is already full', function (): void {
     $to = subscriberWithUnits(maxUnits: 1, existingStores: 1);
     $store = Store::factory()->create(['reseller_id' => null]);
 
-    expect(fn (): Store => app(AssignStoreOwnerAction::class)->execute($store, $to))
+    expect(fn (): Store => resolve(AssignStoreOwnerAction::class)->execute($store, $to))
         ->toThrow(SubscriptionLimitException::class)
         ->and($store->fresh()?->reseller_id)->toBeNull();
 });
@@ -64,7 +64,7 @@ it('leaves a store with the owner it already has even at the plan limit', functi
     $owner = subscriberWithUnits(maxUnits: 1);
     $store = Store::factory()->create(['reseller_id' => $owner->getKey()]);
 
-    app(AssignStoreOwnerAction::class)->execute($store, $owner);
+    resolve(AssignStoreOwnerAction::class)->execute($store, $owner);
 
     expect($store->fresh()?->reseller_id)->toBe($owner->getKey());
 });
@@ -74,6 +74,6 @@ it('refuses an owner whose subscription has lapsed', function (): void {
     Subscription::factory()->expired()->forSubscriber($to)->for(Plan::factory()->maxUnits(5))->create();
     $store = Store::factory()->create(['reseller_id' => null]);
 
-    expect(fn (): Store => app(AssignStoreOwnerAction::class)->execute($store, $to))
+    expect(fn (): Store => resolve(AssignStoreOwnerAction::class)->execute($store, $to))
         ->toThrow(SubscriptionLimitException::class);
 });

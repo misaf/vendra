@@ -45,7 +45,7 @@ beforeEach(function (): void {
 });
 
 it('calculates override coverage for a locale', function (): void {
-    expect(app(TranslationProgress::class)->forLocale('en'))->toBe([
+    expect(resolve(TranslationProgress::class)->forLocale('en'))->toBe([
         'translated' => 1,
         'total' => 2,
         'remaining' => 1,
@@ -55,13 +55,13 @@ it('calculates override coverage for a locale', function (): void {
 });
 
 it('calculates active locale progress and missing locales for a language line', function (): void {
-    expect(app(TranslationProgress::class)->forLanguageLine($this->completeLanguageLine))->toBe([
+    expect(resolve(TranslationProgress::class)->forLanguageLine($this->completeLanguageLine))->toBe([
         'translated' => 2,
         'total' => 2,
         'remaining' => 0,
         'percentage' => 100,
         'missing_locales' => [],
-    ])->and(app(TranslationProgress::class)->forLanguageLine($this->partialLanguageLine))->toBe([
+    ])->and(resolve(TranslationProgress::class)->forLanguageLine($this->partialLanguageLine))->toBe([
         'translated' => 1,
         'total' => 2,
         'remaining' => 1,

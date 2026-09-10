@@ -22,7 +22,7 @@ it('is the application tenant rather than pointing at one', function (): void {
     expect($store)->toBeInstanceOf(TenantContract::class)
         ->and(Config::get('vendra-tenant.model'))->toBe(Store::class)
         ->and(Config::get('multitenancy.tenant_model'))->toBe(Store::class)
-        ->and(app(TenantResolver::class)->modelClass())->toBe(Store::class)
+        ->and(resolve(TenantResolver::class)->modelClass())->toBe(Store::class)
         ->and($store->getTenantKey())->toBe($store->id)
         ->and($store->getTenantName())->toBe('Acme Flowers')
         ->and($store->getTenantSlug())->toBe('acme')
@@ -31,7 +31,7 @@ it('is the application tenant rather than pointing at one', function (): void {
 
 it('becomes the current tenant and restores the previous context', function (): void {
     $store = Store::factory()->active()->create();
-    $resolver = app(TenantResolver::class);
+    $resolver = resolve(TenantResolver::class);
 
     expect($resolver->current())->toBeNull();
 
@@ -42,7 +42,7 @@ it('becomes the current tenant and restores the previous context', function (): 
 });
 
 it('answers the tenancy engine host-resolution port', function (): void {
-    expect(app(HostTenantFinder::class))->toBeInstanceOf(StoreDomainFinder::class)
+    expect(resolve(HostTenantFinder::class))->toBeInstanceOf(StoreDomainFinder::class)
         ->and(Config::get('multitenancy.tenant_finder'))->toBe(StoreDomainFinder::class);
 });
 
@@ -50,8 +50,8 @@ it('resolves itself from one of its own domains', function (): void {
     $store = Store::factory()->active()->create(['slug' => 'acme']);
     StoreDomain::factory()->for($store)->create(['name' => 'acme.example.com', 'active' => true]);
 
-    expect(app(HostTenantFinder::class)->findForHost('acme.example.com')?->getKey())->toBe($store->getKey())
-        ->and(app(HostTenantFinder::class)->findForOrigin('https://acme.example.com')?->getKey())->toBe($store->getKey());
+    expect(resolve(HostTenantFinder::class)->findForHost('acme.example.com')?->getKey())->toBe($store->getKey())
+        ->and(resolve(HostTenantFinder::class)->findForOrigin('https://acme.example.com')?->getKey())->toBe($store->getKey());
 });
 
 it('keeps its domains keyed by store_id and scoped to itself', function (): void {
@@ -64,7 +64,7 @@ it('keeps its domains keyed by store_id and scoped to itself', function (): void
     expect($first->domains()->pluck('name')->all())->toBe(['first.example.com'])
         ->and($second->domains()->pluck('name')->all())->toBe(['second.example.com']);
 
-    $visible = app(TenantResolver::class)->execute(
+    $visible = resolve(TenantResolver::class)->execute(
         $first->getKey(),
         fn (): array => StoreDomain::query()->pluck('name')->all(),
     );
@@ -83,7 +83,7 @@ it('has no billing owner until a reseller domain supplies one', function (): voi
      */
     app()->bind(StoreOwnerResolver::class, NullStoreOwnerResolver::class);
 
-    expect(app(StoreOwnerResolver::class)->find(1))->toBeNull();
+    expect(resolve(StoreOwnerResolver::class)->find(1))->toBeNull();
 });
 
 it('keeps resolving through the generic resolver on id and slug', function (): void {
@@ -94,7 +94,7 @@ it('keeps resolving through the generic resolver on id and slug', function (): v
      */
     $store = Store::factory()->active()->create(['name' => 'Acme Flowers', 'slug' => 'acme']);
 
-    $resolver = app(TenantResolver::class);
+    $resolver = resolve(TenantResolver::class);
 
     expect($store->getKeyName())->toBe('id')
         ->and($store->getTenantSlugName())->toBe('slug')
@@ -103,7 +103,7 @@ it('keeps resolving through the generic resolver on id and slug', function (): v
         ->and($resolver->findByKeyOrSlug('no-such-store'))->toBeNull()
         ->and($resolver->searchOptions(''))->toBe([$store->getKey() => 'acme'])
         ->and($resolver->searchOptions('acm'))->toBe([$store->getKey() => 'acme'])
-        ->and($resolver->searchOptions('zzz'))->toBe([]);
+        ->and($resolver->searchOptions('zzz'))->toBeEmpty();
 });
 
 /*
@@ -134,7 +134,7 @@ it('applies the store locale and timezone while it is the current tenant', funct
         'timezone' => 'Europe/Berlin',
     ]);
 
-    $applied = app(TenantResolver::class)->execute(
+    $applied = resolve(TenantResolver::class)->execute(
         $store->getKey(),
         fn (): array => [Config::string('app.locale'), Config::string('app.timezone')],
     );
@@ -145,7 +145,7 @@ it('applies the store locale and timezone while it is the current tenant', funct
 it('falls back to the fleet defaults for a store with no preference', function (): void {
     $store = Store::factory()->active()->create(['locale' => null, 'timezone' => null]);
 
-    $applied = app(TenantResolver::class)->execute(
+    $applied = resolve(TenantResolver::class)->execute(
         $store->getKey(),
         fn (): array => [Config::string('app.locale'), Config::string('app.timezone')],
     );

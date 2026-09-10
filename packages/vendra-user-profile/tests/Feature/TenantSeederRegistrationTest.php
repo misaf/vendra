@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 
 it('registers its seed command for tenant provisioning', function (): void {
-    $ordered = app(TenantSeeders::class)->ordered();
+    $ordered = resolve(TenantSeeders::class)->ordered();
 
     expect($ordered)->toContain('vendra-user-profile:seed')
         ->and(array_search('vendra-user:seed', $ordered, true))
