@@ -13,8 +13,6 @@ use Misaf\VendraTagger\Models\Tagger;
 final class TaggerFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array

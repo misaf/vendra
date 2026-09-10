@@ -14,8 +14,6 @@ use Misaf\VendraConsole\Models\ConsoleUser;
 final class ConsoleUserFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
