@@ -13,7 +13,7 @@ it('contains every package table in the fresh database baseline', function (): v
         ->and(Schema::hasColumns('permissions', ['tenant_id', 'description']))->toBeTrue()
         ->and(Schema::hasColumn('tags', 'position'))->toBeTrue()
         ->and(Schema::hasColumn('tags', 'order_column'))->toBeFalse()
-        ->and(Schema::hasColumns('console_users', ['username', 'email', 'email_verified_at', 'password']))->toBeTrue()
+        ->and(Schema::hasColumns('console_users', ['email', 'email_verified_at', 'password']))->toBeTrue()
         ->and(Schema::hasColumns('console_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
         ->and(Schema::hasColumns('reseller_users', ['reseller_id', 'username', 'email', 'email_verified_at', 'password']))->toBeTrue()
         ->and(Schema::hasColumns('reseller_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()

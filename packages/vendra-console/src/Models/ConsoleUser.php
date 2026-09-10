@@ -17,7 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Misaf\VendraConsole\Database\Factories\ConsoleUserFactory;
 
-#[Fillable(['username', 'email', 'email_verified_at', 'password'])]
+#[Fillable(['email', 'email_verified_at', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 #[UseFactory(ConsoleUserFactory::class)]
 final class ConsoleUser extends Authenticatable implements FilamentUser, HasName, MustVerifyEmail
@@ -46,6 +46,6 @@ final class ConsoleUser extends Authenticatable implements FilamentUser, HasName
 
     public function getFilamentName(): string
     {
-        return $this->username;
+        return $this->email;
     }
 }
