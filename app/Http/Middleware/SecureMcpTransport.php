@@ -45,9 +45,7 @@ final readonly class SecureMcpTransport
             ->through($middleware)
             ->then(fn (Request $request): Response => $next($request));
 
-        if (! $response instanceof Response) {
-            throw new UnexpectedValueException('The secure MCP transport pipeline must return a response.');
-        }
+        throw_unless($response instanceof Response, UnexpectedValueException::class, 'The secure MCP transport pipeline must return a response.');
 
         return $response;
     }

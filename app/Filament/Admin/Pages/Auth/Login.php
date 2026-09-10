@@ -8,6 +8,7 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -61,8 +62,8 @@ final class Login extends \Filament\Auth\Pages\Login
     protected function getCredentialsFromFormData(array $data): array
     {
         return [
-            'username' => $data['username'],
-            'password' => $data['password'],
+            'username' => Arr::get($data, 'username'),
+            'password' => Arr::get($data, 'password'),
         ];
     }
 

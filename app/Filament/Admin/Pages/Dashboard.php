@@ -62,7 +62,7 @@ final class Dashboard extends \Filament\Pages\Dashboard
                 continue;
             }
 
-            $widget = app($component->getComponent());
+            $widget = resolve($component->getComponent());
 
             if (! $widget instanceof Widget) {
                 continue;

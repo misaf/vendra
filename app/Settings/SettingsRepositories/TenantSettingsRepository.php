@@ -73,7 +73,7 @@ final class TenantSettingsRepository extends ScopedSettingsRepository
             return null;
         }
 
-        return app(TenantResolver::class)->currentId();
+        return resolve(TenantResolver::class)->currentId();
     }
 
     /**

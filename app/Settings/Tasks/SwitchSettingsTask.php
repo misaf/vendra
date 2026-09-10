@@ -30,7 +30,7 @@ final class SwitchSettingsTask implements SwitchTenantTask
 
     private function forgetResolvedSettings(): void
     {
-        foreach (app(SettingsContainer::class)->getSettingClasses() as $settingsClass) {
+        foreach (resolve(SettingsContainer::class)->getSettingClasses() as $settingsClass) {
             if (is_string($settingsClass)) {
                 app()->forgetInstance($settingsClass);
             }
