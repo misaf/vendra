@@ -58,6 +58,6 @@ it('defines all permissions exposed by the tag resource', function (): void {
 it('uses unique kebab-case permission names', function (): void {
     $permissions = array_column(TaggerPolicyEnum::cases(), 'value');
 
-    expect($permissions)->toHaveCount(count(array_unique($permissions)))
+    expect($permissions)->toHaveSameSize(array_unique($permissions))
         ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

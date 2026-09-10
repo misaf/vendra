@@ -25,13 +25,13 @@ it('keeps jurisdiction-aware document fields fillable and stores files as media'
 });
 
 it('defines the user profile relationship', function (): void {
-    expect((new ReflectionMethod(Document::class, 'userProfile'))->getReturnType()?->getName())->toBe(BelongsTo::class);
+    expect(new ReflectionMethod(Document::class, 'userProfile')->getReturnType()?->getName())->toBe(BelongsTo::class);
 });
 
 it('defines policy permissions for the document resource', function (): void {
     $permissions = array_column(DocumentPolicyEnum::cases(), 'value');
 
     expect($permissions)->toHaveCount(10)
-        ->toHaveCount(count(array_unique($permissions)))
+        ->toHaveSameSize(array_unique($permissions))
         ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

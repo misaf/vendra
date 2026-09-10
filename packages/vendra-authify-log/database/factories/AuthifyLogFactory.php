@@ -25,10 +25,10 @@ final class AuthifyLogFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'action' => $this->faker->randomElement(AuthifyLogActionEnum::cases()),
-            'ip_address' => $this->faker->ipv4(),
-            'ip_country' => $this->faker->countryCode(),
-            'user_agent' => $this->faker->userAgent(),
+            'action' => fake()->randomElement(AuthifyLogActionEnum::cases()),
+            'ip_address' => fake()->ipv4(),
+            'ip_country' => fake()->countryCode(),
+            'user_agent' => fake()->userAgent(),
         ];
     }
 

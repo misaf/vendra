@@ -36,8 +36,8 @@ it('returns an empty string when the translation is missing or not a string', fu
     $livewire = new SupportTestTranslatedTableComponent;
     $livewire->activeLocale = 'en';
 
-    expect(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'name', $livewire))->toBe('')
-        ->and(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'missing', $livewire))->toBe('');
+    expect(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'name', $livewire))->toBeEmpty()
+        ->and(SupportTestTranslatedTableHarness::resolveTranslatedAttribute($record, 'missing', $livewire))->toBeEmpty();
 });
 
 it('coerces integer attributes', function (): void {

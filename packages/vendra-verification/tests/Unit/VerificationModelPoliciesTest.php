@@ -25,13 +25,13 @@ it('keeps provider-neutral verification fields fillable and defaults to pending'
 });
 
 it('defines the user profile relationship', function (): void {
-    expect((new ReflectionMethod(Verification::class, 'userProfile'))->getReturnType()?->getName())->toBe(BelongsTo::class);
+    expect(new ReflectionMethod(Verification::class, 'userProfile')->getReturnType()?->getName())->toBe(BelongsTo::class);
 });
 
 it('defines policy permissions for the verification resource', function (): void {
     $permissions = array_column(VerificationPolicyEnum::cases(), 'value');
 
     expect($permissions)->toHaveCount(10)
-        ->toHaveCount(count(array_unique($permissions)))
+        ->toHaveSameSize(array_unique($permissions))
         ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

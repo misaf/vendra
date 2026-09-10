@@ -12,9 +12,6 @@ use Misaf\VendraTagger\Models\Tagger;
  */
 final class TaggerFactory extends Factory
 {
-    /** @var class-string<Tagger> */
-    protected $model = Tagger::class;
-
     /**
      * Define the model's default state.
      *

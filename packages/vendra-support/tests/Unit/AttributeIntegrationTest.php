@@ -29,7 +29,7 @@ it('falls back to unavailable attribute integration', function (): void {
 
     expect(AttributeIntegration::isAvailable())->toBeFalse()
         ->and(AttributeIntegration::valueModel())->toBeNull()
-        ->and(AttributeIntegration::options())->toBe([]);
+        ->and(AttributeIntegration::options())->toBeEmpty();
 });
 
 it('uses the bound attribute resolver when available', function (): void {
@@ -77,7 +77,7 @@ it('falls back when the bound attribute resolver throws', function (): void {
 
     expect(AttributeIntegration::isAvailable())->toBeFalse()
         ->and(AttributeIntegration::valueModel())->toBeNull()
-        ->and(AttributeIntegration::options())->toBe([]);
+        ->and(AttributeIntegration::options())->toBeEmpty();
 });
 
 it('uses the support null resolver fallback shape', function (): void {
@@ -85,5 +85,5 @@ it('uses the support null resolver fallback shape', function (): void {
 
     expect($resolver->available())->toBeFalse()
         ->and($resolver->valueModel())->toBeNull()
-        ->and($resolver->options())->toBe([]);
+        ->and($resolver->options())->toBeEmpty();
 });

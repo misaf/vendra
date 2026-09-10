@@ -17,13 +17,6 @@ use Misaf\VendraStore\Models\StorefrontImage;
 final class StorefrontDeploymentFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var class-string<StorefrontDeployment>
-     */
-    protected $model = StorefrontDeployment::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>

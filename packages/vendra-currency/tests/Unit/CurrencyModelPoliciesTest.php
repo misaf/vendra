@@ -23,6 +23,6 @@ it('defines policy permissions for the currency resource', function (): void {
 it('uses kebab-case permission names scoped per model', function (): void {
     $permissions = array_column(CurrencyPolicyEnum::cases(), 'value');
 
-    expect($permissions)->toHaveCount(count(array_unique($permissions)))
+    expect($permissions)->toHaveSameSize(array_unique($permissions))
         ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

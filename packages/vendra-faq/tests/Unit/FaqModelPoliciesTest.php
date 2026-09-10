@@ -40,9 +40,7 @@ it('uses kebab-case permission names scoped per model', function (): void {
     $faqPermissions = array_column(FaqPolicyEnum::cases(), 'value');
     $categoryPermissions = array_column(FaqCategoryPolicyEnum::cases(), 'value');
 
-    expect($faqPermissions)->toHaveCount(count(array_unique($faqPermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
-
-    expect($categoryPermissions)->toHaveCount(count(array_unique($categoryPermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
+    expect($faqPermissions)->toHaveSameSize(array_unique($faqPermissions))
+        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/')
+        ->and($categoryPermissions)->toHaveSameSize(array_unique($categoryPermissions))->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

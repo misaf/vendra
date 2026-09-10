@@ -40,9 +40,7 @@ it('uses kebab-case permission names scoped per model', function (): void {
     $pagePermissions = array_column(CustomPagePolicyEnum::cases(), 'value');
     $categoryPermissions = array_column(CustomPageCategoryPolicyEnum::cases(), 'value');
 
-    expect($pagePermissions)->toHaveCount(count(array_unique($pagePermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
-
-    expect($categoryPermissions)->toHaveCount(count(array_unique($categoryPermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
+    expect($pagePermissions)->toHaveSameSize(array_unique($pagePermissions))
+        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/')
+        ->and($categoryPermissions)->toHaveSameSize(array_unique($categoryPermissions))->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

@@ -21,7 +21,7 @@ final class CurrencyFactory extends Factory
      */
     public function definition(): array
     {
-        $code = $this->faker->unique()->randomElement(
+        $code = fake()->unique()->randomElement(
             array_keys(CurrencyRegistry::options(CurrencyType::Fiat)),
         );
 
@@ -33,7 +33,7 @@ final class CurrencyFactory extends Factory
             'type' => CurrencyType::Fiat,
             'active' => true,
             'is_default' => false,
-            'position' => $this->faker->numberBetween(1, 1000),
+            'position' => fake()->numberBetween(1, 1000),
         ];
     }
 
@@ -50,7 +50,7 @@ final class CurrencyFactory extends Factory
     public function crypto(): static
     {
         return $this->state(function (): array {
-            $code = $this->faker->unique()->randomElement(
+            $code = fake()->unique()->randomElement(
                 array_keys(CurrencyRegistry::options(CurrencyType::Crypto)),
             );
 

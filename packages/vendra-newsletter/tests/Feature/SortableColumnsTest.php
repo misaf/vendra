@@ -52,11 +52,9 @@ it('filters newsletter subscribers by localized active state', function (): void
 
     $component = livewire(ListNewsletterSubscribers::class)
         ->call('loadTable')
-        ->assertTableFilterExists('subscribed', function (TernaryFilter $filter): bool {
-            return $filter->getLabel() === __('vendra-newsletter::attributes.active')
-                && $filter->getTrueLabel() === __('vendra-newsletter::attributes.active')
-                && $filter->getFalseLabel() === __('vendra-newsletter::attributes.inactive');
-        })
+        ->assertTableFilterExists('subscribed', fn(TernaryFilter $filter): bool => $filter->getLabel() === __('vendra-newsletter::attributes.active')
+            && $filter->getTrueLabel() === __('vendra-newsletter::attributes.active')
+            && $filter->getFalseLabel() === __('vendra-newsletter::attributes.inactive'))
         ->filterTable('subscribed', true)
         ->assertCanSeeTableRecords([$activeSubscriber])
         ->assertCanNotSeeTableRecords([$inactiveSubscriber]);

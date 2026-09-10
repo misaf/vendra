@@ -20,9 +20,9 @@ it('renders plain string state', function () use ($renderer): void {
 });
 
 it('renders empty state as an empty string', function () use ($renderer): void {
-    expect($renderer::render(null))->toBe('')
-        ->and($renderer::render(''))->toBe('')
-        ->and($renderer::render([]))->toBe('');
+    expect($renderer::render(null))->toBeEmpty()
+        ->and($renderer::render(''))->toBeEmpty()
+        ->and($renderer::render([]))->toBeEmpty();
 });
 
 it('renders a valid tiptap document', function () use ($renderer): void {

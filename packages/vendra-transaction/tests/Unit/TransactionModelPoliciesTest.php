@@ -26,16 +26,16 @@ it('defines the expected transaction models', function (): void {
 });
 
 it('defines the expected transaction relationships', function (): void {
-    expect((new ReflectionMethod(Transaction::class, 'wallet'))->getReturnType()?->getName())->toBe(BelongsTo::class)
-        ->and((new ReflectionMethod(Transaction::class, 'counterpartyWallet'))->getReturnType()?->getName())->toBe(BelongsTo::class)
-        ->and((new ReflectionMethod(Transaction::class, 'transactionGateway'))->getReturnType()?->getName())->toBe(BelongsTo::class)
-        ->and((new ReflectionMethod(Transaction::class, 'transactionFee'))->getReturnType()?->getName())->toBe(HasOne::class)
-        ->and((new ReflectionMethod(Transaction::class, 'transactionMetadatas'))->getReturnType()?->getName())->toBe(HasMany::class)
-        ->and((new ReflectionMethod(Transaction::class, 'ledgerEntries'))->getReturnType()?->getName())->toBe(MorphMany::class)
-        ->and((new ReflectionMethod(Wallet::class, 'user'))->getReturnType()?->getName())->toBe(BelongsTo::class)
-        ->and((new ReflectionMethod(Wallet::class, 'ledgerEntries'))->getReturnType()?->getName())->toBe(HasMany::class)
-        ->and((new ReflectionMethod(LedgerEntry::class, 'wallet'))->getReturnType()?->getName())->toBe(BelongsTo::class)
-        ->and((new ReflectionMethod(LedgerEntry::class, 'source'))->getReturnType()?->getName())->toBe(MorphTo::class);
+    expect(new ReflectionMethod(Transaction::class, 'wallet')->getReturnType()?->getName())->toBe(BelongsTo::class)
+        ->and(new ReflectionMethod(Transaction::class, 'counterpartyWallet')->getReturnType()?->getName())->toBe(BelongsTo::class)
+        ->and(new ReflectionMethod(Transaction::class, 'transactionGateway')->getReturnType()?->getName())->toBe(BelongsTo::class)
+        ->and(new ReflectionMethod(Transaction::class, 'transactionFee')->getReturnType()?->getName())->toBe(HasOne::class)
+        ->and(new ReflectionMethod(Transaction::class, 'transactionMetadatas')->getReturnType()?->getName())->toBe(HasMany::class)
+        ->and(new ReflectionMethod(Transaction::class, 'ledgerEntries')->getReturnType()?->getName())->toBe(MorphMany::class)
+        ->and(new ReflectionMethod(Wallet::class, 'user')->getReturnType()?->getName())->toBe(BelongsTo::class)
+        ->and(new ReflectionMethod(Wallet::class, 'ledgerEntries')->getReturnType()?->getName())->toBe(HasMany::class)
+        ->and(new ReflectionMethod(LedgerEntry::class, 'wallet')->getReturnType()?->getName())->toBe(BelongsTo::class)
+        ->and(new ReflectionMethod(LedgerEntry::class, 'source')->getReturnType()?->getName())->toBe(MorphTo::class);
 });
 
 it('defines policy permissions for all transaction resources', function (): void {

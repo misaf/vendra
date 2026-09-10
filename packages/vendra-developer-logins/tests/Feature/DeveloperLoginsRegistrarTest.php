@@ -46,7 +46,7 @@ it('provides only users assigned to the configured admin role', function (): voi
 it('returns no developer logins when the configured role does not exist', function (): void {
     Config::set('vendra-developer-logins.role', 'missing-role');
 
-    expect(DeveloperLoginsRegistrar::users())->toBe([])
+    expect(DeveloperLoginsRegistrar::users())->toBeEmpty()
         ->and(DeveloperLoginsRegistrar::hasUsers())->toBeFalse();
 });
 
@@ -58,5 +58,5 @@ it('omits users when configured login attributes are not strings', function (): 
     User::factory()->create()->assignRole($role);
     Config::set('vendra-developer-logins.label_column', 'id');
 
-    expect(DeveloperLoginsRegistrar::users())->toBe([]);
+    expect(DeveloperLoginsRegistrar::users())->toBeEmpty();
 });

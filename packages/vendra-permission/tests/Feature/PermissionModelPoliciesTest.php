@@ -34,9 +34,7 @@ it('uses kebab-case permission names scoped per model', function (): void {
     $permissionPermissions = array_column(PermissionPolicyEnum::cases(), 'value');
     $rolePermissions = array_column(RolePolicyEnum::cases(), 'value');
 
-    expect($permissionPermissions)->toHaveCount(count(array_unique($permissionPermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
-
-    expect($rolePermissions)->toHaveCount(count(array_unique($rolePermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
+    expect($permissionPermissions)->toHaveSameSize(array_unique($permissionPermissions))
+        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/')
+        ->and($rolePermissions)->toHaveSameSize(array_unique($rolePermissions))->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

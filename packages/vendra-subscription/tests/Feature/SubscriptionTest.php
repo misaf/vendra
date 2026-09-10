@@ -69,9 +69,8 @@ it('derives the suspend date from its plan grace window', function (): void {
     $subscription = Subscription::factory()->for($plan)->create(['ends_at' => now()->addDays(10)]);
 
     expect($subscription->suspendAt()->toDateString())
-        ->toBe(now()->addDays(15)->toDateString());
-
-    expect(Subscription::factory()->neverExpires()->create()->suspendAt())->toBeNull();
+        ->toBe(now()->addDays(15)->toDateString())
+        ->and(Subscription::factory()->neverExpires()->create()->suspendAt())->toBeNull();
 });
 
 it('enforces one active subscription per subscriber', function (): void {

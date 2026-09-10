@@ -21,10 +21,10 @@ final class LanguageFactory extends Factory
     public function definition(): array
     {
         return [
-            'locale' => $this->faker->unique()->randomElement(Locales::configured()),
+            'locale' => fake()->unique()->randomElement(Locales::configured()),
             'active' => true,
             'is_default' => false,
-            'position' => $this->faker->numberBetween(1, 1000),
+            'position' => fake()->numberBetween(1, 1000),
         ];
     }
 

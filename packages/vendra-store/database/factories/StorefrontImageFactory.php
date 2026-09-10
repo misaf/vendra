@@ -13,13 +13,6 @@ use Misaf\VendraStore\Models\StorefrontImage;
 final class StorefrontImageFactory extends Factory
 {
     /**
-     * The name of the factory's corresponding model.
-     *
-     * @var class-string<StorefrontImage>
-     */
-    protected $model = StorefrontImage::class;
-
-    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>

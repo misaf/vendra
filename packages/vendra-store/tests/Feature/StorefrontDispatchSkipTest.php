@@ -19,7 +19,7 @@ beforeEach(function (): void {
  */
 function holdProvisionLockFor(StorefrontDeployment $deployment): void
 {
-    (new UniqueLock(cache()->driver()))->acquire(new ProvisionStorefrontJob($deployment->id, force: true));
+    new UniqueLock(cache()->driver())->acquire(new ProvisionStorefrontJob($deployment->id, force: true));
 }
 
 it('reports only the deployments the bus actually accepted', function (): void {

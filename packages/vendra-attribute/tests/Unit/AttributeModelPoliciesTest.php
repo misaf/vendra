@@ -36,11 +36,9 @@ it('uses kebab-case permission names scoped per model', function (): void {
     $attributePermissions = array_column(AttributePolicyEnum::cases(), 'value');
     $valuePermissions = array_column(AttributeValuePolicyEnum::cases(), 'value');
 
-    expect($attributePermissions)->toHaveCount(count(array_unique($attributePermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
-
-    expect($valuePermissions)->toHaveCount(count(array_unique($valuePermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
+    expect($attributePermissions)->toHaveSameSize(array_unique($attributePermissions))
+        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/')
+        ->and($valuePermissions)->toHaveSameSize(array_unique($valuePermissions))->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });
 
 it('logs activity for attribute models', function (): void {

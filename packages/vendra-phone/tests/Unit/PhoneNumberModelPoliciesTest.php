@@ -27,13 +27,13 @@ it('keeps international phone fields fillable', function (): void {
 });
 
 it('defines the user profile relationship', function (): void {
-    expect((new ReflectionMethod(PhoneNumber::class, 'userProfile'))->getReturnType()?->getName())->toBe(BelongsTo::class);
+    expect(new ReflectionMethod(PhoneNumber::class, 'userProfile')->getReturnType()?->getName())->toBe(BelongsTo::class);
 });
 
 it('defines policy permissions for the phone number resource', function (): void {
     $permissions = array_column(PhoneNumberPolicyEnum::cases(), 'value');
 
     expect($permissions)->toHaveCount(10)
-        ->toHaveCount(count(array_unique($permissions)))
+        ->toHaveSameSize(array_unique($permissions))
         ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });

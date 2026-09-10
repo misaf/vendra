@@ -34,9 +34,7 @@ it('uses kebab-case permission names scoped per model', function (): void {
     $languagePermissions = array_column(LanguagePolicyEnum::cases(), 'value');
     $linePermissions = array_column(LanguageLinePolicyEnum::cases(), 'value');
 
-    expect($languagePermissions)->toHaveCount(count(array_unique($languagePermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
-
-    expect($linePermissions)->toHaveCount(count(array_unique($linePermissions)))
-        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
+    expect($languagePermissions)->toHaveSameSize(array_unique($languagePermissions))
+        ->each->toMatch('/^[a-z]+(-[a-z]+)*$/')
+        ->and($linePermissions)->toHaveSameSize(array_unique($linePermissions))->each->toMatch('/^[a-z]+(-[a-z]+)*$/');
 });
