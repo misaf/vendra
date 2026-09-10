@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 it('documents the Vendra transitive API policy in every package', function (): void {
@@ -23,7 +24,7 @@ it('documents the Vendra transitive API policy in every package', function (): v
         expect($guidelinePath)->toBeFile()
             ->and($skillFiles)->toHaveCount(1);
 
-        foreach ([$guidelinePath, $skillFiles[0]->getPathname()] as $instructionPath) {
+        foreach ([$guidelinePath, Arr::get($skillFiles, 0)->getPathname()] as $instructionPath) {
             $contents = File::get($instructionPath);
 
             expect(mb_substr_count($contents, 'Vendra Transitive API Policy'))->toBe(1);

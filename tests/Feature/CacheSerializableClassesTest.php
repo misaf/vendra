@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 use ApiPlatform\Metadata\Resource\Factory\ResourceMetadataCollectionFactoryInterface;
 use ApiPlatform\Metadata\Resource\Factory\ResourceNameCollectionFactoryInterface;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 it('round-trips the classes Pulse dashboard cards cache', function (): void {
-    Cache::store()->put('pulse-probe', collect([(object) ['hits' => 1]]), 30);
+    Cache::store()->put('pulse-probe', collect([(object) ['hits' => 1]]), 30 * 60);
 
     $value = Cache::store()->get('pulse-probe');
 
@@ -29,11 +30,11 @@ it('round-trips the classes Pulse dashboard cards cache', function (): void {
  | unlisted operation class takes the whole application down.
  */
 it('round-trips the metadata of every API resource through the cache store', function (): void {
-    $names = app(ResourceNameCollectionFactoryInterface::class)->create();
-    $factory = app(ResourceMetadataCollectionFactoryInterface::class);
+    $names = resolve(ResourceNameCollectionFactoryInterface::class)->create();
+    $factory = resolve(ResourceMetadataCollectionFactoryInterface::class);
 
     foreach ($names as $resourceClass) {
-        Cache::store('file')->put('metadata-probe', $factory->create($resourceClass), 30);
+        Cache::store('file')->put('metadata-probe', $factory->create($resourceClass), 30 * 60);
 
         $restored = Cache::store('file')->get('metadata-probe');
 
@@ -54,7 +55,7 @@ function incompleteClassesIn(mixed $value, int $depth = 0): array
     }
 
     if ($value instanceof __PHP_Incomplete_Class) {
-        $name = ((array) $value)['__PHP_Incomplete_Class_Name'] ?? 'unknown';
+        $name = Arr::get((array) $value, '__PHP_Incomplete_Class_Name', 'unknown');
 
         return [is_string($name) ? $name : 'unknown'];
     }

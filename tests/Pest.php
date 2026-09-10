@@ -161,7 +161,7 @@ function fakeDockerEngine(array $state = ['Status' => 'running', 'Health' => ['S
 function bindFakeDockerEngine(Closure $handler): FakeDockerTransport
 {
     $transport = new FakeDockerTransport($handler);
-    $manager = app(ContainerManager::class);
+    $manager = resolve(ContainerManager::class);
 
     $manager->forgetDrivers();
     $manager->extend('docker', static fn (): DockerClient => new DockerClient($transport, ApiVersion::V1_55));
@@ -195,7 +195,7 @@ function assertDockerRequestNotSent(Closure $callback): void
 
 function assertNoDockerRequestsSent(): void
 {
-    expect(currentFakeDockerEngine()->requests)->toBe([]);
+    expect(currentFakeDockerEngine()->requests)->toBeEmpty();
 }
 
 /**

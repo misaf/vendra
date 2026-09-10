@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Misaf\VendraAddress\Filament\RelationManagers\AddressesRelationManager;
 use Misaf\VendraDocument\Filament\RelationManagers\DocumentsRelationManager;
@@ -10,7 +11,7 @@ use Misaf\VendraUserProfile\Support\UserProfileRelationManagers;
 use Misaf\VendraVerification\Filament\RelationManagers\VerificationsRelationManager;
 
 it('registers installed user profile providers in deterministic order', function (): void {
-    expect(app(UserProfileRelationManagers::class)->all())->toBe([
+    expect(resolve(UserProfileRelationManagers::class)->all())->toBe([
         AddressesRelationManager::class,
         PhoneNumbersRelationManager::class,
         DocumentsRelationManager::class,
@@ -34,25 +35,25 @@ it('keeps user profile providers independently selectable', function (): void {
             flags: JSON_THROW_ON_ERROR,
         );
 
-        expect($rootComposer['require'])->toHaveKey("misaf/{$provider}")
-            ->and($composer['require'])->toHaveKey('misaf/vendra-user-profile');
+        expect(Arr::get($rootComposer, 'require'))->toHaveKey("misaf/{$provider}")
+            ->and(Arr::get($composer, 'require'))->toHaveKey('misaf/vendra-user-profile');
 
         foreach (array_diff($providers, [$provider]) as $otherProvider) {
-            expect($composer['require'])->not->toHaveKey("misaf/{$otherProvider}");
+            expect(Arr::get($composer, 'require'))->not->toHaveKey("misaf/{$otherProvider}");
         }
     }
 
-    expect($rootComposer['require'])->not->toHaveKey('ysfkaya/filament-phone-input')
-        ->and(json_decode(
+    expect(Arr::get($rootComposer, 'require'))->not->toHaveKey('ysfkaya/filament-phone-input')
+        ->and(Arr::get(json_decode(
             File::get(base_path('packages/vendra-phone/composer.json')),
             true,
             flags: JSON_THROW_ON_ERROR,
-        )['require'])->toHaveKey('ysfkaya/filament-phone-input')
-        ->and(json_decode(
+        ), 'require'))->toHaveKey('ysfkaya/filament-phone-input')
+        ->and(Arr::get(json_decode(
             File::get(base_path('packages/vendra-document/composer.json')),
             true,
             flags: JSON_THROW_ON_ERROR,
-        )['require'])
+        ), 'require'))
         ->toHaveKey('misaf/vendra-multimedia')
         ->not->toHaveKey('filament/spatie-laravel-media-library-plugin');
 });

@@ -2,18 +2,14 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
+
 /**
  * Determine whether a package's own source imports the tenant provider.
  */
 function packageSourceBindsTenantProvider(string $packagePath): bool
 {
-    foreach (glob("{$packagePath}/src/{,*/,*/*/,*/*/*/,*/*/*/*/,*/*/*/*/*/}*.php", GLOB_BRACE) ?: [] as $sourceFile) {
-        if (preg_match('/^use Misaf\\\\VendraTenant\\\\/m', (string) file_get_contents($sourceFile)) === 1) {
-            return true;
-        }
-    }
-
-    return false;
+    return array_any(glob("{$packagePath}/src/{,*/,*/*/,*/*/*/,*/*/*/*/,*/*/*/*/*/}*.php", GLOB_BRACE) ?: [], fn ($sourceFile) => preg_match('/^use Misaf\\\\VendraTenant\\\\/m', (string) file_get_contents($sourceFile)) === 1);
 }
 
 it('keeps package manifest metadata consistent', function (): void {
@@ -25,7 +21,7 @@ it('keeps package manifest metadata consistent', function (): void {
     );
 
     expect($manifestPaths)->not->toBeEmpty()
-        ->and($rootManifest['require']['php'] ?? null)->toBe('^8.4');
+        ->and(Arr::get($rootManifest, 'require.php', null))->toBe('^8.4');
 
     foreach ($manifestPaths as $manifestPath) {
         $package = basename(dirname($manifestPath));
@@ -54,7 +50,7 @@ it('keeps package manifest metadata consistent', function (): void {
             ->and($manifest)
             ->not->toHaveKey('require-dev')
             ->not->toHaveKey('scripts')
-            ->and($manifest['require']['php'] ?? null)
+            ->and(Arr::get($manifest, 'require.php', null))
             ->toBe('^8.4');
     }
 });
@@ -66,7 +62,7 @@ it('keeps package-only namespaces out of production autoloading', function (): v
         flags: JSON_THROW_ON_ERROR,
     );
 
-    expect(array_values($rootManifest['autoload']['psr-4']))
+    expect(array_values(Arr::get($rootManifest, 'autoload.psr-4')))
         ->each->not->toStartWith('packages/');
 
     foreach (glob(base_path('packages/*/composer.json')) ?: [] as $manifestPath) {
@@ -75,8 +71,8 @@ it('keeps package-only namespaces out of production autoloading', function (): v
             true,
             flags: JSON_THROW_ON_ERROR,
         );
-        $productionPaths = array_values($manifest['autoload']['psr-4'] ?? []);
-        $developmentPaths = array_values($manifest['autoload-dev']['psr-4'] ?? []);
+        $productionPaths = array_values(Arr::get($manifest, 'autoload.psr-4', []));
+        $developmentPaths = array_values(Arr::get($manifest, 'autoload-dev.psr-4', []));
 
         expect($productionPaths)
             ->not->toContain('database/factories/')
@@ -122,7 +118,7 @@ it('keeps package test suites tenant-provider agnostic', function (): void {
         }
     }
 
-    expect($offending)->toBe([]);
+    expect($offending)->toBeEmpty();
 });
 
 it('provides every Vendra module imported by package tests through the host', function (): void {
@@ -133,7 +129,7 @@ it('provides every Vendra module imported by package tests through the host', fu
         true,
         flags: JSON_THROW_ON_ERROR,
     );
-    $hostDependencies = ($rootManifest['require'] ?? []) + ($rootManifest['require-dev'] ?? []);
+    $hostDependencies = (Arr::get($rootManifest, 'require', [])) + (Arr::get($rootManifest, 'require-dev', []));
 
     foreach ($manifestPaths as $manifestPath) {
         $manifest = json_decode(
@@ -142,8 +138,8 @@ it('provides every Vendra module imported by package tests through the host', fu
             flags: JSON_THROW_ON_ERROR,
         );
 
-        foreach (array_keys($manifest['autoload']['psr-4'] ?? []) as $namespace) {
-            $namespacesByPackage[$manifest['name']][] = mb_rtrim($namespace, '\\');
+        foreach (array_keys(Arr::get($manifest, 'autoload.psr-4', [])) as $namespace) {
+            $namespacesByPackage[Arr::get($manifest, 'name')][] = mb_rtrim($namespace, '\\');
         }
     }
 
@@ -157,7 +153,7 @@ it('provides every Vendra module imported by package tests through the host', fu
             $contents = (string) file_get_contents($testFile);
 
             foreach ($namespacesByPackage as $package => $namespaces) {
-                if ($package === $manifest['name'] || array_key_exists($package, $hostDependencies)) {
+                if ($package === Arr::get($manifest, 'name') || array_key_exists($package, $hostDependencies)) {
                     continue;
                 }
 
@@ -175,7 +171,7 @@ it('provides every Vendra module imported by package tests through the host', fu
         }
     }
 
-    expect(array_keys($missingFromHost))->toBe([]);
+    expect(array_keys($missingFromHost))->toBeEmpty();
 });
 
 it('centralizes package test namespaces and mirrors factory namespaces in root autoload-dev', function (): void {
@@ -184,7 +180,7 @@ it('centralizes package test namespaces and mirrors factory namespaces in root a
         true,
         flags: JSON_THROW_ON_ERROR,
     );
-    $rootAutoloadDev = $rootManifest['autoload-dev']['psr-4'] ?? [];
+    $rootAutoloadDev = Arr::get($rootManifest, 'autoload-dev.psr-4', []);
     $missing = [];
 
     foreach (glob(base_path('packages/*/composer.json')) ?: [] as $manifestPath) {
@@ -194,7 +190,7 @@ it('centralizes package test namespaces and mirrors factory namespaces in root a
             true,
             flags: JSON_THROW_ON_ERROR,
         );
-        $packageNamespace = array_search('src/', $manifest['autoload']['psr-4'] ?? [], true);
+        $packageNamespace = array_search('src/', Arr::get($manifest, 'autoload.psr-4', []), true);
 
         if (! is_string($packageNamespace)) {
             $missing[] = "{$package} source namespace";
@@ -209,7 +205,7 @@ it('centralizes package test namespaces and mirrors factory namespaces in root a
             $missing[] = "{$testNamespace} => {$expectedTestPath}";
         }
 
-        foreach ($manifest['autoload-dev']['psr-4'] ?? [] as $namespace => $path) {
+        foreach (Arr::get($manifest, 'autoload-dev.psr-4', []) as $namespace => $path) {
             $expectedPath = "packages/{$package}/{$path}";
 
             if (($rootAutoloadDev[$namespace] ?? null) !== $expectedPath) {
@@ -224,7 +220,7 @@ it('centralizes package test namespaces and mirrors factory namespaces in root a
         }
     }
 
-    expect($missing)->toBe([]);
+    expect($missing)->toBeEmpty();
 });
 
 it('requires vendra-multimedia in every package whose src uses the Spatie media surface', function (): void {
@@ -270,14 +266,14 @@ it('requires vendra-multimedia in every package whose src uses the Spatie media 
             flags: JSON_THROW_ON_ERROR,
         );
 
-        if (! array_key_exists('misaf/vendra-multimedia', $manifest['require'] ?? [])) {
+        if (! array_key_exists('misaf/vendra-multimedia', Arr::get($manifest, 'require', []))) {
             $undeclared[] = basename($packagePath);
         }
     }
 
-    expect($undeclared)->toBe([]);
+    expect($undeclared)->toBeEmpty();
 });
 
 it('does not keep package-level Composer lock files', function (): void {
-    expect(array_values(glob(base_path('packages/*/composer.lock')) ?: []))->toBe([]);
+    expect(array_values(glob(base_path('packages/*/composer.lock')) ?: []))->toBeEmpty();
 });

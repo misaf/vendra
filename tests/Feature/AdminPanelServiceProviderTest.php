@@ -12,7 +12,7 @@ use Misaf\VendraReseller\Providers\ResellerPanelServiceProvider;
 use Symfony\Component\HttpFoundation\Cookie;
 
 it('uses a compact sidebar width', function (): void {
-    $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
+    $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
 
     expect($panel->getSidebarWidth())->toBe('14rem');
 });
@@ -20,15 +20,15 @@ it('uses a compact sidebar width', function (): void {
 it('uses dedicated domains and root paths for central panels', function (): void {
     config()->set('app.url', 'https://vendra.test');
 
-    $resellerPanel = (new ResellerPanelServiceProvider(app()))->panel(Panel::make());
-    $consolePanel = (new ConsolePanelServiceProvider(app()))->panel(Panel::make());
+    $resellerPanel = new ResellerPanelServiceProvider(app())->panel(Panel::make());
+    $consolePanel = new ConsolePanelServiceProvider(app())->panel(Panel::make());
 
     expect($resellerPanel->getDomains())->toBe(['reseller.vendra.test'])
-        ->and($resellerPanel->getPath())->toBe('')
+        ->and($resellerPanel->getPath())->toBeEmpty()
         ->and($resellerPanel->getAuthGuard())->toBe('reseller')
         ->and($resellerPanel->getAuthPasswordBroker())->toBe('reseller_users')
         ->and($consolePanel->getDomains())->toBe(['console.vendra.test'])
-        ->and($consolePanel->getPath())->toBe('')
+        ->and($consolePanel->getPath())->toBeEmpty()
         ->and(config('session.domain'))->toBeNull();
 });
 
@@ -81,13 +81,13 @@ it('isolates reseller authentication configuration', function (): void {
 });
 
 it('uses the full content width for localized navigation and pages', function (): void {
-    $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
+    $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
 
     expect($panel->getMaxContentWidth())->toBe(Width::Full);
 });
 
 it('uses the Vendra logo in light and dark modes', function (): void {
-    $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
+    $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
 
     expect($panel->getBrandName())->toBe('Vendra')
         ->and($panel->getBrandLogo())->toBe(asset('images/vendra-logo.svg'))
@@ -100,7 +100,7 @@ it('uses the Vendra logo in light and dark modes', function (): void {
 it('uses the font matching the application locale', function (string $locale, string $font): void {
     app()->setLocale($locale);
 
-    $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
+    $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
 
     expect($panel->getFontFamily())->toBe($font);
 })->with([
@@ -112,7 +112,7 @@ it('uses the font matching the application locale', function (string $locale, st
 it('uses the Vendra Language catalog for translatable resources', function (): void {
     config()->set('vendra-language.locales', ['EN', 'pt_br']);
 
-    $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
+    $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
     $plugin = $panel->getPlugin('spatie-translatable');
 
     expect($plugin)->toBeInstanceOf(SpatieTranslatablePlugin::class)

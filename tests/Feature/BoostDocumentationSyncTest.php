@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -18,7 +19,7 @@ it('keeps package guidelines and skills aligned with documented source contracts
 
     expect($skillFiles)->toHaveCount(1);
 
-    $skill = File::get($skillFiles[0]->getPathname());
+    $skill = File::get(Arr::get($skillFiles, 0)->getPathname());
 
     foreach ($contractPhrases as $contractPhrase) {
         expect($guideline)->toContain($contractPhrase)
@@ -71,7 +72,7 @@ it('only configures Vendra package skills that have a canonical definition', fun
         ->all();
 
     $boostConfig = json_decode(File::get(base_path('boost.json')), true, flags: JSON_THROW_ON_ERROR);
-    $configuredSkills = collect($boostConfig['skills'])
+    $configuredSkills = collect(Arr::get($boostConfig, 'skills'))
         ->filter(fn (string $skill): bool => Str::startsWith($skill, 'vendra-'))
         ->sort()
         ->values()
@@ -80,7 +81,7 @@ it('only configures Vendra package skills that have a canonical definition', fun
     // boost.json curates which package skills are generated; the set may be a
     // subset, but every configured skill must resolve to a real SKILL.md so a
     // renamed or misspelled reference is still caught.
-    expect(array_values(array_diff($configuredSkills, $canonicalSkills)))->toBe([]);
+    expect(array_values(array_diff($configuredSkills, $canonicalSkills)))->toBeEmpty();
 })->skip(
     fn (): bool => ! File::exists(base_path('boost.json')),
     'boost.json is a local-only Laravel Boost artifact and is not present in CI.',
@@ -91,9 +92,5 @@ it('keeps the transaction package free of stale direct currency guidance', funct
     $guideline = File::get($packagePath.'/guidelines/core.blade.php');
     $skill = File::get($packagePath.'/skills/vendra-transaction-development/SKILL.md');
 
-    foreach ([$guideline, $skill] as $instruction) {
-        expect($instruction)
-            ->not->toContain('depends on `misaf/vendra-currency`')
-            ->not->toContain('Currency coupling goes through `misaf/vendra-currency`');
-    }
+    expect([$guideline, $skill])->each->not->toContain('depends on `misaf/vendra-currency`')->not->toContain('Currency coupling goes through `misaf/vendra-currency`');
 });

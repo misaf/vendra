@@ -10,6 +10,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Livewire;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
+use Illuminate\Support\Arr;
 use Misaf\VendraActivityLog\Filament\Widgets\LatestActivityLogTableWidget;
 use Misaf\VendraAffiliate\Filament\Widgets\AffiliateOverviewWidget;
 use Misaf\VendraMultimedia\Filament\Widgets\LatestMultimediaTableWidget;
@@ -46,7 +47,7 @@ it('uses the registered widgets directly on the admin dashboard', function (): v
     try {
         Filament::setCurrentPanel('admin');
 
-        expect(app(AdminDashboard::class)->getWidgets())->toBe(Filament::getWidgets());
+        expect(resolve(AdminDashboard::class)->getWidgets())->toBe(Filament::getWidgets());
     } finally {
         Filament::setCurrentPanel($currentPanel);
     }
@@ -60,8 +61,8 @@ it('does not poll dashboard widgets', function (): void {
     ];
 
     foreach ($statsWidgets as $widgetClass) {
-        $pollingInterval = (new ReflectionMethod($widgetClass, 'getPollingInterval'))
-            ->invoke(app($widgetClass));
+        $pollingInterval = new ReflectionMethod($widgetClass, 'getPollingInterval')
+            ->invoke(resolve($widgetClass));
 
         expect($pollingInterval)->toBeNull();
     }
@@ -80,7 +81,7 @@ it('does not poll dashboard widgets', function (): void {
 
         foreach ($tableWidgets as $widgetClass) {
             /** @var TableWidget $widget */
-            $widget = app($widgetClass);
+            $widget = resolve($widgetClass);
 
             expect($widget->table(Table::make($widget))->getPollingInterval())->toBeNull();
         }
@@ -100,7 +101,7 @@ it('uses consistent dashboard widget widths', function (): void {
     ];
 
     foreach ($fullWidthWidgets as $widgetClass) {
-        expect(app($widgetClass)->getColumnSpan())->toBe('full');
+        expect(resolve($widgetClass)->getColumnSpan())->toBe('full');
     }
 
 });
@@ -113,17 +114,17 @@ it('groups all dashboard widgets beside a transaction chart', function (): void 
         Filament::setCurrentPanel('admin');
         app()->setLocale('en');
 
-        $dashboard = app(AdminDashboard::class);
+        $dashboard = resolve(AdminDashboard::class);
         $layout = $dashboard->getWidgetsContentComponent();
         $components = $layout->getDefaultChildComponents();
-        $dashboardWidgets = $components[0]->getDefaultChildComponents();
+        $dashboardWidgets = Arr::get($components, 0)->getDefaultChildComponents();
 
         expect($layout)->toBeInstanceOf(Grid::class)
             ->and($layout->getColumns('lg'))->toBe(3)
             ->and($components)->toHaveCount(2)
-            ->and($components[0])->toBeInstanceOf(Group::class)
-            ->and($components[0]->getColumns('md'))->toBe(3)
-            ->and($components[0]->getColumnSpan('lg'))->toBe(2)
+            ->and(Arr::get($components, 0))->toBeInstanceOf(Group::class)
+            ->and(Arr::get($components, 0)->getColumns('md'))->toBe(3)
+            ->and(Arr::get($components, 0)->getColumnSpan('lg'))->toBe(2)
             ->and($dashboardWidgets)->not->toBeEmpty()
             ->and(array_map(
                 static fn (Component $component): array|int|null => $component->getColumnOrder('default'),
@@ -137,10 +138,10 @@ it('groups all dashboard widgets beside a transaction chart', function (): void 
                 $dashboardWidgets,
                 static fn (Component $component): bool => $component->isLiberatedFromContainerGrid(),
             ))->toBeEmpty()
-            ->and($components[1])->toBeInstanceOf(Livewire::class)
-            ->and($components[1]->getComponent())->toBe(TransactionTypeChartWidget::class)
-            ->and($components[1]->getExtraAttributeBag()->get('class'))->toBe('max-md:order-last')
-            ->and($components[1]->getColumnSpan('lg'))->toBe(1);
+            ->and(Arr::get($components, 1))->toBeInstanceOf(Livewire::class)
+            ->and(Arr::get($components, 1)->getComponent())->toBe(TransactionTypeChartWidget::class)
+            ->and(Arr::get($components, 1)->getExtraAttributeBag()->get('class'))->toBe('max-md:order-last')
+            ->and(Arr::get($components, 1)->getColumnSpan('lg'))->toBe(1);
     } finally {
         app()->setLocale($locale);
         Filament::setCurrentPanel($currentPanel);

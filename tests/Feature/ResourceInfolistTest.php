@@ -41,18 +41,12 @@ use Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource;
 use Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource;
 
 it('uses an infolist for every resource view page', function (string $resource): void {
-    if (! is_subclass_of($resource, Resource::class)) {
-        throw new InvalidArgumentException("{$resource} is not a Filament resource.");
-    }
+    throw_unless(is_subclass_of($resource, Resource::class), InvalidArgumentException::class, "{$resource} is not a Filament resource.");
 
     $schema = configuredResourceInfolist($resource);
     $components = $schema->getComponents(withHidden: true);
 
-    expect($components)->not->toBeEmpty();
-
-    foreach ($components as $component) {
-        expect($component)->toBeInstanceOf(Entry::class);
-    }
+    expect($components)->not->toBeEmpty()->toContainOnlyInstancesOf(Entry::class);
 })->with([
     ActivityLogResource::class,
     AffiliateCommissionResource::class,

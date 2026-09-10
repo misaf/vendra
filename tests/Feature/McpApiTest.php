@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Testing\TestResponse;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateFactory;
@@ -69,9 +70,9 @@ function rootMcpInitialize(string $url = 'http://localhost/mcp'): string
         ],
     ], url: $url);
 
-    $result['response']->assertOk();
+    Arr::get($result, 'response')->assertOk();
 
-    $sessionId = $result['response']->headers->get('Mcp-Session-Id');
+    $sessionId = Arr::get($result, 'response')->headers->get('Mcp-Session-Id');
     expect($sessionId)->not->toBeNull();
 
     rootMcpCall(['jsonrpc' => '2.0', 'method' => 'notifications/initialized'], $sessionId, $url);
@@ -82,7 +83,7 @@ function rootMcpInitialize(string $url = 'http://localhost/mcp'): string
 it('requires authentication for the MCP transport', function (): void {
     auth()->logout();
 
-    rootMcpCall([
+    Arr::get(rootMcpCall([
         'jsonrpc' => '2.0',
         'id' => 1,
         'method' => 'initialize',
@@ -91,13 +92,13 @@ it('requires authentication for the MCP transport', function (): void {
             'capabilities' => new stdClass,
             'clientInfo' => ['name' => 'pest', 'version' => '1.0'],
         ],
-    ])['response']->assertUnauthorized();
+    ]), 'response')->assertUnauthorized();
 });
 
 it('advertises every API operation with object input schemas', function (): void {
     $sessionId = rootMcpInitialize();
-    $body = rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass], $sessionId)['body'];
-    $tools = collect($body['result']['tools'] ?? []);
+    $body = Arr::get(rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'tools/list', 'params' => new stdClass], $sessionId), 'body');
+    $tools = collect(Arr::get($body, 'result.tools', []));
 
     expect($tools->pluck('name'))->toContain(
         'get_affiliate',
@@ -131,22 +132,22 @@ it('advertises every API operation with object input schemas', function (): void
         'list_product_prices',
     );
 
-    $tools->each(fn (array $tool) => expect($tool['inputSchema']['type'] ?? null)->toBe('object'));
+    $tools->each(fn (array $tool) => expect(Arr::get($tool, 'inputSchema.type', null))->toBe('object'));
 });
 
 it('publishes readable API documentation as an MCP resource', function (): void {
     $sessionId = rootMcpInitialize();
-    $listed = rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'resources/list', 'params' => new stdClass], $sessionId)['body'];
+    $listed = Arr::get(rootMcpCall(['jsonrpc' => '2.0', 'id' => 2, 'method' => 'resources/list', 'params' => new stdClass], $sessionId), 'body');
 
-    expect(collect($listed['result']['resources'] ?? [])->pluck('uri'))
+    expect(collect(Arr::get($listed, 'result.resources', []))->pluck('uri'))
         ->toContain('resource://vendra/api-documentation');
 
-    $read = rootMcpCall([
+    $read = Arr::get(rootMcpCall([
         'jsonrpc' => '2.0',
         'id' => 3,
         'method' => 'resources/read',
         'params' => ['uri' => 'resource://vendra/api-documentation'],
-    ], $sessionId)['body'];
+    ], $sessionId), 'body');
 
     expect(json_encode($read))->toContain('Vendra API', '/mcp', 'jsonld');
 });
@@ -158,16 +159,16 @@ it('enforces resource policies for authenticated MCP tools', function (): void {
     $this->actingAs($user);
     $sessionId = rootMcpInitialize();
 
-    $body = rootMcpCall([
+    $body = Arr::get(rootMcpCall([
         'jsonrpc' => '2.0',
         'id' => 3,
         'method' => 'tools/call',
         'params' => ['name' => 'list_carts', 'arguments' => new stdClass],
-    ], $sessionId)['body'];
+    ], $sessionId), 'body');
 
-    $cartIds = collect($body['result']['structuredContent']['member'] ?? [])->pluck('id');
+    $cartIds = collect(Arr::get($body, 'result.structuredContent.member', []))->pluck('id');
 
-    expect($body['result']['isError'] ?? false)->toBeFalse()
+    expect(Arr::get($body, 'result.isError', false))->toBeFalse()
         ->and($cartIds)->toContain($owned->id)
         ->not->toContain($hidden->id);
 });
@@ -176,7 +177,7 @@ it('validates and invokes the existing affiliate mutation', function (): void {
     $affiliate = AffiliateFactory::new()->active()->create();
     $sessionId = rootMcpInitialize();
 
-    $body = rootMcpCall([
+    $body = Arr::get(rootMcpCall([
         'jsonrpc' => '2.0',
         'id' => 3,
         'method' => 'tools/call',
@@ -187,12 +188,12 @@ it('validates and invokes the existing affiliate mutation', function (): void {
                 'landingUrl' => 'https://shop.test/products/1',
             ],
         ],
-    ], $sessionId)['body'];
+    ], $sessionId), 'body');
 
-    expect($body['result']['isError'] ?? false)->toBeFalse()
+    expect(Arr::get($body, 'result.isError', false))->toBeFalse()
         ->and(AffiliateClick::query()->whereBelongsTo($affiliate)->count())->toBe(1);
 
-    $invalid = rootMcpCall([
+    $invalid = Arr::get(rootMcpCall([
         'jsonrpc' => '2.0',
         'id' => 4,
         'method' => 'tools/call',
@@ -200,7 +201,7 @@ it('validates and invokes the existing affiliate mutation', function (): void {
             'name' => 'record_affiliate_visit',
             'arguments' => ['code' => '', 'landingUrl' => 'not-a-url'],
         ],
-    ], $sessionId)['body'];
+    ], $sessionId), 'body');
 
     expect($invalid)->toHaveKey('error')
         ->and(AffiliateClick::query()->whereBelongsTo($affiliate)->count())->toBe(1);
@@ -234,14 +235,14 @@ it('resolves and isolates MCP calls by tenant domain', function (): void {
     $url = 'https://admin.flowers.example.com/mcp';
     $sessionId = rootMcpInitialize($url);
 
-    $body = rootMcpCall([
+    $body = Arr::get(rootMcpCall([
         'jsonrpc' => '2.0',
         'id' => 3,
         'method' => 'tools/call',
         'params' => ['name' => 'list_products', 'arguments' => new stdClass],
-    ], $sessionId, $url)['body'];
+    ], $sessionId, $url), 'body');
 
-    $serialized = json_encode($body['result'] ?? []);
+    $serialized = json_encode(Arr::get($body, 'result', []));
 
     expect($serialized)->toContain('Visible Rose')
         ->not->toContain('Hidden Tulip')

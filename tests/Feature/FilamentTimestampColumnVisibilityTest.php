@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -19,9 +20,9 @@ it('keeps created and updated timestamps visible in every Filament table', funct
 
             foreach (preg_split('/\R/', $file->getContents()) ?: [] as $line) {
                 if (preg_match('/([A-Za-z]+Column)::make\(([\'\"])([^\'\"]+)\2\)/', $line, $matches) === 1) {
-                    $timestampColumn = $matches[1] === 'TextColumn'
-                        && in_array($matches[3], ['created_at', 'updated_at'], true)
-                            ? $matches[3]
+                    $timestampColumn = Arr::get($matches, 1) === 'TextColumn'
+                        && in_array(Arr::get($matches, 3), ['created_at', 'updated_at'], true)
+                            ? Arr::get($matches, 3)
                             : null;
                 }
 

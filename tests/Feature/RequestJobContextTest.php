@@ -26,7 +26,7 @@ it('adds the authenticated reseller to the request and job context', function ()
     $owner = ResellerUser::factory()->forReseller($reseller)->create();
     actingAs($owner, 'reseller');
 
-    app(AddResellerToRequestJobContext::class)->handle(
+    resolve(AddResellerToRequestJobContext::class)->handle(
         Request::create('https://reseller.vendra.test'),
         function (Request $request) use ($reseller): Response {
             expect(RequestJobContext::current()->metadata[ContextKeys::RESELLER_ID])->toBe($reseller->getKey());
@@ -41,7 +41,7 @@ it('uses a validated request identifier for context and the response', function 
     $request = Request::create('https://vendra.test');
     $request->headers->set(AddRequestContext::REQUEST_ID_HEADER, $requestId);
 
-    $response = app(AddRequestContext::class)->handle(
+    $response = resolve(AddRequestContext::class)->handle(
         $request,
         function (Request $request): Response {
             expect(RequestJobContext::current()->traceId)
@@ -59,7 +59,7 @@ it('rejects an invalid incoming request identifier', function (): void {
     $request = Request::create('https://vendra.test');
     $request->headers->set(AddRequestContext::REQUEST_ID_HEADER, "untrusted\nvalue");
 
-    $response = app(AddRequestContext::class)->handle(
+    $response = resolve(AddRequestContext::class)->handle(
         $request,
         fn (Request $request): Response => new Response,
     );
@@ -72,7 +72,7 @@ it('rejects an invalid incoming request identifier', function (): void {
 it('adds the current panel id without storing personal data', function (): void {
     Filament::setCurrentPanel('reseller');
 
-    app(AddPanelToRequestJobContext::class)->handle(
+    resolve(AddPanelToRequestJobContext::class)->handle(
         Request::create('https://reseller.vendra.test'),
         function (Request $request): Response {
             expect(RequestJobContext::current()->metadata[ContextKeys::PANEL_ID])->toBe('reseller')

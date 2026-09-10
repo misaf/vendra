@@ -39,7 +39,7 @@ use Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource;
 use Misaf\VendraUser\Filament\Clusters\Resources\Users\Widgets\UserOverviewWidget;
 
 it('uses the same responsive widget grid on every resource page', function (string $pageClass): void {
-    expect(app($pageClass)->getHeaderWidgetsColumns())->toBe([
+    expect(resolve($pageClass)->getHeaderWidgetsColumns())->toBe([
         'sm' => 1,
         'md' => 2,
         'lg' => 3,
@@ -57,15 +57,15 @@ it('uses the same responsive widget grid on every resource page', function (stri
 ]);
 
 it('moves resource header widgets after content on mobile', function (): void {
-    $headerWidgets = app(ListTransactions::class)->getSchema('headerWidgets');
+    $headerWidgets = resolve(ListTransactions::class)->getSchema('headerWidgets');
 
     expect($headerWidgets)->not->toBeNull()
         ->and($headerWidgets->getExtraAttributeBag()->get('class'))->toBe('max-md:order-last');
 });
 
 it('registers each combined overview on its resource page', function (string $pageClass, string $widgetClass): void {
-    $headerWidgets = (new ReflectionMethod($pageClass, 'getHeaderWidgets'))
-        ->invoke(app($pageClass));
+    $headerWidgets = new ReflectionMethod($pageClass, 'getHeaderWidgets')
+        ->invoke(resolve($pageClass));
 
     expect($headerWidgets)->toContain($widgetClass);
 })->with([
@@ -97,7 +97,7 @@ it('registers the individual affiliate overviews with their resource', function 
 });
 
 it('uses equal spans for individual resource stat widgets', function (string $widgetClass): void {
-    expect(app($widgetClass)->getColumnSpan())->toBe(['sm' => 1]);
+    expect(resolve($widgetClass)->getColumnSpan())->toBe(['sm' => 1]);
 })->with([
     AffiliateClicksOverview::class,
     AffiliateReferralsOverview::class,
@@ -111,8 +111,8 @@ it('uses equal spans for individual resource stat widgets', function (string $wi
 ]);
 
 it('disables polling on every resource stat widget', function (string $widgetClass): void {
-    $pollingInterval = (new ReflectionMethod($widgetClass, 'getPollingInterval'))
-        ->invoke(app($widgetClass));
+    $pollingInterval = new ReflectionMethod($widgetClass, 'getPollingInterval')
+        ->invoke(resolve($widgetClass));
 
     expect($pollingInterval)->toBeNull();
 })->with([
@@ -136,7 +136,7 @@ it('disables polling on every resource stat widget', function (string $widgetCla
 ]);
 
 it('uses full width for combined and detailed resource widgets', function (string $widgetClass): void {
-    expect(app($widgetClass)->getColumnSpan())->toBe('full');
+    expect(resolve($widgetClass)->getColumnSpan())->toBe('full');
 })->with([
     ProductOverviewWidget::class,
     CartOverviewWidget::class,
@@ -150,7 +150,7 @@ it('uses full width for combined and detailed resource widgets', function (strin
 ]);
 
 it('disables polling on resource table widgets', function (): void {
-    $widget = app(LatestAuthifyLogTableWidget::class);
+    $widget = resolve(LatestAuthifyLogTableWidget::class);
 
     expect($widget->table(Table::make($widget))->getPollingInterval())->toBeNull();
 });

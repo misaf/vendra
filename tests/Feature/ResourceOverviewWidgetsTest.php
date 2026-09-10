@@ -48,8 +48,8 @@ it('shows tenant-scoped cart user and newsletter metrics', function (): void {
 
         $statsFor = static function (string $widgetClass): array {
             /** @var array<int, Stat> $stats */
-            $stats = (new ReflectionMethod($widgetClass, 'getStats'))
-                ->invoke(app($widgetClass));
+            $stats = new ReflectionMethod($widgetClass, 'getStats')
+                ->invoke(resolve($widgetClass));
 
             return $stats;
         };

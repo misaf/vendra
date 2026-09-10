@@ -6,7 +6,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Number;
 use Laravel\Pennant\Feature;
 use Override;
@@ -29,7 +29,7 @@ abstract class TestCase extends BaseTestCase
             )),
         );
 
-        Carbon::setLocale(app()->getLocale());
+        Date::setLocale(app()->getLocale());
         Number::useLocale(app()->getLocale());
         Feature::flushCache();
     }

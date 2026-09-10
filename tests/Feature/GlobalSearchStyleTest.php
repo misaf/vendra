@@ -49,7 +49,7 @@ it('configures every host and package resource with the normalized global search
         $attributes,
         static fn (string $attribute): bool => str_contains($attribute, 'description'),
     );
-    $declaresCustomResultUrl = (new ReflectionMethod($resource, 'getGlobalSearchResultUrl'))
+    $declaresCustomResultUrl = new ReflectionMethod($resource, 'getGlobalSearchResultUrl')
         ->getDeclaringClass()
         ->getName() === $resource;
 

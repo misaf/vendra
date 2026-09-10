@@ -156,7 +156,7 @@ it('uses final create migrations instead of fresh-install follow-ups', function 
         static fn (string $path): bool => preg_match('/(?:^|_)(?:add|rename|backfill|enforce)_/', basename($path)) === 1,
     );
 
-    expect(array_values($followUpMigrations))->toBe([]);
+    expect(array_values($followUpMigrations))->toBeEmpty();
 });
 
 it('keeps package migration stubs identical to application baselines', function (): void {
@@ -185,7 +185,7 @@ it('keeps package migration stubs identical to application baselines', function 
  | `store_user` are keyed by `store_id` instead.
  */
 it('registers every tenant-aware application table for legacy schema retrofits', function (): void {
-    $registeredTables = collect(app(TenantTableRegistry::class)->all())
+    $registeredTables = collect(resolve(TenantTableRegistry::class)->all())
         ->where('connection', null)
         ->pluck('table')
         ->values();

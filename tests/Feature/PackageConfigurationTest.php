@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Config;
 
@@ -75,10 +76,10 @@ it('casts newsletter environment settings for strict config accessors', function
     try {
         $configuration = require base_path('packages/vendra-newsletter/config/vendra-newsletter.php');
 
-        expect($configuration['batch_chunk_size'])->toBeInt()->toBe(250)
-            ->and($configuration['queue']['tries'])->toBeInt()->toBe(5)
-            ->and($configuration['queue']['timeout'])->toBeInt()->toBe(600)
-            ->and($configuration['queue']['email_timeout'])->toBeInt()->toBe(45);
+        expect(Arr::get($configuration, 'batch_chunk_size'))->toBeInt()->toBe(250)
+            ->and(Arr::get($configuration, 'queue.tries'))->toBeInt()->toBe(5)
+            ->and(Arr::get($configuration, 'queue.timeout'))->toBeInt()->toBe(600)
+            ->and(Arr::get($configuration, 'queue.email_timeout'))->toBeInt()->toBe(45);
     } finally {
         foreach (array_keys($variables) as $name) {
             $environment->clear($name);

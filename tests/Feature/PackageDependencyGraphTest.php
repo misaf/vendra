@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
+
 /**
  * @return array<string, list<string>>
  */
@@ -16,8 +18,8 @@ function vendraPackageDependencyGraph(): array
             flags: JSON_THROW_ON_ERROR,
         );
 
-        $dependencyGraph[$manifest['name']] = array_values(array_filter(
-            array_keys($manifest['require'] ?? []),
+        $dependencyGraph[Arr::get($manifest, 'name')] = array_values(array_filter(
+            array_keys(Arr::get($manifest, 'require', [])),
             fn (string $package): bool => str_starts_with($package, 'misaf/vendra-'),
         ));
     }
@@ -68,7 +70,7 @@ it('keeps the Vendra package dependency graph complete and acyclic', function ()
         }
     }
 
-    expect($unknownDependencies)->toBe([])->and($cycles)->toBe([]);
+    expect($unknownDependencies)->toBeEmpty()->and($cycles)->toBeEmpty();
 });
 
 it('points the tenancy, store, reseller and console layers one way', function (): void {
@@ -85,12 +87,12 @@ it('points the tenancy, store, reseller and console layers one way', function ()
         ->not->toContain('misaf/vendra-store')
         ->not->toContain('misaf/vendra-reseller')
         ->not->toContain('misaf/vendra-console')
-        ->and($dependencyGraph['misaf/vendra-store'])
+        ->and(Arr::get($dependencyGraph, 'misaf/vendra-store'))
         ->toContain('misaf/vendra-tenant')
         ->not->toContain('misaf/vendra-reseller')
-        ->and($dependencyGraph['misaf/vendra-reseller'])
+        ->and(Arr::get($dependencyGraph, 'misaf/vendra-reseller'))
         ->toContain('misaf/vendra-store')
-        ->and($dependencyGraph['misaf/vendra-console'])
+        ->and(Arr::get($dependencyGraph, 'misaf/vendra-console'))
         ->toContain('misaf/vendra-store')
         ->toContain('misaf/vendra-reseller');
 });
@@ -117,8 +119,8 @@ it('imports only Vendra namespaces reachable through declared package dependenci
             flags: JSON_THROW_ON_ERROR,
         );
 
-        foreach (array_keys($manifest['autoload']['psr-4'] ?? []) as $namespace) {
-            $namespacePackages[mb_rtrim($namespace, '\\')] = $manifest['name'];
+        foreach (array_keys(Arr::get($manifest, 'autoload.psr-4', [])) as $namespace) {
+            $namespacePackages[mb_rtrim($namespace, '\\')] = Arr::get($manifest, 'name');
         }
     }
 
@@ -138,7 +140,7 @@ it('imports only Vendra namespaces reachable through declared package dependenci
         $reachablePackages = [
             ...reachableVendraPackages($package, $dependencyGraph),
             ...array_values(array_filter(
-                array_keys($manifest['suggest'] ?? []),
+                array_keys(Arr::get($manifest, 'suggest', [])),
                 fn (string $dependency): bool => str_starts_with($dependency, 'misaf/vendra-'),
             )),
         ];
@@ -166,5 +168,5 @@ it('imports only Vendra namespaces reachable through declared package dependenci
         }
     }
 
-    expect($unreachableImports)->toBe([]);
+    expect($unreachableImports)->toBeEmpty();
 });

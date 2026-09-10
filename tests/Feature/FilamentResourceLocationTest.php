@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -42,7 +43,7 @@ it('documents the resource location invariant in every resource package', functi
         expect($guidelinePath)->toBeFile()
             ->and($skillFiles)->toHaveCount(1);
 
-        foreach ([$guidelinePath, $skillFiles[0]->getPathname()] as $instructionPath) {
+        foreach ([$guidelinePath, Arr::get($skillFiles, 0)->getPathname()] as $instructionPath) {
             $instructions = File::get($instructionPath);
 
             expect($instructions)

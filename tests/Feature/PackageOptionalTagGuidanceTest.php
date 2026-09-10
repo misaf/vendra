@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Misaf\VendraSupport\Capabilities\HasOptionalTags;
 
 it('documents the tag-agnostic relationship contract in every tag-consuming package', function (): void {
     $packagePaths = collect(File::directories(base_path('packages')))
@@ -22,9 +24,9 @@ it('documents the tag-agnostic relationship contract in every tag-consuming pack
         expect($guidelinePath)->toBeFile()
             ->and($skillFiles)->toHaveCount(1);
 
-        foreach ([$guidelinePath, $skillFiles[0]->getPathname()] as $instructionPath) {
+        foreach ([$guidelinePath, Arr::get($skillFiles, 0)->getPathname()] as $instructionPath) {
             expect(File::get($instructionPath))
-                ->toContain('Misaf\VendraSupport\Capabilities\HasOptionalTags')
+                ->toContain(HasOptionalTags::class)
                 ->toContain('single source of their `tags()` relationship and pivot metadata')
                 ->toContain('stable package-owned tag type')
                 ->toContain('TagIntegration')

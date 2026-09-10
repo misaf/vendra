@@ -29,15 +29,15 @@ function settingsRowCount(string $group, string $name, ?string $scope = null): i
 
 describe('platform settings', function (): void {
     it('reads its defaults on a fresh install without seeding', function (): void {
-        expect(app(StoreCreationSettings::class)->open)->toBeTrue()
+        expect(resolve(StoreCreationSettings::class)->open)->toBeTrue()
             ->and(settingsRowCount('store_creation', 'open', SettingsScope::PLATFORM))->toBe(1);
     });
 
     it('persists a platform setting with no tenant', function (): void {
-        app(StoreCreationSettings::class)->fill(['open' => false])->save();
+        resolve(StoreCreationSettings::class)->fill(['open' => false])->save();
         app()->forgetInstance(StoreCreationSettings::class);
 
-        expect(app(StoreCreationSettings::class)->open)->toBeFalse();
+        expect(resolve(StoreCreationSettings::class)->open)->toBeFalse();
 
         $row = SettingsProperty::query()
             ->withoutGlobalScopes()
@@ -51,7 +51,7 @@ describe('platform settings', function (): void {
 
     it('never grows a second global row however often it is saved', function (): void {
         foreach ([false, true, false] as $open) {
-            app(StoreCreationSettings::class)->fill(['open' => $open])->save();
+            resolve(StoreCreationSettings::class)->fill(['open' => $open])->save();
         }
 
         expect(settingsRowCount('store_creation', 'open'))->toBe(1);
@@ -65,7 +65,7 @@ describe('platform settings', function (): void {
     it('stays on the platform row while a store is current', function (): void {
         Store::factory()->active()->create()->makeCurrent();
 
-        app(StoreCreationSettings::class)->fill(['open' => false])->save();
+        resolve(StoreCreationSettings::class)->fill(['open' => false])->save();
 
         expect(settingsRowCount('store_creation', 'open'))->toBe(1)
             ->and(settingsRowCount('store_creation', 'open', SettingsScope::PLATFORM))->toBe(1);
@@ -77,7 +77,7 @@ describe('store settings', function (): void {
         $platformTitle = Config::string('app.name');
         Store::factory()->active()->create()->makeCurrent();
 
-        expect(app(GeneralSettings::class)->site_title)->toBe($platformTitle)
+        expect(resolve(GeneralSettings::class)->site_title)->toBe($platformTitle)
             ->and(settingsRowCount('general', 'site_title'))->toBe(1);
     });
 
@@ -86,7 +86,7 @@ describe('store settings', function (): void {
         $store = Store::factory()->active()->create();
         $store->makeCurrent();
 
-        app(GeneralSettings::class)->fill(['site_title' => 'Acme Flowers'])->save();
+        resolve(GeneralSettings::class)->fill(['site_title' => 'Acme Flowers'])->save();
 
         expect(settingsRowCount('general', 'site_title', SettingsScope::forTenant($store->id)))->toBe(1)
             ->and(settingsRowCount('general', 'site_title', SettingsScope::PLATFORM))->toBe(1);
@@ -106,11 +106,11 @@ describe('store settings', function (): void {
         $store->makeCurrent();
 
         foreach (['One', 'Two', 'Three'] as $title) {
-            app(GeneralSettings::class)->fill(['site_title' => $title])->save();
+            resolve(GeneralSettings::class)->fill(['site_title' => $title])->save();
         }
 
         expect(settingsRowCount('general', 'site_title', SettingsScope::forTenant($store->id)))->toBe(1)
-            ->and(app(GeneralSettings::class)->site_title)->toBe('Three');
+            ->and(resolve(GeneralSettings::class)->site_title)->toBe('Three');
     });
 
     it('keeps one store out of another store settings', function (): void {
@@ -118,16 +118,16 @@ describe('store settings', function (): void {
         $second = Store::factory()->active()->create();
 
         $first->makeCurrent();
-        app(GeneralSettings::class)->fill(['site_title' => 'First'])->save();
+        resolve(GeneralSettings::class)->fill(['site_title' => 'First'])->save();
 
         $second->makeCurrent();
-        app(GeneralSettings::class)->fill(['site_title' => 'Second'])->save();
+        resolve(GeneralSettings::class)->fill(['site_title' => 'Second'])->save();
 
         $first->makeCurrent();
-        expect(app(GeneralSettings::class)->site_title)->toBe('First');
+        expect(resolve(GeneralSettings::class)->site_title)->toBe('First');
 
         $second->makeCurrent();
-        expect(app(GeneralSettings::class)->site_title)->toBe('Second');
+        expect(resolve(GeneralSettings::class)->site_title)->toBe('Second');
     });
 
     /*
@@ -141,14 +141,14 @@ describe('store settings', function (): void {
         $second = Store::factory()->active()->create();
 
         $first->makeCurrent();
-        app(GeneralSettings::class)->fill(['site_title' => 'First'])->save();
-        expect(app(GeneralSettings::class)->site_title)->toBe('First');
+        resolve(GeneralSettings::class)->fill(['site_title' => 'First'])->save();
+        expect(resolve(GeneralSettings::class)->site_title)->toBe('First');
 
         $second->makeCurrent();
-        expect(app(GeneralSettings::class)->site_title)->toBe($platformTitle);
+        expect(resolve(GeneralSettings::class)->site_title)->toBe($platformTitle);
 
         Store::forgetCurrent();
-        expect(app(GeneralSettings::class)->site_title)->toBe($platformTitle);
+        expect(resolve(GeneralSettings::class)->site_title)->toBe($platformTitle);
     });
 });
 
@@ -158,19 +158,19 @@ describe('store settings', function (): void {
  | row must never receive, so `settings` stays out of the registry.
  */
 it('keeps the tenancy retrofit away from platform settings rows', function (): void {
-    $tables = array_column(app(TenantTableRegistry::class)->all(), 'table');
+    $tables = array_column(resolve(TenantTableRegistry::class)->all(), 'table');
 
     expect($tables)->not->toContain('settings');
 });
 
 describe('store creation policy', function (): void {
     it('answers from the platform setting outside any tenant', function (): void {
-        expect(app(StoreCreationPolicy::class)->isOpen())->toBeTrue();
+        expect(resolve(StoreCreationPolicy::class)->isOpen())->toBeTrue();
 
-        app(StoreCreationSettings::class)->fill(['open' => false])->save();
+        resolve(StoreCreationSettings::class)->fill(['open' => false])->save();
         app()->forgetInstance(StoreCreationSettings::class);
         app()->forgetInstance(StoreCreationPolicy::class);
 
-        expect(app(StoreCreationPolicy::class)->isOpen())->toBeFalse();
+        expect(resolve(StoreCreationPolicy::class)->isOpen())->toBeFalse();
     });
 });

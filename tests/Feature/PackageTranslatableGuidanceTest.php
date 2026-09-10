@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 
 it('documents translatable persistence in every package guideline and skill', function (): void {
@@ -17,7 +18,7 @@ it('documents translatable persistence in every package guideline and skill', fu
         expect($guidelinePath)->toBeFile()
             ->and($skillFiles)->toHaveCount(1);
 
-        foreach ([$guidelinePath, $skillFiles[0]->getPathname()] as $instructionPath) {
+        foreach ([$guidelinePath, Arr::get($skillFiles, 0)->getPathname()] as $instructionPath) {
             expect(File::get($instructionPath))
                 ->toContain('Translatable Persistence')
                 ->toContain('explicit domain choice')

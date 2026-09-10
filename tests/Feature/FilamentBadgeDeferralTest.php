@@ -28,13 +28,11 @@ it('keeps every deferred Filament badge lazy across app and package source', fun
             $sourceBeforeDeferral = mb_substr($source, 0, $deferOffset);
             $badgeOffset = mb_strrpos($sourceBeforeDeferral, '->badge(');
 
-            if ($badgeOffset === false) {
-                throw new RuntimeException("Deferred badge in [{$relativePath}] has no badge value.");
-            }
+            throw_if($badgeOffset === false, RuntimeException::class, "Deferred badge in [{$relativePath}] has no badge value.");
 
             $badgeCall = mb_substr($sourceBeforeDeferral, $badgeOffset);
 
-            expect($badgeCall, $relativePath)
+            expect($badgeCall)
                 ->toMatch('/\A->badge\(\s*(?:static\s+)?(?:fn|function)\s*\(/');
 
             $deferredBadgeCount++;
@@ -48,7 +46,7 @@ it('keeps every deferred Filament badge lazy across app and package source', fun
         $hasDeferredProperty = str_contains($source, 'protected static bool $isBadgeDeferred = true;');
         $hasDeferredMethod = preg_match('/public static function isBadgeDeferred\s*\(/', $source) === 1;
 
-        expect($hasDeferredProperty || $hasDeferredMethod, $relativePath)->toBeTrue();
+        expect($hasDeferredProperty || $hasDeferredMethod)->toBeTrue();
 
         $relationManagerBadgeCount++;
     }

@@ -55,9 +55,9 @@ use Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource;
 use Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource;
 
 it('uses domain clusters as top-level navigation without redundant groups', function (): void {
-    $panel = (new AdminPanelServiceProvider(app()))->panel(Panel::make());
+    $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
 
-    expect($panel->getNavigationGroups())->toBe([]);
+    expect($panel->getNavigationGroups())->toBeEmpty();
 });
 
 it('orders domain clusters predictably', function (string $cluster, int $sort): void {
@@ -124,7 +124,7 @@ it('orders navigation resources by centralized priority', function (
 it('assigns every navigation priority a unique sort value', function (): void {
     $values = array_column(NavigationPriority::cases(), 'value');
 
-    expect(array_unique($values))->toHaveCount(count($values));
+    expect(array_unique($values))->toHaveSameSize($values);
 });
 
 it('uses concise singular and plural resource labels in every configured locale', function (

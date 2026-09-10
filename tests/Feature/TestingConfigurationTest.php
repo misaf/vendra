@@ -1,6 +1,8 @@
 <?php
 
 declare(strict_types=1);
+
+use Illuminate\Support\Arr;
 use Monolog\Handler\NullHandler;
 
 it('discards expected exception reports while running tests', function (): void {
@@ -14,11 +16,11 @@ it('runs the host test script in parallel without changing diagnostic scripts', 
         true,
         flags: JSON_THROW_ON_ERROR,
     );
-    $testCommand = implode(' ', (array) ($manifest['scripts']['test'] ?? []));
+    $testCommand = implode(' ', (array) (Arr::get($manifest, 'scripts.test', [])));
 
     expect($testCommand)->toContain('--parallel');
 
-    foreach ($manifest['scripts'] ?? [] as $scriptName => $commands) {
+    foreach (Arr::get($manifest, 'scripts', []) as $scriptName => $commands) {
         if (preg_match('/coverage|profil|mutation|benchmark/i', $scriptName) !== 1) {
             continue;
         }

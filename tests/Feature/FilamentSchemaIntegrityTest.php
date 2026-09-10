@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema as FilamentSchema;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraAttribute\Database\Factories\AttributeFactory;
 use Misaf\VendraAttribute\Database\Factories\AttributeValueFactory;
@@ -110,7 +111,7 @@ it('builds one transaction limit tab per type from wallet transaction limits', f
         TransactionTypeEnum::Commission->value,
         TransactionTypeEnum::Bonus->value,
         TransactionTypeEnum::Transfer->value,
-    ])->and($tabs['all']->getBadge())->toBe('3')
+    ])->and(Arr::get($tabs, 'all')->getBadge())->toBe('3')
         ->and($tabs[TransactionTypeEnum::Deposit->value]->getBadge())->toBe('1')
         ->and($tabs[TransactionTypeEnum::Withdrawal->value]->getBadge())->toBe('1')
         ->and($tabs[TransactionTypeEnum::Commission->value]->getBadge())->toBe('1')
@@ -142,7 +143,7 @@ it('scopes gateway relation tabs to gateway transactions and keeps the user sele
             ->and($badgeProperty->getValue($tab))->toBeInstanceOf(Closure::class);
     }
 
-    expect($tabs['all']->getBadge())->toBe('3')
+    expect(Arr::get($tabs, 'all')->getBadge())->toBe('3')
         ->and($tabs[TransactionTypeEnum::Deposit->value]->getBadge())->toBe('2')
         ->and($tabs[TransactionTypeEnum::Withdrawal->value]->getBadge())->toBe('1')
         ->and(TransactionsRelationManager::isBadgeDeferred($gateway, EditTransactionGateway::class))->toBeTrue()
@@ -155,7 +156,7 @@ it('scopes gateway relation tabs to gateway transactions and keeps the user sele
 function indexNames(string $table): array
 {
     return array_values(array_map(
-        static fn (array $index): string => (string) $index['name'],
+        static fn (array $index): string => (string) Arr::get($index, 'name'),
         Schema::getIndexes($table),
     ));
 }

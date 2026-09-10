@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Filament\Tables\Columns\IconColumn;
+use Illuminate\Support\Arr;
 
 dataset('boolean active tables', [
     'attribute' => ['packages/vendra-attribute/src/Filament/Clusters/Resources/Attributes/Tables/AttributeTable.php', 'vendra-attribute::attributes.active'],
@@ -51,7 +52,7 @@ it('configures boolean active columns like the blog post table', function (strin
     );
 
     expect($matched)->toBe(1)
-        ->and($matches['chain'])
+        ->and(Arr::get($matches, 'chain'))
         ->toContain("->label(__('{$labelKey}'))")
         ->toContain('->onIcon(Heroicon::Bolt)');
 })->with('boolean active tables');
