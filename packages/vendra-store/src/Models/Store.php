@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -123,19 +124,21 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * @param  Builder<Store>  $query
-     * @return Builder<Store>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('active', true);
     }
 
     /**
-     * @param  Builder<Store>  $query
-     * @return Builder<Store>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('active', false);
     }
@@ -143,10 +146,11 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     /**
      * Limit the query to stores that may currently serve requests.
      *
-     * @param  Builder<Store>  $query
-     * @return Builder<Store>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeAccessible(Builder $query): Builder
+    #[Scope]
+    protected function accessible(Builder $query): Builder
     {
         return $query
             ->active()
@@ -199,10 +203,11 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
      * The match arms above expressed as SQL, so a console filter and a status
      * badge cannot disagree about what "suspended" means.
      *
-     * @param  Builder<Store>  $query
-     * @return Builder<Store>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeWithStatus(Builder $query, StoreStatus $status): Builder
+    #[Scope]
+    protected function withStatus(Builder $query, StoreStatus $status): Builder
     {
         return match ($status) {
             StoreStatus::Pending => $query->where('provisioning_status', TenantProvisioningStatus::Pending),

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraStore\Actions\ReconcileStoreStorefrontAction;
 use Misaf\VendraStore\Enums\StorefrontReconciliationOutcome;
@@ -22,14 +24,12 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * absent, unhealthy, or serving the wrong image — so a converged estate comes
  * through a pass untouched. Use `storefront:redeploy` to rebuild deliberately.
  */
+#[Description('Converge every storefront runtime with the state the database intends')]
+#[Signature('storefront:reconcile
+        {--sync : Reconcile each storefront in the current process}
+        {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}')]
 final class ReconcileStorefrontDeploymentsCommand extends StorefrontDeploymentDispatchCommand
 {
-    protected $signature = 'storefront:reconcile
-        {--sync : Reconcile each storefront in the current process}
-        {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}';
-
-    protected $description = 'Converge every storefront runtime with the state the database intends';
-
     /**
      * @return Builder<StorefrontDeployment>
      */

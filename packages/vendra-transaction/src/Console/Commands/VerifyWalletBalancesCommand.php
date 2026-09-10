@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Misaf\VendraTransaction\Models\Wallet;
 
@@ -12,12 +14,10 @@ use Misaf\VendraTransaction\Models\Wallet;
  * reports wallets whose cached balance has drifted. With --repair the
  * cached balance is reset to the ledger-derived value.
  */
+#[Description('Verify cached wallet balances against the ledger')]
+#[Signature('vendra-transaction:verify-balances {--repair : Reset drifted cached balances to the ledger-derived value}')]
 final class VerifyWalletBalancesCommand extends Command
 {
-    protected $signature = 'vendra-transaction:verify-balances {--repair : Reset drifted cached balances to the ledger-derived value}';
-
-    protected $description = 'Verify cached wallet balances against the ledger';
-
     public function handle(): int
     {
         $drifted = 0;

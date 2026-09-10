@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
@@ -19,18 +21,16 @@ use Misaf\VendraSupport\Context\RequestJobContext;
  * When a backlog exists it emits a `Log::warning`, which downstream alerting
  * (Pulse, log drains) can trigger on.
  */
+#[Description('Report stuck subscription payments that need attention')]
+#[Signature('vendra-subscription:report-payment-backlog {--stale-minutes=30}')]
 final class ReportSubscriptionPaymentBacklogCommand extends Command
 {
-    protected $signature = 'vendra-subscription:report-payment-backlog {--stale-minutes=30}';
-
-    protected $description = 'Report stuck subscription payments that need attention';
-
     public function handle(): int
     {
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'subscription_payment_backlog',
-        ))->scope(fn (): int => $this->report());
+        )->scope(fn (): int => $this->report());
 
         return self::SUCCESS;
     }

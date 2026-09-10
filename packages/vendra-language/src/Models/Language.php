@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -68,16 +70,17 @@ final class Language extends Model implements ShouldLogActivity, Sortable
     /**
      * The localized display name resolved from the ICU catalog.
      */
-    public function getNameAttribute(): string
+    protected function name(): Attribute
     {
-        return Locales::name($this->locale);
+        return Attribute::make(get: fn() => Locales::name($this->locale));
     }
 
     /**
-     * @param  Builder<Language>  $query
-     * @return Builder<Language>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('active', true);
     }

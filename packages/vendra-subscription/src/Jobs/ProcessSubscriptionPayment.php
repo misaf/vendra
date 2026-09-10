@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Jobs;
 
-use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\Attributes\UniqueFor;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Misaf\VendraSubscription\Actions\ChargeSubscriptionAction;
@@ -24,18 +24,12 @@ use Throwable;
  * register it under multitenancy's not_tenant_aware_jobs rather than the job
  * coupling itself to a tenancy provider.
  */
+#[Timeout(30)]
+#[Tries(5)]
+#[UniqueFor(600)]
 final class ProcessSubscriptionPayment implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
     use Queueable;
-    use SerializesModels;
-
-    public int $tries = 5;
-
-    public int $timeout = 30;
-
-    public int $uniqueFor = 600;
 
     public function __construct(public readonly int $paymentId) {}
 

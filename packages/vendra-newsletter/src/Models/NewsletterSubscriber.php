@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -73,19 +74,21 @@ final class NewsletterSubscriber extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param  Builder<$this>  $query
-     * @return Builder<$this>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeSubscribed(Builder $query): Builder
+    #[Scope]
+    protected function subscribed(Builder $query): Builder
     {
         return $query->whereNull('unsubscribed_at');
     }
 
     /**
-     * @param  Builder<$this>  $query
-     * @return Builder<$this>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeUnsubscribed(Builder $query): Builder
+    #[Scope]
+    protected function unsubscribed(Builder $query): Builder
     {
         return $query->whereNotNull('unsubscribed_at');
     }

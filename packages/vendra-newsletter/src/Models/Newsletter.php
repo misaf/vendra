@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -56,10 +57,11 @@ final class Newsletter extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param  Builder<$this>  $query
-     * @return Builder<$this>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeDue(Builder $query, ?Carbon $now = null): Builder
+    #[Scope]
+    protected function due(Builder $query, ?Carbon $now = null): Builder
     {
         return $query
             ->where('status', NewsletterStatusEnum::Scheduled->value)

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Cknow\Money\Casts\MoneyIntegerCast;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -133,9 +134,10 @@ final class DeliveryZone extends Model implements ShouldLogActivity, Sortable
     }
 
     /**
-     * @param  Builder<$this>  $builder
+     * @param Builder<self> $builder
      */
-    public function scopeActive(Builder $builder): void
+    #[Scope]
+    protected function active(Builder $builder): void
     {
         $builder->where('active', true);
     }

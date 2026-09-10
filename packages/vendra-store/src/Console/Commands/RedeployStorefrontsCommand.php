@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
@@ -22,14 +24,12 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * republished under the same reference, or an edge label that only a fresh
  * container will carry. Ordinary drift is `storefront:reconcile`.
  */
+#[Description('Rebuild every storefront intended to be running, whatever its recorded status')]
+#[Signature('storefront:redeploy
+        {--sync : Redeploy each storefront in the current process}
+        {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}')]
 final class RedeployStorefrontsCommand extends StorefrontDeploymentDispatchCommand
 {
-    protected $signature = 'storefront:redeploy
-        {--sync : Redeploy each storefront in the current process}
-        {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}';
-
-    protected $description = 'Rebuild every storefront intended to be running, whatever its recorded status';
-
     /**
      * Only storefronts meant to be up.
      *

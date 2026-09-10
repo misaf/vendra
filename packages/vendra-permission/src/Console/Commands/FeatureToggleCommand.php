@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
@@ -13,21 +15,13 @@ use Misaf\VendraPermission\Enums\PermissionFeatureEnum;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
-final class FeatureToggleCommand extends Command
-{
-    /**
-     * @var string
-     */
-    protected $signature = 'vendra-permission:feature
+#[Description('Activate or deactivate a vendra-permission feature for a tenant')]
+#[Signature('vendra-permission:feature
         {action : activate or deactivate}
         {feature : Feature case, value, short value, or all}
-        {tenant : Tenant ID or slug}';
-
-    /**
-     * @var string
-     */
-    protected $description = 'Activate or deactivate a vendra-permission feature for a tenant';
-
+        {tenant : Tenant ID or slug}')]
+final class FeatureToggleCommand extends Command
+{
     public function handle(): int
     {
         $actionInput = $this->getStringArgument('action');
@@ -132,7 +126,7 @@ final class FeatureToggleCommand extends Command
 
     private function resolveTenant(string $tenantInput): ?Model
     {
-        return app(TenantResolver::class)->findByKeyOrSlug($tenantInput);
+        return resolve(TenantResolver::class)->findByKeyOrSlug($tenantInput);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Schema;
@@ -54,7 +55,10 @@ it('does not constrain tenant-aware models for an authenticated identity without
         ['id' => 2, 'tenant_id' => 2],
     ]);
 
-    $consoleUser = new class extends Authenticatable {};
+    $consoleUser = new class extends Authenticatable
+    {
+        use HasFactory;
+    };
     $consoleUser->setAttribute('id', 1);
 
     $this->actingAs($consoleUser);

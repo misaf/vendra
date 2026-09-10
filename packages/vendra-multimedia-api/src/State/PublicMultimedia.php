@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraMultimediaApi\State;
 
+use Illuminate\Database\Eloquent\Attributes\Unguarded;
+use Illuminate\Database\Eloquent\Attributes\Table;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
@@ -13,13 +17,12 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 /**
  * Read model for public media API operations.
  */
+#[Unguarded]
+#[Table(name: 'media')]
 final class PublicMultimedia extends Model
 {
+    use HasFactory;
     use BelongsToTenant;
-
-    protected $table = 'media';
-
-    protected $guarded = [];
 
     protected function casts(): array
     {
@@ -68,7 +71,7 @@ final class PublicMultimedia extends Model
             if (
                 is_string($disk)
                 && is_array($configuration)
-                && 'public' === ($configuration['visibility'] ?? null)
+                && 'public' === (Arr::get($configuration, 'visibility', null))
             ) {
                 $publicDisks[] = $disk;
             }

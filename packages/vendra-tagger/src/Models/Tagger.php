@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTagger\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Support\Str;
@@ -22,11 +23,10 @@ use Stringable;
  */
 #[Hidden(['tenant_id'])]
 #[UseFactory(TaggerFactory::class)]
+#[Table(name: 'tags')]
 final class Tagger extends SpatieTag
 {
     use BelongsToTenant;
-
-    protected $table = 'tags';
 
     /**
      * @var array{order_column_name: string, sort_when_creating: bool}

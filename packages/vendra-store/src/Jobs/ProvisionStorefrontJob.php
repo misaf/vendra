@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Jobs;
 
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\Attributes\UniqueFor;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,15 +23,12 @@ use Throwable;
  * The job decides *when* that happens, how often it is retried, and what a final
  * failure means.
  */
+#[Timeout(180)]
+#[Tries(5)]
+#[UniqueFor(3600)]
 final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, ShouldQueue
 {
     use Queueable;
-
-    public int $tries = 5;
-
-    public int $timeout = 180;
-
-    public int $uniqueFor = 3600;
 
     /**
      * The only queue whose worker holds container-runtime credentials.

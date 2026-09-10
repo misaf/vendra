@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Auth\User as AuthenticatableUser;
 use Illuminate\Support\Facades\Gate;
@@ -45,5 +46,8 @@ it('renders the view user profile page under strict authorization', function ():
 it('lets authorization for another guard principal fall through safely', function (): void {
     Gate::define('foreign-principal-check', fn (): bool => false);
 
-    expect(Gate::forUser(new class extends AuthenticatableUser {})->allows('foreign-principal-check'))->toBeFalse();
+    expect(Gate::forUser(new class extends AuthenticatableUser
+    {
+        use HasFactory;
+    })->allows('foreign-principal-check'))->toBeFalse();
 });

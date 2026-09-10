@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraInquiry\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -109,9 +110,10 @@ final class Inquiry extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param  Builder<$this>  $builder
+     * @param Builder<self> $builder
      */
-    public function scopeUnanswered(Builder $builder): void
+    #[Scope]
+    protected function unanswered(Builder $builder): void
     {
         $builder->where('status', InquiryStatusEnum::New);
     }

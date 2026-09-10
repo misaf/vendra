@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
+#[Description('Retry storefront deployments currently marked as failed')]
+#[Signature('storefront:retry-failed
+        {--sync : Retry each failed storefront in the current process}
+        {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}')]
 final class RetryFailedStorefrontDeploymentsCommand extends StorefrontDeploymentDispatchCommand
 {
-    protected $signature = 'storefront:retry-failed
-        {--sync : Retry each failed storefront in the current process}
-        {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}';
-
-    protected $description = 'Retry storefront deployments currently marked as failed';
-
     /**
      * @return Builder<StorefrontDeployment>
      */

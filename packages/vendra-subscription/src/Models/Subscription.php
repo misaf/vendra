@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -99,10 +100,11 @@ final class Subscription extends Model implements ShouldLogActivity
     /**
      * Limit the query to subscriptions that are active right now.
      *
-     * @param  Builder<Subscription>  $query
-     * @return Builder<Subscription>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query
             ->where('status', SubscriptionStatus::Active)
@@ -117,10 +119,11 @@ final class Subscription extends Model implements ShouldLogActivity
     /**
      * Limit the query to active subscriptions whose period has already lapsed.
      *
-     * @param  Builder<Subscription>  $query
-     * @return Builder<Subscription>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeLapsed(Builder $query): Builder
+    #[Scope]
+    protected function lapsed(Builder $query): Builder
     {
         return $query
             ->where('status', SubscriptionStatus::Active)
@@ -132,10 +135,11 @@ final class Subscription extends Model implements ShouldLogActivity
      * Limit the query to active subscriptions expiring within the given number
      * of days that have not yet had an expiry reminder sent.
      *
-     * @param  Builder<Subscription>  $query
-     * @return Builder<Subscription>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeExpiringWithin(Builder $query, int $days): Builder
+    #[Scope]
+    protected function expiringWithin(Builder $query, int $days): Builder
     {
         return $query
             ->where('status', SubscriptionStatus::Active)

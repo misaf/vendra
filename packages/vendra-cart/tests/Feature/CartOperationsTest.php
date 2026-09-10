@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -15,7 +16,10 @@ beforeEach(function (): void {
 
 it('adds a sellable to the cart', function (): void {
     $cart = Cart::factory()->create();
-    $sellable = new class extends Model {};
+    $sellable = new class extends Model
+    {
+        use HasFactory;
+    };
     $sellable->setAttribute('id', 7);
 
     $item = (new AddCartItemAction)->execute($cart, $sellable, quantity: 2, metadata: ['color' => 'red']);
@@ -30,7 +34,10 @@ it('adds a sellable to the cart', function (): void {
 
 it('merges quantities when the sellable is already in the cart', function (): void {
     $cart = Cart::factory()->create();
-    $sellable = new class extends Model {};
+    $sellable = new class extends Model
+    {
+        use HasFactory;
+    };
     $sellable->setAttribute('id', 7);
     $action = new AddCartItemAction;
 
@@ -77,7 +84,7 @@ it('honours an explicit or disabled expiry', function (): void {
 });
 
 it('schedules expired cart pruning daily', function (): void {
-    $scheduled = collect(app(Schedule::class)->events())->filter(
+    $scheduled = collect(resolve(Schedule::class)->events())->filter(
         fn (object $event): bool => str_contains((string) $event->command, 'vendra-cart:prune-expired'),
     );
 

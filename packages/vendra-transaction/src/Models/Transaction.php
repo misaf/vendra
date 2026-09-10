@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -148,14 +149,14 @@ final class Transaction extends Model implements ShouldLogActivity
     {
         $this->status->transitionTo(Declined::class);
 
-        TransactionDeclined::dispatch($this);
+        event(new TransactionDeclined($this));
     }
 
     public function fail(): void
     {
         $this->status->transitionTo(Failed::class);
 
-        TransactionFailed::dispatch($this);
+        event(new TransactionFailed($this));
     }
 
     public function markProcessing(): void
@@ -171,7 +172,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeOfType(Builder $builder, TransactionTypeEnum $transactionType): void
+    #[Scope]
+    protected function ofType(Builder $builder, TransactionTypeEnum $transactionType): void
     {
         $builder->where('transaction_type', $transactionType);
     }
@@ -179,7 +181,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeDeposit(Builder $builder): void
+    #[Scope]
+    protected function deposit(Builder $builder): void
     {
         $builder->where('transaction_type', TransactionTypeEnum::Deposit);
     }
@@ -187,7 +190,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeWithdrawal(Builder $builder): void
+    #[Scope]
+    protected function withdrawal(Builder $builder): void
     {
         $builder->where('transaction_type', TransactionTypeEnum::Withdrawal);
     }
@@ -195,7 +199,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeCommission(Builder $builder): void
+    #[Scope]
+    protected function commission(Builder $builder): void
     {
         $builder->where('transaction_type', TransactionTypeEnum::Commission);
     }
@@ -203,7 +208,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeBonus(Builder $builder): void
+    #[Scope]
+    protected function bonus(Builder $builder): void
     {
         $builder->where('transaction_type', TransactionTypeEnum::Bonus);
     }
@@ -211,7 +217,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeTransfer(Builder $builder): void
+    #[Scope]
+    protected function transfer(Builder $builder): void
     {
         $builder->where('transaction_type', TransactionTypeEnum::Transfer);
     }
@@ -219,7 +226,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeApproved(Builder $builder): void
+    #[Scope]
+    protected function approved(Builder $builder): void
     {
         $builder->whereState('status', Approved::class);
     }
@@ -227,7 +235,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeDeclined(Builder $builder): void
+    #[Scope]
+    protected function declined(Builder $builder): void
     {
         $builder->whereState('status', Declined::class);
     }
@@ -235,7 +244,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeFailed(Builder $builder): void
+    #[Scope]
+    protected function failed(Builder $builder): void
     {
         $builder->whereState('status', Failed::class);
     }
@@ -243,7 +253,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopePending(Builder $builder): void
+    #[Scope]
+    protected function pending(Builder $builder): void
     {
         $builder->whereState('status', Pending::class);
     }
@@ -251,7 +262,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeReview(Builder $builder): void
+    #[Scope]
+    protected function review(Builder $builder): void
     {
         $builder->whereState('status', Review::class);
     }
@@ -259,7 +271,8 @@ final class Transaction extends Model implements ShouldLogActivity
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeProcessing(Builder $builder): void
+    #[Scope]
+    protected function processing(Builder $builder): void
     {
         $builder->whereState('status', Processing::class);
     }
@@ -272,7 +285,7 @@ final class Transaction extends Model implements ShouldLogActivity
     protected static function booted(): void
     {
         self::creating(function (self $transaction): void {
-            if (empty($transaction->token)) {
+            if (blank($transaction->token)) {
                 $transaction->token = self::generateToken();
             }
         });

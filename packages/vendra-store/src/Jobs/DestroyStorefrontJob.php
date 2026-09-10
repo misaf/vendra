@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Jobs;
 
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\Attributes\UniqueFor;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -30,15 +33,12 @@ use Throwable;
  * reaches the provisioner port directly rather than through an action that would
  * have no state left to write.
  */
+#[Timeout(120)]
+#[Tries(5)]
+#[UniqueFor(3600)]
 final class DestroyStorefrontJob implements NotTenantAware, ShouldBeUnique, ShouldQueue
 {
     use Queueable;
-
-    public int $tries = 5;
-
-    public int $timeout = 120;
-
-    public int $uniqueFor = 3600;
 
     public function __construct(public readonly string $slug)
     {

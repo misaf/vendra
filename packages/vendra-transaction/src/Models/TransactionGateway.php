@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -129,7 +130,8 @@ final class TransactionGateway extends Model implements HasMedia, ShouldLogActiv
     /**
      * @param  Builder<self>  $builder
      */
-    public function scopeActive(Builder $builder): void
+    #[Scope]
+    protected function active(Builder $builder): void
     {
         $builder->where('active', true);
     }

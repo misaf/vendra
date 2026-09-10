@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Jobs;
 
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\Attributes\UniqueFor;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -20,15 +23,12 @@ use Throwable;
  * and correcting a container needs the runtime socket, and only that worker
  * holds one.
  */
+#[Timeout(180)]
+#[Tries(3)]
+#[UniqueFor(3600)]
 final class ReconcileStorefrontJob implements NotTenantAware, ShouldBeUnique, ShouldQueue
 {
     use Queueable;
-
-    public int $tries = 3;
-
-    public int $timeout = 180;
-
-    public int $uniqueFor = 3600;
 
     public function __construct(public readonly int $deploymentId)
     {

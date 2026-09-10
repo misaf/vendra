@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,7 +32,10 @@ it('defaults new cart items to one unit', function (): void {
 });
 
 it('can build an owned cart without depending on a concrete user model', function (): void {
-    $owner = new class extends Model {};
+    $owner = new class extends Model
+    {
+        use HasFactory;
+    };
     $owner->setAttribute('id', 42);
 
     $attributes = CartFactory::new()
@@ -44,7 +48,10 @@ it('can build an owned cart without depending on a concrete user model', functio
 });
 
 it('resolves a human-readable owner label', function (): void {
-    $owner = new class extends Model {};
+    $owner = new class extends Model
+    {
+        use HasFactory;
+    };
     $owner->setAttribute('id', 42);
     $owner->setAttribute('username', 'cart-owner');
 

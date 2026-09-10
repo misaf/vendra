@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Jobs;
 
+use Illuminate\Queue\Attributes\Timeout;
+use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
@@ -26,13 +28,11 @@ use Throwable;
  * beside the domain rather than inside it — the action decides a store should
  * exist, this makes the slow parts happen and records whether they did.
  */
+#[Timeout(60)]
+#[Tries(5)]
 final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
 {
     use Queueable;
-
-    public int $tries = 5;
-
-    public int $timeout = 60;
 
     public function __construct(public readonly int $tenantId) {}
 
@@ -42,7 +42,7 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
     public function middleware(): array
     {
         return [
-            (new WithoutOverlapping("store-provisioning:{$this->tenantId}"))
+            new WithoutOverlapping("store-provisioning:{$this->tenantId}")
                 ->releaseAfter(5)
                 ->expireAfter(120),
         ];
@@ -76,7 +76,7 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
             }
 
             if ($store->routes_cached_at === null) {
-                CacheTenantRoutesJob::dispatchSync($store->id);
+                dispatch_sync(new CacheTenantRoutesJob($store->id));
 
                 $store->forceFill(['routes_cached_at' => now()])->save();
             }
@@ -129,7 +129,7 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
             return false;
         }
 
-        $owner = app(StoreOwnerResolver::class)->find($store->reseller_id);
+        $owner = resolve(StoreOwnerResolver::class)->find($store->reseller_id);
 
         return $owner === null
             || ! $owner->isSubscriptionActive()

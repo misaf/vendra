@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Misaf\VendraBlog\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
 use Misaf\VendraBlog\BlogPlugin;
 use Misaf\VendraBlog\Database\Seeders\DemoContentSeeder;
 use Misaf\VendraBlog\Database\Seeders\PermissionPolicySeeder;
 use Misaf\VendraSupport\Tenancy\Console\Commands\TenantSeedCommand;
 
+#[Description('Seed blog module data for a tenant')]
 final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = BlogPlugin::ID;
@@ -16,8 +18,6 @@ final class SeedCommand extends TenantSeedCommand
     protected $signature = self::MODULE_NAME.':seed
         {tenant? : Tenant ID or slug to seed blog data for}
         {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies, demo-contents}';
-
-    protected $description = 'Seed blog module data for a tenant';
 
     /**
      * @return array<string, class-string>

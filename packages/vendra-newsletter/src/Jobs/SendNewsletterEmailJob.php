@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraNewsletter\Jobs;
 
-use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -22,10 +19,7 @@ use RuntimeException;
 
 final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
     use Queueable;
-    use SerializesModels;
 
     public int $tries;
 
@@ -45,14 +39,14 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
 
     public function handle(): void
     {
-        (new RequestJobContext(
+        new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'newsletter_email',
             metadata: [
                 NewsletterContextKeys::NEWSLETTER_ID => $this->newsletterId,
                 NewsletterContextKeys::SUBSCRIBER_ID => $this->subscriberId,
             ],
-        ))->scope(fn () => $this->send());
+        )->scope(fn () => $this->send());
     }
 
     private function send(): void
@@ -80,9 +74,7 @@ final class SendNewsletterEmailJob implements ShouldBeUnique, ShouldQueue
                 ->lockForUpdate()
                 ->first(['sent_at']);
 
-            if (! is_object($delivery)) {
-                throw new RuntimeException('Unable to create the newsletter delivery receipt.');
-            }
+            throw_unless(is_object($delivery), RuntimeException::class, 'Unable to create the newsletter delivery receipt.');
 
             if ($delivery->sent_at !== null) {
                 return;

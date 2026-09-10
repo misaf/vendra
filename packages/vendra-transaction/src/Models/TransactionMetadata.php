@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,12 +23,11 @@ use Misaf\VendraTransaction\Database\Factories\TransactionMetadataFactory;
  */
 #[Fillable(['transaction_id', 'key_name', 'key_value'])]
 #[UseFactory(TransactionMetadataFactory::class)]
+#[Table(name: 'transaction_metadata')]
 final class TransactionMetadata extends Model
 {
     /** @use HasFactory<TransactionMetadataFactory> */
     use HasFactory;
-
-    protected $table = 'transaction_metadata';
 
     /**
      * @return array<string, string>

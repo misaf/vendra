@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -65,19 +66,21 @@ final class StoreDomain extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param  Builder<StoreDomain>  $query
-     * @return Builder<StoreDomain>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('active', true);
     }
 
     /**
-     * @param  Builder<StoreDomain>  $query
-     * @return Builder<StoreDomain>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeInactive(Builder $query): Builder
+    #[Scope]
+    protected function inactive(Builder $query): Builder
     {
         return $query->where('active', false);
     }

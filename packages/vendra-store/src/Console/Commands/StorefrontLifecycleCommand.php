@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Misaf\VendraStore\Actions\RestartStoreStorefrontAction;
 use Misaf\VendraStore\Actions\StartStoreStorefrontAction;
@@ -23,15 +25,13 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * record nothing and decide nothing — they are reads, and go straight to the
  * provisioner port rather than through a pass-through wrapper.
  */
-final class StorefrontLifecycleCommand extends Command
-{
-    protected $signature = 'storefront:lifecycle
+#[Description('Start, stop, restart, or inspect one store storefront')]
+#[Signature('storefront:lifecycle
         {action : start, stop, restart, status, or logs}
         {slug : The storefront slug}
-        {--lines=200 : Log lines to show for the logs action}';
-
-    protected $description = 'Start, stop, restart, or inspect one store storefront';
-
+        {--lines=200 : Log lines to show for the logs action}')]
+final class StorefrontLifecycleCommand extends Command
+{
     public function handle(
         StartStoreStorefrontAction $start,
         StopStoreStorefrontAction $stop,

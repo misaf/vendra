@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -77,10 +78,11 @@ final class StorefrontDeployment extends Model
     /**
      * Deployments the platform intends to have running.
      *
-     * @param  Builder<StorefrontDeployment>  $query
-     * @return Builder<StorefrontDeployment>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeDesiredRunning(Builder $query): Builder
+    #[Scope]
+    protected function desiredRunning(Builder $query): Builder
     {
         return $query->where('desired_state', StorefrontDesiredState::Running->value);
     }

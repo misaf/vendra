@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCart\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Misaf\VendraCart\Models\Cart;
 
+#[Description('Delete carts whose expiry time has passed')]
+#[Signature('vendra-cart:prune-expired')]
 final class PruneExpiredCartsCommand extends Command
 {
-    protected $signature = 'vendra-cart:prune-expired';
-
-    protected $description = 'Delete carts whose expiry time has passed';
-
     public function handle(): int
     {
         $pruned = Cart::query()

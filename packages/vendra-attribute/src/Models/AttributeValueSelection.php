@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAttribute\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,7 @@ use Illuminate\Support\Carbon;
 #[Fillable(['attribute_value_id', 'selectable_type', 'selectable_id'])]
 final class AttributeValueSelection extends Model
 {
+    use HasFactory;
     /** @return BelongsTo<AttributeValue, $this> */
     public function attributeValue(): BelongsTo
     {

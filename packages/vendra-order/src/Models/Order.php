@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraOrder\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Cknow\Money\Casts\MoneyIntegerCast;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -169,33 +170,37 @@ final class Order extends Model implements ShouldLogActivity
     }
 
     /**
-     * @param  Builder<$this>  $builder
+     * @param Builder<self> $builder
      */
-    public function scopePending(Builder $builder): void
+    #[Scope]
+    protected function pending(Builder $builder): void
     {
         $builder->whereState('status', Pending::class);
     }
 
     /**
-     * @param  Builder<$this>  $builder
+     * @param Builder<self> $builder
      */
-    public function scopeConfirmed(Builder $builder): void
+    #[Scope]
+    protected function confirmed(Builder $builder): void
     {
         $builder->whereState('status', Confirmed::class);
     }
 
     /**
-     * @param  Builder<$this>  $builder
+     * @param Builder<self> $builder
      */
-    public function scopeCompleted(Builder $builder): void
+    #[Scope]
+    protected function completed(Builder $builder): void
     {
         $builder->whereState('status', Completed::class);
     }
 
     /**
-     * @param  Builder<$this>  $builder
+     * @param Builder<self> $builder
      */
-    public function scopeCancelled(Builder $builder): void
+    #[Scope]
+    protected function cancelled(Builder $builder): void
     {
         $builder->whereState('status', Cancelled::class);
     }

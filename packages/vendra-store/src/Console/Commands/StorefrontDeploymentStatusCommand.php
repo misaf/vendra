@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Console\Commands;
 
+use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
@@ -12,12 +14,10 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontReference;
 use Throwable;
 
+#[Description('List storefront deployments from the database')]
+#[Signature('storefront:status {--runtime : Also ask the container runtime what it actually has}')]
 final class StorefrontDeploymentStatusCommand extends Command
 {
-    protected $signature = 'storefront:status {--runtime : Also ask the container runtime what it actually has}';
-
-    protected $description = 'List storefront deployments from the database';
-
     public function handle(StorefrontProvisioner $provisioner): int
     {
         $deployments = StorefrontDeployment::query()

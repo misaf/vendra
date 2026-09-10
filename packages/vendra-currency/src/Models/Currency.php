@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -78,10 +79,11 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
     ];
 
     /**
-     * @param  Builder<Currency>  $query
-     * @return Builder<Currency>
+     * @param Builder<self> $query
+     * @return Builder<self>
      */
-    public function scopeActive(Builder $query): Builder
+    #[Scope]
+    protected function active(Builder $query): Builder
     {
         return $query->where('active', true);
     }
