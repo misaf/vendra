@@ -23,10 +23,10 @@ use Misaf\VendraStore\Support\StorefrontProvisionRequest;
  * between leaves a row that says "in progress", which reconciliation can fix,
  * rather than a committed lie in either direction.
  */
-final class DeployStoreStorefrontAction
+final readonly class DeployStoreStorefrontAction
 {
     public function __construct(
-        private readonly StorefrontProvisioner $provisioner,
+        private StorefrontProvisioner $provisioner,
     ) {}
 
     /**

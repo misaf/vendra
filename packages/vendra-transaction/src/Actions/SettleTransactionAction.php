@@ -13,9 +13,9 @@ use Misaf\VendraTransaction\Models\Transaction;
  * against the source wallet, the mirrored credit on the counterparty wallet
  * for transfers, and any fee as its own negative entry.
  */
-final class SettleTransactionAction
+final readonly class SettleTransactionAction
 {
-    public function __construct(private readonly PostLedgerEntryAction $postLedgerEntry) {}
+    public function __construct(private PostLedgerEntryAction $postLedgerEntry) {}
 
     public function execute(Transaction $transaction): void
     {

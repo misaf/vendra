@@ -20,29 +20,29 @@ use Illuminate\Support\Facades\Config;
  * Laravel Docker Engine driver settings, and a storefront setting does not know
  * what a socket is.
  */
-final class StorefrontSettings
+final readonly class StorefrontSettings
 {
     /**
      * @param  array<string, string>  $logOptions
      */
     public function __construct(
-        public readonly string $network,
-        public readonly string $namePrefix,
-        public readonly int $port,
-        public readonly string $healthPath,
-        public readonly int $healthTimeout,
-        public readonly bool $pull,
-        public readonly string $logDriver,
-        public readonly array $logOptions,
-        public readonly StorefrontContainerResources $resources,
-        public readonly string $baseDomain,
-        public readonly string $apiUrl,
-        public readonly string $certResolver,
-        public readonly string $certificatesPath,
-        public readonly string $caFile,
-        public readonly string $storageBaseUrl,
-        public readonly string $neshanServiceKey,
-        public readonly string $traefikMiddlewares,
+        public string $network,
+        public string $namePrefix,
+        public int $port,
+        public string $healthPath,
+        public int $healthTimeout,
+        public bool $pull,
+        public string $logDriver,
+        public array $logOptions,
+        public StorefrontContainerResources $resources,
+        public string $baseDomain,
+        public string $apiUrl,
+        public string $certResolver,
+        public string $certificatesPath,
+        public string $caFile,
+        public string $storageBaseUrl,
+        public string $neshanServiceKey,
+        public string $traefikMiddlewares,
     ) {}
 
     /**

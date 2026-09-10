@@ -15,13 +15,11 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * rather than a bare string so a lifecycle port cannot be called with a domain,
  * an id, or a container name by mistake.
  */
-final class StorefrontReference
+final readonly class StorefrontReference
 {
-    public function __construct(public readonly string $slug)
+    public function __construct(public string $slug)
     {
-        if (mb_trim($slug) === '') {
-            throw new InvalidArgumentException('A storefront slug is required.');
-        }
+        throw_if(mb_trim($slug) === '', InvalidArgumentException::class, 'A storefront slug is required.');
     }
 
     public static function for(StorefrontDeployment $deployment): self

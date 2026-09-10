@@ -9,19 +9,19 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Throwable;
 
-final class EloquentCurrencyResolver implements CurrencyResolver
+final readonly class EloquentCurrencyResolver implements CurrencyResolver
 {
     /**
      * @param  class-string<Model>  $currencyModel
      */
     public function __construct(
-        private readonly string $currencyModel,
-        private readonly CurrencyResolver $fallback = new NullCurrencyResolver,
-        private readonly string $codeColumn = 'code',
-        private readonly string $nameColumn = 'name',
-        private readonly string $activeColumn = 'active',
-        private readonly string $defaultColumn = 'is_default',
-        private readonly string $positionColumn = 'position',
+        private string $currencyModel,
+        private CurrencyResolver $fallback = new NullCurrencyResolver,
+        private string $codeColumn = 'code',
+        private string $nameColumn = 'name',
+        private string $activeColumn = 'active',
+        private string $defaultColumn = 'is_default',
+        private string $positionColumn = 'position',
     ) {}
 
     public function available(): bool

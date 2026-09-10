@@ -6,7 +6,7 @@ namespace Misaf\VendraStore\Support;
 
 use stdClass;
 
-final class StorefrontContainerDefinition
+final readonly class StorefrontContainerDefinition
 {
     private const int NANOSECOND = 1_000_000_000;
 
@@ -19,18 +19,18 @@ final class StorefrontContainerDefinition
      * @param  list<string>  $securityOptions
      */
     public function __construct(
-        public readonly string $name,
-        public readonly string $image,
-        public readonly array $environment,
-        public readonly array $labels,
-        public readonly int $port,
-        public readonly array $binds,
-        public readonly string $network,
-        public readonly array $healthCheck,
-        public readonly string $logDriver,
-        public readonly array $logOptions,
-        public readonly StorefrontContainerResources $resources,
-        public readonly array $securityOptions,
+        public string $name,
+        public string $image,
+        public array $environment,
+        public array $labels,
+        public int $port,
+        public array $binds,
+        public string $network,
+        public array $healthCheck,
+        public string $logDriver,
+        public array $logOptions,
+        public StorefrontContainerResources $resources,
+        public array $securityOptions,
     ) {}
 
     /** @return array<string, mixed> */

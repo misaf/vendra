@@ -15,9 +15,9 @@ use Misaf\VendraAffiliate\Services\AffiliateCodeService;
  * Living here rather than in a `booted()` closure is what lets the code service
  * arrive through the constructor instead of a container lookup inside the model.
  */
-final class AffiliateObserver
+final readonly class AffiliateObserver
 {
-    public function __construct(private readonly AffiliateCodeService $affiliateCodeService) {}
+    public function __construct(private AffiliateCodeService $affiliateCodeService) {}
 
     public function creating(Affiliate $affiliate): void
     {

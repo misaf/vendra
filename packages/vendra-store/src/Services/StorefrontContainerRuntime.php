@@ -20,9 +20,9 @@ use Misaf\VendraStore\Support\StorefrontRuntimeStatus;
 use RuntimeException;
 use Throwable;
 
-final class StorefrontContainerRuntime
+final readonly class StorefrontContainerRuntime
 {
-    public function __construct(private readonly ContainerManager $containers) {}
+    public function __construct(private ContainerManager $containers) {}
 
     public function status(): StorefrontRuntimeStatus
     {
@@ -198,9 +198,7 @@ final class StorefrontContainerRuntime
                 '/containers/'.rawurlencode($container).'/'.$operation,
             );
         } catch (ApiException $exception) {
-            if (! in_array($exception->statusCode, $acceptedStatuses, true)) {
-                throw $exception;
-            }
+            throw_unless(in_array($exception->statusCode, $acceptedStatuses, true), $exception);
         }
     }
 }

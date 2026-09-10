@@ -14,9 +14,9 @@ use Misaf\VendraStore\Settings\StoreCreationSettings;
  * other half is the reseller's own subscription. Keeping it here is what lets
  * both read it without `vendra-reseller` ever pointing at `vendra-console`.
  */
-final class StoreCreationPolicy
+final readonly class StoreCreationPolicy
 {
-    public function __construct(private readonly StoreCreationSettings $settings) {}
+    public function __construct(private StoreCreationSettings $settings) {}
 
     public function isOpen(): bool
     {

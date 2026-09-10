@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Services;
 
+use Illuminate\Support\Sleep;
 use Misaf\VendraStore\Support\StorefrontContainerDefinition;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
-final class StorefrontContainerHealthGate
+final readonly class StorefrontContainerHealthGate
 {
     private const int POLL_MICROSECONDS = 2_000_000;
 
     public function __construct(
-        private readonly StorefrontContainerRuntime $runtime,
-        private readonly LoggerInterface $logger,
+        private StorefrontContainerRuntime $runtime,
+        private LoggerInterface $logger,
     ) {}
 
     public function await(StorefrontContainerDefinition $definition, int $timeoutSeconds): bool
@@ -49,7 +50,7 @@ final class StorefrontContainerHealthGate
                 return false;
             }
 
-            usleep(self::POLL_MICROSECONDS);
+            Sleep::usleep(self::POLL_MICROSECONDS);
         } while (true);
     }
 }

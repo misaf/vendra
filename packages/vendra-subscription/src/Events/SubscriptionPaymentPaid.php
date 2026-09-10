@@ -14,10 +14,10 @@ use Misaf\VendraSubscription\Models\SubscriptionPayment;
  * react to it (e.g. activating the subscriber's access) without the payment
  * engine knowing the concrete subscriber or its side effects.
  */
-final class SubscriptionPaymentPaid implements ShouldDispatchAfterCommit
+final readonly class SubscriptionPaymentPaid implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public readonly SubscriptionPayment $payment) {}
+    public function __construct(public SubscriptionPayment $payment) {}
 }

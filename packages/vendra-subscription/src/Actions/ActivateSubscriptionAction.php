@@ -14,9 +14,9 @@ use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSubscription\Support\SubscriptionRegistry;
 
-final class ActivateSubscriptionAction
+final readonly class ActivateSubscriptionAction
 {
-    public function __construct(private readonly SubscriptionRegistry $subscriptionRegistry) {}
+    public function __construct(private SubscriptionRegistry $subscriptionRegistry) {}
 
     /**
      * Activate the subscription of a paid payment: supersede the subscriber's
@@ -60,7 +60,7 @@ final class ActivateSubscriptionAction
         }, attempts: 5);
 
         if ($activated instanceof Subscription) {
-            SubscriptionActivated::dispatch($activated);
+            event(new SubscriptionActivated($activated));
         }
     }
 }

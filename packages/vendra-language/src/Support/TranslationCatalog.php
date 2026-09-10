@@ -23,8 +23,8 @@ final class TranslationCatalog
     private ?array $namespaceOptions = null;
 
     public function __construct(
-        private Filesystem $files,
-        private Translator $translator,
+        private readonly Filesystem $files,
+        private readonly Translator $translator,
     ) {}
 
     /**
@@ -144,7 +144,7 @@ final class TranslationCatalog
         ksort($languageLines);
 
         foreach ($languageLines as &$languageLine) {
-            ksort($languageLine['text']);
+            ksort(Arr::get($languageLine, 'text'));
         }
         unset($languageLine);
 

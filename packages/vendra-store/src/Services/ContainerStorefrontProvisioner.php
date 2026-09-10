@@ -30,14 +30,14 @@ use RuntimeException;
  * network is an error naming the network, not an improvised bridge the proxy is
  * not attached to.
  */
-final class ContainerStorefrontProvisioner implements StorefrontProvisioner
+final readonly class ContainerStorefrontProvisioner implements StorefrontProvisioner
 {
     public function __construct(
-        private readonly StorefrontContainerRuntime $runtime,
-        private readonly StorefrontContainerHealthGate $healthGate,
-        private readonly StorefrontConfigurationValidator $validator,
-        private readonly StorefrontContainerDefinitionFactory $definitions,
-        private readonly StorefrontSettings $settings,
+        private StorefrontContainerRuntime $runtime,
+        private StorefrontContainerHealthGate $healthGate,
+        private StorefrontConfigurationValidator $validator,
+        private StorefrontContainerDefinitionFactory $definitions,
+        private StorefrontSettings $settings,
     ) {}
 
     public function provision(StorefrontProvisionRequest $request): StorefrontProvisionResult

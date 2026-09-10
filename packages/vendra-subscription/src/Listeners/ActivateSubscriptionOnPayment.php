@@ -12,9 +12,9 @@ use Misaf\VendraSubscription\Events\SubscriptionPaymentPaid;
  * package closes the payment lifecycle (collect -> activate) without a consumer
  * having to wire it, while host-specific side effects stay in SubscriptionActivated consumers.
  */
-final class ActivateSubscriptionOnPayment
+final readonly class ActivateSubscriptionOnPayment
 {
-    public function __construct(private readonly ActivateSubscriptionAction $activateSubscriptionAction) {}
+    public function __construct(private ActivateSubscriptionAction $activateSubscriptionAction) {}
 
     public function handle(SubscriptionPaymentPaid $event): void
     {

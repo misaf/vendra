@@ -14,11 +14,11 @@ use Misaf\VendraStore\Support\StoreQuota;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
-final class RestoreOffboardedStoreAction
+final readonly class RestoreOffboardedStoreAction
 {
     public function __construct(
-        private readonly StoreOwnerResolver $ownerResolver,
-        private readonly StoreQuota $storeQuota,
+        private StoreOwnerResolver $ownerResolver,
+        private StoreQuota $storeQuota,
     ) {}
 
     public function execute(Store $store): Store

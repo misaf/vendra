@@ -15,10 +15,10 @@ use Misaf\VendraSubscription\Models\Subscription;
  * suspending those units and notifying the owner. Carries the lapsed
  * subscription; resolve its subscriber to act.
  */
-final class SubscriptionGraceExpired implements ShouldDispatchAfterCommit
+final readonly class SubscriptionGraceExpired implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public readonly Subscription $subscription) {}
+    public function __construct(public Subscription $subscription) {}
 }

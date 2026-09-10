@@ -27,11 +27,11 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * converging, which is how a deliberately stopped storefront gets started again
  * every pass.
  */
-final class ReconcileStoreStorefrontAction
+final readonly class ReconcileStoreStorefrontAction
 {
     public function __construct(
-        private readonly StorefrontProvisioner $provisioner,
-        private readonly DeployStoreStorefrontAction $deploy,
+        private StorefrontProvisioner $provisioner,
+        private DeployStoreStorefrontAction $deploy,
     ) {}
 
     public function execute(StorefrontDeployment $deployment): StorefrontReconciliationOutcome
@@ -114,9 +114,7 @@ final class ReconcileStoreStorefrontAction
 
     private function desiredImage(StorefrontDeployment $deployment): string
     {
-        if (! $deployment->storefrontImage()->exists()) {
-            throw new InvalidArgumentException('Select a storefront image before reconciling this storefront.');
-        }
+        throw_unless($deployment->storefrontImage()->exists(), InvalidArgumentException::class, 'Select a storefront image before reconciling this storefront.');
 
         return $deployment->storefrontImage()->firstOrFail()->image;
     }

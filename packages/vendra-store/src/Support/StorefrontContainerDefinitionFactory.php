@@ -20,7 +20,7 @@ use JsonException;
  * the Engine's payload shape is kept inside the storefront runtime adapter;
  * callers above this factory still name only storefront concerns.
  */
-final class StorefrontContainerDefinitionFactory
+final readonly class StorefrontContainerDefinitionFactory
 {
     /**
      * The label a platform-placed storefront carries, and its value.
@@ -47,7 +47,7 @@ final class StorefrontContainerDefinitionFactory
      */
     public const string DOMAIN_LABEL = 'io.vendra.domain';
 
-    public function __construct(private readonly StorefrontSettings $settings) {}
+    public function __construct(private StorefrontSettings $settings) {}
 
     /**
      * @throws JsonException

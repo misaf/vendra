@@ -6,17 +6,17 @@ namespace Misaf\VendraStore\Support;
 
 use Illuminate\Support\Arr;
 
-final class StorefrontContainer
+final readonly class StorefrontContainer
 {
     /** @param array<string, string> $labels */
     public function __construct(
-        public readonly string $id,
-        public readonly string $name,
-        public readonly string $state,
-        public readonly ?string $health,
-        public readonly ?int $exitCode,
-        public readonly ?string $image,
-        public readonly array $labels,
+        public string $id,
+        public string $name,
+        public string $state,
+        public ?string $health,
+        public ?int $exitCode,
+        public ?string $image,
+        public array $labels,
     ) {}
 
     /** @param array<array-key, mixed> $payload */

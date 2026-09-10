@@ -13,7 +13,7 @@ use Misaf\VendraTransaction\Models\Wallet;
  * Validates a submitted amount against the wallet's configured per-type
  * transaction limit, when one exists.
  */
-final class WithinTransactionLimit implements ValidationRule
+final readonly class WithinTransactionLimit implements ValidationRule
 {
     public function __construct(
         private Wallet $wallet,

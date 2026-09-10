@@ -15,10 +15,10 @@ use Misaf\VendraUser\Models\User;
  * click-redirect route. Runs synchronously so it can read the current
  * request; the attribution itself is queued.
  */
-final class RegistrationSubscriber
+final readonly class RegistrationSubscriber
 {
     public function __construct(
-        private readonly AttributeReferralAction $attributeReferral,
+        private AttributeReferralAction $attributeReferral,
     ) {}
 
     public function userCreated(User $user): void
@@ -55,7 +55,7 @@ final class RegistrationSubscriber
      */
     private function referralCookie(): ?array
     {
-        $request = app(Request::class);
+        $request = resolve(Request::class);
         $value = $request->cookies->get(Config::string('vendra-affiliate.attribution.cookie_name', 'vendra_affiliate_ref'));
 
         if (! is_string($value) || $value === '') {

@@ -13,10 +13,10 @@ use Misaf\VendraSubscription\Models\Subscription;
  * A subscription was explicitly cancelled. Consumers decide how their
  * subscriber-specific units should react to the loss of access.
  */
-final class SubscriptionCancelled implements ShouldDispatchAfterCommit
+final readonly class SubscriptionCancelled implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public readonly Subscription $subscription) {}
+    public function __construct(public Subscription $subscription) {}
 }

@@ -12,12 +12,12 @@ namespace Misaf\VendraStore\Support;
  * revisit it. Returning a typed result rather than a loose array is what lets the
  * job write its status without re-checking the shape of every field.
  */
-final class StorefrontProvisionResult
+final readonly class StorefrontProvisionResult
 {
     public function __construct(
-        public readonly bool $ready,
-        public readonly ?string $reference = null,
-        public readonly ?string $imageDigest = null,
+        public bool $ready,
+        public ?string $reference = null,
+        public ?string $imageDigest = null,
     ) {}
 
     /**

@@ -19,9 +19,9 @@ use Misaf\VendraTransaction\Services\TransactionGatewayRegistry;
  * fee and metadata rows. Settlement into the ledger only happens later, on the
  * transition to Approved.
  */
-final class CreateTransactionAction
+final readonly class CreateTransactionAction
 {
-    public function __construct(private readonly TransactionGatewayRegistry $transactionGatewayRegistry) {}
+    public function __construct(private TransactionGatewayRegistry $transactionGatewayRegistry) {}
 
     /**
      * @param  array<string, mixed>  $metadata
@@ -37,9 +37,7 @@ final class CreateTransactionAction
         ?string $token = null,
         ?string $idempotencyKey = null,
     ): Transaction {
-        if ($idempotencyKey !== null && mb_trim($idempotencyKey) === '') {
-            throw new InvalidArgumentException('The transaction idempotency key cannot be empty.');
-        }
+        throw_if($idempotencyKey !== null && mb_trim($idempotencyKey) === '', InvalidArgumentException::class, 'The transaction idempotency key cannot be empty.');
 
         $gateway = $transactionGateway instanceof TransactionGateway
             ? $transactionGateway
@@ -54,7 +52,7 @@ final class CreateTransactionAction
                 'amount' => abs($amount),
             ];
 
-            if (! empty($token)) {
+            if (filled($token)) {
                 $attributes['token'] = $token;
             }
 
@@ -106,7 +104,7 @@ final class CreateTransactionAction
                 $transaction->transactionFee()->create(['amount' => $fee]);
             }
 
-            if (! empty($metadata)) {
+            if (filled($metadata)) {
                 $this->createTransactionMetadata($transaction, $metadata);
             }
 

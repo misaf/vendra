@@ -6,15 +6,15 @@ namespace Misaf\VendraStore\Support;
 
 use Illuminate\Support\Str;
 
-final class StorefrontRuntimeStatus
+final readonly class StorefrontRuntimeStatus
 {
     public function __construct(
-        public readonly bool $reachable,
-        public readonly string $driver,
-        public readonly string $apiVersion,
-        public readonly ?string $server = null,
-        public readonly ?string $message = null,
-        public readonly ?string $endpoint = null,
+        public bool $reachable,
+        public string $driver,
+        public string $apiVersion,
+        public ?string $server = null,
+        public ?string $message = null,
+        public ?string $endpoint = null,
     ) {}
 
     public function reportedEngine(): ?string

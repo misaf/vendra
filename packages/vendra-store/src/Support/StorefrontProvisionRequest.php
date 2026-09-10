@@ -17,17 +17,17 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * job out of the payload-building business: it moves a deployment through its
  * states and nothing more.
  */
-final class StorefrontProvisionRequest
+final readonly class StorefrontProvisionRequest
 {
     /**
      * @param  array<string, mixed>  $configuration  the configuration the storefront image boots on
      */
     public function __construct(
-        public readonly int $tenantId,
-        public readonly string $slug,
-        public readonly string $domain,
-        public readonly string $image,
-        public readonly array $configuration,
+        public int $tenantId,
+        public string $slug,
+        public string $domain,
+        public string $image,
+        public array $configuration,
     ) {}
 
     /**
@@ -41,9 +41,7 @@ final class StorefrontProvisionRequest
     {
         $storefrontImage = $deployment->storefrontImage;
 
-        if ($storefrontImage === null) {
-            throw new InvalidArgumentException('Select a storefront image before deploying this storefront.');
-        }
+        throw_if($storefrontImage === null, InvalidArgumentException::class, 'Select a storefront image before deploying this storefront.');
 
         return new self(
             tenantId: $deployment->store_id,

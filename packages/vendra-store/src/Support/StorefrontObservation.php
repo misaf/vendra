@@ -15,13 +15,13 @@ use Misaf\VendraStore\Enums\StorefrontRuntimeState;
  * state is what lets a converge pass tell a storefront serving the current
  * release from one still running the previous image.
  */
-final class StorefrontObservation
+final readonly class StorefrontObservation
 {
     public function __construct(
-        public readonly StorefrontRuntimeState $state,
-        public readonly ?string $image = null,
-        public readonly ?string $containerName = null,
-        public readonly ?string $domain = null,
+        public StorefrontRuntimeState $state,
+        public ?string $image = null,
+        public ?string $containerName = null,
+        public ?string $domain = null,
     ) {}
 
     /**

@@ -17,17 +17,17 @@ use Misaf\VendraAffiliate\Models\Affiliate;
  * redirecting the visitor to the configured landing URL. Unknown codes
  * redirect silently so the endpoint cannot be used to probe codes.
  */
-final class AffiliateRedirectController
+final readonly class AffiliateRedirectController
 {
     public function __construct(
-        private readonly RecordAffiliateClickAction $recordAffiliateClick,
+        private RecordAffiliateClickAction $recordAffiliateClick,
     ) {}
 
     public function __invoke(Request $request, string $code): RedirectResponse
     {
         $redirectUrl = Config::string('vendra-affiliate.attribution.redirect_url', '/');
 
-        $affiliate = Affiliate::where('code', $code)
+        $affiliate = Affiliate::query()->where('code', $code)
             ->where('status', AffiliateStatusEnum::Active)
             ->first();
 

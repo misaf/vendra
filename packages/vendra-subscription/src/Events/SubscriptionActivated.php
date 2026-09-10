@@ -14,10 +14,10 @@ use Misaf\VendraSubscription\Models\Subscription;
  * the activating transaction). Consumers react with host-specific side effects
  * such as notifying the subscriber's owner.
  */
-final class SubscriptionActivated implements ShouldDispatchAfterCommit
+final readonly class SubscriptionActivated implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public readonly Subscription $subscription) {}
+    public function __construct(public Subscription $subscription) {}
 }

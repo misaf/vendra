@@ -26,9 +26,9 @@ use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
  * reconciliation picks it up once the estate is up. Dispatching a job certain to
  * fail would only fill the failed-jobs table instead.
  */
-final class RequestStorefrontDeploymentAction
+final readonly class RequestStorefrontDeploymentAction
 {
-    public function __construct(private readonly StorefrontRuntimeConfiguration $runtime) {}
+    public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
      * @param  array<string, mixed>  $form
@@ -67,7 +67,7 @@ final class RequestStorefrontDeploymentAction
         ]);
 
         if ($this->runtime->isConfigured()) {
-            ProvisionStorefrontJob::dispatch($deployment->id)->afterCommit();
+            dispatch(new ProvisionStorefrontJob($deployment->id))->afterCommit();
         }
 
         return $deployment;

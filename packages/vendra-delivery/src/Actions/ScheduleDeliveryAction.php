@@ -14,9 +14,9 @@ use Misaf\VendraDelivery\Support\DeliverySchedule;
 use Misaf\VendraOrder\Models\Order;
 use RuntimeException;
 
-final class ScheduleDeliveryAction
+final readonly class ScheduleDeliveryAction
 {
-    public function __construct(private readonly DeliverySchedule $schedule) {}
+    public function __construct(private DeliverySchedule $schedule) {}
 
     /**
      * Record where and when a placed order travels.
@@ -40,9 +40,7 @@ final class ScheduleDeliveryAction
         ?float $latitude = null,
         ?float $longitude = null,
     ): Delivery {
-        if (! $quote->isDeliverable()) {
-            throw new RuntimeException('The delivery address is outside the delivered range and must be quoted by hand.');
-        }
+        throw_unless($quote->isDeliverable(), RuntimeException::class, 'The delivery address is outside the delivered range and must be quoted by hand.');
 
         Validator::make([
             'scheduled_for' => $scheduledFor,

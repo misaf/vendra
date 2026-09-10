@@ -9,9 +9,9 @@ use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use RuntimeException;
 
-final class RunTenantSeeders
+final readonly class RunTenantSeeders
 {
-    public function __construct(private readonly TenantSeeders $seeders) {}
+    public function __construct(private TenantSeeders $seeders) {}
 
     public function handle(TenantProvisioned $event): void
     {

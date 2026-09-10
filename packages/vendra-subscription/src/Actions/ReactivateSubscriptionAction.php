@@ -9,9 +9,9 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Subscription;
 
-final class ReactivateSubscriptionAction
+final readonly class ReactivateSubscriptionAction
 {
-    public function __construct(private readonly SubscribeAction $subscribe) {}
+    public function __construct(private SubscribeAction $subscribe) {}
 
     public function execute(Subscription $subscription): Subscription
     {

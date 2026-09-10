@@ -28,9 +28,9 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
  * domain, so an owner arrives typed as a `SubscriptionSubscriber` and only
  * `stores.reseller_id` — a plain nullable key here — records which one it was.
  */
-final class AssignStoreOwnerAction
+final readonly class AssignStoreOwnerAction
 {
-    public function __construct(private readonly StoreQuota $storeQuota) {}
+    public function __construct(private StoreQuota $storeQuota) {}
 
     /**
      * @param  (Model&SubscriptionSubscriber)|null  $owner

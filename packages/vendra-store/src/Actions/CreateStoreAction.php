@@ -26,11 +26,11 @@ use Misaf\VendraUser\Models\User;
  * subscriber rather than a concrete Reseller, so the store domain stays below
  * the reseller domain in the dependency graph.
  */
-final class CreateStoreAction
+final readonly class CreateStoreAction
 {
     public function __construct(
-        private readonly CreateUserAction $createUserAction,
-        private readonly StoreQuota $storeQuota,
+        private CreateUserAction $createUserAction,
+        private StoreQuota $storeQuota,
     ) {}
 
     /**

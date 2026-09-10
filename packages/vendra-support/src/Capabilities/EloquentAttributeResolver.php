@@ -9,20 +9,20 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
 use Throwable;
 
-final class EloquentAttributeResolver implements AttributeResolver
+final readonly class EloquentAttributeResolver implements AttributeResolver
 {
     /**
      * @param  class-string<Model>  $attributeModel
      * @param  class-string<Model>  $attributeValueModel
      */
     public function __construct(
-        private readonly string $attributeModel,
-        private readonly string $attributeValueModel,
-        private readonly AttributeResolver $fallback = new NullAttributeResolver,
-        private readonly string $nameColumn = 'name',
-        private readonly string $unitColumn = 'unit',
-        private readonly string $activeColumn = 'active',
-        private readonly string $positionColumn = 'position',
+        private string $attributeModel,
+        private string $attributeValueModel,
+        private AttributeResolver $fallback = new NullAttributeResolver,
+        private string $nameColumn = 'name',
+        private string $unitColumn = 'unit',
+        private string $activeColumn = 'active',
+        private string $positionColumn = 'position',
     ) {}
 
     public function available(): bool

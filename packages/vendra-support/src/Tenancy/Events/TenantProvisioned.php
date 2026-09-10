@@ -12,10 +12,10 @@ use Illuminate\Database\Eloquent\Model;
  * own tenant-scoped seeders (see TenantSeeders) or other provisioning side
  * effects, without the provisioning module needing to know they exist.
  */
-final class TenantProvisioned implements ShouldDispatchAfterCommit
+final readonly class TenantProvisioned implements ShouldDispatchAfterCommit
 {
     public function __construct(
-        public readonly Model $tenant,
-        public readonly bool $shouldSeed = false,
+        public Model $tenant,
+        public bool $shouldSeed = false,
     ) {}
 }

@@ -17,9 +17,9 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * recorded desired state, so the next reconciliation pass converges on this
  * intent rather than reversing it.
  */
-final class RestartStoreStorefrontAction
+final readonly class RestartStoreStorefrontAction
 {
-    public function __construct(private readonly StorefrontProvisioner $provisioner) {}
+    public function __construct(private StorefrontProvisioner $provisioner) {}
 
     public function execute(StorefrontDeployment $deployment): void
     {

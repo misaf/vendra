@@ -20,9 +20,9 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * pretending otherwise would only mean a rolled-back delete leaving a container
  * that is already gone.
  */
-final class DestroyStoreStorefrontAction
+final readonly class DestroyStoreStorefrontAction
 {
-    public function __construct(private readonly StorefrontProvisioner $provisioner) {}
+    public function __construct(private StorefrontProvisioner $provisioner) {}
 
     public function execute(StorefrontDeployment $deployment): void
     {

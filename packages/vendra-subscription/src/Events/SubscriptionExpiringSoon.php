@@ -14,10 +14,10 @@ use Misaf\VendraSubscription\Models\Subscription;
  * reminded. Consumers react by reminding the subscriber's owner. The engine
  * marks the subscription reminded regardless of whether a consumer acts.
  */
-final class SubscriptionExpiringSoon implements ShouldDispatchAfterCommit
+final readonly class SubscriptionExpiringSoon implements ShouldDispatchAfterCommit
 {
     use Dispatchable;
     use SerializesModels;
 
-    public function __construct(public readonly Subscription $subscription) {}
+    public function __construct(public Subscription $subscription) {}
 }
