@@ -43,6 +43,7 @@ final class ProductPrice extends Model implements ShouldLogActivity
 
     /** @use HasFactory<ProductPriceFactory> */
     use HasFactory;
+
     use SoftDeletes;
 
     /**
