@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 return [
-    'navigation_group'       => 'Console',
+    'navigation_group'                => 'Console',
+    'navigation_group_resellers'      => 'Resellers',
+    'navigation_group_stores'         => 'Stores',
+
 
     'plan'                                    => 'Plan',
     'plans'                                   => 'Plans',
@@ -16,7 +19,6 @@ return [
     'provisioning'                            => 'Provisioning',
     'provisioning_stores'                     => 'Stores pending provisioning',
     'failed_stores'                           => 'Failed',
-    'storefronts_live'                        => 'Storefronts live',
     'storefronts_ready'                       => 'Ready storefronts',
     'failed_deployments'                      => 'Failed deployments',
     'intervention_required'                   => 'Intervention required',
@@ -88,7 +90,6 @@ return [
     'no_trial'               => 'No trial',
     'stores_count'           => 'Stores',
     'stores_used'            => 'Used',
-    'stores_remaining'       => 'Remaining',
     'store_capacity'         => 'Store capacity',
     'current_subscription'   => 'Current subscription',
     'subscription_summary'   => 'Subscription',
@@ -144,14 +145,12 @@ return [
     'create_storefront_hint'                 => 'Provision a store-specific storefront after the store is created.',
     'storefront_slug'                        => 'Storefront slug',
     'storefront_slug_hint'                   => 'Lowercase letters, numbers, and hyphens only.',
-    'storefront_theme'                       => 'Storefront theme',
     'storefront_image'                       => 'Storefront image',
     'storefront_images'                      => 'Storefront images',
     'storefront_image_hint'                  => 'Choose an operator-approved storefront build.',
     'storefront_image_reference'             => 'Container image reference',
     'storefront_image_reference_hint'        => 'Use an immutable digest such as registry.example/storefront@sha256:…',
-    'storefront_themes'                      => 'Available themes',
-    'storefront_themes_hint'                 => 'Enter the theme identifiers built into this image.',
+    'storefront_image_notes'                 => 'Notes',
     'storefront_name_en'                     => 'English storefront name',
     'storefront_name_fa'                     => 'Persian storefront name',
     'storefront_business_type'               => 'Business type',
@@ -176,6 +175,7 @@ return [
     'owner_credentials'                      => 'Owner username: :username · Password: :password',
 
     'admin_url'              => 'Admin URL',
+    'storefront_url'         => 'Storefront URL',
     'custom_url'             => 'Custom URL',
     'url_copied'             => 'URL copied',
 
@@ -316,7 +316,7 @@ return [
             'plans'                  => 'Manage the subscription plans available to resellers.',
             'resellers'              => 'Manage reseller accounts and their store capacity.',
             'stores'                 => 'Manage stores, domains, and access status.',
-            'storefront_images'      => 'Manage approved storefront builds and their available themes.',
+            'storefront_images'      => 'Manage the approved storefront image catalog.',
             'storefront_deployments' => 'Inspect deployment history, failures, runtime state, and recovery actions.',
         ],
         'empty_state' => [

@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 return [
-    'navigation_group'       => 'کنسول',
+    'navigation_group'                => 'کنسول',
+    'navigation_group_resellers'      => 'حساب‌ها',
+    'navigation_group_stores'         => 'املاک',
+
 
     'plan'                                    => 'طرح',
     'plans'                                   => 'طرح‌ها',
@@ -15,7 +18,6 @@ return [
     'stores_active_suspended'                 => ':active فعال · :suspended معلق',
     'provisioning'                            => 'در حال راه‌اندازی',
     'failed_stores'                           => 'ناموفق',
-    'storefronts_live'                        => 'ویترین‌های فعال',
     'failed_deployments'                      => 'استقرارهای ناموفق',
     'activity_log'                            => 'فعالیت',
     'activity_logs'                           => 'فعالیت',
@@ -118,14 +120,12 @@ return [
     'create_storefront_hint'                 => 'پس از ایجاد ملک، فروشگاه اختصاصی آن مستقر می‌شود.',
     'storefront_slug'                        => 'نامک فروشگاه',
     'storefront_slug_hint'                   => 'فقط حروف کوچک انگلیسی، عدد و خط تیره.',
-    'storefront_theme'                       => 'قالب فروشگاه',
     'storefront_image'                       => 'تصویر کانتینر فروشگاه',
     'storefront_images'                      => 'تصاویر کانتینر فروشگاه',
     'storefront_image_hint'                  => 'یک نسخه تأییدشده فروشگاه را انتخاب کنید.',
     'storefront_image_reference'             => 'مرجع تصویر کانتینر',
     'storefront_image_reference_hint'        => 'از digest تغییرناپذیر مانند registry.example/storefront@sha256:… استفاده کنید.',
-    'storefront_themes'                      => 'قالب‌های موجود',
-    'storefront_themes_hint'                 => 'شناسه قالب‌های ساخته‌شده در این تصویر را وارد کنید.',
+    'storefront_image_notes'                 => 'یادداشت‌ها',
     'storefront_name_en'                     => 'نام انگلیسی فروشگاه',
     'storefront_name_fa'                     => 'نام فارسی فروشگاه',
     'storefront_business_type'               => 'نوع کسب‌وکار',
@@ -150,6 +150,7 @@ return [
     'owner_credentials'                      => 'نام کاربری مالک: :username · رمز عبور: :password',
 
     'admin_url'              => 'URL ادمین',
+    'storefront_url'         => 'URL ویترین',
     'custom_url'             => 'URL سفارشی',
     'url_copied'             => 'URL کپی شد',
 
@@ -291,7 +292,7 @@ return [
             'plans'                  => 'مدیریت طرح‌های اشتراک در دسترس حساب‌ها.',
             'resellers'              => 'مدیریت حساب‌ها و ظرفیت املاک آن‌ها.',
             'stores'                 => 'مدیریت املاک، دامنه‌ها و وضعیت دسترسی.',
-            'storefront_images'      => 'مدیریت نسخه‌های تأییدشده فروشگاه و قالب‌های آن‌ها.',
+            'storefront_images'      => 'مدیریت کاتالوگ تصاویر تأییدشده فروشگاه.',
             'storefront_deployments' => 'تاریخچه استقرار، خطاها، وضعیت اجرا و عملیات بازیابی را بررسی کنید.',
         ],
         'empty_state' => [

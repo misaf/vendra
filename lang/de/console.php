@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 return [
-    'navigation_group'       => 'Konsole',
+    'navigation_group'                => 'Konsole',
+    'navigation_group_resellers'      => 'Konten',
+    'navigation_group_stores'         => 'Stores',
+
 
     'plan'                                    => 'Tarif',
     'plans'                                   => 'Tarife',
@@ -15,7 +18,6 @@ return [
     'stores_active_suspended'                 => ':active aktiv · :suspended gesperrt',
     'provisioning'                            => 'Bereitstellung',
     'failed_stores'                           => 'Fehlgeschlagen',
-    'storefronts_live'                        => 'Storefronts live',
     'failed_deployments'                      => 'Fehlgeschlagene Deployments',
     'activity_log'                            => 'Aktivität',
     'activity_logs'                           => 'Aktivität',
@@ -118,14 +120,12 @@ return [
     'create_storefront_hint'                 => 'Nach Erstellung des Mandanten einen objektspezifischen Shop bereitstellen.',
     'storefront_slug'                        => 'Shop-Slug',
     'storefront_slug_hint'                   => 'Nur Kleinbuchstaben, Zahlen und Bindestriche.',
-    'storefront_theme'                       => 'Shop-Theme',
     'storefront_image'                       => 'Storefront-Image',
     'storefront_images'                      => 'Storefront-Images',
     'storefront_image_hint'                  => 'Wählen Sie einen freigegebenen Storefront-Build.',
     'storefront_image_reference'             => 'Container-Image-Referenz',
     'storefront_image_reference_hint'        => 'Verwenden Sie einen unveränderlichen Digest wie registry.example/storefront@sha256:…',
-    'storefront_themes'                      => 'Verfügbare Themes',
-    'storefront_themes_hint'                 => 'Geben Sie die in diesem Image enthaltenen Theme-Kennungen ein.',
+    'storefront_image_notes'                 => 'Notizen',
     'storefront_name_en'                     => 'Englischer Shopname',
     'storefront_name_fa'                     => 'Persischer Shopname',
     'storefront_business_type'               => 'Geschäftstyp',
@@ -150,6 +150,7 @@ return [
     'owner_credentials'                      => 'Inhaber-Benutzername: :username · Passwort: :password',
 
     'admin_url'              => 'Admin-URL',
+    'storefront_url'         => 'Storefront-URL',
     'custom_url'             => 'Eigene URL',
     'url_copied'             => 'URL kopiert',
 
@@ -291,7 +292,7 @@ return [
             'plans'                  => 'Verwalten Sie die verfügbaren Abonnement-Tarife.',
             'resellers'              => 'Verwalten Sie Konten und deren Store-Kapazität.',
             'stores'                 => 'Verwalten Sie Stores, Domains und Zugriffsstatus.',
-            'storefront_images'      => 'Verwalten Sie freigegebene Storefront-Builds und deren Themes.',
+            'storefront_images'      => 'Verwalten Sie den Katalog freigegebener Storefront-Images.',
             'storefront_deployments' => 'Prüfen Sie Verlauf, Fehler, Laufzeitstatus und Wiederherstellungsaktionen.',
         ],
         'empty_state' => [
