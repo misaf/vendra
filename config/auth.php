@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Misaf\VendraConsole\Models\ConsoleUser;
-use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraUser\Models\User;
 
 return [
@@ -49,12 +47,12 @@ return [
 
         'console' => [
             'driver' => 'session',
-            'provider' => 'console_users',
+            'provider' => 'console',
         ],
 
         'reseller' => [
             'driver' => 'session',
-            'provider' => 'reseller_users',
+            'provider' => 'reseller',
         ],
 
         'sanctum' => [
@@ -86,14 +84,21 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
-        'console_users' => [
-            'driver' => 'eloquent',
-            'model' => ConsoleUser::class,
+        /*
+        | Console and reseller identities are the same canonical User with a
+        | null tenant id, but each panel keeps its own provider so a panel's
+        | lookups can be retargeted without moving the other's. Both use the
+        | platform-scoped driver, which constrains every lookup to
+        | `tenant_id IS NULL`.
+        */
+        'console' => [
+            'driver' => 'platform-eloquent',
+            'model' => env('AUTH_MODEL', User::class),
         ],
 
-        'reseller_users' => [
-            'driver' => 'eloquent',
-            'model' => ResellerUser::class,
+        'reseller' => [
+            'driver' => 'platform-eloquent',
+            'model' => env('AUTH_MODEL', User::class),
         ],
     ],
 
@@ -124,16 +129,25 @@ return [
             'throttle' => 60,
         ],
 
-        'console_users' => [
-            'provider' => 'console_users',
-            'table' => 'console_password_reset_tokens',
+        /*
+        | Console and reseller each keep their own token store. Reset tokens
+        | are keyed by email alone, so any shared table would let one scope
+        | overwrite or consume another's token — both against the tenant-facing
+        | `users` broker, whose emails may legitimately collide, and against
+        | each other, since one platform identity may hold both a console
+        | grant and a reseller membership. Expiry and throttle stay at the
+        | framework defaults.
+        */
+        'console' => [
+            'provider' => 'console',
+            'table' => env('AUTH_CONSOLE_PASSWORD_RESET_TOKEN_TABLE', 'console_password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
 
-        'reseller_users' => [
-            'provider' => 'reseller_users',
-            'table' => 'reseller_password_reset_tokens',
+        'reseller' => [
+            'provider' => 'reseller',
+            'table' => env('AUTH_RESELLER_PASSWORD_RESET_TOKEN_TABLE', 'reseller_password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],

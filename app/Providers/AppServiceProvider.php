@@ -28,7 +28,6 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Mcp\Server;
 use Misaf\VendraReseller\Models\Reseller;
-use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraReseller\Support\TransactionSubscriptionCharger;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -67,17 +66,7 @@ final class AppServiceProvider extends ServiceProvider
 
         Relation::morphMap([
             'reseller' => Reseller::class,
-            'reseller_user' => ResellerUser::class,
         ]);
-
-        /*
-         | The registry drives the `vendra-tenant:enable` retrofit, which
-         | backfills every null tenant id and then forces the column NOT NULL.
-         | Nothing the host owns wants that: `storefront_deployments` describes
-         | the store itself and is keyed by `store_id`, and `settings` keeps a
-         | null `tenant_id` on purpose for its platform-wide rows. Register a
-         | table here only when a non-null `tenant_id` is the right end state.
-         */
 
         URL::forceScheme('https');
         Model::shouldBeStrict();

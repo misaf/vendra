@@ -189,7 +189,6 @@
             "Misaf\\VendraCartApi\\Tests\\": "packages/vendra-cart-api/tests/",
             "Misaf\\VendraCart\\Database\\Factories\\": "packages/vendra-cart/database/factories/",
             "Misaf\\VendraCart\\Tests\\": "packages/vendra-cart/tests/",
-            "Misaf\\VendraConsole\\Database\\Factories\\": "packages/vendra-console/database/factories/",
             "Misaf\\VendraConsole\\Tests\\": "packages/vendra-console/tests/",
             "Misaf\\VendraCurrency\\Database\\Factories\\": "packages/vendra-currency/database/factories/",
             "Misaf\\VendraCurrency\\Tests\\": "packages/vendra-currency/tests/",
