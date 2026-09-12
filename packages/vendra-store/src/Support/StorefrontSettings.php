@@ -49,7 +49,7 @@ final readonly class StorefrontSettings
      * Read the current configuration.
      *
      * Bound as a non-singleton so a configuration change — a test setting an
-     * image, an operator reloading config — is picked up on the next resolve
+     * image, an administrator reloading config — is picked up on the next resolve
      * rather than frozen at first use.
      */
     public static function fromConfig(): self
@@ -97,7 +97,7 @@ final readonly class StorefrontSettings
     /**
      * The CA bundle path inside the container.
      *
-     * Resolved against the read-only certificate mount, so operators configure a
+     * Resolved against the read-only certificate mount, so administrators configure a
      * file name rather than an in-container path they cannot see.
      */
     public function resolvedCaFile(): string
@@ -113,7 +113,7 @@ final readonly class StorefrontSettings
      * The fleet's per-storefront caps.
      *
      * A zero, a blank, or a missing key lifts that cap rather than setting it
-     * to nothing: the operator-facing way to say "uncapped" is to empty the
+     * to nothing: the administrator-facing way to say "uncapped" is to empty the
      * environment variable.
      *
      * @param  array<array-key, mixed>  $storefront

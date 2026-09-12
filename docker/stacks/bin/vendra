@@ -83,7 +83,7 @@ BASE_DOMAIN="$(config_value BASE_DOMAIN)"
 NETWORK="$(config_value STOREFRONT_NETWORK traefik-public)"
 
 # Docker and Podman both serve the Engine API and the same compose files, so
-# the estate is driven through whichever one the operator names. Rootless
+# the estate is driven through whichever one you name. Rootless
 # Podman is the safer choice: the socket the storefront worker mounts is then
 # not root-equivalent on the host.
 RUNTIME="$(config_value CONTAINER_RUNTIME docker)"
@@ -105,7 +105,7 @@ STATE_DIR="$(config_value VENDRA_STATE_DIR /var/lib/vendra)"
 # HSTS is deliberately off unless real certificates are in play. Sending it with
 # a certificate the browser does not trust pins the host to HTTPS *and* removes
 # the "proceed anyway" bypass, leaving a local .test host unreachable until the
-# operator clears HSTS state by hand.
+# someone clears HSTS state by hand.
 CERT_RESOLVER="$(config_value CERT_RESOLVER)"
 TRAEFIK_HSTS_SECONDS="$(config_value TRAEFIK_HSTS_SECONDS)"
 if [ -n "$CERT_RESOLVER" ]; then

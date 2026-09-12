@@ -16,7 +16,7 @@ use InvalidArgumentException;
  * turns that into an immediate failure naming the missing field.
  *
  * Formerly named `StorefrontSpecification`, which promised the composability of
- * the Specification pattern that it never had: this throws with an operator-facing
+ * the Specification pattern that it never had: this throws with an administrator-facing
  * message rather than answering a boolean, so it is named for what it does. The
  * same field maps also drive {@see deploymentRules()}, so the console form and
  * the provisioner agree on what "complete" means instead of describing it twice.

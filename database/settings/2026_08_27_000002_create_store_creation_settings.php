@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
 /**
- * The platform is open for new stores on a fresh install; an operator closes it
+ * The platform is open for new stores on a fresh install; an administrator closes it
  * from the console's platform settings page.
  */
 return new class extends SettingsMigration

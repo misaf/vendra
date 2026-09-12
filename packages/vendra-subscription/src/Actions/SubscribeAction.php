@@ -36,7 +36,7 @@ final readonly class SubscribeAction
      * Create a subscription period for any subscriber. Paid periods remain
      * pending without replacing current access until their durable payment
      * succeeds; immediately active periods raise SubscriptionActivated so
-     * consumers can react (e.g. notifying the owner).
+     * consumers can react (e.g. notifying the subscriber).
      *
      * @param  Model&SubscriptionSubscriber  $subscriber
      *

@@ -17,7 +17,7 @@ beforeEach(function (): void {
     Queue::fake();
 });
 
-it('hashes a provided owner password', function (): void {
+it('hashes a provided administrator password', function (): void {
     $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
@@ -29,7 +29,7 @@ it('hashes a provided owner password', function (): void {
         ->and(Hash::check('secret-password', Arr::get($result, 'user')->password))->toBeTrue();
 });
 
-it('generates a random owner password when none is provided', function (): void {
+it('generates a random administrator password when none is provided', function (): void {
     $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
@@ -41,7 +41,7 @@ it('generates a random owner password when none is provided', function (): void 
         ->and(Hash::check(Arr::get($result, 'password'), Arr::get($result, 'user')->password))->toBeTrue();
 });
 
-it('assigns the owner role for the user guard when another guard is active', function (): void {
+it('assigns the administrator role for the user guard when another guard is active', function (): void {
     Config::set('auth.defaults.guard', 'console');
 
     $result = resolve(ProvisionStoreAction::class)->execute([

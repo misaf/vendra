@@ -13,13 +13,13 @@ it('contains every package table in the fresh database baseline', function (): v
         ->and(Schema::hasColumns('permissions', ['tenant_id', 'description']))->toBeTrue()
         ->and(Schema::hasColumn('tags', 'position'))->toBeTrue()
         ->and(Schema::hasColumn('tags', 'order_column'))->toBeFalse()
-        ->and(Schema::hasColumns('console_users', ['email', 'email_verified_at', 'password']))->toBeTrue()
         ->and(Schema::hasColumns('console_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
-        ->and(Schema::hasColumns('reseller_users', ['reseller_id', 'username', 'email', 'email_verified_at', 'password']))->toBeTrue()
         ->and(Schema::hasColumns('reseller_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
+        ->and(Schema::hasTable('platform_password_reset_tokens'))->toBeFalse()
+        ->and(Schema::hasColumns('reseller_users', ['reseller_id', 'user_id']))->toBeTrue()
         ->and(Schema::hasColumns('resellers', ['name', 'email', 'offboarding_reason', 'offboarded_at']))->toBeTrue()
         ->and(Schema::hasColumn('resellers', 'owner_name'))->toBeFalse()
-        ->and(Schema::hasColumn('resellers', 'owner_email'))->toBeFalse()
+        ->and(Schema::hasColumn('resellers', 'user_email'))->toBeFalse()
         ->and(Schema::hasColumn('users', 'is_console_admin'))->toBeFalse()
         ->and(Schema::hasColumn('users', 'reseller_id'))->toBeFalse();
 });
@@ -139,13 +139,18 @@ it('stores independent tenant availability and durable provisioning state', func
         ->and(Schema::hasIndex('stores', ['provisioning_status']))->toBeTrue();
 });
 
-it('enforces one active owner and subscription per reseller', function (): void {
+it('enforces one active user and subscription per reseller', function (): void {
     expect(Schema::hasIndex('reseller_users', ['active_reseller_guard'], 'unique'))->toBeTrue()
-        ->and(Schema::hasIndex('reseller_users', ['active_username_guard'], 'unique'))->toBeTrue()
-        ->and(Schema::hasIndex('reseller_users', ['active_email_guard'], 'unique'))->toBeTrue()
+        ->and(Schema::hasIndex('reseller_users', ['reseller_id', 'user_id'], 'unique'))->toBeTrue()
         ->and(Schema::hasForeignKey('reseller_users', ['reseller_id']))->toBeTrue()
+        ->and(Schema::hasForeignKey('reseller_users', ['user_id']))->toBeTrue()
         ->and(Schema::hasColumn('subscriptions', 'active_subscriber_guard'))->toBeTrue()
         ->and(Schema::hasIndex('subscriptions', ['subscriber_type', 'active_subscriber_guard'], 'unique'))->toBeTrue();
+});
+
+it('keeps platform-level user identities globally unique', function (): void {
+    expect(Schema::hasIndex('users', ['global_email_guard'], 'unique'))->toBeTrue()
+        ->and(Schema::hasIndex('users', ['global_username_guard'], 'unique'))->toBeTrue();
 });
 
 it('uses final create migrations instead of fresh-install follow-ups', function (): void {
@@ -181,7 +186,9 @@ it('keeps package migration stubs identical to application baselines', function 
 /*
  | The registry drives `vendra-tenant:enable`, which backfills every null tenant
  | id and then forces the column NOT NULL. `settings` is excluded because its
- | null `tenant_id` is the platform scope and must stay null; `store_domains` and
+ | null `tenant_id` is the platform scope and must stay null; `users` is
+ | excluded because platform-level identities (console users, reseller
+ | users) legitimately carry a null tenant id; `store_domains` and
  | `store_user` are keyed by `store_id` instead.
  */
 it('registers every tenant-aware application table for legacy schema retrofits', function (): void {
@@ -192,7 +199,7 @@ it('registers every tenant-aware application table for legacy schema retrofits',
 
     $tenantAwareTables = collect(Schema::getTableListing(schemaQualified: false))
         ->filter(fn (string $table): bool => Schema::hasColumn($table, 'tenant_id'))
-        ->reject(fn (string $table): bool => in_array($table, ['settings', 'store_domains', 'store_user'], true))
+        ->reject(fn (string $table): bool => in_array($table, ['settings', 'users', 'store_domains', 'store_user'], true))
         ->values();
 
     expect($registeredTables->all())->toEqualCanonicalizing($tenantAwareTables->all());

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use LogicException;
-use Misaf\VendraStore\Contracts\StoreOwnerResolver;
+use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Support\StoreQuota;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
@@ -17,7 +17,7 @@ use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 final readonly class RestoreOffboardedStoreAction
 {
     public function __construct(
-        private StoreOwnerResolver $ownerResolver,
+        private StoreResellerResolver $resellerResolver,
         private StoreQuota $storeQuota,
     ) {}
 
@@ -34,7 +34,7 @@ final readonly class RestoreOffboardedStoreAction
                 return $lockedStore;
             }
 
-            $this->assertOwnerHasRoom($lockedStore);
+            $this->assertResellerHasRoom($lockedStore);
 
             $metadata = $lockedStore->metadata ?? [];
             Arr::set($metadata, 'offboarding.restored_at', now()->toIso8601String());
@@ -52,24 +52,24 @@ final readonly class RestoreOffboardedStoreAction
         }, attempts: 5);
     }
 
-    private function assertOwnerHasRoom(Store $store): void
+    private function assertResellerHasRoom(Store $store): void
     {
         if ($store->reseller_id === null) {
             return;
         }
 
-        $owner = $this->ownerResolver->find($store->reseller_id);
+        $reseller = $this->resellerResolver->find($store->reseller_id);
 
-        if (! $owner instanceof Model || ! $owner instanceof SubscriptionSubscriber) {
-            throw new LogicException("Store [{$store->id}] cannot be restored because its billing owner is unavailable.");
+        if (! $reseller instanceof Model || ! $reseller instanceof SubscriptionSubscriber) {
+            throw new LogicException("Store [{$store->id}] cannot be restored because its billing reseller is unavailable.");
         }
 
-        $lockedOwner = $owner->newQuery()->whereKey($owner->getKey())->lockForUpdate()->firstOrFail();
+        $lockedReseller = $reseller->newQuery()->whereKey($reseller->getKey())->lockForUpdate()->firstOrFail();
 
-        if (! $lockedOwner instanceof SubscriptionSubscriber) {
-            throw new LogicException("Store [{$store->id}] has an invalid billing owner.");
+        if (! $lockedReseller instanceof SubscriptionSubscriber) {
+            throw new LogicException("Store [{$store->id}] has an invalid billing reseller.");
         }
 
-        $this->storeQuota->assertCanCreateStore($lockedOwner);
+        $this->storeQuota->assertCanCreateStore($lockedReseller);
     }
 }

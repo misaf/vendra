@@ -126,7 +126,7 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     /**
      * Fail before anything is placed when the runtime is not answering.
      *
-     * `ping()` reports rather than throws, so the message an operator sees names
+     * `ping()` reports rather than throws, so the message an administrator sees names
      * the endpoint and whether it was the API version that was refused.
      */
     private function assertRuntimeReachable(): StorefrontRuntimeStatus
@@ -145,7 +145,7 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
      *
      * Networks are per-daemon, so "it does not exist" and "you are talking to a
      * different daemon than you think" produce the identical symptom. Naming the
-     * endpoint and what answered there separates them without the operator
+     * endpoint and what answered there separates them without the administrator
      * having to go looking, and a configured/reported engine mismatch is called
      * out because it is the likeliest way to arrive here with the network sitting
      * in front of you on the other runtime.
@@ -178,7 +178,7 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     /**
      * Refuse to touch a container the platform did not place.
      *
-     * Container names are chosen by an operator-configurable prefix, so a
+     * Container names are chosen by an administrator-configurable prefix, so a
      * collision with something else on the same runtime is possible. Removing
      * somebody else's container because it happened to answer to the name we
      * wanted is not a recoverable mistake, so ownership is checked first.

@@ -215,7 +215,7 @@ it('names the daemon it asked when a network is missing', function (): void {
 /*
  | The incident this reports on: an endpoint that had been moved to the other
  | daemon still pinged, so the only symptom was a network that was plainly there
- | when the operator looked for it — on the runtime nobody was talking to.
+ | when the administrator looked for it — on the runtime nobody was talking to.
  */
 it('blames the daemon rather than the network when the endpoint is serving the other runtime', function (): void {
     fakeDockerEngine(networkExists: false, serverHeader: 'Libpod/5.8.6 (linux)');
@@ -362,7 +362,7 @@ describe('resource caps', function (): void {
         });
     });
 
-    it('honours a PID cap the operator overrides', function (): void {
+    it('honours a PID cap an administrator overrides', function (): void {
         Config::set('vendra-store.storefront.pids_limit', 128);
         fakeDockerEngine();
 

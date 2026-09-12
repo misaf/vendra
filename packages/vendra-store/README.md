@@ -7,7 +7,7 @@ A Store *is* the tenant — it implements `Misaf\VendraTenant\Contracts\TenantCo
 rather than pointing at a separate tenant row — so `stores` is the only table
 describing it, and it is the isolation boundary for everything inside it:
 products, orders, customers and vendors. A store has a domain, an optional
-billing owner, and one storefront; this package decides *when* that storefront
+billing reseller, and one storefront; this package decides *when* that storefront
 should be deployed, started, stopped, or destroyed and *what* it should contain.
 
 How a runtime is made to agree is somebody else's problem. Everything crossing
@@ -23,9 +23,9 @@ never mentions containers — the shipped implementation happens to use them.
   `misaf/vendra-subscription`, `misaf/vendra-permission`, `misaf/vendra-user`
   and `misaf/vendra-support`
 
-`misaf/vendra-reseller` is **not** a requirement. A store's billing owner is
-reached through `Contracts\StoreOwnerResolver`, which the reseller package binds;
-without it a store simply has no owner.
+`misaf/vendra-reseller` is **not** a requirement. A store's billing reseller is
+reached through `Contracts\StoreResellerResolver`, which the reseller package binds;
+without it a store simply has no reseller.
 
 ## Installation
 
@@ -59,9 +59,9 @@ itself — `store_domains`, `storefront_deployments` — name it outright with
 ### Store status
 
 A store's condition is spread over three columns, each written by a different
-concern: `provisioning_status` by the provisioner, `active` by an operator, and
+concern: `provisioning_status` by the provisioner, `active` by an administrator, and
 `billing_suspended_at` by subscription enforcement. `Store::status()` derives the
-one reading an operator wants — `StoreStatus::Pending`, `Provisioning`, `Active`,
+the one reading an administrator wants — `StoreStatus::Pending`, `Provisioning`, `Active`,
 `Suspended` or `Failed` — and `Store::query()->withStatus(...)` is that same rule
 expressed as SQL. It is derived rather than stored, so no fourth column can drift
 out of step with the three that own it.
@@ -133,36 +133,36 @@ use Misaf\VendraStore\Actions\ProvisionStoreAction;
 
 ['tenant' => $tenant, 'user' => $user, 'password' => $password] = app(ProvisionStoreAction::class)
     ->execute(
-        data: ['domain' => 'flowers-a.com', 'email' => 'owner@flowers-a.com'],
+        data: ['domain' => 'flowers-a.com', 'email' => 'admin@flowers-a.com'],
         shouldSeed: true,
         reseller: $reseller,
     );
 ```
 
 The console and the reseller panel both call this and differ only in which
-reseller they resolve, so the flow exists once. It creates the tenant, the owner
+reseller they resolve, so the flow exists once. It creates the tenant, the administrator
 user, and the administrator role, then queues the work that finishes
 provisioning.
 
-### Reassigning a store's owner
+### Reassigning a store's billing reseller
 
 ```php
-use Misaf\VendraStore\Actions\AssignStoreOwnerAction;
+use Misaf\VendraStore\Actions\AssignStoreResellerAction;
 
-app(AssignStoreOwnerAction::class)->execute($store, $reseller);  // hand it over
-app(AssignStoreOwnerAction::class)->execute($store, null);       // take it back
+app(AssignStoreResellerAction::class)->execute($store, $reseller);  // hand it over
+app(AssignStoreResellerAction::class)->execute($store, null);       // take it back
 ```
 
-The receiving owner gains a store, so this runs the same row lock and
+The receiving reseller gains a store, so this runs the same row lock and
 `StoreQuota` check as creating one, and throws `SubscriptionLimitException` when
-their plan is full. Re-selecting the owner a store already has is a no-op rather
-than a quota failure. The action names no reseller — the owner is a
+their plan is full. Re-selecting the reseller a store already has is a no-op rather
+than a quota failure. The action names no reseller class — the reseller is a
 `SubscriptionSubscriber` — which is what keeps this package installable without
 `misaf/vendra-reseller`.
 
 ### Operating and offboarding a store
 
-`SuspendStoreAction` and `ReactivateStoreAction` own operator availability;
+`SuspendStoreAction` and `ReactivateStoreAction` own administrator-driven availability;
 reactivation is allowed only after tenant provisioning is ready.
 `RetryStoreProvisioningAction` resets a failed provisioning attempt and queues
 the existing completion job. Storefront operations use the existing
@@ -172,8 +172,8 @@ start/stop/restart actions, while `RedeployStoreStorefrontAction` and
 `OffboardStoreAction` is the supported removal path. It records a required
 reason and prior active state in metadata, inactivates and soft-deletes the
 store, and lets `StoreObserver` stop its storefront. Historical domains,
-subscriptions, ownership, and tenant data are retained. Restore through
-`RestoreOffboardedStoreAction`, which rechecks owner/quota constraints and only
+subscriptions, billing, and tenant data are retained. Restore through
+`RestoreOffboardedStoreAction`, which rechecks reseller/quota constraints and only
 restores active service when provisioning is ready.
 
 ### Deploying a storefront
@@ -244,7 +244,7 @@ This package ships the shared building blocks — `Filament\Pages\CreateStorePag
 `Filament\Schemas\StorefrontConfigurationFields`, `Filament\Actions\ReplaceDomainAction`,
 `Filament\Concerns\BuildsDailyTrend` — rather than panel resources. The console
 and reseller panels own those and differ only in which reseller they resolve as
-the store's billing owner.
+the store's billing reseller.
 
 ## Testing
 

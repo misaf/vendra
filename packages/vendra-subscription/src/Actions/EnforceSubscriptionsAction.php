@@ -14,14 +14,14 @@ use Misaf\VendraSubscription\Models\Subscription;
 /**
  * The subscriber-agnostic enforcement engine: it expires lapsed subscriptions,
  * marks soon-to-expire ones reminded, and detects subscribers past their grace
- * window. Host-specific reactions (notifying owners, suspending units)
+ * window. Host-specific reactions (notifying contacts, suspending units)
  * happen in consumers of SubscriptionExpiringSoon and SubscriptionGraceExpired,
  * so this action never touches notifications or units directly.
  */
 final class EnforceSubscriptionsAction
 {
     /**
-     * Number of days before expiry that an owner is reminded to renew.
+     * Number of days before expiry that a subscriber is reminded to renew.
      */
     private const int EXPIRY_REMINDER_DAYS = 7;
 

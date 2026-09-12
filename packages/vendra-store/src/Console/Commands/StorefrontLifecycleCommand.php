@@ -15,7 +15,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontReference;
 
 /**
- * Operator access to a single storefront's lifecycle.
+ * Administrator access to a single storefront's lifecycle.
  *
  * Deliberately separate from `storefront:reconcile`: these commands act on one
  * storefront, change no configuration, and record intent — stopping a storefront

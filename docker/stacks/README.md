@@ -218,7 +218,7 @@ vendra hosts | sudo tee -a /etc/hosts
 ```
 
 Traefik carries network aliases for `BASE_DOMAIN` and `api.BASE_DOMAIN` on
-`traefik-public`. Without them, containers would follow the operator's
+`traefik-public`. Without them, containers would follow the host's
 `/etc/hosts` entries to `127.0.0.1` — which inside a container is the container
 itself, so a storefront's server-side call to the API fails with `ECONNREFUSED`
 before it leaves the process.

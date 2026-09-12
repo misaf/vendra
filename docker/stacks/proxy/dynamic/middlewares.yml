@@ -4,7 +4,7 @@
 # duration under acme, and 0 (HSTS off) under self-signed. That matters — an
 # HSTS header served with an untrusted certificate pins the browser to HTTPS and
 # then removes the "proceed anyway" escape hatch, so a local .test host becomes
-# unreachable until the operator clears HSTS state by hand.
+# unreachable until someone clears HSTS state by hand.
 #
 # stsPreload stays false everywhere. Preloading ships the domain inside browsers
 # and is slow and painful to undo; it is a deliberate, separate decision.

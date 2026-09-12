@@ -47,7 +47,7 @@ return new class extends Migration
 
             /*
              | Platform-owned annotations about the store — where it came from,
-             | what an operator noted. Free-form on purpose; anything the
+             | what an administrator noted. Free-form on purpose; anything the
              | platform queries earns a column instead.
              */
             $table->json('metadata')

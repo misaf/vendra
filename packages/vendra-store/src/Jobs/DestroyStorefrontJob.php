@@ -20,7 +20,7 @@ use Throwable;
  * Removes one storefront's container, off the request lifecycle.
  *
  * Queued for the same reason deployment is: only the storefront worker holds a
- * runtime socket, and an operator closing a store should not wait on a container
+ * runtime socket, and an administrator closing a store should not wait on a container
  * to stop. It runs on the same queue for that reason.
  *
  * Addressed by slug, not by deployment id, and that is the point of it. This job
@@ -69,7 +69,7 @@ final class DestroyStorefrontJob implements NotTenantAware, ShouldBeUnique, Shou
     /**
      * A storefront that could not be removed is a leaked container, and by now
      * there is no row left to record that against — so it is named in the log,
-     * with the slug an operator needs to finish the job by hand.
+     * with the slug an administrator needs to finish the job by hand.
      */
     public function failed(?Throwable $exception): void
     {

@@ -183,7 +183,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
      *
      * Derived from the three columns that own it rather than stored, so the
      * reading can never disagree with them. Suspension outranks readiness: a
-     * store an operator disabled, or one billing suspended, is suspended even
+     * store an administrator disabled, or one billing suspended, is suspended even
      * though it provisioned cleanly.
      */
     public function status(): StoreStatus

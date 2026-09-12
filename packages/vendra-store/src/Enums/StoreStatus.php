@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Enums;
 
 /**
- * The one status an operator reads a store by.
+ * The one status an administrator reads a store by.
  *
  * A store's condition is stored across three columns — `provisioning_status`,
  * `active`, and `billing_suspended_at` — because each is written by a different
- * concern: the provisioner, the operator, and billing enforcement. Nobody
+ * concern: the provisioner, the administrator, and billing enforcement. Nobody
  * reading a console table wants those three; they want to know whether the
  * store is up. This enum is that reading, derived rather than persisted, so the
  * columns stay the source of truth and no new state can drift out of sync with
@@ -26,7 +26,7 @@ enum StoreStatus: string
     /** Provisioned, enabled, and not suspended — the store serves requests. */
     case Active = 'active';
 
-    /** Provisioned, but disabled by an operator or suspended by billing. */
+    /** Provisioned, but disabled by an administrator or suspended by billing. */
     case Suspended = 'suspended';
 
     /** Provisioning gave up. */

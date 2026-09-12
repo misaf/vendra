@@ -6433,7 +6433,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/misaf/laravel-docker-engine.git",
-                "reference": "5f8974833c1f9c714802fe228c6c74079552c183"
+                "reference": "74a70e754991cb886e43e29c34d98b8ba1581ee6"
             },
             "require": {
                 "illuminate/contracts": "^13.0",
@@ -6516,7 +6516,7 @@
                 "issues": "https://github.com/misaf/laravel-docker-engine/issues",
                 "source": "https://github.com/misaf/laravel-docker-engine"
             },
-            "time": "2026-09-09T11:45:57+00:00"
+            "time": "2026-09-11T11:44:27+00:00"
         },
         {
             "name": "misaf/laravel-email-verification",
@@ -7458,7 +7458,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-console",
-                "reference": "97265e99930134aa5803a892a9135a3d07cb4457"
+                "reference": "5017fcc8105fa8aa4a207ebe7fdb5608c0728fbd"
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -7476,6 +7476,7 @@
                 "misaf/vendra-subscription": "self.version",
                 "misaf/vendra-support": "self.version",
                 "misaf/vendra-tenant": "self.version",
+                "misaf/vendra-user": "self.version",
                 "php": "^8.4",
                 "spatie/laravel-package-tools": "^1.93.1"
             },
@@ -7483,6 +7484,7 @@
             "extra": {
                 "laravel": {
                     "providers": [
+                        "Misaf\\VendraConsole\\Providers\\ConsoleServiceProvider",
                         "Misaf\\VendraConsole\\Providers\\ConsolePanelServiceProvider"
                     ]
                 }
@@ -7491,11 +7493,6 @@
                 "psr-4": {
                     "Misaf\\VendraConsole\\": "src/",
                     "Misaf\\VendraConsole\\Database\\Seeders\\": "database/seeders/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Misaf\\VendraConsole\\Database\\Factories\\": "database/factories/"
                 }
             },
             "license": [
@@ -8831,7 +8828,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-reseller",
-                "reference": "6ac520c0ea5e9b752e72df3a2626ae3089c4ca68"
+                "reference": "cb6f5f04be0dcae2568d094ef37b8ee75d385a06"
             },
             "require": {
                 "filament/filament": "^5.6.8",
@@ -8847,6 +8844,7 @@
                 "misaf/vendra-support": "self.version",
                 "misaf/vendra-tenant": "self.version",
                 "misaf/vendra-transaction": "self.version",
+                "misaf/vendra-user": "self.version",
                 "php": "^8.4",
                 "spatie/laravel-multitenancy": "^4.1.3",
                 "spatie/laravel-package-tools": "^1.93.1",

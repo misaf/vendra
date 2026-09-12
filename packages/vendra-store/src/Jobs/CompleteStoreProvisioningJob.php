@@ -10,7 +10,7 @@ use Illuminate\Queue\Attributes\Timeout;
 use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Support\Str;
-use Misaf\VendraStore\Contracts\StoreOwnerResolver;
+use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
@@ -116,12 +116,12 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
     }
 
     /**
-     * A store whose billing owner is not paying starts suspended.
+     * A store whose billing reseller is not paying starts suspended.
      *
-     * A store created straight from the console has no owner, so there is
-     * nobody to suspend for and it starts active. The owner is looked up through
-     * {@see StoreOwnerResolver} so this package never names the reseller domain;
-     * an owner key that resolves to nothing fails closed.
+     * A store created straight from the console has no reseller, so there is
+     * nobody to suspend for and it starts active. The reseller is looked up through
+     * {@see StoreResellerResolver} so this package never names the reseller domain;
+     * a reseller key that resolves to nothing fails closed.
      */
     private function shouldStartBillingSuspended(Store $store): bool
     {
@@ -129,11 +129,11 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
             return false;
         }
 
-        $owner = resolve(StoreOwnerResolver::class)->find($store->reseller_id);
+        $reseller = resolve(StoreResellerResolver::class)->find($store->reseller_id);
 
-        return $owner === null
-            || ! $owner->isSubscriptionActive()
-            || $owner->activeSubscription() === null;
+        return $reseller === null
+            || ! $reseller->isSubscriptionActive()
+            || $reseller->activeSubscription() === null;
     }
 
     private function markFailed(?Throwable $exception): void

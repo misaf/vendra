@@ -12,8 +12,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | This role will bypass authorization checks in Gate::after(). It is the
-    | top-level role granted to a tenant owner; admins may create additional
-    | scoped roles themselves.
+    | top-level role granted to a tenant administrator; admins may create
+    | additional scoped roles themselves.
     |
     */
 

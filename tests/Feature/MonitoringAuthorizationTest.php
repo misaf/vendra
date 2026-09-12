@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Misaf\VendraConsole\Models\ConsoleUser;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraUser\Models\User;
 
@@ -37,7 +36,7 @@ it('denies tenant users outside the local environment', function (string $gate):
 it('allows console users outside the local environment', function (string $gate): void {
     app()->detectEnvironment(fn (): string => 'production');
 
-    Auth::guard('console')->setUser(ConsoleUser::factory()->create());
+    Auth::guard('console')->setUser(User::factory()->create(['tenant_id' => null]));
 
     expect(Gate::forUser(null)->allows($gate))->toBeTrue();
 })->with('monitoring gates');

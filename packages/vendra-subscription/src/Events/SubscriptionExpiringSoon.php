@@ -11,7 +11,7 @@ use Misaf\VendraSubscription\Models\Subscription;
 
 /**
  * An active subscription is approaching its expiry and has not yet been
- * reminded. Consumers react by reminding the subscriber's owner. The engine
+ * reminded. Consumers react by reminding the subscriber's contact. The engine
  * marks the subscription reminded regardless of whether a consumer acts.
  */
 final readonly class SubscriptionExpiringSoon implements ShouldDispatchAfterCommit

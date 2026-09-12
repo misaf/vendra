@@ -72,7 +72,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
      * For one situation only: a worker killed mid-provision never releases its
      * lock, so the deployment is unqueueable for the whole `uniqueFor` window —
      * an hour — with no other way out. The lock cannot say whether its owner is
-     * dead or merely slow, which is why this is a flag an operator types and not
+     * dead or merely slow, which is why this is a flag an administrator types and not
      * a timeout the command applies on its own: used while a job really is in
      * flight, it lets a second one provision the same storefront concurrently.
      */

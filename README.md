@@ -88,9 +88,6 @@ Typical workflow:
 
 For production builds, rely on installed Composer packages rather than local path repository workflows.
 
-See [UPGRADING.md](UPGRADING.md) before changing the host application's Vendra
-release line.
-
 ## Documentation and AI Guidance
 
 Every package maintains the same documentation set:

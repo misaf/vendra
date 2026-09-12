@@ -52,7 +52,7 @@ services:
       - "${VENDRA_STATE_DIR:-/var/lib/vendra}/acme:/acme"
     networks:
       # Aliases so containers on traefik-public resolve the public hostnames to
-      # Traefik instead of following the operator's /etc/hosts entries, which
+      # Traefik instead of following the host's /etc/hosts entries, which
       # point at 127.0.0.1 — loopback inside a container is the container
       # itself, and the storefront's server-side calls to api.${BASE_DOMAIN}
       # fail with ECONNREFUSED before they leave the process.

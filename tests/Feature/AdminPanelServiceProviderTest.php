@@ -7,8 +7,8 @@ use Filament\Panel;
 use Filament\Support\Enums\Width;
 use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 use Misaf\VendraConsole\Providers\ConsolePanelServiceProvider;
-use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraReseller\Providers\ResellerPanelServiceProvider;
+use Misaf\VendraUser\Models\User;
 use Symfony\Component\HttpFoundation\Cookie;
 
 it('uses a compact sidebar width', function (): void {
@@ -26,9 +26,11 @@ it('uses dedicated domains and root paths for central panels', function (): void
     expect($resellerPanel->getDomains())->toBe(['reseller.vendra.test'])
         ->and($resellerPanel->getPath())->toBeEmpty()
         ->and($resellerPanel->getAuthGuard())->toBe('reseller')
-        ->and($resellerPanel->getAuthPasswordBroker())->toBe('reseller_users')
+        ->and($resellerPanel->getAuthPasswordBroker())->toBe('reseller')
         ->and($consolePanel->getDomains())->toBe(['console.vendra.test'])
         ->and($consolePanel->getPath())->toBeEmpty()
+        ->and($consolePanel->getAuthGuard())->toBe('console')
+        ->and($consolePanel->getAuthPasswordBroker())->toBe('console')
         ->and(config('session.domain'))->toBeNull();
 });
 
@@ -74,10 +76,19 @@ it('keeps proxied central panel assets on https via X-Forwarded-Proto', function
     'reseller' => 'https://reseller.vendra.test',
 ]);
 
-it('isolates reseller authentication configuration', function (): void {
-    expect(config('auth.guards.reseller.provider'))->toBe('reseller_users')
-        ->and(config('auth.providers.reseller_users.model'))->toBe(ResellerUser::class)
-        ->and(config('auth.passwords.reseller_users.table'))->toBe('reseller_password_reset_tokens');
+it('isolates panel sessions while sharing the canonical user', function (): void {
+    expect(config('auth.guards.web.provider'))->toBe('users')
+        ->and(config('auth.guards.console.provider'))->toBe('console')
+        ->and(config('auth.guards.reseller.provider'))->toBe('reseller')
+        ->and(config('auth.providers.users.model'))->toBe(User::class)
+        ->and(config('auth.providers.console.model'))->toBe(User::class)
+        ->and(config('auth.providers.reseller.model'))->toBe(User::class)
+        ->and(config('auth.passwords.users.provider'))->toBe('users')
+        ->and(config('auth.passwords.console.provider'))->toBe('console')
+        ->and(config('auth.passwords.reseller.provider'))->toBe('reseller')
+        ->and(config('auth.passwords.users.table'))->toBe('password_reset_tokens')
+        ->and(config('auth.passwords.console.table'))->toBe('console_password_reset_tokens')
+        ->and(config('auth.passwords.reseller.table'))->toBe('reseller_password_reset_tokens');
 });
 
 it('uses the full content width for localized navigation and pages', function (): void {

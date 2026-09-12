@@ -48,7 +48,7 @@ it('keeps package guidelines and skills aligned with documented source contracts
     ],
     'store accessibility and domains' => [
         'vendra-store',
-        ['Store::accessible()', 'ReplaceStoreDomainAction', 'StoreOwnerResolver'],
+        ['Store::accessible()', 'ReplaceStoreDomainAction', 'StoreResellerResolver'],
     ],
     'testing helpers' => [
         'vendra-testing',

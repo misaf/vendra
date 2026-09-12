@@ -13,7 +13,7 @@ Generic plans and polymorphic subscriptions for Vendra applications.
 - Runs a durable, retriable payment engine — queued collection (`ProcessSubscriptionPayment`), idempotent charge/retrieve, and reconciliation
 - Emits lifecycle events (`SubscriptionPaymentPaid`/`Failed`, `SubscriptionActivated`, `SubscriptionCancelled`, `SubscriptionExpiringSoon`, `SubscriptionGraceExpired`) for host reactions
 
-The engine is subscriber-agnostic: subscribe, activate, charge, and enforce all operate through the `SubscriptionSubscriber` contract and never reference a concrete subscriber. Subscriber-specific reactions — the concrete subscriber model, quota enforcement, provisioning, and owner notifications — belong to the host application, which implements the contract and subscribes to the engine's events. Provider adapters implement the `SubscriptionCharger` contract exposed by `misaf/vendra-support`; they must never collect more than once for the same idempotency key and financial payload.
+The engine is subscriber-agnostic: subscribe, activate, charge, and enforce all operate through the `SubscriptionSubscriber` contract and never reference a concrete subscriber. Subscriber-specific reactions — the concrete subscriber model, quota enforcement, provisioning, and contact notifications — belong to the host application, which implements the contract and subscribes to the engine's events. Provider adapters implement the `SubscriptionCharger` contract exposed by `misaf/vendra-support`; they must never collect more than once for the same idempotency key and financial payload.
 
 ## Requirements
 
@@ -31,7 +31,7 @@ php artisan migrate
 
 The host application defines the inverse `morphMany` relationship and registers stable morph aliases for its subscriber models.
 
-## Operator lifecycle actions
+## Platform lifecycle actions
 
 `CancelSubscriptionAction` cancels a subscription and its open payment
 operations idempotently and emits `SubscriptionCancelled` for host reactions.

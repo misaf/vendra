@@ -5,13 +5,13 @@ declare(strict_types=1);
 use Illuminate\Support\Arr;
 use Misaf\VendraReseller\Actions\CreateResellerAction;
 use Misaf\VendraReseller\Models\Reseller;
-use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraStore\Support\StoreQuota;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
+use Misaf\VendraUser\Models\User;
 
 function resellerWithPlan(int $maxUnits, int $existingProperties = 0): Reseller
 {
@@ -79,14 +79,14 @@ it('creates a reseller subscribed to a plan for its period', function (): void {
     $result = resolve(CreateResellerAction::class)->execute(
         plan: $plan,
         username: 'acme_owner',
-        email: 'owner@acme.test',
+        email: 'admin@acme.test',
         password: 'Secure123',
     );
 
     expect(Arr::get($result, 'reseller'))->toBeInstanceOf(Reseller::class)
         ->and(Arr::get($result, 'reseller')->exists)->toBeTrue()
-        ->and(Arr::get($result, 'owner'))->toBeInstanceOf(ResellerUser::class)
-        ->and(Arr::get($result, 'owner')->reseller_id)->toBe(Arr::get($result, 'reseller')->getKey())
+        ->and(Arr::get($result, 'user'))->toBeInstanceOf(User::class)
+        ->and(Reseller::forUser(Arr::get($result, 'user'))?->is(Arr::get($result, 'reseller')))->toBeTrue()
         ->and(Arr::get($result, 'subscription')->status)->toBe(SubscriptionStatus::Active)
         ->and(Arr::get($result, 'subscription')->plan_id)->toBe($plan->getKey())
         ->and(Arr::get($result, 'subscription')->ends_at->toDateString())
@@ -98,7 +98,7 @@ it('creates a reseller with the requested active state', function (): void {
     $result = resolve(CreateResellerAction::class)->execute(
         plan: Plan::factory()->create(),
         username: 'paused_owner',
-        email: 'owner@paused.test',
+        email: 'admin@paused.test',
         password: 'Secure123',
         active: false,
     );

@@ -17,9 +17,9 @@ use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 
 /**
  * Creating a store is the same operation in every panel: provision the store,
- * hand the owner their credentials, and request the storefront.
+ * hand the administrator their credentials, and request the storefront.
  *
- * Only the billing owner is resolved differently — the console picks one from
+ * Only the billing reseller is resolved differently — the console picks one from
  * the form, the reseller panel uses the authenticated reseller's own — so that
  * is the single hook subclasses fill in. The two pages previously carried
  * identical copies of everything below it, which is how they drift.
@@ -44,7 +44,7 @@ abstract class CreateStorePage extends CreateRecord
                     'domain' => $domain,
                     'email' => $email,
                 ],
-                owner: $this->resolveOwner($data),
+                reseller: $this->resolveReseller($data),
             );
         } catch (SubscriptionLimitException $exception) {
             Notification::make()
@@ -59,7 +59,7 @@ abstract class CreateStorePage extends CreateRecord
         Notification::make()
             ->success()
             ->title(__('console.store_created'))
-            ->body(__('console.owner_credentials', [
+            ->body(__('console.administrator_credentials', [
                 'username' => Arr::get($result, 'user')->username,
                 'password' => Arr::get($result, 'password'),
             ]))
@@ -78,13 +78,13 @@ abstract class CreateStorePage extends CreateRecord
     }
 
     /**
-     * The owner this store is billed to, or null for a store the platform owns
+     * The reseller this store is billed to, or null for a store the platform owns
      * directly.
      *
      * @param  array<string, mixed>  $data
      * @return (Model&SubscriptionSubscriber)|null
      */
-    abstract protected function resolveOwner(array $data): ?SubscriptionSubscriber;
+    abstract protected function resolveReseller(array $data): ?SubscriptionSubscriber;
 
     /**
      * Whether a storefront was asked for.

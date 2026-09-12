@@ -8,7 +8,7 @@ use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
 /*
  | A store's condition is spread across three columns, each written by a
- | different concern. `status()` is the one reading operators get, and
+ | different concern. `status()` is the one reading administrators get, and
  | `withStatus()` is that same reading as SQL — the pair must never disagree.
  */
 it('derives each status from the columns that own it', function (TenantProvisioningStatus $provisioning, bool $active, bool $billingSuspended, StoreStatus $expected): void {
@@ -24,7 +24,7 @@ it('derives each status from the columns that own it', function (TenantProvision
     'provisioning' => [TenantProvisioningStatus::Processing, true, false, StoreStatus::Provisioning],
     'failed' => [TenantProvisioningStatus::Failed, true, false, StoreStatus::Failed],
     'active' => [TenantProvisioningStatus::Ready, true, false, StoreStatus::Active],
-    'disabled by operator' => [TenantProvisioningStatus::Ready, false, false, StoreStatus::Suspended],
+    'disabled by administrator' => [TenantProvisioningStatus::Ready, false, false, StoreStatus::Suspended],
     'suspended by billing' => [TenantProvisioningStatus::Ready, true, true, StoreStatus::Suspended],
     'provisioning outranks' => [TenantProvisioningStatus::Failed, false, true, StoreStatus::Failed],
 ]);

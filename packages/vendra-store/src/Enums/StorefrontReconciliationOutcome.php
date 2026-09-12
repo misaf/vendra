@@ -7,7 +7,7 @@ namespace Misaf\VendraStore\Enums;
 /**
  * What a reconciliation pass did to one storefront.
  *
- * Reported rather than inferred: an operator running a converge pass over the
+ * Reported rather than inferred: an administrator running a converge pass over the
  * estate needs to know which storefronts were touched, and "12 reconciled" says
  * nothing at all when the honest answer is "11 already correct, 1 restarted".
  */

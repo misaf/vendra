@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Misaf\VendraReseller\Models\Reseller;
-use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraStore\Actions\CreateStoreAction;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -36,7 +36,7 @@ it('stamps the owning reseller on a store created under it', function (): void {
         username: 'admin_acme',
         email: 'admin@acme.test',
         password: 'secret-password',
-        owner: $reseller,
+        reseller: $reseller,
     );
 
     expect(Arr::get($result, 'store')->reseller_id)->toBe($reseller->getKey())
@@ -52,7 +52,7 @@ it('rejects creating a store once the reseller reaches its plan limit', function
         username: 'admin_first',
         email: 'admin@first.test',
         password: 'secret-password',
-        owner: $reseller,
+        reseller: $reseller,
     );
 
     resolve(CreateStoreAction::class)->execute(
@@ -61,13 +61,14 @@ it('rejects creating a store once the reseller reaches its plan limit', function
         username: 'admin_second',
         email: 'admin@second.test',
         password: 'secret-password',
-        owner: $reseller,
+        reseller: $reseller,
     );
 })->throws(SubscriptionLimitException::class);
 
-it('keeps store owners separate from the reseller owner account', function (): void {
+it('keeps store administrators separate from the reseller user account', function (): void {
     $reseller = subscribedReseller(maxUnits: 3);
-    $owner = ResellerUser::factory()->forReseller($reseller)->create();
+    $user = User::factory()->create(['tenant_id' => null]);
+    $reseller->users()->attach($user->getKey());
 
     $first = resolve(CreateStoreAction::class)->execute(
         name: 'First Store',
@@ -75,7 +76,7 @@ it('keeps store owners separate from the reseller owner account', function (): v
         username: 'admin_first',
         email: 'admin@first.test',
         password: 'secret-password',
-        owner: $reseller,
+        reseller: $reseller,
     );
 
     $second = resolve(CreateStoreAction::class)->execute(
@@ -84,31 +85,40 @@ it('keeps store owners separate from the reseller owner account', function (): v
         username: 'admin_second',
         email: 'admin@second.test',
         password: 'secret-password',
-        owner: $reseller,
+        reseller: $reseller,
     );
 
-    expect($owner->reseller_id)->toBe($reseller->getKey())
+    expect(Reseller::forUser($user)?->is($reseller))->toBeTrue()
         ->and(Arr::get($first, 'user'))->toBeInstanceOf(User::class)
         ->and(Arr::get($second, 'user'))->toBeInstanceOf(User::class);
 });
 
-it('rejects assigning a second active owner to a reseller', function (): void {
+it('rejects assigning a second active user to a reseller', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);
-    ResellerUser::factory()->forReseller($reseller)->create();
+    $user = User::factory()->create(['tenant_id' => null]);
+    $reseller->users()->attach($user->getKey());
 
-    expect(fn (): ResellerUser => ResellerUser::factory()->forReseller($reseller)->create())
-        ->toThrow(QueryException::class);
+    $duplicate = User::factory()->create(['tenant_id' => null]);
+
+    expect(function () use ($reseller, $duplicate): void {
+        $reseller->users()->attach($duplicate->getKey());
+    })->toThrow(QueryException::class);
 });
 
-it('allows replacing a soft-deleted reseller owner', function (): void {
+it('allows replacing a soft-deleted reseller user', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);
-    $owner = ResellerUser::factory()->forReseller($reseller)->create();
+    $user = User::factory()->create(['tenant_id' => null]);
+    $reseller->users()->attach($user->getKey());
 
-    $owner->delete();
+    DB::table('reseller_users')
+        ->where('reseller_id', $reseller->getKey())
+        ->where('user_id', $user->getKey())
+        ->update(['deleted_at' => now()]);
 
-    $replacement = ResellerUser::factory()->forReseller($reseller)->create();
+    $replacement = User::factory()->create(['tenant_id' => null]);
+    $reseller->users()->attach($replacement->getKey());
 
-    expect($replacement->reseller_id)->toBe($reseller->getKey());
+    expect(Reseller::forUser($replacement)?->is($reseller))->toBeTrue();
 });
 
 it('still creates a store with no reseller for the legacy path', function (): void {
@@ -149,7 +159,7 @@ it('slugifies the store name so its admin host resolves', function (): void {
         username: 'admin_houshang',
         email: 'admin@houshang.test',
         password: 'secret-password',
-        owner: $reseller,
+        reseller: $reseller,
     );
 
     expect(Arr::get($result, 'store')->slug)->toBe('houshang-flowers')

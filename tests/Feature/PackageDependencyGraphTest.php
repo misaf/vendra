@@ -79,8 +79,8 @@ it('points the tenancy, store, reseller and console layers one way', function ()
     /*
      | The layering the whole platform rests on. `vendra-tenant` is a generic
      | tenancy engine, so it may not know the ecommerce Store; the Store is the
-     | concrete tenant and sits below reseller ownership, which is supplied
-     | through `Misaf\VendraStore\Contracts\StoreOwnerResolver` rather than a
+     | concrete tenant and sits below the reseller domain, which reaches it
+     | through `Misaf\VendraStore\Contracts\StoreResellerResolver` rather than a
      | dependency; the console composes both.
      */
     expect(reachableVendraPackages('misaf/vendra-tenant', $dependencyGraph))

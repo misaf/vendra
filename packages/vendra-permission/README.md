@@ -76,7 +76,7 @@ The admin bypass role is configurable in `config/vendra-permission.php`:
 
 The config key is `admin_role` (short and local to this file).
 The env var is `VENDRA_PERMISSION_ADMIN_ROLE` (prefixed to avoid global collisions).
-It defaults to `RoleEnum::Admin` — the top-level role granted to a tenant owner; admins may create additional scoped roles themselves.
+It defaults to `RoleEnum::Admin` — the top-level role granted to a tenant administrator; admins may create additional scoped roles themselves.
 This value is used for both the `Gate::after()` admin bypass and excluding that role from the roles table query.
 
 Pennant feature behavior is configured in `config/vendra-permission.php`:

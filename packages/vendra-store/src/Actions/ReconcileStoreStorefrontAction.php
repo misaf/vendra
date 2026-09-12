@@ -22,7 +22,7 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * storefront needs starting, not rebuilding.
  *
  * Reconciliation reads intent and never writes it. `desired_state` is a decision
- * somebody made — an operator stopping a storefront, a deployment requesting
+ * somebody made — an administrator stopping a storefront, a deployment requesting
  * one — and a converge pass that edited it would be deciding rather than
  * converging, which is how a deliberately stopped storefront gets started again
  * every pass.

@@ -13,18 +13,19 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
 use Misaf\VendraReseller\Http\Middleware\AddResellerToRequestJobContext;
 use Misaf\VendraReseller\Models\Reseller;
-use Misaf\VendraReseller\Models\ResellerUser;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
+use Misaf\VendraUser\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
 use function Pest\Laravel\actingAs;
 
 it('adds the authenticated reseller to the request and job context', function (): void {
     $reseller = Reseller::factory()->create();
-    $owner = ResellerUser::factory()->forReseller($reseller)->create();
-    actingAs($owner, 'reseller');
+    $user = User::factory()->create(['tenant_id' => null]);
+    $reseller->users()->attach($user->getKey());
+    actingAs($user, 'reseller');
 
     resolve(AddResellerToRequestJobContext::class)->handle(
         Request::create('https://reseller.vendra.test'),
@@ -85,7 +86,7 @@ it('adds the current panel id without storing personal data', function (): void 
 });
 
 it('adds an authenticated non-panel actor to request context', function (): void {
-    $actor = ResellerUser::factory()->create();
+    $actor = User::factory()->create(['tenant_id' => null]);
     Context::flush();
 
     Event::dispatch(new Authenticated('sanctum', $actor));

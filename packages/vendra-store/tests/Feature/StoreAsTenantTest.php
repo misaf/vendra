@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Config;
-use Misaf\VendraStore\Contracts\StoreOwnerResolver;
+use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Services\StoreDomainFinder;
-use Misaf\VendraStore\Support\NullStoreOwnerResolver;
+use Misaf\VendraStore\Support\NullStoreResellerResolver;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraTenant\Contracts\HostTenantFinder;
 use Misaf\VendraTenant\Contracts\TenantContract;
@@ -72,7 +72,7 @@ it('keeps its domains keyed by store_id and scoped to itself', function (): void
     expect($visible)->toBe(['first.example.com']);
 });
 
-it('has no billing owner until a reseller domain supplies one', function (): void {
+it('has no billing reseller until a reseller domain supplies one', function (): void {
     $store = Store::factory()->active()->create();
 
     expect($store->reseller_id)->toBeNull();
@@ -81,9 +81,9 @@ it('has no billing owner until a reseller domain supplies one', function (): voi
      | The reseller package binds the real resolver; the store package only ever
      | asks through the port, which is why it stays installable without it.
      */
-    app()->bind(StoreOwnerResolver::class, NullStoreOwnerResolver::class);
+    app()->bind(StoreResellerResolver::class, NullStoreResellerResolver::class);
 
-    expect(resolve(StoreOwnerResolver::class)->find(1))->toBeNull();
+    expect(resolve(StoreResellerResolver::class)->find(1))->toBeNull();
 });
 
 it('keeps resolving through the generic resolver on id and slug', function (): void {
