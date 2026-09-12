@@ -17,14 +17,14 @@ use Misaf\VendraUser\Actions\CreateUserAction;
 use Misaf\VendraUser\Models\User;
 
 /**
- * Creates one store, its first domain, and its owner user in a single
+ * Creates one store, its first domain, and its administrator user in a single
  * transaction.
  *
- * A store is either created directly from the console with no billing owner, or
- * by a reseller that owns it. Which panel the request came from is not recorded,
- * because it is not business state. The owner is typed as a subscription
- * subscriber rather than a concrete Reseller, so the store domain stays below
- * the reseller domain in the dependency graph.
+ * A store is either created directly from the console with no billing reseller,
+ * or by a reseller that runs it. Which panel the request came from is not
+ * recorded, because it is not business state. The reseller is typed as a
+ * subscription subscriber rather than a concrete Reseller, so the store domain
+ * stays below the reseller domain in the dependency graph.
  */
 final readonly class CreateStoreAction
 {
@@ -34,9 +34,10 @@ final readonly class CreateStoreAction
     ) {}
 
     /**
-     * @param  (Model&SubscriptionSubscriber)|null  $owner  the reseller billed for
-     *                                                      this store, or null for
-     *                                                      a direct console store
+     * @param  (Model&SubscriptionSubscriber)|null  $reseller  the reseller billed
+     *                                                         for this store, or
+     *                                                         null for a direct
+     *                                                         console store
      * @return array{store: Store, user: User}
      */
     public function execute(
@@ -45,7 +46,7 @@ final readonly class CreateStoreAction
         string $username,
         string $email,
         string $password,
-        ?SubscriptionSubscriber $owner = null,
+        ?SubscriptionSubscriber $reseller = null,
         bool $shouldSeed = false,
     ): array {
         $domain = StoreDomain::normalizeDomain($domain);
@@ -60,30 +61,30 @@ final readonly class CreateStoreAction
             $username,
             $email,
             $password,
-            $owner,
+            $reseller,
             $shouldSeed,
         ): array {
-            $ownerId = null;
+            $resellerId = null;
 
-            if ($owner !== null) {
+            if ($reseller !== null) {
                 /*
-                 | Re-read the owner under a row lock before counting: two
+                 | Re-read the reseller under a row lock before counting: two
                  | concurrent creations would otherwise both see the last free
                  | slot in the plan and both take it.
                  */
-                $lockedOwner = $owner->newQuery()->lockForUpdate()->whereKey($owner->getKey())->first();
+                $lockedReseller = $reseller->newQuery()->lockForUpdate()->whereKey($reseller->getKey())->first();
 
-                if (! $lockedOwner instanceof Model || ! $lockedOwner instanceof SubscriptionSubscriber) {
-                    throw (new ModelNotFoundException)->setModel($owner::class);
+                if (! $lockedReseller instanceof Model || ! $lockedReseller instanceof SubscriptionSubscriber) {
+                    throw (new ModelNotFoundException)->setModel($reseller::class);
                 }
 
-                $this->storeQuota->assertCanCreateStore($lockedOwner);
+                $this->storeQuota->assertCanCreateStore($lockedReseller);
 
-                $ownerId = $lockedOwner->getKey();
+                $resellerId = $lockedReseller->getKey();
             }
 
             $createdStore = Store::query()->create([
-                'reseller_id' => $ownerId,
+                'reseller_id' => $resellerId,
                 'name' => $name,
                 'active' => false,
                 'provisioning_status' => TenantProvisioningStatus::Pending,

@@ -12,12 +12,10 @@ return new class extends Migration
     {
         $this->createResellersTable();
         $this->createResellerUsersTable();
-        $this->createPasswordResetTokensTable();
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reseller_password_reset_tokens');
         Schema::dropIfExists('reseller_users');
         Schema::dropIfExists('resellers');
     }
@@ -54,35 +52,17 @@ return new class extends Migration
             $table->foreignId('reseller_id')
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->string('username');
-            $table->string('email');
-            $table->timestampTz('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->timestampsTz();
             $table->softDeletesTz();
             $table->unsignedBigInteger('active_reseller_guard')
                 ->nullable()
                 ->virtualAs('CASE WHEN deleted_at IS NULL THEN reseller_id ELSE NULL END');
-            $table->string('active_username_guard')
-                ->nullable()
-                ->virtualAs('CASE WHEN deleted_at IS NULL THEN username ELSE NULL END');
-            $table->string('active_email_guard')
-                ->nullable()
-                ->virtualAs('CASE WHEN deleted_at IS NULL THEN email ELSE NULL END');
 
             $table->unique('active_reseller_guard', 'reseller_users_active_reseller_unique');
-            $table->unique('active_username_guard', 'reseller_users_active_username_unique');
-            $table->unique('active_email_guard', 'reseller_users_active_email_unique');
-        });
-    }
-
-    private function createPasswordResetTokensTable(): void
-    {
-        Schema::create('reseller_password_reset_tokens', function (Blueprint $table): void {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestampTz('created_at')->nullable();
+            $table->unique(['reseller_id', 'user_id'], 'reseller_users_reseller_user_unique');
         });
     }
 };

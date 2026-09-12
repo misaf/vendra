@@ -12,12 +12,12 @@ use Misaf\VendraStore\Console\Commands\RetryFailedStorefrontDeploymentsCommand;
 use Misaf\VendraStore\Console\Commands\StorefrontDeploymentStatusCommand;
 use Misaf\VendraStore\Console\Commands\StorefrontLifecycleCommand;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
-use Misaf\VendraStore\Contracts\StoreOwnerResolver;
+use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Observers\StoreDomainObserver;
 use Misaf\VendraStore\Services\ContainerStorefrontProvisioner;
 use Misaf\VendraStore\Services\StoreDomainFinder;
-use Misaf\VendraStore\Support\NullStoreOwnerResolver;
+use Misaf\VendraStore\Support\NullStoreResellerResolver;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Misaf\VendraStore\Support\StorefrontSettings;
 use Misaf\VendraTenant\Contracts\HostTenantFinder;
@@ -54,7 +54,7 @@ final class StoreServiceProvider extends PackageServiceProvider
     {
         /*
          | Bound rather than shared, so a configuration change — a test setting
-         | an image, an operator reloading config — is picked up on the next
+         | an image, an administrator reloading config — is picked up on the next
          | resolve rather than frozen at first use.
          */
         $this->app->bind(StorefrontSettings::class, static fn (): StorefrontSettings => StorefrontSettings::fromConfig());
@@ -71,11 +71,11 @@ final class StoreServiceProvider extends PackageServiceProvider
         $this->app->bind(HostTenantFinder::class, StoreDomainFinder::class);
 
         /*
-         | Store ownership is optional: misaf/vendra-reseller binds its own
-         | resolver, and without it a store simply has no billing owner. `bindIf`
+         | The billing reseller is optional: misaf/vendra-reseller binds its own
+         | resolver, and without it a store simply has none. `bindIf`
          | keeps this a default rather than a race with provider order.
          */
-        $this->app->bindIf(StoreOwnerResolver::class, NullStoreOwnerResolver::class);
+        $this->app->bindIf(StoreResellerResolver::class, NullStoreResellerResolver::class);
     }
 
     public function packageBooted(): void

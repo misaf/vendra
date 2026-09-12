@@ -17,14 +17,13 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraUser\Models\User;
-use Spatie\Permission\Guard;
 
 /**
- * Creates a store and everything it needs to be usable: the owner user, the
- * administrator role, and the queued work that finishes provisioning.
+ * Creates a store and everything it needs to be usable: the administrator user,
+ * the administrator role, and the queued work that finishes provisioning.
  *
  * The console and the reseller panel both call this — they differ only in which
- * owner they resolve — so the flow exists once instead of being copied into
+ * reseller they resolve — so the flow exists once instead of being copied into
  * each panel.
  */
 final readonly class ProvisionStoreAction
@@ -41,31 +40,39 @@ final readonly class ProvisionStoreAction
      *     name?: string,
      *     username?: string
      * } $data
-     * @param  (Model&SubscriptionSubscriber)|null  $owner
+     * @param  (Model&SubscriptionSubscriber)|null  $reseller
      * @return array{store: Store, user: User, password: string}
      */
-    public function execute(array $data, bool $shouldSeed = false, ?string $password = null, ?SubscriptionSubscriber $owner = null): array
+    public function execute(array $data, bool $shouldSeed = false, ?string $password = null, ?SubscriptionSubscriber $reseller = null): array
     {
         $password ??= Str::password(length: 8, letters: true, numbers: true, symbols: false);
         $domain = StoreDomain::normalizeDomain(Arr::get($data, 'domain'));
         $name = Arr::get($data, 'name', Str::headline(Str::before($domain, '.')));
         $username = Arr::get($data, 'username', $this->usernameFromEmail(Arr::get($data, 'email')));
 
-        $result = DB::transaction(function () use ($data, $domain, $name, $username, $password, $owner, $shouldSeed): array {
+        $result = DB::transaction(function () use ($data, $domain, $name, $username, $password, $reseller, $shouldSeed): array {
             $result = $this->createStoreAction->execute(
                 name: $name,
                 domain: $domain,
                 username: $username,
                 email: Arr::get($data, 'email'),
                 password: $password,
-                owner: $owner,
+                reseller: $reseller,
                 shouldSeed: $shouldSeed,
             );
 
             $role = $this->createRoleAction->execute(
                 tenant: Arr::get($result, 'store'),
                 name: Config::string('vendra-permission.admin_role'),
-                guardName: Guard::getDefaultName(User::class),
+                /*
+                | The tenant administrator role always lives on the
+                | tenant-facing guard. Guard::getDefaultName() resolves
+                | against the ambient default guard, which Filament switches
+                | per panel — provisioning from the console panel would
+                | otherwise mint the role for the `console` guard, where the
+                | tenant administration actions never look for it.
+                */
+                guardName: 'web',
             );
 
             Arr::get($result, 'store')->execute(fn () => Arr::get($result, 'user')->assignRole($role));
@@ -99,6 +106,6 @@ final readonly class ProvisionStoreAction
             ->limit(12, '')
             ->toString();
 
-        return Str::length($username) >= 3 ? $username : 'owner';
+        return Str::length($username) >= 3 ? $username : 'admin';
     }
 }

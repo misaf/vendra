@@ -44,14 +44,14 @@ interface SubscriptionSubscriber
     public function isSubscriptionActive(): bool;
 
     /**
-     * Whether there is an owner contact to receive billing notifications.
+     * Whether there is a contact email to receive billing notifications.
      */
-    public function hasOwnerContact(): bool;
+    public function hasContactEmail(): bool;
 
     /**
-     * Deliver a billing notification to the subscriber's owner contact.
+     * Deliver a billing notification to the subscriber's contact email.
      */
-    public function notifyOwner(Notification $notification): void;
+    public function notifyContact(Notification $notification): void;
 
     /**
      * The user billed for the subscriber's paid subscriptions, if any.
