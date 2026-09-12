@@ -7,26 +7,27 @@ namespace Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraOrder\Actions\CompleteOrderAction;
 use Misaf\VendraOrder\Models\Order;
-use Misaf\VendraOrder\States\Confirmed;
+use Misaf\VendraOrder\States\Completed;
 
-final class ConfirmOrderAction
+final class CompleteOrderTableAction
 {
     public static function make(): Action
     {
-        return Action::make('confirm')
+        return Action::make('complete')
             ->authorize(fn (Order $record): bool => auth()->user()?->can('update', $record) ?? false)
             ->color('success')
-            ->icon(Heroicon::OutlinedCheckCircle)
-            ->label(__('vendra-order::messages.confirm'))
+            ->icon(Heroicon::OutlinedTruck)
+            ->label(__('vendra-order::messages.complete'))
             ->requiresConfirmation()
-            ->visible(fn (Order $record): bool => $record->status->canTransitionTo(Confirmed::class))
+            ->visible(fn (Order $record): bool => $record->status->canTransitionTo(Completed::class))
             ->action(function (Order $record): void {
-                $record->confirm();
+                resolve(CompleteOrderAction::class)->execute($record);
 
                 Notification::make()
                     ->success()
-                    ->title(__('vendra-order::messages.order_confirmed'))
+                    ->title(__('vendra-order::messages.order_completed'))
                     ->send();
             });
     }

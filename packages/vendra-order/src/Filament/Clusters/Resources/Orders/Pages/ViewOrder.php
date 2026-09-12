@@ -6,9 +6,9 @@ namespace Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\ViewRecord;
-use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CancelOrderAction;
-use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CompleteOrderAction;
-use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\ConfirmOrderAction;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CancelOrderTableAction;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CompleteOrderTableAction;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\ConfirmOrderTableAction;
 use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource;
 
 final class ViewOrder extends ViewRecord
@@ -18,9 +18,9 @@ final class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            ConfirmOrderAction::make(),
-            CompleteOrderAction::make(),
-            CancelOrderAction::make(),
+            ConfirmOrderTableAction::make(),
+            CompleteOrderTableAction::make(),
+            CancelOrderTableAction::make(),
             DeleteAction::make(),
         ];
     }

@@ -8,10 +8,11 @@ use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Arr;
+use Misaf\VendraCurrency\Actions\InstallCurrenciesAction;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
 
-final class InstallCurrenciesAction
+final class InstallCurrenciesTableAction
 {
     public static function make(): Action
     {
@@ -27,15 +28,7 @@ final class InstallCurrenciesAction
                     ->searchable(),
             ])
             ->action(function (array $data): void {
-                collect(Arr::get($data, 'codes', []))
-                    ->filter(fn (mixed $code): bool => is_string($code) && CurrencyRegistry::isSupported($code))
-                    ->reject(fn (string $code): bool => Currency::query()->where('code', mb_strtoupper($code))->exists())
-                    ->each(fn (string $code) => Currency::query()->create([
-                        'code' => $code,
-                        'name' => CurrencyRegistry::nameFor($code),
-                        'decimal_places' => CurrencyRegistry::minorUnitFor($code),
-                        'type' => CurrencyRegistry::typeFor($code),
-                    ]));
+                resolve(InstallCurrenciesAction::class)->execute((array) Arr::get($data, 'codes', []));
             })
             ->icon(Heroicon::OutlinedSquaresPlus)
             ->label(__('vendra-currency::actions.install_from_catalog'))

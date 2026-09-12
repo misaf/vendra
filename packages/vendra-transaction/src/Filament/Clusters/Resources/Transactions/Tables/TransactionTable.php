@@ -18,9 +18,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
-use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\ApproveTransactionAction;
-use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\DeclineTransactionAction;
-use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\FailTransactionAction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\ApproveTransactionTableAction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\DeclineTransactionTableAction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\FailTransactionTableAction;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\TransactionState;
 
@@ -127,11 +127,11 @@ final class TransactionTable
                 ActionGroup::make([
                     ViewAction::make(),
 
-                    ApproveTransactionAction::make(),
+                    ApproveTransactionTableAction::make(),
 
-                    DeclineTransactionAction::make(),
+                    DeclineTransactionTableAction::make(),
 
-                    FailTransactionAction::make(),
+                    FailTransactionTableAction::make(),
                 ]),
             ])
             ->defaultSort(column: 'id', direction: 'desc');

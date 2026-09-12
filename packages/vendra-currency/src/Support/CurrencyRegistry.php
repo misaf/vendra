@@ -42,9 +42,12 @@ final class CurrencyRegistry
         return collect(self::all())
             ->when($type instanceof CurrencyType, fn ($entries) => $entries
                 ->filter(fn (array $entry): bool => Arr::get($entry, 'type') === $type))
-            ->map(fn (array $entry): string => Arr::get($entry, 'name') === Arr::get($entry, 'code')
-                ? Arr::get($entry, 'code')
-                : "{Arr::get($entry, 'name')} ({Arr::get($entry, 'code')})")
+            ->map(function (array $entry): string {
+                $name = (string) Arr::get($entry, 'name');
+                $code = (string) Arr::get($entry, 'code');
+
+                return $name === $code ? $code : "{$name} ({$code})";
+            })
             ->sort()
             ->all();
     }

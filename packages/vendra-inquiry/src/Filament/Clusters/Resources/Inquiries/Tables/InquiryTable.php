@@ -17,9 +17,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
-use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\AnswerInquiryAction;
-use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\CloseInquiryAction;
-use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\ReopenInquiryAction;
+use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\AnswerInquiryTableAction;
+use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\CloseInquiryTableAction;
+use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\ReopenInquiryTableAction;
 
 final class InquiryTable
 {
@@ -76,11 +76,11 @@ final class InquiryTable
                 ActionGroup::make([
                     ViewAction::make(),
 
-                    AnswerInquiryAction::make(),
+                    AnswerInquiryTableAction::make(),
 
-                    CloseInquiryAction::make(),
+                    CloseInquiryTableAction::make(),
 
-                    ReopenInquiryAction::make(),
+                    ReopenInquiryTableAction::make(),
                 ]),
             ])
             ->toolbarActions([

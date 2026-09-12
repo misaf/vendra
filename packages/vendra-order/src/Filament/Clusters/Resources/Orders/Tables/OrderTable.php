@@ -18,9 +18,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CancelOrderAction;
-use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CompleteOrderAction;
-use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\ConfirmOrderAction;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CancelOrderTableAction;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CompleteOrderTableAction;
+use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\ConfirmOrderTableAction;
 use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraOrder\States\OrderState;
 
@@ -101,11 +101,11 @@ final class OrderTable
                 ActionGroup::make([
                     ViewAction::make(),
 
-                    ConfirmOrderAction::make(),
+                    ConfirmOrderTableAction::make(),
 
-                    CompleteOrderAction::make(),
+                    CompleteOrderTableAction::make(),
 
-                    CancelOrderAction::make(),
+                    CancelOrderTableAction::make(),
                 ]),
             ])
             ->toolbarActions([

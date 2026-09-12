@@ -7,11 +7,12 @@ namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actio
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraTransaction\Actions\ApproveTransactionAction;
 use Misaf\VendraTransaction\Exceptions\InsufficientBalanceException;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\Approved;
 
-final class ApproveTransactionAction
+final class ApproveTransactionTableAction
 {
     public static function make(): Action
     {
@@ -24,7 +25,7 @@ final class ApproveTransactionAction
             ->visible(fn (Transaction $record): bool => $record->status->canTransitionTo(Approved::class))
             ->action(function (Transaction $record): void {
                 try {
-                    $record->approve();
+                    resolve(ApproveTransactionAction::class)->execute($record);
 
                     Notification::make()
                         ->success()

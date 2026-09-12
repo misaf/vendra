@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Pages;
 
 use Filament\Resources\Pages\ViewRecord;
-use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\ApproveTransactionAction;
-use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\DeclineTransactionAction;
-use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\FailTransactionAction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\ApproveTransactionTableAction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\DeclineTransactionTableAction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\FailTransactionTableAction;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource;
 
 final class ViewTransaction extends ViewRecord
@@ -17,9 +17,9 @@ final class ViewTransaction extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            ApproveTransactionAction::make(),
-            DeclineTransactionAction::make(),
-            FailTransactionAction::make(),
+            ApproveTransactionTableAction::make(),
+            DeclineTransactionTableAction::make(),
+            FailTransactionTableAction::make(),
         ];
     }
 }

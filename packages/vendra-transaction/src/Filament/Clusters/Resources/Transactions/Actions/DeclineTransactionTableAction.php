@@ -7,10 +7,11 @@ namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actio
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraTransaction\Actions\DeclineTransactionAction;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\Declined;
 
-final class DeclineTransactionAction
+final class DeclineTransactionTableAction
 {
     public static function make(): Action
     {
@@ -22,7 +23,7 @@ final class DeclineTransactionAction
             ->requiresConfirmation()
             ->visible(fn (Transaction $record): bool => $record->status->canTransitionTo(Declined::class))
             ->action(function (Transaction $record): void {
-                $record->decline();
+                resolve(DeclineTransactionAction::class)->execute($record);
 
                 Notification::make()
                     ->success()

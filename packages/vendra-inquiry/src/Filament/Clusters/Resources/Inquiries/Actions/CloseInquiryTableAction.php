@@ -7,26 +7,27 @@ namespace Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraInquiry\Actions\CloseInquiryAction;
 use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
 
-final class ReopenInquiryAction
+final class CloseInquiryTableAction
 {
     public static function make(): Action
     {
-        return Action::make('reopen')
+        return Action::make('close')
             ->authorize(fn (Inquiry $record): bool => auth()->user()?->can('update', $record) ?? false)
-            ->color('warning')
-            ->icon(Heroicon::OutlinedArrowPath)
-            ->label(__('vendra-inquiry::messages.reopen'))
+            ->color('gray')
+            ->icon(Heroicon::OutlinedArchiveBox)
+            ->label(__('vendra-inquiry::messages.close'))
             ->requiresConfirmation()
-            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::New)
+            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::Closed)
             ->action(function (Inquiry $record): void {
-                $record->reopen();
+                resolve(CloseInquiryAction::class)->execute($record);
 
                 Notification::make()
                     ->success()
-                    ->title(__('vendra-inquiry::messages.inquiry_reopened'))
+                    ->title(__('vendra-inquiry::messages.inquiry_closed'))
                     ->send();
             });
     }

@@ -7,10 +7,11 @@ namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actio
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
+use Misaf\VendraTransaction\Actions\FailTransactionAction;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\Failed;
 
-final class FailTransactionAction
+final class FailTransactionTableAction
 {
     public static function make(): Action
     {
@@ -22,7 +23,7 @@ final class FailTransactionAction
             ->requiresConfirmation()
             ->visible(fn (Transaction $record): bool => $record->status->canTransitionTo(Failed::class))
             ->action(function (Transaction $record): void {
-                $record->fail();
+                resolve(FailTransactionAction::class)->execute($record);
 
                 Notification::make()
                     ->success()
