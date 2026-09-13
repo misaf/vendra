@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Actions;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
@@ -15,7 +12,6 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
 use Misaf\VendraStore\Support\StorefrontConfigurationMap;
-use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 
 /**
@@ -31,30 +27,16 @@ final readonly class RequestStorefrontDeploymentAction
     public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * @param  array<string, mixed>  $form
+     * The caller validates the configuration and the active image first, as
+     * `Filament\Pages\CreateStorePage` does, before any store is provisioned.
      *
-     * @throws ValidationException
+     * @param  array<string, mixed>  $form
      */
     public function execute(Store $store, string $domain, array $form): StorefrontDeployment
     {
         $configuration = StorefrontConfigurationMap::toConfiguration($form);
 
-        /*
-         | Validate here rather than leaving it to the provisioner. The image
-         | refuses to boot on an incomplete configuration, so a field missed at
-         | this point used to surface minutes later as a failed deployment and a
-         | crash-looping container instead of as an error on the form.
-         */
-        Validator::make($configuration, StorefrontConfigurationValidator::deploymentRules())->validate();
-
-        $selection = Validator::make($form, [
-            'storefront_image_id' => [
-                'required',
-                'integer',
-                Rule::exists(StorefrontImage::class, 'id')->where('active', true),
-            ],
-        ])->validate();
-        $storefrontImage = StorefrontImage::query()->findOrFail(Arr::integer($selection, 'storefront_image_id'));
+        $storefrontImage = StorefrontImage::query()->findOrFail(Arr::integer($form, 'storefront_image_id'));
 
         $deployment = StorefrontDeployment::query()->create([
             'store_id' => $store->id,

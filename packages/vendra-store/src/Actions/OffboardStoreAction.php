@@ -14,10 +14,11 @@ final class OffboardStoreAction
 {
     public const int MAX_REASON_LENGTH = 2000;
 
+    /**
+     * The caller trims the reason; a blank or over-long one is still refused.
+     */
     public function execute(Store $store, string $reason): Store
     {
-        $reason = mb_trim($reason);
-
         throw_if($reason === '', InvalidArgumentException::class, 'An offboarding reason is required.');
 
         throw_if(Str::length($reason) > self::MAX_REASON_LENGTH, InvalidArgumentException::class, 'The offboarding reason may not exceed '.self::MAX_REASON_LENGTH.' characters.');

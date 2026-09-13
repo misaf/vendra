@@ -90,6 +90,16 @@ it('installs multiple currencies at once from the catalog action', function (): 
         ->and($bitcoin->type)->toBe(CurrencyType::Crypto);
 });
 
+it('requires at least one code in the catalog action', function (): void {
+    livewire(ListCurrencies::class)
+        ->callAction('installCurrencies', [
+            'codes' => [],
+        ])
+        ->assertHasActionErrors(['codes' => 'required']);
+
+    expect(Currency::query()->count())->toBe(0);
+});
+
 it('rejects already installed currencies in the catalog action', function (): void {
     CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
 

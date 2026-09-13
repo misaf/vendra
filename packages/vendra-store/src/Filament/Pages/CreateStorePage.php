@@ -9,9 +9,15 @@ use Filament\Resources\Pages\CreateRecord;
 use Filament\Support\Exceptions\Halt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use Misaf\VendraStore\Actions\ProvisionStoreAction;
 use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
+use Misaf\VendraStore\Models\StorefrontImage;
+use Misaf\VendraStore\Support\StorefrontConfigurationMap;
+use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 
@@ -37,6 +43,10 @@ abstract class CreateStorePage extends CreateRecord
         $email = Arr::get($data, 'email', null);
 
         throw_if(! is_string($domain) || ! is_string($email), InvalidArgumentException::class, 'Invalid store details provided.');
+
+        if ($this->shouldRequestStorefront($data)) {
+            $this->validateStorefrontRequest($data);
+        }
 
         try {
             $result = resolve(ProvisionStoreAction::class)->execute(
@@ -75,6 +85,31 @@ abstract class CreateStorePage extends CreateRecord
         }
 
         return Arr::get($result, 'store');
+    }
+
+    /**
+     * Validate the storefront here rather than leaving it to the provisioner.
+     *
+     * The image refuses to boot on an incomplete configuration, so a field missed
+     * at this point used to surface minutes later as a failed deployment and a
+     * crash-looping container instead of as an error on the form. Checked before
+     * the store is provisioned, so a rejected storefront leaves no store behind.
+     *
+     * @param  array<string, mixed>  $data
+     *
+     * @throws ValidationException
+     */
+    private function validateStorefrontRequest(array $data): void
+    {
+        Validator::make(StorefrontConfigurationMap::toConfiguration($data), StorefrontConfigurationValidator::deploymentRules())->validate();
+
+        Validator::make($data, [
+            'storefront_image_id' => [
+                'required',
+                'integer',
+                Rule::exists(StorefrontImage::class, 'id')->where('active', true),
+            ],
+        ])->validate();
     }
 
     /**

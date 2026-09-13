@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraCart\Database\Factories\CartFactory;
 use Misaf\VendraCart\Database\Factories\CartItemFactory;
 use Misaf\VendraOrder\Actions\PlaceOrderAction;
 use Misaf\VendraOrder\Data\OrderLineDraft;
-use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraOrder\States\Pending;
 
 beforeEach(function (): void {
@@ -70,28 +67,4 @@ it('clears the converted cart items but keeps the cart', function (): void {
 
     expect($cart->items()->count())->toBe(0)
         ->and($cart->fresh())->not->toBeNull();
-});
-
-it('refuses to place an order without lines', function (): void {
-    $cart = CartFactory::new()->create();
-
-    expect(fn (): Order => resolve(PlaceOrderAction::class)->execute(
-        cart: $cart,
-        currencyCode: 'USD',
-        lines: [],
-    ))->toThrow(ValidationException::class)
-        ->and(Order::query()->count())->toBe(0);
-});
-
-it('refuses a line with a quantity below one', function (): void {
-    $customer = createTestUser();
-    $cart = CartFactory::new()->forOwner($customer)->create();
-
-    expect(fn (): Order => resolve(PlaceOrderAction::class)->execute(
-        cart: $cart,
-        currencyCode: 'USD',
-        lines: [new OrderLineDraft($customer, ['en' => 'Winter Wheat'], 4400, 0)],
-    ))->toThrow(ValidationException::class)
-        ->and(Order::query()->count())->toBe(0)
-        ->and(Validator::make([], [])->passes())->toBeTrue();
 });

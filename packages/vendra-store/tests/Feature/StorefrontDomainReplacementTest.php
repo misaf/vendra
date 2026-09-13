@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraStore\Actions\ReconcileStoreStorefrontAction;
 use Misaf\VendraStore\Actions\ReplaceStoreDomainAction;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
@@ -49,21 +48,6 @@ it('forces a redeploy so the container is rebuilt with the new routing label', f
         ProvisionStorefrontJob::class,
         fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
     );
-});
-
-it('rejects a domain another store already runs its storefront on', function (): void {
-    Queue::fake();
-
-    $other = Store::factory()->create();
-    StorefrontDeployment::factory()->for($other)->create(['domain' => 'taken.test']);
-
-    $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
-
-    // Without the rule this reaches the database and comes back as a query
-    // error mid-transaction rather than a message on the field.
-    expect(fn () => resolve(ReplaceStoreDomainAction::class)->execute($store, 'taken.test'))
-        ->toThrow(ValidationException::class);
 });
 
 it('still records the new domain when no container runtime is configured', function (): void {

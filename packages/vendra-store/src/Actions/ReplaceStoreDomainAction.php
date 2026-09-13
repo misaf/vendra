@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -38,26 +36,13 @@ final readonly class ReplaceStoreDomainAction
      * which is what provisioning does anyway. Leaving that out was the bug: the
      * storefront went on answering the old domain, the new one had no router at
      * all, and convergence could not see the difference.
+     *
+     * The caller normalizes and validates the domain — the active-domain rules
+     * and a free storefront deployment domain — as
+     * `Filament\Actions\ReplaceDomainAction` does.
      */
     public function execute(Store $store, string $domain): StoreDomain
     {
-        $domain = StoreDomain::normalizeDomain($domain);
-
-        Validator::make(
-            ['domain' => $domain],
-            ['domain' => [
-                ...StoreDomain::activeDomainRules(),
-
-                /*
-                 | A deployment's domain is unique too, and it is the column the
-                 | routing label is built from. Without this the collision
-                 | surfaces from the database mid-transaction as a query error in
-                 | the panel, rather than as a message on the field.
-                 */
-                Rule::unique(StorefrontDeployment::class, 'domain')->ignore($store->getKey(), 'store_id'),
-            ]],
-        )->validate();
-
         /*
          | Read before the transaction, written inside it. A store owns at most
          | one storefront, and this is the model the write below and the dispatch

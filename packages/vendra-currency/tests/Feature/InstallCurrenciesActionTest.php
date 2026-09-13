@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraCurrency\Actions\InstallCurrenciesAction;
 use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\VendraCurrency\Enums\CurrencyType;
@@ -48,9 +47,4 @@ it('skips unsupported and already installed codes', function (): void {
         ->and(Currency::query()->where('code', 'USD')->count())->toBe(1)
         ->and(Currency::query()->where('code', 'EUR')->count())->toBe(1)
         ->and(Currency::query()->where('code', 'NOPE')->count())->toBe(0);
-});
-
-it('refuses an empty code list', function (): void {
-    expect(fn (): int => resolve(InstallCurrenciesAction::class)->execute([]))
-        ->toThrow(ValidationException::class);
 });

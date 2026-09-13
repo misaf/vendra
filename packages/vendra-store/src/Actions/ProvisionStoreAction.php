@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
 use Misaf\VendraStore\Jobs\CompleteStoreProvisioningJob;
 use Misaf\VendraStore\Models\Store;
-use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
@@ -24,7 +23,7 @@ use Misaf\VendraUser\Models\User;
  *
  * The console and the reseller panel both call this — they differ only in which
  * reseller they resolve — so the flow exists once instead of being copied into
- * each panel.
+ * each panel. Callers pass a normalized, validated domain and email.
  */
 final readonly class ProvisionStoreAction
 {
@@ -46,7 +45,7 @@ final readonly class ProvisionStoreAction
     public function execute(array $data, bool $shouldSeed = false, ?string $password = null, ?SubscriptionSubscriber $reseller = null): array
     {
         $password ??= Str::password(length: 8, letters: true, numbers: true, symbols: false);
-        $domain = StoreDomain::normalizeDomain(Arr::get($data, 'domain'));
+        $domain = Arr::string($data, 'domain');
         $name = Arr::get($data, 'name', Str::headline(Str::before($domain, '.')));
         $username = Arr::get($data, 'username', $this->usernameFromEmail(Arr::get($data, 'email')));
 

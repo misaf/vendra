@@ -6,7 +6,6 @@ namespace Misaf\VendraOrder\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraOrder\Data\OrderLineDraft;
 use Misaf\VendraOrder\Models\Order;
@@ -26,6 +25,9 @@ final class PlaceOrderAction
      * The cart row itself survives so its token stays usable for the next
      * order; only its items are cleared.
      *
+     * The caller validates the currency, lines and amounts first — the
+     * checkout API does so with `PlaceOrderRequest` and its processor.
+     *
      * @param  list<OrderLineDraft>  $lines
      */
     public function execute(
@@ -43,22 +45,6 @@ final class PlaceOrderAction
         foreach ($lines as $line) {
             $itemsAmount += $line->lineAmount();
         }
-
-        Validator::make([
-            'currency_code' => $currencyCode,
-            'lines' => $lines,
-            'delivery_amount' => $deliveryAmount,
-            'payment_reference' => $paymentReference,
-            'quantities' => array_map(fn (OrderLineDraft $line): int => $line->quantity, $lines),
-            'unit_amounts' => array_map(fn (OrderLineDraft $line): int => $line->unitAmount, $lines),
-        ], [
-            'currency_code' => ['required', 'string', 'size:3'],
-            'lines' => ['required', 'array', 'min:1'],
-            'delivery_amount' => ['integer', 'min:0'],
-            'payment_reference' => ['nullable', 'string', 'max:255'],
-            'quantities.*' => ['integer', 'min:1'],
-            'unit_amounts.*' => ['integer', 'min:0'],
-        ])->validate();
 
         return DB::transaction(function () use (
             $cart,

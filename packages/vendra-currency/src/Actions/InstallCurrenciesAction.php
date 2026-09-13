@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraCurrency\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
 
@@ -14,17 +13,13 @@ final class InstallCurrenciesAction
     /**
      * Install the given catalog codes, skipping anything unsupported or
      * already installed. The comparison is case-insensitive; the model
-     * normalizes the stored code to uppercase.
+     * normalizes the stored code to uppercase. The caller requires at least
+     * one code.
      *
      * @param  list<mixed>  $codes
      */
     public function execute(array $codes): int
     {
-        Validator::make(
-            ['codes' => $codes],
-            ['codes' => ['required', 'array', 'min:1']],
-        )->validate();
-
         return DB::transaction(function () use ($codes): int {
             $installed = 0;
 

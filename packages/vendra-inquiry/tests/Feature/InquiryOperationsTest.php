@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraInquiry\Actions\SubmitInquiryAction;
 use Misaf\VendraInquiry\Database\Factories\InquiryFactory;
 use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
@@ -32,19 +30,6 @@ it('records an enquiry exactly as it was written', function (): void {
         ->and($inquiry->locale)->toBe('fa')
         ->and($inquiry->answered_at)->toBeNull();
 });
-
-it('refuses an enquiry without a usable email or message', function (array $overrides): void {
-    expect(fn (): Inquiry => resolve(SubmitInquiryAction::class)->execute(
-        name: Arr::get($overrides, 'name', 'Nasrin K.'),
-        email: Arr::get($overrides, 'email', 'nasrin@example.com'),
-        message: Arr::get($overrides, 'message', 'Do you deliver on Fridays?'),
-    ))->toThrow(ValidationException::class)
-        ->and(Inquiry::query()->count())->toBe(0);
-})->with([
-    'missing name' => [['name' => '']],
-    'invalid email' => [['email' => 'not-an-email']],
-    'empty message' => [['message' => '']],
-]);
 
 it('marks an enquiry answered and stamps when', function (): void {
     $inquiry = InquiryFactory::new()->createOne();

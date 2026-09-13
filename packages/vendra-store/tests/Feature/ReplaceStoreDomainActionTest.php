@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraStore\Actions\ReplaceStoreDomainAction;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -51,13 +50,3 @@ it('keeps replaced history when the property is soft-deleted and restored', func
     expect($store->execute(fn () => $store->storeDomains()->where('active', true)->value('name')))->toBe('new.test')
         ->and($store->execute(fn () => $store->storeDomains()->onlyTrashed()->count()))->toBe(1);
 });
-
-it('rejects a domain already active on another property', function (): void {
-    $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
-
-    $otherStore = Store::factory()->create();
-    StoreDomain::factory()->for($otherStore)->create(['name' => 'taken.test', 'active' => true]);
-
-    resolve(ReplaceStoreDomainAction::class)->execute($store, 'taken.test');
-})->throws(ValidationException::class);

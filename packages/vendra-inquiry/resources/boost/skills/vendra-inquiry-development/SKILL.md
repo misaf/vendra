@@ -44,7 +44,7 @@ Treat `packages/vendra-inquiry` as the source of storefront contact-enquiry beha
 
 - Model an enquiry with a name, email, optional phone, optional occasion slug, verbatim message, `InquiryStatusEnum` status, optional source and locale, optional metadata, and an `answered_at` stamp.
 - Default a new enquiry to `InquiryStatusEnum::New` and badge the inbox on that scope.
-- Validate inside `SubmitInquiryAction` rather than at each caller.
+- Validate at the caller (e.g. `misaf/vendra-inquiry-api`'s `SubmitInquiryRequest`) before calling `SubmitInquiryAction`; the action does not validate.
 - Keep status changes on the model (`markAnswered()`, `close()`, `reopen()`); they are single writes and need no action wrapper.
 - Use typed Eloquent relationships with PHPDoc generics, Laravel model attributes, explicit casts, final classes, and `declare(strict_types=1)`.
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraDelivery\Actions;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Misaf\VendraAddress\Models\Address;
 use Misaf\VendraDelivery\Data\DeliveryQuote;
 use Misaf\VendraDelivery\Models\Delivery;
@@ -29,6 +28,9 @@ final readonly class ScheduleDeliveryAction
      * An order has exactly one delivery, so rescheduling updates the existing
      * row rather than adding a second one; the lookup and the write share a
      * transaction to keep two concurrent reschedules from both inserting.
+     *
+     * The caller validates the date format and recipient name; whether the
+     * date is bookable is a business rule and stays here.
      */
     public function execute(
         Order $order,
@@ -41,14 +43,6 @@ final readonly class ScheduleDeliveryAction
         ?float $longitude = null,
     ): Delivery {
         throw_unless($quote->isDeliverable(), RuntimeException::class, 'The delivery address is outside the delivered range and must be quoted by hand.');
-
-        Validator::make([
-            'scheduled_for' => $scheduledFor,
-            'recipient_name' => $recipientName,
-        ], [
-            'scheduled_for' => ['nullable', 'date_format:Y-m-d'],
-            'recipient_name' => ['nullable', 'string', 'max:255'],
-        ])->validate();
 
         if ($scheduledFor !== null && ! $this->schedule->isBookable($scheduledFor)) {
             throw new RuntimeException(sprintf('Delivery date [%s] is not bookable.', $scheduledFor));

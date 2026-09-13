@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\CreateStoreAction;
 use Misaf\VendraStore\Models\Store;
@@ -133,22 +132,6 @@ it('still creates a store with no reseller for the legacy path', function (): vo
     expect(Arr::get($result, 'store'))->toBeInstanceOf(Store::class)
         ->and(Arr::get($result, 'store')->reseller_id)->toBeNull();
 });
-
-it('rejects invalid and duplicate active domains outside Filament', function (string $domain): void {
-    $existingStore = Store::factory()->create();
-    StoreDomain::factory()->for($existingStore)->create(['name' => 'taken.test', 'active' => true]);
-
-    resolve(CreateStoreAction::class)->execute(
-        name: 'Rejected Store',
-        domain: $domain,
-        username: 'admin_rejected',
-        email: 'admin@rejected.test',
-        password: 'secret-password',
-    );
-})->with([
-    'invalid format' => 'not a domain',
-    'duplicate domain' => 'taken.test',
-])->throws(ValidationException::class);
 
 it('slugifies the store name so its admin host resolves', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);

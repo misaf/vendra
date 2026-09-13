@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Validation\ValidationException;
-use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
 use Misaf\VendraStore\Filament\Schemas\StorefrontConfigurationFields;
@@ -40,19 +38,6 @@ describe('the form-to-configuration map', function (): void {
             ->all();
 
         expect($defined)->each->toBeIn(array_keys(StorefrontConfigurationMap::FIELDS));
-    });
-});
-
-describe('requesting a deployment', function (): void {
-    it('rejects an incomplete configuration at request time instead of on the queue', function (): void {
-        $tenant = createTestTenant();
-        $form = storefrontRequestData();
-        unset($form['storefront_contact_email'], $form['storefront_locality']);
-
-        expect(fn () => resolve(RequestStorefrontDeploymentAction::class)->execute($tenant, 'acme.test', $form))
-            ->toThrow(ValidationException::class)
-            ->and(StorefrontDeployment::query()->count())->toBe(0);
-        Queue::assertNothingPushed();
     });
 });
 

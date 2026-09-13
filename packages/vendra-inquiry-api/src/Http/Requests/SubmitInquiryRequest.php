@@ -11,9 +11,8 @@ final class SubmitInquiryRequest extends FormRequest
     /**
      * Validation rules shared by the HTTP operation and the MCP tool.
      *
-     * These mirror `SubmitInquiryAction`: the action validates the operation
-     * wherever it is called from, and these give the storefront the same
-     * answer before a row is ever attempted.
+     * `SubmitInquiryAction` does not validate its input, so these are the
+     * checks an enquiry passes before a row is ever attempted.
      *
      * @var array<string, array<int, string>>
      */

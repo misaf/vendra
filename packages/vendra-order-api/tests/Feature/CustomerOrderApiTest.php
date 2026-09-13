@@ -111,6 +111,24 @@ it('rejects checkout when the product has no stock left', function (): void {
     expect(Order::query()->count())->toBe(0);
 });
 
+it('rejects a malformed checkout payload before any order is written', function (array $payload): void {
+    $user = createTestUser();
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct())->createOne();
+
+    $this->actingAs($user)
+        ->postJson('/api/sales/checkout', ['cartToken' => $cart->token, ...$payload])
+        ->assertUnprocessable();
+
+    expect(Order::query()->count())->toBe(0)
+        ->and(Delivery::query()->count())->toBe(0);
+})->with([
+    'currency code not three letters' => [['currencyCode' => 'US']],
+    'payment reference too long' => [['paymentReference' => str_repeat('x', 256)]],
+    'delivery date in the wrong format' => [['deliveryDate' => '13/09/2026']],
+    'recipient name too long' => [['recipientName' => str_repeat('x', 256)]],
+]);
+
 it('rejects checkout when the cart is empty', function (): void {
     $user = createTestUser();
     $cart = CartFactory::new()->forOwner($user)->createOne();

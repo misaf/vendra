@@ -7,9 +7,7 @@ namespace Misaf\VendraStore\Actions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Misaf\VendraStore\Models\Store;
-use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Support\StoreQuota;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
@@ -39,6 +37,9 @@ final readonly class CreateStoreAction
      *                                                         null for a direct
      *                                                         console store
      * @return array{store: Store, user: User}
+     *
+     * The caller normalizes and validates the domain with
+     * `StoreDomain::normalizeDomain()` and `StoreDomain::activeDomainRules()`.
      */
     public function execute(
         string $name,
@@ -49,12 +50,6 @@ final readonly class CreateStoreAction
         ?SubscriptionSubscriber $reseller = null,
         bool $shouldSeed = false,
     ): array {
-        $domain = StoreDomain::normalizeDomain($domain);
-        Validator::make(
-            ['domain' => $domain],
-            ['domain' => StoreDomain::activeDomainRules()],
-        )->validate();
-
         return DB::transaction(function () use (
             $name,
             $domain,
