@@ -277,6 +277,7 @@ cmd_urls() {
 	printf '  reseller  https://reseller.%s\n' "$BASE_DOMAIN"
 	printf '  api       https://api.%s\n' "$BASE_DOMAIN"
 	printf '\n'
+	printf '  First-boot console credentials are printed by: vendra logs php\n\n'
 }
 
 # Local estates run on a domain no public DNS resolves. This writes the hosts
