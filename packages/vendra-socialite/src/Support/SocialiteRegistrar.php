@@ -8,10 +8,12 @@ use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSocialite\Models\SocialiteUser;
+use Misaf\VendraSupport\Contracts\TenantResolver;
+use Misaf\VendraUser\Actions\CreateUserAction;
 use Misaf\VendraUser\Models\User;
 
 /**
@@ -76,18 +78,21 @@ final class SocialiteRegistrar
     }
 
     /**
-     * Create a Vendra user from an OAuth identity, mapping the provider profile
-     * onto the `username`-based schema and treating the OAuth email as verified.
-     * Tenant assignment is handled by `BelongsToTenant`.
+     * Create a Vendra user from an OAuth identity through `CreateUserAction`,
+     * mapping the provider profile onto the `username`-based schema and treating
+     * the OAuth email as verified. The user joins the current tenant; without
+     * one it is created with no tenant, as before.
      */
     public static function createUserUsing(string $provider, SocialiteUserContract $oauthUser, FilamentSocialitePlugin $plugin): User
     {
-        return User::query()->create([
-            'username' => self::generateUsername($oauthUser->getNickname() ?? $oauthUser->getName() ?? $oauthUser->getEmail()),
-            'email' => $oauthUser->getEmail(),
-            'email_verified_at' => now(),
-            'password' => Hash::make(Str::password(32)),
-        ]);
+        $email = $oauthUser->getEmail() ?? throw new InvalidArgumentException("The [{$provider}] identity has no email address.");
+
+        return resolve(CreateUserAction::class)->execute(
+            tenant: resolve(TenantResolver::class)->current(),
+            username: self::generateUsername($oauthUser->getNickname() ?? $oauthUser->getName() ?? $email),
+            email: $email,
+            password: Str::password(32),
+        );
     }
 
     /**

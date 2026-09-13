@@ -6,6 +6,7 @@ use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use Illuminate\Support\Arr;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSocialite\Support\SocialiteRegistrar;
+use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraUser\Models\User;
 
 beforeEach(function (): void {
@@ -56,5 +57,10 @@ it('creates a verified user mapped onto the module schema from an oauth identity
         ->and($user->email)->toBe('ada@example.test')
         ->and($user->username)->toBe('ada-lovelace')
         ->and($user->email_verified_at)->not->toBeNull()
+        ->and($user->tenant_id)->toBe(resolve(TenantResolver::class)->currentId())
         ->and($user->tenant_id)->not->toBeNull();
 });
+
+it('refuses an oauth identity without an email address', function (): void {
+    SocialiteRegistrar::createUserUsing('github', fakeOauthUser(['email' => null]), FilamentSocialitePlugin::make());
+})->throws(InvalidArgumentException::class, 'The [github] identity has no email address.');
