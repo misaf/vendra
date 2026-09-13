@@ -6,7 +6,6 @@
 docker/stacks/.env
 .phpactor.json
 .phpunit.result.cache
-/.ai
 /.claude
 /.codex
 /.agents
