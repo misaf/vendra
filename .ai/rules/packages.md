@@ -26,3 +26,8 @@ The billing entity behind `stores.reseller_id` is a `reseller`, never an "owner"
 A store's first tenant-level account is an `administrator` (`console.administrator_credentials`, `RoleEnum::Admin`), distinct from the reseller's `user`.
 
 `owner` survives only where it is someone else's API: `cache_locks.owner`, the cart/wishlist `owner` morph, and Filament's `$ownerRecord`.
+
+## Docblocks carry only what native types cannot; Rector has the final say
+Run `vendor/bin/rector` after PHP edits; its dead-code and code-quality sets (plus ThrowIfRector) define the house shape, so do not re-add what it removes.
+Keep docblock tags only when they add type information the signature lacks (generics, array shapes, `@property`, `@use`) and bare `@throws` tags — no descriptions on `@return`/`@throws`, and no `@return` that repeats a native return type.
+Prose belongs only where the *why* is non-obvious (e.g. a race retry or an index that depends on tenancy); do not restate what the method name or code already says.
