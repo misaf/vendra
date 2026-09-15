@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Misaf\VendraStore\Actions;
+
+use Illuminate\Support\Facades\DB;
+use Misaf\VendraStore\Exceptions\StorefrontImageInUseException;
+use Misaf\VendraStore\Models\StorefrontImage;
+
+final class DeleteStorefrontImageAction
+{
+    /**
+     * @throws StorefrontImageInUseException when a deployment still references the image
+     */
+    public function execute(StorefrontImage $image): void
+    {
+        DB::transaction(function () use ($image): void {
+            $lockedImage = StorefrontImage::query()->whereKey($image->getKey())->lockForUpdate()->firstOrFail();
+
+            if ($lockedImage->isInUse()) {
+                throw StorefrontImageInUseException::forImage($lockedImage);
+            }
+
+            $lockedImage->delete();
+        });
+    }
+}
