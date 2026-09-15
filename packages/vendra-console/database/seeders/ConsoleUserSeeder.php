@@ -12,7 +12,7 @@ use RuntimeException;
 final class ConsoleUserSeeder extends Seeder
 {
     /**
-     * @throws RuntimeException
+     * @throws RuntimeException When `console:user` fails, e.g. the default email belongs to an existing user.
      */
     public function run(): void
     {
@@ -20,6 +20,8 @@ final class ConsoleUserSeeder extends Seeder
             return;
         }
 
-        throw_if($this->command->call('console:user') !== Command::SUCCESS, RuntimeException::class, 'No console user was seeded. Run `php artisan console:user --email=<address>` to create one.');
+        if ($this->command->call('console:user') !== Command::SUCCESS) {
+            throw new RuntimeException('No console user was seeded. Run `php artisan console:user --email=<address>` to create one.');
+        }
     }
 }
