@@ -59,7 +59,7 @@ abstract class CreateStorePage extends CreateRecord
         } catch (SubscriptionLimitException $exception) {
             Notification::make()
                 ->danger()
-                ->title(__('console.store_limit_reached'))
+                ->title(__('vendra-store::messages.store_limit_reached'))
                 ->body($exception->getMessage())
                 ->send();
 
@@ -68,8 +68,8 @@ abstract class CreateStorePage extends CreateRecord
 
         Notification::make()
             ->success()
-            ->title(__('console.store_created'))
-            ->body(__('console.administrator_credentials', [
+            ->title(__('vendra-store::messages.store_created'))
+            ->body(__('vendra-store::attributes.administrator_credentials', [
                 'username' => Arr::get($result, 'user')->username,
                 'password' => Arr::get($result, 'password'),
             ]))

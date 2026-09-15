@@ -39,7 +39,7 @@ final readonly class ReplaceStoreDomainAction
      *
      * The caller normalizes and validates the domain — the active-domain rules
      * and a free storefront deployment domain — as
-     * `Filament\Actions\ReplaceDomainAction` does.
+     * `Filament\Actions\ReplaceDomainTableAction` does.
      */
     public function execute(Store $store, string $domain): StoreDomain
     {

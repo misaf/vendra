@@ -22,8 +22,8 @@ final class StorefrontConfigurationFields
     public static function make(bool $optional): array
     {
         return [
-            Section::make(__('console.storefront_configuration'))
-                ->description(__('console.storefront_configuration_description'))
+            Section::make(__('vendra-store::attributes.storefront_configuration'))
+                ->description(__('vendra-store::attributes.storefront_configuration_description'))
                 ->schema([
                     ...($optional ? [
                         self::creationToggle(),
@@ -45,8 +45,8 @@ final class StorefrontConfigurationFields
     public static function creationToggle(bool $default = false): Toggle
     {
         return Toggle::make('create_storefront')
-            ->label(__('console.create_storefront'))
-            ->helperText(__('console.create_storefront_hint'))
+            ->label(__('vendra-store::attributes.create_storefront'))
+            ->helperText(__('vendra-store::attributes.create_storefront_hint'))
             ->default($default)
             ->live()
             ->columnSpanFull();
@@ -61,8 +61,8 @@ final class StorefrontConfigurationFields
 
         return [
             Select::make('storefront_image_id')
-                ->label(__('console.storefront_image'))
-                ->helperText(__('console.storefront_image_hint'))
+                ->label(__('vendra-store::navigation.storefront_image'))
+                ->helperText(__('vendra-store::attributes.storefront_image_hint'))
                 ->options(fn (): array => StorefrontImage::query()->active()->orderBy('image')->pluck('image', 'id')->all())
                 ->required($required)
                 ->searchable()
@@ -70,8 +70,8 @@ final class StorefrontConfigurationFields
                 ->native(false)
                 ->live(),
             TextInput::make('storefront_slug')
-                ->label(__('console.storefront_slug'))
-                ->helperText(__('console.storefront_slug_hint'))
+                ->label(__('vendra-store::attributes.storefront_slug'))
+                ->helperText(__('vendra-store::attributes.storefront_slug_hint'))
                 ->required($required)
                 ->regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/')
                 ->unique(StorefrontDeployment::class, 'slug')
@@ -79,11 +79,11 @@ final class StorefrontConfigurationFields
                 ->placeholder('rose-garden')
                 ->maxLength(100),
             TextInput::make('storefront_name_en')
-                ->label(__('console.storefront_name_en'))
+                ->label(__('vendra-store::attributes.storefront_name_en'))
                 ->required($required)
                 ->maxLength(255),
             TextInput::make('storefront_name_fa')
-                ->label(__('console.storefront_name_fa'))
+                ->label(__('vendra-store::attributes.storefront_name_fa'))
                 ->required($required)
                 ->maxLength(255),
             Hidden::make('storefront_business_type')
@@ -91,13 +91,13 @@ final class StorefrontConfigurationFields
                 ->required($required)
                 ->dehydrated(),
             TextInput::make('storefront_price_currency')
-                ->label(__('console.storefront_price_currency'))
+                ->label(__('vendra-store::attributes.storefront_price_currency'))
                 ->default('IRR')
                 ->required($required)
                 ->length(3),
             TextInput::make('storefront_og_image')
-                ->label(__('console.storefront_og_image'))
-                ->helperText(__('console.storefront_og_image_hint'))
+                ->label(__('vendra-store::attributes.storefront_og_image'))
+                ->helperText(__('vendra-store::attributes.storefront_og_image_hint'))
                 ->maxLength(2048),
         ];
     }
@@ -111,21 +111,21 @@ final class StorefrontConfigurationFields
 
         return [
             TextInput::make('storefront_mobile_phone')
-                ->label(__('console.storefront_mobile_phone'))
+                ->label(__('vendra-store::attributes.storefront_mobile_phone'))
                 ->required($required)
                 ->tel()
                 ->extraAttributes(['dir' => 'ltr'])
                 ->placeholder('09121234567')
                 ->maxLength(50),
             TextInput::make('storefront_office_phone')
-                ->label(__('console.storefront_office_phone'))
+                ->label(__('vendra-store::attributes.storefront_office_phone'))
                 ->required($required)
                 ->tel()
                 ->extraAttributes(['dir' => 'ltr'])
                 ->placeholder('02112345678')
                 ->maxLength(50),
             TextInput::make('storefront_contact_email')
-                ->label(__('console.storefront_contact_email'))
+                ->label(__('vendra-store::attributes.storefront_contact_email'))
                 ->required($required)
                 ->email()
                 ->autocomplete('email')
@@ -133,13 +133,13 @@ final class StorefrontConfigurationFields
                 ->placeholder('contact@example.com')
                 ->maxLength(255),
             TextInput::make('storefront_hours_open')
-                ->label(__('console.storefront_hours_open'))
+                ->label(__('vendra-store::attributes.storefront_hours_open'))
                 ->placeholder('08:00')
                 ->extraAttributes(['dir' => 'ltr'])
                 ->required($required)
                 ->regex('/^(?:[01]\\d|2[0-3]):[0-5]\\d$/'),
             TextInput::make('storefront_hours_close')
-                ->label(__('console.storefront_hours_close'))
+                ->label(__('vendra-store::attributes.storefront_hours_close'))
                 ->placeholder('21:00')
                 ->extraAttributes(['dir' => 'ltr'])
                 ->required($required)
@@ -156,35 +156,35 @@ final class StorefrontConfigurationFields
 
         return [
             TextInput::make('storefront_locality')
-                ->label(__('console.storefront_locality'))
+                ->label(__('vendra-store::attributes.storefront_locality'))
                 ->required($required)
                 ->maxLength(255),
             TextInput::make('storefront_country')
-                ->label(__('console.storefront_country'))
+                ->label(__('vendra-store::attributes.storefront_country'))
                 ->default('IR')
                 ->extraAttributes(['dir' => 'ltr'])
                 ->required($required)
                 ->length(2),
             TextInput::make('storefront_map_query')
-                ->label(__('console.storefront_map_query'))
+                ->label(__('vendra-store::attributes.storefront_map_query'))
                 ->required($required)
                 ->placeholder('35.6892, 51.3890')
                 ->maxLength(500),
             TextInput::make('storefront_whatsapp_phone')
-                ->label(__('console.storefront_whatsapp_phone'))
+                ->label(__('vendra-store::attributes.storefront_whatsapp_phone'))
                 ->required($required)
                 ->tel()
                 ->extraAttributes(['dir' => 'ltr'])
                 ->placeholder('+989121234567')
                 ->maxLength(50),
             TextInput::make('storefront_telegram_username')
-                ->label(__('console.storefront_telegram_username'))
+                ->label(__('vendra-store::attributes.storefront_telegram_username'))
                 ->required($required)
                 ->prefix('@')
                 ->extraAttributes(['dir' => 'ltr'])
                 ->maxLength(100),
             TextInput::make('storefront_instagram_username')
-                ->label(__('console.storefront_instagram_username'))
+                ->label(__('vendra-store::attributes.storefront_instagram_username'))
                 ->required($required)
                 ->prefix('@')
                 ->extraAttributes(['dir' => 'ltr'])

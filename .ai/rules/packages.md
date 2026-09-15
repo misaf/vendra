@@ -23,7 +23,7 @@ Identities are always `user`: the canonical `Misaf\VendraUser\Models\User` plus 
 
 The billing entity behind `stores.reseller_id` is a `reseller`, never an "owner": `AssignStoreResellerAction`, `Contracts\StoreResellerResolver`, `CreateStorePage::resolveReseller()`, `?SubscriptionSubscriber $reseller = null`.
 
-A store's first tenant-level account is an `administrator` (`console.administrator_credentials`, `RoleEnum::Admin`), distinct from the reseller's `user`.
+A store's first tenant-level account is an `administrator` (`vendra-store::attributes.administrator_credentials`, `RoleEnum::Admin`), distinct from the reseller's `user`.
 
 `owner` survives only where it is someone else's API: `cache_locks.owner`, the cart/wishlist `owner` morph, and Filament's `$ownerRecord`.
 

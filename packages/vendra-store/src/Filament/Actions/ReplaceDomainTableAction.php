@@ -21,7 +21,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * this and override {@see authorizationCallback()} to apply their own access
  * rules; the form, validation, and replace behaviour stay identical.
  */
-abstract class ReplaceDomainAction extends Action
+abstract class ReplaceDomainTableAction extends Action
 {
     public static function getDefaultName(): string
     {
@@ -33,11 +33,11 @@ abstract class ReplaceDomainAction extends Action
         parent::setUp();
 
         $this
-            ->label(__('console.replace_domain'))
+            ->label(__('vendra-store::actions.replace_domain'))
             ->icon(Heroicon::OutlinedArrowPath)
             ->schema([
                 TextInput::make('domain')
-                    ->label(__('console.new_domain'))
+                    ->label(__('vendra-store::attributes.new_domain'))
                     ->required()
                     ->maxLength(255)
                     ->rules(StoreDomain::activeDomainRules())
@@ -64,7 +64,7 @@ abstract class ReplaceDomainAction extends Action
 
                 Notification::make()
                     ->success()
-                    ->title(__('console.domain_replaced'))
+                    ->title(__('vendra-store::messages.domain_replaced'))
                     ->send();
             });
 
