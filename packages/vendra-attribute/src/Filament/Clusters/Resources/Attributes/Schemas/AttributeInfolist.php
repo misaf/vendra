@@ -9,6 +9,8 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraTagger\Filament\Infolists\Components\ModelTagsEntry;
 
 final class AttributeInfolist
@@ -16,8 +18,7 @@ final class AttributeInfolist
     public static function configure(Schema $schema): Schema
     {
         $components = [
-            TextEntry::make('name')
-                ->label(__('vendra-attribute::attributes.name')),
+            NameEntry::make(),
 
             TextEntry::make('unit')
                 ->badge()
@@ -33,9 +34,7 @@ final class AttributeInfolist
                 ->label(__('vendra-attribute::attributes.values'))
                 ->state(fn (Attribute $record): int => $record->values()->count()),
 
-            TextEntry::make('description')
-                ->columnSpanFull()
-                ->label(__('vendra-attribute::attributes.description'))
+            DescriptionEntry::make()
                 ->placeholder('-'),
 
             self::dateEntry('created_at'),

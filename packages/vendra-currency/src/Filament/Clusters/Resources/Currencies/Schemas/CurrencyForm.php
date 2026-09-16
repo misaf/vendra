@@ -6,18 +6,17 @@ namespace Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
-use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
+use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
+use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class CurrencyForm
@@ -84,19 +83,11 @@ final class CurrencyForm
                     ->options(CurrencyType::class)
                     ->required(),
 
-                ActiveToggle::make()
+                IsActiveToggle::make()
                     ->default(true),
 
-                Toggle::make('is_default')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))
-                    ->columnSpanFull()
-                    ->default(false)
-                    ->helperText(__('vendra-currency::attributes.is_default_helper_text'))
-                    ->label(__('vendra-currency::attributes.is_default'))
-                    ->live()
-                    ->onIcon(Heroicon::Bolt)
-                    ->required()
-                    ->rules(['boolean']),
+                IsDefaultToggle::make()
+                    ->helperText(__('vendra-currency::attributes.is_default_helper_text')),
             ])
             ->columns(2);
     }

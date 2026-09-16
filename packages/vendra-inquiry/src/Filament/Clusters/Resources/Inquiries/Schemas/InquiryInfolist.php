@@ -6,6 +6,7 @@ namespace Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class InquiryInfolist
 {
@@ -13,8 +14,7 @@ final class InquiryInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')
-                    ->label(__('vendra-inquiry::attributes.name')),
+                NameEntry::make(),
                 TextEntry::make('email')
                     ->copyable()
                     ->label(__('vendra-inquiry::attributes.email')),

@@ -6,6 +6,8 @@ namespace Misaf\VendraPermission\Filament\Clusters\Resources\Roles\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class RoleInfolist
 {
@@ -13,7 +15,7 @@ final class RoleInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')->label(__('vendra-permission::attributes.name')),
+                NameEntry::make(),
                 TextEntry::make('guard_name')
                     ->badge()
                     ->label(__('vendra-permission::attributes.guard_name')),
@@ -21,9 +23,7 @@ final class RoleInfolist
                     ->badge()
                     ->columnSpanFull()
                     ->label(__('vendra-permission::navigation.permissions')),
-                TextEntry::make('description')
-                    ->columnSpanFull()
-                    ->label(__('vendra-permission::attributes.description')),
+                DescriptionEntry::make(),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])

@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraLanguage\Support\Locales;
-use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
+use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
+use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class LanguageForm
@@ -36,19 +35,11 @@ final class LanguageForm
                         modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
                     ),
 
-                ActiveToggle::make()
+                IsActiveToggle::make()
                     ->default(false),
 
-                Toggle::make('is_default')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))
-                    ->columnSpanFull()
-                    ->default(false)
-                    ->helperText(__('vendra-language::attributes.is_default_helper_text'))
-                    ->label(__('vendra-language::attributes.is_default'))
-                    ->live()
-                    ->onIcon(Heroicon::Bolt)
-                    ->required()
-                    ->rules(['boolean']),
+                IsDefaultToggle::make()
+                    ->helperText(__('vendra-language::attributes.is_default_helper_text')),
             ]);
     }
 

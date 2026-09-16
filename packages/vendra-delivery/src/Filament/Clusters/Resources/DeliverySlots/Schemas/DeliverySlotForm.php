@@ -9,7 +9,7 @@ use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
+use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 
 final class DeliverySlotForm
 {
@@ -46,7 +46,7 @@ final class DeliverySlotForm
                             ->minValue(1)
                             ->numeric(),
 
-                        ActiveToggle::make()
+                        IsActiveToggle::make()
                             ->default(true),
                     ])
                     ->columns(2)

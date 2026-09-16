@@ -22,8 +22,8 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
@@ -58,7 +58,7 @@ final class AttributeTable
                 ->counts('values')
                 ->label(__('vendra-attribute::attributes.values')),
 
-            ActiveToggleColumn::make(),
+            IsActiveToggleColumn::make(),
 
             CreatedAtColumn::make(),
 

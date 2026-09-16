@@ -28,10 +28,11 @@ use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraLanguage\Support\Locales;
 use Misaf\VendraLanguage\Support\TranslationProgress;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 
 final class LanguageTable
 {
@@ -62,7 +63,7 @@ final class LanguageTable
                         ->hidden(fn (Language $record): bool => ! $record->is_default),
                 ]),
 
-            ActiveToggleColumn::make()
+            IsActiveToggleColumn::make()
                 ->disabled(fn (Language $record): bool => ! LanguageResource::canEdit($record)),
 
             TextColumn::make('translation_coverage')
@@ -101,8 +102,7 @@ final class LanguageTable
                             BooleanConstraint::make('active')
                                 ->label(__('vendra-language::attributes.active')),
 
-                            BooleanConstraint::make('is_default')
-                                ->label(__('vendra-language::attributes.is_default')),
+                            IsDefaultConstraint::make(),
 
                             TextConstraint::make('locale')
                                 ->label(__('vendra-language::attributes.locale')),

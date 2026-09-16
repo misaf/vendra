@@ -9,28 +9,25 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraCustomPage\Models\CustomPage;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
-use Misaf\VendraSupport\Filament\Concerns\RendersRichContent;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
 final class CustomPageInfolist
 {
-    use RendersRichContent;
-
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
                 TextEntry::make('customPageCategory.name')
                     ->label(__('vendra-custom-page::navigation.custom_page_category')),
-                TextEntry::make('name')->label(__('vendra-custom-page::attributes.name')),
-                TextEntry::make('slug')->label(__('vendra-custom-page::attributes.slug')),
+                NameEntry::make(),
+                SlugEntry::make(),
                 IconEntry::make('active')
                     ->boolean()
                     ->label(__('vendra-custom-page::attributes.active')),
-                TextEntry::make('description')
-                    ->columnSpanFull()
-                    ->formatStateUsing(fn (array|string|null $state): string => self::renderRichContent($state))
-                    ->html()
-                    ->label(__('vendra-custom-page::attributes.description')),
+                DescriptionEntry::make()
+                    ->richContent(),
                 ModelImageEntry::make()
                     ->collection(CustomPage::MEDIA_COLLECTION),
                 self::dateEntry('created_at'),

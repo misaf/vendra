@@ -9,6 +9,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraBlog\Models\BlogPostCategory;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
 final class BlogPostCategoryInfolist
 {
@@ -16,15 +19,11 @@ final class BlogPostCategoryInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')
-                    ->label(__('vendra-blog::attributes.name')),
+                NameEntry::make(),
 
-                TextEntry::make('slug')
-                    ->label(__('vendra-blog::attributes.slug')),
+                SlugEntry::make(),
 
-                TextEntry::make('description')
-                    ->columnSpanFull()
-                    ->label(__('vendra-blog::attributes.description')),
+                DescriptionEntry::make(),
 
                 IconEntry::make('active')
                     ->boolean()

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
@@ -16,6 +15,7 @@ use Livewire\Component as Livewire;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\RelationManagers\PermissionRelationManager;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Schemas\Components\RolesSelect;
 use Misaf\VendraPermission\Models\Permission;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionTextarea;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class PermissionForm
@@ -97,10 +97,7 @@ final class PermissionForm
                     ->string()
                     ->visible(fn (Get $get) => blank($get('roles'))),
 
-                Textarea::make('description')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
-                    ->columnSpanFull()
-                    ->label(__('vendra-permission::attributes.description'))
+                DescriptionTextarea::make()
                     ->live()
                     ->maxLength(255)
                     ->rows(5)

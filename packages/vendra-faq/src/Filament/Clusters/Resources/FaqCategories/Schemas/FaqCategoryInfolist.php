@@ -9,6 +9,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraFaq\Models\FaqCategory;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
 final class FaqCategoryInfolist
 {
@@ -16,11 +19,9 @@ final class FaqCategoryInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')->label(__('vendra-faq::attributes.name')),
-                TextEntry::make('slug')->label(__('vendra-faq::attributes.slug')),
-                TextEntry::make('description')
-                    ->columnSpanFull()
-                    ->label(__('vendra-faq::attributes.description')),
+                NameEntry::make(),
+                SlugEntry::make(),
+                DescriptionEntry::make(),
                 IconEntry::make('active')
                     ->boolean()
                     ->label(__('vendra-faq::attributes.active')),

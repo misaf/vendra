@@ -7,6 +7,10 @@ namespace Misaf\VendraUserProfile\Filament\Clusters\Resources\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsDefaultEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
 final class UserProfileInfolist
 {
@@ -15,14 +19,10 @@ final class UserProfileInfolist
         return $schema
             ->components([
                 TextEntry::make('user.username')->label(__('vendra-user-profile::attributes.user')),
-                TextEntry::make('name')->label(__('vendra-user-profile::attributes.name')),
-                TextEntry::make('slug')->label(__('vendra-user-profile::attributes.slug')),
-                TextEntry::make('description')
-                    ->columnSpanFull()
-                    ->label(__('vendra-user-profile::attributes.description')),
-                IconEntry::make('is_default')
-                    ->boolean()
-                    ->label(__('vendra-user-profile::attributes.is_default')),
+                NameEntry::make(),
+                SlugEntry::make(),
+                DescriptionEntry::make(),
+                IsDefaultEntry::make(),
                 IconEntry::make('active')
                     ->boolean()
                     ->label(__('vendra-user-profile::attributes.active')),

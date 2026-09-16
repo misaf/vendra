@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Misaf\VendraPermission\Filament\Clusters\Resources\Roles\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionTextarea;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class RoleForm
@@ -54,10 +54,7 @@ final class RoleForm
                     ->searchable()
                     ->string(),
 
-                Textarea::make('description')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
-                    ->columnSpanFull()
-                    ->label(__('vendra-permission::attributes.description'))
+                DescriptionTextarea::make()
                     ->live(debounce: 500)
                     ->maxLength(255)
                     ->nullable()

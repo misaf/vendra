@@ -29,9 +29,10 @@ use Misaf\VendraMultimedia\Filament\Tables\Columns\ModelImageColumn;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
 
@@ -63,13 +64,9 @@ final class BlogPostTable
                 ->state(fn (BlogPost $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                 ->toggleable(isToggledHiddenByDefault: true),
 
-            TextColumn::make('slug')
-                ->alignStart()
-                ->label(__('vendra-blog::attributes.slug'))
-                ->icon(Heroicon::Link)
-                ->toggleable(isToggledHiddenByDefault: true),
+            SlugColumn::make(),
 
-            ActiveToggleColumn::make(),
+            IsActiveToggleColumn::make(),
 
             CreatedAtColumn::make(),
 

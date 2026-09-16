@@ -22,10 +22,11 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 
 final class UserProfileTable
 {
@@ -58,7 +59,7 @@ final class UserProfileTable
                 ->icon(Heroicon::DocumentText)
                 ->toggleable(isToggledHiddenByDefault: true),
 
-            ActiveToggleColumn::make(),
+            IsActiveToggleColumn::make(),
 
             CreatedAtColumn::make(),
 
@@ -86,7 +87,7 @@ final class UserProfileTable
                                         ->titleAttribute('username'),
                                 ),
                             TextConstraint::make('slug'),
-                            BooleanConstraint::make('is_default'),
+                            IsDefaultConstraint::make(),
                             BooleanConstraint::make('active'),
                         ]),
                 ],

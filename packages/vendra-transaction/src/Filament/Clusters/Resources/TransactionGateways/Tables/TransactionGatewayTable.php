@@ -24,10 +24,12 @@ use Livewire\Component as Livewire;
 use Misaf\VendraMultimedia\Filament\Tables\Columns\ModelImageColumn;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Actions\SetDefaultTransactionGatewayTableAction;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
@@ -69,12 +71,8 @@ final class TransactionGatewayTable
                     ->state(fn (TransactionGateway $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('slug')
-                    ->alignStart()
-                    ->label(__('vendra-transaction::attributes.slug'))
-                    ->icon(Heroicon::Link)
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                SlugColumn::make()
+                    ->searchable(),
 
                 TextColumn::make('transactions_count')
                     ->alignCenter()
@@ -82,7 +80,7 @@ final class TransactionGatewayTable
                     ->counts('transactions')
                     ->label(__('vendra-transaction::navigation.transactions')),
 
-                ActiveToggleColumn::make(),
+                IsActiveToggleColumn::make(),
 
                 CreatedAtColumn::make(),
 
@@ -101,8 +99,7 @@ final class TransactionGatewayTable
                             BooleanConstraint::make('active')
                                 ->label(__('vendra-transaction::attributes.active')),
 
-                            BooleanConstraint::make('is_default')
-                                ->label(__('vendra-transaction::attributes.is_default')),
+                            IsDefaultConstraint::make(),
                         ]),
                 ],
                 layout: FiltersLayout::AboveContentCollapsible,

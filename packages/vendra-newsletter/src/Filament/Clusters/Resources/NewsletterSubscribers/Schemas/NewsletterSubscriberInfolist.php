@@ -8,6 +8,7 @@ use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class NewsletterSubscriberInfolist
 {
@@ -18,7 +19,7 @@ final class NewsletterSubscriberInfolist
                 TextEntry::make('email')
                     ->copyable()
                     ->label(__('vendra-newsletter::attributes.email')),
-                TextEntry::make('name')->label(__('vendra-newsletter::attributes.name')),
+                NameEntry::make(),
                 IconEntry::make('subscribed')
                     ->boolean()
                     ->label(__('vendra-newsletter::attributes.active'))

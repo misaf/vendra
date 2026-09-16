@@ -27,10 +27,11 @@ use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Actions\SetDefaultCurrencyTableAction;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource;
 use Misaf\VendraCurrency\Models\Currency;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 
 final class CurrencyTable
 {
@@ -77,7 +78,7 @@ final class CurrencyTable
                 ->alignCenter()
                 ->label(__('vendra-currency::attributes.decimal_places')),
 
-            ActiveToggleColumn::make()
+            IsActiveToggleColumn::make()
                 ->disabled(fn (Currency $record): bool => ! CurrencyResource::canEdit($record)),
 
             CreatedAtColumn::make(),
@@ -104,8 +105,7 @@ final class CurrencyTable
                             BooleanConstraint::make('active')
                                 ->label(__('vendra-currency::attributes.active')),
 
-                            BooleanConstraint::make('is_default')
-                                ->label(__('vendra-currency::attributes.is_default')),
+                            IsDefaultConstraint::make(),
 
                             NumberConstraint::make('position')
                                 ->label(__('vendra-currency::attributes.position')),

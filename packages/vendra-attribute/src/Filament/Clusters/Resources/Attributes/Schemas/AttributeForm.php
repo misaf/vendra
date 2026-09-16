@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Validation\Rules\Unique;
@@ -13,7 +12,8 @@ use Livewire\Component as Livewire;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraAttribute\Support\AttributeUnits;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
-use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionTextarea;
+use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraTagger\Filament\Forms\Components\ModelTagsInput;
 
@@ -42,15 +42,11 @@ final class AttributeForm
                 ->options(AttributeUnits::options())
                 ->searchable(),
 
-            Textarea::make('description')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
-                ->columnSpanFull()
-                ->label(__('vendra-attribute::attributes.description'))
-                ->live(onBlur: true)
+            DescriptionTextarea::make()
                 ->maxLength(65535)
                 ->rows(4),
 
-            ActiveToggle::make()
+            IsActiveToggle::make()
                 ->default(true),
         ];
 

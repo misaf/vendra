@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Misaf\VendraSupport\Filament\Tables\Columns;
 
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Columns\TextColumn;
 
-final class ActiveToggleColumn extends ToggleColumn
+final class SlugColumn extends TextColumn
 {
     public static function getDefaultName(): string
     {
-        return 'active';
+        return 'slug';
     }
 
     protected function setUp(): void
@@ -19,7 +19,9 @@ final class ActiveToggleColumn extends ToggleColumn
         parent::setUp();
 
         $this
-            ->label(__('vendra-support::attributes.active'))
-            ->onIcon(Heroicon::Bolt);
+            ->label(__('vendra-support::attributes.slug'))
+            ->icon(Heroicon::Link)
+            ->alignStart()
+            ->toggleable(isToggledHiddenByDefault: true);
     }
 }

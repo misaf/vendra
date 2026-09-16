@@ -9,6 +9,9 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraCustomPage\Models\CustomPageCategory;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
 final class CustomPageCategoryInfolist
 {
@@ -16,11 +19,9 @@ final class CustomPageCategoryInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')->label(__('vendra-custom-page::attributes.name')),
-                TextEntry::make('slug')->label(__('vendra-custom-page::attributes.slug')),
-                TextEntry::make('description')
-                    ->columnSpanFull()
-                    ->label(__('vendra-custom-page::attributes.description')),
+                NameEntry::make(),
+                SlugEntry::make(),
+                DescriptionEntry::make(),
                 IconEntry::make('active')
                     ->boolean()
                     ->label(__('vendra-custom-page::attributes.active')),

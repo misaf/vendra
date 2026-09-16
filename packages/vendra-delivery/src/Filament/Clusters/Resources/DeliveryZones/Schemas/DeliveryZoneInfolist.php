@@ -7,6 +7,8 @@ namespace Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\Schemas
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class DeliveryZoneInfolist
 {
@@ -14,11 +16,10 @@ final class DeliveryZoneInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')
-                    ->label(__('vendra-delivery::attributes.name')),
-                TextEntry::make('description')
-                    ->label(__('vendra-delivery::attributes.description'))
-                    ->placeholder('—'),
+                NameEntry::make(),
+                DescriptionEntry::make()
+                    ->placeholder('—')
+                    ->columnSpan(1),
                 TextEntry::make('origin_latitude')
                     ->label(__('vendra-delivery::attributes.origin_latitude')),
                 TextEntry::make('origin_longitude')

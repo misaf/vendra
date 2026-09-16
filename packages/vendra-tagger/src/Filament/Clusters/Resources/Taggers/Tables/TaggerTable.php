@@ -20,6 +20,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
 final class TaggerTable
@@ -34,11 +35,7 @@ final class TaggerTable
                 ->label(__('vendra-tagger::attributes.name'))
                 ->icon(Heroicon::Tag),
 
-            TextColumn::make('slug')
-                ->alignStart()
-                ->label(__('vendra-tagger::attributes.slug'))
-                ->icon(Heroicon::Link)
-                ->toggleable(isToggledHiddenByDefault: true),
+            SlugColumn::make(),
 
             TextColumn::make('type')
                 ->alignStart()

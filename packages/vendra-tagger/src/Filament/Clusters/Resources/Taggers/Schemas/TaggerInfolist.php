@@ -6,6 +6,8 @@ namespace Misaf\VendraTagger\Filament\Clusters\Resources\Taggers\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
 final class TaggerInfolist
 {
@@ -13,8 +15,8 @@ final class TaggerInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')->label(__('vendra-tagger::attributes.name')),
-                TextEntry::make('slug')->label(__('vendra-tagger::attributes.slug')),
+                NameEntry::make(),
+                SlugEntry::make(),
                 TextEntry::make('type')
                     ->badge()
                     ->label(__('vendra-tagger::attributes.type')),

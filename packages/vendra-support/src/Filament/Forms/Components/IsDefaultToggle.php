@@ -8,11 +8,11 @@ use Filament\Forms\Components\Toggle;
 use Filament\Support\Icons\Heroicon;
 use Livewire\Component as Livewire;
 
-final class ActiveToggle extends Toggle
+final class IsDefaultToggle extends Toggle
 {
     public static function getDefaultName(): string
     {
-        return 'active';
+        return 'is_default';
     }
 
     protected function setUp(): void
@@ -20,10 +20,11 @@ final class ActiveToggle extends Toggle
         parent::setUp();
 
         $this
-            ->label(__('vendra-support::attributes.active'))
+            ->label(__('vendra-support::attributes.is_default'))
             ->onIcon(Heroicon::Bolt)
             ->live()
-            ->afterStateUpdated(fn (ActiveToggle $component, Livewire $livewire) => $livewire->validateOnly($component->getStatePath()))
+            ->afterStateUpdated(fn (IsDefaultToggle $component, Livewire $livewire) => $livewire->validateOnly($component->getStatePath()))
+            ->default(false)
             ->required()
             ->rules(['boolean'])
             ->columnSpanFull();

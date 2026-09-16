@@ -7,6 +7,7 @@ namespace Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraWishlist\Models\Wishlist;
 
 final class WishlistInfolist
@@ -15,8 +16,7 @@ final class WishlistInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')
-                    ->label(__('vendra-wishlist::attributes.name')),
+                NameEntry::make(),
                 TextEntry::make('owner_label')
                     ->label(__('vendra-wishlist::attributes.owner'))
                     ->placeholder('—'),

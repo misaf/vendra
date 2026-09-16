@@ -7,6 +7,8 @@ namespace Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsDefaultEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class CurrencyInfolist
 {
@@ -17,7 +19,7 @@ final class CurrencyInfolist
                 TextEntry::make('code')
                     ->badge()
                     ->label(__('vendra-currency::attributes.code')),
-                TextEntry::make('name')->label(__('vendra-currency::attributes.name')),
+                NameEntry::make(),
                 TextEntry::make('symbol')
                     ->label(__('vendra-currency::attributes.symbol'))
                     ->placeholder('—'),
@@ -29,9 +31,7 @@ final class CurrencyInfolist
                 IconEntry::make('active')
                     ->boolean()
                     ->label(__('vendra-currency::attributes.active')),
-                IconEntry::make('is_default')
-                    ->boolean()
-                    ->label(__('vendra-currency::attributes.is_default')),
+                IsDefaultEntry::make(),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])

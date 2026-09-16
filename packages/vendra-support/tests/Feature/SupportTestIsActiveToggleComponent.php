@@ -13,10 +13,10 @@ use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
 use Livewire\Component;
-use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
-use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 
-final class SupportTestActiveToggleComponent extends Component implements HasActions, HasSchemas, HasTable
+final class SupportTestIsActiveToggleComponent extends Component implements HasActions, HasSchemas, HasTable
 {
     use InteractsWithActions;
     use InteractsWithSchemas;
@@ -33,7 +33,7 @@ final class SupportTestActiveToggleComponent extends Component implements HasAct
     public function form(Schema $schema): Schema
     {
         return $schema
-            ->components([ActiveToggle::make()->default(true)])
+            ->components([IsActiveToggle::make()->default(true)])
             ->statePath('data');
     }
 
@@ -41,7 +41,7 @@ final class SupportTestActiveToggleComponent extends Component implements HasAct
     {
         return $table
             ->query(SupportTestActiveRecord::query())
-            ->columns([ActiveToggleColumn::make()]);
+            ->columns([IsActiveToggleColumn::make()]);
     }
 
     public function render(): string

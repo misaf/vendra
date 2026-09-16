@@ -7,6 +7,7 @@ namespace Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\Schemas
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class DeliverySlotInfolist
 {
@@ -14,8 +15,7 @@ final class DeliverySlotInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name')
-                    ->label(__('vendra-delivery::attributes.name')),
+                NameEntry::make(),
                 TextEntry::make('starts_at')
                     ->label(__('vendra-delivery::attributes.starts_at')),
                 TextEntry::make('ends_at')

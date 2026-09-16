@@ -10,6 +10,7 @@ use Filament\Schemas\Schema;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Misaf\VendraMultimedia\Models\Multimedia;
+use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class MultimediaInfolist
 {
@@ -36,8 +37,7 @@ final class MultimediaInfolist
                 TextEntry::make('collection_name')
                     ->label(__('vendra-multimedia::attributes.collection_name')),
 
-                TextEntry::make('name')
-                    ->label(__('vendra-multimedia::attributes.name')),
+                NameEntry::make(),
 
                 TextEntry::make('file_name')
                     ->label(__('vendra-multimedia::attributes.file_name')),
