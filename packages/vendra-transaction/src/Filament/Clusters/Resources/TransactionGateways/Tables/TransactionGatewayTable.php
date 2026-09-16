@@ -16,7 +16,6 @@ use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -25,6 +24,7 @@ use Filament\Tables\Table;
 use Livewire\Component as Livewire;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
+use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Actions\SetDefaultTransactionGatewayTableAction;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
@@ -87,9 +87,7 @@ final class TransactionGatewayTable
                     ->counts('transactions')
                     ->label(__('vendra-transaction::navigation.transactions')),
 
-                ToggleColumn::make('active')
-                    ->label(__('vendra-transaction::attributes.active'))
-                    ->onIcon(Heroicon::Bolt),
+                ActiveToggleColumn::make(),
 
                 TextColumn::make('created_at')
                     ->extraCellAttributes(['dir' => 'ltr'])

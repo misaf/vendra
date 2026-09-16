@@ -14,6 +14,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 
 final class DeliveryZoneForm
 {
@@ -75,8 +76,8 @@ final class DeliveryZoneForm
                             ->minValue(0)
                             ->default(0),
 
-                        Toggle::make('active')
-                            ->label(__('vendra-delivery::attributes.active')),
+                        ActiveToggle::make()
+                            ->default(true),
                     ])
                     ->columns(2)
                     ->columnSpanFull(),

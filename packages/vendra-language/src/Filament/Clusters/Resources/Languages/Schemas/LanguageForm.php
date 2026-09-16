@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraLanguage\Support\Locales;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class LanguageForm
@@ -35,15 +36,8 @@ final class LanguageForm
                         modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
                     ),
 
-                Toggle::make('active')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
-                    ->columnSpanFull()
-                    ->default(false)
-                    ->label(__('vendra-language::attributes.active'))
-                    ->live()
-                    ->onIcon(Heroicon::Bolt)
-                    ->required()
-                    ->rules(['boolean']),
+                ActiveToggle::make()
+                    ->default(false),
 
                 Toggle::make('is_default')
                     ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))

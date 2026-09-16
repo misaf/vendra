@@ -17,6 +17,7 @@ use Livewire\Component as Livewire;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class CurrencyForm
@@ -83,15 +84,8 @@ final class CurrencyForm
                     ->options(CurrencyType::class)
                     ->required(),
 
-                Toggle::make('active')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
-                    ->columnSpanFull()
-                    ->default(true)
-                    ->label(__('vendra-currency::attributes.active'))
-                    ->live()
-                    ->onIcon(Heroicon::Bolt)
-                    ->required()
-                    ->rules(['boolean']),
+                ActiveToggle::make()
+                    ->default(true),
 
                 Toggle::make('is_default')
                     ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.is_default'))

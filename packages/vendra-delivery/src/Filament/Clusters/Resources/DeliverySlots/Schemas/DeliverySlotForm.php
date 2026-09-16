@@ -6,10 +6,10 @@ namespace Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\Schemas
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 
 final class DeliverySlotForm
 {
@@ -46,8 +46,8 @@ final class DeliverySlotForm
                             ->minValue(1)
                             ->numeric(),
 
-                        Toggle::make('active')
-                            ->label(__('vendra-delivery::attributes.active')),
+                        ActiveToggle::make()
+                            ->default(true),
                     ])
                     ->columns(2)
                     ->columnSpanFull(),

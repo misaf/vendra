@@ -15,6 +15,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class UserProfileForm
@@ -85,17 +86,8 @@ final class UserProfileForm
                         'boolean',
                     ]),
 
-                Toggle::make('active')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
-                    ->columnSpanFull()
-                    ->default(false)
-                    ->label(__('vendra-user-profile::attributes.active'))
-                    ->live()
-                    ->onIcon(Heroicon::Bolt)
-                    ->required()
-                    ->rules([
-                        'boolean',
-                    ]),
+                ActiveToggle::make()
+                    ->default(false),
             ]);
     }
 }

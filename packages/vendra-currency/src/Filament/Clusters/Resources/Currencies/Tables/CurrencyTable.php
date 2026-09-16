@@ -16,7 +16,6 @@ use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -28,6 +27,7 @@ use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Actions\SetDefaultCurrencyTableAction;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource;
 use Misaf\VendraCurrency\Models\Currency;
+use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 
 final class CurrencyTable
 {
@@ -77,9 +77,7 @@ final class CurrencyTable
                 ->alignCenter()
                 ->label(__('vendra-currency::attributes.decimal_places')),
 
-            ToggleColumn::make('active')
-                ->label(__('vendra-currency::attributes.active'))
-                ->onIcon(Heroicon::Bolt)
+            ActiveToggleColumn::make()
                 ->disabled(fn (Currency $record): bool => ! CurrencyResource::canEdit($record)),
 
             TextColumn::make('created_at')

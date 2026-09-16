@@ -7,16 +7,15 @@ namespace Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\Schemas;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraFaq\Models\FaqCategory;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedFormFields;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class FaqCategoryForm
@@ -79,17 +78,8 @@ final class FaqCategoryForm
                     ->panelLayout('grid')
                     ->responsiveImages(),
 
-                Toggle::make('active')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
-                    ->columnSpanFull()
-                    ->default(false)
-                    ->label(__('vendra-faq::attributes.active'))
-                    ->live()
-                    ->onIcon(Heroicon::Bolt)
-                    ->required()
-                    ->rules([
-                        'boolean',
-                    ]),
+                ActiveToggle::make()
+                    ->default(false),
             ]);
     }
 }

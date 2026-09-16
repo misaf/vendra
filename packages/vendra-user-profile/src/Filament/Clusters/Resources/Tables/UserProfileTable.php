@@ -15,7 +15,6 @@ use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as LayoutComponent;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -23,6 +22,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
+use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 
 final class UserProfileTable
 {
@@ -58,9 +58,7 @@ final class UserProfileTable
                 ->icon(Heroicon::DocumentText)
                 ->toggleable(isToggledHiddenByDefault: true),
 
-            ToggleColumn::make('active')
-                ->label(__('vendra-user-profile::attributes.active'))
-                ->onIcon(Heroicon::Bolt),
+            ActiveToggleColumn::make(),
 
             TextColumn::make('created_at')
                 ->extraCellAttributes(['dir' => 'ltr'])

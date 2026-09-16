@@ -16,7 +16,6 @@ use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -29,6 +28,7 @@ use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraLanguage\Support\Locales;
 use Misaf\VendraLanguage\Support\TranslationProgress;
+use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 
 final class LanguageTable
 {
@@ -62,9 +62,7 @@ final class LanguageTable
                         ->hidden(fn (Language $record): bool => ! $record->is_default),
                 ]),
 
-            ToggleColumn::make('active')
-                ->label(__('vendra-language::attributes.active'))
-                ->onIcon(Heroicon::Bolt)
+            ActiveToggleColumn::make()
                 ->disabled(fn (Language $record): bool => ! LanguageResource::canEdit($record)),
 
             TextColumn::make('translation_coverage')

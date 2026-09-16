@@ -8,14 +8,13 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraAttribute\Support\AttributeUnits;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
+use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class AttributeForm
@@ -51,17 +50,8 @@ final class AttributeForm
                 ->maxLength(65535)
                 ->rows(4),
 
-            Toggle::make('active')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.active'))
-                ->columnSpanFull()
-                ->default(true)
-                ->label(__('vendra-attribute::attributes.active'))
-                ->live()
-                ->onIcon(Heroicon::Bolt)
-                ->required()
-                ->rules([
-                    'boolean',
-                ]),
+            ActiveToggle::make()
+                ->default(true),
         ];
 
         if (TagIntegration::isAvailable()) {

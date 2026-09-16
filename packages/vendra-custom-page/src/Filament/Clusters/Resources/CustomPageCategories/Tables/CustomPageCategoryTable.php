@@ -19,7 +19,6 @@ use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as LayoutComponent;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
@@ -31,6 +30,7 @@ use Livewire\Component as Livewire;
 use Misaf\VendraCustomPage\Models\CustomPageCategory;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
+use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
 
 final class CustomPageCategoryTable
 {
@@ -80,9 +80,7 @@ final class CustomPageCategoryTable
                 ->icon(Heroicon::Link)
                 ->toggleable(isToggledHiddenByDefault: true),
 
-            ToggleColumn::make('active')
-                ->label(__('vendra-custom-page::attributes.active'))
-                ->onIcon(Heroicon::Bolt),
+            ActiveToggleColumn::make(),
 
             TextColumn::make('created_at')
                 ->extraCellAttributes(['dir' => 'ltr'])
