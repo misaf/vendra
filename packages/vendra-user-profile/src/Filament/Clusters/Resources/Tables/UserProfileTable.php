@@ -19,14 +19,17 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\SlugConstraint;
 
 final class UserProfileTable
 {
@@ -47,17 +50,11 @@ final class UserProfileTable
                 ->limitList(2)
                 ->listWithLineBreaks(),
 
-            TextColumn::make('name')
-                ->alignStart()
-                ->label(__('vendra-user-profile::table.columns.name'))
-                ->icon(Heroicon::Tag)
+            NameColumn::make()
                 ->searchable()
                 ->sortable(),
 
-            TextColumn::make('description')
-                ->label(__('vendra-user-profile::table.columns.description'))
-                ->icon(Heroicon::DocumentText)
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make(),
 
             IsActiveToggleColumn::make(),
 
@@ -76,8 +73,7 @@ final class UserProfileTable
                 [
                     QueryBuilder::make()
                         ->constraints([
-                            TextConstraint::make('name')
-                                ->label(__('vendra-user-profile::table.columns.name')),
+                            NameConstraint::make(),
 
                             RelationshipConstraint::make('user')
                                 ->selectable(
@@ -86,7 +82,7 @@ final class UserProfileTable
                                         ->searchable()
                                         ->titleAttribute('username'),
                                 ),
-                            TextConstraint::make('slug'),
+                            SlugConstraint::make(),
                             IsDefaultConstraint::make(),
                             IsActiveConstraint::make(),
                         ]),

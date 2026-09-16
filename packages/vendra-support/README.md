@@ -15,7 +15,9 @@ Shared support infrastructure used by every Vendra module.
 - `IsActiveEntry` infolist entry, `IsActiveConstraint` query-builder constraint, and `IsActiveFilter` ternary filter (Active / Inactive) for reading and filtering the same columns
 - `IsDefaultToggle` form field, `IsDefaultEntry` infolist entry, and `IsDefaultConstraint` query-builder constraint for boolean `is_default` columns
 - `CreatedAtColumn`, `UpdatedAtColumn`, and `RowIndexColumn` table columns for timestamps (Jalali under the `fa` locale) and the `#` row index
+- `CreatedAtEntry`, `UpdatedAtEntry`, and `DateTimeEntry` infolist entries with the same timestamp formatting, `IsActiveIconColumn`, and `PositionConstraint`, `NameConstraint`, and `SlugConstraint` query-builder constraints
 - `SluggableNameInput`, `SlugInput`, and `DescriptionTextarea` form fields, `NameEntry`, `SlugEntry`, and `DescriptionEntry` infolist entries, and `SlugColumn` for the common translated name/slug/description attributes
+- `NameColumn` and `DescriptionColumn` table columns and the `DescriptionRichEditor` JSON rich-text field
 - Composable policy authorization, sandbox helpers, and shared events
 
 The package binds null capability resolvers by default. Concrete providers can replace those bindings without coupling domain packages to their implementations.

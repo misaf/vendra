@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class NewsletterSubscriberTable
@@ -40,10 +41,7 @@ final class NewsletterSubscriberTable
                     ->icon(Heroicon::Envelope)
                     ->searchable(),
 
-                TextColumn::make('name')
-                    ->alignStart()
-                    ->label(__('vendra-newsletter::attributes.name'))
-                    ->icon(Heroicon::Tag)
+                NameColumn::make()
                     ->placeholder('—')
                     ->searchable(),
 

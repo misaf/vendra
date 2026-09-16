@@ -7,6 +7,8 @@ namespace Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\Schemas
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 
 final class LanguageLineInfolist
 {
@@ -20,20 +22,9 @@ final class LanguageLineInfolist
                 KeyValueEntry::make('text')
                     ->columnSpanFull()
                     ->label(__('vendra-language::attributes.text')),
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-language::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
-            );
     }
 }

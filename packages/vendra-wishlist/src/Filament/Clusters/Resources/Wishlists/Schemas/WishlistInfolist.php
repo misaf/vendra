@@ -7,7 +7,9 @@ namespace Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 use Misaf\VendraWishlist\Models\Wishlist;
 
 final class WishlistInfolist
@@ -30,20 +32,9 @@ final class WishlistInfolist
                     ->badge()
                     ->label(__('vendra-wishlist::attributes.items'))
                     ->state(fn (Wishlist $record): int => $record->items()->count()),
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-wishlist::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
-            );
     }
 }

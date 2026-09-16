@@ -8,7 +8,10 @@ use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\DateTimeEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 
 final class NewsletterSubscriberInfolist
 {
@@ -24,22 +27,13 @@ final class NewsletterSubscriberInfolist
                     ->boolean()
                     ->label(__('vendra-newsletter::attributes.active'))
                     ->state(fn (NewsletterSubscriber $record): bool => $record->isSubscribed()),
-                self::dateEntry('subscribed_at'),
-                self::dateEntry('unsubscribed_at'),
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                DateTimeEntry::make('subscribed_at')
+                    ->label(__('vendra-newsletter::attributes.subscribed_at')),
+                DateTimeEntry::make('unsubscribed_at')
+                    ->label(__('vendra-newsletter::attributes.unsubscribed_at')),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-newsletter::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
-            );
     }
 }

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\Schemas;
 
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Livewire\Component as Livewire;
 use Misaf\VendraCustomPage\Models\CustomPage;
 use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionRichEditor;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Filament\Forms\Components\SluggableNameInput;
 use Misaf\VendraSupport\Filament\Forms\Components\SlugInput;
@@ -37,11 +37,7 @@ final class CustomPageForm
                 SlugInput::make()
                     ->uniqueWithinTenant(perLocale: true),
 
-                RichEditor::make('description')
-                    ->columnSpanFull()
-                    ->label(__('vendra-custom-page::attributes.description'))
-                    ->required()
-                    ->json(),
+                DescriptionRichEditor::make(),
 
                 ModelImageUpload::make()
                     ->collection(CustomPage::MEDIA_COLLECTION),

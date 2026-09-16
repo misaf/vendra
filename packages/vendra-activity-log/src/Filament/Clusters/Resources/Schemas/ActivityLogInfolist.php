@@ -8,6 +8,8 @@ use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraActivityLog\Models\ActivityLog;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 
 final class ActivityLogInfolist
 {
@@ -46,20 +48,9 @@ final class ActivityLogInfolist
                     ->columnSpanFull()
                     ->state(fn (ActivityLog $record): array => $record->properties?->all() ?? []),
 
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-activity-log::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
-            );
     }
 }

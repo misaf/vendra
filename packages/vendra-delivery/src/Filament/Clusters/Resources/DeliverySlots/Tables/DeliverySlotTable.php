@@ -11,12 +11,12 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
@@ -46,9 +46,7 @@ final class DeliverySlotTable
                     ->label(__('vendra-delivery::attributes.capacity'))
                     ->placeholder('∞'),
 
-                IconColumn::make('active')
-                    ->boolean()
-                    ->label(__('vendra-delivery::attributes.active')),
+                IsActiveIconColumn::make(),
 
                 CreatedAtColumn::make()
                     ->sortable(),

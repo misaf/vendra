@@ -6,6 +6,8 @@ namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 
 final class AffiliateCommissionInfolist
 {
@@ -32,20 +34,9 @@ final class AffiliateCommissionInfolist
                 TextEntry::make('source_id'),
                 TextEntry::make('affiliate_referral_id'),
                 TextEntry::make('affiliate_payout_id'),
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-affiliate::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
-            );
     }
 }

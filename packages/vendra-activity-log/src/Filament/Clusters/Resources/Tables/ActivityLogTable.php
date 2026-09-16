@@ -23,6 +23,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Number;
 use Misaf\VendraActivityLog\Models\ActivityLog;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
@@ -49,10 +50,7 @@ final class ActivityLogTable
                 ->searchable()
                 ->sortable(),
 
-            TextColumn::make('description')
-                ->label(__('vendra-activity-log::attributes.description'))
-                ->icon(Heroicon::DocumentText)
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make(),
 
             BadgeableColumn::make('subject_type')
                 ->alignStart()

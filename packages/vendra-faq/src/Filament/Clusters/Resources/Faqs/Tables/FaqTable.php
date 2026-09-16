@@ -14,10 +14,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as LayoutComponent;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Table;
@@ -29,11 +27,14 @@ use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\PositionConstraint;
 use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
 
 final class FaqTable
@@ -53,16 +54,10 @@ final class FaqTable
                 ->collection(Faq::MEDIA_COLLECTION)
                 ->defaultImageUrl(fn (Faq $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire))),
 
-            TextColumn::make('name')
-                ->alignStart()
-                ->label(__('vendra-faq::attributes.name'))
-                ->icon(Heroicon::Tag),
+            NameColumn::make(),
 
-            TextColumn::make('description')
-                ->label(__('vendra-faq::attributes.description'))
-                ->icon(Heroicon::DocumentText)
-                ->state(fn (Faq $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make()
+                ->state(fn (Faq $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire)),
 
             SlugColumn::make(),
 
@@ -100,7 +95,7 @@ final class FaqTable
 
                             IsActiveConstraint::make(),
 
-                            NumberConstraint::make('position'),
+                            PositionConstraint::make(),
                         ]),
                 ],
                 layout: FiltersLayout::AboveContentCollapsible,

@@ -17,19 +17,21 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Livewire\Component as Livewire;
 use Misaf\VendraMultimedia\Filament\Tables\Columns\ModelImageColumn;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\SlugConstraint;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Actions\SetDefaultTransactionGatewayTableAction;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
@@ -65,11 +67,8 @@ final class TransactionGatewayTable
                             ->hidden(fn (TransactionGateway $record): bool => ! $record->is_default),
                     ]),
 
-                TextColumn::make('description')
-                    ->label(__('vendra-transaction::attributes.description'))
-                    ->icon(Heroicon::DocumentText)
-                    ->state(fn (TransactionGateway $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
-                    ->toggleable(isToggledHiddenByDefault: true),
+                DescriptionColumn::make()
+                    ->state(fn (TransactionGateway $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire)),
 
                 SlugColumn::make()
                     ->searchable(),
@@ -90,11 +89,9 @@ final class TransactionGatewayTable
                 [
                     QueryBuilder::make()
                         ->constraints([
-                            TextConstraint::make('name')
-                                ->label(__('vendra-transaction::attributes.name')),
+                            NameConstraint::make(),
 
-                            TextConstraint::make('slug')
-                                ->label(__('vendra-transaction::attributes.slug')),
+                            SlugConstraint::make(),
 
                             IsActiveConstraint::make(),
 

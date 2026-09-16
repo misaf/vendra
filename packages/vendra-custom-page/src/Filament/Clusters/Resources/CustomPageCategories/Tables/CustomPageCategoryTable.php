@@ -17,10 +17,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as LayoutComponent;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Number;
@@ -30,11 +28,13 @@ use Misaf\VendraMultimedia\Filament\Tables\Columns\ModelImageColumn;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\PositionConstraint;
 
 final class CustomPageCategoryTable
 {
@@ -64,11 +64,8 @@ final class CustomPageCategoryTable
                 ])
                 ->suffix(''),
 
-            TextColumn::make('description')
-                ->label(__('vendra-custom-page::attributes.description'))
-                ->icon(Heroicon::DocumentText)
-                ->state(fn (CustomPageCategory $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire))
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make()
+                ->state(fn (CustomPageCategory $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire)),
 
             SlugColumn::make(),
 
@@ -92,7 +89,7 @@ final class CustomPageCategoryTable
                         ->constraints([
                             IsActiveConstraint::make(),
 
-                            NumberConstraint::make('position'),
+                            PositionConstraint::make(),
                         ]),
                 ],
                 layout: FiltersLayout::AboveContentCollapsible,

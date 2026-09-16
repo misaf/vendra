@@ -18,7 +18,6 @@ use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
@@ -32,6 +31,8 @@ use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\PositionConstraint;
 
 final class CurrencyTable
 {
@@ -95,8 +96,7 @@ final class CurrencyTable
                             TextConstraint::make('code')
                                 ->label(__('vendra-currency::attributes.code')),
 
-                            TextConstraint::make('name')
-                                ->label(__('vendra-currency::attributes.name')),
+                            NameConstraint::make(),
 
                             SelectConstraint::make('type')
                                 ->label(__('vendra-currency::attributes.type'))
@@ -106,8 +106,7 @@ final class CurrencyTable
 
                             IsDefaultConstraint::make(),
 
-                            NumberConstraint::make('position')
-                                ->label(__('vendra-currency::attributes.position')),
+                            PositionConstraint::make(),
                         ]),
                 ],
                 layout: FiltersLayout::AboveContentCollapsible,

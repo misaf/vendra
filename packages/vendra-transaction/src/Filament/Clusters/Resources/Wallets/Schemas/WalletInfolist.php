@@ -6,6 +6,8 @@ namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 use Misaf\VendraTransaction\Models\Wallet;
 
 final class WalletInfolist
@@ -37,20 +39,9 @@ final class WalletInfolist
                 TextEntry::make('balance')
                     ->label(__('vendra-transaction::attributes.balance'))
                     ->numeric(),
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-transaction::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->dateTime('Y-m-d H:i'),
-            );
     }
 }

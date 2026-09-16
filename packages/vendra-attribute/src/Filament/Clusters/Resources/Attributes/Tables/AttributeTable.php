@@ -16,16 +16,19 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\PositionConstraint;
 use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
 
 final class AttributeTable
@@ -38,16 +41,11 @@ final class AttributeTable
         $columns = [
             RowIndexColumn::make(),
 
-            TextColumn::make('name')
-                ->label(__('vendra-attribute::attributes.name'))
-                ->icon(Heroicon::Tag)
+            NameColumn::make()
                 ->searchable()
                 ->sortable(),
 
-            TextColumn::make('description')
-                ->label(__('vendra-attribute::attributes.description'))
-                ->icon(Heroicon::DocumentText)
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make(),
 
             TextColumn::make('unit')
                 ->badge()
@@ -92,10 +90,10 @@ final class AttributeTable
             ->filters([
                 QueryBuilder::make()
                     ->constraints([
-                        TextConstraint::make('name'),
+                        NameConstraint::make(),
                         TextConstraint::make('unit'),
                         IsActiveConstraint::make(),
-                        NumberConstraint::make('position'),
+                        PositionConstraint::make(),
                     ]),
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->reorderable('position', direction: 'desc');

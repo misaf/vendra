@@ -18,18 +18,18 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as LayoutComponent;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Number;
 use Misaf\VendraPermission\Models\Role;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
 
 final class RoleTable
 {
@@ -55,10 +55,7 @@ final class RoleTable
                 ])
                 ->suffix(''),
 
-            TextColumn::make('description')
-                ->label(__('vendra-permission::table.columns.description'))
-                ->icon(Heroicon::DocumentText)
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make(),
 
             CreatedAtColumn::make(),
 
@@ -72,8 +69,7 @@ final class RoleTable
                 [
                     QueryBuilder::make()
                         ->constraints([
-                            TextConstraint::make('name')
-                                ->label(__('vendra-permission::table.columns.name')),
+                            NameConstraint::make(),
 
                             SelectConstraint::make('guard_name')
                                 ->label(__('vendra-permission::table.columns.guard_name'))

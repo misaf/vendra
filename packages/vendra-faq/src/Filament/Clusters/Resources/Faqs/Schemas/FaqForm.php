@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\Schemas;
 
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Livewire\Component as Livewire;
 use Misaf\VendraFaq\Models\Faq;
 use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionRichEditor;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Filament\Forms\Components\SluggableNameInput;
 use Misaf\VendraSupport\Filament\Forms\Components\SlugInput;
@@ -38,13 +38,9 @@ final class FaqForm
             SlugInput::make()
                 ->uniqueWithinTenant(perLocale: true),
 
-            RichEditor::make('description')
+            DescriptionRichEditor::make()
                 ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.description'))
-                ->columnSpanFull()
-                ->label(__('vendra-faq::attributes.description'))
-                ->live(onBlur: true)
-                ->required()
-                ->json(),
+                ->live(onBlur: true),
 
             ModelImageUpload::make()
                 ->collection(Faq::MEDIA_COLLECTION),

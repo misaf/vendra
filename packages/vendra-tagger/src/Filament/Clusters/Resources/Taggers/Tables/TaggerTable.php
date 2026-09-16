@@ -15,13 +15,16 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
-use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\PositionConstraint;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\SlugConstraint;
 
 final class TaggerTable
 {
@@ -30,10 +33,7 @@ final class TaggerTable
         $columns = [
             RowIndexColumn::make(),
 
-            TextColumn::make('name')
-                ->alignStart()
-                ->label(__('vendra-tagger::attributes.name'))
-                ->icon(Heroicon::Tag),
+            NameColumn::make(),
 
             SlugColumn::make(),
 
@@ -58,11 +58,9 @@ final class TaggerTable
                 [
                     QueryBuilder::make()
                         ->constraints([
-                            TextConstraint::make('name')
-                                ->label(__('vendra-tagger::attributes.name')),
+                            NameConstraint::make(),
 
-                            TextConstraint::make('slug')
-                                ->label(__('vendra-tagger::attributes.slug')),
+                            SlugConstraint::make(),
 
                             TextConstraint::make('type')
                                 ->label(__('vendra-tagger::attributes.type')),
@@ -73,7 +71,7 @@ final class TaggerTable
                             DateConstraint::make('updated_at')
                                 ->label(__('vendra-tagger::attributes.updated_at')),
 
-                            NumberConstraint::make('position'),
+                            PositionConstraint::make(),
                         ]),
                 ],
                 layout: FiltersLayout::AboveContentCollapsible,

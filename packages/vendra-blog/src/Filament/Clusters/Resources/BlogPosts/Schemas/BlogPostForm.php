@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\Schemas;
 
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Livewire\Component as Livewire;
 use Misaf\VendraBlog\Models\BlogPost;
 use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionRichEditor;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Filament\Forms\Components\SluggableNameInput;
 use Misaf\VendraSupport\Filament\Forms\Components\SlugInput;
@@ -38,11 +38,7 @@ final class BlogPostForm
             SlugInput::make()
                 ->uniqueWithinTenant(perLocale: true),
 
-            RichEditor::make('description')
-                ->columnSpanFull()
-                ->label(__('vendra-blog::attributes.description'))
-                ->required()
-                ->json(),
+            DescriptionRichEditor::make(),
 
             ModelImageUpload::make()
                 ->collection(BlogPost::MEDIA_COLLECTION)

@@ -6,6 +6,8 @@ namespace Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 
 final class DeliveryInfolist
 {
@@ -33,21 +35,16 @@ final class DeliveryInfolist
                 TextEntry::make('address.line_one')
                     ->label(__('vendra-delivery::attributes.address'))
                     ->placeholder('—'),
-                self::dateEntry('scheduled_for'),
-                self::dateEntry('created_at'),
-                self::dateEntry('updated_at'),
+                TextEntry::make('scheduled_for')
+                    ->label(__('vendra-delivery::attributes.scheduled_for'))
+                    ->when(
+                        app()->isLocale('fa'),
+                        fn (TextEntry $entry): TextEntry => $entry->jalaliDate('Y-m-d', latinNumbers: true),
+                        fn (TextEntry $entry): TextEntry => $entry->date('Y-m-d'),
+                    ),
+                CreatedAtEntry::make(),
+                UpdatedAtEntry::make(),
             ])
             ->columns(2);
-    }
-
-    private static function dateEntry(string $name): TextEntry
-    {
-        return TextEntry::make($name)
-            ->label(__("vendra-delivery::attributes.{$name}"))
-            ->when(
-                app()->isLocale('fa'),
-                fn (TextEntry $entry): TextEntry => $entry->jalaliDate('Y-m-d', latinNumbers: true),
-                fn (TextEntry $entry): TextEntry => $entry->date('Y-m-d'),
-            );
     }
 }

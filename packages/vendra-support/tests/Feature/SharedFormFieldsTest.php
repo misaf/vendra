@@ -6,6 +6,7 @@ namespace Misaf\VendraSupport\Tests\Feature;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Misaf\VendraSupport\Filament\Forms\Components\DescriptionRichEditor;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\IsDefaultEntry;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
@@ -86,4 +87,13 @@ it('labels the default entry and constraint with the shared translation', functi
         ->and($entry->isBoolean())->toBeTrue()
         ->and($constraint->getName())->toBe('is_default')
         ->and($constraint->getLabel())->toBe(__('vendra-support::attributes.is_default'));
+});
+
+it('stores the rich description editor as required json with the shared label', function (): void {
+    $editor = DescriptionRichEditor::make();
+
+    expect($editor->getName())->toBe('description')
+        ->and($editor->getLabel())->toBe(__('vendra-support::attributes.description'))
+        ->and($editor->isJson())->toBeTrue()
+        ->and($editor->isRequired())->toBeTrue();
 });

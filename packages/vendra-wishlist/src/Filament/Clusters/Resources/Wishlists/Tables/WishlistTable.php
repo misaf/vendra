@@ -15,11 +15,11 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
 
 final class WishlistTable
 {
@@ -70,8 +70,7 @@ final class WishlistTable
             ->filters([
                 QueryBuilder::make()
                     ->constraints([
-                        TextConstraint::make('name')
-                            ->label(__('vendra-wishlist::attributes.name')),
+                        NameConstraint::make(),
 
                         BooleanConstraint::make('is_default')
                             ->label(__('vendra-wishlist::attributes.is_default')),

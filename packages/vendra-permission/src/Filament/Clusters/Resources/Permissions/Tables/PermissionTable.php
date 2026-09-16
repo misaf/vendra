@@ -17,7 +17,6 @@ use Filament\Tables\Columns\Layout\Component as LayoutComponent;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Config;
 use Laravel\Pennant\Feature;
@@ -26,8 +25,11 @@ use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permi
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Roles\SyncBulkAction;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
 
 final class PermissionTable
 {
@@ -48,17 +50,11 @@ final class PermissionTable
                 ->limitList(2)
                 ->listWithLineBreaks(),
 
-            TextColumn::make('name')
-                ->alignStart()
-                ->label(__('vendra-permission::table.columns.name'))
-                ->icon(Heroicon::Tag)
+            NameColumn::make()
                 ->searchable()
                 ->sortable(),
 
-            TextColumn::make('description')
-                ->label(__('vendra-permission::table.columns.description'))
-                ->icon(Heroicon::DocumentText)
-                ->toggleable(isToggledHiddenByDefault: true),
+            DescriptionColumn::make(),
 
             CreatedAtColumn::make(),
 
@@ -71,8 +67,7 @@ final class PermissionTable
                 [
                     QueryBuilder::make()
                         ->constraints([
-                            TextConstraint::make('name')
-                                ->label(__('vendra-permission::table.columns.name')),
+                            NameConstraint::make(),
 
                             SelectConstraint::make('guard_name')
                                 ->label(__('vendra-permission::table.columns.guard_name'))

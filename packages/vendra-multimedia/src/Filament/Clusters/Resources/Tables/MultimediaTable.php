@@ -25,6 +25,7 @@ use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
 
 final class MultimediaTable
 {
@@ -106,8 +107,7 @@ final class MultimediaTable
                             TextConstraint::make('collection_name')
                                 ->label(__('vendra-multimedia::attributes.collection_name')),
 
-                            TextConstraint::make('name')
-                                ->label(__('vendra-multimedia::attributes.name')),
+                            NameConstraint::make(),
 
                             TextConstraint::make('file_name')
                                 ->label(__('vendra-multimedia::attributes.file_name')),
