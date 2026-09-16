@@ -11,6 +11,7 @@ Shared support infrastructure used by every Vendra module.
 - Request and queued-job context propagation primitives
 - Shared tenant seeders and console commands
 - Shared Filament clusters, navigation taxonomy, and concerns
+- `ActiveToggle` form field and `ActiveToggleColumn` table column for boolean active/inactive columns
 - Composable policy authorization, sandbox helpers, and shared events
 
 The package binds null capability resolvers by default. Concrete providers can replace those bindings without coupling domain packages to their implementations.

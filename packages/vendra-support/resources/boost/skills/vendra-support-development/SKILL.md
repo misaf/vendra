@@ -54,6 +54,7 @@ Tenant awareness is derived purely from the bound resolver — never from config
 - Base `DemoContentSeeder` / `PermissionPolicySeeder` and `SeedCommand` / `TenantSeedCommand` must run tenant-agnostically: seed globally when tenancy is off, per-tenant (optional `{tenant?}` arg) when on.
 - Keep `RequestJobContext` domain-neutral. Its first-class fields are trace ID, actor, operation, tenant, and a hidden idempotency key; domain packages supply their own visible metadata. Use `add()` for persistent current-process context, `scope()` for temporary context, `current()` to snapshot it, and `resolveTraceId()` to preserve or create correlation IDs.
 - Keep shared Filament concerns generic and free of any single module's domain assumptions.
+- `Filament\Forms\Components\ActiveToggle` and `Filament\Tables\Columns\ActiveToggleColumn` are the shared boolean active/inactive controls: default name `active`, Bolt on-icon, shared label; the form field is live, required, `boolean`-validated, and validates its own state path on change. Keep them domain-free — record-specific writes (`updateStateUsing`) and authorization (`disabled`) stay at the call site.
 
 ## Policy Authorization Concerns
 
