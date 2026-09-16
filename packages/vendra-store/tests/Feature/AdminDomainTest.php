@@ -81,3 +81,11 @@ it('does not resolve manually inactive, billing suspended, or provisioning tenan
         'provisioned_at' => null,
     ]],
 ]);
+
+it('points a store at the admin host that actually serves its panel', function (): void {
+    $store = Store::factory()->active()->create(['slug' => 'acme']);
+
+    expect($store->adminUrl())->toBe('https://acme.admin.vendra.test');
+
+    $this->get($store->adminUrl().'/login')->assertSuccessful();
+});

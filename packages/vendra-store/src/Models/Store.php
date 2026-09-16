@@ -21,6 +21,7 @@ use Misaf\VendraStore\Database\Factories\StoreFactory;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Observers\StoreObserver;
 use Misaf\VendraStore\Scopes\StoreScope;
+use Misaf\VendraStore\Services\StoreDomainFinder;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraTenant\Concerns\IsTenantModel;
 use Misaf\VendraTenant\Contracts\TenantContract;
@@ -195,6 +196,20 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
             ! $this->active, $this->billing_suspended_at !== null => StoreStatus::Suspended,
             default => StoreStatus::Active,
         };
+    }
+
+    /**
+     * The store's own admin panel, on the canonical host that
+     * {@see StoreDomainFinder::findForAdminHost()} resolves: the slug under
+     * `admin.<central host>`. The slug directly under the central host serves
+     * nothing.
+     *
+     * Panels are served over TLS by the edge proxy, so the scheme is fixed
+     * rather than derived from the request.
+     */
+    public function adminUrl(): string
+    {
+        return 'https://'.$this->slug.'.admin.'.Config::string('vendra-tenant.central_host');
     }
 
     /**

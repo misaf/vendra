@@ -90,6 +90,14 @@ final class StorefrontDeployment extends Model
     /**
      * Enter provisioning, clearing any previous failure.
      */
+    /**
+     * The public storefront, served over TLS by the edge proxy.
+     */
+    public function url(): string
+    {
+        return 'https://'.$this->domain;
+    }
+
     public function markProcessing(): void
     {
         $this->transitionTo(StorefrontDeploymentStatus::Processing, [
