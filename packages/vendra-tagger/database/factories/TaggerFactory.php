@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTagger\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraTagger\Models\Tagger;
 
 /**
  * @extends Factory<Tagger>
  */
+#[UseModel(Tagger::class)]
 final class TaggerFactory extends Factory
 {
     /**

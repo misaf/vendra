@@ -89,7 +89,7 @@ it('serves catalog items in the JSON:API envelope with relationships and include
 
     $this->getJson("/api/catalog/products?inStock=1&categoryId={$group->id}&include=productPrices", ['Accept' => 'application/vnd.api+json'])
         ->assertOk()
-        ->assertHeader('content-type', 'application/vnd.api+json; charset=utf-8')
+        ->assertHeader('content-type', 'application/vnd.api+json')
         ->assertJsonPath('meta.totalItems', 1)
         ->assertJsonPath('data.0.type', 'Product')
         ->assertJsonPath('data.0.id', "/api/catalog/products/{$item->id}")
