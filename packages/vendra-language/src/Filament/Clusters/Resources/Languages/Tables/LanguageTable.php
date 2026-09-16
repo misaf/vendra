@@ -84,7 +84,7 @@ final class LanguageTable
                 ->state(function (Language $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLocale($record->locale);
 
-                    return "{Arr::get($coverage, 'translated')} / {Arr::get($coverage, 'total')}";
+                    return Arr::get($coverage, 'translated').' / '.Arr::get($coverage, 'total');
                 }),
 
             TextColumn::make('created_at')

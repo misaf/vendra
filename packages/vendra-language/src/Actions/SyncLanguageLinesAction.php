@@ -29,19 +29,17 @@ final readonly class SyncLanguageLinesAction
                 ->keyBy(
                     fn (LanguageLine $languageLine): string => "{$languageLine->namespace}\0{$languageLine->group}\0{$languageLine->key}",
                 );
-            $result = [
-                'created' => 0,
-                'updated' => 0,
-                'unchanged' => 0,
-            ];
+            $created = 0;
+            $updated = 0;
+            $unchanged = 0;
 
             foreach ($catalogLines as $catalogLine) {
-                $identity = "{Arr::get($catalogLine, 'namespace')}\0{Arr::get($catalogLine, 'group')}\0{Arr::get($catalogLine, 'key')}";
+                $identity = implode("\0", [Arr::get($catalogLine, 'namespace'), Arr::get($catalogLine, 'group'), Arr::get($catalogLine, 'key')]);
                 $languageLine = $existingLanguageLines->get($identity);
 
                 if (! $languageLine instanceof LanguageLine) {
                     LanguageLine::query()->create($catalogLine);
-                    Arr::get($result, 'created')++;
+                    $created++;
 
                     continue;
                 }
@@ -50,16 +48,20 @@ final readonly class SyncLanguageLinesAction
                 $mergedText = $text + Arr::get($catalogLine, 'text');
 
                 if ($mergedText === $text) {
-                    Arr::get($result, 'unchanged')++;
+                    $unchanged++;
 
                     continue;
                 }
 
                 $languageLine->update(['text' => $mergedText]);
-                Arr::get($result, 'updated')++;
+                $updated++;
             }
 
-            return $result;
+            return [
+                'created' => $created,
+                'updated' => $updated,
+                'unchanged' => $unchanged,
+            ];
         });
     }
 }

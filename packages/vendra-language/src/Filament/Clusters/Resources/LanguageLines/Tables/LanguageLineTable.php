@@ -81,7 +81,7 @@ final class LanguageLineTable
                 ->state(function (LanguageLine $record, TranslationProgress $progress): string {
                     $coverage = $progress->forLanguageLine($record);
 
-                    return "{Arr::get($coverage, 'translated')} / {Arr::get($coverage, 'total')}";
+                    return Arr::get($coverage, 'translated').' / '.Arr::get($coverage, 'total');
                 })
                 ->tooltip(function (LanguageLine $record, TranslationProgress $progress): ?string {
                     $missingLocales = Arr::get($progress->forLanguageLine($record), 'missing_locales');
