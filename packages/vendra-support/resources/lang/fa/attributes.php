@@ -6,6 +6,7 @@ return [
     'active' => 'فعال',
     'created_at' => 'تاریخ ایجاد',
     'description' => 'توضیحات',
+    'inactive' => 'غیرفعال',
     'is_default' => 'پیش‌فرض',
     'name' => 'نام',
     'slug' => 'نامک',

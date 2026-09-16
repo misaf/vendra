@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\IsDefaultEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
@@ -22,9 +22,7 @@ final class TransactionGatewayInfolist
             ->components([
                 NameEntry::make(),
                 SlugEntry::make(),
-                IconEntry::make('active')
-                    ->boolean()
-                    ->label(__('vendra-transaction::attributes.active')),
+                IsActiveEntry::make(),
                 IsDefaultEntry::make(),
                 DescriptionEntry::make(),
                 ModelImageEntry::make()

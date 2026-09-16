@@ -17,7 +17,6 @@ use Filament\Tables\Columns\Layout\Component as LayoutComponent;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
@@ -33,6 +32,7 @@ use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
 final class CustomPageTable
 {
@@ -91,8 +91,7 @@ final class CustomPageTable
                                         ->titleAttribute('name'),
                                 ),
 
-                            BooleanConstraint::make('active')
-                                ->label(__('vendra-custom-page::attributes.active')),
+                            IsActiveConstraint::make(),
 
                             NumberConstraint::make('position'),
                         ]),

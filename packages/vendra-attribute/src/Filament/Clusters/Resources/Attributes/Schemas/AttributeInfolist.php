@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraTagger\Filament\Infolists\Components\ModelTagsEntry;
 
@@ -25,9 +25,7 @@ final class AttributeInfolist
                 ->label(__('vendra-attribute::attributes.unit'))
                 ->placeholder('-'),
 
-            IconEntry::make('active')
-                ->boolean()
-                ->label(__('vendra-attribute::attributes.active')),
+            IsActiveEntry::make(),
 
             TextEntry::make('values_count')
                 ->badge()

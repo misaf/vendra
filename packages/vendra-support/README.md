@@ -12,6 +12,7 @@ Shared support infrastructure used by every Vendra module.
 - Shared tenant seeders and console commands
 - Shared Filament clusters, navigation taxonomy, and concerns
 - `IsActiveToggle` form field and `IsActiveToggleColumn` table column for boolean active/inactive columns
+- `IsActiveEntry` infolist entry, `IsActiveConstraint` query-builder constraint, and `IsActiveFilter` ternary filter (Active / Inactive) for reading and filtering the same columns
 - `IsDefaultToggle` form field, `IsDefaultEntry` infolist entry, and `IsDefaultConstraint` query-builder constraint for boolean `is_default` columns
 - `CreatedAtColumn`, `UpdatedAtColumn`, and `RowIndexColumn` table columns for timestamps (Jalali under the `fa` locale) and the `#` row index
 - `SluggableNameInput`, `SlugInput`, and `DescriptionTextarea` form fields, `NameEntry`, `SlugEntry`, and `DescriptionEntry` infolist entries, and `SlugColumn` for the common translated name/slug/description attributes

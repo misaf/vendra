@@ -17,7 +17,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Livewire\Component as Livewire;
@@ -29,6 +28,7 @@ use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Actions\SetDefaultTransactionGatewayTableAction;
 use Misaf\VendraTransaction\Models\TransactionGateway;
@@ -96,8 +96,7 @@ final class TransactionGatewayTable
                             TextConstraint::make('slug')
                                 ->label(__('vendra-transaction::attributes.slug')),
 
-                            BooleanConstraint::make('active')
-                                ->label(__('vendra-transaction::attributes.active')),
+                            IsActiveConstraint::make(),
 
                             IsDefaultConstraint::make(),
                         ]),

@@ -8,7 +8,10 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\IsActiveFilter;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
 use function Pest\Livewire\livewire;
 
@@ -49,4 +52,20 @@ it('flips the record from the table column', function (): void {
         ->call('updateTableColumnState', 'active', (string) $record->getKey(), false);
 
     expect($record->refresh()->active)->toBeFalse();
+});
+
+it('labels the active entry, constraint and filter with the shared translations', function (): void {
+    $entry = IsActiveEntry::make();
+    $constraint = IsActiveConstraint::make();
+    $filter = IsActiveFilter::make();
+
+    expect($entry->getName())->toBe('active')
+        ->and($entry->getLabel())->toBe(__('vendra-support::attributes.active'))
+        ->and($entry->isBoolean())->toBeTrue()
+        ->and($constraint->getName())->toBe('active')
+        ->and($constraint->getLabel())->toBe(__('vendra-support::attributes.active'))
+        ->and($filter->getName())->toBe('active')
+        ->and($filter->getLabel())->toBe(__('vendra-support::attributes.active'))
+        ->and($filter->getTrueLabel())->toBe(__('vendra-support::attributes.active'))
+        ->and($filter->getFalseLabel())->toBe(__('vendra-support::attributes.inactive'));
 });

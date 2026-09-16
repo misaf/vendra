@@ -6,6 +6,7 @@ return [
     'active' => 'Aktiv',
     'created_at' => 'Erstellt am',
     'description' => 'Beschreibung',
+    'inactive' => 'Inaktiv',
     'is_default' => 'Standard',
     'name' => 'Name',
     'slug' => 'Slug',

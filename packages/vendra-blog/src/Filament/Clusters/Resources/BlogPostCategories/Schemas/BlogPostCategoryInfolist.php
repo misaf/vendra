@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraBlog\Models\BlogPostCategory;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
@@ -25,9 +25,7 @@ final class BlogPostCategoryInfolist
 
                 DescriptionEntry::make(),
 
-                IconEntry::make('active')
-                    ->boolean()
-                    ->label(__('vendra-blog::attributes.active')),
+                IsActiveEntry::make(),
 
                 ModelImageEntry::make()
                     ->collection(BlogPostCategory::MEDIA_COLLECTION),

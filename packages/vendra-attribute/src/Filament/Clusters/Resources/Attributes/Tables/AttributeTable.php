@@ -16,7 +16,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
@@ -26,6 +25,7 @@ use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
 
 final class AttributeTable
@@ -94,7 +94,7 @@ final class AttributeTable
                     ->constraints([
                         TextConstraint::make('name'),
                         TextConstraint::make('unit'),
-                        BooleanConstraint::make('active'),
+                        IsActiveConstraint::make(),
                         NumberConstraint::make('position'),
                     ]),
             ], layout: FiltersLayout::AboveContentCollapsible)

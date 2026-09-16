@@ -8,6 +8,7 @@ use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
 final class DeliveryZoneInfolist
@@ -32,9 +33,7 @@ final class DeliveryZoneInfolist
                 IconEntry::make('requires_quote')
                     ->boolean()
                     ->label(__('vendra-delivery::attributes.requires_quote')),
-                IconEntry::make('active')
-                    ->boolean()
-                    ->label(__('vendra-delivery::attributes.active')),
+                IsActiveEntry::make(),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])

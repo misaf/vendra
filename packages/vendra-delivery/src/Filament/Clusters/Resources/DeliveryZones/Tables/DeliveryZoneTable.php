@@ -20,6 +20,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
 final class DeliveryZoneTable
 {
@@ -83,8 +84,7 @@ final class DeliveryZoneTable
                         BooleanConstraint::make('requires_quote')
                             ->label(__('vendra-delivery::attributes.requires_quote')),
 
-                        BooleanConstraint::make('active')
-                            ->label(__('vendra-delivery::attributes.active')),
+                        IsActiveConstraint::make(),
                     ]),
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->defaultSort(column: 'position', direction: 'asc')

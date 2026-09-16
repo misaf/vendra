@@ -15,10 +15,10 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
 final class DeliverySlotTable
 {
@@ -74,8 +74,7 @@ final class DeliverySlotTable
             ->filters([
                 QueryBuilder::make()
                     ->constraints([
-                        BooleanConstraint::make('active')
-                            ->label(__('vendra-delivery::attributes.active')),
+                        IsActiveConstraint::make(),
                     ]),
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->defaultSort(column: 'position', direction: 'asc')

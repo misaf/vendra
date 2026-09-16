@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\IsDefaultEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 
@@ -28,9 +28,7 @@ final class CurrencyInfolist
                     ->label(__('vendra-currency::attributes.type')),
                 TextEntry::make('decimal_places')
                     ->label(__('vendra-currency::attributes.decimal_places')),
-                IconEntry::make('active')
-                    ->boolean()
-                    ->label(__('vendra-currency::attributes.active')),
+                IsActiveEntry::make(),
                 IsDefaultEntry::make(),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),

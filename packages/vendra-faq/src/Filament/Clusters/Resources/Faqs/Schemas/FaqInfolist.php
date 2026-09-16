@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraFaq\Models\Faq;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 use Misaf\VendraTagger\Filament\Infolists\Components\ModelTagsEntry;
@@ -24,9 +24,7 @@ final class FaqInfolist
                 ->label(__('vendra-faq::navigation.faq_category')),
             NameEntry::make(),
             SlugEntry::make(),
-            IconEntry::make('active')
-                ->boolean()
-                ->label(__('vendra-faq::attributes.active')),
+            IsActiveEntry::make(),
             DescriptionEntry::make()
                 ->richContent(),
             ModelImageEntry::make()

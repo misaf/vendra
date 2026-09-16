@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraCustomPage\Models\CustomPage;
 use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
+use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\NameEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\SlugEntry;
 
@@ -23,9 +23,7 @@ final class CustomPageInfolist
                     ->label(__('vendra-custom-page::navigation.custom_page_category')),
                 NameEntry::make(),
                 SlugEntry::make(),
-                IconEntry::make('active')
-                    ->boolean()
-                    ->label(__('vendra-custom-page::attributes.active')),
+                IsActiveEntry::make(),
                 DescriptionEntry::make()
                     ->richContent(),
                 ModelImageEntry::make()
