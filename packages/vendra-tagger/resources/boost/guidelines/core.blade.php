@@ -32,6 +32,7 @@ The `misaf/vendra-tagger` package owns tagging and taxonomy and the Filament adm
 - Bind the support-layer `TagResolver` to the Vendra `Tagger` model and Spatie pivot configuration. This is the only cross-package integration point; never import or require `misaf/vendra-product` from Tagger.
 - Product integrations use the reserved `product` tag type and are enabled by capability detection in Product, not Product-specific code here.
 - Other consumers reserve their own types (`user`, `blog`, and `affiliate`) and enable UI through Support capability detection. Keep all consumer-specific code out of Tagger.
+- Consumer tag UI uses `Filament\Forms\Components\ModelTagsInput`, `Filament\Infolists\Components\ModelTagsEntry`, and `Filament\Tables\Columns\ModelTagsColumn` from this package (default name `tags`, shared `vendra-tagger::attributes.tags` label). Consumers still chain their own `->type(Model::TAG_TYPE)` and keep rendering them only when `TagIntegration::isAvailable()`.
 - Attribute and FAQ likewise own their `attribute` and `faq` types and conditional UI; Tagger remains unaware of those domain packages.
 - Publish only this package's final tag create migration. It owns optional tenant ownership, the `position` column and its ordering index, and the taggable pivot.
 - Follow Laravel comment style: document with PHPDoc (array shapes, generics, `@see`) and reserve inline comments for genuinely complex logic. Match the surrounding file and do not add comments that restate the code.

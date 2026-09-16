@@ -7,6 +7,7 @@ return [
     'name' => 'Name',
     'slug' => 'Slug',
     'slug_helper_text' => 'Eine eindeutige Kennung für die URL. Leer lassen, um sie automatisch aus dem Namen zu generieren.',
+    'tags' => 'Schlagwörter',
     'tenant_id' => 'Mandant',
     'type' => 'Typ',
     'type_helper_text' => 'Der Tag-Typ, um zusammengehörige Tags zu gruppieren.',

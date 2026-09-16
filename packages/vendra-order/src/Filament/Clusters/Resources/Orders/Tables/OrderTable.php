@@ -23,6 +23,8 @@ use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\CompleteOrderTa
 use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\Actions\ConfirmOrderTableAction;
 use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraOrder\States\OrderState;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class OrderTable
 {
@@ -30,10 +32,7 @@ final class OrderTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('number')
                     ->copyable()
@@ -82,16 +81,8 @@ final class OrderTable
                         fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-order::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->description(__('vendra-order::tables.description.orders'))
             ->emptyStateHeading(__('vendra-order::tables.empty_state.heading.orders'))

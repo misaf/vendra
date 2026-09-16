@@ -4,5 +4,6 @@ declare(strict_types=1);
 
 return [
     'active' => 'Active',
-    'tags' => 'Tags',
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
 ];

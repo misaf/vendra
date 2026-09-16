@@ -18,6 +18,8 @@ use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Table;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class DeliveryZoneTable
 {
@@ -25,9 +27,7 @@ final class DeliveryZoneTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
+                RowIndexColumn::make()
                     ->sortable(['position']),
 
                 TextColumn::make('name')
@@ -53,16 +53,8 @@ final class DeliveryZoneTable
                     ->boolean()
                     ->label(__('vendra-delivery::attributes.active')),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-delivery::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->description(__('vendra-delivery::tables.description.delivery_zones'))
             ->emptyStateHeading(__('vendra-delivery::tables.empty_state.heading.delivery_zones'))

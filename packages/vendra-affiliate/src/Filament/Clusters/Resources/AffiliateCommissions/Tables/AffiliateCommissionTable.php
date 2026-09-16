@@ -24,6 +24,8 @@ use Misaf\VendraAffiliate\Enums\AffiliateCommissionPolicyEnum;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class AffiliateCommissionTable
 {
@@ -31,10 +33,7 @@ final class AffiliateCommissionTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('affiliate.code')
                     ->label(__('vendra-affiliate::attributes.affiliate'))
@@ -61,15 +60,7 @@ final class AffiliateCommissionTable
                     ->badge()
                     ->label(__('vendra-affiliate::attributes.status')),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-affiliate::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                    ),
+                CreatedAtColumn::make(),
             ])
             ->filters(
                 [

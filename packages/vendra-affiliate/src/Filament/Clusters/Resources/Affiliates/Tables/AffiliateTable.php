@@ -28,6 +28,10 @@ use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\ProcessPayoutAction;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
 
 final class AffiliateTable
 {
@@ -37,10 +41,7 @@ final class AffiliateTable
          * @var array<int, TextColumn|SpatieTagsColumn> $columns
          */
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
             TextColumn::make('user.username')
                 ->label(__('vendra-affiliate::attributes.user'))
@@ -76,32 +77,14 @@ final class AffiliateTable
                 ->badge()
                 ->label(__('vendra-affiliate::attributes.status')),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-affiliate::attributes.created_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-affiliate::attributes.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         if (TagIntegration::isAvailable()) {
-            $columns[] = SpatieTagsColumn::make('tags')
-                ->label(__('vendra-support::attributes.tags'))
-                ->type(Affiliate::TAG_TYPE)
-                ->toggleable();
+            $columns[] = ModelTagsColumn::make()
+                ->type(Affiliate::TAG_TYPE);
         }
 
         return $table

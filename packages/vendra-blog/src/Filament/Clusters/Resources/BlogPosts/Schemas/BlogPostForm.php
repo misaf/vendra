@@ -6,8 +6,6 @@ namespace Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\Schemas;
 
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -16,10 +14,12 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraBlog\Models\BlogPost;
+use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedFormFields;
 use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraTagger\Filament\Forms\Components\ModelTagsInput;
 
 final class BlogPostForm
 {
@@ -79,27 +79,16 @@ final class BlogPostForm
                 ->required()
                 ->json(),
 
-            SpatieMediaLibraryFileUpload::make('image')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
+            ModelImageUpload::make()
                 ->collection(BlogPost::MEDIA_COLLECTION)
-                ->columnSpanFull()
-                ->image()
-                ->label(__('vendra-blog::attributes.image'))
-                ->live()
-                ->multiple()
-                ->panelLayout('grid')
-                ->responsiveImages(),
+                ->multiple(),
 
             ActiveToggle::make()
                 ->default(false),
         ];
 
         if (TagIntegration::isAvailable()) {
-            $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
-                ->columnSpanFull()
-                ->label(__('vendra-support::attributes.tags'))
-                ->live()
+            $components[] = ModelTagsInput::make()
                 ->type(BlogPost::TAG_TYPE);
         }
 

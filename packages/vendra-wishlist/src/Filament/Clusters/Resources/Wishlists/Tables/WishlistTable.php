@@ -18,6 +18,8 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class WishlistTable
 {
@@ -25,10 +27,7 @@ final class WishlistTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('name')
                     ->icon(Heroicon::Heart)
@@ -48,16 +47,8 @@ final class WishlistTable
                     ->boolean()
                     ->label(__('vendra-wishlist::attributes.is_default')),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-wishlist::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->description(__('vendra-wishlist::tables.description.wishlists'))
             ->emptyStateHeading(__('vendra-wishlist::tables.empty_state.heading.wishlists'))

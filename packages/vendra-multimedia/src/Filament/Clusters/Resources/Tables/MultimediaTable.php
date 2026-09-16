@@ -22,6 +22,9 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Support\Number;
 use Misaf\VendraMultimedia\Models\Multimedia;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
 final class MultimediaTable
 {
@@ -31,10 +34,7 @@ final class MultimediaTable
          * @var array<int, Column|ColumnGroup|LayoutComponent> $columns
          */
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
             BadgeableColumn::make('model_type')
                 ->alignStart()
@@ -79,25 +79,9 @@ final class MultimediaTable
                 ->sortable()
                 ->toggleable(),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-multimedia::tables.created_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-multimedia::tables.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         return $table

@@ -10,6 +10,7 @@ Translated, sortable, and tenant-compatible tag management for Vendra applicatio
 - Derives optional tenant scoping and assignment from `misaf/vendra-support`
 - Provides permission-backed Filament list, create, view, edit, delete, and reorder operations
 - Supports configurable Filament panels and navigation groups
+- Ships `ModelTagsInput`, `ModelTagsEntry`, and `ModelTagsColumn` so tag-consuming packages share one tags field, entry, and column
 
 ## Requirements
 
@@ -17,6 +18,7 @@ Translated, sortable, and tenant-compatible tag management for Vendra applicatio
 - Laravel 13
 - Filament 5
 - `misaf/vendra-support`
+- `filament/spatie-laravel-tags-plugin`
 - `spatie/laravel-tags`
 
 ## Installation

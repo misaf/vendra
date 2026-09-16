@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\Schemas;
 
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
@@ -14,6 +13,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraCustomPage\Models\CustomPageCategory;
+use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedFormFields;
 use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
@@ -68,15 +68,8 @@ final class CustomPageCategoryForm
                     ->maxLength(65535)
                     ->rows(5),
 
-                SpatieMediaLibraryFileUpload::make('image')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
-                    ->collection(CustomPageCategory::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->image()
-                    ->label(__('vendra-custom-page::attributes.image'))
-                    ->live()
-                    ->panelLayout('grid')
-                    ->responsiveImages(),
+                ModelImageUpload::make()
+                    ->collection(CustomPageCategory::MEDIA_COLLECTION),
 
                 ActiveToggle::make()
                     ->default(false),

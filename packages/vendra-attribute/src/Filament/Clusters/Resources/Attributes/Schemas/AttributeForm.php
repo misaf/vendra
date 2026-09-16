@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -16,6 +15,7 @@ use Misaf\VendraAttribute\Support\AttributeUnits;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraTagger\Filament\Forms\Components\ModelTagsInput;
 
 final class AttributeForm
 {
@@ -55,11 +55,7 @@ final class AttributeForm
         ];
 
         if (TagIntegration::isAvailable()) {
-            $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
-                ->columnSpanFull()
-                ->label(__('vendra-support::attributes.tags'))
-                ->live()
+            $components[] = ModelTagsInput::make()
                 ->type(Attribute::TAG_TYPE);
         }
 

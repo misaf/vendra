@@ -18,16 +18,16 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
 final class TaggerTable
 {
     public static function configure(Table $table): Table
     {
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
             TextColumn::make('name')
                 ->alignStart()
@@ -45,26 +45,10 @@ final class TaggerTable
                 ->label(__('vendra-tagger::attributes.type'))
                 ->icon(Heroicon::Tag),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-tagger::attributes.created_at'))
-                ->sinceTooltip()
-                ->sortable()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make()
+                ->sortable(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-tagger::attributes.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         return $table

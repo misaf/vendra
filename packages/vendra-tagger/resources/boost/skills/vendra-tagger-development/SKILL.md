@@ -63,6 +63,7 @@ Keep every resource that declares a `$cluster`, including its complete supportin
 - Provide separate singular and plural resource labels in `en`, `de`, and `fa`: model labels use the singular key, while navigation and plural model labels use the plural key. Keep navigation labels at 24 characters or fewer.
 - Keep translated name and slug validation unique within the current tenant and tag type. The `type` field itself is not unique.
 - Keep table reordering on `position` and use the permission-backed `reorder` policy.
+- `Filament\Forms\Components\ModelTagsInput` (live, validates its own state path, full width), `Filament\Infolists\Components\ModelTagsEntry` (full width), and `Filament\Tables\Columns\ModelTagsColumn` (toggleable) are the shared tag components for consumer packages. Keep them type-agnostic: the tag type is always chained at the call site.
 
 ## Permissions And Navigation
 

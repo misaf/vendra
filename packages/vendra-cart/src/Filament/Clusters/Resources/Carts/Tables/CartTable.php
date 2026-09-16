@@ -17,6 +17,8 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class CartTable
 {
@@ -24,10 +26,7 @@ final class CartTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('token')
                     ->copyable()
@@ -58,16 +57,8 @@ final class CartTable
                         fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
                     ),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-cart::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->description(__('vendra-cart::tables.description.carts'))
             ->emptyStateHeading(__('vendra-cart::tables.empty_state.heading.carts'))

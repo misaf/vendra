@@ -10,6 +10,7 @@ return [
     'disk' => 'Disk',
     'file_name' => 'File Name',
     'generated_conversions' => 'Generated Conversions',
+    'image' => 'Image',
     'manipulations' => 'Manipulations',
     'mime_type' => 'Mime Type',
     'model_id' => 'Model ID',

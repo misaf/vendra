@@ -10,6 +10,7 @@ return [
     'disk' => 'Datenträger',
     'file_name' => 'Dateiname',
     'generated_conversions' => 'Generierte Konvertierungen',
+    'image' => 'Bild',
     'manipulations' => 'Bearbeitungen',
     'mime_type' => 'MIME-Typ',
     'model_id' => 'Modell-ID',

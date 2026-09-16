@@ -28,6 +28,9 @@ use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Actions\SetDefau
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
 final class CurrencyTable
 {
@@ -37,10 +40,7 @@ final class CurrencyTable
          * @var array<int, Column> $columns
          */
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
             TextColumn::make('code')
                 ->badge()
@@ -80,25 +80,9 @@ final class CurrencyTable
             ActiveToggleColumn::make()
                 ->disabled(fn (Currency $record): bool => ! CurrencyResource::canEdit($record)),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-currency::attributes.created_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-currency::attributes.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         return $table

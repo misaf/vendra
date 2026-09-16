@@ -9119,7 +9119,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-support",
-                "reference": "c36cd03cfaaf694e54758e537359f6095b97083e"
+                "reference": "63925d715e09096a890217ed181415c34f1c9539"
             },
             "require": {
                 "filament/filament": "^5.6.8",
@@ -9127,6 +9127,7 @@
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
                 "laravel/prompts": "^0.3.21",
+                "misaf/filament-jalali": "^5.1.4",
                 "php": "^8.4",
                 "symfony/intl": "^7.4 || ^8.0"
             },
@@ -9177,10 +9178,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-tagger",
-                "reference": "d51fb20fa0abafe520a45c61bc9ce2bb3fe82763"
+                "reference": "eda7e04c87dde5fb11445bbaafa37c55bea35e96"
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
+                "filament/spatie-laravel-tags-plugin": "^5.6.8",
                 "lara-zeus/spatie-translatable": "^2.0.1",
                 "misaf/filament-jalali": "^5.1.4",
                 "misaf/vendra-support": "self.version",

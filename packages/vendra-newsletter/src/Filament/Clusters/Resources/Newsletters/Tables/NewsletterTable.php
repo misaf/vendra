@@ -19,6 +19,8 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Misaf\VendraNewsletter\Enums\NewsletterStatusEnum;
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\Actions\SendNewsletterTableAction;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class NewsletterTable
 {
@@ -26,10 +28,7 @@ final class NewsletterTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('subject')
                     ->alignStart()
@@ -68,15 +67,7 @@ final class NewsletterTable
                         fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-newsletter::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                    ),
+                CreatedAtColumn::make(),
             ])
             ->filters(
                 [

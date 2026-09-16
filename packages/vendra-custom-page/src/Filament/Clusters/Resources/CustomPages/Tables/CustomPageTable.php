@@ -14,7 +14,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\Layout\Component as LayoutComponent;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
@@ -26,9 +25,13 @@ use Filament\Tables\Table;
 use Livewire\Component as Livewire;
 use Misaf\VendraCustomPage\Models\CustomPage;
 use Misaf\VendraCustomPage\Models\CustomPageCategory;
+use Misaf\VendraMultimedia\Filament\Tables\Columns\ModelImageColumn;
 use Misaf\VendraSupport\Filament\Concerns\HasDefaultAvatarImageUrl;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
 use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
 final class CustomPageTable
 {
@@ -41,19 +44,11 @@ final class CustomPageTable
          * @var array<int, Column|ColumnGroup|LayoutComponent> $columns
          */
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
-            SpatieMediaLibraryImageColumn::make('image')
-                ->alignCenter()
+            ModelImageColumn::make()
                 ->collection(CustomPage::MEDIA_COLLECTION)
-                ->conversion('thumb-table')
-                ->defaultImageUrl(fn (CustomPage $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire)))
-                ->extraImgAttributes(['class' => 'saturate-50', 'loading' => 'lazy'])
-                ->label(__('vendra-custom-page::attributes.image'))
-                ->stacked(),
+                ->defaultImageUrl(fn (CustomPage $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire))),
 
             TextColumn::make('name')
                 ->alignStart()
@@ -74,25 +69,9 @@ final class CustomPageTable
 
             ActiveToggleColumn::make(),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-custom-page::attributes.created_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-custom-page::attributes.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         return $table

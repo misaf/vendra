@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraCustomPage\Models\CustomPageCategory;
+use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 
 final class CustomPageCategoryInfolist
 {
@@ -24,10 +24,8 @@ final class CustomPageCategoryInfolist
                 IconEntry::make('active')
                     ->boolean()
                     ->label(__('vendra-custom-page::attributes.active')),
-                SpatieMediaLibraryImageEntry::make('image')
-                    ->collection(CustomPageCategory::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->label(__('vendra-custom-page::attributes.image')),
+                ModelImageEntry::make()
+                    ->collection(CustomPageCategory::MEDIA_COLLECTION),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])

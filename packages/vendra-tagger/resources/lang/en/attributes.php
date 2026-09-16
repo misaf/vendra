@@ -7,6 +7,7 @@ return [
     'name' => 'Name',
     'slug' => 'Slug',
     'slug_helper_text' => 'A unique identifier for the URL. Leave empty to auto-generate from the name.',
+    'tags' => 'Tags',
     'tenant_id' => 'Tenant',
     'type' => 'Type',
     'type_helper_text' => 'The tag type used to group related tags together.',

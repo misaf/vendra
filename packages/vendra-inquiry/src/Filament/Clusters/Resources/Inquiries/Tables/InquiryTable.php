@@ -20,6 +20,8 @@ use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\AnswerInquiryTableAction;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\CloseInquiryTableAction;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\ReopenInquiryTableAction;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class InquiryTable
 {
@@ -27,10 +29,7 @@ final class InquiryTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('name')
                     ->icon(Heroicon::User)
@@ -57,16 +56,8 @@ final class InquiryTable
                     ->searchable()
                     ->tooltip(fn (string $state): string => $state),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-inquiry::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->description(__('vendra-inquiry::tables.description.inquiries'))
             ->emptyStateHeading(__('vendra-inquiry::tables.empty_state.heading.inquiries'))

@@ -14,6 +14,8 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Table;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraTransaction\Models\Wallet;
 
 final class WalletTable
@@ -27,10 +29,7 @@ final class WalletTable
             ->emptyStateDescription(__('vendra-transaction::tables.empty_state.description.wallets'))
             ->emptyStateIcon(Heroicon::OutlinedWallet)
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('user')
                     ->label(__('vendra-transaction::attributes.user'))
@@ -55,16 +54,8 @@ final class WalletTable
                     ->badge()
                     ->label(__('vendra-transaction::navigation.transactions')),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-transaction::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->filters(
                 [

@@ -6,7 +6,6 @@ namespace Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\Schemas
 
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -15,6 +14,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraCustomPage\Models\CustomPage;
+use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedFormFields;
 use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
@@ -78,15 +78,8 @@ final class CustomPageForm
                     ->required()
                     ->json(),
 
-                SpatieMediaLibraryFileUpload::make('image')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
-                    ->collection(CustomPage::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->image()
-                    ->label(__('vendra-custom-page::attributes.image'))
-                    ->live()
-                    ->panelLayout('grid')
-                    ->responsiveImages(),
+                ModelImageUpload::make()
+                    ->collection(CustomPage::MEDIA_COLLECTION),
 
                 ActiveToggle::make()
                     ->default(false),

@@ -21,6 +21,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class NewsletterSubscriberTable
 {
@@ -28,10 +30,7 @@ final class NewsletterSubscriberTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('email')
                     ->alignStart()
@@ -90,15 +89,7 @@ final class NewsletterSubscriberTable
                         fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-newsletter::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                    ),
+                CreatedAtColumn::make(),
             ])
             ->filters(
                 [

@@ -17,6 +17,8 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Oper
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Misaf\VendraAffiliate\Enums\PayoutStatusEnum;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class AffiliatePayoutTable
 {
@@ -24,10 +26,7 @@ final class AffiliatePayoutTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('affiliate.code')
                     ->label(__('vendra-affiliate::attributes.affiliate'))
@@ -64,15 +63,7 @@ final class AffiliatePayoutTable
                         fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
                     ),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-affiliate::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                    ),
+                CreatedAtColumn::make(),
             ])
             ->filters(
                 [

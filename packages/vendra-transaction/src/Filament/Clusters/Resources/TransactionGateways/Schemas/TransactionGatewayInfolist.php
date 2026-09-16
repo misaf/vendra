@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
 final class TransactionGatewayInfolist
@@ -27,10 +27,8 @@ final class TransactionGatewayInfolist
                 TextEntry::make('description')
                     ->columnSpanFull()
                     ->label(__('vendra-transaction::attributes.description')),
-                SpatieMediaLibraryImageEntry::make('image')
-                    ->collection(TransactionGateway::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->label(__('vendra-transaction::attributes.image')),
+                ModelImageEntry::make()
+                    ->collection(TransactionGateway::MEDIA_COLLECTION),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])

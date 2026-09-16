@@ -6,8 +6,6 @@ namespace Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\Schemas;
 
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -16,10 +14,12 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraFaq\Models\Faq;
+use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedFormFields;
 use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraTagger\Filament\Forms\Components\ModelTagsInput;
 
 final class FaqForm
 {
@@ -81,26 +81,15 @@ final class FaqForm
                 ->required()
                 ->json(),
 
-            SpatieMediaLibraryFileUpload::make('image')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
-                ->collection(Faq::MEDIA_COLLECTION)
-                ->columnSpanFull()
-                ->image()
-                ->label(__('vendra-faq::attributes.image'))
-                ->live()
-                ->panelLayout('grid')
-                ->responsiveImages(),
+            ModelImageUpload::make()
+                ->collection(Faq::MEDIA_COLLECTION),
 
             ActiveToggle::make()
                 ->default(false),
         ];
 
         if (TagIntegration::isAvailable()) {
-            $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
-                ->columnSpanFull()
-                ->label(__('vendra-support::attributes.tags'))
-                ->live()
+            $components[] = ModelTagsInput::make()
                 ->type(Faq::TAG_TYPE);
         }
 

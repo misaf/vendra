@@ -17,6 +17,8 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Table;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class DeliverySlotTable
 {
@@ -24,9 +26,7 @@ final class DeliverySlotTable
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
+                RowIndexColumn::make()
                     ->sortable(['position']),
 
                 TextColumn::make('name')
@@ -50,16 +50,8 @@ final class DeliverySlotTable
                     ->boolean()
                     ->label(__('vendra-delivery::attributes.active')),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-delivery::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make()
+                    ->sortable(),
             ])
             ->description(__('vendra-delivery::tables.description.delivery_slots'))
             ->emptyStateHeading(__('vendra-delivery::tables.empty_state.heading.delivery_slots'))

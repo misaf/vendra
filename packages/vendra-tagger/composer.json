@@ -21,6 +21,7 @@
     "require": {
         "php": "^8.4",
         "awcodes/filament-badgeable-column": "^4.0",
+        "filament/spatie-laravel-tags-plugin": "^5.6.8",
         "lara-zeus/spatie-translatable": "^2.0.1",
         "misaf/filament-jalali": "^5.1.4",
         "misaf/vendra-support": "self.version",

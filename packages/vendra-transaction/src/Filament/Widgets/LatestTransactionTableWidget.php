@@ -9,6 +9,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\TransactionState;
 
@@ -68,15 +69,7 @@ final class LatestTransactionTableWidget extends BaseWidget
                     ->formatStateUsing(fn (TransactionState $state): string => $state->getLabel())
                     ->label(__('vendra-transaction::attributes.status')),
 
-                TextColumn::make('created_at')
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-transaction::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                CreatedAtColumn::make(),
             ])
             ->defaultSort(column: 'id', direction: 'desc')
             ->paginationPageOptions([5]);

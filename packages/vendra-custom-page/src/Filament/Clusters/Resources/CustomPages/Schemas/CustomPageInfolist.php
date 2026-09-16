@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraCustomPage\Models\CustomPage;
+use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraSupport\Filament\Concerns\RendersRichContent;
 
 final class CustomPageInfolist
@@ -31,10 +31,8 @@ final class CustomPageInfolist
                     ->formatStateUsing(fn (array|string|null $state): string => self::renderRichContent($state))
                     ->html()
                     ->label(__('vendra-custom-page::attributes.description')),
-                SpatieMediaLibraryImageEntry::make('image')
-                    ->collection(CustomPage::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->label(__('vendra-custom-page::attributes.image')),
+                ModelImageEntry::make()
+                    ->collection(CustomPage::MEDIA_COLLECTION),
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),
             ])

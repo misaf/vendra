@@ -23,6 +23,10 @@ use Filament\Tables\Table;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Tables\Columns\ActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
+use Misaf\VendraTagger\Filament\Tables\Columns\ModelTagsColumn;
 
 final class AttributeTable
 {
@@ -32,10 +36,7 @@ final class AttributeTable
          * @var array<int, TextColumn|ToggleColumn|SpatieTagsColumn> $columns
          */
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
             TextColumn::make('name')
                 ->label(__('vendra-attribute::attributes.name'))
@@ -59,32 +60,14 @@ final class AttributeTable
 
             ActiveToggleColumn::make(),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-attribute::attributes.created_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-attribute::attributes.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         if (TagIntegration::isAvailable()) {
-            $columns[] = SpatieTagsColumn::make('tags')
-                ->label(__('vendra-support::attributes.tags'))
-                ->type(Attribute::TAG_TYPE)
-                ->toggleable();
+            $columns[] = ModelTagsColumn::make()
+                ->type(Attribute::TAG_TYPE);
         }
 
         return $table

@@ -9,6 +9,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class LedgerEntriesRelationManager extends RelationManager
 {
@@ -28,10 +30,7 @@ final class LedgerEntriesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('amount')
                     ->color(fn (int $state): string => $state < 0 ? 'danger' : 'success')
@@ -51,18 +50,10 @@ final class LedgerEntriesRelationManager extends RelationManager
                     ->icon(Heroicon::Tag)
                     ->label(__('vendra-transaction::attributes.source')),
 
-                TextColumn::make('created_at')
+                CreatedAtColumn::make()
                     ->alignCenter()
                     ->badge()
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-transaction::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                    ->sortable(),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
     }

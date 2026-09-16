@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraBlog\Models\BlogPostCategory;
+use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 
 final class BlogPostCategoryInfolist
 {
@@ -30,10 +30,8 @@ final class BlogPostCategoryInfolist
                     ->boolean()
                     ->label(__('vendra-blog::attributes.active')),
 
-                SpatieMediaLibraryImageEntry::make('image')
-                    ->collection(BlogPostCategory::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->label(__('vendra-blog::attributes.image')),
+                ModelImageEntry::make()
+                    ->collection(BlogPostCategory::MEDIA_COLLECTION),
 
                 self::dateEntry('created_at'),
                 self::dateEntry('updated_at'),

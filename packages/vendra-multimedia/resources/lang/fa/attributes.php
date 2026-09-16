@@ -10,6 +10,7 @@ return [
     'disk' => 'دیسک',
     'file_name' => 'نام فایل',
     'generated_conversions' => 'تبدیل های تولید شده',
+    'image' => 'تصویر',
     'manipulations' => 'دستکاری ها',
     'mime_type' => 'نوع MIME',
     'model_id' => 'شناسه مدل',

@@ -8,6 +8,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class ClicksRelationManager extends RelationManager
 {
@@ -34,10 +36,7 @@ final class ClicksRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('ip_address')
                     ->extraCellAttributes(['dir' => 'ltr'])
@@ -54,17 +53,9 @@ final class ClicksRelationManager extends RelationManager
                     ->limit(40)
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('created_at')
+                CreatedAtColumn::make()
                     ->alignCenter()
-                    ->badge()
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-affiliate::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                    ),
+                    ->badge(),
             ])
             ->defaultSort(column: 'created_at', direction: 'desc');
     }

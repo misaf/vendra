@@ -9,6 +9,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class ReferralsRelationManager extends RelationManager
 {
@@ -35,10 +36,7 @@ final class ReferralsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('row')
-                    ->label('#')
-                    ->rowIndex()
-                    ->sortable(['id']),
+                RowIndexColumn::make(),
 
                 TextColumn::make('user.username')
                     ->label(__('vendra-affiliate::attributes.user'))

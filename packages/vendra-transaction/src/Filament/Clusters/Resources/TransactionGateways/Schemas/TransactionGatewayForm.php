@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Schemas;
 
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -15,6 +14,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
+use Misaf\VendraMultimedia\Filament\Forms\Components\ModelImageUpload;
 use Misaf\VendraSupport\Filament\Forms\Components\ActiveToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraTransaction\Models\TransactionGateway;
@@ -62,13 +62,10 @@ final class TransactionGatewayForm
                     ->maxLength(1000)
                     ->rows(3),
 
-                SpatieMediaLibraryFileUpload::make('image')
-                    ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.image'))
+                ModelImageUpload::make()
                     ->collection(TransactionGateway::MEDIA_COLLECTION)
-                    ->columnSpanFull()
-                    ->image()
-                    ->label(__('vendra-transaction::attributes.image'))
-                    ->live(),
+                    ->panelLayout(null)
+                    ->responsiveImages(false),
 
                 ActiveToggle::make()
                     ->default(false),

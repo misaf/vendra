@@ -12,6 +12,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
 use Misaf\VendraCart\Models\Cart;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 
 final class CartItemsRelationManager extends RelationManager
 {
@@ -68,18 +69,10 @@ final class CartItemsRelationManager extends RelationManager
                     ->formatStateUsing(fn (?array $state): string => $state ? json_encode($state, JSON_THROW_ON_ERROR) : '—')
                     ->label(__('vendra-cart::attributes.metadata')),
 
-                TextColumn::make('created_at')
+                CreatedAtColumn::make()
                     ->alignCenter()
                     ->badge()
-                    ->extraCellAttributes(['dir' => 'ltr'])
-                    ->label(__('vendra-cart::attributes.created_at'))
-                    ->sinceTooltip()
-                    ->sortable()
-                    ->when(
-                        app()->isLocale('fa'),
-                        fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                        fn (TextColumn $column) => $column->dateTime('Y-m-d H:i'),
-                    ),
+                    ->sortable(),
             ])
             ->recordActions([
                 DeleteAction::make(),

@@ -12,6 +12,7 @@ Shared support infrastructure used by every Vendra module.
 - Shared tenant seeders and console commands
 - Shared Filament clusters, navigation taxonomy, and concerns
 - `ActiveToggle` form field and `ActiveToggleColumn` table column for boolean active/inactive columns
+- `CreatedAtColumn`, `UpdatedAtColumn`, and `RowIndexColumn` table columns for timestamps (Jalali under the `fa` locale) and the `#` row index
 - Composable policy authorization, sandbox helpers, and shared events
 
 The package binds null capability resolvers by default. Concrete providers can replace those bindings without coupling domain packages to their implementations.
@@ -21,6 +22,7 @@ The package binds null capability resolvers by default. Concrete providers can r
 - PHP 8.4+
 - Laravel 13
 - Filament 5
+- `misaf/filament-jalali`
 
 ## Installation
 

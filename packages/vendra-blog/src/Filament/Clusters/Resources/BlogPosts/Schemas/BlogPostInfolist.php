@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
-use Filament\Infolists\Components\SpatieTagsEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraBlog\Models\BlogPost;
+use Misaf\VendraMultimedia\Filament\Infolists\Components\ModelImageEntry;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Concerns\RendersRichContent;
+use Misaf\VendraTagger\Filament\Infolists\Components\ModelTagsEntry;
 
 final class BlogPostInfolist
 {
@@ -39,19 +39,15 @@ final class BlogPostInfolist
                 ->html()
                 ->label(__('vendra-blog::attributes.description')),
 
-            SpatieMediaLibraryImageEntry::make('image')
-                ->collection(BlogPost::MEDIA_COLLECTION)
-                ->columnSpanFull()
-                ->label(__('vendra-blog::attributes.image')),
+            ModelImageEntry::make()
+                ->collection(BlogPost::MEDIA_COLLECTION),
 
             self::dateEntry('created_at'),
             self::dateEntry('updated_at'),
         ];
 
         if (TagIntegration::isAvailable()) {
-            $components[] = SpatieTagsEntry::make('tags')
-                ->columnSpanFull()
-                ->label(__('vendra-support::attributes.tags'))
+            $components[] = ModelTagsEntry::make()
                 ->type(BlogPost::TAG_TYPE);
         }
 

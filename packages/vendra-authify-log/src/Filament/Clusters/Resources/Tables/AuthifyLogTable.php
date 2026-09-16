@@ -23,6 +23,9 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use Misaf\LaravelAuthifyLog\Enums\AuthifyLogActionEnum;
 use Misaf\VendraAuthifyLog\Models\AuthifyLog;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 
 final class AuthifyLogTable
 {
@@ -32,10 +35,7 @@ final class AuthifyLogTable
          * @var array<int, Column|ColumnGroup|LayoutComponent> $columns
          */
         $columns = [
-            TextColumn::make('row')
-                ->label('#')
-                ->rowIndex()
-                ->sortable(['id']),
+            RowIndexColumn::make(),
 
             TextColumn::make('ip_address')
                 ->alignCenter()
@@ -52,25 +52,9 @@ final class AuthifyLogTable
                 ->label(__('vendra-authify-log::attributes.ip_address'))
                 ->searchable(),
 
-            TextColumn::make('created_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-authify-log::attributes.created_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            CreatedAtColumn::make(),
 
-            TextColumn::make('updated_at')
-                ->extraCellAttributes(['dir' => 'ltr'])
-                ->label(__('vendra-authify-log::attributes.updated_at'))
-                ->sinceTooltip()
-                ->when(
-                    app()->isLocale('fa'),
-                    fn (TextColumn $column) => $column->jalaliDateTime('Y-m-d H:i', latinNumbers: true),
-                    fn (TextColumn $column) => $column->dateTime('Y-m-d H:i')
-                ),
+            UpdatedAtColumn::make(),
         ];
 
         return $table

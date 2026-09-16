@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Schemas;
 
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieTagsInput;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Schema;
@@ -16,6 +15,7 @@ use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraTagger\Filament\Forms\Components\ModelTagsInput;
 
 final class AffiliateForm
 {
@@ -82,11 +82,7 @@ final class AffiliateForm
         ];
 
         if (TagIntegration::isAvailable()) {
-            $components[] = SpatieTagsInput::make('tags')
-                ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.tags'))
-                ->columnSpanFull()
-                ->label(__('vendra-support::attributes.tags'))
-                ->live()
+            $components[] = ModelTagsInput::make()
                 ->type(Affiliate::TAG_TYPE);
         }
 
