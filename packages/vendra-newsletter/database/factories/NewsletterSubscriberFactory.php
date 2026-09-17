@@ -16,6 +16,9 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 #[UseModel(NewsletterSubscriber::class)]
 final class NewsletterSubscriberFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
