@@ -20,7 +20,7 @@ final class TransactionGatewayFactory extends Factory
         return [
             'name' => fake()->unique()->words(2, true),
             'description' => fake()->optional()->sentence(),
-            'active' => true,
+            'active' => fake()->boolean(80),
         ];
     }
 
