@@ -150,7 +150,7 @@ services:
   storefront-worker:
     <<: *php
     depends_on: *after-app
-    command: ["php", "artisan", "queue:work", "--queue=storefronts", "--tries=5", "--timeout=180"]
+    command: ["php", "artisan", "queue:work", "--queue=storefronts", "--tries=5", "--timeout=300"]
     volumes:
       - "storage-data:/app/storage/app"
       # Whatever the host socket is, it is always mounted at the Docker path, so

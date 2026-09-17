@@ -23,7 +23,7 @@ use Throwable;
  * The job decides *when* that happens, how often it is retried, and what a final
  * failure means.
  */
-#[Timeout(180)]
+#[Timeout(300)]
 #[Tries(5)]
 #[UniqueFor(3600)]
 final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, ShouldQueue

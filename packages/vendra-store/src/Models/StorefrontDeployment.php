@@ -61,13 +61,14 @@ final class StorefrontDeployment extends Model
      * The store this storefront belongs to.
      *
      * Deliberately unscoped: reconciliation, retries and the console's status
-     * columns all read deployments from outside any store's context.
+     * columns all read deployments from outside any store's context. Offboarded
+     * stores stay resolvable so their deployments still name what they served.
      *
      * @return BelongsTo<Store, $this>
      */
     public function store(): BelongsTo
     {
-        return $this->belongsTo(Store::class);
+        return $this->belongsTo(Store::class)->withTrashed();
     }
 
     /** @return BelongsTo<StorefrontImage, $this> */

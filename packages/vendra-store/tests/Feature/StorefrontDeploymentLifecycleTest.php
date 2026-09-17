@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Queue;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
 use Misaf\VendraStore\Filament\Schemas\StorefrontConfigurationFields;
+use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontConfigurationMap;
 
@@ -86,4 +87,13 @@ describe('the deployment state machine', function (): void {
             ->and(StorefrontDeploymentStatus::Processing->isSettled())->toBeFalse()
             ->and(StorefrontDeploymentStatus::Pending->isSettled())->toBeFalse();
     });
+});
+
+it('still resolves the store of an offboarded storefront', function (): void {
+    Queue::fake();
+    $store = Store::factory()->active()->create();
+    $deployment = StorefrontDeployment::factory()->for($store)->create();
+    $store->delete();
+
+    expect($deployment->fresh()?->store?->is($store))->toBeTrue();
 });

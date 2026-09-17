@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
@@ -31,4 +32,21 @@ it('stores the selected image and derives provisioning data from its catalog ent
 
     expect($deployment->storefront_image_id)->toBe($image->id)
         ->and($request->image)->toBe($image->image);
+});
+
+it("keeps the deployment's own identity over the stored configuration", function (): void {
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
+        createTestTenant(),
+        'acme.test',
+        [
+            ...storefrontRequestData(),
+            'storefront_image_id' => StorefrontImage::factory()->create()->id,
+        ],
+    );
+    $deployment->forceFill(['configuration' => ['siteUrl' => 'https://elsewhere.test', 'domain' => 'elsewhere.test']])->save();
+
+    $request = StorefrontProvisionRequest::for($deployment);
+
+    expect(Arr::get($request->configuration, 'siteUrl'))->toBe('https://acme.test')
+        ->and(Arr::get($request->configuration, 'domain'))->toBe('acme.test');
 });

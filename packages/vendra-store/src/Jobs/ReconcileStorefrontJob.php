@@ -23,7 +23,7 @@ use Throwable;
  * and correcting a container needs the runtime socket, and only that worker
  * holds one.
  */
-#[Timeout(180)]
+#[Timeout(300)]
 #[Tries(3)]
 #[UniqueFor(3600)]
 final class ReconcileStorefrontJob implements NotTenantAware, ShouldBeUnique, ShouldQueue

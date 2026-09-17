@@ -49,10 +49,10 @@ final readonly class StorefrontProvisionRequest
             domain: $deployment->domain,
             image: $storefrontImage->image,
             configuration: [
+                ...$deployment->configuration,
                 'slug' => $deployment->slug,
                 'domain' => $deployment->domain,
                 'siteUrl' => 'https://'.$deployment->domain,
-                ...$deployment->configuration,
             ],
         );
     }

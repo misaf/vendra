@@ -22,7 +22,7 @@ use Spatie\Multitenancy\Jobs\NotTenantAware;
  * Skipped when the intent changed to Stopped before the job ran: restarting
  * would bring up a storefront somebody has since taken down.
  */
-#[Timeout(180)]
+#[Timeout(300)]
 #[Tries(3)]
 #[UniqueFor(3600)]
 final class RestartStorefrontJob implements NotTenantAware, ShouldBeUnique, ShouldQueue
