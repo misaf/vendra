@@ -12,7 +12,7 @@ use Misaf\VendraSubscription\Actions\EnforceSubscriptionsAction;
 use Misaf\VendraSupport\Context\RequestJobContext;
 
 #[Description('Expire lapsed subscriptions and suspend units past their grace period')]
-#[Signature('vendra-subscription:enforce-subscriptions')]
+#[Signature('vendra-subscription:enforce')]
 final class EnforceSubscriptionsCommand extends Command
 {
     public function handle(EnforceSubscriptionsAction $enforceSubscriptionsAction): int
