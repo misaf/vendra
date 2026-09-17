@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Database\Factories\SettingsPropertyFactory;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
@@ -15,10 +17,14 @@ use Spatie\LaravelSettings\Models\SettingsProperty as SpatieSettingsProperty;
     'scope',
     'tenant_id',
 ])]
+#[UseFactory(SettingsPropertyFactory::class)]
 final class SettingsProperty extends SpatieSettingsProperty
 {
     use BelongsToTenant;
+
+    /** @use HasFactory<SettingsPropertyFactory> */
     use HasFactory;
+
     use LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
