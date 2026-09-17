@@ -31,7 +31,7 @@ final class CurrencyFactory extends Factory
             'symbol' => null,
             'decimal_places' => CurrencyRegistry::minorUnitFor($code) ?? 2,
             'type' => CurrencyType::Fiat,
-            'active' => true,
+            'active' => fake()->boolean(80),
             'is_default' => false,
             'position' => fake()->numberBetween(1, 1000),
         ];
@@ -40,6 +40,11 @@ final class CurrencyFactory extends Factory
     public function default(): static
     {
         return $this->state(fn (): array => ['is_default' => true]);
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (): array => ['active' => true]);
     }
 
     public function inactive(): static
