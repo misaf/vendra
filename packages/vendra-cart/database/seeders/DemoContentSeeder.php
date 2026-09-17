@@ -6,6 +6,7 @@ namespace Misaf\VendraCart\Database\Seeders;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraCart\Database\Factories\CartFactory;
@@ -38,6 +39,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
+     * The cart token is the natural key — it already carries a unique index —
+     * so a repeated run inserts nothing instead of tripping that index. Store
+     * provisioning retries the whole seed list on failure, so a partial run
+     * has to be safe to repeat.
+     *
      * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
@@ -45,7 +51,13 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         $owners = $this->owners();
 
         foreach ($records as $index => $record) {
-            $cart = new Cart($this->validatedFixtureRecord($record));
+            $data = $this->validatedFixtureRecord($record);
+
+            if (Cart::query()->where('token', Arr::get($data, 'token'))->exists()) {
+                continue;
+            }
+
+            $cart = new Cart($data);
             $owner = $owners->isEmpty()
                 ? null
                 : $owners->get($index % $owners->count());
