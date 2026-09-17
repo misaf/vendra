@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Misaf\VendraOrder\Console\Commands;
 
 use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Misaf\VendraOrder\Database\Seeders\PermissionPolicySeeder;
 use Misaf\VendraOrder\OrderPlugin;
 use Misaf\VendraSupport\Tenancy\Console\Commands\TenantSeedCommand;
 
 #[Description('Seed order module data for a tenant')]
+#[Signature(self::MODULE_NAME.':seed
+        {tenant? : Tenant ID or slug to seed order data for}
+        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}')]
 final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = OrderPlugin::ID;
-
-    protected $signature = self::MODULE_NAME.':seed
-        {tenant? : Tenant ID or slug to seed order data for}
-        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}';
 
     /**
      * @return array<string, class-string>
