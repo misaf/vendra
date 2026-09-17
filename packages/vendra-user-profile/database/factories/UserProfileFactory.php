@@ -19,6 +19,9 @@ use Misaf\VendraUserProfile\Models\UserProfile;
 #[UseModel(UserProfile::class)]
 final class UserProfileFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
