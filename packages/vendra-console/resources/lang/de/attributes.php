@@ -83,7 +83,6 @@ return [
     'created_at' => 'Erstellt am',
     'updated_at' => 'Aktualisiert am',
     'active' => 'Aktiv',
-    'replaced_at' => 'Ersetzt am',
     'inactive' => 'Inaktiv',
     'period_day' => 'Tag',
     'period_week' => 'Woche',

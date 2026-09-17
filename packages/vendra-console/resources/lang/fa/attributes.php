@@ -83,7 +83,6 @@ return [
     'created_at' => 'ایجاد شده در',
     'updated_at' => 'به‌روزرسانی شده در',
     'active' => 'فعال',
-    'replaced_at' => 'جایگزین‌شده در',
     'inactive' => 'غیرفعال',
     'period_day' => 'روز',
     'period_week' => 'هفته',

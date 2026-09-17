@@ -83,7 +83,6 @@ return [
     'created_at' => 'Created at',
     'updated_at' => 'Updated at',
     'active' => 'Active',
-    'replaced_at' => 'Replaced at',
     'inactive' => 'Inactive',
     'period_day' => 'Day',
     'period_week' => 'Week',
