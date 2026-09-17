@@ -82,6 +82,13 @@ return RectorConfig::configure()
         removeUnusedImports: true,
     )
     ->withSkip([
+        AddHasFactoryToModelsRector::class => [
+            __DIR__.'/packages/vendra-activity-log/src/Models/ActivityLog.php',
+            __DIR__.'/packages/vendra-attribute/src/Models/AttributableModel.php',
+            __DIR__.'/packages/vendra-attribute/src/Models/AttributeValueSelection.php',
+            __DIR__.'/packages/vendra-multimedia/src/Models/Multimedia.php',
+            __DIR__.'/packages/vendra-socialite/src/Models/SocialiteUser.php',
+        ],
         SeparateMultiUseImportsRector::class,
         DateWhereClauseToShorthandRector::class,
     ]);
