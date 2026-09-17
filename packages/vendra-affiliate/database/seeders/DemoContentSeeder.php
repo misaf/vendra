@@ -13,16 +13,11 @@ use Misaf\VendraAffiliate\Database\Factories\AffiliateReferralFactory;
 use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
-use Misaf\VendraSupport\Tenancy\RequiresCurrentTenant;
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
-    use RequiresCurrentTenant;
-
     protected function seedFactories(): void
     {
-        $this->currentTenantOrNull();
-
         AffiliateFactory::new()
             ->active()
             ->count(3)
@@ -50,8 +45,6 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     protected function seedFixtures(array $records): void
     {
-        $this->currentTenantOrNull();
-
         foreach ($records as $record) {
             $this->seedFixtureRecord($record);
         }
