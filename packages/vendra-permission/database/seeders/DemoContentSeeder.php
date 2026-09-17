@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
 use Misaf\VendraPermission\Database\Factories\RoleFactory;
+use Misaf\VendraPermission\Models\Role;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
@@ -21,6 +22,13 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
+     * Name and guard name are the natural key — together they carry a
+     * tenant-scoped unique index — so an already seeded role is left alone
+     * rather than created a second time. The seed command makes the tenant
+     * current for the run, so the lookup is scoped to it. Store provisioning
+     * retries the whole seed list on failure, so a partial run has to be safe
+     * to repeat.
+     *
      * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
@@ -51,6 +59,15 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(?Model $tenant, array $data): void
     {
+        $roleExists = Role::query()
+            ->where('name', Arr::get($data, 'name'))
+            ->where('guard_name', Arr::get($data, 'guard_name'))
+            ->exists();
+
+        if ($roleExists) {
+            return;
+        }
+
         $this->createRoleAction->execute(
             tenant: $tenant,
             name: Arr::get($data, 'name'),
