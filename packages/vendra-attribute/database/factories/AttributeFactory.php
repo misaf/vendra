@@ -10,10 +10,15 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
-/** @extends Factory<Attribute> */
+/**
+ * @extends Factory<Attribute>
+ */
 #[UseModel(Attribute::class)]
 final class AttributeFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

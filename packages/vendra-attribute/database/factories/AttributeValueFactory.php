@@ -11,10 +11,15 @@ use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraAttribute\Models\AttributeValue;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
-/** @extends Factory<AttributeValue> */
+/**
+ * @extends Factory<AttributeValue>
+ */
 #[UseModel(AttributeValue::class)]
 final class AttributeValueFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
