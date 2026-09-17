@@ -10,10 +10,15 @@ use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Models\TransactionLimit;
 use Misaf\VendraTransaction\Models\Wallet;
 
-/** @extends Factory<TransactionLimit> */
+/**
+ * @extends Factory<TransactionLimit>
+ */
 #[UseModel(TransactionLimit::class)]
 final class TransactionLimitFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

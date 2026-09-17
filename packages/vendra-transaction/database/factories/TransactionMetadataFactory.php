@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\Models\TransactionMetadata;
 
-/** @extends Factory<TransactionMetadata> */
+/**
+ * @extends Factory<TransactionMetadata>
+ */
 #[UseModel(TransactionMetadata::class)]
 final class TransactionMetadataFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

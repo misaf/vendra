@@ -11,10 +11,15 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 use Misaf\VendraTransaction\Services\TransactionGatewayRegistry;
 
-/** @extends Factory<TransactionGateway> */
+/**
+ * @extends Factory<TransactionGateway>
+ */
 #[UseModel(TransactionGateway::class)]
 final class TransactionGatewayFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

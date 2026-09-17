@@ -12,10 +12,15 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraTransaction\Models\Wallet;
 use Misaf\VendraTransaction\Support\TransactionUsers;
 
-/** @extends Factory<Wallet> */
+/**
+ * @extends Factory<Wallet>
+ */
 #[UseModel(Wallet::class)]
 final class WalletFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

@@ -19,10 +19,15 @@ use Misaf\VendraTransaction\States\Pending;
 use Misaf\VendraTransaction\States\Processing;
 use Misaf\VendraTransaction\States\Review;
 
-/** @extends Factory<Transaction> */
+/**
+ * @extends Factory<Transaction>
+ */
 #[UseModel(Transaction::class)]
 final class TransactionFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

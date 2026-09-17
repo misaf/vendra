@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\Models\TransactionFee;
 
-/** @extends Factory<TransactionFee> */
+/**
+ * @extends Factory<TransactionFee>
+ */
 #[UseModel(TransactionFee::class)]
 final class TransactionFeeFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

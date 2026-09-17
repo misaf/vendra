@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraTransaction\Models\LedgerEntry;
 use Misaf\VendraTransaction\Models\Wallet;
 
-/** @extends Factory<LedgerEntry> */
+/**
+ * @extends Factory<LedgerEntry>
+ */
 #[UseModel(LedgerEntry::class)]
 final class LedgerEntryFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         $amount = fake()->numberBetween(1, 100_000);
