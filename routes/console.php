@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use Misaf\VendraStore\Jobs\RecordStorefrontRuntimeHealthJob;
 
 Artisan::command('inspire', function (): void {
     $this->comment(Inspiring::quote());
@@ -12,3 +13,4 @@ Artisan::command('inspire', function (): void {
 
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
 Schedule::command('storefront:reconcile')->everyFiveMinutes()->withoutOverlapping();
+Schedule::job(new RecordStorefrontRuntimeHealthJob)->everyMinute();

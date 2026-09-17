@@ -243,6 +243,16 @@ image republished under the same reference, or an edge label that only a fresh
 container will carry. `storefront:lifecycle` records intent, so a storefront
 stopped there stays stopped through the next pass.
 
+### Runtime health
+
+Panels run in the web container, which holds no runtime socket, so they never
+probe the runtime. `Jobs\RecordStorefrontRuntimeHealthJob` runs on the
+`storefronts` queue (the host schedules it every minute) and
+`Actions\RecordStorefrontRuntimeHealthAction` records the runtime status and
+the storefront network as a `Support\StorefrontRuntimeHealthReport`. Read the
+latest one with `Support\StorefrontRuntimeHealth::latest()`; a report older
+than five minutes is stale, meaning the worker or the scheduler stopped.
+
 ## Filament
 
 This package ships the shared building blocks — `Filament\Pages\CreateStorePage`,
