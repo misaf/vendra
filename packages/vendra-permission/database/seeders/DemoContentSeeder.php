@@ -10,18 +10,13 @@ use Illuminate\Support\Facades\Validator;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
 use Misaf\VendraPermission\Database\Factories\RoleFactory;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
-use Misaf\VendraSupport\Tenancy\RequiresCurrentTenant;
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
-    use RequiresCurrentTenant;
-
     public function __construct(private readonly CreateRoleAction $createRoleAction) {}
 
     protected function seedFactories(): void
     {
-        $this->currentTenantOrNull();
-
         RoleFactory::new()->createOne();
     }
 
