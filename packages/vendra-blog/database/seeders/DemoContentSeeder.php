@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraBlog\Database\Factories\BlogPostCategoryFactory;
 use Misaf\VendraBlog\Database\Factories\BlogPostFactory;
+use Misaf\VendraBlog\Models\BlogPost;
 use Misaf\VendraBlog\Models\BlogPostCategory;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
 
@@ -27,6 +28,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
+     * Fixtures are keyed on the translated slug of the record's first locale,
+     * so a repeated run of the same fixture file updates nothing and inserts
+     * nothing. Store provisioning retries the whole seed list on failure, so a
+     * partial run has to be safe to repeat.
+     *
      * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
@@ -60,12 +66,18 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        $blogPostCategory = BlogPostCategory::query()->create([
-            'name' => Arr::get($data, 'name'),
-            'description' => Arr::get($data, 'description'),
-            'slug' => Arr::get($data, 'slug'),
-            'active' => Arr::get($data, 'active'),
-        ]);
+        $slug = Arr::get($data, 'slug');
+        $locale = array_key_first($slug);
+
+        $blogPostCategory = BlogPostCategory::query()
+            ->where('slug->'.$locale, $slug[$locale])
+            ->first()
+            ?? BlogPostCategory::query()->create([
+                'name' => Arr::get($data, 'name'),
+                'description' => Arr::get($data, 'description'),
+                'slug' => Arr::get($data, 'slug'),
+                'active' => Arr::get($data, 'active'),
+            ]);
 
         foreach (Arr::get($data, 'blog_posts') as $blogPostRecord) {
             $this->handleBlogPostFixtureRecord($blogPostCategory, $blogPostRecord);
@@ -82,6 +94,17 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleBlogPostFixtureRecord(BlogPostCategory $blogPostCategory, array $blogPostRecord): void
     {
+        $slug = Arr::get($blogPostRecord, 'slug');
+        $locale = array_key_first($slug);
+
+        $existingBlogPost = $blogPostCategory->blogPosts()
+            ->where('slug->'.$locale, $slug[$locale])
+            ->first();
+
+        if ($existingBlogPost instanceof BlogPost) {
+            return;
+        }
+
         $blogPostCategory->blogPosts()->create([
             'name' => Arr::get($blogPostRecord, 'name'),
             'description' => Arr::get($blogPostRecord, 'description'),
