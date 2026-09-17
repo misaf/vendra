@@ -132,7 +132,7 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
         $reseller = resolve(StoreResellerResolver::class)->find($store->reseller_id);
 
         return $reseller === null
-            || ! $reseller->isSubscriptionActive()
+            || ! $reseller->canHoldUnits()
             || $reseller->activeSubscription() === null;
     }
 

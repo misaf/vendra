@@ -41,15 +41,10 @@ interface SubscriptionSubscriber
     /**
      * Whether the subscriber is active and able to create and hold units.
      */
-    public function isSubscriptionActive(): bool;
+    public function canHoldUnits(): bool;
 
     /**
-     * Whether there is a contact email to receive billing notifications.
-     */
-    public function hasContactEmail(): bool;
-
-    /**
-     * Deliver a billing notification to the subscriber's contact email.
+     * Deliver a billing notification to the subscriber's contact.
      */
     public function notifyContact(Notification $notification): void;
 

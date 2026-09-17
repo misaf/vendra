@@ -17,7 +17,7 @@ final class StoreQuota
      */
     public function canCreateStore(SubscriptionSubscriber $subscriber): bool
     {
-        if (! $subscriber->isSubscriptionActive()) {
+        if (! $subscriber->canHoldUnits()) {
             return false;
         }
 
@@ -37,7 +37,7 @@ final class StoreQuota
      */
     public function remainingStores(SubscriptionSubscriber $subscriber): int
     {
-        if (! $subscriber->isSubscriptionActive()) {
+        if (! $subscriber->canHoldUnits()) {
             return 0;
         }
 
@@ -57,7 +57,7 @@ final class StoreQuota
      */
     public function assertCanCreateStore(SubscriptionSubscriber $subscriber): void
     {
-        if (! $subscriber->isSubscriptionActive()) {
+        if (! $subscriber->canHoldUnits()) {
             throw SubscriptionLimitException::subscriberInactive($subscriber);
         }
 
