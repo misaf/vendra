@@ -161,10 +161,10 @@ hand the socket to Horizon — that gives every queued job in the system host ro
 Useful commands, all through `vendra artisan`:
 
 ```sh
-vendra artisan storefront:status          # the fleet as the database sees it
-vendra artisan storefront:reconcile       # correct whatever has drifted
-vendra artisan storefront:retry-failed    # re-provision only the failures
-vendra artisan storefront:redeploy        # rebuild everything (an outage)
+vendra artisan vendra-store:status          # the fleet as the database sees it
+vendra artisan vendra-store:reconcile       # correct whatever has drifted
+vendra artisan vendra-store:retry-failed    # re-provision only the failures
+vendra artisan vendra-store:redeploy        # rebuild everything (an outage)
 ```
 
 `reconcile` compares each storefront against what the database intends and

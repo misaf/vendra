@@ -18,7 +18,7 @@ use Misaf\VendraStore\Support\StorefrontReference;
 /**
  * Administrator access to a single storefront's lifecycle.
  *
- * Deliberately separate from `storefront:reconcile`: these commands act on one
+ * Deliberately separate from `vendra-store:reconcile`: these commands act on one
  * storefront, change no configuration, and record intent — stopping a storefront
  * here means it stays stopped through the next reconciliation pass.
  *
@@ -28,7 +28,7 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * provisioner port rather than through a pass-through wrapper.
  */
 #[Description('Start, stop, restart, or inspect one store storefront')]
-#[Signature('storefront:lifecycle
+#[Signature('vendra-store:lifecycle
         {action : start, stop, restart, status, or logs}
         {slug : The storefront slug}
         {--lines=200 : Log lines to show for the logs action}')]

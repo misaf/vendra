@@ -12,7 +12,7 @@ use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 #[Description('Retry storefront deployments currently marked as failed')]
-#[Signature('storefront:retry-failed
+#[Signature('vendra-store:retry-failed
         {--sync : Retry each failed storefront in the current process}
         {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}')]
 final class RetryFailedStorefrontDeploymentsCommand extends StorefrontDeploymentDispatchCommand

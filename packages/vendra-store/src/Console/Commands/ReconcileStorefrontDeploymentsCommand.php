@@ -22,10 +22,10 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * This is cheap and safe to repeat. It corrects with the narrowest verb that
  * works — start a stopped container, stop a running one, redeploy only what is
  * absent, unhealthy, or serving the wrong image — so a converged estate comes
- * through a pass untouched. Use `storefront:redeploy` to rebuild deliberately.
+ * through a pass untouched. Use `vendra-store:redeploy` to rebuild deliberately.
  */
 #[Description('Converge every storefront runtime with the state the database intends')]
-#[Signature('storefront:reconcile
+#[Signature('vendra-store:reconcile
         {--sync : Reconcile each storefront in the current process}
         {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}')]
 final class ReconcileStorefrontDeploymentsCommand extends StorefrontDeploymentDispatchCommand

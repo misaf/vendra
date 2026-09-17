@@ -39,7 +39,7 @@ it('reports only the deployments the bus actually accepted', function (): void {
 
     holdProvisionLockFor($inFlight);
 
-    $this->artisan('storefront:redeploy')
+    $this->artisan('vendra-store:redeploy')
         ->expectsOutputToContain('1 storefront deployment(s) queued for redeployment.')
         ->expectsOutputToContain('1 skipped, already being provisioned: busy-florist')
         ->assertSuccessful();
@@ -61,7 +61,7 @@ it('does not claim to have queued anything when every dispatch was discarded', f
 
     holdProvisionLockFor($deployment);
 
-    $this->artisan('storefront:redeploy')
+    $this->artisan('vendra-store:redeploy')
         ->expectsOutputToContain('0 storefront deployment(s) queued for redeployment.')
         ->expectsOutputToContain('1 skipped, already being provisioned: acme-flowers')
         ->assertSuccessful();
@@ -75,7 +75,7 @@ it('says nothing about skipping when every dispatch was accepted', function (): 
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
-    $this->artisan('storefront:redeploy')
+    $this->artisan('vendra-store:redeploy')
         ->expectsOutputToContain('1 storefront deployment(s) queued for redeployment.')
         ->doesntExpectOutputToContain('skipped')
         ->assertSuccessful();
@@ -91,7 +91,7 @@ it('breaks a stale lock only when asked to', function (): void {
 
     holdProvisionLockFor($deployment);
 
-    $this->artisan('storefront:redeploy --force-unique')
+    $this->artisan('vendra-store:redeploy --force-unique')
         ->expectsOutputToContain('1 storefront deployment(s) queued for redeployment.')
         ->doesntExpectOutputToContain('skipped')
         ->assertSuccessful();
@@ -100,7 +100,7 @@ it('breaks a stale lock only when asked to', function (): void {
 });
 
 it('offers the escape hatch on every dispatching command', function (): void {
-    foreach (['storefront:redeploy', 'storefront:retry-failed', 'storefront:reconcile'] as $command) {
+    foreach (['vendra-store:redeploy', 'vendra-store:retry-failed', 'vendra-store:reconcile'] as $command) {
         expect(Artisan::all()[$command]->getDefinition()->hasOption('force-unique'))
             ->toBeTrue("[{$command}] should accept --force-unique");
     }
@@ -111,7 +111,7 @@ it('keeps a sync pass going past a failed deployment and reports it', function (
     StorefrontDeployment::factory()->create(['slug' => 'broken-two', 'desired_state' => StorefrontDesiredState::Running]);
     bindFakeDockerEngine(fn () => dockerResponse(['message' => 'daemon down'], 500));
 
-    $this->artisan('storefront:reconcile --sync')
+    $this->artisan('vendra-store:reconcile --sync')
         ->expectsOutputToContain('0 storefront deployment(s) reconciled.')
         ->assertFailed();
 });
@@ -123,7 +123,7 @@ it('skips a sync deployment a worker already holds the lock for', function (): v
     $provisioner->shouldNotReceive('provision');
     app()->instance(StorefrontProvisioner::class, $provisioner);
 
-    $this->artisan('storefront:redeploy --sync')
+    $this->artisan('vendra-store:redeploy --sync')
         ->expectsOutputToContain('1 skipped')
         ->assertSuccessful();
 });
@@ -134,9 +134,9 @@ it('does not pile up skip listeners across repeated runs in one process', functi
     StorefrontDeployment::factory()->create(['desired_state' => StorefrontDesiredState::Running]);
     $listenersBefore = count(Event::getListeners(UniqueJobSkipped::class));
 
-    Artisan::call('storefront:redeploy');
-    Artisan::call('storefront:redeploy');
-    Artisan::call('storefront:redeploy');
+    Artisan::call('vendra-store:redeploy');
+    Artisan::call('vendra-store:redeploy');
+    Artisan::call('vendra-store:redeploy');
 
     expect(Event::getListeners(UniqueJobSkipped::class))->toHaveCount($listenersBefore + 1);
 });

@@ -15,7 +15,7 @@ use Misaf\VendraStore\Support\StorefrontReference;
 use Throwable;
 
 #[Description('List storefront deployments from the database')]
-#[Signature('storefront:status {--runtime : Also ask the container runtime what it actually has}')]
+#[Signature('vendra-store:status {--runtime : Also ask the container runtime what it actually has}')]
 final class StorefrontDeploymentStatusCommand extends Command
 {
     public function handle(StorefrontProvisioner $provisioner): int
@@ -129,7 +129,7 @@ final class StorefrontDeploymentStatusCommand extends Command
         $this->components->error(sprintf(
             'The runtime has no container for: %s. If the endpoint or runtime was changed, those containers are '
             .'still on the previous daemon — run container:status to confirm which one is answering, then '
-            .'storefront:redeploy to place them here.',
+            .'vendra-store:redeploy to place them here.',
             $missing->implode(', '),
         ));
 

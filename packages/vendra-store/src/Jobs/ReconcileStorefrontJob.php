@@ -72,7 +72,7 @@ final class ReconcileStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
      * The storefront may be serving perfectly and merely unreadable, so the row's
      * status is left alone rather than marked Failed — that status means
      * provisioning gave up, and claiming it here would strand a healthy
-     * storefront in the panel and feed it to `storefront:retry-failed`.
+     * storefront in the panel and feed it to `vendra-store:retry-failed`.
      */
     public function failed(?Throwable $exception): void
     {

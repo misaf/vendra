@@ -14,7 +14,7 @@ Add `Spatie\QueueableAction\QueueableAction` when the action must also run on th
 ## One verb per action; reads do not get an action
 An action that grew a second public verb is not an action — split it (`StartStoreStorefrontAction`, `StopStoreStorefrontAction`, `RestartStoreStorefrontAction`), or rename it and move it out of `Actions/`.
 
-A method that records nothing and decides nothing is a read, not an operation: let the caller reach the port or the model directly rather than adding a pass-through wrapper. `storefront:lifecycle` does this — start/stop/restart go through actions because they record desired state, while status and logs call `StorefrontProvisioner` straight.
+A method that records nothing and decides nothing is a read, not an operation: let the caller reach the port or the model directly rather than adding a pass-through wrapper. `vendra-store:lifecycle` does this — start/stop/restart go through actions because they record desired state, while status and logs call `StorefrontProvisioner` straight.
 
 Wrap the whole operation in `DB::transaction()` whenever it performs more than one write, and take a row lock when it reads a value it is about to write back. A demote-then-create left half-applied is how a store ends up with no active domain.
 

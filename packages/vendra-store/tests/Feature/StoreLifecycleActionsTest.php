@@ -220,7 +220,7 @@ describe('storefront intent', function (): void {
             'desired_state' => StorefrontDesiredState::Stopped,
         ]);
 
-        $this->artisan('storefront:retry-failed')->assertSuccessful();
+        $this->artisan('vendra-store:retry-failed')->assertSuccessful();
 
         Queue::assertPushed(ProvisionStorefrontJob::class, 1);
         Queue::assertPushed(ProvisionStorefrontJob::class, fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $running->id);

@@ -229,18 +229,18 @@ adapter answered.
 ## Commands
 
 ```bash
-php artisan storefront:status [--runtime]     # deployments from the database
-php artisan storefront:reconcile [--sync]     # converge every runtime with intent
-php artisan storefront:redeploy [--sync]      # rebuild everything meant to be up
-php artisan storefront:retry-failed [--sync]  # retry deployments marked failed
-php artisan storefront:lifecycle {start|stop|restart|status|logs} {slug}
+php artisan vendra-store:status [--runtime]     # deployments from the database
+php artisan vendra-store:reconcile [--sync]     # converge every runtime with intent
+php artisan vendra-store:redeploy [--sync]      # rebuild everything meant to be up
+php artisan vendra-store:retry-failed [--sync]  # retry deployments marked failed
+php artisan vendra-store:lifecycle {start|stop|restart|status|logs} {slug}
 ```
 
-`storefront:reconcile` is cheap and safe to repeat: it corrects with the
+`vendra-store:reconcile` is cheap and safe to repeat: it corrects with the
 narrowest verb that works, so a converged estate comes through a pass untouched.
-Reach for `storefront:redeploy` only for a change convergence cannot see — an
+Reach for `vendra-store:redeploy` only for a change convergence cannot see — an
 image republished under the same reference, or an edge label that only a fresh
-container will carry. `storefront:lifecycle` records intent, so a storefront
+container will carry. `vendra-store:lifecycle` records intent, so a storefront
 stopped there stays stopped through the next pass.
 
 ### Runtime health

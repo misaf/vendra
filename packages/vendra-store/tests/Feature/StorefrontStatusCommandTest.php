@@ -21,7 +21,7 @@ it('reports only what the database recorded by default', function (): void {
 
     $runtime = storefrontStatusRuntime();
 
-    $this->artisan('storefront:status')->assertSuccessful();
+    $this->artisan('vendra-store:status')->assertSuccessful();
 
     expect($runtime->transport->requests)->toBeEmpty();
 });
@@ -36,7 +36,7 @@ it('asks the runtime what it actually has when told to', function (): void {
 
     storefrontStatusRuntime(present: true);
 
-    $this->artisan('storefront:status --runtime')
+    $this->artisan('vendra-store:status --runtime')
         ->doesntExpectOutputToContain('The runtime has no container for')
         ->assertSuccessful();
 });
@@ -57,7 +57,7 @@ it('reports storefronts the runtime has nothing for', function (): void {
 
     storefrontStatusRuntime();
 
-    $this->artisan('storefront:status --runtime')
+    $this->artisan('vendra-store:status --runtime')
         ->expectsOutputToContain('The runtime has no container for: acme-flowers')
         ->assertFailed();
 });
@@ -71,7 +71,7 @@ it('does not report a storefront that is absent because it is meant to be', func
 
     storefrontStatusRuntime();
 
-    $this->artisan('storefront:status --runtime')
+    $this->artisan('vendra-store:status --runtime')
         ->doesntExpectOutputToContain('The runtime has no container for')
         ->assertSuccessful();
 });
@@ -83,7 +83,7 @@ it('still prints the recorded state when the runtime will not answer', function 
         ? dockerStreamResponse('', 500)
         : dockerResponse(['message' => 'The fake runtime is configured as unreachable.'], 500));
 
-    $this->artisan('storefront:status --runtime')
+    $this->artisan('vendra-store:status --runtime')
         ->expectsOutputToContain('acme-flowers')
         ->assertSuccessful();
 });

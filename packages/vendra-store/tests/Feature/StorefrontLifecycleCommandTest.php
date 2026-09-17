@@ -22,7 +22,7 @@ it('records start intent and leaves the runtime work to the queue', function ():
         'desired_state' => StorefrontDesiredState::Stopped,
     ]);
 
-    $this->artisan('storefront:lifecycle', ['action' => 'start', 'slug' => 'acme-flowers'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'start', 'slug' => 'acme-flowers'])
         ->expectsOutput('Storefront [acme-flowers] start queued.')
         ->assertSuccessful();
 
@@ -39,7 +39,7 @@ it('records stop intent so the storefront stays down through reconciliation', fu
         'desired_state' => StorefrontDesiredState::Running,
     ]);
 
-    $this->artisan('storefront:lifecycle', ['action' => 'stop', 'slug' => 'acme-flowers'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'stop', 'slug' => 'acme-flowers'])
         ->expectsOutput('Storefront [acme-flowers] stop queued.')
         ->assertSuccessful();
 
@@ -49,7 +49,7 @@ it('records stop intent so the storefront stays down through reconciliation', fu
 });
 
 it('fails when no deployment carries the given slug', function (): void {
-    $this->artisan('storefront:lifecycle', ['action' => 'status', 'slug' => 'missing-store'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'status', 'slug' => 'missing-store'])
         ->expectsOutput('No storefront deployment named [missing-store] exists.')
         ->assertFailed();
 });
@@ -63,7 +63,7 @@ it('refuses to start a storefront whose store may not serve', function (): void 
         'desired_state' => StorefrontDesiredState::Stopped,
     ]);
 
-    $this->artisan('storefront:lifecycle', ['action' => 'start', 'slug' => 'acme-flowers'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'start', 'slug' => 'acme-flowers'])
         ->assertFailed();
 
     expect($deployment->refresh()->desired_state)->toBe(StorefrontDesiredState::Stopped);
@@ -81,7 +81,7 @@ it('reports the recorded and observed state side by side', function (): void {
 
     fakeExistingStorefront();
 
-    $this->artisan('storefront:lifecycle', ['action' => 'status', 'slug' => 'acme-flowers'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'status', 'slug' => 'acme-flowers'])
         ->expectsOutputToContain('acme-flowers')
         ->expectsOutputToContain('Runtime state')
         ->assertSuccessful();
@@ -96,7 +96,7 @@ it('prints the storefront logs the provisioner returns', function (): void {
 
     fakeExistingStorefront(logs: 'storefront listening on :3000');
 
-    $this->artisan('storefront:lifecycle', ['action' => 'logs', 'slug' => 'acme-flowers'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'logs', 'slug' => 'acme-flowers'])
         ->expectsOutputToContain('storefront listening on :3000')
         ->assertSuccessful();
 });
@@ -104,7 +104,7 @@ it('prints the storefront logs the provisioner returns', function (): void {
 it('rejects an action it does not know', function (): void {
     StorefrontDeployment::factory()->create(['slug' => 'acme-flowers']);
 
-    $this->artisan('storefront:lifecycle', ['action' => 'nuke', 'slug' => 'acme-flowers'])
+    $this->artisan('vendra-store:lifecycle', ['action' => 'nuke', 'slug' => 'acme-flowers'])
         ->expectsOutput('Unknown action. Use start, stop, restart, status, or logs.')
         ->assertFailed();
 });

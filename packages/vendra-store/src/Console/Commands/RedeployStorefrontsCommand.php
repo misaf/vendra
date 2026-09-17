@@ -14,7 +14,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  * Rebuilds every storefront the platform intends to be running.
  *
  * Destructive by design, which is why it is its own command rather than a flag
- * on `storefront:reconcile`. Provisioning replaces a container instead of
+ * on `vendra-store:reconcile`. Provisioning replaces a container instead of
  * updating it, so each storefront here is removed and recreated and is down for
  * its own pull, start, and health gate — sequentially, since one worker serves
  * the storefront queue. On an estate of any size that is an outage, and it
@@ -22,10 +22,10 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
  *
  * Reach for it when the change is one convergence cannot see: a storefront image
  * republished under the same reference, or an edge label that only a fresh
- * container will carry. Ordinary drift is `storefront:reconcile`.
+ * container will carry. Ordinary drift is `vendra-store:reconcile`.
  */
 #[Description('Rebuild every storefront intended to be running, whatever its recorded status')]
-#[Signature('storefront:redeploy
+#[Signature('vendra-store:redeploy
         {--sync : Redeploy each storefront in the current process}
         {--force-unique : Drop a stale unique lock left by a killed worker; skips the guard against provisioning one storefront twice}')]
 final class RedeployStorefrontsCommand extends StorefrontDeploymentDispatchCommand

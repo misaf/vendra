@@ -57,7 +57,7 @@ it('reconciles every database deployment including ready storefronts', function 
         ['status' => StorefrontDeploymentStatus::Ready],
     )->create();
 
-    $this->artisan('storefront:reconcile')
+    $this->artisan('vendra-store:reconcile')
         ->expectsOutput('2 storefront deployment(s) queued for reconciliation.')
         ->assertSuccessful();
 
@@ -83,7 +83,7 @@ it('lists the database-backed storefront fleet', function (): void {
         'status' => StorefrontDeploymentStatus::Pending,
     ]);
 
-    $this->artisan('storefront:status')
+    $this->artisan('vendra-store:status')
         ->expectsTable(
             ['Slug', 'Domain', 'Status', 'Desired', 'Container', 'Image digest'],
             [
@@ -102,7 +102,7 @@ it('retries only failed storefront deployments', function (): void {
         'status' => StorefrontDeploymentStatus::Ready,
     ]);
 
-    $this->artisan('storefront:retry-failed')
+    $this->artisan('vendra-store:retry-failed')
         ->expectsOutput('1 failed storefront deployment(s) queued for retry.')
         ->assertSuccessful();
 

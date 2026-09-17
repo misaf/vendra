@@ -188,7 +188,7 @@ describe('the reconcile command', function (): void {
             'desired_state' => StorefrontDesiredState::Stopped,
         ]);
 
-        $this->artisan('storefront:reconcile')
+        $this->artisan('vendra-store:reconcile')
             ->expectsOutput('2 storefront deployment(s) queued for reconciliation.')
             ->assertSuccessful();
 
@@ -205,7 +205,7 @@ describe('the reconcile command', function (): void {
     it('queues a forced rebuild only when redeployment is asked for by name', function (): void {
         $deployment = reconcilable();
 
-        $this->artisan('storefront:redeploy')
+        $this->artisan('vendra-store:redeploy')
             ->expectsOutput('1 storefront deployment(s) queued for redeployment.')
             ->assertSuccessful();
 
@@ -219,7 +219,7 @@ describe('the reconcile command', function (): void {
     it('leaves a deliberately stopped storefront out of a redeployment', function (): void {
         reconcilable(['desired_state' => StorefrontDesiredState::Stopped]);
 
-        $this->artisan('storefront:redeploy')
+        $this->artisan('vendra-store:redeploy')
             ->expectsOutput('0 storefront deployment(s) queued for redeployment.')
             ->assertSuccessful();
 
@@ -231,7 +231,7 @@ it('reports what a synchronous pass actually changed', function (): void {
     fakeExistingStorefront();
     reconcilable();
 
-    $this->artisan('storefront:reconcile --sync')
+    $this->artisan('vendra-store:reconcile --sync')
         ->expectsOutput('1 storefront deployment(s) reconciled.')
         ->expectsOutput('  in sync: 1')
         ->assertSuccessful();
