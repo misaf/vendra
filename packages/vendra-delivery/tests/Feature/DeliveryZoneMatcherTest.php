@@ -16,7 +16,7 @@ const STUDIO_LATITUDE = 35.6892;
 const STUDIO_LONGITUDE = 51.3890;
 
 it('prices a pin inside the free band at nothing', function (): void {
-    DeliveryZoneFactory::new()->freeWithin(12)->createOne([
+    DeliveryZoneFactory::new()->active()->freeWithin(12)->createOne([
         'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
         'position' => 1,
@@ -31,12 +31,12 @@ it('prices a pin inside the free band at nothing', function (): void {
 });
 
 it('charges the first band that still covers the pin', function (): void {
-    $free = DeliveryZoneFactory::new()->freeWithin(2)->createOne([
+    $free = DeliveryZoneFactory::new()->active()->freeWithin(2)->createOne([
         'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
         'position' => 1,
     ]);
-    $paid = DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne([
+    $paid = DeliveryZoneFactory::new()->active()->chargingWithin(30, 1500)->createOne([
         'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
         'position' => 2,
@@ -51,7 +51,7 @@ it('charges the first band that still covers the pin', function (): void {
 });
 
 it('marks an address beyond every band as quoted by hand', function (): void {
-    DeliveryZoneFactory::new()->freeWithin(12)->createOne([
+    DeliveryZoneFactory::new()->active()->freeWithin(12)->createOne([
         'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
         'position' => 1,
@@ -67,12 +67,12 @@ it('marks an address beyond every band as quoted by hand', function (): void {
 });
 
 it('uses the outermost quote-by-hand band when one is configured', function (): void {
-    DeliveryZoneFactory::new()->freeWithin(12)->createOne([
+    DeliveryZoneFactory::new()->active()->freeWithin(12)->createOne([
         'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
         'position' => 1,
     ]);
-    $outer = DeliveryZoneFactory::new()->quotedByHand()->createOne([
+    $outer = DeliveryZoneFactory::new()->active()->quotedByHand()->createOne([
         'origin_latitude' => STUDIO_LATITUDE,
         'origin_longitude' => STUDIO_LONGITUDE,
         'position' => 2,
