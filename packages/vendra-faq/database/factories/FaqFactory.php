@@ -17,6 +17,9 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 #[UseModel(Faq::class)]
 final class FaqFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
