@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'active' => 'Aktiv',
     'created_at' => 'Erstellt am',
+    'deleted_at' => 'Gelöscht am',
     'description' => 'Beschreibung',
     'inactive' => 'Inaktiv',
     'is_default' => 'Standard',

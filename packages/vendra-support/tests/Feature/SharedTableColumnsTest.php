@@ -10,6 +10,7 @@ use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\DateTimeEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\UpdatedAtEntry;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\DeletedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
@@ -27,6 +28,9 @@ it('defaults the timestamp and row index columns to their shared names and label
         ->and(CreatedAtColumn::make()->getLabel())->toBe(__('vendra-support::attributes.created_at'))
         ->and(UpdatedAtColumn::make()->getName())->toBe('updated_at')
         ->and(UpdatedAtColumn::make()->getLabel())->toBe(__('vendra-support::attributes.updated_at'))
+        ->and(DeletedAtColumn::make()->getName())->toBe('deleted_at')
+        ->and(DeletedAtColumn::make()->getLabel())->toBe(__('vendra-support::attributes.deleted_at'))
+        ->and(DeletedAtColumn::make()->getPlaceholder())->toBe('—')
         ->and(RowIndexColumn::make()->getName())->toBe('row')
         ->and(RowIndexColumn::make()->getLabel())->toBe('#');
 });
