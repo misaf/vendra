@@ -13,6 +13,8 @@ use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Services\ContainerStorefrontProvisioner;
 use Misaf\VendraStore\Support\StorefrontProvisionRequest;
+use Misaf\VendraStore\Support\StorefrontProvisionResult;
+use Misaf\VendraStore\Support\StorefrontReference;
 
 /**
  * @param  array<string, mixed>  $overrides
@@ -461,4 +463,47 @@ describe('podman compatibility', function (): void {
             ->withArgs(fn (string $message): bool => Str::contains($message, 'no health state'))
             ->once();
     });
+});
+
+it('refuses to operate a foreign container that happens to carry a storefront name', function (string $operation): void {
+    bindFakeDockerEngine(fn (Request $request, bool $stream) => match (true) {
+        Str::endsWith($request->path, '/_ping') => dockerResponse('OK'),
+        Str::contains($request->path, '/containers/') && Str::endsWith($request->path, '/json') => dockerResponse([
+            'Id' => 'foreign',
+            'Name' => '/vendra-storefront-acme-flowers',
+            'Config' => ['Image' => 'someone/else', 'Labels' => []],
+            'State' => ['Status' => 'running'],
+        ]),
+        default => dockerResponse('', 204),
+    });
+
+    $reference = new StorefrontReference('acme-flowers');
+
+    expect(fn () => resolve(StorefrontProvisioner::class)->{$operation}($reference))
+        ->toThrow(RuntimeException::class, 'was not placed by the platform');
+})->with(['start', 'stop', 'restart', 'observe']);
+
+it('provisions again when the domain changed while a provision job was running', function (): void {
+    $deployment = StorefrontDeployment::factory()->create([
+        'slug' => 'acme-flowers',
+        'domain' => 'acme.test',
+        'configuration' => storefrontConfiguration(),
+    ]);
+    $domains = [];
+    $provisioner = Mockery::mock(StorefrontProvisioner::class);
+    $provisioner->expects('provision')->twice()->andReturnUsing(function (StorefrontProvisionRequest $request) use ($deployment, &$domains): StorefrontProvisionResult {
+        $domains[] = $request->domain;
+
+        // A domain replace commits while the first placement is under way.
+        if (count($domains) === 1) {
+            $deployment->refresh()->forceFill(['domain' => 'new-acme.test'])->save();
+        }
+
+        return StorefrontProvisionResult::make(ready: true, reference: 'vendra-storefront-acme-flowers', imageDigest: null);
+    });
+    app()->instance(StorefrontProvisioner::class, $provisioner);
+
+    runProvisionJob($deployment);
+
+    expect($domains)->toBe(['acme.test', 'new-acme.test']);
 });

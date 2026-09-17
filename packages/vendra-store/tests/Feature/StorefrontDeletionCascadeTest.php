@@ -113,3 +113,11 @@ it('does nothing for a store that never had a storefront', function (): void {
 
     Queue::assertNothingPushed();
 });
+
+it('leaves a container alone once a newer store reuses the destroyed slug', function (): void {
+    StorefrontDeployment::factory()->create(['slug' => 'reused-slug']);
+    $provisioner = Mockery::mock(StorefrontProvisioner::class);
+    $provisioner->shouldNotReceive('destroy');
+
+    new DestroyStorefrontJob('reused-slug')->handle($provisioner);
+});

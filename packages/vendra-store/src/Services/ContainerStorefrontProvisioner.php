@@ -74,17 +74,26 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
 
     public function start(StorefrontReference $storefront): void
     {
-        $this->runtime->start($this->containerName($storefront));
+        $container = $this->containerName($storefront);
+
+        $this->assertPlatformOwned($container);
+        $this->runtime->start($container);
     }
 
     public function stop(StorefrontReference $storefront): void
     {
-        $this->runtime->stop($this->containerName($storefront));
+        $container = $this->containerName($storefront);
+
+        $this->assertPlatformOwned($container);
+        $this->runtime->stop($container);
     }
 
     public function restart(StorefrontReference $storefront): void
     {
-        $this->runtime->restart($this->containerName($storefront));
+        $container = $this->containerName($storefront);
+
+        $this->assertPlatformOwned($container);
+        $this->runtime->restart($container);
     }
 
     public function destroy(StorefrontReference $storefront): void
@@ -108,9 +117,17 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     {
         $this->assertRuntimeReachable();
 
-        return StorefrontObservation::fromContainer(
-            $this->runtime->find($this->containerName($storefront)),
-        );
+        $container = $this->runtime->find($this->containerName($storefront));
+
+        /*
+         | A foreign container under a storefront's name is neither absent nor
+         | ours: reconciliation would otherwise stop or start it.
+         */
+        if ($container !== null && ! $this->isPlatformOwned($container)) {
+            throw $this->foreignContainer($container->name);
+        }
+
+        return StorefrontObservation::fromContainer($container);
     }
 
     public function logs(StorefrontReference $storefront, int $lines = 200): string
@@ -191,9 +208,14 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
             return;
         }
 
-        throw new RuntimeException(sprintf(
+        throw $this->foreignContainer($container);
+    }
+
+    private function foreignContainer(string $container): RuntimeException
+    {
+        return new RuntimeException(sprintf(
             'The container [%s] already exists and was not placed by the platform. '
-            .'Rename it, or change STOREFRONT_NAME_PREFIX, before deploying this storefront.',
+            .'Rename it, or change STOREFRONT_NAME_PREFIX, before managing this storefront.',
             $container,
         ));
     }

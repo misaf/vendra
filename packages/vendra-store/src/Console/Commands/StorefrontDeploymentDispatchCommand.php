@@ -14,6 +14,7 @@ use Illuminate\Queue\Events\UniqueJobSkipped;
 use Illuminate\Support\Facades\Event;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
+use Throwable;
 
 /**
  * Shared body of the commands that push storefront deployments back through
@@ -36,15 +37,16 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
 
         $count = 0;
         $outcomes = [];
+        $failures = [];
         $skipped = $this->recordSkippedDispatches();
 
         $this->query()
             ->select('id')
             ->orderBy('id')
-            ->chunkById(100, function (Collection $deployments) use (&$count, &$outcomes): void {
+            ->chunkById(100, function (Collection $deployments) use (&$count, &$outcomes, &$failures, $skipped): void {
                 foreach ($deployments as $deployment) {
                     if ($this->option('sync')) {
-                        $outcomes[] = $this->performSync($deployment->id);
+                        $this->runSync($deployment->id, $outcomes, $failures, $skipped);
                     } else {
                         $job = $this->jobFor($deployment->id);
 
@@ -59,11 +61,49 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
                 }
             });
 
-        $this->info(sprintf($this->summary(), $count - $skipped->count(), $this->option('sync') ? $this->syncVerb() : $this->queuedVerb()));
+        $this->info(sprintf($this->summary(), $count - $skipped->count() - count($failures), $this->option('sync') ? $this->syncVerb() : $this->queuedVerb()));
         $this->reportSkipped($skipped);
         $this->reportOutcomes(array_values(array_filter($outcomes)));
 
-        return self::SUCCESS;
+        foreach ($failures as $deploymentId => $message) {
+            $this->error(sprintf('Deployment [%d] failed: %s', $deploymentId, $message));
+        }
+
+        return $failures === [] ? self::SUCCESS : self::FAILURE;
+    }
+
+    /**
+     * Run one deployment in this process under the same unique lock a queued job
+     * takes, so a sync pass cannot provision a storefront a worker is already
+     * provisioning. One failure is recorded and the pass moves on.
+     *
+     * @param  list<mixed>  $outcomes
+     * @param  array<int, string>  $failures
+     * @param  ArrayObject<int, int>  $skipped
+     */
+    private function runSync(int $deploymentId, array &$outcomes, array &$failures, ArrayObject $skipped): void
+    {
+        $job = $this->jobFor($deploymentId);
+        $lock = new UniqueLock($this->laravel->make(Cache::class));
+
+        if ($this->option('force-unique')) {
+            $lock->release($job);
+        }
+
+        if (! $lock->acquire($job)) {
+            $skipped->append($deploymentId);
+
+            return;
+        }
+
+        try {
+            $outcomes[] = $this->performSync($deploymentId);
+        } catch (Throwable $exception) {
+            report($exception);
+            $failures[$deploymentId] = $exception->getMessage();
+        } finally {
+            $lock->release($job);
+        }
     }
 
     /**

@@ -40,6 +40,8 @@ final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
      */
     public const string QUEUE = 'storefronts';
 
+    private const int MAX_PASSES = 3;
+
     public function __construct(
         public readonly int $deploymentId,
         public readonly bool $force = false,
@@ -50,8 +52,26 @@ final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
     public function handle(DeployStoreStorefrontAction $deploy): void
     {
         $deployment = StorefrontDeployment::query()->findOrFail($this->deploymentId);
+        $force = $this->force;
 
-        $deploy->execute($deployment, force: $this->force);
+        /*
+         | A domain replace or suspension that lands while this runs dispatches a
+         | job the unique lock discards, and this run placed the old intent. It
+         | converges onto the new one here instead, a bounded number of times.
+         */
+        for ($pass = 0; $pass < self::MAX_PASSES; $pass++) {
+            $intent = $deployment->intentFingerprint();
+
+            $deploy->execute($deployment, force: $force);
+
+            $deployment = StorefrontDeployment::query()->findOrFail($this->deploymentId);
+
+            if ($deployment->intentFingerprint() === $intent) {
+                return;
+            }
+
+            $force = true;
+        }
     }
 
     /** @return list<int> */

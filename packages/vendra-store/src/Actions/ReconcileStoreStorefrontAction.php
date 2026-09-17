@@ -6,6 +6,7 @@ namespace Misaf\VendraStore\Actions;
 
 use InvalidArgumentException;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
+use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontReconciliationOutcome;
 use Misaf\VendraStore\Enums\StorefrontRuntimeState;
 use Misaf\VendraStore\Models\StorefrontDeployment;
@@ -70,6 +71,19 @@ final readonly class ReconcileStoreStorefrontAction
         if ($observed->state->isServing()
             && ! $observed->isServingOtherThan($this->desiredImage($deployment))
             && ! $observed->isServingDomainOtherThan($deployment->domain)) {
+            /*
+             | A deployment whose health gate timed out was recorded as Requested
+             | for this pass to revisit. Serving the desired image on its domain
+             | is the proof it was waiting for.
+             */
+            if ($deployment->status === StorefrontDeploymentStatus::Requested) {
+                $deployment->markReady(
+                    $observed->containerName ?? $deployment->container_name,
+                    $this->desiredImage($deployment),
+                    $deployment->image_digest,
+                );
+            }
+
             return StorefrontReconciliationOutcome::InSync;
         }
 

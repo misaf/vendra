@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraStore\Actions\ReconcileStoreStorefrontAction;
+use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Enums\StorefrontReconciliationOutcome;
@@ -12,6 +13,8 @@ use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
+use Misaf\VendraStore\Support\StorefrontObservation;
+use Misaf\VendraStore\Support\StorefrontProvisionResult;
 
 const RECONCILE_IMAGE = 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123';
 
@@ -232,4 +235,30 @@ it('reports what a synchronous pass actually changed', function (): void {
         ->expectsOutput('1 storefront deployment(s) reconciled.')
         ->expectsOutput('  in sync: 1')
         ->assertSuccessful();
+});
+
+it('promotes a requested deployment to ready once it is serving the desired image', function (): void {
+    fakeExistingStorefront();
+    $deployment = reconcilable(['status' => StorefrontDeploymentStatus::Requested, 'deployed_at' => null]);
+
+    expect(reconcile($deployment))->toBe(StorefrontReconciliationOutcome::InSync)
+        ->and($deployment->refresh()->status)->toBe(StorefrontDeploymentStatus::Ready)
+        ->and($deployment->deployed_at)->not->toBeNull();
+});
+
+it('converges again when the intent changed while a reconcile job was running', function (): void {
+    $deployment = reconcilable(['desired_state' => StorefrontDesiredState::Stopped]);
+    $provisioner = Mockery::mock(StorefrontProvisioner::class);
+    $provisioner->expects('observe')->twice()->andReturnUsing(function () use ($deployment): StorefrontObservation {
+        // A start lands while the first pass is still settling the stopped intent.
+        $deployment->refresh()->markDesiredState(StorefrontDesiredState::Running);
+
+        return StorefrontObservation::fromContainer(null);
+    });
+    $provisioner->expects('provision')->once()->andReturn(StorefrontProvisionResult::make(ready: true, reference: 'vendra-storefront-acme-flowers', imageDigest: null));
+    app()->instance(StorefrontProvisioner::class, $provisioner);
+
+    app()->call([new ReconcileStorefrontJob($deployment->id), 'handle']);
+
+    expect($deployment->refresh()->status)->toBe(StorefrontDeploymentStatus::Ready);
 });

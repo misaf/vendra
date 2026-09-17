@@ -160,6 +160,24 @@ final class StorefrontDeployment extends Model
     }
 
     /**
+     * The columns an administrator changes to ask for a different storefront.
+     * A job compares it before and after its run to catch a change whose own
+     * dispatch the unique lock discarded while it was working.
+     *
+     * @return array<string, mixed>
+     */
+    public function intentFingerprint(): array
+    {
+        return [
+            'slug' => $this->slug,
+            'domain' => $this->domain,
+            'storefront_image_id' => $this->storefront_image_id,
+            'configuration' => $this->configuration,
+            'desired_state' => $this->desired_state->value,
+        ];
+    }
+
+    /**
      * Whether this storefront may be asked to run. Read with trashed stores
      * included, because an offboarded store is exactly the case being refused.
      */

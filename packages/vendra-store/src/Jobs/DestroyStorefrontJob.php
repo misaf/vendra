@@ -12,6 +12,7 @@ use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\Attributes\UniqueFor;
 use Illuminate\Support\Facades\Log;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
+use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontReference;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Throwable;
@@ -52,6 +53,14 @@ final class DestroyStorefrontJob implements NotTenantAware, ShouldBeUnique, Shou
      */
     public function handle(StorefrontProvisioner $provisioner): void
     {
+        /*
+         | The force delete freed the slug immediately. A deployment holding it
+         | now belongs to a newer store, and the container is that store's.
+         */
+        if (StorefrontDeployment::query()->where('slug', $this->slug)->exists()) {
+            return;
+        }
+
         $provisioner->destroy(new StorefrontReference($this->slug));
     }
 
