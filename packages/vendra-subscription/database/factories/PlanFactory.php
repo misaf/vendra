@@ -34,7 +34,7 @@ final class PlanFactory extends Factory
             'currency_code' => null,
             'trial_days' => 0,
             'features' => null,
-            'active' => true,
+            'active' => fake()->boolean(80),
             'is_default' => false,
         ];
     }
@@ -81,5 +81,15 @@ final class PlanFactory extends Factory
             'period_unit' => $unit,
             'period_count' => $count,
         ]);
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (): array => ['active' => true]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (): array => ['active' => false]);
     }
 }
