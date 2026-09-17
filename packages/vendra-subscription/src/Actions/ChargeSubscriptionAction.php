@@ -7,6 +7,7 @@ namespace Misaf\VendraSubscription\Actions;
 use Illuminate\Support\Facades\DB;
 use LogicException;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
+use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Events\SubscriptionPaymentPaid;
 use Misaf\VendraSubscription\Exceptions\SubscriptionPaymentException;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
@@ -55,6 +56,13 @@ final readonly class ChargeSubscriptionAction
 
             if ($lockedPayment->status->isTerminal()
                 || ($lockedPayment->next_retry_at !== null && $lockedPayment->next_retry_at->isFuture())) {
+                return $lockedPayment;
+            }
+
+            // A payment outliving its cancelled subscription must never reach the provider.
+            if ($lockedPayment->subscription()->withTrashed()->first()?->status === SubscriptionStatus::Cancelled) {
+                $lockedPayment->cancel();
+
                 return $lockedPayment;
             }
 

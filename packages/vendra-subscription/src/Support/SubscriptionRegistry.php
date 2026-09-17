@@ -73,12 +73,16 @@ final class SubscriptionRegistry
     }
 
     /**
-     * Cancel every non-terminal subscription held by a subscriber.
+     * Cancel every non-terminal subscription held by a subscriber, and its open
+     * payments with it: a pending payment left behind would otherwise still be
+     * charged by payment recovery after the subscriber is gone.
      *
      * @return int the number of subscriptions cancelled
      */
     public function cancelOpen(Model&SubscriptionSubscriber $subscriber): int
     {
+        $this->lockOpenPayments($subscriber)->each->cancel();
+
         return $this->subscriptionsQuery($subscriber)
             ->whereIn('status', [
                 SubscriptionStatus::PendingPayment->value,

@@ -37,6 +37,23 @@ it('starts pending and settles a deposit into the ledger on approval', function 
     Event::assertDispatched(TransactionApproved::class);
 });
 
+it('settles a transaction once when approved again from a stale copy', function (): void {
+    Event::fake([TransactionApproved::class]);
+
+    $wallet = WalletFactory::new()->create();
+    $transaction = TransactionFactory::new()->forWallet($wallet)->deposit()->create(['amount' => 4_000]);
+    $staleCopy = Transaction::query()->findOrFail($transaction->getKey());
+
+    $transaction->approve();
+    $staleCopy->approve();
+
+    expect($wallet->fresh()->balance)->toBe(4_000)
+        ->and($transaction->ledgerEntries()->count())->toBe(1)
+        ->and($staleCopy->status)->toBeInstanceOf(Approved::class);
+
+    Event::assertDispatchedTimes(TransactionApproved::class, 1);
+});
+
 it('settles a withdrawal as a negative ledger entry', function (): void {
     $wallet = WalletFactory::new()->create();
     resolve(PostLedgerEntryAction::class)->execute($wallet, 10_000);

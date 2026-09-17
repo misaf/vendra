@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Event;
 use Misaf\VendraSubscription\Actions\ApplySubscriptionPaymentResultAction;
+use Misaf\VendraSubscription\Actions\ChargeSubscriptionAction;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Events\SubscriptionPaymentFailed;
 use Misaf\VendraSubscription\Events\SubscriptionPaymentPaid;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
+use Misaf\VendraSupport\Contracts\SubscriptionCharger;
 use Misaf\VendraSupport\Data\SubscriptionChargeResult;
 use Misaf\VendraSupport\Enums\SubscriptionChargeStatus;
 
@@ -52,4 +54,18 @@ it('moves an active subscription to past due when its renewal payment fails', fu
     );
 
     expect($subscription->refresh()->status)->toBe(SubscriptionStatus::PastDue);
+});
+
+it('cancels instead of charging a payment whose subscription was cancelled', function (): void {
+    $charger = Mockery::mock(SubscriptionCharger::class);
+    $charger->allows(['available' => true, 'provider' => 'testing']);
+    $charger->shouldNotReceive('charge', 'retrieve');
+    app()->instance(SubscriptionCharger::class, $charger);
+
+    $subscription = Subscription::factory()->create(['status' => SubscriptionStatus::Cancelled]);
+    $payment = SubscriptionPayment::factory()->for($subscription)->create(['status' => SubscriptionPaymentStatus::Pending]);
+
+    resolve(ChargeSubscriptionAction::class)->execute($payment);
+
+    expect($payment->refresh()->status)->toBe(SubscriptionPaymentStatus::Cancelled);
 });

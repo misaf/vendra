@@ -21,14 +21,29 @@ final class ApproveTransactionTransition extends Transition
 
     public function handle(): Transaction
     {
-        DB::transaction(function (): void {
+        $settled = DB::transaction(function (): bool {
+            /*
+             | Re-read under a row lock: the transition was validated against an
+             | in-memory status, and two workers approving the same transaction
+             | from stale copies would otherwise both post it to the ledger.
+             */
+            $this->transaction->refreshForUpdate();
+
+            if (! $this->transaction->status->canTransitionTo(Approved::class)) {
+                return false;
+            }
+
             resolve(SettleTransactionAction::class)->execute($this->transaction);
 
             $this->transaction->status = new Approved($this->transaction);
             $this->transaction->save();
+
+            return true;
         });
 
-        event(new TransactionApproved($this->transaction));
+        if ($settled) {
+            event(new TransactionApproved($this->transaction));
+        }
 
         return $this->transaction;
     }
