@@ -29,7 +29,7 @@ use Misaf\VendraConsole\Filament\Resources\Stores\Pages\ViewStore;
 use Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers\AdministratorsRelationManager;
 use Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers\DomainsRelationManager;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource as ConsoleStoreResource;
-use Misaf\VendraConsole\Models\ConsoleUser;
+use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -59,7 +59,7 @@ function consoleAdmin(): User
 {
     $admin = User::factory()->create(['tenant_id' => null]);
 
-    ConsoleUser::factory()->for($admin)->create();
+    Console::factory()->for($admin)->create();
 
     return $admin;
 }

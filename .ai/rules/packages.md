@@ -19,7 +19,7 @@ The host and every first-party package target PHP ^8.4. Keep package composer co
 Child package manifests do not declare *\Tests\ PSR-4 entries. The monorepo root composer.json owns package test namespace mappings because Composer ignores dependencies' autoload-dev; child manifests keep only database factory autoload-dev mappings when a factory directory exists.
 
 ## One vocabulary: user, reseller, administrator — never "operator"
-Identities are always `user`: the canonical `Misaf\VendraUser\Models\User` plus the `console_users` grant table and each reseller's single main account, `resellers.user_id`. "Operator" is not a word this codebase uses (the only exceptions are Filament's `IsRelatedToOperator` and Rector's `OptionalToNullsafeOperatorRector`).
+Identities are always `user`: the canonical `Misaf\VendraUser\Models\User` plus each console user's `consoles` row and each reseller's single main account, `resellers.user_id`. "Operator" is not a word this codebase uses (the only exceptions are Filament's `IsRelatedToOperator` and Rector's `OptionalToNullsafeOperatorRector`).
 
 The billing entity behind `stores.reseller_id` is a `reseller`, never an "owner": `AssignStoreResellerAction`, `Contracts\StoreResellerResolver`, `CreateStorePage::resolveReseller()`, `?SubscriptionSubscriber $reseller = null`.
 

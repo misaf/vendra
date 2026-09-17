@@ -17,6 +17,8 @@ it('contains every package table in the fresh database baseline', function (): v
         ->and(Schema::hasColumns('reseller_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
         ->and(Schema::hasTable('platform_password_reset_tokens'))->toBeFalse()
         ->and(Schema::hasTable('reseller_users'))->toBeFalse()
+        ->and(Schema::hasTable('console_users'))->toBeFalse()
+        ->and(Schema::hasColumns('consoles', ['user_id', 'active']))->toBeTrue()
         ->and(Schema::hasColumns('resellers', ['user_id', 'active', 'offboarding_reason', 'offboarded_at']))->toBeTrue()
         ->and(Schema::hasColumn('resellers', 'name'))->toBeFalse()
         ->and(Schema::hasColumn('resellers', 'description'))->toBeFalse()
@@ -35,6 +37,7 @@ it('names boolean availability columns active', function (string $table): void {
     'attributes',
     'blog_post_categories',
     'blog_posts',
+    'consoles',
     'currencies',
     'custom_page_categories',
     'custom_pages',
@@ -148,6 +151,11 @@ it('enforces one main account and one active subscription per reseller', functio
         ->and(Schema::hasForeignKey('resellers', ['user_id']))->toBeTrue()
         ->and(Schema::hasColumn('subscriptions', 'active_subscriber_guard'))->toBeTrue()
         ->and(Schema::hasIndex('subscriptions', ['subscriber_type', 'active_subscriber_guard'], 'unique'))->toBeTrue();
+});
+
+it('enforces one console per user', function (): void {
+    expect(Schema::hasIndex('consoles', ['user_id'], 'unique'))->toBeTrue()
+        ->and(Schema::hasForeignKey('consoles', ['user_id']))->toBeTrue();
 });
 
 it('keeps platform-level user identities globally unique', function (): void {

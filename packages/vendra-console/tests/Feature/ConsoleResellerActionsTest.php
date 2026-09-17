@@ -7,7 +7,7 @@ use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Hash;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ListResellers;
 use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
-use Misaf\VendraConsole\Models\ConsoleUser;
+use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraReseller\Filament\Pages\Auth\Login;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
@@ -22,7 +22,7 @@ function actingConsoleAdmin(): User
 {
     $admin = User::factory()->create(['tenant_id' => null]);
 
-    ConsoleUser::factory()->for($admin)->create();
+    Console::factory()->for($admin)->create();
 
     actingAs($admin, 'console');
     Filament::setCurrentPanel(Filament::getPanel('console'));

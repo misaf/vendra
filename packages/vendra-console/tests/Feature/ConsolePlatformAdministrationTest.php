@@ -16,7 +16,7 @@ use Misaf\VendraConsole\Filament\Resources\Stores\Pages\EditStore;
 use Misaf\VendraConsole\Filament\Resources\Stores\Pages\ListStores;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource;
 use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
-use Misaf\VendraConsole\Models\ConsoleUser;
+use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
@@ -49,7 +49,7 @@ function actAsPlatformUser(): User
 {
     $admin = User::factory()->create(['tenant_id' => null]);
 
-    ConsoleUser::factory()->for($admin)->create();
+    Console::factory()->for($admin)->create();
 
     actingAs($admin, 'console');
     Filament::setCurrentPanel(Filament::getPanel('console'));
