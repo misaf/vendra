@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
@@ -14,6 +15,7 @@ use Misaf\VendraStore\Models\StorefrontImage;
 /**
  * @extends Factory<StorefrontDeployment>
  */
+#[UseModel(StorefrontDeployment::class)]
 final class StorefrontDeploymentFactory extends Factory
 {
     /**
