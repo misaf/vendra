@@ -126,6 +126,24 @@ final class SubscriptionRegistry
     }
 
     /**
+     * Point the subscriber's open payments at a new payer, so a replaced main
+     * account is not charged for renewals after it lost access.
+     *
+     * @return int the number of payments reassigned
+     */
+    public function reassignOpenPayments(Model&SubscriptionSubscriber $subscriber, Model $payer): int
+    {
+        $payments = $this->lockOpenPayments($subscriber);
+
+        $payments->each(function (SubscriptionPayment $payment) use ($payer): void {
+            $payment->payer()->associate($payer);
+            $payment->save();
+        });
+
+        return $payments->count();
+    }
+
+    /**
      * @return Builder<Subscription>
      */
     private function subscriptionsQuery(Model&SubscriptionSubscriber $subscriber): Builder
