@@ -52,7 +52,6 @@ function storefrontConfiguration(array $overrides = []): array
 function storefrontRequest(array $overrides = []): StorefrontProvisionRequest
 {
     return new StorefrontProvisionRequest(
-        tenantId: 1,
         slug: Arr::get($overrides, 'slug', 'acme-flowers'),
         domain: Arr::get($overrides, 'domain', 'acme.test'),
         image: Arr::get($overrides, 'image', 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123'),

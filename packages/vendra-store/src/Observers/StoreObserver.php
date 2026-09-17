@@ -9,7 +9,6 @@ use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Jobs\DestroyStorefrontJob;
 use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\Store;
-use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontOrigins;
 
 /**
@@ -59,7 +58,7 @@ final class StoreObserver
         $store->execute(fn () => $store->storeDomains()->onlyTrashed()->where('active', true)->restore());
         StorefrontOrigins::forget();
 
-        $deployment = $this->deploymentFor($store);
+        $deployment = $store->storefrontDeployment()->first();
 
         if ($deployment === null) {
             return;
@@ -94,7 +93,7 @@ final class StoreObserver
      */
     private function settleStorefront(Store $store): void
     {
-        $deployment = $this->deploymentFor($store);
+        $deployment = $store->storefrontDeployment()->first();
 
         if ($deployment === null) {
             return;
@@ -121,16 +120,5 @@ final class StoreObserver
         $deployment->markDesiredState(StorefrontDesiredState::Stopped);
 
         dispatch(new ReconcileStorefrontJob($deployment->id))->afterCommit();
-    }
-
-    /**
-     * A store owns at most one storefront, and this reads it from outside any
-     * store's context — the caller may be deleting a store that is not current.
-     */
-    private function deploymentFor(Store $store): ?StorefrontDeployment
-    {
-        return StorefrontDeployment::query()
-            ->where('store_id', $store->getKey())
-            ->first();
     }
 }

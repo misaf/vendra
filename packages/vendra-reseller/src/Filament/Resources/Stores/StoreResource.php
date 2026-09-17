@@ -97,7 +97,7 @@ final class StoreResource extends Resource
         return parent::getEloquentQuery()
             ->where('reseller_id', $resellerId)
             ->with([
-                'storefrontDeployments',
+                'storefrontDeployment',
                 'domains' => fn (Relation $relation): Relation => $relation->where('active', true),
             ]);
     }

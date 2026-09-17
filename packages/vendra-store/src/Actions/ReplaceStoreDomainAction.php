@@ -57,9 +57,7 @@ final readonly class ReplaceStoreDomainAction
          | of the closure, because the arrow function wrapping the transaction
          | captures by value and a reference through it would not survive.
          */
-        $deployment = StorefrontDeployment::query()
-            ->where('store_id', $store->getKey())
-            ->first();
+        $deployment = $store->storefrontDeployment()->first();
 
         $storeDomain = $store->execute(fn (): StoreDomain => DB::transaction(function () use ($store, $domain, $deployment): StoreDomain {
             $store->storeDomains()

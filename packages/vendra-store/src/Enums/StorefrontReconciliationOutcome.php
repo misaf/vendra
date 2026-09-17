@@ -18,12 +18,4 @@ enum StorefrontReconciliationOutcome: string
     case Stopped = 'stopped';
     case Deployed = 'deployed';
     case Redeployed = 'redeployed';
-
-    /**
-     * Whether the runtime was changed to close a gap.
-     */
-    public function changedAnything(): bool
-    {
-        return $this !== self::InSync;
-    }
 }

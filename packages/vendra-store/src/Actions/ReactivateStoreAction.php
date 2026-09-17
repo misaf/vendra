@@ -30,9 +30,7 @@ final class ReactivateStoreAction
             $lockedStore->forceFill(['active' => true])->save();
 
             if ($lockedStore->status() === StoreStatus::Active) {
-                $deployment = StorefrontDeployment::query()
-                    ->where('store_id', $lockedStore->getKey())
-                    ->first();
+                $deployment = $lockedStore->storefrontDeployment()->first();
 
                 if ($deployment instanceof StorefrontDeployment) {
                     $deployment->markDesiredState(StorefrontDesiredState::Running);

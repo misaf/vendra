@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -86,16 +87,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     use HasSlug;
     use IsTenantModel;
     use SoftDeletes;
-
-    /**
-     * Cascade a store's domains through its own lifecycle so no orphaned domain
-     * keeps resolving. The active domain (active = true) follows the store;
-     * replaced history domains (active = false, already trashed) are left
-     * untouched on soft delete and only purged on force delete. Each callback
-     * runs in the store's own tenant context so {@see StoreScope} on the
-     * domains resolves to this store, not whatever store is currently active in
-     * the request.
-     */
 
     /**
      * @return array<string, string>
@@ -270,12 +261,13 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
 
     /**
      * The storefront the platform runs for this store, when one was requested.
+     * `storefront_deployments.store_id` is unique, so a store owns at most one.
      *
-     * @return HasMany<StorefrontDeployment, $this>
+     * @return HasOne<StorefrontDeployment, $this>
      */
-    public function storefrontDeployments(): HasMany
+    public function storefrontDeployment(): HasOne
     {
-        return $this->hasMany(StorefrontDeployment::class)
+        return $this->hasOne(StorefrontDeployment::class)
             ->withoutGlobalScope(StoreScope::class);
     }
 
@@ -287,16 +279,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withTimestamps();
-    }
-
-    /**
-     * The name of the store's active (resolving) domain, if any.
-     */
-    public function activeDomainName(): ?string
-    {
-        $name = $this->domains()->where('active', true)->value('name');
-
-        return is_string($name) ? $name : null;
     }
 
     /**

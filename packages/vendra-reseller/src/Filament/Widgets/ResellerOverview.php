@@ -44,7 +44,7 @@ final class ResellerOverview extends StatsOverviewWidget
         $needsAttention = $provisioning + $failed;
 
         $hasReadyStorefront = (clone $stores)->whereHas(
-            'storefrontDeployments',
+            'storefrontDeployment',
             fn (Builder $query) => $query->where('status', StorefrontDeploymentStatus::Ready),
         )->exists();
 

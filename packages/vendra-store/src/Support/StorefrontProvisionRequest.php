@@ -23,7 +23,6 @@ final readonly class StorefrontProvisionRequest
      * @param  array<string, mixed>  $configuration  the configuration the storefront image boots on
      */
     public function __construct(
-        public int $tenantId,
         public string $slug,
         public string $domain,
         public string $image,
@@ -44,7 +43,6 @@ final readonly class StorefrontProvisionRequest
         throw_if($storefrontImage === null, InvalidArgumentException::class, 'Select a storefront image before deploying this storefront.');
 
         return new self(
-            tenantId: $deployment->store_id,
             slug: $deployment->slug,
             domain: $deployment->domain,
             image: $storefrontImage->image,

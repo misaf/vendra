@@ -27,7 +27,7 @@ final class AlignStorefrontWithStoreAction
             default => null,
         };
 
-        $deployment = StorefrontDeployment::query()->where('store_id', $store->getKey())->first();
+        $deployment = $store->storefrontDeployment()->first();
 
         if ($desiredState === null || ! $deployment instanceof StorefrontDeployment || $deployment->desired_state === $desiredState) {
             return;
