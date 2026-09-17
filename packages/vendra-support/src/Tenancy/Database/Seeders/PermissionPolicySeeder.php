@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Tenancy\Database\Seeders;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Config;
@@ -37,6 +38,16 @@ abstract class PermissionPolicySeeder extends Seeder
         $guardName = Config::string('auth.defaults.guard');
 
         foreach (array_unique($this->policies()) as $policy) {
+            $exists = $permissionModel::query()
+                ->where('name', $policy)
+                ->where('guard_name', $guardName)
+                ->when($tenantKey !== null, fn (Builder $query): Builder => $query->where(TenantSchema::column(), $tenantKey))
+                ->exists();
+
+            if ($exists) {
+                continue;
+            }
+
             /** @var Model $permission */
             $permission = $permissionModel::query()->make();
             $permission->fill([
