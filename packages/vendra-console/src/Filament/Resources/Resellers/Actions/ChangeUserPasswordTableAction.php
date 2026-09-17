@@ -28,6 +28,7 @@ final class ChangeUserPasswordTableAction extends Action
 
         $this
             ->label(__('vendra-console::actions.change_user_password'))->icon(Heroicon::OutlinedKey)
+            ->hidden(fn (Reseller $record): bool => $record->trashed())
             ->schema([
                 NewPasswordInput::make(),
                 PasswordConfirmationInput::make(),

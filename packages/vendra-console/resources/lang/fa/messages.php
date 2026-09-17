@@ -24,6 +24,7 @@ return [
     'store_provisioning_queued' => 'آماده‌سازی فروشگاه در صف قرار گرفت',
     'store_reactivated' => 'فروشگاه دوباره فعال شد',
     'store_restored' => 'فروشگاه بازیابی شد',
+    'store_restore_failed' => 'فروشگاه بازیابی نشد',
     'store_suspended' => 'فروشگاه تعلیق شد',
     'storefront_redeployment_queued' => 'استقرار دوباره فروشگاه در صف قرار گرفت',
     'storefront_restarted' => 'فروشگاه دوباره راه‌اندازی شد',

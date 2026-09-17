@@ -24,6 +24,7 @@ return [
     'store_provisioning_queued' => 'Store provisioning queued',
     'store_reactivated' => 'Store reactivated',
     'store_restored' => 'Store restored',
+    'store_restore_failed' => 'The store could not be restored',
     'store_suspended' => 'Store suspended',
     'storefront_redeployment_queued' => 'Storefront redeployment queued',
     'storefront_restarted' => 'Storefront restarted',

@@ -24,6 +24,7 @@ return [
     'store_provisioning_queued' => 'Store-Bereitstellung eingeplant',
     'store_reactivated' => 'Store reaktiviert',
     'store_restored' => 'Store wiederhergestellt',
+    'store_restore_failed' => 'Der Store konnte nicht wiederhergestellt werden',
     'store_suspended' => 'Store gesperrt',
     'storefront_redeployment_queued' => 'Storefront-Neubereitstellung eingeplant',
     'storefront_restarted' => 'Storefront neu gestartet',

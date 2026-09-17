@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ListResellers;
 use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
 use Misaf\VendraConsole\Models\Console;
+use Misaf\VendraReseller\Actions\OffboardResellerAction;
 use Misaf\VendraReseller\Filament\Pages\Auth\Login;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
@@ -118,6 +119,28 @@ it('offboards a reseller through the table row action with an audit reason', fun
         ->and($offboardedReseller->offboarding_reason)->toBe('Contract terminated by the platform.');
 });
 
+it('hides account and subscription actions on an offboarded reseller', function (string $action): void {
+    actingConsoleAdmin();
+
+    $reseller = Reseller::factory()->create();
+    Subscription::factory()->forSubscriber($reseller)->for(Plan::factory())->create();
+    resolve(OffboardResellerAction::class)->execute($reseller, 'Contract ended.');
+
+    livewire(ListResellers::class)
+        ->loadTable()
+        ->filterTable('trashed', ['value' => 'trashed'])
+        ->assertActionHidden(TestAction::make($action)->table($reseller));
+})->with([
+    'changeUserPassword',
+    'changeUserEmail',
+    'replaceUserAccount',
+    'changePlan',
+    'renew',
+    'extendSubscription',
+    'cancelSubscription',
+    'reactivateSubscription',
+]);
+
 it('changes a reseller user password through the table row action', function (): void {
     $admin = actingConsoleAdmin();
 
@@ -183,6 +206,38 @@ it('rejects a reseller user email another active user already holds', function (
         ->assertHasFormErrors(['email' => 'unique']);
 
     expect($user->fresh()?->email)->not->toBe('taken@example.com');
+});
+
+it('accepts a reseller user email that only a store user holds', function (): void {
+    actingConsoleAdmin();
+
+    $reseller = Reseller::factory()->create();
+    $user = consoleResellerUserFor($reseller);
+    User::factory()->forTenant(createTestTenant())->create(['email' => 'store-user@example.com']);
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('changeUserEmail')->table($reseller), ['email' => 'store-user@example.com'])
+        ->assertHasNoFormErrors();
+
+    expect($user->fresh()?->email)->toBe('store-user@example.com');
+});
+
+it('validates a replacement reseller email as strictly as reseller creation', function (): void {
+    actingConsoleAdmin();
+
+    $reseller = Reseller::factory()->create();
+    $originalUser = consoleResellerUserFor($reseller);
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('replaceUserAccount')->table($reseller), [
+            'username' => 'replacement',
+            'email' => 'replacement@localhost',
+            'password' => 'NewSecure123',
+            'password_confirmation' => 'NewSecure123',
+        ])
+        ->assertHasFormErrors(['email']);
+
+    expect($reseller->refresh()->user_id)->toBe($originalUser->getKey());
 });
 
 it('updates a reseller user email through the domain action', function (): void {

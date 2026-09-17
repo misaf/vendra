@@ -30,6 +30,7 @@ use Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers\Administrator
 use Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers\DomainsRelationManager;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource as ConsoleStoreResource;
 use Misaf\VendraConsole\Models\Console;
+use Misaf\VendraReseller\Actions\OffboardResellerAction;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -286,6 +287,45 @@ it('honors a disabled state when creating a reseller', function (): void {
     expect($reseller?->active)->toBeFalse()
         ->and($reseller?->user)->toBeInstanceOf(User::class)
         ->and(Hash::check('Secure123', $reseller?->user->password))->toBeTrue();
+});
+
+it('creates a reseller whose username and email are only used inside a store', function (): void {
+    actAsConsoleAdmin();
+
+    User::factory()->forTenant(createTestTenant())->create([
+        'username' => 'shared_name',
+        'email' => 'shared@gmail.com',
+    ]);
+
+    livewire(CreateReseller::class)
+        ->fillForm([
+            'plan_id' => Plan::factory()->create()->getKey(),
+            'username' => 'shared_name',
+            'email' => 'shared@gmail.com',
+            'password' => 'Secure123',
+            'password_confirmation' => 'Secure123',
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    expect(User::query()->whereNull('tenant_id')->where('username', 'shared_name')->exists())->toBeTrue();
+});
+
+it('rejects a reseller username another platform user already holds', function (): void {
+    actAsConsoleAdmin();
+
+    User::factory()->create(['tenant_id' => null, 'username' => 'taken_name']);
+
+    livewire(CreateReseller::class)
+        ->fillForm([
+            'plan_id' => Plan::factory()->create()->getKey(),
+            'username' => 'taken_name',
+            'email' => 'fresh@gmail.com',
+            'password' => 'Secure123',
+            'password_confirmation' => 'Secure123',
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['username' => 'unique']);
 });
 
 it('prevents deleting a plan used by subscriptions from list and edit pages', function (): void {
@@ -684,6 +724,22 @@ it('lets a console admin offboard then restore a store', function (): void {
         ->assertHasNoErrors();
 
     expect($store->fresh()?->trashed())->toBeFalse();
+});
+
+it('notifies instead of failing when restoring a store whose reseller was offboarded', function (): void {
+    actAsConsoleAdmin();
+
+    $reseller = Reseller::factory()->create();
+    $store = Store::factory()->create(['reseller_id' => $reseller->getKey()]);
+    resolve(OffboardResellerAction::class)->execute($reseller, 'Contract ended.');
+
+    livewire(ListStores::class)
+        ->loadTable()
+        ->filterTable('trashed', ['value' => 'trashed'])
+        ->callAction(TestAction::make('restoreOffboardedStore')->table($store))
+        ->assertNotified(__('vendra-console::messages.store_restore_failed'));
+
+    expect($store->fresh()?->trashed())->toBeTrue();
 });
 
 it('does not expose permanent deletion for an offboarded store', function (): void {
