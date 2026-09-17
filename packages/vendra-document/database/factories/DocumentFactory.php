@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraDocument\Models\Document;
 use Misaf\VendraUserProfile\Models\UserProfile;
 
-/** @extends Factory<Document> */
+/**
+ * @extends Factory<Document>
+ */
 #[UseModel(Document::class)]
 final class DocumentFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
