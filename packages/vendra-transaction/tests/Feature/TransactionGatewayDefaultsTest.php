@@ -10,13 +10,13 @@ beforeEach(function (): void {
 });
 
 it('makes the first active gateway the default', function (): void {
-    $gateway = TransactionGatewayFactory::new()->createOne();
+    $gateway = TransactionGatewayFactory::new()->active()->createOne();
 
     expect($gateway->is_default)->toBeTrue();
 });
 
 it('does not allow the only default gateway to be unset', function (): void {
-    $gateway = TransactionGatewayFactory::new()->default()->createOne();
+    $gateway = TransactionGatewayFactory::new()->active()->default()->createOne();
 
     $gateway->update(['is_default' => false]);
 
@@ -24,8 +24,8 @@ it('does not allow the only default gateway to be unset', function (): void {
 });
 
 it('promotes the first ordered gateway when the default is deleted', function (): void {
-    $default = TransactionGatewayFactory::new()->default()->createOne();
-    $next = TransactionGatewayFactory::new()->createOne();
+    $default = TransactionGatewayFactory::new()->active()->default()->createOne();
+    $next = TransactionGatewayFactory::new()->active()->createOne();
 
     $default->delete();
 
@@ -34,8 +34,8 @@ it('promotes the first ordered gateway when the default is deleted', function ()
 });
 
 it('promotes the first active gateway when the default becomes inactive', function (): void {
-    $default = TransactionGatewayFactory::new()->default()->createOne();
-    $next = TransactionGatewayFactory::new()->createOne();
+    $default = TransactionGatewayFactory::new()->active()->default()->createOne();
+    $next = TransactionGatewayFactory::new()->active()->createOne();
 
     $default->update(['active' => false]);
 
@@ -51,8 +51,8 @@ it('clears the default flag when creating an inactive gateway', function (): voi
 });
 
 it('switches the default gateway through the domain action', function (): void {
-    $first = TransactionGatewayFactory::new()->default()->createOne();
-    $second = TransactionGatewayFactory::new()->createOne();
+    $first = TransactionGatewayFactory::new()->active()->default()->createOne();
+    $second = TransactionGatewayFactory::new()->active()->createOne();
 
     (new SetDefaultTransactionGatewayAction)->execute($second);
 
@@ -61,7 +61,7 @@ it('switches the default gateway through the domain action', function (): void {
 });
 
 it('activates an inactive gateway when it becomes the default', function (): void {
-    TransactionGatewayFactory::new()->default()->createOne();
+    TransactionGatewayFactory::new()->active()->default()->createOne();
     $gateway = TransactionGatewayFactory::new()->inactive()->createOne();
 
     (new SetDefaultTransactionGatewayAction)->execute($gateway);

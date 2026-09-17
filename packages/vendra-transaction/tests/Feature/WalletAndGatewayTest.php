@@ -108,7 +108,7 @@ it('enforces the per-wallet transaction limit at creation', function (): void {
 
 it('resolves gateways by slug and ignores disabled ones', function (): void {
     TransactionGatewayFactory::new()->inactive()->create(['slug' => 'coinpayments']);
-    TransactionGatewayFactory::new()->internal()->create();
+    TransactionGatewayFactory::new()->active()->internal()->create();
 
     expect(TransactionGatewayRegistry::hasActive('coinpayments'))->toBeFalse()
         ->and(TransactionGatewayRegistry::hasActive('internal-transactions'))->toBeTrue()
@@ -125,7 +125,7 @@ it('provisions the default wallet in the resolved default currency', function ()
 });
 
 it('identifies internal transactions by the internal gateway', function (): void {
-    $internal = TransactionGatewayFactory::new()->internal()->create();
+    $internal = TransactionGatewayFactory::new()->active()->internal()->create();
     $external = TransactionGatewayFactory::new()->active()->create(['slug' => 'shetab']);
     $wallet = WalletFactory::new()->create();
 
