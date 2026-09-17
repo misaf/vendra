@@ -18,7 +18,7 @@ beforeEach(function (): void {
 });
 
 it('offers every uninstalled catalog currency for installation', function (): void {
-    CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
 
     livewire(CreateCurrency::class)
         ->assertFormFieldExists('code', function (Select $field): bool {
@@ -73,7 +73,7 @@ it('rejects codes outside the currency catalog', function (): void {
 });
 
 it('installs multiple currencies at once from the catalog action', function (): void {
-    CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
 
     livewire(ListCurrencies::class)
         ->callAction('installCurrencies', [
@@ -101,7 +101,7 @@ it('requires at least one code in the catalog action', function (): void {
 });
 
 it('rejects already installed currencies in the catalog action', function (): void {
-    CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
 
     livewire(ListCurrencies::class)
         ->callAction('installCurrencies', [
@@ -113,7 +113,7 @@ it('rejects already installed currencies in the catalog action', function (): vo
 });
 
 it('temporarily disables an installed currency from the table', function (): void {
-    $currency = CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
+    $currency = CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
 
     livewire(ListCurrencies::class)
         ->call('updateTableColumnState', 'active', (string) $currency->getKey(), false);
@@ -127,8 +127,8 @@ it('temporarily disables an installed currency from the table', function (): voi
 });
 
 it('sets a currency as default from the table action', function (): void {
-    $dollar = CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
-    $euro = CurrencyFactory::new()->code('EUR')->createOne(['position' => 2]);
+    $dollar = CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
+    $euro = CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 2]);
 
     livewire(ListCurrencies::class)
         ->callAction(TestAction::make('setDefault')->table($euro))
@@ -139,8 +139,8 @@ it('sets a currency as default from the table action', function (): void {
 });
 
 it('shows the default flag as an icon column on the default currency', function (): void {
-    $dollar = CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
-    $euro = CurrencyFactory::new()->code('EUR')->createOne(['position' => 2]);
+    $dollar = CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
+    $euro = CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 2]);
 
     $euro->update(['is_default' => true]);
     $dollar->update(['is_default' => false]);

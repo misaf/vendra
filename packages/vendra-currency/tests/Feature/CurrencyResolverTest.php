@@ -24,15 +24,15 @@ beforeEach(function (): void {
 });
 
 it('resolves the default currency code from the database', function (): void {
-    CurrencyFactory::new()->code('EUR')->createOne(['position' => 1]);
-    CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 2]);
+    CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 2]);
 
     expect(resolve(CurrencyResolver::class)->defaultCode())->toBe('USD');
 });
 
 it('resolves options and active codes from active currencies only', function (): void {
-    CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
-    CurrencyFactory::new()->code('EUR')->createOne(['position' => 2]);
+    CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 2]);
     CurrencyFactory::new()->code('GBP')->inactive()->createOne(['position' => 3]);
 
     $resolver = resolve(CurrencyResolver::class);
@@ -45,7 +45,7 @@ it('resolves options and active codes from active currencies only', function ():
 });
 
 it('integrates with the shared currency facade', function (): void {
-    CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 1]);
 
     expect(CurrencyIntegration::isAvailable())->toBeTrue()
         ->and(CurrencyIntegration::defaultCode())->toBe('USD');

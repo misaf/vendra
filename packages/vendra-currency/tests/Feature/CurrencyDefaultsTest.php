@@ -28,13 +28,13 @@ beforeEach(function (): void {
 });
 
 it('makes the first active currency the default', function (): void {
-    $currency = CurrencyFactory::new()->code('USD')->createOne(['position' => 1]);
+    $currency = CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 1]);
 
     expect($currency->is_default)->toBeTrue();
 });
 
 it('does not allow the only default currency to be unset', function (): void {
-    $currency = CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
+    $currency = CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 1]);
 
     $currency->update(['is_default' => false]);
 
@@ -42,8 +42,8 @@ it('does not allow the only default currency to be unset', function (): void {
 });
 
 it('promotes the first ordered currency when the default is deleted', function (): void {
-    $default = CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 2]);
-    $next = CurrencyFactory::new()->code('EUR')->createOne(['position' => 1]);
+    $default = CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 2]);
+    $next = CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 1]);
 
     $default->delete();
 
@@ -51,8 +51,8 @@ it('promotes the first ordered currency when the default is deleted', function (
 });
 
 it('promotes the first active currency when the default is inactive', function (): void {
-    $default = CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 2]);
-    $next = CurrencyFactory::new()->code('EUR')->createOne(['position' => 1]);
+    $default = CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 2]);
+    $next = CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 1]);
 
     $default->update(['active' => false]);
 
@@ -68,8 +68,8 @@ it('disables the default flag when creating a disabled currency', function (): v
 });
 
 it('switches the default currency through the domain action', function (): void {
-    $dollar = CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
-    $euro = CurrencyFactory::new()->code('EUR')->createOne(['position' => 2]);
+    $dollar = CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 1]);
+    $euro = CurrencyFactory::new()->active()->code('EUR')->createOne(['position' => 2]);
 
     (new SetDefaultCurrencyAction)->execute($euro);
 
@@ -78,7 +78,7 @@ it('switches the default currency through the domain action', function (): void 
 });
 
 it('enables a disabled currency when it becomes the default', function (): void {
-    CurrencyFactory::new()->code('USD')->default()->createOne(['position' => 1]);
+    CurrencyFactory::new()->active()->code('USD')->default()->createOne(['position' => 1]);
     $euro = CurrencyFactory::new()->code('EUR')->inactive()->createOne(['position' => 2]);
 
     (new SetDefaultCurrencyAction)->execute($euro);
@@ -88,8 +88,8 @@ it('enables a disabled currency when it becomes the default', function (): void 
 });
 
 it('rejects bulk updates that would create multiple default currencies', function (): void {
-    CurrencyFactory::new()->code('USD')->createOne(['is_default' => false, 'position' => 1]);
-    CurrencyFactory::new()->code('EUR')->createOne(['is_default' => false, 'position' => 2]);
+    CurrencyFactory::new()->active()->code('USD')->createOne(['is_default' => false, 'position' => 1]);
+    CurrencyFactory::new()->active()->code('EUR')->createOne(['is_default' => false, 'position' => 2]);
 
     expect(fn (): int => Currency::query()->update(['is_default' => true]))
         ->toThrow(QueryException::class);
