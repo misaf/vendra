@@ -20,9 +20,9 @@ use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 #[Description('Processes messages from the authify-log-channel and dispatches jobs.')]
 #[Signature('vendra-authify-log:channel')]
-class AuthifyLogChannelCommand extends Command
+final class AuthifyLogChannelCommand extends Command
 {
-    public function handle(): void
+    public function handle(): int
     {
         $redisConnection = Redis::connection('authify_log_channel');
 
@@ -30,7 +30,7 @@ class AuthifyLogChannelCommand extends Command
             $cacheKey = 'entries';
             $batchSize = 100;
 
-            echo "Received message: {$message}".PHP_EOL;
+            $this->line("Received message: {$message}");
 
             if ($message < $batchSize) {
                 return;
@@ -39,13 +39,15 @@ class AuthifyLogChannelCommand extends Command
             $entries = $this->getBatchEntries($cacheKey, $batchSize);
 
             if (blank($entries)) {
-                echo 'No entries to process.'.PHP_EOL;
+                $this->line('No entries to process.');
 
                 return;
             }
 
             $this->processBatch($entries);
         });
+
+        return self::SUCCESS;
     }
 
     /**
