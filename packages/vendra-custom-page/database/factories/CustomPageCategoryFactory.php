@@ -16,6 +16,9 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 #[UseModel(CustomPageCategory::class)]
 final class CustomPageCategoryFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

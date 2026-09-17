@@ -17,6 +17,9 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 #[UseModel(CustomPage::class)]
 final class CustomPageFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
