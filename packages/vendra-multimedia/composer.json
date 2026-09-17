@@ -29,7 +29,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Misaf\\VendraMultimedia\\": "src/"
+            "Misaf\\VendraMultimedia\\": "src/",
+            "Misaf\\VendraMultimedia\\Database\\Seeders\\": "database/seeders/"
         }
     },
     "extra": {

@@ -8,10 +8,12 @@ use Composer\InstalledVersions;
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
+use Misaf\VendraMultimedia\Console\Commands\SeedCommand;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraMultimedia\MultimediaPlugin;
 use Misaf\VendraMultimedia\Support\DefaultPathGenerator;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -31,6 +33,7 @@ final class MultimediaServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_media_table',
             ])
+            ->hasCommands(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-multimedia');
             });
@@ -84,6 +87,7 @@ final class MultimediaServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('media');
+        $this->app->make(TenantSeeders::class)->register('vendra-multimedia:seed', priority: 26);
         AboutCommand::add('Vendra Multimedia', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-multimedia')]);
     }
 }

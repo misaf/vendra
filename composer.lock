@@ -7473,10 +7473,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-console",
-                "reference": "75b450d7d680a9cdf19cd71f4fb167dd0bcf5385"
+                "reference": "c8472d406633496b36c88b0fe393f2e89468b35c"
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
+                "cknow/laravel-money": "^8.5",
                 "filament/filament": "^5.6.8",
                 "illuminate/console": "^13.0",
                 "illuminate/contracts": "^13.0",
@@ -7493,7 +7494,8 @@
                 "misaf/vendra-tenant": "self.version",
                 "misaf/vendra-user": "self.version",
                 "php": "^8.4",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {
@@ -8289,7 +8291,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-multimedia",
-                "reference": "ed63a24dffaa25bf5b1271a373a930f8cb5ae825"
+                "reference": "4911d3283d88034a000bc16e8dccacead3c37d81"
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -8310,7 +8312,8 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Misaf\\VendraMultimedia\\": "src/"
+                    "Misaf\\VendraMultimedia\\": "src/",
+                    "Misaf\\VendraMultimedia\\Database\\Seeders\\": "database/seeders/"
                 }
             },
             "license": [
