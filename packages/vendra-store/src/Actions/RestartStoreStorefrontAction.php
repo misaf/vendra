@@ -4,27 +4,26 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Actions;
 
-use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
+use Misaf\VendraStore\Jobs\RestartStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
-use Misaf\VendraStore\Support\StorefrontReference;
 
 /**
  * Restarts an already-deployed storefront.
  *
  * This is not a deployment: nothing is built, pulled, or replaced, so the
- * recorded status and image stay exactly as they were. What does change is the
- * recorded desired state, so the next reconciliation pass converges on this
- * intent rather than reversing it.
+ * recorded status and image stay exactly as they were. The intent is recorded
+ * here and the restart runs on the storefront queue, the only worker holding a
+ * container-runtime socket.
  */
-final readonly class RestartStoreStorefrontAction
+final class RestartStoreStorefrontAction
 {
-    public function __construct(private StorefrontProvisioner $provisioner) {}
-
     public function execute(StorefrontDeployment $deployment): void
     {
-        $this->provisioner->restart(StorefrontReference::for($deployment));
+        $deployment->assertStoreMayServe();
 
         $deployment->markDesiredState(StorefrontDesiredState::Running);
+
+        dispatch(new RestartStorefrontJob($deployment->id))->afterCommit();
     }
 }

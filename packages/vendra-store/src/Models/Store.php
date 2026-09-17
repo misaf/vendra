@@ -199,6 +199,16 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
+     * Whether suspension or offboarding means this store's storefront must stay
+     * down. A store still provisioning is not held down: its first storefront
+     * deployment runs alongside provisioning.
+     */
+    public function keepsStorefrontDown(): bool
+    {
+        return $this->trashed() || $this->status() === StoreStatus::Suspended;
+    }
+
+    /**
      * The store's own admin panel, on the canonical host that
      * {@see StoreDomainFinder::findForAdminHost()} resolves: the slug under
      * `admin.<central host>`. The slug directly under the central host serves

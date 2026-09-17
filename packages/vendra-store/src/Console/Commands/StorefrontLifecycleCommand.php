@@ -11,6 +11,7 @@ use Misaf\VendraStore\Actions\RestartStoreStorefrontAction;
 use Misaf\VendraStore\Actions\StartStoreStorefrontAction;
 use Misaf\VendraStore\Actions\StopStoreStorefrontAction;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
+use Misaf\VendraStore\Exceptions\StoreNotServingException;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontReference;
 
@@ -21,7 +22,8 @@ use Misaf\VendraStore\Support\StorefrontReference;
  * storefront, change no configuration, and record intent — stopping a storefront
  * here means it stays stopped through the next reconciliation pass.
  *
- * start/stop/restart record intent, so each is an action. status and logs
+ * start/stop/restart record intent, so each is an action; the runtime work they
+ * ask for runs on the storefront queue. status and logs
  * record nothing and decide nothing — they are reads, and go straight to the
  * provisioner port rather than through a pass-through wrapper.
  */
@@ -48,9 +50,9 @@ final class StorefrontLifecycleCommand extends Command
         }
 
         return match ((string) $this->argument('action')) {
-            'start' => $this->perform(fn () => $start->execute($deployment), "Storefront [{$slug}] started."),
-            'stop' => $this->perform(fn () => $stop->execute($deployment), "Storefront [{$slug}] stopped."),
-            'restart' => $this->perform(fn () => $restart->execute($deployment), "Storefront [{$slug}] restarted."),
+            'start' => $this->perform(fn () => $start->execute($deployment), "Storefront [{$slug}] start queued."),
+            'stop' => $this->perform(fn () => $stop->execute($deployment), "Storefront [{$slug}] stop queued."),
+            'restart' => $this->perform(fn () => $restart->execute($deployment), "Storefront [{$slug}] restart queued."),
             'status' => $this->reportStatus($provisioner, $deployment),
             'logs' => $this->reportLogs($provisioner, $deployment),
             default => $this->unknownAction(),
@@ -62,7 +64,13 @@ final class StorefrontLifecycleCommand extends Command
      */
     private function perform(callable $operation, string $message): int
     {
-        $operation();
+        try {
+            $operation();
+        } catch (StoreNotServingException $exception) {
+            $this->error($exception->getMessage());
+
+            return self::FAILURE;
+        }
 
         $this->info($message);
 

@@ -17,6 +17,7 @@ use Misaf\VendraStore\Database\Factories\StorefrontDeploymentFactory;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
+use Misaf\VendraStore\Exceptions\StoreNotServingException;
 
 /**
  * The storefront one store owns: its configuration, and the state of the
@@ -156,6 +157,25 @@ final class StorefrontDeployment extends Model
     public function markDesiredState(StorefrontDesiredState $state): void
     {
         $this->forceFill(['desired_state' => $state])->save();
+    }
+
+    /**
+     * Whether this storefront may be asked to run. Read with trashed stores
+     * included, because an offboarded store is exactly the case being refused.
+     */
+    public function storeMayServe(): bool
+    {
+        $store = Store::query()->withTrashed()->find($this->store_id);
+
+        return ! $store instanceof Store || ! $store->keepsStorefrontDown();
+    }
+
+    /**
+     * @throws StoreNotServingException
+     */
+    public function assertStoreMayServe(): void
+    {
+        throw_unless($this->storeMayServe(), StoreNotServingException::forDeployment($this));
     }
 
     /**

@@ -12,6 +12,8 @@ final class RedeployStoreStorefrontAction
 {
     public function execute(StorefrontDeployment $deployment): void
     {
+        $deployment->assertStoreMayServe();
+
         $deployment->markDesiredState(StorefrontDesiredState::Running);
 
         dispatch(new ProvisionStorefrontJob($deployment->id, force: true))->afterCommit();

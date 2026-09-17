@@ -18,11 +18,16 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 final class RetryFailedStorefrontDeploymentsCommand extends StorefrontDeploymentDispatchCommand
 {
     /**
+     * Only storefronts meant to be up: a failed deployment whose store was since
+     * suspended or offboarded stays failed until the store comes back.
+     *
      * @return Builder<StorefrontDeployment>
      */
     protected function query(): Builder
     {
-        return StorefrontDeployment::query()->where('status', StorefrontDeploymentStatus::Failed->value);
+        return StorefrontDeployment::query()
+            ->desiredRunning()
+            ->where('status', StorefrontDeploymentStatus::Failed->value);
     }
 
     /**

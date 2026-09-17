@@ -6,7 +6,6 @@ namespace Misaf\VendraStore\Actions;
 
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
-use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontProvisionRequest;
 
@@ -38,6 +37,23 @@ final readonly class DeployStoreStorefrontAction
             return $deployment->status;
         }
 
+        /*
+         | The deployment reads intent and never writes it. A queued retry that
+         | fires after a store was suspended or offboarded would otherwise bring
+         | its storefront back up; callers that mean "run it" record Running
+         | before dispatching, as RedeployStoreStorefrontAction does. A row a
+         | thrown attempt left Processing is settled as Failed, so it does not
+         | read as in progress forever; convergence redeploys it once the intent
+         | is Running again.
+         */
+        if (! $deployment->desired_state->expectsRunning()) {
+            if ($deployment->status === StorefrontDeploymentStatus::Processing) {
+                $deployment->markFailed('Deployment abandoned: the storefront was stopped before it finished.');
+            }
+
+            return $deployment->status;
+        }
+
         $deployment->markProcessing();
 
         $request = StorefrontProvisionRequest::for($deployment);
@@ -48,13 +64,6 @@ final readonly class DeployStoreStorefrontAction
         } else {
             $deployment->markRequested($result->reference, $request->image, $result->imageDigest);
         }
-
-        /*
-         | A deployment is an instruction to run, so it also settles the intent:
-         | a storefront that was deliberately stopped and is then redeployed is
-         | meant to be up again.
-         */
-        $deployment->markDesiredState(StorefrontDesiredState::Running);
 
         return $deployment->status;
     }

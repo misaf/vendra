@@ -17,6 +17,8 @@ final class RetryFailedStorefrontDeploymentAction
             throw new LogicException("Storefront deployment [{$deployment->id}] is not failed.");
         }
 
+        $deployment->assertStoreMayServe();
+
         dispatch(new ProvisionStorefrontJob($deployment->id))->afterCommit();
     }
 }
