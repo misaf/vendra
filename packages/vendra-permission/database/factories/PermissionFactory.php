@@ -19,6 +19,9 @@ use RuntimeException;
 #[UseModel(Permission::class)]
 final class PermissionFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         $guardNames = $this->configuredGuardNames();

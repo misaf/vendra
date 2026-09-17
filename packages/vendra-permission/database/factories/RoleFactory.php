@@ -19,6 +19,9 @@ use RuntimeException;
 #[UseModel(Role::class)]
 final class RoleFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         $guardNames = $this->configuredGuardNames();
