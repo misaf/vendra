@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Tables;
 
-use Awcodes\BadgeableColumn\Components\Badge;
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
@@ -27,6 +24,7 @@ use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
@@ -51,18 +49,13 @@ final class CurrencyTable
                 ->searchable()
                 ->sortable(),
 
-            BadgeableColumn::make('name')
+            TextColumn::make('name')
                 ->label(__('vendra-currency::attributes.name'))
                 ->icon(Heroicon::Tag)
                 ->searchable()
-                ->sortable()
-                ->prefixBadges([
-                    Badge::make('is_default')
-                        ->label(__('vendra-currency::attributes.is_default'))
-                        ->color('success')
-                        ->size(Size::ExtraSmall)
-                        ->hidden(fn (Currency $record): bool => ! $record->is_default),
-                ]),
+                ->sortable(),
+
+            IsDefaultIconColumn::make(),
 
             TextColumn::make('symbol')
                 ->label(__('vendra-currency::attributes.symbol'))

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -13,6 +12,8 @@ use Illuminate\Support\Arr;
 use Misaf\VendraAddress\Database\Factories\AddressFactory;
 use Misaf\VendraAddress\Filament\RelationManagers\AddressesRelationManager;
 use Misaf\VendraSupport\Capabilities\Countries;
+use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
 
 it('uses a localized country select and free-text administrative fields', function (): void {
     app()->setLocale('fa');
@@ -50,17 +51,13 @@ it('updates verification state from table toggle', function (): void {
     expect($address->refresh()->verified_at)->toBeNull();
 });
 
-it('shows primary badge on label column for primary addresses', function (): void {
+it('shows the primary flag as the shared icon column', function (): void {
     makeCurrentTestTenant();
 
     $relationManager = new AddressesRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
-    $address = AddressFactory::new()->createOne(['is_primary' => true]);
-    $labelColumn = $table->getColumn('label');
+    $primaryColumn = $table->getColumn('is_primary');
 
-    expect($labelColumn)->toBeInstanceOf(BadgeableColumn::class);
-
-    $state = $labelColumn->record($address)->formatState($address->label)->toHtml();
-
-    expect($state)->toContain('badgeable-column-badge');
+    expect($primaryColumn)->toBeInstanceOf(IsPrimaryIconColumn::class)
+        ->and(Arr::get($relationManager->form(Schema::make($relationManager))->getFlatFields(), 'is_primary'))->toBeInstanceOf(IsPrimaryToggle::class);
 });

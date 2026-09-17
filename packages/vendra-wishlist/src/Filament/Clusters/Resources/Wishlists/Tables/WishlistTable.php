@@ -10,15 +10,15 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
 
 final class WishlistTable
@@ -43,9 +43,7 @@ final class WishlistTable
                     ->counts('items')
                     ->label(__('vendra-wishlist::attributes.items')),
 
-                IconColumn::make('is_default')
-                    ->boolean()
-                    ->label(__('vendra-wishlist::attributes.is_default')),
+                IsDefaultIconColumn::make(),
 
                 CreatedAtColumn::make()
                     ->sortable(),
@@ -72,8 +70,7 @@ final class WishlistTable
                     ->constraints([
                         NameConstraint::make(),
 
-                        BooleanConstraint::make('is_default')
-                            ->label(__('vendra-wishlist::attributes.is_default')),
+                        IsDefaultConstraint::make(),
                     ]),
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->defaultSort(column: 'id', direction: 'desc');

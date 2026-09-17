@@ -8,6 +8,7 @@ return [
     'description' => 'Beschreibung',
     'inactive' => 'Inaktiv',
     'is_default' => 'Standard',
+    'is_primary' => 'Primär',
     'name' => 'Name',
     'position' => 'Position',
     'slug' => 'Slug',

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\ToggleColumn;
@@ -10,6 +9,8 @@ use Filament\Tables\Table;
 use Illuminate\Support\Arr;
 use Misaf\VendraPhone\Database\Factories\PhoneNumberFactory;
 use Misaf\VendraPhone\Filament\RelationManagers\PhoneNumbersRelationManager;
+use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
 
 it('provides a notes field', function (): void {
     $relationManager = new PhoneNumbersRelationManager;
@@ -40,17 +41,13 @@ it('updates verification state from table toggle', function (): void {
     expect($phoneNumber->refresh()->verified_at)->toBeNull();
 });
 
-it('shows primary badge on label column for primary phone numbers', function (): void {
+it('shows the primary flag as the shared icon column', function (): void {
     makeCurrentTestTenant();
 
     $relationManager = new PhoneNumbersRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
-    $phoneNumber = PhoneNumberFactory::new()->createOne(['is_primary' => true]);
-    $labelColumn = $table->getColumn('label');
+    $primaryColumn = $table->getColumn('is_primary');
 
-    expect($labelColumn)->toBeInstanceOf(BadgeableColumn::class);
-
-    $state = $labelColumn->record($phoneNumber)->formatState($phoneNumber->label)->toHtml();
-
-    expect($state)->toContain('badgeable-column-badge');
+    expect($primaryColumn)->toBeInstanceOf(IsPrimaryIconColumn::class)
+        ->and(Arr::get($relationManager->form(Schema::make($relationManager))->getFlatFields(), 'is_primary'))->toBeInstanceOf(IsPrimaryToggle::class);
 });

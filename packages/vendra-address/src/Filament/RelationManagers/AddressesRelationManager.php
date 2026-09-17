@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAddress\Filament\RelationManagers;
 
-use Awcodes\BadgeableColumn\Components\Badge;
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -13,10 +11,8 @@ use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -24,6 +20,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraAddress\Models\Address;
 use Misaf\VendraSupport\Capabilities\Countries;
+use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
 
 final class AddressesRelationManager extends RelationManager
 {
@@ -76,9 +74,7 @@ final class AddressesRelationManager extends RelationManager
             Textarea::make('notes')
                 ->label(__('vendra-address::address.fields.notes'))
                 ->columnSpanFull(),
-            Toggle::make('is_primary')
-                ->label(__('vendra-address::address.fields.is_primary'))
-                ->onIcon(Heroicon::Bolt),
+            IsPrimaryToggle::make(),
         ]);
     }
 
@@ -86,17 +82,11 @@ final class AddressesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                BadgeableColumn::make('label')
+                TextColumn::make('label')
                     ->label(__('vendra-address::address.fields.label'))
                     ->icon(Heroicon::Tag)
-                    ->default('—')
-                    ->prefixBadges([
-                        Badge::make('is_primary')
-                            ->label(__('vendra-address::address.fields.is_primary'))
-                            ->color('success')
-                            ->size(Size::ExtraSmall)
-                            ->hidden(fn (Address $record): bool => ! $record->is_primary),
-                    ]),
+                    ->default('—'),
+                IsPrimaryIconColumn::make(),
                 TextColumn::make('line_one')->label(__('vendra-address::address.fields.line_one'))->icon(Heroicon::MapPin)->searchable(),
                 TextColumn::make('locality')->label(__('vendra-address::address.fields.locality'))->icon(Heroicon::MapPin)->searchable(),
                 TextColumn::make('country_code')->label(__('vendra-address::address.fields.country_code'))->icon(Heroicon::GlobeAlt)->badge(),

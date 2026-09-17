@@ -8,6 +8,7 @@ return [
     'description' => 'توضیحات',
     'inactive' => 'غیرفعال',
     'is_default' => 'پیش‌فرض',
+    'is_primary' => 'اصلی',
     'name' => 'نام',
     'position' => 'جایگاه',
     'slug' => 'نامک',

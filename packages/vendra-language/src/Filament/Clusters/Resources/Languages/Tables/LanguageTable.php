@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Tables;
 
-use Awcodes\BadgeableColumn\Components\Badge;
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
@@ -28,6 +25,7 @@ use Misaf\VendraLanguage\Support\Locales;
 use Misaf\VendraLanguage\Support\TranslationProgress;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
@@ -51,17 +49,12 @@ final class LanguageTable
                 ->searchable()
                 ->sortable(),
 
-            BadgeableColumn::make('name')
+            TextColumn::make('name')
                 ->label(__('vendra-language::attributes.name'))
                 ->icon(Heroicon::Tag)
-                ->state(fn (Language $record): string => Locales::name($record->locale))
-                ->prefixBadges([
-                    Badge::make('is_default')
-                        ->label(__('vendra-language::attributes.is_default'))
-                        ->color('success')
-                        ->size(Size::ExtraSmall)
-                        ->hidden(fn (Language $record): bool => ! $record->is_default),
-                ]),
+                ->state(fn (Language $record): string => Locales::name($record->locale)),
+
+            IsDefaultIconColumn::make(),
 
             IsActiveToggleColumn::make()
                 ->disabled(fn (Language $record): bool => ! LanguageResource::canEdit($record)),

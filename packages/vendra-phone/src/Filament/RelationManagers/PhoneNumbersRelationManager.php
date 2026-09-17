@@ -4,18 +4,14 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPhone\Filament\RelationManagers;
 
-use Awcodes\BadgeableColumn\Components\Badge;
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\ColumnGroup;
@@ -25,6 +21,8 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraPhone\Models\PhoneNumber;
+use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 use Ysfkaya\FilamentPhoneInput\Tables\PhoneColumn;
@@ -72,9 +70,7 @@ final class PhoneNumbersRelationManager extends RelationManager
             Textarea::make('notes')
                 ->label(__('vendra-phone::phone.fields.notes'))
                 ->columnSpanFull(),
-            Toggle::make('is_primary')
-                ->label(__('vendra-phone::phone.fields.is_primary'))
-                ->onIcon(Heroicon::Bolt),
+            IsPrimaryToggle::make(),
         ]);
     }
 
@@ -82,17 +78,11 @@ final class PhoneNumbersRelationManager extends RelationManager
     {
         /** @var array<int, Column|ColumnGroup|LayoutComponent> $columns */
         $columns = [
-            BadgeableColumn::make('label')
+            TextColumn::make('label')
                 ->label(__('vendra-phone::phone.fields.label'))
                 ->icon(Heroicon::Tag)
-                ->default('—')
-                ->prefixBadges([
-                    Badge::make('is_primary')
-                        ->label(__('vendra-phone::phone.fields.is_primary'))
-                        ->color('success')
-                        ->size(Size::ExtraSmall)
-                        ->hidden(fn (PhoneNumber $record): bool => ! $record->is_primary),
-                ]),
+                ->default('—'),
+            IsPrimaryIconColumn::make(),
             TextColumn::make('type')
                 ->label(__('vendra-phone::phone.fields.type'))
                 ->icon(Heroicon::Tag)

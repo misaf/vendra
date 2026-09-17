@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\Schemas;
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
 
 final class WishlistForm
 {
@@ -26,8 +26,7 @@ final class WishlistForm
                         TextInput::make('token')
                             ->label(__('vendra-wishlist::attributes.token')),
 
-                        Toggle::make('is_default')
-                            ->label(__('vendra-wishlist::attributes.is_default')),
+                        IsDefaultToggle::make(),
                     ])
                     ->columns(2)
                     ->columnSpanFull(),

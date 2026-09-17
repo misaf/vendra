@@ -7,6 +7,7 @@ namespace Misaf\VendraSupport\Tests\Feature;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Filament\Forms\Components\DescriptionRichEditor;
+use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
 use Misaf\VendraSupport\Filament\Infolists\Components\DescriptionEntry;
 use Misaf\VendraSupport\Filament\Infolists\Components\IsDefaultEntry;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
@@ -76,6 +77,15 @@ it('starts the default toggle off and validates it as soon as it changes', funct
         ->assertHasNoErrors()
         ->set('data.is_default', null)
         ->assertHasErrors(['data.is_default' => 'required']);
+});
+
+it('starts the primary toggle off as a required boolean with the shared label', function (): void {
+    $toggle = IsPrimaryToggle::make();
+
+    expect($toggle->getName())->toBe('is_primary')
+        ->and($toggle->getLabel())->toBe(__('vendra-support::attributes.is_primary'))
+        ->and($toggle->getDefaultState())->toBeFalse()
+        ->and($toggle->isRequired())->toBeTrue();
 });
 
 it('labels the default entry and constraint with the shared translation', function (): void {

@@ -23,6 +23,7 @@ use Filament\Tables\Table;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
@@ -55,6 +56,8 @@ final class UserProfileTable
                 ->sortable(),
 
             DescriptionColumn::make(),
+
+            IsDefaultIconColumn::make(),
 
             IsActiveToggleColumn::make(),
 

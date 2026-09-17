@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\Tables;
 
-use Awcodes\BadgeableColumn\Components\Badge;
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Support\Enums\Size;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -25,6 +22,7 @@ use Misaf\VendraSupport\Filament\Concerns\InteractsWithTranslatedTableRecords;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
@@ -54,18 +52,13 @@ final class TransactionGatewayTable
                     ->collection(TransactionGateway::MEDIA_COLLECTION)
                     ->defaultImageUrl(fn (TransactionGateway $record): string => self::defaultAvatarImageUrl($record->name)),
 
-                BadgeableColumn::make('name')
+                TextColumn::make('name')
                     ->alignStart()
                     ->label(__('vendra-transaction::attributes.name'))
                     ->icon(Heroicon::Tag)
-                    ->searchable()
-                    ->prefixBadges([
-                        Badge::make('is_default')
-                            ->label(__('vendra-transaction::attributes.is_default'))
-                            ->color('success')
-                            ->size(Size::ExtraSmall)
-                            ->hidden(fn (TransactionGateway $record): bool => ! $record->is_default),
-                    ]),
+                    ->searchable(),
+
+                IsDefaultIconColumn::make(),
 
                 DescriptionColumn::make()
                     ->state(fn (TransactionGateway $record, Livewire $livewire): string => self::translatedAttribute($record, 'description', $livewire)),

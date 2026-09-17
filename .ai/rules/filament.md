@@ -15,3 +15,6 @@ Never hardcode a user-facing string: every label, heading and navigation item us
 
 ## Filament actions stay resource-scoped and thin
 Filament actions live under src/Filament/.../<Resource>/Actions/ as one independent class per operation with Table/Bulk/Page suffix (e.g. SuspendStoreTableAction), never plural *Actions aggregators. They own only label/visibility/schema/notification and delegate writes to a domain action in src/Actions. No DB writes, dispatches, or state transitions inline. Shared helpers go in Actions/Concerns/ within the same resource. Permission attach/detach/sync plumbing is the only exempt thin wrapper.
+
+## Status fields use badges, booleans use icons
+Status/state enum values (`status`, `*_status`, `desired_state`) render as `TextEntry`/`TextColumn` `->badge()`. Boolean values render as `IconEntry`/`IconColumn` `->boolean()` (or a toggle column when edited inline) — never as a text badge or a prefix badge next to the name. For `active`, `is_default` and `is_primary` use the shared vendra-support components (`IsActive*`, `IsDefault*`, `IsPrimary*`) instead of hand-building them; add missing variants there.

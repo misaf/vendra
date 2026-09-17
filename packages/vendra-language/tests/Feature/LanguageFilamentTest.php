@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Awcodes\BadgeableColumn\Components\BadgeableColumn;
 use Filament\Actions\Testing\TestAction;
 use Filament\Forms\Components\Select;
 use Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\Pages\CreateLanguageLine;
@@ -12,7 +11,7 @@ use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Pages\CreateLangu
 use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Pages\ListLanguages;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraLanguage\Models\LanguageLine;
-use Misaf\VendraLanguage\Support\Locales;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 
 use function Pest\Livewire\livewire;
 
@@ -194,7 +193,7 @@ it('sets a language as default from the table action', function (): void {
         ->and($german->refresh()->is_default)->toBeTrue();
 });
 
-it('shows default badge on the default language', function (): void {
+it('shows the default flag as an icon column on the default language', function (): void {
     $english = Language::query()->create(['locale' => 'en', 'position' => 1]);
     $german = Language::query()->create(['locale' => 'de', 'position' => 2]);
 
@@ -203,11 +202,9 @@ it('shows default badge on the default language', function (): void {
 
     livewire(ListLanguages::class)
         ->loadTable()
-        ->assertTableColumnExists('name', function (BadgeableColumn $column) use ($german): bool {
-            $germanState = $column->record($german)->formatState(Locales::name($german->locale))->toHtml();
-
-            return str_contains($germanState, 'badgeable-column-badge');
-        }, $german);
+        ->assertTableColumnExists('is_default', fn (IsDefaultIconColumn $column): bool => true, $german)
+        ->assertTableColumnStateSet('is_default', true, $german)
+        ->assertTableColumnStateSet('is_default', false, $english);
 });
 
 it('shows locale coverage and language line progress in the tables', function (): void {
