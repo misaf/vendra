@@ -2,9 +2,14 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Queue;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\AssignStoreResellerAction;
+use Misaf\VendraStore\Enums\StorefrontDesiredState;
+use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
@@ -76,4 +81,27 @@ it('refuses a reseller whose subscription has lapsed', function (): void {
 
     expect(fn (): Store => resolve(AssignStoreResellerAction::class)->execute($store, $to))
         ->toThrow(SubscriptionLimitException::class);
+});
+
+it('refuses to reassign an offboarded store', function (): void {
+    $to = subscriberWithUnits(maxUnits: 2);
+    $store = Store::factory()->create(['reseller_id' => null]);
+    $store->delete();
+
+    expect(fn (): Store => resolve(AssignStoreResellerAction::class)->execute($store, $to))
+        ->toThrow(ModelNotFoundException::class)
+        ->and($store->fresh()?->reseller_id)->toBeNull();
+});
+
+it("lifts the previous reseller's billing suspension and restarts the storefront", function (): void {
+    Queue::fake();
+    $to = subscriberWithUnits(maxUnits: 2);
+    $store = Store::factory()->active()->create(['billing_suspended_at' => now()]);
+    $deployment = StorefrontDeployment::factory()->for($store)->create(['desired_state' => StorefrontDesiredState::Stopped]);
+
+    resolve(AssignStoreResellerAction::class)->execute($store, $to);
+
+    expect($store->fresh()?->billing_suspended_at)->toBeNull()
+        ->and($deployment->refresh()->desired_state)->toBe(StorefrontDesiredState::Running);
+    Queue::assertPushed(ReconcileStorefrontJob::class, fn (ReconcileStorefrontJob $job): bool => $job->deploymentId === $deployment->id);
 });

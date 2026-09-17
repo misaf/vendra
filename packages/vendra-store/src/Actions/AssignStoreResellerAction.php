@@ -31,7 +31,10 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
  */
 final readonly class AssignStoreResellerAction
 {
-    public function __construct(private StoreQuota $storeQuota) {}
+    public function __construct(
+        private StoreQuota $storeQuota,
+        private AlignStorefrontWithStoreAction $alignStorefront,
+    ) {}
 
     /**
      * @param  (Model&SubscriptionSubscriber)|null  $reseller
@@ -41,13 +44,25 @@ final readonly class AssignStoreResellerAction
         return DB::transaction(function () use ($store, $reseller): Store {
             $lockedStore = $store->refreshForUpdate();
 
+            throw_if($lockedStore->trashed(), (new ModelNotFoundException)->setModel(Store::class));
+
             $resellerId = $reseller === null ? null : $this->assertResellerHasRoom($reseller, $lockedStore);
 
             if ($resellerId === $lockedStore->reseller_id) {
                 return $lockedStore;
             }
 
-            $lockedStore->forceFill(['reseller_id' => $resellerId])->save();
+            /*
+             | A billing suspension belonged to the previous reseller's lapsed
+             | plan. The receiving reseller passed the quota check, and a store
+             | the console takes back is not billed at all.
+             */
+            $lockedStore->forceFill([
+                'reseller_id' => $resellerId,
+                'billing_suspended_at' => null,
+            ])->save();
+
+            $this->alignStorefront->execute($lockedStore);
 
             return $lockedStore;
         }, attempts: 5);
