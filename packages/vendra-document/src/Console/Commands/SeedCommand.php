@@ -10,9 +10,9 @@ use Misaf\VendraDocument\Database\Seeders\PermissionPolicySeeder;
 use Misaf\VendraSupport\Tenancy\Console\Commands\TenantSeedCommand;
 
 #[Description('Seed document module data for a tenant')]
-#[Signature('vendra-document:seed
-        {tenant? : Tenant ID or slug to seed document permissions for}
-        {seeders?* : Seeder keys to run. Use "all" or: permission-policies}')]
+#[Signature(self::MODULE_NAME.':seed
+        {tenant? : Tenant ID or slug to seed document data for}
+        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}')]
 final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = 'vendra-document';
@@ -22,6 +22,8 @@ final class SeedCommand extends TenantSeedCommand
      */
     protected function seeders(): array
     {
-        return ['permission-policies' => PermissionPolicySeeder::class];
+        return [
+            'permission-policies' => PermissionPolicySeeder::class,
+        ];
     }
 }
