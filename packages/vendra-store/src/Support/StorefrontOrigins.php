@@ -6,7 +6,9 @@ namespace Misaf\VendraStore\Support;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Cache;
+use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
+use Misaf\VendraStore\Scopes\StoreScope;
 use Misaf\VendraSupport\Tenancy\Scopes\TeamScope;
 use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
 
@@ -19,6 +21,11 @@ use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
  * onboarded. A wildcard is not an option — it cannot be combined with
  * credentials, and it would let any site on the internet read the API through a
  * visitor's browser.
+ *
+ * The cache entry is always read and cleared in landlord context. Domains are
+ * created inside `$store->execute()`, and the tenant cache prefix would
+ * otherwise send the clear to a key nobody reads, leaving a new store's domain
+ * blocked until the cache is flushed by hand.
  */
 final class StorefrontOrigins
 {
@@ -32,14 +39,37 @@ final class StorefrontOrigins
     public function all(): array
     {
         /** @var list<string> $origins */
-        $origins = Cache::rememberForever(self::CACHE_KEY, fn (): array => $this->query());
+        $origins = self::asLandlord(fn (): array => Cache::rememberForever(self::CACHE_KEY, fn (): array => $this->query()));
 
         return $origins;
     }
 
     public static function forget(): void
     {
-        Cache::forget(self::CACHE_KEY);
+        self::asLandlord(fn (): bool => Cache::forget(self::CACHE_KEY));
+    }
+
+    /**
+     * @template TResult
+     *
+     * @param  callable(): TResult  $callback
+     * @return TResult
+     */
+    private static function asLandlord(callable $callback): mixed
+    {
+        $current = Store::current();
+
+        if (! $current instanceof Store) {
+            return $callback();
+        }
+
+        Store::forgetCurrent();
+
+        try {
+            return $callback();
+        } finally {
+            $current->makeCurrent();
+        }
     }
 
     /**
@@ -49,7 +79,7 @@ final class StorefrontOrigins
     {
         try {
             $domains = StoreDomain::query()
-                ->withoutGlobalScopes([TenantScope::class, TeamScope::class])
+                ->withoutGlobalScopes([StoreScope::class, TenantScope::class, TeamScope::class])
                 ->where('active', true)
                 ->pluck('name');
         } catch (QueryException) {

@@ -100,3 +100,39 @@ it('forgets the cached allowlist when a domain changes', function (): void {
     expect(Cache::has(StorefrontOrigins::CACHE_KEY))->toBeFalse()
         ->and((new StorefrontOrigins)->all())->not->toContain('https://abbas.example.com');
 });
+
+it('forgets the cached allowlist when a store is offboarded or restored', function (): void {
+    // A tenant switch drops the array store's contents, which would hide a missed clear.
+    config()->set('cache.default', 'file');
+    StorefrontOrigins::forget();
+
+    $domain = registerStorefrontDomain('abbas.example.com');
+    $store = Store::query()->findOrFail($domain->store_id);
+
+    expect((new StorefrontOrigins)->all())->toContain('https://abbas.example.com');
+
+    $store->delete();
+
+    expect((new StorefrontOrigins)->all())->not->toContain('https://abbas.example.com');
+
+    $store->restore();
+
+    expect((new StorefrontOrigins)->all())->toContain('https://abbas.example.com');
+
+    StorefrontOrigins::forget();
+});
+
+it('keeps the current store when a domain change clears the allowlist', function (): void {
+    expect((new StorefrontOrigins)->all())->toBeEmpty();
+
+    $store = Store::factory()->active()->create();
+    $store->makeCurrent();
+
+    StoreDomain::factory()->for($store)->create(['name' => 'abbas.example.com', 'active' => true]);
+
+    expect(Store::current()?->is($store))->toBeTrue();
+
+    Store::forgetCurrent();
+
+    expect((new StorefrontOrigins)->all())->toContain('https://abbas.example.com');
+});

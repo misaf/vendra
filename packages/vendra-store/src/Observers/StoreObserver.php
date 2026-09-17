@@ -10,6 +10,7 @@ use Misaf\VendraStore\Jobs\DestroyStorefrontJob;
 use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
+use Misaf\VendraStore\Support\StorefrontOrigins;
 
 /**
  * Keeps a store's domains and its storefront in step with the store itself.
@@ -47,12 +48,16 @@ final class StoreObserver
             $store->storeDomains()->where('active', true)->delete();
         });
 
+        // Bulk query deletes fire no StoreDomain events, so the allowlist is cleared here.
+        StorefrontOrigins::forget();
+
         $this->settleStorefront($store);
     }
 
     public function restored(Store $store): void
     {
         $store->execute(fn () => $store->storeDomains()->onlyTrashed()->where('active', true)->restore());
+        StorefrontOrigins::forget();
 
         $deployment = $this->deploymentFor($store);
 
