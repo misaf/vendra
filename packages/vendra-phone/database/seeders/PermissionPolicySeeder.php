@@ -11,7 +11,9 @@ final class PermissionPolicySeeder extends BasePermissionPolicySeeder
 {
     protected const string MODULE_NAME = 'vendra-phone';
 
-    /** @return list<string> */
+    /**
+     * @return list<string>
+     */
     protected function policies(): array
     {
         return array_column(PhoneNumberPolicyEnum::cases(), 'value');
