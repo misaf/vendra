@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraAddress\Models\Address;
 use Misaf\VendraUserProfile\Models\UserProfile;
 
-/** @extends Factory<Address> */
+/**
+ * @extends Factory<Address>
+ */
 #[UseModel(Address::class)]
 final class AddressFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
