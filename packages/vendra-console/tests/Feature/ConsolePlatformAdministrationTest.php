@@ -17,6 +17,7 @@ use Misaf\VendraConsole\Filament\Resources\Stores\Pages\ListStores;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource;
 use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
 use Misaf\VendraConsole\Models\Console;
+use Misaf\VendraConsole\Settings\ConsoleSettings;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
@@ -256,8 +257,8 @@ describe('operating store lifecycles', function (): void {
 });
 
 describe('platform settings', function (): void {
-    it('brands the console from configuration', function (): void {
-        Config::set('console.platform.name', 'Acme Operations');
+    it('brands the console from the platform settings', function (): void {
+        resolve(ConsoleSettings::class)->fill(['platform_name' => 'Acme Operations'])->save();
 
         expect(Filament::getPanel('console')->getBrandName())->toBe('Acme Operations');
     });
