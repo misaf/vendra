@@ -39,6 +39,7 @@ final class TaggerTable
 
             TextColumn::make('type')
                 ->alignStart()
+                ->badge()
                 ->label(__('vendra-tagger::attributes.type'))
                 ->icon(Heroicon::Tag),
 

@@ -15,8 +15,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Table;
+use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource;
+use Misaf\VendraDelivery\Models\DeliverySlot;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
-use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
@@ -46,7 +48,8 @@ final class DeliverySlotTable
                     ->label(__('vendra-delivery::attributes.capacity'))
                     ->placeholder('∞'),
 
-                IsActiveIconColumn::make(),
+                IsActiveToggleColumn::make()
+                    ->disabled(fn (DeliverySlot $record): bool => ! DeliverySlotResource::canEdit($record)),
 
                 CreatedAtColumn::make()
                     ->sortable(),

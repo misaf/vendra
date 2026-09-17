@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\Schemas;
 
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 use Misaf\VendraSupport\Filament\Infolists\Components\CreatedAtEntry;
@@ -32,6 +33,9 @@ final class DeliveryInfolist
                     ->placeholder('—'),
                 TextEntry::make('fee_amount')
                     ->label(__('vendra-delivery::attributes.fee_amount')),
+                IconEntry::make('requires_quote')
+                    ->boolean()
+                    ->label(__('vendra-delivery::attributes.requires_quote')),
                 TextEntry::make('address.line_one')
                     ->label(__('vendra-delivery::attributes.address'))
                     ->placeholder('—'),

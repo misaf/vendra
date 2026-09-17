@@ -52,6 +52,8 @@ return [
     'deployment_status_processing' => 'در حال پردازش',
     'deployment_status_ready' => 'آماده',
     'deployment_status_requested' => 'درخواست‌شده',
+    'desired_state_running' => 'در حال اجرا',
+    'desired_state_stopped' => 'متوقف',
     'operational_status' => 'وضعیت عملیاتی',
     'store_status_active' => 'فعال',
     'store_status_failed' => 'ناموفق',

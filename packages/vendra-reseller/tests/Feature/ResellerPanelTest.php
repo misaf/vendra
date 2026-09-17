@@ -26,6 +26,7 @@ use Misaf\VendraReseller\Filament\Widgets\ResellerOverview;
 use Misaf\VendraReseller\Filament\Widgets\SubscriptionDetail;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
+use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -152,6 +153,7 @@ it('uses a store overview as the reseller record landing page', function (): voi
     $reseller = Reseller::factory()->create();
     $store = Store::factory()->create(['reseller_id' => $reseller->getKey(), 'name' => 'Acme Flowers']);
     StoreDomain::factory()->for($store)->create(['name' => 'acme.test', 'active' => true]);
+    StorefrontDeployment::factory()->for($store)->create(['desired_state' => StorefrontDesiredState::Stopped]);
     actAsResellerUser($reseller);
 
     livewire(ListStores::class)
@@ -160,7 +162,8 @@ it('uses a store overview as the reseller record landing page', function (): voi
     livewire(ViewStore::class, ['record' => $store->getKey()])
         ->assertOk()
         ->assertSee('Acme Flowers')
-        ->assertSee('acme.test');
+        ->assertSee('acme.test')
+        ->assertSee(__('vendra-reseller::attributes.desired_state_stopped'));
 });
 
 it('lets a reseller edit store details without exposing protected billing or provisioning fields', function (): void {

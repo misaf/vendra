@@ -9,6 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
@@ -68,6 +69,10 @@ final class DeliveryTable
                 TextColumn::make('fee_amount')
                     ->extraCellAttributes(['dir' => 'ltr'])
                     ->label(__('vendra-delivery::attributes.fee_amount')),
+
+                IconColumn::make('requires_quote')
+                    ->boolean()
+                    ->label(__('vendra-delivery::attributes.requires_quote')),
 
                 CreatedAtColumn::make()
                     ->sortable(),

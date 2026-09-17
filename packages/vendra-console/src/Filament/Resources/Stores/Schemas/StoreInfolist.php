@@ -53,6 +53,8 @@ final class StoreInfolist
                             ->formatStateUsing(fn (string $state): string => __("vendra-console::attributes.deployment_status_{$state}"))
                             ->placeholder(__('vendra-console::attributes.storefront_not_requested')),
                         TextEntry::make('desired_state')->label(__('vendra-console::attributes.desired_state'))
+                            ->badge()
+                            ->formatStateUsing(fn (string $state): string => __("vendra-console::attributes.desired_state_{$state}"))
                             ->state(fn (Store $record): ?string => self::deployment($record)?->desired_state->value)
                             ->placeholder('—'),
                     ]),

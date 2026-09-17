@@ -32,6 +32,7 @@ use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource as ConsoleStoreR
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraReseller\Actions\OffboardResellerAction;
 use Misaf\VendraReseller\Models\Reseller;
+use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Models\StorefrontDeployment;
@@ -545,6 +546,7 @@ it('uses a store overview as the console record landing page', function (): void
 
     $store = Store::factory()->create(['name' => 'Console overview store']);
     StoreDomain::factory()->for($store)->create(['name' => 'overview.test', 'active' => true]);
+    StorefrontDeployment::factory()->for($store)->create(['desired_state' => StorefrontDesiredState::Stopped]);
 
     livewire(ListStores::class)
         ->assertActionVisible(TestAction::make('view')->table($store));
@@ -552,7 +554,8 @@ it('uses a store overview as the console record landing page', function (): void
     livewire(ViewStore::class, ['record' => $store->getKey()])
         ->assertOk()
         ->assertSee('Console overview store')
-        ->assertSee('overview.test');
+        ->assertSee('overview.test')
+        ->assertSee(__('vendra-console::attributes.desired_state_stopped'));
 });
 
 it('edits store details without directly mutating operational identity fields', function (): void {

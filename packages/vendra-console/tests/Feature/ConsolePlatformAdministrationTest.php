@@ -27,6 +27,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Settings\StoreCreationSettings;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 use Misaf\VendraUser\Models\User;
@@ -159,6 +160,34 @@ describe('operating store lifecycles', function (): void {
             ->assertHasNoErrors();
 
         expect($store->fresh()?->active)->toBeTrue();
+    });
+
+    it('suspends and reactivates a store from the active toggle column', function (): void {
+        $store = Store::factory()->active()->create();
+
+        actAsPlatformUser();
+
+        livewire(ListStores::class)
+            ->call('updateTableColumnState', 'active', (string) $store->getKey(), false)
+            ->assertNotified(__('vendra-console::messages.store_suspended'));
+
+        expect($store->fresh()?->active)->toBeFalse();
+
+        livewire(ListStores::class)
+            ->call('updateTableColumnState', 'active', (string) $store->getKey(), true)
+            ->assertNotified(__('vendra-console::messages.store_reactivated'));
+
+        expect($store->fresh()?->active)->toBeTrue();
+    });
+
+    it('disables the active toggle for a store that has not finished provisioning', function (): void {
+        $store = Store::factory()->inactive()->provisioningPending()->create();
+
+        actAsPlatformUser();
+
+        livewire(ListStores::class)
+            ->loadTable()
+            ->assertTableColumnExists('active', fn (IsActiveToggleColumn $column): bool => $column->isDisabled(), $store);
     });
 
     it('queues the existing provisioning recovery job for a failed store', function (): void {

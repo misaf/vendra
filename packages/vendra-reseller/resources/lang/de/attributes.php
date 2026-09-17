@@ -52,6 +52,8 @@ return [
     'deployment_status_processing' => 'In Bearbeitung',
     'deployment_status_ready' => 'Bereit',
     'deployment_status_requested' => 'Angefordert',
+    'desired_state_running' => 'Laufend',
+    'desired_state_stopped' => 'Gestoppt',
     'operational_status' => 'Betriebsstatus',
     'store_status_active' => 'Aktiv',
     'store_status_failed' => 'Fehlgeschlagen',

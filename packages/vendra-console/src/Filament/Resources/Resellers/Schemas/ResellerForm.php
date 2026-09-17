@@ -88,7 +88,10 @@ final class ResellerForm
 
                         TextEntry::make('current_status')
                             ->label(__('vendra-console::attributes.status'))
-                            ->state(fn (?Reseller $record): string => $record?->activeSubscription()?->status->value ?? '—'),
+                            ->badge()
+                            ->state(fn (?Reseller $record): ?string => $record?->activeSubscription()?->status->value)
+                            ->formatStateUsing(fn (string $state): string => __("vendra-console::attributes.status_{$state}"))
+                            ->placeholder('—'),
 
                         TextEntry::make('current_ends_at')
                             ->label(__('vendra-console::attributes.ends_at'))

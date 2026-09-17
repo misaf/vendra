@@ -24,6 +24,7 @@ use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
@@ -71,6 +72,8 @@ final class StoreTable
                     ->openUrlInNewTab()
                     ->copyable()
                     ->copyMessage(__('vendra-reseller::messages.url_copied')),
+
+                IsActiveIconColumn::make(),
 
                 TextColumn::make('status')
                     ->label(__('vendra-reseller::attributes.operational_status'))

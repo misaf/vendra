@@ -69,3 +69,36 @@ it('renders the deliveries table and view page', function (): void {
 
     livewire(ViewDelivery::class, ['record' => $delivery->getKey()])->assertOk();
 });
+
+it('toggles a delivery zone quote flag and active state from the table', function (): void {
+    $zone = DeliveryZoneFactory::new()->createOne();
+
+    livewire(ListDeliveryZones::class)
+        ->call('loadTable')
+        ->call('updateTableColumnState', 'requires_quote', (string) $zone->getKey(), true)
+        ->call('updateTableColumnState', 'active', (string) $zone->getKey(), false);
+
+    expect($zone->refresh()->requires_quote)->toBeTrue()
+        ->and($zone->active)->toBeFalse();
+});
+
+it('toggles a delivery window active state from the table', function (): void {
+    $slot = DeliverySlotFactory::new()->createOne(['active' => true]);
+
+    livewire(ListDeliverySlots::class)
+        ->call('loadTable')
+        ->call('updateTableColumnState', 'active', (string) $slot->getKey(), false);
+
+    expect($slot->refresh()->active)->toBeFalse();
+});
+
+it('shows whether a delivery was quoted by hand as an icon', function (): void {
+    $delivery = DeliveryFactory::new()->createOne(['requires_quote' => true]);
+
+    livewire(ListDeliveries::class)
+        ->call('loadTable')
+        ->assertTableColumnStateSet('requires_quote', true, $delivery);
+
+    livewire(ViewDelivery::class, ['record' => $delivery->getKey()])
+        ->assertSchemaStateSet(['requires_quote' => true]);
+});

@@ -11,15 +11,17 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\BooleanConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Table;
+use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource;
+use Misaf\VendraDelivery\Models\DeliveryZone;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
-use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
@@ -47,11 +49,13 @@ final class DeliveryZoneTable
                     ->extraCellAttributes(['dir' => 'ltr'])
                     ->label(__('vendra-delivery::attributes.fee_amount')),
 
-                IconColumn::make('requires_quote')
-                    ->boolean()
-                    ->label(__('vendra-delivery::attributes.requires_quote')),
+                ToggleColumn::make('requires_quote')
+                    ->disabled(fn (DeliveryZone $record): bool => ! DeliveryZoneResource::canEdit($record))
+                    ->label(__('vendra-delivery::attributes.requires_quote'))
+                    ->onIcon(Heroicon::Bolt),
 
-                IsActiveIconColumn::make(),
+                IsActiveToggleColumn::make()
+                    ->disabled(fn (DeliveryZone $record): bool => ! DeliveryZoneResource::canEdit($record)),
 
                 CreatedAtColumn::make()
                     ->sortable(),

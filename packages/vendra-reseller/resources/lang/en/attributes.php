@@ -52,6 +52,8 @@ return [
     'deployment_status_processing' => 'Processing',
     'deployment_status_ready' => 'Ready',
     'deployment_status_requested' => 'Requested',
+    'desired_state_running' => 'Running',
+    'desired_state_stopped' => 'Stopped',
     'operational_status' => 'Operational status',
     'store_status_active' => 'Active',
     'store_status_failed' => 'Failed',

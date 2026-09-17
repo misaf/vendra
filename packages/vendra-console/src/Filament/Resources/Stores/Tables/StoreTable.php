@@ -7,6 +7,7 @@ namespace Misaf\VendraConsole\Filament\Resources\Stores\Tables;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -33,14 +34,19 @@ use Misaf\VendraConsole\Filament\Resources\Stores\Actions\ViewDeploymentTableAct
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\ViewStorefrontLogsTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource;
 use Misaf\VendraReseller\Models\Reseller;
+use Misaf\VendraStore\Actions\ReactivateStoreAction;
+use Misaf\VendraStore\Actions\SuspendStoreAction;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\IsActiveFilter;
+use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
+use Throwable;
 
 final class StoreTable
 {
@@ -92,6 +98,11 @@ final class StoreTable
                     ->openUrlInNewTab()
                     ->copyable()
                     ->copyMessage(__('vendra-console::messages.url_copied')),
+
+                IsActiveToggleColumn::make()
+                    ->disabled(fn (Store $record): bool => $record->trashed()
+                        || (! $record->active && $record->provisioning_status !== TenantProvisioningStatus::Ready))
+                    ->updateStateUsing(fn (Store $record, bool $state): bool => self::setActive($record, $state)),
 
                 TextColumn::make('status')
                     ->label(__('vendra-console::attributes.status'))
@@ -195,6 +206,30 @@ final class StoreTable
         $deployment = $store->storefrontDeployments->first();
 
         return $deployment instanceof StorefrontDeployment ? $deployment : null;
+    }
+
+    private static function setActive(Store $store, bool $active): bool
+    {
+        try {
+            $store = $active
+                ? resolve(ReactivateStoreAction::class)->execute($store)
+                : resolve(SuspendStoreAction::class)->execute($store);
+
+            Notification::make()
+                ->success()
+                ->title(__($active ? 'vendra-console::messages.store_reactivated' : 'vendra-console::messages.store_suspended'))
+                ->send();
+        } catch (Throwable $exception) {
+            report($exception);
+
+            Notification::make()
+                ->danger()
+                ->title(__('vendra-console::messages.operational_action_failed'))
+                ->body($exception->getMessage())
+                ->send();
+        }
+
+        return (bool) $store->fresh()?->active;
     }
 
     /** @return array<string, string> */
