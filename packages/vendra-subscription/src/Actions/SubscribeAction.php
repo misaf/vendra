@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraSubscription\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -50,87 +49,89 @@ final readonly class SubscribeAction
 
         $startsAt ??= Date::now();
 
-        $result = DB::transaction(function () use ($subscriber, $plan, $startsAt): array {
-            $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
+        [
+            'subscription' => $subscription,
+            'payment' => $payment,
+        ] = DB::transaction(
+            /** @return array{subscription: Subscription, payment: SubscriptionPayment|null} */
+            function () use ($subscriber, $plan, $startsAt): array {
+                $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
 
-            $currentUnits = $lockedSubscriber->subscribedUnitCount();
+                $currentUnits = $lockedSubscriber->subscribedUnitCount();
 
-            if ($currentUnits > $plan->max_units) {
-                throw SubscriptionLimitException::planBelowUsage($lockedSubscriber, $plan->max_units, $currentUnits);
-            }
-
-            $openPayments = $this->subscriptionRegistry->lockOpenPayments($lockedSubscriber);
-
-            if ($openPayments->contains(fn (SubscriptionPayment $payment): bool => $payment->status !== SubscriptionPaymentStatus::Pending)) {
-                throw SubscriptionPaymentException::paymentInProgress();
-            }
-
-            if ($openPayments->isNotEmpty()) {
-                $openPayments->each(
-                    function (SubscriptionPayment $payment): void {
-                        $payment->cancel();
-                    },
-                );
-                $this->subscriptionRegistry->cancelPending(
-                    $lockedSubscriber,
-                    $openPayments->map(fn (SubscriptionPayment $payment): int => $payment->subscription_id)->all(),
-                );
-            }
-
-            // A trial only applies to the subscriber's very first subscription.
-            $trialEndsAt = $plan->hasTrial() && ! $lockedSubscriber->hasSubscriptions()
-                ? $startsAt->copy()->addDays($plan->trial_days)
-                : null;
-            $requiresCollection = $plan->price > 0;
-            $requiresImmediatePayment = $requiresCollection && $trialEndsAt === null;
-
-            if (! $requiresImmediatePayment) {
-                $this->subscriptionRegistry->cancelActive($lockedSubscriber);
-            }
-
-            $subscription = $this->subscriptionRegistry->create($lockedSubscriber, [
-                'plan_id' => $plan->getKey(),
-                'status' => $requiresImmediatePayment ? SubscriptionStatus::PendingPayment : SubscriptionStatus::Active,
-                'price' => $plan->price,
-                'currency_code' => $plan->currency_code,
-                'trial_ends_at' => $trialEndsAt,
-                'starts_at' => $startsAt,
-                'ends_at' => $plan->resolveEndDate($startsAt),
-            ]);
-
-            if (! $requiresImmediatePayment) {
-                $lockedSubscriber->reactivateSuspendedUnits();
-
-                if (! $requiresCollection) {
-                    return ['subscription' => $subscription, 'payment' => null];
+                if ($currentUnits > $plan->max_units) {
+                    throw SubscriptionLimitException::planBelowUsage($lockedSubscriber, $plan->max_units, $currentUnits);
                 }
-            }
 
-            if (! $this->subscriptionCharger->available()) {
-                throw SubscriptionPaymentException::providerUnavailable();
-            }
+                $openPayments = $this->subscriptionRegistry->lockOpenPayments($lockedSubscriber);
 
-            $payer = $lockedSubscriber->subscriptionPayer();
+                if ($openPayments->contains(fn (SubscriptionPayment $payment): bool => $payment->status !== SubscriptionPaymentStatus::Pending)) {
+                    throw SubscriptionPaymentException::paymentInProgress();
+                }
 
-            if ($payer === null) {
-                throw SubscriptionPaymentException::missingPayer($subscription);
-            }
+                if ($openPayments->isNotEmpty()) {
+                    $openPayments->each(
+                        function (SubscriptionPayment $payment): void {
+                            $payment->cancel();
+                        },
+                    );
+                    $this->subscriptionRegistry->cancelPending(
+                        $lockedSubscriber,
+                        $openPayments->map(fn (SubscriptionPayment $payment): int => $payment->subscription_id)->all(),
+                    );
+                }
 
-            $payment = $subscription->payments()->make([
-                'provider' => $this->subscriptionCharger->provider(),
-                'idempotency_key' => (string) Str::uuid(),
-                'amount' => $subscription->price,
-                'currency_code' => $subscription->currency_code,
-                'next_retry_at' => $trialEndsAt,
-            ]);
-            $payment->payer()->associate($payer);
-            $payment->save();
+                // A trial only applies to the subscriber's very first subscription.
+                $trialEndsAt = $plan->hasTrial() && ! $lockedSubscriber->hasSubscriptions()
+                    ? $startsAt->copy()->addDays($plan->trial_days)
+                    : null;
+                $requiresCollection = $plan->price > 0;
+                $requiresImmediatePayment = $requiresCollection && $trialEndsAt === null;
 
-            return ['subscription' => $subscription, 'payment' => $payment];
-        }, attempts: 5);
+                if (! $requiresImmediatePayment) {
+                    $this->subscriptionRegistry->cancelActive($lockedSubscriber);
+                }
 
-        $subscription = Arr::get($result, 'subscription');
-        $payment = Arr::get($result, 'payment');
+                $subscription = $this->subscriptionRegistry->create($lockedSubscriber, [
+                    'plan_id' => $plan->getKey(),
+                    'status' => $requiresImmediatePayment ? SubscriptionStatus::PendingPayment : SubscriptionStatus::Active,
+                    'price' => $plan->price,
+                    'currency_code' => $plan->currency_code,
+                    'trial_ends_at' => $trialEndsAt,
+                    'starts_at' => $startsAt,
+                    'ends_at' => $plan->resolveEndDate($startsAt),
+                ]);
+
+                if (! $requiresImmediatePayment) {
+                    $lockedSubscriber->reactivateSuspendedUnits();
+
+                    if (! $requiresCollection) {
+                        return ['subscription' => $subscription, 'payment' => null];
+                    }
+                }
+
+                if (! $this->subscriptionCharger->available()) {
+                    throw SubscriptionPaymentException::providerUnavailable();
+                }
+
+                $payer = $lockedSubscriber->subscriptionPayer();
+
+                if ($payer === null) {
+                    throw SubscriptionPaymentException::missingPayer($subscription);
+                }
+
+                $payment = $subscription->payments()->make([
+                    'provider' => $this->subscriptionCharger->provider(),
+                    'idempotency_key' => (string) Str::uuid(),
+                    'amount' => $subscription->price,
+                    'currency_code' => $subscription->currency_code,
+                    'next_retry_at' => $trialEndsAt,
+                ]);
+                $payment->payer()->associate($payer);
+                $payment->save();
+
+                return ['subscription' => $subscription, 'payment' => $payment];
+            }, attempts: 5);
 
         new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
