@@ -3,21 +3,20 @@
 declare(strict_types=1);
 
 use Filament\Tables\Columns\IconColumn;
-use Illuminate\Support\Arr;
 
 dataset('boolean active tables', [
-    'attribute' => ['packages/vendra-attribute/src/Filament/Clusters/Resources/Attributes/Tables/AttributeTable.php', 'vendra-attribute::attributes.active'],
-    'blog post category' => ['packages/vendra-blog/src/Filament/Clusters/Resources/BlogPostCategories/Tables/BlogPostCategoryTable.php', 'vendra-blog::attributes.active'],
-    'blog post' => ['packages/vendra-blog/src/Filament/Clusters/Resources/BlogPosts/Tables/BlogPostTable.php', 'vendra-blog::attributes.active'],
-    'currency' => ['packages/vendra-currency/src/Filament/Clusters/Resources/Currencies/Tables/CurrencyTable.php', 'vendra-currency::attributes.active'],
-    'custom page category' => ['packages/vendra-custom-page/src/Filament/Clusters/Resources/CustomPageCategories/Tables/CustomPageCategoryTable.php', 'vendra-custom-page::attributes.active'],
-    'custom page' => ['packages/vendra-custom-page/src/Filament/Clusters/Resources/CustomPages/Tables/CustomPageTable.php', 'vendra-custom-page::attributes.active'],
-    'FAQ category' => ['packages/vendra-faq/src/Filament/Clusters/Resources/FaqCategories/Tables/FaqCategoryTable.php', 'vendra-faq::attributes.active'],
-    'FAQ' => ['packages/vendra-faq/src/Filament/Clusters/Resources/Faqs/Tables/FaqTable.php', 'vendra-faq::attributes.active'],
-    'language' => ['packages/vendra-language/src/Filament/Clusters/Resources/Languages/Tables/LanguageTable.php', 'vendra-language::attributes.active'],
-    'product category' => ['packages/vendra-product/src/Filament/Clusters/Resources/ProductCategories/Tables/ProductCategoryTable.php', 'vendra-product::attributes.active'],
-    'transaction gateway' => ['packages/vendra-transaction/src/Filament/Clusters/Resources/TransactionGateways/Tables/TransactionGatewayTable.php', 'vendra-transaction::attributes.active'],
-    'user profile' => ['packages/vendra-user-profile/src/Filament/Clusters/Resources/Tables/UserProfileTable.php', 'vendra-user-profile::attributes.active'],
+    'attribute' => 'packages/vendra-attribute/src/Filament/Clusters/Resources/Attributes/Tables/AttributeTable.php',
+    'blog post category' => 'packages/vendra-blog/src/Filament/Clusters/Resources/BlogPostCategories/Tables/BlogPostCategoryTable.php',
+    'blog post' => 'packages/vendra-blog/src/Filament/Clusters/Resources/BlogPosts/Tables/BlogPostTable.php',
+    'currency' => 'packages/vendra-currency/src/Filament/Clusters/Resources/Currencies/Tables/CurrencyTable.php',
+    'custom page category' => 'packages/vendra-custom-page/src/Filament/Clusters/Resources/CustomPageCategories/Tables/CustomPageCategoryTable.php',
+    'custom page' => 'packages/vendra-custom-page/src/Filament/Clusters/Resources/CustomPages/Tables/CustomPageTable.php',
+    'FAQ category' => 'packages/vendra-faq/src/Filament/Clusters/Resources/FaqCategories/Tables/FaqCategoryTable.php',
+    'FAQ' => 'packages/vendra-faq/src/Filament/Clusters/Resources/Faqs/Tables/FaqTable.php',
+    'language' => 'packages/vendra-language/src/Filament/Clusters/Resources/Languages/Tables/LanguageTable.php',
+    'product category' => 'packages/vendra-product/src/Filament/Clusters/Resources/ProductCategories/Tables/ProductCategoryTable.php',
+    'transaction gateway' => 'packages/vendra-transaction/src/Filament/Clusters/Resources/TransactionGateways/Tables/TransactionGatewayTable.php',
+    'user profile' => 'packages/vendra-user-profile/src/Filament/Clusters/Resources/Tables/UserProfileTable.php',
 ]);
 
 dataset('localized boolean active labels', [
@@ -40,21 +39,12 @@ arch('filament tables use interactive toggles instead of icon columns')
     ])
     ->not->toUse(IconColumn::class);
 
-it('configures boolean active columns like the blog post table', function (string $relativePath, string $labelKey): void {
+it('renders boolean active columns with the shared active toggle column', function (string $relativePath): void {
     $contents = file_get_contents(base_path($relativePath));
 
-    expect($contents)->toBeString();
-
-    $matched = preg_match(
-        "/ToggleColumn::make\\('active'\\)(?<chain>.*?)(?=\\n\\s*[A-Z][A-Za-z]+Column::make\\(|\\n\\s*];)/s",
-        $contents,
-        $matches,
-    );
-
-    expect($matched)->toBe(1)
-        ->and(Arr::get($matches, 'chain'))
-        ->toContain("->label(__('{$labelKey}'))")
-        ->toContain('->onIcon(Heroicon::Bolt)');
+    expect($contents)->toBeString()
+        ->toContain('IsActiveToggleColumn::make()')
+        ->not->toContain("ToggleColumn::make('active')");
 })->with('boolean active tables');
 
 it('localizes boolean active labels', function (string $namespace, string $key): void {
