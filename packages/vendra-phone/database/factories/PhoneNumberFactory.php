@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraPhone\Models\PhoneNumber;
 use Misaf\VendraUserProfile\Models\UserProfile;
 
-/** @extends Factory<PhoneNumber> */
+/**
+ * @extends Factory<PhoneNumber>
+ */
 #[UseModel(PhoneNumber::class)]
 final class PhoneNumberFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
