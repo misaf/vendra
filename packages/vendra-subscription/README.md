@@ -56,6 +56,14 @@ php artisan vendra-subscription:report-payment-backlog
 php artisan vendra-subscription:report-payment-backlog --stale-minutes=60
 ```
 
+## Panel labels
+
+`SubscriptionStatus` implements Filament's `HasLabel` and `HasColor`, and
+`PeriodUnit` implements `HasLabel`, with translations in
+`vendra-subscription::enums`. A `->badge()` column or entry that returns the
+status is translated and colored without `formatStateUsing()`, and
+`->options(PeriodUnit::class)` builds a translated select.
+
 ## Testing
 
 Run the package checks from the project root:
