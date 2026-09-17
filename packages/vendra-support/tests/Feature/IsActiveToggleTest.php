@@ -6,6 +6,7 @@ namespace Misaf\VendraSupport\Tests\Feature;
 
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Filament\Infolists\Components\IsActiveEntry;
@@ -53,6 +54,20 @@ it('flips the record from the table column', function (): void {
 
     expect($record->refresh()->active)->toBeFalse();
 });
+
+it('refuses the table toggle when the record policy denies an update', function (bool $allowsUpdate): void {
+    Gate::policy(SupportTestActiveRecord::class, SupportTestActiveRecordPolicy::class);
+    SupportTestActiveRecordPolicy::$allowsUpdate = $allowsUpdate;
+    $record = SupportTestActiveRecord::query()->create(['active' => true]);
+
+    livewire(SupportTestIsActiveToggleComponent::class)
+        ->call('updateTableColumnState', 'active', (string) $record->getKey(), false);
+
+    expect($record->refresh()->active)->toBe(! $allowsUpdate);
+})->with([
+    'denied' => false,
+    'allowed' => true,
+]);
 
 it('labels the active entry, constraint and filter with the shared translations', function (): void {
     $entry = IsActiveEntry::make();
