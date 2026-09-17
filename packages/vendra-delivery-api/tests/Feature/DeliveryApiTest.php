@@ -11,8 +11,8 @@ beforeEach(function (): void {
 });
 
 it('lists only active delivery bands, tightest first', function (): void {
-    $free = DeliveryZoneFactory::new()->freeWithin(12)->createOne(['name' => ['en' => 'Free zone'], 'position' => 1]);
-    $paid = DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne(['name' => ['en' => 'Outside'], 'position' => 2]);
+    $free = DeliveryZoneFactory::new()->active()->freeWithin(12)->createOne(['name' => ['en' => 'Free zone'], 'position' => 1]);
+    $paid = DeliveryZoneFactory::new()->active()->chargingWithin(30, 1500)->createOne(['name' => ['en' => 'Outside'], 'position' => 2]);
     $hidden = DeliveryZoneFactory::new()->inactive()->createOne(['position' => 3]);
 
     $this->getJson('/api/delivery/zones', ['Accept' => 'application/ld+json'])
@@ -28,7 +28,7 @@ it('lists only active delivery bands, tightest first', function (): void {
 it('lists bookable dates and active delivery windows', function (): void {
     Config::set('vendra-delivery.schedule.advance_days', 3);
 
-    $morning = DeliverySlotFactory::new()->window('Morning', '09:00:00', '12:00:00')->createOne(['position' => 1]);
+    $morning = DeliverySlotFactory::new()->active()->window('Morning', '09:00:00', '12:00:00')->createOne(['position' => 1]);
     DeliverySlotFactory::new()->window('Night', '20:00:00', '23:00:00')->inactive()->createOne(['position' => 2]);
 
     $response = $this->getJson('/api/delivery/schedule', ['Accept' => 'application/ld+json'])
@@ -41,13 +41,13 @@ it('lists bookable dates and active delivery windows', function (): void {
 });
 
 it('prices a pin inside a charged band', function (): void {
-    DeliveryZoneFactory::new()->freeWithin(2)->createOne([
+    DeliveryZoneFactory::new()->active()->freeWithin(2)->createOne([
         'name' => ['en' => 'Free zone'],
         'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
         'position' => 1,
     ]);
-    $paid = DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne([
+    $paid = DeliveryZoneFactory::new()->active()->chargingWithin(30, 1500)->createOne([
         'name' => ['en' => 'Outside the free zone'],
         'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
@@ -67,7 +67,7 @@ it('prices a pin inside a charged band', function (): void {
 });
 
 it('reports an address beyond every band as quoted by hand', function (): void {
-    DeliveryZoneFactory::new()->freeWithin(12)->createOne([
+    DeliveryZoneFactory::new()->active()->freeWithin(12)->createOne([
         'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
         'position' => 1,
