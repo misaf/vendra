@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Actions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
@@ -15,7 +16,9 @@ final class SuspendStoreAction
     public function execute(Store $store): Store
     {
         return DB::transaction(function () use ($store): Store {
-            $lockedStore = Store::query()->whereKey($store->getKey())->lockForUpdate()->firstOrFail();
+            $lockedStore = $store->refreshForUpdate();
+
+            throw_if($lockedStore->trashed(), (new ModelNotFoundException)->setModel(Store::class));
 
             if ($lockedStore->active) {
                 $lockedStore->forceFill(['active' => false])->save();

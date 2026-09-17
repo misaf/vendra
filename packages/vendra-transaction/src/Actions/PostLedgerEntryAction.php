@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraTransaction\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraTransaction\Exceptions\InsufficientBalanceException;
 use Misaf\VendraTransaction\Models\LedgerEntry;
@@ -20,8 +21,9 @@ final class PostLedgerEntryAction
     public function execute(Wallet $wallet, int $amount, ?Model $source = null): LedgerEntry
     {
         return DB::transaction(function () use ($wallet, $amount, $source): LedgerEntry {
-            /** @var Wallet $locked */
-            $locked = Wallet::query()->lockForUpdate()->findOrFail($wallet->getKey());
+            $locked = $wallet->refreshForUpdate();
+
+            throw_if($locked->trashed(), (new ModelNotFoundException)->setModel(Wallet::class));
 
             $balanceAfter = $locked->balance + $amount;
 

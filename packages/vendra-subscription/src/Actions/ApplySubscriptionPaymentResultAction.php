@@ -18,10 +18,7 @@ final class ApplySubscriptionPaymentResultAction
     public function execute(SubscriptionPayment $payment, SubscriptionChargeResult $result): SubscriptionPayment
     {
         [$payment, $failed] = DB::transaction(function () use ($payment, $result): array {
-            $payment = SubscriptionPayment::query()
-                ->whereKey($payment->getKey())
-                ->lockForUpdate()
-                ->firstOrFail();
+            $payment->refreshForUpdate();
 
             if ($payment->provider_reference !== null
                 && $result->providerReference !== null

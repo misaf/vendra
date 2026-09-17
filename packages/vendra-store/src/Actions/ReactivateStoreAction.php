@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Actions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use LogicException;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
@@ -18,7 +19,9 @@ final class ReactivateStoreAction
     public function execute(Store $store): Store
     {
         return DB::transaction(function () use ($store): Store {
-            $lockedStore = Store::query()->whereKey($store->getKey())->lockForUpdate()->firstOrFail();
+            $lockedStore = $store->refreshForUpdate();
+
+            throw_if($lockedStore->trashed(), (new ModelNotFoundException)->setModel(Store::class));
 
             if ($lockedStore->provisioning_status !== TenantProvisioningStatus::Ready) {
                 throw new LogicException("Store [{$lockedStore->id}] must finish provisioning before it can be reactivated.");

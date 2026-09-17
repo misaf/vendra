@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\OffboardStoreAction;
@@ -125,3 +126,17 @@ it('revalidates reseller quota before restoring an offboarded store', function (
     expect(fn () => resolve(RestoreOffboardedStoreAction::class)->execute($archived))
         ->toThrow(SubscriptionLimitException::class);
 });
+
+it('refuses to operate on an offboarded store it locks', function (string $action): void {
+    $store = Store::factory()->active()->create();
+    $store->delete();
+
+    expect(fn (): Store => resolve($action)->execute($store))->toThrow(ModelNotFoundException::class)
+        ->and(Store::withTrashed()->findOrFail($store->getKey())->active)->toBeTrue();
+
+    Queue::assertNothingPushed();
+})->with([
+    'suspend' => SuspendStoreAction::class,
+    'reactivate' => ReactivateStoreAction::class,
+    'retry provisioning' => RetryStoreProvisioningAction::class,
+]);

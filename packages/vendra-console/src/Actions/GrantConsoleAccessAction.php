@@ -30,7 +30,7 @@ final readonly class GrantConsoleAccessAction
                 return true;
             }
 
-            $lockedConsole = Console::query()->whereKey($console->getKey())->lockForUpdate()->firstOrFail();
+            $lockedConsole = $console->refreshForUpdate();
 
             if ($lockedConsole->active) {
                 return false;

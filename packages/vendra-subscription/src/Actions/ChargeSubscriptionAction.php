@@ -51,10 +51,7 @@ final readonly class ChargeSubscriptionAction
         }
 
         $payment = DB::transaction(function () use ($payment): SubscriptionPayment {
-            $lockedPayment = SubscriptionPayment::query()
-                ->whereKey($payment->getKey())
-                ->lockForUpdate()
-                ->firstOrFail();
+            $lockedPayment = $payment->refreshForUpdate();
 
             if ($lockedPayment->status->isTerminal()
                 || ($lockedPayment->next_retry_at !== null && $lockedPayment->next_retry_at->isFuture())) {

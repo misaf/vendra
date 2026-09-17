@@ -24,11 +24,7 @@ final class OffboardStoreAction
         throw_if(Str::length($reason) > self::MAX_REASON_LENGTH, InvalidArgumentException::class, 'The offboarding reason may not exceed '.self::MAX_REASON_LENGTH.' characters.');
 
         return DB::transaction(function () use ($store, $reason): Store {
-            $lockedStore = Store::query()
-                ->withTrashed()
-                ->whereKey($store->getKey())
-                ->lockForUpdate()
-                ->firstOrFail();
+            $lockedStore = $store->refreshForUpdate();
 
             if ($lockedStore->trashed()) {
                 return $lockedStore;

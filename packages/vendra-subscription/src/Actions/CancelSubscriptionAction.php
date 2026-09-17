@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Actions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
@@ -17,10 +18,9 @@ final class CancelSubscriptionAction
         $cancelled = false;
 
         $result = DB::transaction(function () use ($subscription, &$cancelled): Subscription {
-            $lockedSubscription = Subscription::query()
-                ->whereKey($subscription->getKey())
-                ->lockForUpdate()
-                ->firstOrFail();
+            $lockedSubscription = $subscription->refreshForUpdate();
+
+            throw_if($lockedSubscription->trashed(), (new ModelNotFoundException)->setModel(Subscription::class));
 
             if ($lockedSubscription->status === SubscriptionStatus::Cancelled) {
                 return $lockedSubscription;

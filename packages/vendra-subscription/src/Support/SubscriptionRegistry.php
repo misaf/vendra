@@ -7,6 +7,7 @@ namespace Misaf\VendraSubscription\Support;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
@@ -33,11 +34,11 @@ final class SubscriptionRegistry
      */
     public function lockSubscriber(Model&SubscriptionSubscriber $subscriber): Model&SubscriptionSubscriber
     {
-        /** @var TSubscriber */
-        return $subscriber->newQuery()
-            ->whereKey($subscriber->getKey())
-            ->lockForUpdate()
-            ->firstOrFail();
+        $subscriber->refreshForUpdate();
+
+        throw_if(method_exists($subscriber, 'trashed') && $subscriber->trashed(), (new ModelNotFoundException)->setModel($subscriber::class));
+
+        return $subscriber;
     }
 
     /**

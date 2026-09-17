@@ -39,11 +39,7 @@ final readonly class AssignStoreResellerAction
     public function execute(Store $store, ?SubscriptionSubscriber $reseller): Store
     {
         return DB::transaction(function () use ($store, $reseller): Store {
-            $lockedStore = Store::query()
-                ->withTrashed()
-                ->whereKey($store->getKey())
-                ->lockForUpdate()
-                ->firstOrFail();
+            $lockedStore = $store->refreshForUpdate();
 
             $resellerId = $reseller === null ? null : $this->assertResellerHasRoom($reseller, $lockedStore);
 
@@ -69,11 +65,9 @@ final readonly class AssignStoreResellerAction
      */
     private function assertResellerHasRoom(SubscriptionSubscriber $reseller, Store $store): mixed
     {
-        $lockedReseller = $reseller->newQuery()->lockForUpdate()->whereKey($reseller->getKey())->first();
+        $lockedReseller = $reseller->refreshForUpdate();
 
-        if (! $lockedReseller instanceof Model || ! $lockedReseller instanceof SubscriptionSubscriber) {
-            throw (new ModelNotFoundException)->setModel($reseller::class);
-        }
+        throw_if(method_exists($lockedReseller, 'trashed') && $lockedReseller->trashed(), (new ModelNotFoundException)->setModel($reseller::class));
 
         if ($lockedReseller->getKey() !== $store->reseller_id) {
             $this->storeQuota->assertCanCreateStore($lockedReseller);

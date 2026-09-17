@@ -67,11 +67,9 @@ final readonly class CreateStoreAction
                  | concurrent creations would otherwise both see the last free
                  | slot in the plan and both take it.
                  */
-                $lockedReseller = $reseller->newQuery()->lockForUpdate()->whereKey($reseller->getKey())->first();
+                $lockedReseller = $reseller->refreshForUpdate();
 
-                if (! $lockedReseller instanceof Model || ! $lockedReseller instanceof SubscriptionSubscriber) {
-                    throw (new ModelNotFoundException)->setModel($reseller::class);
-                }
+                throw_if(method_exists($lockedReseller, 'trashed') && $lockedReseller->trashed(), (new ModelNotFoundException)->setModel($reseller::class));
 
                 $this->storeQuota->assertCanCreateStore($lockedReseller);
 

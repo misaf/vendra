@@ -16,7 +16,7 @@ final class DeleteStorefrontImageAction
     public function execute(StorefrontImage $image): void
     {
         DB::transaction(function () use ($image): void {
-            $lockedImage = StorefrontImage::query()->whereKey($image->getKey())->lockForUpdate()->firstOrFail();
+            $lockedImage = $image->refreshForUpdate();
 
             if ($lockedImage->isInUse()) {
                 throw StorefrontImageInUseException::forImage($lockedImage);

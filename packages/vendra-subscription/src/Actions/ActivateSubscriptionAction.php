@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Actions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use LogicException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
@@ -38,14 +39,10 @@ final readonly class ActivateSubscriptionAction
             }
 
             $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
-            $lockedPayment = SubscriptionPayment::query()
-                ->whereKey($payment->id)
-                ->lockForUpdate()
-                ->firstOrFail();
-            $lockedSubscription = Subscription::query()
-                ->whereKey($subscription->id)
-                ->lockForUpdate()
-                ->firstOrFail();
+            $lockedPayment = $payment->refreshForUpdate();
+            $lockedSubscription = $subscription->refreshForUpdate();
+
+            throw_if($lockedSubscription->trashed(), (new ModelNotFoundException)->setModel(Subscription::class));
 
             if ($lockedPayment->status !== SubscriptionPaymentStatus::Paid
                 || $lockedSubscription->status !== SubscriptionStatus::PendingPayment) {
