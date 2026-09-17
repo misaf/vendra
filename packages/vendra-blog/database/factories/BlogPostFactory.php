@@ -17,6 +17,9 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 #[UseModel(BlogPost::class)]
 final class BlogPostFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
