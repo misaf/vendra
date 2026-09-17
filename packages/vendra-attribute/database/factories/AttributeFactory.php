@@ -20,7 +20,7 @@ final class AttributeFactory extends Factory
             'name' => fake()->unique()->word(),
             'description' => fake()->optional()->sentence(),
             'unit' => fake()->optional()->randomElement(['kg', 'cm', 'item', 'month']),
-            'active' => true,
+            'active' => fake()->boolean(80),
         ];
     }
 
