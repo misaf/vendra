@@ -146,13 +146,13 @@ it('prices delivery from the dropped pin and schedules it', function (): void {
     $cart = CartFactory::new()->forOwner($user)->createOne();
     CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne(['quantity' => 1]);
 
-    DeliveryZoneFactory::new()->chargingWithin(30, 1500)->createOne([
+    DeliveryZoneFactory::new()->active()->chargingWithin(30, 1500)->createOne([
         'name' => ['en' => 'Outside the free zone'],
         'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
         'position' => 1,
     ]);
-    $slot = DeliverySlotFactory::new()->window('Afternoon', '12:00:00', '17:00:00')->createOne();
+    $slot = DeliverySlotFactory::new()->active()->window('Afternoon', '12:00:00', '17:00:00')->createOne();
     $date = now()->addDay()->toDateString();
 
     $this->actingAs($user)
@@ -184,7 +184,7 @@ it('refuses checkout to an address beyond every delivery band', function (): voi
     $cart = CartFactory::new()->forOwner($user)->createOne();
     CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne();
 
-    DeliveryZoneFactory::new()->freeWithin(12)->createOne([
+    DeliveryZoneFactory::new()->active()->freeWithin(12)->createOne([
         'origin_latitude' => 35.6892,
         'origin_longitude' => 51.3890,
         'position' => 1,
