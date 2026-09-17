@@ -132,6 +132,22 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
+     * Limit the query to active subscriptions ending within the given number of
+     * days, whether or not their expiry reminder has gone out.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function endingWithin(Builder $query, int $days): Builder
+    {
+        return $query
+            ->where('status', SubscriptionStatus::Active)
+            ->whereNotNull('ends_at')
+            ->whereBetween('ends_at', [now(), now()->addDays($days)]);
+    }
+
+    /**
      * Limit the query to active subscriptions expiring within the given number
      * of days that have not yet had an expiry reminder sent.
      *
