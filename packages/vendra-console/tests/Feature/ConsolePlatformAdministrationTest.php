@@ -290,6 +290,30 @@ describe('platform settings', function (): void {
         expect(resolve(StoreCreationSettings::class)->open)->toBeFalse();
     });
 
+    it('lets a console user rename the platform from the platform settings page', function (): void {
+        actAsPlatformUser();
+
+        livewire(ManagePlatformSettings::class)
+            ->assertFormSet(['platform_name' => 'Vendra Console'])
+            ->fillForm(['platform_name' => 'Acme Platform'])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        expect(resolve(ConsoleSettings::class)->platform_name)->toBe('Acme Platform')
+            ->and(resolve(StoreCreationSettings::class)->open)->toBeTrue();
+    });
+
+    it('requires a platform name', function (): void {
+        actAsPlatformUser();
+
+        livewire(ManagePlatformSettings::class)
+            ->fillForm(['platform_name' => ''])
+            ->call('save')
+            ->assertHasFormErrors(['platform_name' => 'required']);
+
+        expect(resolve(ConsoleSettings::class)->platform_name)->toBe('Vendra Console');
+    });
+
     it('rejects a non-boolean store creation state', function (): void {
         actAsPlatformUser();
 
