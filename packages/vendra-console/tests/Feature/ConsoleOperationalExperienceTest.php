@@ -13,8 +13,8 @@ use Misaf\VendraConsole\Filament\Resources\StorefrontDeployments\Pages\ViewStore
 use Misaf\VendraConsole\Filament\Resources\StorefrontDeployments\StorefrontDeploymentResource;
 use Misaf\VendraConsole\Filament\Resources\Stores\Pages\ListStores;
 use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource;
-use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
 use Misaf\VendraConsole\Filament\Widgets\ContainerRuntimeHealth;
+use Misaf\VendraConsole\Filament\Widgets\NeedsAttention;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraStore\Actions\RecordStorefrontRuntimeHealthAction;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
@@ -231,7 +231,10 @@ it('links operational dashboard stats to resource filters', function (): void {
         ],
     ]);
 
-    livewire(ConsoleOverview::class)
+    Store::factory()->provisioningFailed()->active()->create();
+    StorefrontDeployment::factory()->for(Store::factory()->active())->create(['status' => StorefrontDeploymentStatus::Failed]);
+
+    livewire(NeedsAttention::class)
         ->assertOk()
         ->assertSeeHtml('href="'.e($failedDeploymentsUrl).'"')
         ->assertSeeHtml('href="'.e($failedStoresUrl).'"');
