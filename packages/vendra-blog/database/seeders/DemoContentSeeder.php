@@ -10,16 +10,11 @@ use Misaf\VendraBlog\Database\Factories\BlogPostCategoryFactory;
 use Misaf\VendraBlog\Database\Factories\BlogPostFactory;
 use Misaf\VendraBlog\Models\BlogPostCategory;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
-use Misaf\VendraSupport\Tenancy\RequiresCurrentTenant;
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
-    use RequiresCurrentTenant;
-
     protected function seedFactories(): void
     {
-        $this->currentTenantOrNull();
-
         BlogPostCategoryFactory::new()
             ->active()
             ->count(4)
@@ -36,8 +31,6 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     protected function seedFixtures(array $records): void
     {
-        $this->currentTenantOrNull();
-
         foreach ($records as $record) {
             $this->seedFixtureRecord($record);
         }
