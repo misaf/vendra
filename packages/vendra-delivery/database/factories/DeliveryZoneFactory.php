@@ -30,7 +30,7 @@ final class DeliveryZoneFactory extends Factory
             'currency_code' => Config::string('app.currency', 'USD'),
             'fee_amount' => 0,
             'requires_quote' => false,
-            'active' => true,
+            'active' => fake()->boolean(80),
         ];
     }
 
@@ -59,6 +59,11 @@ final class DeliveryZoneFactory extends Factory
             'fee_amount' => 0,
             'requires_quote' => true,
         ]);
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (): array => ['active' => true]);
     }
 
     public function inactive(): static

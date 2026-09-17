@@ -26,7 +26,7 @@ final class DeliverySlotFactory extends Factory
             'starts_at' => '09:00:00',
             'ends_at' => '12:00:00',
             'capacity' => null,
-            'active' => true,
+            'active' => fake()->boolean(80),
         ];
     }
 
@@ -42,6 +42,11 @@ final class DeliverySlotFactory extends Factory
     public function withCapacity(int $capacity): static
     {
         return $this->state(fn (): array => ['capacity' => $capacity]);
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (): array => ['active' => true]);
     }
 
     public function inactive(): static
