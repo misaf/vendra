@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraReseller\Filament\Actions;
+namespace Misaf\VendraConsole\Filament\Resources\Resellers\Actions;
 
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Textarea;
@@ -17,12 +17,12 @@ final class OffboardResellerTableAction extends DeleteAction
         parent::setUp();
 
         $this
-            ->label(__('vendra-reseller::actions.offboard_reseller'))
-            ->modalHeading(__('vendra-reseller::actions.offboard_reseller'))
-            ->modalDescription(__('vendra-reseller::messages.offboard_reseller_description'))
+            ->label(__('vendra-console::actions.offboard_reseller'))
+            ->modalHeading(__('vendra-console::actions.offboard_reseller'))
+            ->modalDescription(__('vendra-console::messages.offboard_reseller_description'))
             ->schema([
                 Textarea::make('offboarding_reason')
-                    ->label(__('vendra-reseller::attributes.offboarding_reason'))
+                    ->label(__('vendra-console::attributes.offboarding_reason'))
                     ->required()
                     ->maxLength(DomainOffboardResellerAction::MAX_REASON_LENGTH),
             ])

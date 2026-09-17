@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraReseller\Filament\Actions;
+namespace Misaf\VendraConsole\Filament\Resources\Resellers\Actions;
 
 use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\Textarea;
@@ -19,12 +19,12 @@ final class OffboardResellerBulkAction extends DeleteBulkAction
         parent::setUp();
 
         $this
-            ->label(__('vendra-reseller::actions.offboard_resellers'))
-            ->modalHeading(__('vendra-reseller::actions.offboard_resellers'))
-            ->modalDescription(__('vendra-reseller::messages.offboard_resellers_description'))
+            ->label(__('vendra-console::actions.offboard_resellers'))
+            ->modalHeading(__('vendra-console::actions.offboard_resellers'))
+            ->modalDescription(__('vendra-console::messages.offboard_resellers_description'))
             ->schema([
                 Textarea::make('offboarding_reason')
-                    ->label(__('vendra-reseller::attributes.offboarding_reason'))
+                    ->label(__('vendra-console::attributes.offboarding_reason'))
                     ->required()
                     ->maxLength(OffboardResellerAction::MAX_REASON_LENGTH),
             ])
