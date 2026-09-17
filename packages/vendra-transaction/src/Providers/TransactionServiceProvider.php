@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
+use Misaf\VendraTransaction\Console\Commands\SeedCommand;
 use Misaf\VendraTransaction\Console\Commands\VerifyWalletBalancesCommand;
 use Misaf\VendraTransaction\Models\Wallet;
 use Misaf\VendraTransaction\Services\TransactionGatewayRegistry;
@@ -32,7 +34,7 @@ final class TransactionServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_transactions_table',
             ])
-            ->hasCommands(VerifyWalletBalancesCommand::class)
+            ->hasCommands(SeedCommand::class, VerifyWalletBalancesCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-transaction');
             });
@@ -63,6 +65,7 @@ final class TransactionServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('transaction_gateways', 'wallets', 'transactions');
+        $this->app->make(TenantSeeders::class)->register('vendra-transaction:seed', priority: 32);
 
         AboutCommand::add('Vendra Transaction', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-transaction')]);
 
