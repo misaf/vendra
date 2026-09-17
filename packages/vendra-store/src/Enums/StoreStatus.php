@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Enums;
 
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
+
 /**
  * The one status an administrator reads a store by.
  *
@@ -15,7 +18,7 @@ namespace Misaf\VendraStore\Enums;
  * columns stay the source of truth and no new state can drift out of sync with
  * them.
  */
-enum StoreStatus: string
+enum StoreStatus: string implements HasColor, HasLabel
 {
     /** Created, provisioning not started. */
     case Pending = 'pending';
@@ -51,6 +54,28 @@ enum StoreStatus: string
         return match ($this) {
             self::Pending, self::Provisioning => false,
             default => true,
+        };
+    }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::Pending => 'gray',
+            self::Provisioning => 'info',
+            self::Active => 'success',
+            self::Suspended => 'warning',
+            self::Failed => 'danger',
+        };
+    }
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::Pending => __('vendra-store::enums.store_status_pending'),
+            self::Provisioning => __('vendra-store::enums.store_status_provisioning'),
+            self::Active => __('vendra-store::enums.store_status_active'),
+            self::Suspended => __('vendra-store::enums.store_status_suspended'),
+            self::Failed => __('vendra-store::enums.store_status_failed'),
         };
     }
 }

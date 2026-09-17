@@ -16,7 +16,6 @@ use Misaf\VendraConsole\Filament\Resources\StorefrontDeployments\Pages\ListStore
 use Misaf\VendraConsole\Filament\Resources\Stores\Pages\ListStores;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
-use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Enums\StorefrontRuntimeState;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
@@ -66,17 +65,18 @@ it('labels the reseller list by its user username', function (): void {
         ->assertTableColumnExists('user.username', fn (TextColumn $column): bool => $column->getLabel() === __('vendra-console::attributes.username'));
 });
 
-it('translates store and storefront statuses in the store list', function (): void {
+it('shows store and storefront statuses as their enum badges in the store list', function (): void {
     actAsLabellingConsoleUser();
 
     $store = Store::factory()->active()->create();
     StorefrontDeployment::factory()->for($store)->create(['status' => StorefrontDeploymentStatus::Failed]);
-    $storeStatus = Store::query()->findOrFail($store->getKey())->status()->value;
 
     livewire(ListStores::class)
         ->loadTable()
-        ->assertTableColumnFormattedStateSet('status', __("vendra-console::attributes.store_status_{$storeStatus}"), $store)
-        ->assertTableColumnFormattedStateSet('storefront_status', __('vendra-console::attributes.deployment_status_failed'), $store);
+        ->assertTableColumnFormattedStateSet('status', StoreStatus::Active->getLabel(), $store)
+        ->assertTableColumnExists('status', fn (TextColumn $column): bool => $column->getColor(StoreStatus::Active) === 'success', $store)
+        ->assertTableColumnFormattedStateSet('storefront_status', StorefrontDeploymentStatus::Failed->getLabel(), $store)
+        ->assertTableColumnExists('storefront_status', fn (TextColumn $column): bool => $column->getColor(StorefrontDeploymentStatus::Failed) === 'danger', $store);
 });
 
 it('translates plan period units in the list and the form', function (): void {
@@ -98,10 +98,7 @@ it('translates plan period units in the list and the form', function (): void {
 
 it('translates every enum-derived console label', function (string $locale): void {
     $prefixedEnums = [
-        'deployment_status_' => StorefrontDeploymentStatus::cases(),
-        'desired_state_' => StorefrontDesiredState::cases(),
         'runtime_state_' => StorefrontRuntimeState::cases(),
-        'store_status_' => StoreStatus::cases(),
         'status_' => SubscriptionStatus::cases(),
         'period_' => PeriodUnit::cases(),
     ];

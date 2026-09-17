@@ -153,7 +153,7 @@ it('uses a store overview as the reseller record landing page', function (): voi
     $reseller = Reseller::factory()->create();
     $store = Store::factory()->create(['reseller_id' => $reseller->getKey(), 'name' => 'Acme Flowers']);
     StoreDomain::factory()->for($store)->create(['name' => 'acme.test', 'active' => true]);
-    StorefrontDeployment::factory()->for($store)->create(['desired_state' => StorefrontDesiredState::Stopped]);
+    StorefrontDeployment::factory()->for($store)->create(['domain' => 'shop.acme.test', 'desired_state' => StorefrontDesiredState::Stopped]);
     actAsResellerUser($reseller);
 
     livewire(ListStores::class)
@@ -163,7 +163,8 @@ it('uses a store overview as the reseller record landing page', function (): voi
         ->assertOk()
         ->assertSee('Acme Flowers')
         ->assertSee('acme.test')
-        ->assertSee(__('vendra-reseller::attributes.desired_state_stopped'));
+        ->assertSee('shop.acme.test')
+        ->assertSee(StorefrontDesiredState::Stopped->getLabel());
 });
 
 it('lets a reseller edit store details without exposing protected billing or provisioning fields', function (): void {
@@ -360,6 +361,7 @@ it('scopes operational store and deployment filters to the authenticated reselle
         ->resetTableFilters()
         ->filterTable('storefront_status', StorefrontDeploymentStatus::Ready->value)
         ->assertCanSeeTableRecords([$readyStore])
+        ->assertTableColumnFormattedStateSet('storefront_status', StorefrontDeploymentStatus::Ready->getLabel(), $readyStore)
         ->assertCanNotSeeTableRecords([$failedStore, $otherFailedStore]);
 });
 

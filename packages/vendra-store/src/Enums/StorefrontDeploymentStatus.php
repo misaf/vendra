@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Enums;
 
-enum StorefrontDeploymentStatus: string
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasLabel;
+
+enum StorefrontDeploymentStatus: string implements HasColor, HasLabel
 {
     case Pending = 'pending';
     case Processing = 'processing';
@@ -46,6 +49,28 @@ enum StorefrontDeploymentStatus: string
         return match ($this) {
             self::Ready, self::Failed => true,
             default => false,
+        };
+    }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::Pending => 'gray',
+            self::Processing => 'info',
+            self::Requested => 'info',
+            self::Ready => 'success',
+            self::Failed => 'danger',
+        };
+    }
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::Pending => __('vendra-store::enums.deployment_status_pending'),
+            self::Processing => __('vendra-store::enums.deployment_status_processing'),
+            self::Requested => __('vendra-store::enums.deployment_status_requested'),
+            self::Ready => __('vendra-store::enums.deployment_status_ready'),
+            self::Failed => __('vendra-store::enums.deployment_status_failed'),
         };
     }
 }

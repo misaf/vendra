@@ -36,6 +36,7 @@ use Misaf\VendraConsole\Filament\Resources\Stores\StoreResource;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\ReactivateStoreAction;
 use Misaf\VendraStore\Actions\SuspendStoreAction;
+use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
@@ -57,6 +58,7 @@ final class StoreTable
                 RowIndexColumn::make(),
 
                 NameColumn::make()
+                    ->icon(null)
                     ->searchable()
                     ->sortable(),
 
@@ -69,20 +71,17 @@ final class StoreTable
 
                 TextColumn::make('domain')
                     ->label(__('vendra-console::attributes.domain'))
-                    ->icon(Heroicon::GlobeAlt)
                     ->state(fn (Store $record): ?string => $record->domains->first()?->name)
                     ->placeholder('—'),
 
                 TextColumn::make('storefront_status')
                     ->label(__('vendra-console::attributes.storefront_status'))
                     ->badge()
-                    ->state(fn (Store $record): ?string => self::deployment($record)?->status->value)
-                    ->formatStateUsing(fn (string $state): string => __("vendra-console::attributes.deployment_status_{$state}"))
+                    ->state(fn (Store $record): ?StorefrontDeploymentStatus => self::deployment($record)?->status)
                     ->placeholder(__('vendra-console::attributes.storefront_not_requested')),
 
                 TextColumn::make('admin_url')
                     ->label(__('vendra-console::attributes.admin_url'))
-                    ->icon(Heroicon::OutlinedBuildingOffice2)
                     ->state(fn (Store $record): string => $record->adminUrl())
                     ->url(fn (Store $record): string => $record->adminUrl())
                     ->openUrlInNewTab()
@@ -91,7 +90,6 @@ final class StoreTable
 
                 TextColumn::make('storefront_url')
                     ->label(__('vendra-console::attributes.storefront_url'))
-                    ->icon(Heroicon::OutlinedShoppingBag)
                     ->state(fn (Store $record): ?string => self::deployment($record)?->domain)
                     ->placeholder('—')
                     ->url(fn (Store $record): ?string => self::deployment($record)?->url())
@@ -105,10 +103,9 @@ final class StoreTable
                     ->updateStateUsing(fn (Store $record, bool $state): bool => self::setActive($record, $state)),
 
                 TextColumn::make('status')
-                    ->label(__('vendra-console::attributes.status'))
+                    ->label(__('vendra-console::attributes.operational_status'))
                     ->badge()
-                    ->state(fn (Store $record): string => $record->status()->value)
-                    ->formatStateUsing(fn (string $state): string => __("vendra-console::attributes.store_status_{$state}")),
+                    ->state(fn (Store $record): StoreStatus => $record->status()),
 
                 CreatedAtColumn::make()
                     ->sortable(),
@@ -130,7 +127,7 @@ final class StoreTable
                     SelectFilter::make('status')
                         ->label(__('vendra-console::attributes.operational_status'))
                         ->multiple()
-                        ->options(self::statusOptions())
+                        ->options(StoreStatus::class)
                         ->query(function (Builder $query, array $data): Builder {
                             $statuses = [];
 
@@ -230,15 +227,5 @@ final class StoreTable
         }
 
         return (bool) $store->fresh()?->active;
-    }
-
-    /** @return array<string, string> */
-    private static function statusOptions(): array
-    {
-        return collect(StoreStatus::cases())
-            ->mapWithKeys(fn (StoreStatus $status): array => [
-                $status->value => __("vendra-console::attributes.store_status_{$status->value}"),
-            ])
-            ->all();
     }
 }

@@ -66,6 +66,11 @@ the one reading an administrator wants — `StoreStatus::Pending`, `Provisioning
 expressed as SQL. It is derived rather than stored, so no fourth column can drift
 out of step with the three that own it.
 
+`StoreStatus`, `StorefrontDeploymentStatus` and `StorefrontDesiredState` implement
+Filament's `HasLabel` and `HasColor`, with labels in `vendra-store::enums`, so a
+`->badge()` column or entry that returns the enum is translated and colored without
+`formatStateUsing()`, and `SelectFilter::options(StoreStatus::class)` lists them.
+
 A store also carries its own `locale`, `currency`, `timezone`, and a free-form
 `metadata` bag. Locale and timezone reach the tenancy engine through
 `TenantContract`, so a store keeps its own language and clock while it is

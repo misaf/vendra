@@ -546,7 +546,7 @@ it('uses a store overview as the console record landing page', function (): void
 
     $store = Store::factory()->create(['name' => 'Console overview store']);
     StoreDomain::factory()->for($store)->create(['name' => 'overview.test', 'active' => true]);
-    StorefrontDeployment::factory()->for($store)->create(['desired_state' => StorefrontDesiredState::Stopped]);
+    StorefrontDeployment::factory()->for($store)->create(['domain' => 'shop.overview.test', 'desired_state' => StorefrontDesiredState::Stopped]);
 
     livewire(ListStores::class)
         ->assertActionVisible(TestAction::make('view')->table($store));
@@ -555,7 +555,8 @@ it('uses a store overview as the console record landing page', function (): void
         ->assertOk()
         ->assertSee('Console overview store')
         ->assertSee('overview.test')
-        ->assertSee(__('vendra-console::attributes.desired_state_stopped'));
+        ->assertSee('shop.overview.test')
+        ->assertSee(StorefrontDesiredState::Stopped->getLabel());
 });
 
 it('edits store details without directly mutating operational identity fields', function (): void {
