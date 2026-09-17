@@ -11,9 +11,9 @@ use Misaf\VendraUserProfile\Database\Seeders\PermissionPolicySeeder;
 use Misaf\VendraUserProfile\UserProfilePlugin;
 
 #[Description('Seed user profile module data for a tenant')]
-#[Signature('vendra-user-profile:seed
-        {tenant? : Tenant ID or slug to seed user profile permissions for}
-        {seeders?* : Seeder keys to run. Use "all" or: permission-policies}')]
+#[Signature(self::MODULE_NAME.':seed
+        {tenant? : Tenant ID or slug to seed user profile data for}
+        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}')]
 final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = UserProfilePlugin::ID;
@@ -23,6 +23,8 @@ final class SeedCommand extends TenantSeedCommand
      */
     protected function seeders(): array
     {
-        return ['permission-policies' => PermissionPolicySeeder::class];
+        return [
+            'permission-policies' => PermissionPolicySeeder::class,
+        ];
     }
 }
