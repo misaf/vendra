@@ -6,6 +6,7 @@ namespace Misaf\VendraStore\Enums;
 
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
+use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
 /**
  * The one status an administrator reads a store by.
@@ -34,6 +35,21 @@ enum StoreStatus: string implements HasColor, HasLabel
 
     /** Provisioning gave up. */
     case Failed = 'failed';
+
+    /**
+     * Derives the status from the three columns that own it. Suspension
+     * outranks readiness, but never an unfinished or failed provisioning.
+     */
+    public static function fromColumns(TenantProvisioningStatus $provisioningStatus, bool $active, bool $billingSuspended): self
+    {
+        return match (true) {
+            $provisioningStatus === TenantProvisioningStatus::Pending => self::Pending,
+            $provisioningStatus === TenantProvisioningStatus::Processing => self::Provisioning,
+            $provisioningStatus === TenantProvisioningStatus::Failed => self::Failed,
+            ! $active, $billingSuspended => self::Suspended,
+            default => self::Active,
+        };
+    }
 
     /**
      * Whether a store in this status may serve requests.

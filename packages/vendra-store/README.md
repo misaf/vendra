@@ -253,6 +253,9 @@ the storefront network as a `Support\StorefrontRuntimeHealthReport`. Read the
 latest one with `Support\StorefrontRuntimeHealth::latest()`; a report older
 than five minutes is stale, meaning the worker or the scheduler stopped.
 
+`Support\StoreStatusCounts::for(?Builder $stores)` counts stores per
+`StoreStatus` in one grouped query, using the same rule as `Store::status()`.
+
 ## Filament
 
 This package ships the shared building blocks — `Filament\Pages\CreateStorePage`,

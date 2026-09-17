@@ -180,13 +180,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
      */
     public function status(): StoreStatus
     {
-        return match (true) {
-            $this->provisioning_status === TenantProvisioningStatus::Pending => StoreStatus::Pending,
-            $this->provisioning_status === TenantProvisioningStatus::Processing => StoreStatus::Provisioning,
-            $this->provisioning_status === TenantProvisioningStatus::Failed => StoreStatus::Failed,
-            ! $this->active, $this->billing_suspended_at !== null => StoreStatus::Suspended,
-            default => StoreStatus::Active,
-        };
+        return StoreStatus::fromColumns($this->provisioning_status, $this->active, $this->billing_suspended_at !== null);
     }
 
     /**

@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Support\StoreStatusCounts;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
 /*
@@ -54,4 +56,39 @@ it('treats an active store as the one that may serve requests', function (): voi
         ->and(Store::query()->accessible()->pluck('id')->all())->toBe([$active->id])
         ->and(StoreStatus::Provisioning->isSettled())->toBeFalse()
         ->and(StoreStatus::Failed->isSettled())->toBeTrue();
+});
+
+it('counts stores per status in one query by the same rule its accessor reads', function (): void {
+    Store::factory()->provisioningPending()->active()->create();
+    Store::factory()->provisioning()->active()->create();
+    Store::factory()->count(2)->provisioningFailed()->active()->create();
+    Store::factory()->count(3)->active()->create();
+    Store::factory()->active()->suspended()->create();
+    Store::factory()->create(['active' => false, 'provisioning_status' => TenantProvisioningStatus::Ready]);
+    Store::factory()->active()->create()->delete();
+
+    DB::enableQueryLog();
+
+    $counts = StoreStatusCounts::for();
+
+    expect(DB::getQueryLog())->toHaveCount(1)
+        ->and($counts->count(StoreStatus::Pending))->toBe(1)
+        ->and($counts->count(StoreStatus::Provisioning))->toBe(1)
+        ->and($counts->count(StoreStatus::Failed))->toBe(2)
+        ->and($counts->count(StoreStatus::Active))->toBe(3)
+        ->and($counts->count(StoreStatus::Suspended))->toBe(2)
+        ->and($counts->total())->toBe(9)
+        ->and($counts->needingAttention())->toBe(4);
+});
+
+it('counts only the stores the given query selects', function (): void {
+    Store::factory()->count(2)->active()->create(['reseller_id' => 7]);
+    Store::factory()->provisioningFailed()->active()->create(['reseller_id' => 7]);
+    Store::factory()->count(4)->active()->create(['reseller_id' => 8]);
+
+    $counts = StoreStatusCounts::for(Store::query()->where('reseller_id', 7));
+
+    expect($counts->count(StoreStatus::Active))->toBe(2)
+        ->and($counts->needingAttention())->toBe(1)
+        ->and($counts->total())->toBe(3);
 });
