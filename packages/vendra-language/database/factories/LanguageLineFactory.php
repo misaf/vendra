@@ -14,6 +14,9 @@ use Misaf\VendraLanguage\Models\LanguageLine;
 #[UseModel(LanguageLine::class)]
 final class LanguageLineFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
