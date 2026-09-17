@@ -18,7 +18,9 @@ final class SeedCommand extends TenantSeedCommand
         {tenant? : Tenant ID or slug to seed attribute data for}
         {seeders?* : Seeder keys to run. Use "all" or: permission-policies}';
 
-    /** @return array<string, class-string> */
+    /**
+     * @return array<string, class-string>
+     */
     protected function seeders(): array
     {
         return ['permission-policies' => PermissionPolicySeeder::class];
