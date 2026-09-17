@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use LogicException;
@@ -61,10 +60,6 @@ final readonly class RestoreOffboardedStoreAction
             throw new LogicException("Store [{$store->id}] cannot be restored because its billing reseller is unavailable.");
         }
 
-        $reseller->refreshForUpdate();
-
-        throw_if(method_exists($reseller, 'trashed') && $reseller->trashed(), (new ModelNotFoundException)->setModel($reseller::class));
-
-        $this->storeQuota->assertCanCreateStore($reseller);
+        $this->storeQuota->lockAndAssertCanCreateStore($reseller);
     }
 }

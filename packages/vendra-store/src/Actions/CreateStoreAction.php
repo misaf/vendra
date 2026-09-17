@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Support\StoreQuota;
@@ -62,18 +61,7 @@ final readonly class CreateStoreAction
             $resellerId = null;
 
             if ($reseller !== null) {
-                /*
-                 | Re-read the reseller under a row lock before counting: two
-                 | concurrent creations would otherwise both see the last free
-                 | slot in the plan and both take it.
-                 */
-                $lockedReseller = $reseller->refreshForUpdate();
-
-                throw_if(method_exists($lockedReseller, 'trashed') && $lockedReseller->trashed(), (new ModelNotFoundException)->setModel($reseller::class));
-
-                $this->storeQuota->assertCanCreateStore($lockedReseller);
-
-                $resellerId = $lockedReseller->getKey();
+                $resellerId = $this->storeQuota->lockAndAssertCanCreateStore($reseller)->getKey();
             }
 
             $createdStore = Store::query()->create([

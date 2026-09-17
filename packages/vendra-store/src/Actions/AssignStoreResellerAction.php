@@ -80,14 +80,10 @@ final readonly class AssignStoreResellerAction
      */
     private function assertResellerHasRoom(SubscriptionSubscriber $reseller, Store $store): mixed
     {
-        $lockedReseller = $reseller->refreshForUpdate();
-
-        throw_if(method_exists($lockedReseller, 'trashed') && $lockedReseller->trashed(), (new ModelNotFoundException)->setModel($reseller::class));
-
-        if ($lockedReseller->getKey() !== $store->reseller_id) {
-            $this->storeQuota->assertCanCreateStore($lockedReseller);
+        if ($reseller->getKey() === $store->reseller_id) {
+            return $store->reseller_id;
         }
 
-        return $lockedReseller->getKey();
+        return $this->storeQuota->lockAndAssertCanCreateStore($reseller)->getKey();
     }
 }

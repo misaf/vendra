@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Support;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 
@@ -17,17 +18,7 @@ final class StoreQuota
      */
     public function canCreateStore(SubscriptionSubscriber $subscriber): bool
     {
-        if (! $subscriber->canHoldUnits()) {
-            return false;
-        }
-
-        $plan = $subscriber->activeSubscription()?->plan;
-
-        if ($plan === null) {
-            return false;
-        }
-
-        return $subscriber->subscribedUnitCount() < $plan->max_units;
+        return $this->remainingStores($subscriber) > 0;
     }
 
     /**
@@ -70,5 +61,29 @@ final class StoreQuota
         if ($subscriber->subscribedUnitCount() >= $plan->max_units) {
             throw SubscriptionLimitException::unitQuotaReached($subscriber, $plan->max_units);
         }
+    }
+
+    /**
+     * Re-reads the subscriber under a row lock, then checks its quota: two
+     * concurrent claims would otherwise both see the last free slot and both
+     * take it. Call inside the transaction that writes the store.
+     *
+     * @template TSubscriber of Model&SubscriptionSubscriber
+     *
+     * @param  TSubscriber  $subscriber
+     * @return TSubscriber
+     *
+     * @throws ModelNotFoundException
+     * @throws SubscriptionLimitException
+     */
+    public function lockAndAssertCanCreateStore(SubscriptionSubscriber $subscriber): SubscriptionSubscriber
+    {
+        $lockedSubscriber = $subscriber->refreshForUpdate();
+
+        throw_if(method_exists($lockedSubscriber, 'trashed') && $lockedSubscriber->trashed(), (new ModelNotFoundException)->setModel($subscriber::class));
+
+        $this->assertCanCreateStore($lockedSubscriber);
+
+        return $lockedSubscriber;
     }
 }
