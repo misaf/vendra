@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Misaf\VendraSubscription\Actions\CreatePlanAction;
 use Misaf\VendraSubscription\Actions\DeletePlanAction;
+use Misaf\VendraSubscription\Actions\RestorePlanAction;
 use Misaf\VendraSubscription\Actions\UpdatePlanAction;
 use Misaf\VendraSubscription\Exceptions\PlanInUseException;
 use Misaf\VendraSubscription\Models\Plan;
@@ -35,4 +36,19 @@ it('soft deletes an unused plan', function (): void {
     resolve(DeletePlanAction::class)->execute($plan);
 
     expect($plan->refresh()->trashed())->toBeTrue();
+});
+
+it('restores a deleted default plan without taking the default back', function (): void {
+    $deleted = resolve(CreatePlanAction::class)->execute(Plan::factory()->raw(['active' => true, 'is_default' => false]));
+    $other = resolve(CreatePlanAction::class)->execute(Plan::factory()->raw(['active' => true, 'is_default' => false]));
+
+    resolve(DeletePlanAction::class)->execute($deleted);
+
+    expect($other->refresh()->is_default)->toBeTrue();
+
+    resolve(RestorePlanAction::class)->execute($deleted);
+
+    expect($deleted->refresh()->trashed())->toBeFalse()
+        ->and($deleted->is_default)->toBeFalse()
+        ->and($other->refresh()->is_default)->toBeTrue();
 });
