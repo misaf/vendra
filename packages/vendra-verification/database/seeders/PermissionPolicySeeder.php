@@ -11,7 +11,9 @@ final class PermissionPolicySeeder extends BasePermissionPolicySeeder
 {
     protected const string MODULE_NAME = 'vendra-verification';
 
-    /** @return list<string> */
+    /**
+     * @return list<string>
+     */
     protected function policies(): array
     {
         return array_column(VerificationPolicyEnum::cases(), 'value');
