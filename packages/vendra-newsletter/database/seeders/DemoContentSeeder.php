@@ -26,6 +26,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
+     * Newsletters are keyed on their subject and subscribers on their email
+     * address (a tenant-scoped unique), so a repeated run inserts nothing.
+     * Store provisioning retries the whole seed list on failure, so a partial
+     * run has to be safe to repeat.
+     *
      * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
@@ -44,8 +49,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     {
         $data = $this->validatedFixtureRecord($record);
 
-        Newsletter::query()->create([
-            'subject' => Arr::get($data, 'subject'),
+        Newsletter::query()->firstOrCreate(['subject' => Arr::get($data, 'subject')], [
             'content' => Arr::get($data, 'content'),
             'status' => NewsletterStatusEnum::from(Arr::get($data, 'status')),
             'scheduled_at' => Arr::get($data, 'scheduled_at'),
@@ -64,7 +68,10 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
         ];
 
         foreach ($subscribers as $subscriber) {
-            NewsletterSubscriber::query()->create($subscriber);
+            NewsletterSubscriber::query()->firstOrCreate(
+                ['email' => Arr::get($subscriber, 'email')],
+                ['name' => Arr::get($subscriber, 'name')],
+            );
         }
     }
 
