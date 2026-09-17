@@ -17,7 +17,9 @@ final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = 'vendra-address';
 
-    /** @return array<string, class-string> */
+    /**
+     * @return array<string, class-string>
+     */
     protected function seeders(): array
     {
         return ['permission-policies' => PermissionPolicySeeder::class];
