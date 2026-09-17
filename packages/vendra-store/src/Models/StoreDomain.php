@@ -95,7 +95,14 @@ final class StoreDomain extends Model implements ShouldLogActivity
             'string',
             'max:255',
             'regex:'.self::DOMAIN_PATTERN,
+            // `admin.<domain>` is the administration host of the store owning <domain>.
+            'not_regex:/^admin\./i',
             Rule::unique(self::class, 'name')->where('active', true)->withoutTrashed(),
+            /*
+             | An offboarded store keeps its deployment row, and with it the
+             | deployment's unique domain, after its store domain is released.
+             */
+            Rule::unique(StorefrontDeployment::class, 'domain'),
         ];
     }
 

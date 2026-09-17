@@ -226,3 +226,11 @@ describe('storefront intent', function (): void {
         Queue::assertPushed(ProvisionStorefrontJob::class, fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $running->id);
     });
 });
+
+it('refuses to suspend a store that is still provisioning', function (): void {
+    $store = Store::factory()->provisioning()->inactive()->create();
+
+    expect(fn () => resolve(SuspendStoreAction::class)->execute($store))->toThrow(LogicException::class);
+
+    Queue::assertNothingPushed();
+});

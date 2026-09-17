@@ -10,11 +10,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\Rule;
 use Misaf\VendraStore\Actions\ReplaceStoreDomainAction;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
-use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
  * Shared "replace the store's active domain" table action. Panels subclass
@@ -35,20 +33,13 @@ abstract class ReplaceDomainTableAction extends Action
         $this
             ->label(__('vendra-store::actions.replace_domain'))
             ->icon(Heroicon::OutlinedArrowPath)
+            ->visible(fn (Store $record): bool => ! $record->trashed())
             ->schema([
                 TextInput::make('domain')
                     ->label(__('vendra-store::attributes.new_domain'))
                     ->required()
                     ->maxLength(255)
                     ->rules(StoreDomain::activeDomainRules())
-                    /*
-                     | A deployment's domain is unique too, and it is the column the
-                     | routing label is built from. Without this the collision
-                     | surfaces from the database mid-transaction as a query error
-                     | in the panel, rather than as a message on the field.
-                     */
-                    ->rule(fn (Store $record): mixed => Rule::unique(StorefrontDeployment::class, 'domain')
-                        ->ignore($record->getKey(), 'store_id'))
                     ->dehydrateStateUsing(fn (?string $state): ?string => $state === null
                         ? null
                         : StoreDomain::normalizeDomain($state)),

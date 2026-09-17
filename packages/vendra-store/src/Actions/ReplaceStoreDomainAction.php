@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Actions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\Store;
@@ -43,6 +44,12 @@ final readonly class ReplaceStoreDomainAction
      */
     public function execute(Store $store, string $domain): StoreDomain
     {
+        /*
+         | An offboarded store's trashed active domain is invisible here, so a
+         | replace would leave two active domains once the store is restored.
+         */
+        throw_if($store->trashed(), (new ModelNotFoundException)->setModel(Store::class));
+
         /*
          | Read before the transaction, written inside it. A store owns at most
          | one storefront, and this is the model the write below and the dispatch

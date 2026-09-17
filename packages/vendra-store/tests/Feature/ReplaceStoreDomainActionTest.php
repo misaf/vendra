@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
 use Misaf\VendraStore\Actions\ReplaceStoreDomainAction;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
+use Misaf\VendraStore\Models\StorefrontDeployment;
 
 it('activates a new domain and retains the previous one as trashed history', function (): void {
     $store = Store::factory()->create();
@@ -50,3 +53,18 @@ it('keeps replaced history when the property is soft-deleted and restored', func
     expect($store->execute(fn () => $store->storeDomains()->where('active', true)->value('name')))->toBe('new.test')
         ->and($store->execute(fn () => $store->storeDomains()->onlyTrashed()->count()))->toBe(1);
 });
+
+it('refuses to replace the domain of an offboarded store', function (): void {
+    $store = Store::factory()->create();
+    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
+    $store->delete();
+
+    expect(fn () => resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test'))
+        ->toThrow(ModelNotFoundException::class);
+});
+
+it('rejects domains that collide with an administration host or a retained deployment', function (string $domain): void {
+    StorefrontDeployment::factory()->create(['domain' => 'held.test']);
+
+    expect(Validator::make(['domain' => $domain], ['domain' => StoreDomain::activeDomainRules()])->fails())->toBeTrue();
+})->with(['admin.shop.test', 'held.test']);
