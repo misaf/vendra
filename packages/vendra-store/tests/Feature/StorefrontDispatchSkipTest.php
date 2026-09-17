@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Bus\UniqueLock;
+use Illuminate\Queue\Events\UniqueJobSkipped;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
@@ -124,4 +126,17 @@ it('skips a sync deployment a worker already holds the lock for', function (): v
     $this->artisan('storefront:redeploy --sync')
         ->expectsOutputToContain('1 skipped')
         ->assertSuccessful();
+});
+
+it('does not pile up skip listeners across repeated runs in one process', function (): void {
+    Queue::fake();
+
+    StorefrontDeployment::factory()->create(['desired_state' => StorefrontDesiredState::Running]);
+    $listenersBefore = count(Event::getListeners(UniqueJobSkipped::class));
+
+    Artisan::call('storefront:redeploy');
+    Artisan::call('storefront:redeploy');
+    Artisan::call('storefront:redeploy');
+
+    expect(Event::getListeners(UniqueJobSkipped::class))->toHaveCount($listenersBefore + 1);
 });

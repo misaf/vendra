@@ -27,6 +27,15 @@ use Throwable;
  */
 abstract class StorefrontDeploymentDispatchCommand extends Command
 {
+    /**
+     * The current run's skipped deployment ids; null between runs.
+     *
+     * @var ArrayObject<int, int>|null
+     */
+    private ?ArrayObject $skipped = null;
+
+    private bool $listensForSkippedDispatches = false;
+
     public function handle(StorefrontRuntimeConfiguration $runtime): int
     {
         if (! $runtime->isConfigured()) {
@@ -60,6 +69,8 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
                     $count++;
                 }
             });
+
+        $this->skipped = null;
 
         $this->info(sprintf($this->summary(), $count - $skipped->count() - count($failures), $this->option('sync') ? $this->syncVerb() : $this->queuedVerb()));
         $this->reportSkipped($skipped);
@@ -135,6 +146,10 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
      * — unlike inspecting the lock before dispatching, which is both a guess and
      * a second chance to lose the race.
      *
+     * Artisan reuses one command instance across calls in a process, so the
+     * listener is registered once and writes into the current run's collection
+     * rather than piling up a new listener per run.
+     *
      * @return ArrayObject<int, int> deployment ids; an object so the listener's
      *                               writes are visible to the caller
      */
@@ -142,12 +157,17 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     {
         /** @var ArrayObject<int, int> $skipped */
         $skipped = new ArrayObject;
+        $this->skipped = $skipped;
 
-        Event::listen(static function (UniqueJobSkipped $event) use ($skipped): void {
-            if (property_exists($event->job, 'deploymentId')) {
-                $skipped->append($event->job->deploymentId);
-            }
-        });
+        if (! $this->listensForSkippedDispatches) {
+            Event::listen(function (UniqueJobSkipped $event): void {
+                if ($this->skipped instanceof ArrayObject && property_exists($event->job, 'deploymentId')) {
+                    $this->skipped->append($event->job->deploymentId);
+                }
+            });
+
+            $this->listensForSkippedDispatches = true;
+        }
 
         return $skipped;
     }
