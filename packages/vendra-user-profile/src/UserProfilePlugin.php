@@ -12,9 +12,11 @@ final class UserProfilePlugin implements Plugin
 {
     use ResolvesPluginInstances;
 
+    public const string ID = 'vendra-user-profile';
+
     public function getId(): string
     {
-        return 'vendra-user-profile';
+        return self::ID;
     }
 
     public function register(Panel $panel): void
