@@ -15,11 +15,11 @@ use Misaf\VendraUser\Models\User;
 
 function resellerWithPlan(int $maxUnits, int $existingProperties = 0): Reseller
 {
-    $reseller = Reseller::factory()->create();
+    $reseller = Reseller::factory()->active()->create();
 
     Subscription::factory()
         ->forSubscriber($reseller)
-        ->for(Plan::factory()->maxUnits($maxUnits))
+        ->for(Plan::factory()->active()->maxUnits($maxUnits))
         ->create();
 
     for ($index = 0; $index < $existingProperties; $index++) {
@@ -50,8 +50,8 @@ it('blocks creating a property at the plan limit', function (): void {
 })->throws(SubscriptionLimitException::class);
 
 it('blocks property creation when no subscription is active', function (): void {
-    $reseller = Reseller::factory()->create();
-    Subscription::factory()->expired()->forSubscriber($reseller)->for(Plan::factory()->maxUnits(5))->create();
+    $reseller = Reseller::factory()->active()->create();
+    Subscription::factory()->expired()->forSubscriber($reseller)->for(Plan::factory()->active()->maxUnits(5))->create();
 
     $quota = resolve(StoreQuota::class);
 
@@ -74,7 +74,7 @@ it('blocks property creation for an inactive reseller with an active subscriptio
 })->throws(SubscriptionLimitException::class, 'is inactive');
 
 it('creates a reseller subscribed to a plan for its period', function (): void {
-    $plan = Plan::factory()->period(PeriodUnit::Month, 1)->create();
+    $plan = Plan::factory()->active()->period(PeriodUnit::Month, 1)->create();
 
     $result = resolve(CreateResellerAction::class)->execute(
         plan: $plan,
@@ -96,7 +96,7 @@ it('creates a reseller subscribed to a plan for its period', function (): void {
 
 it('creates a reseller with the requested active state', function (): void {
     $result = resolve(CreateResellerAction::class)->execute(
-        plan: Plan::factory()->create(),
+        plan: Plan::factory()->active()->create(),
         username: 'paused_owner',
         email: 'admin@paused.test',
         password: 'Secure123',

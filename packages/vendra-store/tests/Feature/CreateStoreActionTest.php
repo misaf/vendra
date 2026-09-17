@@ -17,11 +17,11 @@ use Misaf\VendraUser\Models\User;
 
 function subscribedReseller(int $maxUnits): Reseller
 {
-    $reseller = Reseller::factory()->create();
+    $reseller = Reseller::factory()->active()->create();
 
     Subscription::factory()
         ->forSubscriber($reseller)
-        ->for(Plan::factory()->maxUnits($maxUnits))
+        ->for(Plan::factory()->active()->maxUnits($maxUnits))
         ->create();
 
     return $reseller;
@@ -111,7 +111,7 @@ it('keeps store administrators separate from the reseller user account', functio
 it('rejects making one user the main account of two resellers', function (): void {
     $reseller = subscribedReseller(maxUnits: 2);
 
-    expect(fn (): Reseller => Reseller::factory()->create(['user_id' => $reseller->user_id]))
+    expect(fn (): Reseller => Reseller::factory()->active()->create(['user_id' => $reseller->user_id]))
         ->toThrow(QueryException::class);
 });
 

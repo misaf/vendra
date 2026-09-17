@@ -21,11 +21,11 @@ use Misaf\VendraSubscription\Models\Subscription;
  */
 function subscriberWithUnits(int $maxUnits, int $existingStores = 0): Reseller
 {
-    $reseller = Reseller::factory()->create();
+    $reseller = Reseller::factory()->active()->create();
 
     Subscription::factory()
         ->forSubscriber($reseller)
-        ->for(Plan::factory()->maxUnits($maxUnits))
+        ->for(Plan::factory()->active()->maxUnits($maxUnits))
         ->create();
 
     Store::factory()->count($existingStores)->create(['reseller_id' => $reseller->getKey()]);
@@ -75,8 +75,8 @@ it('leaves a store with the reseller it already has even at the plan limit', fun
 });
 
 it('refuses a reseller whose subscription has lapsed', function (): void {
-    $to = Reseller::factory()->create();
-    Subscription::factory()->expired()->forSubscriber($to)->for(Plan::factory()->maxUnits(5))->create();
+    $to = Reseller::factory()->active()->create();
+    Subscription::factory()->expired()->forSubscriber($to)->for(Plan::factory()->active()->maxUnits(5))->create();
     $store = Store::factory()->create(['reseller_id' => null]);
 
     expect(fn (): Store => resolve(AssignStoreResellerAction::class)->execute($store, $to))
