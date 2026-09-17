@@ -18,6 +18,12 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
+     * The currency code is the natural key — it already carries a
+     * tenant-scoped unique index — so a repeated run inserts nothing and
+     * cannot trip the single-default constraint. Store provisioning retries
+     * the whole seed list on failure, so a partial run has to be safe to
+     * repeat.
+     *
      * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
@@ -45,8 +51,7 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        Currency::query()->create([
-            'code' => Arr::get($data, 'code'),
+        Currency::query()->firstOrCreate(['code' => Arr::get($data, 'code')], [
             'name' => CurrencyRegistry::nameFor(Arr::get($data, 'code')),
             'symbol' => Arr::get($data, 'symbol'),
             'decimal_places' => CurrencyRegistry::minorUnitFor($data['code']) ?? 2,
