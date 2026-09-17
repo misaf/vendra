@@ -16,7 +16,7 @@ final class SeedCommand extends TenantSeedCommand
 
     protected $signature = self::MODULE_NAME.':seed
         {tenant? : Tenant ID or slug to seed language data for}
-        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies, demo-contents}';
+        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}';
 
     /**
      * @return array<string, class-string>
