@@ -15,8 +15,6 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
 {
     protected function seedFactories(): void
     {
-        $this->currentTenantOrNull();
-
         FaqCategoryFactory::new()
             ->active()
             ->count(4)
@@ -33,8 +31,6 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     protected function seedFixtures(array $records): void
     {
-        $this->currentTenantOrNull();
-
         foreach ($records as $record) {
             $this->handleSeedFixtureRecord($this->validatedFixtureRecord($record));
         }
