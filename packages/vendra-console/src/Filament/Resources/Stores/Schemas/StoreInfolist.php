@@ -29,7 +29,7 @@ final class StoreInfolist
                         TextEntry::make('reseller_id')->label(__('vendra-console::navigation.reseller'))
                             ->formatStateUsing(fn (?int $state): string => $state === null
                                 ? __('vendra-console::attributes.platform_owned_store')
-                                : Reseller::query()->withTrashed()->find($state)?->name ?? '—'),
+                                : Reseller::query()->withTrashed()->find($state)?->displayName() ?? '—'),
                         TextEntry::make('active_domain')->label(__('vendra-console::attributes.domain'))
                             ->state(fn (Store $record): ?string => $record->domains->first()?->name)
                             ->placeholder('—'),

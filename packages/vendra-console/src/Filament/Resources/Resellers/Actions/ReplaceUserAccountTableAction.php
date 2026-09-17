@@ -32,7 +32,6 @@ final class ReplaceUserAccountTableAction extends Action
         $this
             ->label(__('vendra-console::actions.replace_user_account'))
             ->icon(Heroicon::OutlinedUserPlus)
-            ->visible(fn (Reseller $record): bool => $record->latestUser() instanceof User)
             ->slideOver()
             ->schema([
                 TextInput::make('username')->label(__('vendra-console::attributes.username'))->minLength(3)->maxLength(12)

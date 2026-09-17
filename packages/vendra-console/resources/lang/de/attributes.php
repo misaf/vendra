@@ -16,7 +16,6 @@ return [
     'platform_activity' => 'Nur Plattformaktivität',
     'platform_owned_store' => 'Plattformeigen (kein Konto)',
     'reseller_overview' => 'Kontoübersicht',
-    'reseller_identifier' => 'Kontokennung',
     'user_account' => 'Benutzerkonto',
     'store_identity' => 'Store-Übersicht',
     'slug' => 'Mandantenkennung',

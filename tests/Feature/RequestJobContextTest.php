@@ -24,7 +24,7 @@ use function Pest\Laravel\actingAs;
 it('adds the authenticated reseller to the request and job context', function (): void {
     $reseller = Reseller::factory()->create();
     $user = User::factory()->create(['tenant_id' => null]);
-    $reseller->users()->attach($user->getKey());
+    $reseller->user()->associate($user)->save();
     actingAs($user, 'reseller');
 
     resolve(AddResellerToRequestJobContext::class)->handle(

@@ -130,10 +130,13 @@ it('globally searches console resources', function (): void {
     actAsConsoleAdmin();
 
     $plan = Plan::factory()->create(['name' => 'Enterprise Search Plan']);
-    $reseller = Reseller::factory()->create([
-        'name' => 'Search Partner',
-        'email' => 'partner-search@example.com',
-    ]);
+    $reseller = Reseller::factory()
+        ->for(User::factory()->state([
+            'tenant_id' => null,
+            'username' => 'search_partner',
+            'email' => 'partner-search@example.com',
+        ]))
+        ->create();
     $store = Store::factory()->create(['name' => 'Search Store']);
     StoreDomain::factory()->for($store)->create([
         'name' => 'global-search-store.test',
@@ -147,7 +150,10 @@ it('globally searches console resources', function (): void {
 
     expect($planResult->title)->toBe($plan->name)
         ->and($planResult->url)->toBe(PlanResource::getUrl('edit', ['record' => $plan]))
-        ->and($resellerResult->title)->toBe($reseller->name)
+        ->and($resellerResult->title)->toBe('search_partner')
+        ->and($resellerResult->details)->toBe([
+            __('vendra-console::attributes.email') => 'partner-search@example.com',
+        ])
         ->and($resellerResult->url)->toBe(ResellerResource::getUrl('view', ['record' => $reseller]))
         ->and($storeResult->title)->toBe($store->name)
         ->and($storeResult->url)->toBe(ConsoleStoreResource::getUrl('view', ['record' => $store]))
@@ -165,15 +171,12 @@ it('uses a reseller overview as the record landing page', function (): void {
     actAsConsoleAdmin();
 
     $plan = Plan::factory()->create(['name' => 'Growth']);
-    $reseller = Reseller::factory()->create([
-        'name' => 'Overview Partner',
-        'email' => 'overview@example.com',
-    ]);
+    $reseller = Reseller::factory()->create();
     $user = User::factory()->create([
         'tenant_id' => null,
         'username' => 'overview_owner',
     ]);
-    $reseller->users()->attach($user->getKey());
+    $reseller->user()->associate($user)->save();
     Subscription::factory()->forSubscriber($reseller)->for($plan)->create();
     Store::factory()->count(2)->create(['reseller_id' => $reseller->getKey()]);
 
@@ -182,7 +185,6 @@ it('uses a reseller overview as the record landing page', function (): void {
 
     livewire(ViewReseller::class, ['record' => $reseller->getKey()])
         ->assertOk()
-        ->assertSee('Overview Partner')
         ->assertSee($user->username)
         ->assertSee('Growth');
 });
@@ -279,11 +281,11 @@ it('honors a disabled state when creating a reseller', function (): void {
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $reseller = Reseller::query()->where('name', 'paused_owner')->sole();
+    $reseller = Reseller::forUser(User::query()->where('username', 'paused_owner')->sole());
 
-    expect($reseller->active)->toBeFalse()
-        ->and($reseller->user())->toBeInstanceOf(User::class)
-        ->and(Hash::check('Secure123', $reseller->user()?->password))->toBeTrue();
+    expect($reseller?->active)->toBeFalse()
+        ->and($reseller?->user)->toBeInstanceOf(User::class)
+        ->and(Hash::check('Secure123', $reseller?->user->password))->toBeTrue();
 });
 
 it('prevents deleting a plan used by subscriptions from list and edit pages', function (): void {

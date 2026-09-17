@@ -16,8 +16,12 @@ it('contains every package table in the fresh database baseline', function (): v
         ->and(Schema::hasColumns('console_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
         ->and(Schema::hasColumns('reseller_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
         ->and(Schema::hasTable('platform_password_reset_tokens'))->toBeFalse()
-        ->and(Schema::hasColumns('reseller_users', ['reseller_id', 'user_id']))->toBeTrue()
-        ->and(Schema::hasColumns('resellers', ['name', 'email', 'offboarding_reason', 'offboarded_at']))->toBeTrue()
+        ->and(Schema::hasTable('reseller_users'))->toBeFalse()
+        ->and(Schema::hasColumns('resellers', ['user_id', 'active', 'offboarding_reason', 'offboarded_at']))->toBeTrue()
+        ->and(Schema::hasColumn('resellers', 'name'))->toBeFalse()
+        ->and(Schema::hasColumn('resellers', 'description'))->toBeFalse()
+        ->and(Schema::hasColumn('resellers', 'slug'))->toBeFalse()
+        ->and(Schema::hasColumn('resellers', 'email'))->toBeFalse()
         ->and(Schema::hasColumn('resellers', 'owner_name'))->toBeFalse()
         ->and(Schema::hasColumn('resellers', 'user_email'))->toBeFalse()
         ->and(Schema::hasColumn('users', 'is_console_admin'))->toBeFalse()
@@ -139,11 +143,9 @@ it('stores independent tenant availability and durable provisioning state', func
         ->and(Schema::hasIndex('stores', ['provisioning_status']))->toBeTrue();
 });
 
-it('enforces one active user and subscription per reseller', function (): void {
-    expect(Schema::hasIndex('reseller_users', ['active_reseller_guard'], 'unique'))->toBeTrue()
-        ->and(Schema::hasIndex('reseller_users', ['reseller_id', 'user_id'], 'unique'))->toBeTrue()
-        ->and(Schema::hasForeignKey('reseller_users', ['reseller_id']))->toBeTrue()
-        ->and(Schema::hasForeignKey('reseller_users', ['user_id']))->toBeTrue()
+it('enforces one main account and one active subscription per reseller', function (): void {
+    expect(Schema::hasIndex('resellers', ['user_id'], 'unique'))->toBeTrue()
+        ->and(Schema::hasForeignKey('resellers', ['user_id']))->toBeTrue()
         ->and(Schema::hasColumn('subscriptions', 'active_subscriber_guard'))->toBeTrue()
         ->and(Schema::hasIndex('subscriptions', ['subscriber_type', 'active_subscriber_guard'], 'unique'))->toBeTrue();
 });

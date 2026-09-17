@@ -16,7 +16,6 @@ return [
     'platform_activity' => 'فقط فعالیت پلتفرم',
     'platform_owned_store' => 'متعلق به پلتفرم (بدون نماینده)',
     'reseller_overview' => 'نمای کلی حساب',
-    'reseller_identifier' => 'شناسه حساب',
     'user_account' => 'حساب کاربر',
     'store_identity' => 'نمای کلی ملک',
     'slug' => 'شناسه مستأجر',

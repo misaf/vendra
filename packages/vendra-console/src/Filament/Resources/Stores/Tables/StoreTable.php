@@ -187,9 +187,7 @@ final class StoreTable
      */
     private static function resellerNames(): Collection
     {
-        return once(fn (): Collection => Reseller::query()
-            ->get(['id', 'name'])
-            ->mapWithKeys(fn (Reseller $reseller): array => [$reseller->id => $reseller->name]));
+        return once(fn (): Collection => collect(Reseller::displayNames(Reseller::query())));
     }
 
     private static function deployment(Store $store): ?StorefrontDeployment

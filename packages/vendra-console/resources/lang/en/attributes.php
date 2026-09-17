@@ -16,7 +16,6 @@ return [
     'platform_activity' => 'Platform activity only',
     'platform_owned_store' => 'Platform-owned (no reseller)',
     'reseller_overview' => 'Reseller overview',
-    'reseller_identifier' => 'Reseller identifier',
     'user_account' => 'User account',
     'store_identity' => 'Store overview',
     'slug' => 'Tenant identifier',

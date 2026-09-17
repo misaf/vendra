@@ -9,7 +9,6 @@ use Filament\Tables\Enums\FiltersLayout;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -57,7 +56,7 @@ function resellerUser(Reseller $reseller, array $attributes = []): User
         ...$attributes,
     ]);
 
-    $reseller->users()->attach($user->getKey());
+    $reseller->user()->associate($user)->save();
 
     return $user;
 }
@@ -268,7 +267,7 @@ it('registers a reseller with an initial subscription', function (): void {
         ->and($user->tenant_id)->toBeNull()
         ->and($user->canAccessPanel(Filament::getPanel('reseller')))->toBeTrue()
         ->and(Hash::check('Secure123', $user->password))->toBeTrue()
-        ->and($reseller?->name)->toBe('new_reseller')
+        ->and($reseller?->displayName())->toBe('new_reseller')
         ->and($reseller?->activeSubscription()?->plan_id)->toBe($plan->getKey());
 });
 
@@ -399,7 +398,7 @@ it('grants reseller panel access only to reseller users', function (): void {
         ->and($regular->canAccessPanel($panel))->toBeFalse();
 });
 
-it('derives reseller panel access from the membership, not the identity', function (): void {
+it('derives reseller panel access from the reseller, not the identity', function (): void {
     $reseller = Reseller::factory()->create();
     $user = resellerUser($reseller);
 
@@ -408,13 +407,10 @@ it('derives reseller panel access from the membership, not the identity', functi
     expect($user->canAccessPanel($panel))->toBeTrue()
         ->and(Reseller::forUser($user)?->is($reseller))->toBeTrue();
 
-    DB::table('reseller_users')
-        ->where('reseller_id', $reseller->getKey())
-        ->where('user_id', $user->getKey())
-        ->update(['deleted_at' => now()]);
+    $reseller->forceFill(['active' => false])->save();
 
     expect($user->canAccessPanel($panel))->toBeFalse()
-        ->and(Reseller::forUser($user))->toBeNull()
+        ->and(Reseller::forUser($user)?->is($reseller))->toBeTrue()
         ->and(User::query()->find($user->getKey()))->not->toBeNull();
 });
 
@@ -436,14 +432,14 @@ it('closes reseller store creation while the platform freeze is on', function ()
     expect(StoreResource::canCreate())->toBeFalse();
 });
 
-it('keeps inactive users in the panel but blocks store operations', function (): void {
+it('locks an inactive reseller out of the panel and its store operations', function (): void {
     $reseller = Reseller::factory()->create(['active' => false]);
     Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->maxUnits(2))->create();
     $store = Store::factory()->create(['reseller_id' => $reseller->getKey(), 'active' => true]);
 
     $user = actAsResellerUser($reseller);
 
-    expect($user->canAccessPanel(Filament::getPanel('reseller')))->toBeTrue()
+    expect($user->canAccessPanel(Filament::getPanel('reseller')))->toBeFalse()
         ->and(StoreResource::canCreate())->toBeFalse();
 
     livewire(ListStores::class)

@@ -29,21 +29,16 @@ final class ChangeUserEmailTableAction extends Action
 
         $this
             ->label(__('vendra-console::actions.change_user_email'))->icon(Heroicon::OutlinedEnvelope)
-            ->disabled(fn (Reseller $record): bool => $record->user() === null)
-            ->tooltip(fn (Reseller $record): ?string => $record->user() === null ? __('vendra-console::messages.user_account_required') : null)
-            ->fillForm(fn (Reseller $record): array => ['email' => $record->user()?->email])
+            ->fillForm(fn (Reseller $record): array => ['email' => $record->user->email])
             ->schema([
                 TextInput::make('email')->label(__('vendra-console::attributes.email'))->email()->required()
                     ->rule(fn (Reseller $record): mixed => Rule::unique(User::class, 'email')
                         ->withoutTrashed()
-                        ->ignore($record->user()?->getKey())),
+                        ->ignore($record->user_id)),
             ])
             ->action(function (Reseller $record, array $data): void {
-                $user = $record->user();
-                if ($user instanceof User) {
-                    resolve(UpdateResellerUserEmailAction::class)->execute($record, $user, (string) Arr::get($data, 'email'));
-                    self::notifySuccess(__('vendra-console::messages.user_email_updated'));
-                }
+                resolve(UpdateResellerUserEmailAction::class)->execute($record, (string) Arr::get($data, 'email'));
+                self::notifySuccess(__('vendra-console::messages.user_email_updated'));
             });
     }
 }

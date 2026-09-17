@@ -59,11 +59,11 @@ it('shows the storefront image reference in the deployment list', function (): v
         ->assertTableColumnStateSet('storefrontImage.image', $deployment->storefrontImage->image, $deployment);
 });
 
-it('labels the reseller list name column as the name', function (): void {
+it('labels the reseller list by its user username', function (): void {
     actAsLabellingConsoleUser();
 
     livewire(ListResellers::class)
-        ->assertTableColumnExists('name', fn (TextColumn $column): bool => $column->getLabel() === __('vendra-console::attributes.name'));
+        ->assertTableColumnExists('user.username', fn (TextColumn $column): bool => $column->getLabel() === __('vendra-console::attributes.username'));
 });
 
 it('translates store and storefront statuses in the store list', function (): void {

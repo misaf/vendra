@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ListResellers;
 use Misaf\VendraConsole\Filament\Widgets\ConsoleOverview;
@@ -38,18 +37,9 @@ function consoleResellerUserFor(Reseller $reseller, array $attributes = []): Use
         ...$attributes,
     ]);
 
-    $reseller->users()->attach($user->getKey());
+    $reseller->user()->associate($user)->save();
 
     return $user;
-}
-
-function userHasActiveMembership(Reseller $reseller, User $user): bool
-{
-    return DB::table('reseller_users')
-        ->where('reseller_id', $reseller->getKey())
-        ->where('user_id', $user->getKey())
-        ->whereNull('deleted_at')
-        ->exists();
 }
 
 it('changes a reseller plan through the table row action', function (): void {
@@ -181,40 +171,6 @@ it('requires confirmation when changing a reseller user password', function (): 
     expect($user->fresh()?->password)->toBe($originalPassword);
 });
 
-it('shows why a reseller without a user cannot change its password yet', function (): void {
-    actingConsoleAdmin();
-
-    $reseller = Reseller::factory()->create();
-
-    livewire(ListResellers::class)
-        ->assertActionVisible(TestAction::make('createUserAccount')->table($reseller))
-        ->assertActionVisible(TestAction::make('changeUserPassword')->table($reseller))
-        ->assertActionDisabled(TestAction::make('changeUserPassword')->table($reseller));
-});
-
-it('creates a user login for an existing reseller', function (): void {
-    actingConsoleAdmin();
-
-    $reseller = Reseller::factory()->create();
-
-    livewire(ListResellers::class)
-        ->callAction(TestAction::make('createUserAccount')->table($reseller), [
-            'username' => 'user_login',
-            'email' => 'user@existing.test',
-            'password' => 'Secure123',
-            'password_confirmation' => 'Secure123',
-        ])
-        ->assertHasNoActionErrors()
-        ->assertNotified();
-
-    $user = $reseller->user();
-
-    expect($user)->toBeInstanceOf(User::class)
-        ->and($user->email)->toBe('user@existing.test')
-        ->and($user->tenant_id)->toBeNull()
-        ->and(Hash::check('Secure123', $user->password))->toBeTrue();
-});
-
 it('rejects a reseller user email another active user already holds', function (): void {
     actingConsoleAdmin();
 
@@ -229,7 +185,7 @@ it('rejects a reseller user email another active user already holds', function (
     expect($user->fresh()?->email)->not->toBe('taken@example.com');
 });
 
-it('updates disables and re-enables a reseller user through domain actions', function (): void {
+it('updates a reseller user email through the domain action', function (): void {
     actingConsoleAdmin();
 
     $reseller = Reseller::factory()->create();
@@ -239,25 +195,10 @@ it('updates disables and re-enables a reseller user through domain actions', fun
         ->callAction(TestAction::make('changeUserEmail')->table($reseller), ['email' => 'NEW-USER@EXAMPLE.COM'])
         ->assertHasNoActionErrors();
 
-    expect($user->fresh()?->email)->toBe('new-user@example.com')
-        ->and($reseller->fresh()?->email)->toBe('new-user@example.com');
-
-    livewire(ListResellers::class)
-        ->callAction(TestAction::make('disableUserAccount')->table($reseller))
-        ->assertHasNoActionErrors();
-
-    expect($reseller->user())->toBeNull()
-        ->and(userHasActiveMembership($reseller, $user))->toBeFalse()
-        ->and($user->fresh()?->trashed())->toBeFalse();
-
-    livewire(ListResellers::class)
-        ->callAction(TestAction::make('enableUserAccount')->table($reseller))
-        ->assertHasNoActionErrors();
-
-    expect($reseller->user()?->is($user))->toBeTrue();
+    expect($user->fresh()?->email)->toBe('new-user@example.com');
 });
 
-it('replaces a reseller user while preserving the old account as history', function (): void {
+it('replaces a reseller main account while preserving the old identity', function (): void {
     actingConsoleAdmin();
 
     $reseller = Reseller::factory()->create();
@@ -272,9 +213,9 @@ it('replaces a reseller user while preserving the old account as history', funct
         ])
         ->assertHasNoActionErrors();
 
-    expect(userHasActiveMembership($reseller, $originalUser))->toBeFalse()
+    expect(Reseller::forUser($originalUser))->toBeNull()
         ->and($originalUser->fresh()?->trashed())->toBeFalse()
-        ->and($reseller->user()?->email)->toBe('replacement@example.com');
+        ->and($reseller->refresh()->user->email)->toBe('replacement@example.com');
 });
 
 it('extends cancels and reactivates a reseller subscription through domain actions', function (): void {
