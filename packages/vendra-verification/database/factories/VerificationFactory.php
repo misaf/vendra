@@ -9,10 +9,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Misaf\VendraUserProfile\Models\UserProfile;
 use Misaf\VendraVerification\Models\Verification;
 
-/** @extends Factory<Verification> */
+/**
+ * @extends Factory<Verification>
+ */
 #[UseModel(Verification::class)]
 final class VerificationFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
