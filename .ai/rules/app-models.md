@@ -1,7 +1,7 @@
 ---
 paths:
   - 'app/Models/**'
-  - app/Models/StorefrontDeployment.php
+  - 'packages/vendra-store/src/Models/StorefrontDeployment.php'
 ---
 
 # App Models

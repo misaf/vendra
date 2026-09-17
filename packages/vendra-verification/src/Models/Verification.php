@@ -11,11 +11,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraUserProfile\Models\UserProfile;
 use Misaf\VendraVerification\Database\Factories\VerificationFactory;
 
+/**
+ * @property int $id
+ * @property int $tenant_id
+ * @property int $user_profile_id
+ * @property string $type
+ * @property string $status
+ * @property string|null $provider
+ * @property string|null $reference
+ * @property string|null $country_code
+ * @property array<string, mixed>|null $metadata
+ * @property Carbon|null $verified_at
+ * @property Carbon|null $expires_at
+ * @property string|null $notes
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon|null $deleted_at
+ */
 #[Fillable([
     'user_profile_id',
     'type',

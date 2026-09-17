@@ -6,7 +6,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | --- | --- |
 | packages/*/src/Actions/** | .ai/rules/actions.md |
 | app/Actions/** | .ai/rules/app-actions.md |
-| app/Models/**, app/Models/StorefrontDeployment.php | .ai/rules/app-models.md |
+| app/Models/**, packages/vendra-store/src/Models/StorefrontDeployment.php | .ai/rules/app-models.md |
 | app/** | .ai/rules/app.md |
 | packages/**/src/Console/Commands/* | .ai/rules/commands.md |
 | app/Contracts/StorefrontProvisioner.php | .ai/rules/contracts.md |
