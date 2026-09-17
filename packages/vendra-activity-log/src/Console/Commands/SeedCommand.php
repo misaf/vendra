@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Misaf\VendraActivityLog\Console\Commands;
 
 use Illuminate\Console\Attributes\Description;
+use Illuminate\Console\Attributes\Signature;
 use Misaf\VendraActivityLog\ActivityLogPlugin;
 use Misaf\VendraActivityLog\Database\Seeders\PermissionPolicySeeder;
 use Misaf\VendraSupport\Tenancy\Console\Commands\TenantSeedCommand;
 
 #[Description('Seed activity log module data for a tenant')]
+#[Signature(self::MODULE_NAME.':seed
+        {tenant? : Tenant ID or slug to seed activity log data for}
+        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}')]
 final class SeedCommand extends TenantSeedCommand
 {
     protected const string MODULE_NAME = ActivityLogPlugin::ID;
-
-    protected $signature = self::MODULE_NAME.':seed
-        {tenant? : Tenant ID or slug to seed activity log data for}
-        {seeders?* : Seeder keys to run. Use "all" or one or more of: permission-policies}';
 
     /**
      * @return array<string, class-string>
