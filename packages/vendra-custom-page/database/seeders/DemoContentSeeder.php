@@ -8,6 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraCustomPage\Database\Factories\CustomPageCategoryFactory;
 use Misaf\VendraCustomPage\Database\Factories\CustomPageFactory;
+use Misaf\VendraCustomPage\Models\CustomPage;
 use Misaf\VendraCustomPage\Models\CustomPageCategory;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
 
@@ -27,6 +28,11 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
+     * Fixtures are keyed on the translated slug of the record's first locale,
+     * so a repeated run of the same fixture file updates nothing and inserts
+     * nothing. Store provisioning retries the whole seed list on failure, so a
+     * partial run has to be safe to repeat.
+     *
      * @param  list<array<string, mixed>>  $records
      */
     protected function seedFixtures(array $records): void
@@ -52,12 +58,18 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleSeedFixtureRecord(array $data): void
     {
-        $customPageCategory = CustomPageCategory::query()->create([
-            'name' => Arr::get($data, 'name'),
-            'description' => Arr::get($data, 'description'),
-            'slug' => Arr::get($data, 'slug'),
-            'active' => Arr::get($data, 'active'),
-        ]);
+        $slug = Arr::get($data, 'slug');
+        $locale = array_key_first($slug);
+
+        $customPageCategory = CustomPageCategory::query()
+            ->where('slug->'.$locale, $slug[$locale])
+            ->first()
+            ?? CustomPageCategory::query()->create([
+                'name' => Arr::get($data, 'name'),
+                'description' => Arr::get($data, 'description'),
+                'slug' => Arr::get($data, 'slug'),
+                'active' => Arr::get($data, 'active'),
+            ]);
 
         foreach (Arr::get($data, 'custom_pages') as $customPageRecord) {
             $this->handleCustomPageFixtureRecord($customPageCategory, $customPageRecord);
@@ -74,6 +86,17 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     private function handleCustomPageFixtureRecord(CustomPageCategory $customPageCategory, array $customPageRecord): void
     {
+        $slug = Arr::get($customPageRecord, 'slug');
+        $locale = array_key_first($slug);
+
+        $existingCustomPage = $customPageCategory->customPages()
+            ->where('slug->'.$locale, $slug[$locale])
+            ->first();
+
+        if ($existingCustomPage instanceof CustomPage) {
+            return;
+        }
+
         $customPageCategory->customPages()->create([
             'name' => Arr::get($customPageRecord, 'name'),
             'description' => Arr::get($customPageRecord, 'description'),
