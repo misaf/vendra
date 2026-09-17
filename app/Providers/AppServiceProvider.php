@@ -62,6 +62,7 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         DevCommands::artisan('queue:listen --queue=default,transactional-email,storefronts --tries=1 --timeout=0', 'queue');
+        DevCommands::artisan('schedule:work', 'scheduler');
         DevCommands::except('server', 'vite', 'horizon');
 
         Relation::morphMap([
