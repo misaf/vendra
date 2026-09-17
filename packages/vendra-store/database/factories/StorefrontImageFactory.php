@@ -19,7 +19,17 @@ final class StorefrontImageFactory extends Factory
     {
         return [
             'image' => 'ghcr.io/misaf/vendra-storefront-'.fake()->unique()->slug().'@sha256:'.fake()->sha256(),
-            'active' => true,
+            'active' => fake()->boolean(80),
         ];
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (): array => ['active' => true]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (): array => ['active' => false]);
     }
 }

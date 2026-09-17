@@ -26,7 +26,7 @@ final class StoreFactory extends Factory
             'name' => fake()->unique()->sentence(3),
             'description' => fake()->text(),
             'slug' => fn (array $attributes) => Str::slug(Arr::get($attributes, 'name')),
-            'active' => fake()->boolean(),
+            'active' => fake()->boolean(80),
             'locale' => null,
             'currency' => null,
             'timezone' => null,

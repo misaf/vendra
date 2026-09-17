@@ -27,7 +27,7 @@ final class StoreDomainFactory extends Factory
             'name' => fake()->unique()->sentence(3),
             'description' => fake()->text(),
             'slug' => fn (array $attributes) => Str::slug(Arr::get($attributes, 'name')),
-            'active' => fake()->boolean(),
+            'active' => fake()->boolean(80),
         ];
     }
 
@@ -36,5 +36,15 @@ final class StoreDomainFactory extends Factory
         return $this->state(fn (): array => [
             'store_id' => $store->id,
         ]);
+    }
+
+    public function active(): static
+    {
+        return $this->state(fn (): array => ['active' => true]);
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (): array => ['active' => false]);
     }
 }
