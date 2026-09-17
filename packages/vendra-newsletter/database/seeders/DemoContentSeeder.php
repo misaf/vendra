@@ -12,16 +12,11 @@ use Misaf\VendraNewsletter\Enums\NewsletterStatusEnum;
 use Misaf\VendraNewsletter\Models\Newsletter;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoContentSeeder;
-use Misaf\VendraSupport\Tenancy\RequiresCurrentTenant;
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
-    use RequiresCurrentTenant;
-
     protected function seedFactories(): void
     {
-        $this->currentTenantOrNull();
-
         NewsletterFactory::new()->draft()->count(3)->create();
         NewsletterFactory::new()->scheduled()->count(2)->create();
         NewsletterFactory::new()->sent()->count(3)->create();
@@ -35,8 +30,6 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
      */
     protected function seedFixtures(array $records): void
     {
-        $this->currentTenantOrNull();
-
         foreach ($records as $record) {
             $this->seedFixtureRecord($record);
         }
