@@ -19,6 +19,9 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 #[UseModel(AffiliateCommission::class)]
 final class AffiliateCommissionFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [

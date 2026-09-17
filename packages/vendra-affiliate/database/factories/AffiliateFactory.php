@@ -18,6 +18,9 @@ use Misaf\VendraUser\Models\User;
 #[UseModel(Affiliate::class)]
 final class AffiliateFactory extends Factory
 {
+    /**
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
         return [
