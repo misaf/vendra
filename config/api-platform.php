@@ -86,6 +86,16 @@ return [
         'partial_parameter_name' => 'partial',
     ],
 
+    'jsonapi' => [
+        // API Platform 5 defaults this to false (scalar `data.id` plus a
+        // `data.links.self` IRI). Kept true so the JSON:API `data.id` stays the
+        // resource IRI that existing clients were built against under 4.x.
+        'use_iri_as_id' => true,
+
+        // Allow client-generated IDs on JSON:API POST. Off to avoid id spoofing.
+        'allow_client_generated_id' => false,
+    ],
+
     'graphql' => [
         'enabled' => false,
         'nesting_separator' => '__',

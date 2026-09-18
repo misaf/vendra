@@ -19,8 +19,8 @@
     ],
     "require": {
         "php": "^8.4",
-        "api-platform/laravel": "^4.3",
-        "api-platform/mcp": "^4.4",
+        "api-platform/laravel": "^5.0",
+        "api-platform/mcp": "^5.0",
         "awcodes/filament-badgeable-column": "^4.0",
         "bezhansalleh/filament-language-switch": "^5.0",
         "bezhansalleh/filament-panel-switch": "^3.1",

@@ -20,7 +20,7 @@
     "type": "vendra-module",
     "require": {
         "php": "^8.4",
-        "api-platform/laravel": "^4.3",
+        "api-platform/laravel": "^5.0",
         "illuminate/database": "^13.0",
         "illuminate/support": "^13.0",
         "spatie/laravel-package-tools": "^1.93.1"
