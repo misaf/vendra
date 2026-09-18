@@ -22,6 +22,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Navigation Group
+    |--------------------------------------------------------------------------
+    |
+    | This value determines the sidebar navigation group that the Carts
+    | cluster is nested under. You may provide a translation key or a literal
+    | label, allowing you to file the cart UI alongside a host application's
+    | own groups. When left empty, the module's default group is used.
+    |
+    */
+
+    'navigation_group' => 'vendra-support::navigation.groups.Sales',
+
+    /*
+    |--------------------------------------------------------------------------
     | Cart Expiry
     |--------------------------------------------------------------------------
     |
