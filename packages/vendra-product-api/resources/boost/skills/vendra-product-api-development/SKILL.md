@@ -39,7 +39,7 @@ Treat `packages/vendra-product-api` as the API Platform layer for `misaf/vendra-
 
 ## API Platform Shape
 
-Expose read models as API Platform resources in `src/ApiResource`, backed by state providers in `src/State` (for example `ProductResourceProvider`).
+Expose read models as API Platform resources in `src/ApiResource`, served by the shared `Misaf\VendraApi\State\EloquentResourceProvider`, with each resource's query in a `src/State` links handler (for example `ProductLinksHandler`) and its serialization in a mapper (for example `ProductMapper`).
 
 - Define each resource as a `final readonly` DTO annotated with `#[ApiResource]`, declaring `Get`/`GetCollection` operations with explicit `uriTemplate` paths and a `provider`.
 - Keep each resource `shortName` and URI path stable and kebab-case, for example `/catalog/products`, `/catalog/product-categories`, `/catalog/product-prices`.

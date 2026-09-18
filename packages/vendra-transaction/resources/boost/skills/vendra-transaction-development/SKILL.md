@@ -1,6 +1,6 @@
 ---
 name: vendra-transaction-development
-description: "Create, modify, review, or test the Vendra Transaction package in packages/vendra-transaction. Use for Wallet, LedgerEntry, Transaction, TransactionGateway, fees, limits, metadata, the transaction state machine (States, ApproveTransactionTransition), TransactionService, CreateTransactionAction, PostLedgerEntryAction, SettleTransactionAction, verify-balances command, policies, Filament resources and widgets, migrations, translations, and package wiring."
+description: "Create, modify, review, or test the Vendra Transaction package in packages/vendra-transaction. Use for Wallet, LedgerEntry, Transaction, TransactionGateway, fees, limits, metadata, the transaction state machine (States, ApproveTransactionTransition), WalletResolver, TransactionGatewayRegistry, CreateTransactionAction, PostLedgerEntryAction, SettleTransactionAction, verify-balances command, policies, Filament resources and widgets, migrations, translations, and package wiring."
 ---
 
 # Vendra Transaction
@@ -47,7 +47,7 @@ The ledger is the single source of balance truth.
 - Use nullable `transactions.idempotency_key` for retry-safe creation. Return the original transaction when a key and financial payload are repeated, and reject the same key with different details. Keep it in the consolidated create migration and its package stub; do not add a follow-up alteration migration.
 - Resolve the user model through `Support\TransactionUsers::model()`; the provider attaches the `wallets` relation to the configured auth model.
 - Resolve currency defaults and options through Support's `CurrencyIntegration`; persist only scalar `currency_code` values. The null resolver keeps the module functional without `misaf/vendra-currency`, while an installed provider supplies managed active/default currencies.
-- Gateways are admin-managed labels: translatable `name`/`description`, scalar `slug` (lookup key; internal slug is `TransactionService::INTERNAL_GATEWAY_SLUG`), media logo, sortable position. No payment-processing logic here.
+- Gateways are admin-managed labels: translatable `name`/`description`, scalar `slug` (lookup key; internal slug is `TransactionGatewayRegistry::INTERNAL_GATEWAY_SLUG`), media logo, sortable position. No payment-processing logic here.
 - Keep the module tenant-agnostic (`BelongsToTenant`, `TenantSchema`, registry registration for `transaction_gateways`, `wallets`, `transactions`); never reference `Misaf\VendraTenant`.
 - Tag-consuming models must use `Misaf\VendraSupport\Capabilities\HasOptionalTags` as the single source of their `tags()` relationship and pivot metadata. Keep the package tag-agnostic: define a stable package-owned tag type, use `TagIntegration` for availability and UI integration, never import the concrete Vendra Tagger model/provider or define the relationship through Spatie `HasTags`, and list Tagger only under Composer `suggest`.
 

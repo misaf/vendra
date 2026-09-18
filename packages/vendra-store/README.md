@@ -259,7 +259,7 @@ than five minutes is stale, meaning the worker or the scheduler stopped.
 ## Filament
 
 This package ships the shared building blocks — `Filament\Pages\CreateStorePage`,
-`Filament\Schemas\StorefrontConfigurationFields`, `Filament\Actions\ReplaceDomainAction`,
+`Filament\Schemas\StorefrontConfigurationFields`, `Filament\Actions\ReplaceDomainTableAction`,
 `Filament\Concerns\BuildsDailyTrend` — rather than panel resources. The console
 and reseller panels own those and differ only in which reseller they resolve as
 the store's billing reseller.

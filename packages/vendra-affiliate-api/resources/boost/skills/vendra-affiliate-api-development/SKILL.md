@@ -33,7 +33,7 @@ Use `vendra-api-development` for shared API Platform infrastructure, `laravel-be
 - Work inside `packages/vendra-affiliate-api` with namespace `Misaf\VendraAffiliateApi`.
 - Reuse `Misaf\VendraAffiliate\Models\Affiliate`; do not duplicate affiliate persistence, status transitions, commissions, referrals, or payouts.
 - Preserve the public contract: referral-code lookup is read-only, exposing active affiliates only and serializing just `code` and `created_at`. The sole write is the throttled, validated referral-visit endpoint that delegates to the domain action and returns `204` with no output.
-- Apply active status in the `ReferralCodeProvider` query so index, filter, and show operations cannot diverge.
+- Apply active status in `AffiliateLinksHandler`, the query every operation shares through `EloquentResourceProvider`, so index, filter, and show operations cannot diverge.
 - Keep filters intentionally narrow and never expose user relationships or financial fields.
 - Inherit tenant scoping from the domain model and keep the production `Misaf\VendraAffiliateApi` namespace free of `Misaf\VendraTenant`. Feature tests may use a concrete tenant factory solely to establish tenant context.
 

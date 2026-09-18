@@ -16,7 +16,7 @@ The `misaf/vendra-cart-api` package owns API Platform resources (`ApiResource` D
 
 - Keep cart API code inside `packages/vendra-cart-api` using the `Misaf\VendraCartApi` namespace.
 - Keep cart models, migrations, factories, policies, seeders, and Filament UI in `misaf/vendra-cart`; this package only serializes and routes them.
-- Expose the `CartResource` and `CartLine` resources under `/sales/carts`, backed by `ShoppingCartProvider`.
+- Expose the `CartResource` and `CartLine` resources under `/sales/carts`, served by the shared `EloquentResourceProvider` through `CartLinksHandler` and `CartMapper`.
 - Keep the operations read-only and authenticated: attach `middleware: 'auth:sanctum'` and a `policy` enforced by `ShoppingCartPolicy`. Never expose unauthenticated cart mutation.
 - Keep the cart owner morph columns private (`ownerType`, `ownerId`); do not serialize raw `owner_type` or `owner_id`.
 - Serialize each line's `sellableType`, `sellableId`, quantity, and metadata via `CartLine`.

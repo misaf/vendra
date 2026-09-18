@@ -40,7 +40,7 @@ Treat `packages/vendra-blog-api` as the API Platform layer for `vendra-blog`.
 
 ## API Platform Shape
 
-Expose read models as API Platform resources in `src/ApiResource` (`BlogPostResource`, `BlogPostCategoryResource`), backed by state providers in `src/State` (for example `BlogResourceProvider`).
+Expose read models as API Platform resources in `src/ApiResource` (`BlogPostResource`, `BlogPostCategoryResource`), served by the shared `Misaf\VendraApi\State\EloquentResourceProvider`, with each resource's query in a `src/State` links handler (for example `BlogPostLinksHandler`) and its serialization in a mapper (for example `BlogPostMapper`).
 
 - Define each resource as a `final readonly` DTO annotated with `#[ApiResource]`, declaring `Get`/`GetCollection` operations with explicit `uriTemplate` paths and a `provider`.
 - Keep each resource `shortName` and URI path stable and kebab-case, for example `/content/blog-posts`, `/content/blog-post-categories`.

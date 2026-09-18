@@ -1,6 +1,6 @@
 ---
 name: vendra-custom-page-api-development
-description: "Create, modify, review, or test the Vendra Custom Page API Platform package in packages/vendra-custom-page-api, including the CustomPageResource and CustomPageCategoryResource `ApiResource` DTOs, ContentResourceProvider state provider, query parameters, relationships, operations, and provider wiring."
+description: "Create, modify, review, or test the Vendra Custom Page API Platform package in packages/vendra-custom-page-api, including the CustomPageResource and CustomPageCategoryResource `ApiResource` DTOs, CustomPageLinksHandler and CustomPageMapper state classes, query parameters, relationships, operations, and provider wiring."
 ---
 
 # Vendra Custom Page API
@@ -37,7 +37,7 @@ Use this skill together with `laravel-best-practices` and `pest-testing`.
 
 ## API Platform Contract
 
-- Expose read models as API Platform resources in `src/ApiResource` (`CustomPageResource`, `CustomPageCategoryResource`), backed by `ContentResourceProvider` in `src/State`.
+- Expose read models as API Platform resources in `src/ApiResource` (`CustomPageResource`, `CustomPageCategoryResource`), served by the shared `EloquentResourceProvider` with `CustomPageLinksHandler`, `CustomPageCategoryLinksHandler`, and their mappers in `src/State`.
 - Keep the `/content/custom-pages` and `/content/custom-page-categories` resources read-only.
 - Expose translated JSON columns as `array<string, string>` locale maps and hydrate them from the domain models' translations in the state provider.
 - Declare supported query parameters as `QueryParameter`s on the resource operations, using API Platform filters (`EqualsFilter`, `BooleanFilter`, ...) with Laravel `constraints`.

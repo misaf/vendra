@@ -1,6 +1,6 @@
 ---
 name: vendra-cart-api-development
-description: "Create, modify, review, or test the Vendra Cart API Platform package in packages/vendra-cart-api. Use for the CartResource and CartLine API Platform resources (`ApiResource` DTOs), ShoppingCartProvider state provider, query parameters, operations, authentication and ShoppingCartPolicy, CartApiServiceProvider, cart API serialization, or decisions about exposing polymorphic owners and sellables through API Platform."
+description: "Create, modify, review, or test the Vendra Cart API Platform package in packages/vendra-cart-api. Use for the CartResource and CartLine API Platform resources (`ApiResource` DTOs), CartLinksHandler and CartMapper state classes, query parameters, operations, authentication and ShoppingCartPolicy, CartApiServiceProvider, cart API serialization, or decisions about exposing polymorphic owners and sellables through API Platform."
 ---
 
 # Vendra Cart API
@@ -37,7 +37,7 @@ Use this skill with `vendra-api-development`, `laravel-best-practices`, and `pes
 
 ## Resources And Routes
 
-- Expose read models as API Platform resources in `src/ApiResource` (`CartResource`, `CartLine`), backed by `ShoppingCartProvider` in `src/State`; API Platform generates routes from the resource operations.
+- Expose read models as API Platform resources in `src/ApiResource` (`CartResource`, `CartLine`), served by the shared `EloquentResourceProvider` with `CartLinksHandler` and `CartMapper` in `src/State`; API Platform generates routes from the resource operations.
 - Keep the `/sales/carts` operations authenticated: attach `middleware: 'auth:sanctum'` and a `policy` enforced by `ShoppingCartPolicy`.
 - Register the `src/ApiResource` directory into `api-platform.resources` and tag the state provider as `ProviderInterface`; do not hand-register route files.
 - Keep the operations read-only until authenticated ownership/token access and mutation authorization have an explicit design.

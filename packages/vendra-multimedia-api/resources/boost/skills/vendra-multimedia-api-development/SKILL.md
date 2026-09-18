@@ -39,7 +39,7 @@ Treat `packages/vendra-multimedia-api` as the API Platform layer for `misaf/vend
 
 ## API Platform Shape
 
-Expose read models as API Platform resources in `src/ApiResource` (`MultimediaResource`), backed by state providers in `src/State` (for example `AssetProvider`).
+Expose read models as API Platform resources in `src/ApiResource` (`MultimediaResource`), served by the shared `Misaf\VendraApi\State\EloquentResourceProvider`, with each resource's query in a `src/State` links handler (for example `MultimediaLinksHandler`) and its serialization in a mapper (for example `MultimediaMapper`).
 
 - Define each resource as a `final readonly` DTO annotated with `#[ApiResource]`, declaring `Get`/`GetCollection` operations with explicit `uriTemplate` paths and a `provider`.
 - Keep each resource `shortName` and URI path stable and kebab-case, for example `/content/multimedia`.
