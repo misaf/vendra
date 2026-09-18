@@ -191,6 +191,30 @@ it('keeps package migration stubs identical to application baselines', function 
     }
 });
 
+it('ships every non-framework application baseline as a package migration stub', function (): void {
+    $frameworkMigrations = [
+        'create_cache_table.php',
+        'create_jobs_table.php',
+        'create_failed_jobs_table.php',
+        'create_job_batches_table.php',
+        'create_notifications_table.php',
+        'create_settings_table.php',
+        'create_features_table.php',
+        'create_pulse_tables.php',
+    ];
+
+    $packageMigrations = collect(glob(base_path('packages/*/database/migrations/*.stub')) ?: [])
+        ->map(fn (string $stub): string => str_replace('.stub', '', basename($stub)));
+
+    $unshipped = collect(glob(database_path('migrations/*.php')) ?: [])
+        ->map(fn (string $migration): string => preg_replace('/^\d{4}_\d{2}_\d{2}_\d{6}_/', '', basename($migration)) ?? basename($migration))
+        ->reject(fn (string $migration): bool => in_array($migration, $frameworkMigrations, true) || $packageMigrations->contains($migration))
+        ->values()
+        ->all();
+
+    expect($unshipped)->toBeEmpty();
+});
+
 /*
  | The registry drives `vendra-tenant:enable`, which backfills every null tenant
  | id and then forces the column NOT NULL. `settings` is excluded because its
