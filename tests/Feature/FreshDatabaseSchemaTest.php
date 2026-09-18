@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 
 it('contains every package table in the fresh database baseline', function (): void {
-    expect(Schema::hasTable('authify_logs'))->toBeTrue()
-        ->and(Schema::hasColumns('language_lines', ['tenant_id', 'namespace', 'namespace_guard']))->toBeTrue()
+    expect(Schema::hasColumns('language_lines', ['tenant_id', 'namespace', 'namespace_guard']))->toBeTrue()
         ->and(Schema::hasColumns('activity_log', ['tenant_id', 'event', 'attribute_changes']))->toBeTrue()
         ->and(Schema::hasColumns('roles', ['tenant_id', 'description']))->toBeTrue()
         ->and(Schema::hasColumns('permissions', ['tenant_id', 'description']))->toBeTrue()
@@ -89,7 +88,6 @@ it('enforces required relational integrity', function (string $table, string $co
     ['documents', 'user_profile_id'],
     ['phone_numbers', 'user_profile_id'],
     ['verifications', 'user_profile_id'],
-    ['authify_logs', 'user_id'],
     ['taggables', 'tag_id'],
     ['model_has_permissions', 'permission_id'],
     ['model_has_roles', 'role_id'],

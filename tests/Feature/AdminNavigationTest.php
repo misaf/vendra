@@ -13,7 +13,6 @@ use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Affil
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource;
-use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\AuthifyLogResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
@@ -118,7 +117,6 @@ it('orders navigation resources by centralized priority', function (
     'language lines' => [LanguageLineResource::class, NavigationPriority::LanguageLines],
     'general settings' => [ManageGeneralSettings::class, NavigationPriority::GeneralSettings],
     'activity logs' => [ActivityLogResource::class, NavigationPriority::ActivityLogs],
-    'authentication logs' => [AuthifyLogResource::class, NavigationPriority::AuthenticationLogs],
 ]);
 
 it('assigns every navigation priority a unique sort value', function (): void {
@@ -154,7 +152,6 @@ it('uses concise singular and plural resource labels in every configured locale'
     'affiliate commissions' => [AffiliateCommissionResource::class, 'vendra-affiliate::navigation.affiliate_commission', 'vendra-affiliate::navigation.affiliate_commissions'],
     'affiliate payouts' => [AffiliatePayoutResource::class, 'vendra-affiliate::navigation.affiliate_payout', 'vendra-affiliate::navigation.affiliate_payouts'],
     'attributes' => [AttributeResource::class, 'vendra-attribute::navigation.attribute', 'vendra-attribute::navigation.attributes'],
-    'authentication logs' => [AuthifyLogResource::class, 'vendra-authify-log::navigation.authify_log', 'vendra-authify-log::navigation.authify_logs'],
     'blog posts' => [BlogPostResource::class, 'vendra-blog::navigation.blog_post', 'vendra-blog::navigation.blog_posts'],
     'blog categories' => [BlogPostCategoryResource::class, 'vendra-blog::navigation.blog_post_category', 'vendra-blog::navigation.blog_post_categories'],
     'carts' => [CartResource::class, 'vendra-cart::navigation.cart', 'vendra-cart::navigation.carts'],
@@ -265,7 +262,6 @@ it('uses semantic icons for domain resources', function (string $resource, Heroi
     'affiliate payouts' => [AffiliatePayoutResource::class, Heroicon::OutlinedBanknotes],
     'affiliates' => [AffiliateResource::class, Heroicon::OutlinedLink],
     'attributes' => [AttributeResource::class, Heroicon::OutlinedAdjustmentsHorizontal],
-    'authify logs' => [AuthifyLogResource::class, Heroicon::OutlinedShieldCheck],
     'blog post categories' => [BlogPostCategoryResource::class, Heroicon::OutlinedFolder],
     'blog posts' => [BlogPostResource::class, Heroicon::OutlinedDocumentText],
     'carts' => [CartResource::class, Heroicon::OutlinedShoppingCart],

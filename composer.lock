@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52d17e96a80f392843c9aabd824410e5",
+    "content-hash": "d4bd85126b0846bce028121a21f9a57e",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -6360,88 +6360,6 @@
             "time": "2026-08-07T00:07:30+00:00"
         },
         {
-            "name": "misaf/laravel-authify-log",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/misaf/laravel-authify-log.git",
-                "reference": "65df8b45934ad8c89241ac69802244b1b48ce9ab"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/misaf/laravel-authify-log/zipball/65df8b45934ad8c89241ac69802244b1b48ce9ab",
-                "reference": "65df8b45934ad8c89241ac69802244b1b48ce9ab",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/support": "^12.0|^13.0",
-                "php": "^8.4",
-                "spatie/laravel-package-tools": "^1.92.4"
-            },
-            "require-dev": {
-                "fakerphp/faker": "^1.24.1",
-                "larastan/larastan": "^3.9.2",
-                "laravel/boost": "^2.0.6",
-                "laravel/pint": "^1.27",
-                "mockery/mockery": "^1.6.12",
-                "nunomaduro/collision": "^8.8.3",
-                "orchestra/testbench": "^10.9",
-                "pestphp/pest": "^4.3.2",
-                "pestphp/pest-plugin-laravel": "^4.0",
-                "pestphp/pest-plugin-profanity": "^4.2.1",
-                "pestphp/pest-plugin-type-coverage": "^4.0.3",
-                "predis/predis": "^3.6"
-            },
-            "suggest": {
-                "ext-redis": "Required by the default \"redis\" buffering driver",
-                "stijnvanouplines/blade-country-flags": "Render the stored ip_country as a flag in your Blade views (^1.0.7)"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Authify": "Misaf\\LaravelAuthifyLog\\Facades\\Authify"
-                    },
-                    "providers": [
-                        "Misaf\\LaravelAuthifyLog\\Providers\\AuthifyLogServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Misaf\\LaravelAuthifyLog\\": "src/",
-                    "Misaf\\LaravelAuthifyLog\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ehsan Mahmoodi",
-                    "email": "misaf.1990@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A logging utility for user authentication activities in Laravel.",
-            "homepage": "https://github.com/misaf/laravel-authify-log",
-            "keywords": [
-                "Authentication",
-                "audit-log",
-                "authify",
-                "laravel",
-                "log",
-                "security"
-            ],
-            "support": {
-                "issues": "https://github.com/misaf/laravel-authify-log/issues",
-                "source": "https://github.com/misaf/laravel-authify-log/tree/1.x"
-            },
-            "time": "2026-08-27T12:06:03+00:00"
-        },
-        {
             "name": "misaf/laravel-docker-engine",
             "version": "1.x-dev",
             "source": {
@@ -7157,67 +7075,6 @@
             "support": {
                 "issues": "https://github.com/misaf/vendra-attribute-api/issues",
                 "source": "https://github.com/misaf/vendra-attribute-api"
-            },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
-            "name": "misaf/vendra-authify-log",
-            "version": "1.x-dev",
-            "dist": {
-                "type": "path",
-                "url": "packages/vendra-authify-log",
-                "reference": "9d0c1c345a204d8eaf5fee6367c6202e6af7d598"
-            },
-            "require": {
-                "misaf/filament-jalali": "^5.1.4",
-                "misaf/laravel-authify-log": "^1.0.2",
-                "misaf/vendra-support": "self.version",
-                "php": "^8.4",
-                "spatie/laravel-package-tools": "^1.93.1"
-            },
-            "type": "vendra-module",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Misaf\\VendraAuthifyLog\\Providers\\AuthifyLogServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Misaf\\VendraAuthifyLog\\": "src/",
-                    "Misaf\\VendraAuthifyLog\\Database\\Seeders\\": "database/seeders/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Misaf\\VendraAuthifyLog\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ehsan Mahmoodi",
-                    "email": "misaf.1990@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Authentication event logging and Filament log management for Vendra",
-            "homepage": "https://github.com/misaf/vendra-authify-log",
-            "keywords": [
-                "authify",
-                "filamentphp",
-                "laravel",
-                "log"
-            ],
-            "support": {
-                "issues": "https://github.com/misaf/vendra-authify-log/issues",
-                "source": "https://github.com/misaf/vendra-authify-log"
             },
             "transport-options": {
                 "symlink": true,
@@ -25643,7 +25500,6 @@
         "misaf/vendra-api": 20,
         "misaf/vendra-attribute": 20,
         "misaf/vendra-attribute-api": 20,
-        "misaf/vendra-authify-log": 20,
         "misaf/vendra-blog": 20,
         "misaf/vendra-blog-api": 20,
         "misaf/vendra-cart": 20,

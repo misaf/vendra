@@ -86,7 +86,7 @@ Use `Misaf\VendraSupport\Filament\Navigation\NavigationGroup` as the single sour
   - Content: Blog Posts 1, Blog Post Categories 2, Custom Pages 3, Custom Page Categories 4, FAQs 5, FAQ Categories 6, Multimedia 7, Tags 8.
   - Marketing: Affiliates 1, Affiliate Commissions 2, Affiliate Payouts 3, Newsletters 4, Newsletter Subscribers 5.
   - Localization: Languages 1, Language Lines 2.
-  - System: General Settings 1, Activity Logs 2, Authentication Logs 3.
+  - System: General Settings 1, Activity Logs 2.
 - Give every resource a globally unique `NavigationPriority` case and assign `$navigationSort` from its backed value. Group values by domain cluster and leave gaps for future resources.
 - Give every resource separate singular and plural translation keys in `en`, `de`, and `fa`. Use the singular key for model labels and the plural key for navigation and plural model labels; keep navigation labels at 24 characters or fewer.
 - Use domain clusters as top-level sidebar items, set `$subNavigationPosition = SubNavigationPosition::Top`, and keep cluster resources ungrouped so `NavigationPriority` controls their visible tab order.

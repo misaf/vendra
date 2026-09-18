@@ -9,7 +9,6 @@ use Misaf\VendraActivityLog\Filament\Clusters\Resources\ActivityLogResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
-use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\AuthifyLogResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
@@ -52,7 +51,6 @@ it('uses an infolist for every resource view page', function (string $resource):
     AffiliateCommissionResource::class,
     AffiliatePayoutResource::class,
     AffiliateResource::class,
-    AuthifyLogResource::class,
     BlogPostCategoryResource::class,
     BlogPostResource::class,
     CartResource::class,

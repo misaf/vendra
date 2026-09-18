@@ -19,7 +19,6 @@ it('reports the installed version of every Vendra package', function (): void {
         'Vendra API' => 'misaf/vendra-api',
         'Vendra Attribute' => 'misaf/vendra-attribute',
         'Vendra Attribute API' => 'misaf/vendra-attribute-api',
-        'Vendra Authify Log' => 'misaf/vendra-authify-log',
         'Vendra Blog' => 'misaf/vendra-blog',
         'Vendra Blog API' => 'misaf/vendra-blog-api',
         'Vendra Cart' => 'misaf/vendra-cart',

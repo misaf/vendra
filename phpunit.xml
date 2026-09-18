@@ -28,9 +28,6 @@
         <testsuite name="vendra-attribute-api">
             <directory>packages/vendra-attribute-api/tests</directory>
         </testsuite>
-        <testsuite name="vendra-authify-log">
-            <directory>packages/vendra-authify-log/tests</directory>
-        </testsuite>
         <testsuite name="vendra-blog">
             <directory>packages/vendra-blog/tests</directory>
         </testsuite>

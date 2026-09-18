@@ -6,7 +6,6 @@ use App\Notifications\Auth\ResetPasswordNotification;
 use App\Notifications\Auth\VerifyEmailNotification;
 use Filament\Facades\Filament;
 use Illuminate\Contracts\Queue\ShouldQueueAfterCommit;
-use Misaf\VendraAuthifyLog\Notifications\LoginNotification;
 use Misaf\VendraUser\Models\User;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 
@@ -14,8 +13,7 @@ it('keeps authentication notifications independent of tenant context', function 
     expect(new VerifyEmailNotification)->toBeInstanceOf(NotTenantAware::class)
         ->and(new VerifyEmailNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class)
         ->and(new ResetPasswordNotification)->toBeInstanceOf(NotTenantAware::class)
-        ->and(new ResetPasswordNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class)
-        ->and(new LoginNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class);
+        ->and(new ResetPasswordNotification)->toBeInstanceOf(ShouldQueueAfterCommit::class);
 });
 
 it('assigns transactional email to a Horizon supervisor', function (): void {

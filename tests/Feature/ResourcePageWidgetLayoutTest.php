@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Filament\Tables\Table;
+use Misaf\VendraActivityLog\Filament\Widgets\LatestActivityLogTableWidget;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Pages\ListAffiliateCommissions;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Widgets\AffiliateCommissionOverviewWidget;
@@ -14,7 +15,6 @@ use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Pages\ListAffil
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Widgets\AffiliateClicksOverview;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Widgets\AffiliateCommissionsOverview;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Widgets\AffiliateReferralsOverview;
-use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\Widgets\LatestAuthifyLogTableWidget;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\Pages\ListCarts;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\Widgets\CartOverviewWidget;
@@ -146,11 +146,11 @@ it('uses full width for combined and detailed resource widgets', function (strin
     AffiliateCommissionOverviewWidget::class,
     AffiliatePayoutOverviewWidget::class,
     TransactionGatewayChart::class,
-    LatestAuthifyLogTableWidget::class,
+    LatestActivityLogTableWidget::class,
 ]);
 
 it('disables polling on resource table widgets', function (): void {
-    $widget = resolve(LatestAuthifyLogTableWidget::class);
+    $widget = resolve(LatestActivityLogTableWidget::class);
 
     expect($widget->table(Table::make($widget))->getPollingInterval())->toBeNull();
 });

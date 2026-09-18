@@ -61,16 +61,3 @@ it('preserves labels for workflow statuses', function (): void {
     expect(__('vendra-newsletter::attributes.status'))->toBe('Status')
         ->and(__('vendra-transaction::attributes.status'))->toBe('Status');
 });
-
-it('does not expose a status component for authify logs without a status field', function (): void {
-    foreach ([
-        'packages/vendra-authify-log/src/Filament/Clusters/Resources/Tables/AuthifyLogTable.php',
-        'packages/vendra-authify-log/src/Filament/Clusters/Resources/Schemas/AuthifyLogInfolist.php',
-    ] as $relativePath) {
-        $contents = file_get_contents(base_path($relativePath));
-
-        expect($contents)
-            ->toBeString()
-            ->not->toContain("::make('status')");
-    }
-});

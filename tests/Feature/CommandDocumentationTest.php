@@ -15,11 +15,6 @@ it('describes module seed commands with the correct domain', function (
         ->and($command->getDefinition()->getArgument('tenant')->getDescription())
         ->toBe($tenantDescription);
 })->with([
-    'authentication log' => [
-        'vendra-authify-log:seed',
-        'Seed authentication log module data for a tenant',
-        'Tenant ID or slug to seed authentication log data for',
-    ],
     'custom page' => [
         'vendra-custom-page:seed',
         'Seed custom page module data for a tenant',

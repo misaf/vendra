@@ -48,5 +48,4 @@ enum NavigationPriority: int
 
     case GeneralSettings = 7100;
     case ActivityLogs = 7200;
-    case AuthenticationLogs = 7300;
 }

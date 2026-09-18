@@ -8,7 +8,6 @@ use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Affil
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource;
-use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\AuthifyLogResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
@@ -83,7 +82,6 @@ dataset('searchable resources', [
     'affiliate payouts' => [AffiliatePayoutResource::class, false],
     'affiliates' => [AffiliateResource::class, false],
     'attributes' => [AttributeResource::class, false],
-    'authentication logs' => [AuthifyLogResource::class, false],
     'blog post categories' => [BlogPostCategoryResource::class, false],
     'blog posts' => [BlogPostResource::class, false],
     'carts' => [CartResource::class, false],

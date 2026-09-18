@@ -24,7 +24,6 @@ jobs:
           - vendra-api
           - vendra-attribute
           - vendra-attribute-api
-          - vendra-authify-log
           - vendra-blog
           - vendra-blog-api
           - vendra-cart

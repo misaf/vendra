@@ -11,7 +11,6 @@ use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Affil
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource;
-use Misaf\VendraAuthifyLog\Filament\Clusters\Resources\AuthifyLogResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
@@ -109,7 +108,6 @@ it('uses the full resource name as the resource slug', function (string $resourc
     AffiliateResource::class,
     ActivityLogResource::class,
     AttributeResource::class,
-    AuthifyLogResource::class,
     BlogPostCategoryResource::class,
     BlogPostResource::class,
     CartResource::class,
@@ -181,7 +179,6 @@ it('assigns each admin resource to its domain cluster', function (string $resour
     'localization / languages' => [LanguageResource::class, LocalizationCluster::class],
     'localization / language lines' => [LanguageLineResource::class, LocalizationCluster::class],
     'system / activity logs' => [ActivityLogResource::class, SystemCluster::class],
-    'system / authentication logs' => [AuthifyLogResource::class, SystemCluster::class],
 ]);
 
 it('assigns general settings to the system domain', function (): void {
