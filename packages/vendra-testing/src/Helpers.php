@@ -77,6 +77,11 @@ function makeCurrentTestTenant(array $attributes = []): ?Model
  *
  * Accepts null so call sites composed with createTestTenant() stay a no-op
  * when tenancy is disabled.
+ *
+ * A Filament panel context keeps its own tenant, and the resource `creating`
+ * hook re-associates new records with it after BelongsToTenant has stamped the
+ * resolver's tenant. Keep the two in step, as a real admin request does, so
+ * records created after a switch land in the tenant the test switched to.
  */
 function switchToTestTenant(Model|int|string|null $tenant): void
 {
@@ -84,7 +89,12 @@ function switchToTestTenant(Model|int|string|null $tenant): void
         return;
     }
 
-    resolve(TenantResolver::class)->makeCurrent($tenant);
+    $resolver = resolve(TenantResolver::class);
+    $resolver->makeCurrent($tenant);
+
+    if (Filament::getTenant() instanceof Model) {
+        Filament::setTenant($resolver->current(), isQuiet: true);
+    }
 }
 
 /**
