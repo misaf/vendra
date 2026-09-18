@@ -21,20 +21,41 @@ All operations require `auth:sanctum`.
   "currencyCode": "USD",
   "gateway": "bank-transfer",
   "paymentReference": "TRF-8891",
-  "cardMessage": "Happy birthday."
+  "cardMessage": "Happy birthday.",
+  "recipientName": "Nasrin K.",
+  "addressId": 7,
+  "latitude": 35.7219,
+  "longitude": 51.3347,
+  "deliveryDate": "2026-10-02",
+  "deliverySlotId": 3
 }
 ```
 
 Prices are never taken from the request. The processor reads the product name,
 price and stock from `misaf/vendra-product` and snapshots them onto the order,
-so a client cannot dictate what it pays. Delivery is not priced here:
-`misaf/vendra-delivery` owns zones, slots and fees, so orders placed through
-this endpoint carry a zero delivery amount until that module supplies one.
+so a client cannot dictate what it pays. The same holds for delivery: the fee
+comes from the `misaf/vendra-delivery` band the dropped pin falls in, and the
+delivery is scheduled on the order. An address that band prices by hand is
+refused rather than charged a guessed fee. Without a pin the order is placed
+with a zero delivery amount and nothing is scheduled. `addressId` must belong
+to one of the caller's own profiles.
 
 ## Requirements
 
 - PHP 8.4+
-- `misaf/vendra-api`, `misaf/vendra-order`, `misaf/vendra-product`
+- Laravel 13
+- `misaf/vendra-api`
+- `misaf/vendra-delivery`
+- `misaf/vendra-order`
+- `misaf/vendra-product`
+
+## Installation
+
+```bash
+composer require misaf/vendra-order-api
+```
+
+The service provider registers the resources and processors automatically.
 
 ## Testing
 

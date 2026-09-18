@@ -30,7 +30,18 @@ one that does not exist: both answer `404`.
 ## Requirements
 
 - PHP 8.4+
-- `misaf/vendra-api`, `misaf/vendra-wishlist`, `misaf/vendra-product`
+- Laravel 13
+- `misaf/vendra-api`
+- `misaf/vendra-product`
+- `misaf/vendra-wishlist`
+
+## Installation
+
+```bash
+composer require misaf/vendra-wishlist-api
+```
+
+The service provider registers the resources and processors automatically.
 
 ## Testing
 

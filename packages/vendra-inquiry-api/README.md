@@ -29,7 +29,17 @@ spoofed.
 ## Requirements
 
 - PHP 8.4+
-- `misaf/vendra-api`, `misaf/vendra-inquiry`
+- Laravel 13
+- `misaf/vendra-api`
+- `misaf/vendra-inquiry`
+
+## Installation
+
+```bash
+composer require misaf/vendra-inquiry-api
+```
+
+The service provider registers the resources and processors automatically.
 
 ## Testing
 

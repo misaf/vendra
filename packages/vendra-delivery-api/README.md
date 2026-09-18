@@ -37,7 +37,17 @@ address by hand: checkout will refuse it rather than invent a fee.
 ## Requirements
 
 - PHP 8.4+
-- `misaf/vendra-api`, `misaf/vendra-delivery`
+- Laravel 13
+- `misaf/vendra-api`
+- `misaf/vendra-delivery`
+
+## Installation
+
+```bash
+composer require misaf/vendra-delivery-api
+```
+
+The service provider registers the resources and processors automatically.
 
 ## Testing
 

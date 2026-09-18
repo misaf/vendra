@@ -18,8 +18,8 @@ The `misaf/vendra-order-api` package owns API Platform resources (`ApiResource` 
 - Keep order models, migrations, factories, policies, seeders, states, and Filament UI in `misaf/vendra-order`; this package only serializes, routes, and composes them.
 - Expose `OrderResource` and `OrderLine` under `/sales/orders` read-only, and checkout under `/sales/checkout`.
 - Keep every operation authenticated with `middleware: 'auth:sanctum'` and a `policy` enforced by `CustomerOrderPolicy`; the collection and item queries are scoped to the caller in `OrderLinksHandler`.
-- Never accept money from the client. `PlaceOrderProcessor` reads names, prices, and stock from `misaf/vendra-product` and hands `OrderLineDraft` values to `PlaceOrderAction`; the client only chooses the cart, currency, gateway, payment reference, and card message.
-- Keep delivery pricing out of this package. `misaf/vendra-delivery` owns zones, slots, and fees; until it supplies an amount, checkout places orders with a zero delivery amount.
+- Never accept money from the client. `PlaceOrderProcessor` reads names, prices, and stock from `misaf/vendra-product` and hands `OrderLineDraft` values to `PlaceOrderAction`; the client only chooses the cart, currency, gateway, payment reference, card message, and delivery details (recipient, own address, pin, date, slot).
+- Never accept a delivery fee from the client. `PlaceOrderProcessor` prices the dropped pin through `misaf/vendra-delivery`'s `DeliveryZoneMatcher`, refuses a pin that band prices by hand, and schedules the delivery with `ScheduleDeliveryAction`; without a pin the order carries a zero delivery amount and nothing is scheduled. Zones, slots, and fees stay in `misaf/vendra-delivery`.
 - Keep the order customer morph columns private (`customerType`, `customerId`); do not serialize raw `customer_type` or `customer_id`.
 - Reject unsupported sellable types, missing prices, out-of-stock products, and unavailable gateways with a validation error rather than a partial order.
 - Do the Eloquent querying, hydration, and pagination in the state provider, not the DTO.
