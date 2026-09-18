@@ -22,7 +22,7 @@ use Misaf\VendraSupport\Tenancy\TenantSchema;
  *
  * @implements Scope<Model>
  */
-class TeamScope implements Scope
+final class TeamScope implements Scope
 {
     /**
      * @param  Builder<covariant Model>  $builder

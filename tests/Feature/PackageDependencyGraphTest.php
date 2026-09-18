@@ -126,12 +126,6 @@ it('imports only Vendra namespaces reachable through declared package dependenci
 
     foreach (array_keys($dependencyGraph) as $package) {
         $packagePath = base_path('packages/'.mb_substr($package, mb_strlen('misaf/')));
-        $sourcePath = "{$packagePath}/src";
-
-        if (! is_dir($sourcePath)) {
-            continue;
-        }
-
         $manifest = json_decode(
             file_get_contents("{$packagePath}/composer.json"),
             true,
@@ -144,25 +138,34 @@ it('imports only Vendra namespaces reachable through declared package dependenci
                 fn (string $dependency): bool => str_starts_with($dependency, 'misaf/vendra-'),
             )),
         ];
-        $sourceFiles = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($sourcePath, FilesystemIterator::SKIP_DOTS),
-        );
 
-        foreach ($sourceFiles as $sourceFile) {
-            if ($sourceFile->getExtension() !== 'php') {
+        foreach (['src', 'database'] as $sourceDirectory) {
+            $sourcePath = "{$packagePath}/{$sourceDirectory}";
+
+            if (! is_dir($sourcePath)) {
                 continue;
             }
 
-            $contents = (string) file_get_contents($sourceFile->getPathname());
+            $sourceFiles = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($sourcePath, FilesystemIterator::SKIP_DOTS),
+            );
 
-            foreach ($namespacePackages as $namespace => $namespacePackage) {
-                if ($package === $namespacePackage || in_array($namespacePackage, $reachablePackages, true)) {
+            foreach ($sourceFiles as $sourceFile) {
+                if ($sourceFile->getExtension() !== 'php') {
                     continue;
                 }
 
-                if (preg_match('/^use '.preg_quote($namespace, '/').'\\\\/m', $contents) === 1) {
-                    $relativePath = mb_substr($sourceFile->getPathname(), mb_strlen(base_path()) + 1);
-                    $unreachableImports[] = "{$relativePath} → {$namespacePackage}";
+                $contents = (string) file_get_contents($sourceFile->getPathname());
+
+                foreach ($namespacePackages as $namespace => $namespacePackage) {
+                    if ($package === $namespacePackage || in_array($namespacePackage, $reachablePackages, true)) {
+                        continue;
+                    }
+
+                    if (preg_match('/^use '.preg_quote($namespace, '/').'\\\\/m', $contents) === 1) {
+                        $relativePath = mb_substr($sourceFile->getPathname(), mb_strlen(base_path()) + 1);
+                        $unreachableImports[] = "{$relativePath} → {$namespacePackage}";
+                    }
                 }
             }
         }
