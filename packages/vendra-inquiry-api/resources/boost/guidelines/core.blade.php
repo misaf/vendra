@@ -21,6 +21,7 @@ The `misaf/vendra-inquiry-api` package owns API Platform resources (`ApiResource
 - Never expose a read operation for enquiries. What customers wrote in is inbox material for the studio, not a public collection.
 - Capture the source and the sender's locale from the request rather than the body, so neither can be spoofed.
 - Mirror `SubmitInquiryAction`'s rules in `SubmitInquiryRequest` so the storefront gets the same answer the action would give, and delegate the write itself to that action.
+- Enforce the `vendra-inquiry.occasions` allow-list in `SubmitInquiryProcessor`, where the HTTP operation and the MCP tool meet: `SubmitInquiryRequest::RULES` is a constant and cannot read configuration.
 - Give input DTOs with multi-word properties an explicit `#[SerializedName]`: the configured name converter otherwise maps camelCase wire names onto snake_case PHP properties and silently drops them.
 - Rely on the inquiry model's support-layer tenant scope and keep production API code free of `Misaf\VendraTenant`. Feature tests may use a concrete tenant factory solely to establish tenant context.
 - Keep Pest architecture tests and focused resource/processor tests current.

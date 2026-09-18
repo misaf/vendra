@@ -41,6 +41,7 @@ it('rejects an enquiry the studio could not answer', function (array $payload): 
     'bad email' => [['name' => 'Nasrin K.', 'email' => 'not-an-email', 'message' => 'Do you deliver on Fridays?']],
     'no message' => [['name' => 'Nasrin K.', 'email' => 'nasrin@example.com']],
     'empty message' => [['name' => 'Nasrin K.', 'email' => 'nasrin@example.com', 'message' => '']],
+    'unconfigured occasion' => [['name' => 'Nasrin K.', 'email' => 'nasrin@example.com', 'message' => 'Do you deliver on Fridays?', 'occasion' => 'birthday']],
 ]);
 
 it('does not take the source from the payload', function (): void {
