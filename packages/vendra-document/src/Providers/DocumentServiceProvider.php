@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDocument\Providers;
 
+use Composer\InstalledVersions;
+use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraDocument\Console\Commands\SeedCommand;
 use Misaf\VendraDocument\Filament\RelationManagers\DocumentsRelationManager;
 use Misaf\VendraDocument\Models\Document;
@@ -37,5 +39,7 @@ final class DocumentServiceProvider extends PackageServiceProvider
 
         $this->app->make(UserProfileRelationManagers::class)
             ->register(DocumentsRelationManager::class, priority: 30);
+
+        AboutCommand::add('Vendra Document', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-document')]);
     }
 }

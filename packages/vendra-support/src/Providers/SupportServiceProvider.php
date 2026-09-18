@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Providers;
 
+use Composer\InstalledVersions;
 use Filament\Panel;
+use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Misaf\VendraSupport\Capabilities\NullAttributeApiResolver;
@@ -63,5 +65,7 @@ final class SupportServiceProvider extends ServiceProvider
         ], 'vendra-support-config');
 
         Event::listen(TenantProvisioned::class, RunTenantSeeders::class);
+
+        AboutCommand::add('Vendra Support', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-support')]);
     }
 }

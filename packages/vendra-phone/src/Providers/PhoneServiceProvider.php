@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPhone\Providers;
 
+use Composer\InstalledVersions;
+use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraPhone\Console\Commands\SeedCommand;
 use Misaf\VendraPhone\Filament\RelationManagers\PhoneNumbersRelationManager;
 use Misaf\VendraPhone\Models\PhoneNumber;
@@ -37,5 +39,7 @@ final class PhoneServiceProvider extends PackageServiceProvider
 
         $this->app->make(UserProfileRelationManagers::class)
             ->register(PhoneNumbersRelationManager::class, priority: 20);
+
+        AboutCommand::add('Vendra Phone', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-phone')]);
     }
 }

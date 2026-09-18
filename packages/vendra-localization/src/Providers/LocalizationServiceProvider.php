@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLocalization\Providers;
 
+use Composer\InstalledVersions;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Log\Context\Repository;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\App;
@@ -50,5 +52,7 @@ final class LocalizationServiceProvider extends PackageServiceProvider
                 $localeManager->apply($locale);
             }
         });
+
+        AboutCommand::add('Vendra Localization', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-localization')]);
     }
 }

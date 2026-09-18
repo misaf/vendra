@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraVerification\Providers;
 
+use Composer\InstalledVersions;
+use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Misaf\VendraUserProfile\Models\UserProfile;
@@ -37,5 +39,7 @@ final class VerificationServiceProvider extends PackageServiceProvider
 
         $this->app->make(UserProfileRelationManagers::class)
             ->register(VerificationsRelationManager::class, priority: 40);
+
+        AboutCommand::add('Vendra Verification', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-verification')]);
     }
 }

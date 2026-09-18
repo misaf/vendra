@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAddress\Providers;
 
+use Composer\InstalledVersions;
+use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraAddress\Console\Commands\SeedCommand;
 use Misaf\VendraAddress\Filament\RelationManagers\AddressesRelationManager;
 use Misaf\VendraAddress\Models\Address;
@@ -37,5 +39,7 @@ final class AddressServiceProvider extends PackageServiceProvider
 
         $this->app->make(UserProfileRelationManagers::class)
             ->register(AddressesRelationManager::class, priority: 10);
+
+        AboutCommand::add('Vendra Address', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-address')]);
     }
 }
