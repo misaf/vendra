@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
+use Illuminate\Events\CallQueuedListener;
+use Illuminate\Support\Facades\Queue;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateFactory;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateReferralFactory;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Listeners\TransactionCommissionSubscriber;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
+use Misaf\VendraTransaction\Actions\ApproveTransactionAction;
 use Misaf\VendraTransaction\Database\Factories\TransactionFactory;
 use Misaf\VendraTransaction\Database\Factories\WalletFactory;
+use Misaf\VendraTransaction\Events\TransactionApproved;
 use Misaf\VendraTransaction\Models\Transaction;
-use Misaf\VendraTransaction\States\Declined;
 use Misaf\VendraUser\Models\User;
 
 beforeEach(function (): void {
@@ -35,7 +38,7 @@ function referredDeposit(int $amount, int $commissionPercent = 20): Transaction
     return TransactionFactory::new()
         ->forWallet(WalletFactory::new()->forUser($user)->create())
         ->deposit()
-        ->approved()
+        ->pending()
         ->create(['amount' => $amount]);
 }
 
@@ -44,7 +47,7 @@ it('credits a commission when a referred deposit is approved', function (): void
 
     $transaction = referredDeposit(amount: 10_000, commissionPercent: 20);
 
-    resolve(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
+    resolve(ApproveTransactionAction::class)->execute($transaction);
 
     $commission = AffiliateCommission::query()->sole();
 
@@ -60,24 +63,21 @@ it('credits a repeated event only once', function (): void {
     $transaction = referredDeposit(amount: 10_000);
     $subscriber = resolve(TransactionCommissionSubscriber::class);
 
-    $subscriber->transactionUpdated($transaction);
-    $subscriber->transactionUpdated($transaction);
+    $subscriber->transactionApproved(new TransactionApproved($transaction));
+    $subscriber->transactionApproved(new TransactionApproved($transaction));
 
     expect(AffiliateCommission::query()->count())->toBe(1);
 });
 
-it('reverses the unpaid commission when the deposit leaves the approved state', function (): void {
+it('queues nothing when a deposit is updated without being approved', function (): void {
     config()->set('vendra-affiliate.conversions.deposit.enabled', true);
-
     $transaction = referredDeposit(amount: 10_000);
-    $subscriber = resolve(TransactionCommissionSubscriber::class);
+    Queue::fake();
 
-    $subscriber->transactionUpdated($transaction);
+    $transaction->markProcessing();
+    $transaction->update(['amount' => 12_000]);
 
-    $transaction->update(['status' => Declined::class]);
-    $subscriber->transactionUpdated($transaction->refresh());
-
-    expect(AffiliateCommission::query()->sole()->status)->toBe(CommissionStatusEnum::Reversed);
+    Queue::assertNotPushed(CallQueuedListener::class, fn (CallQueuedListener $job): bool => $job->class === TransactionCommissionSubscriber::class);
 });
 
 it('ignores deposits when the deposit conversion is disabled', function (): void {
@@ -85,7 +85,7 @@ it('ignores deposits when the deposit conversion is disabled', function (): void
 
     $transaction = referredDeposit(amount: 10_000);
 
-    resolve(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
+    resolve(ApproveTransactionAction::class)->execute($transaction);
 
     expect(AffiliateCommission::query()->count())->toBe(0);
 });
@@ -95,10 +95,10 @@ it('ignores deposits from users without a referral', function (): void {
 
     $transaction = TransactionFactory::new()
         ->deposit()
-        ->approved()
+        ->pending()
         ->create(['amount' => 10_000]);
 
-    resolve(TransactionCommissionSubscriber::class)->transactionUpdated($transaction);
+    resolve(ApproveTransactionAction::class)->execute($transaction);
 
     expect(AffiliateCommission::query()->count())->toBe(0);
 });

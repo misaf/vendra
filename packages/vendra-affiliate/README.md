@@ -15,8 +15,8 @@ stats widgets.
    self-referrals are ignored.
 4. Conversions credit `AffiliateCommission` ledger entries idempotently:
    - **Deposit** — a referred user's approved deposit credits
-     `commission_percent` of the amount; leaving the approved state reverses
-     the unpaid commission.
+     `commission_percent` of the amount when `TransactionApproved` fires.
+     Approval is final, so the commission is never reversed automatically.
    - **Signup** — a fixed bounty per attributed registration.
    - **Checkout** — host applications call `RecordCartConversionAction` from their
      checkout flow (vendra-cart has no checkout event yet).
