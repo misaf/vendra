@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Tables;
 
-use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
@@ -20,10 +19,10 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\RelationshipConstraint\Operators\IsRelatedToOperator;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Misaf\VendraAffiliate\Enums\AffiliateCommissionPolicyEnum;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
-use Misaf\VendraAffiliate\Models\AffiliateCommission;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Actions\ApproveCommissionTableAction;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\Actions\ReverseCommissionTableAction;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
@@ -97,37 +96,13 @@ final class AffiliateCommissionTable
             ->emptyStateIcon(Heroicon::OutlinedReceiptPercent)
             ->recordActions([
                 ActionGroup::make([
-                    self::approveAction(),
+                    ApproveCommissionTableAction::make(),
 
-                    self::reverseAction(),
+                    ReverseCommissionTableAction::make(),
 
                     ViewAction::make(),
                 ]),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
-    }
-
-    private static function approveAction(): Action
-    {
-        return Action::make('approve')
-            ->authorize(fn (): bool => (bool) auth()->user()?->can(AffiliateCommissionPolicyEnum::Approve->value))
-            ->color('success')
-            ->icon(Heroicon::OutlinedCheckCircle)
-            ->label(__('vendra-affiliate::messages.approve_commission'))
-            ->requiresConfirmation()
-            ->visible(fn (AffiliateCommission $record): bool => $record->status === CommissionStatusEnum::Pending)
-            ->action(fn (AffiliateCommission $record) => $record->update(['status' => CommissionStatusEnum::Approved]));
-    }
-
-    private static function reverseAction(): Action
-    {
-        return Action::make('reverse')
-            ->authorize(fn (): bool => (bool) auth()->user()?->can(AffiliateCommissionPolicyEnum::Reverse->value))
-            ->color('danger')
-            ->icon(Heroicon::OutlinedArrowUturnLeft)
-            ->label(__('vendra-affiliate::messages.reverse_commission'))
-            ->requiresConfirmation()
-            ->visible(fn (AffiliateCommission $record): bool => in_array($record->status, [CommissionStatusEnum::Pending, CommissionStatusEnum::Approved], true))
-            ->action(fn (AffiliateCommission $record) => $record->update(['status' => CommissionStatusEnum::Reversed]));
     }
 }

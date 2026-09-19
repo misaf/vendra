@@ -104,4 +104,9 @@ final class AffiliateCommission extends Model implements ShouldLogActivity
         return $this->status === CommissionStatusEnum::Approved
             && $this->affiliate_payout_id === null;
     }
+
+    public function canBeReversed(): bool
+    {
+        return in_array($this->status, [CommissionStatusEnum::Pending, CommissionStatusEnum::Approved], true);
+    }
 }
