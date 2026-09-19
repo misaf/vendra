@@ -11,6 +11,9 @@ use Misaf\VendraProduct\Models\Product;
 /**
  * Products are locked in id order, so two checkouts sharing products cannot
  * deadlock, and every quantity is checked before any is taken.
+ *
+ * Taking the last unit switches `in_stock` off. Restocking never switches it
+ * back on, so a product the merchant took off sale stays off.
  */
 final class DeductProductStockAction
 {
@@ -40,7 +43,9 @@ final class DeductProductStockAction
             }
 
             foreach ($quantities as $productId => $quantity) {
-                $products->get($productId)?->decrement('quantity', $quantity);
+                $product = $products->get($productId);
+
+                $product?->decrement('quantity', $quantity, $product->quantity === $quantity ? ['in_stock' => false] : []);
             }
         });
     }

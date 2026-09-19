@@ -119,8 +119,10 @@ Take and return stock with `DeductProductStockAction` and
 `RestockProductsAction`, both keyed by product id. Deduction locks the products
 in id order, rechecks `in_stock` and the quantity under the lock, and takes
 nothing when any product falls short, throwing
-`InsufficientProductStockException` with that product's id. Restocking also
-returns stock to deleted products.
+`InsufficientProductStockException` with that product's id. Taking a
+product's last unit switches `in_stock` off. Restocking never switches it back
+on, so the merchant re-enables the product. Restocking also returns stock to
+deleted products.
 
 ### Optional tags
 

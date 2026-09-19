@@ -21,6 +21,22 @@ it('takes the ordered quantities off each product', function (): void {
         ->and($second->fresh()?->quantity)->toBe(2);
 });
 
+it('takes the product off sale with its last unit and leaves it off when restocked', function (): void {
+    $soldOut = ProductFactory::new()->createOne(['in_stock' => true, 'quantity' => 2]);
+    $remaining = ProductFactory::new()->createOne(['in_stock' => true, 'quantity' => 3]);
+
+    resolve(DeductProductStockAction::class)->execute([$soldOut->id => 2, $remaining->id => 1]);
+
+    expect($soldOut->fresh()?->in_stock)->toBeFalse()
+        ->and($remaining->fresh()?->in_stock)->toBeTrue();
+
+    resolve(RestockProductsAction::class)->execute([$soldOut->id => 2]);
+
+    expect($soldOut->fresh())
+        ->quantity->toBe(2)
+        ->in_stock->toBeFalse();
+});
+
 it('takes nothing when any product lacks the stock', function (int $available, bool $inStock): void {
     $plenty = ProductFactory::new()->createOne(['in_stock' => true, 'quantity' => 10]);
     $short = ProductFactory::new()->createOne(['in_stock' => $inStock, 'quantity' => $available]);
