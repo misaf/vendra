@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\OffboardStoreAction;
@@ -233,4 +234,20 @@ it('refuses to suspend a store that is still provisioning', function (): void {
     expect(fn () => resolve(SuspendStoreAction::class)->execute($store))->toThrow(LogicException::class);
 
     Queue::assertNothingPushed();
+});
+
+it('checks a loaded store without a query but re-reads it before running an action', function (): void {
+    $store = Store::factory()->active()->create();
+    $deployment = StorefrontDeployment::factory()->for($store)->create([
+        'status' => StorefrontDeploymentStatus::Ready,
+        'desired_state' => StorefrontDesiredState::Running,
+    ])->load('store');
+
+    Store::query()->whereKey($store->id)->update(['billing_suspended_at' => now()]);
+
+    DB::enableQueryLog();
+
+    expect($deployment->storeMayServe())->toBeTrue()
+        ->and(DB::getQueryLog())->toBeEmpty()
+        ->and(fn () => $deployment->assertStoreMayServe())->toThrow(StoreNotServingException::class);
 });

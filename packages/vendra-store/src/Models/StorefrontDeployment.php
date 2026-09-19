@@ -159,20 +159,28 @@ final class StorefrontDeployment extends Model
 
     /**
      * Determine if the storefront's store, including a trashed one, may serve.
+     *
+     * Reuses an eager-loaded store, so a table row asks without a query.
      */
     public function storeMayServe(): bool
     {
-        $store = Store::query()->withTrashed()->find($this->store_id);
-
-        return ! $store instanceof Store || ! $store->keepsStorefrontDown();
+        return self::mayServe($this->relationLoaded('store') ? $this->store : $this->store()->first());
     }
 
     /**
+     * Re-read the store rather than trusting a loaded one, since an action
+     * must not run on a store suspended after the record was loaded.
+     *
      * @throws StoreNotServingException
      */
     public function assertStoreMayServe(): void
     {
-        throw_unless($this->storeMayServe(), StoreNotServingException::forDeployment($this));
+        throw_unless(self::mayServe($this->store()->first()), StoreNotServingException::forDeployment($this));
+    }
+
+    private static function mayServe(?Store $store): bool
+    {
+        return ! $store instanceof Store || ! $store->keepsStorefrontDown();
     }
 
     /**
