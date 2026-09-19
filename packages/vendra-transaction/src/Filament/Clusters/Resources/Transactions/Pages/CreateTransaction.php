@@ -5,9 +5,18 @@ declare(strict_types=1);
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Pages;
 
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Misaf\VendraTransaction\Actions\CreateTransactionAction;
+use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Facades\WalletResolver;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\TransactionResource;
+use Misaf\VendraTransaction\Models\Transaction;
+use Misaf\VendraTransaction\Models\TransactionGateway;
+use Misaf\VendraTransaction\Models\Wallet;
+use Misaf\VendraTransaction\Rules\WithinTransactionLimit;
 use Misaf\VendraTransaction\Support\TransactionUsers;
 
 final class CreateTransaction extends CreateRecord
@@ -15,29 +24,38 @@ final class CreateTransaction extends CreateRecord
     protected static string $resource = TransactionResource::class;
 
     /**
-     * Resolve the selected user and currency into a wallet, creating it if needed.
-     *
      * @param  array<string, mixed>  $data
-     * @return array<string, mixed>
      */
-    protected function mutateFormDataBeforeCreate(array $data): array
+    protected function handleRecordCreation(array $data): Model
     {
-        $currencyCode = (string) Arr::get($data, 'currency_code');
+        return DB::transaction(function () use ($data): Transaction {
+            $currencyCode = (string) Arr::get($data, 'currency_code');
+            $transactionType = Arr::get($data, 'transaction_type');
+            $transactionType = $transactionType instanceof TransactionTypeEnum ? $transactionType : TransactionTypeEnum::from((string) $transactionType);
+            $amount = (int) Arr::get($data, 'amount');
 
-        $data['wallet_id'] = WalletResolver::walletFor(
-            TransactionUsers::model()::query()->findOrFail(Arr::get($data, 'user_id')),
-            $currencyCode,
-        )->id;
+            $wallet = self::walletFor(Arr::get($data, 'user_id'), $currencyCode);
+            $counterpartyWallet = filled(Arr::get($data, 'counterparty_user_id'))
+                ? self::walletFor(Arr::get($data, 'counterparty_user_id'), $currencyCode)
+                : null;
 
-        if (filled(Arr::get($data, 'counterparty_user_id'))) {
-            $data['counterparty_wallet_id'] = WalletResolver::walletFor(
-                TransactionUsers::model()::query()->findOrFail(Arr::get($data, 'counterparty_user_id')),
-                $currencyCode,
-            )->id;
-        }
+            Validator::make(
+                ['data' => ['amount' => $amount]],
+                ['data.amount' => [new WithinTransactionLimit($wallet, $transactionType)]],
+            )->validate();
 
-        unset($data['user_id'], $data['currency_code'], $data['counterparty_user_id']);
+            return resolve(CreateTransactionAction::class)->execute(
+                transactionGateway: TransactionGateway::query()->findOrFail(Arr::get($data, 'transaction_gateway_id')),
+                wallet: $wallet,
+                transactionType: $transactionType,
+                amount: $amount,
+                counterpartyWallet: $counterpartyWallet,
+            );
+        });
+    }
 
-        return $data;
+    private static function walletFor(mixed $userId, string $currencyCode): Wallet
+    {
+        return WalletResolver::walletFor(TransactionUsers::model()::query()->findOrFail($userId), $currencyCode);
     }
 }

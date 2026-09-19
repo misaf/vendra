@@ -8,6 +8,7 @@ use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 use Misaf\VendraTransaction\Actions\PostLedgerEntryAction;
 use Misaf\VendraTransaction\Database\Factories\TransactionFactory;
 use Misaf\VendraTransaction\Database\Factories\TransactionGatewayFactory;
+use Misaf\VendraTransaction\Database\Factories\TransactionLimitFactory;
 use Misaf\VendraTransaction\Database\Factories\WalletFactory;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Pages\CreateTransaction;
@@ -99,6 +100,25 @@ it('provisions both wallets for a transfer created from the form', function (): 
 
     expect($sourceWallet->transactions()->transfer()->sole()->counterparty_wallet_id)->toBe($destinationWallet->id)
         ->and($destinationWallet->currency_code)->toBe($currencyCode);
+});
+
+it('refuses an amount above the wallet limit as a form error', function (): void {
+    $gateway = TransactionGatewayFactory::new()->active()->create();
+    $wallet = WalletFactory::new()->create(['currency_code' => CurrencyIntegration::defaultCode()]);
+    TransactionLimitFactory::new()->forWallet($wallet)->ofType(TransactionTypeEnum::Deposit)->create(['amount' => 5_000]);
+
+    livewire(CreateTransaction::class)
+        ->fillForm([
+            'user_id' => $wallet->user_id,
+            'currency_code' => $wallet->currency_code,
+            'transaction_gateway_id' => $gateway->id,
+            'transaction_type' => TransactionTypeEnum::Deposit->value,
+            'amount' => 5_001,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['amount']);
+
+    expect($wallet->transactions()->count())->toBe(0);
 });
 
 it('approves a transaction from the view page and settles the ledger', function (): void {
