@@ -66,6 +66,11 @@ the one reading an administrator wants — `StoreStatus::Pending`, `Provisioning
 expressed as SQL. It is derived rather than stored, so no fourth column can drift
 out of step with the three that own it.
 
+Each writer goes through an action that also aligns the storefront's desired state
+through `AlignStorefrontWithStoreAction`: `SuspendStoreAction` and
+`ReactivateStoreAction` for `active`, and `SuspendStoreForBillingAction` and
+`ReactivateStoreForBillingAction` for `billing_suspended_at`.
+
 `StoreStatus`, `StorefrontDeploymentStatus` and `StorefrontDesiredState` implement
 Filament's `HasLabel` and `HasColor`, with labels in `vendra-store::enums`, so a
 `->badge()` column or entry that returns the enum is translated and colored without

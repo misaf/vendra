@@ -7,14 +7,13 @@ namespace Misaf\VendraStore\Actions;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use LogicException;
-use Misaf\VendraStore\Enums\StorefrontDesiredState;
-use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\Store;
-use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
-final class SuspendStoreAction
+final readonly class SuspendStoreAction
 {
+    public function __construct(private AlignStorefrontWithStoreAction $alignStorefrontWithStoreAction) {}
+
     public function execute(Store $store): Store
     {
         return DB::transaction(function () use ($store): Store {
@@ -34,12 +33,7 @@ final class SuspendStoreAction
                 $lockedStore->forceFill(['active' => false])->save();
             }
 
-            $deployment = $lockedStore->storefrontDeployment()->first();
-
-            if ($deployment instanceof StorefrontDeployment) {
-                $deployment->markDesiredState(StorefrontDesiredState::Stopped);
-                dispatch(new ReconcileStorefrontJob($deployment->id))->afterCommit();
-            }
+            $this->alignStorefrontWithStoreAction->execute($lockedStore);
 
             return $lockedStore;
         });
