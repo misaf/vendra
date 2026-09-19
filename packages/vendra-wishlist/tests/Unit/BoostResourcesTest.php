@@ -8,7 +8,7 @@ it('ships wishlist-specific Boost guidelines and a development skill', function 
     $skill = file_get_contents($modulePath.'/resources/boost/skills/vendra-wishlist-development/SKILL.md');
 
     expect($guideline)->toBeString()
-        ->toContain('## Vendra Wishlist', 'defaultFor')
+        ->toContain('## Vendra Wishlist', 'firstOrCreateDefaultFor')
         ->and($skill)->toBeString()
         ->toContain('name: vendra-wishlist-development', '## Module Boundary');
 });

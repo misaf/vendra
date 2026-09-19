@@ -44,7 +44,7 @@ Treat `packages/vendra-wishlist` as the source of saved-selection behavior and i
 
 - Model a wishlist with an opaque UUID token, optional polymorphic `owner`, a scalar `name`, an `is_default` flag, and an `items()` relationship.
 - Model each item with a parent list, polymorphic `sellable`, and optional JSON metadata for selection-specific values.
-- Keep one default list per owner and resolve it with `Wishlist::defaultFor()`; a heart button on a product card has no list to pick.
+- Keep one default list per owner and resolve it with `Wishlist::firstOrCreateDefaultFor()`; a heart button on a product card has no list to pick. The `wishlists_default_owner_unique` index on the virtual `default_list_guard` column enforces one default list, so concurrent first saves resolve to the same list.
 - Keep saving idempotent and locked; keep removing forgiving.
 - Reference catalog records; never duplicate or own product names, descriptions, prices, stock, or lifecycle data.
 - Use typed Eloquent relationships with PHPDoc generics, Laravel model attributes, explicit casts, final classes, and `declare(strict_types=1)`.

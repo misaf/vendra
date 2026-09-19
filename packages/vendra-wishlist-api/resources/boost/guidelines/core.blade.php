@@ -18,7 +18,7 @@ The `misaf/vendra-wishlist-api` package owns API Platform resources (`ApiResourc
 - Keep wishlist models, migrations, factories, policies, seeders, actions, and Filament UI in `misaf/vendra-wishlist`; this package only serializes and routes them.
 - Expose `/customers/wishlists` read-only and `/customers/saved-items` for saving and forgetting.
 - Keep every operation authenticated with `middleware: 'auth:sanctum'`; scope reads to the caller in `WishlistLinksHandler` and enforce `CustomerWishlistPolicy`.
-- Resolve the target list through `Wishlist::defaultFor()` rather than accepting a list identifier: a heart button has no list to pick.
+- Resolve the target list through `Wishlist::firstOrCreateDefaultFor()` rather than accepting a list identifier: a heart button has no list to pick.
 - Answer a save with the whole list so the storefront can re-render every heart in one round trip.
 - Verify the saved sellable against the catalog before writing; reject an unknown identifier with a validation error rather than storing a dangling reference.
 - Answer `404` for a saved item belonging to another customer, so an identifier reveals nothing about somebody else's list.

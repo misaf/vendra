@@ -7,7 +7,7 @@ button on a product card writes to.
 ## Features
 
 - Guest lists identified by UUID tokens, plus optional polymorphic owners
-- One default list per owner, created on first use through `Wishlist::defaultFor()`
+- One default list per owner, created on first use through `Wishlist::firstOrCreateDefaultFor()` and enforced by a unique index
 - Polymorphic saved items with optional selection metadata
 - Idempotent saving: tapping the heart twice keeps one row, not two
 - Tenant-aware Filament administration and permission seeding
@@ -41,7 +41,7 @@ use Misaf\VendraWishlist\Actions\AddWishlistItemAction;
 use Misaf\VendraWishlist\Actions\RemoveWishlistItemAction;
 use Misaf\VendraWishlist\Models\Wishlist;
 
-$wishlist = Wishlist::defaultFor($user);
+$wishlist = Wishlist::firstOrCreateDefaultFor($user);
 
 app(AddWishlistItemAction::class)->execute($wishlist, $product);
 

@@ -74,7 +74,8 @@ it('rejects saving something the catalog does not have', function (): void {
         ->postJson('/api/customers/saved-items', ['sellableType' => 'product', 'sellableId' => 9999])
         ->assertUnprocessable();
 
-    expect(WishlistItem::query()->count())->toBe(0);
+    expect(WishlistItem::query()->count())->toBe(0)
+        ->and(Wishlist::query()->count())->toBe(0);
 });
 
 it('forgets a saved item', function (): void {

@@ -33,9 +33,10 @@ final readonly class SaveWishlistItemProcessor implements ProcessorInterface
             $this->reject('sellableId', __('vendra-wishlist-api::messages.sellable_not_found'));
         }
 
-        $wishlist = Wishlist::defaultFor($user);
+        $sellable = $this->resolveSellable($data);
+        $wishlist = Wishlist::firstOrCreateDefaultFor($user);
 
-        $this->addWishlistItem->execute($wishlist, $this->resolveSellable($data), $data->metadata);
+        $this->addWishlistItem->execute($wishlist, $sellable, $data->metadata);
 
         return $this->wishlistMapper->map($wishlist->load('items'));
     }

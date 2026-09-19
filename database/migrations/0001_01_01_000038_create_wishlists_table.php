@@ -34,9 +34,18 @@ return new class extends Migration
             $table->uuid('token')->unique();
             $table->string('name');
             $table->boolean('is_default')->default(false);
+            /*
+             | Holds 1 only on an owner's default list, so the unique index
+             | below allows one default list per owner while other lists,
+             | whose guard is null, are never compared.
+             */
+            $table->unsignedTinyInteger('default_list_guard')
+                ->nullable()
+                ->virtualAs('CASE WHEN is_default THEN 1 ELSE NULL END');
             $table->timestampsTz();
 
             $table->index(TenantSchema::tenantIndex(['is_default']));
+            $table->unique(TenantSchema::tenantIndex(['owner_type', 'owner_id', 'default_list_guard']), 'wishlists_default_owner_unique');
         });
     }
 

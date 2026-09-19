@@ -21,7 +21,7 @@ The `misaf/vendra-wishlist` package owns saved product selections — wishlists 
 - A customer-entered list name is user data, not a translated string: keep `name` a scalar column and out of `$translatable`.
 - Reference products, variants, and other saved records only through the `sellable` polymorphic relationship. Never copy catalog ownership, pricing, stock, names, or product-specific classes into this module.
 - Keep the package free of cart, order, checkout, pricing, and stock concerns. A wishlist reserves nothing and prices nothing; carts belong to `misaf/vendra-cart` and orders to `misaf/vendra-order`.
-- Resolve the list a heart button writes to through `Wishlist::defaultFor()` so callers never have to invent one, and keep exactly one default list per owner.
+- Resolve the list a heart button writes to through `Wishlist::firstOrCreateDefaultFor()` so callers never have to invent one, and keep exactly one default list per owner. The `wishlists_default_owner_unique` index on the virtual `default_list_guard` column enforces that, so concurrent first saves resolve to the same list.
 - Keep saving idempotent: `AddWishlistItemAction` takes a row lock so two taps racing each other cannot both insert past the unique index, and removing something that was never saved is not an error.
 - Preserve the unique identity of `wishlist_id`, `sellable_type`, and `sellable_id`.
 - Derive tenant awareness through `misaf/vendra-support`. Apply `BelongsToTenant` to `Wishlist`; items inherit tenant isolation through their parent list. Never assign `tenant_id` directly or add a `tenant_aware` config toggle.

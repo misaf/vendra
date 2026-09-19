@@ -33,7 +33,7 @@ use Misaf\VendraWishlist\Database\Factories\WishlistFactory;
  * @property Carbon $updated_at
  */
 #[Fillable(['owner_type', 'owner_id', 'token', 'name', 'is_default'])]
-#[Hidden(['tenant_id'])]
+#[Hidden(['tenant_id', 'default_list_guard'])]
 #[UseFactory(WishlistFactory::class)]
 final class Wishlist extends Model
 {
@@ -55,7 +55,11 @@ final class Wishlist extends Model
         });
     }
 
-    public static function defaultFor(Model $owner): self
+    /**
+     * A unique index allows one default list per owner, so concurrent first
+     * saves resolve to the same list instead of creating two.
+     */
+    public static function firstOrCreateDefaultFor(Model $owner): self
     {
         return self::query()->firstOrCreate(
             [
