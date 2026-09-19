@@ -6,7 +6,7 @@ from the storefront, and whether a person has written back.
 ## Features
 
 - Name, email, optional phone, optional occasion slug, and the message verbatim
-- `new → answered → closed` status with a reopen path, badged in the admin inbox
+- `new → answered → closed` status with a reopen path, badged in the admin inbox, as a Spatie model-states machine (`States\Open`, `Answered`, `Closed`) that refuses a move to the current status
 - Validation that lives with the operation, so HTTP, console, and tests agree
 - Sender locale stored so a reply can be written in the language they used
 - Tenant-aware Filament inbox and permission seeding

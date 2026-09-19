@@ -23,7 +23,7 @@ The `misaf/vendra-inquiry` package owns storefront contact enquiries — what a 
 - Keep the sender's own words out of `$translatable`: a customer's message and name are user data in one language, stored in scalar columns.
 - Treat `occasion` as a stable slug chosen from configuration, and let the storefront translate it for display.
 - Keep enquiries uncreatable from the administration UI: they arrive from the storefront through `SubmitInquiryAction`. The action does not validate; its caller does (the storefront API through `misaf/vendra-inquiry-api`'s `SubmitInquiryRequest`).
-- Track the reply with `markAnswered()`, `close()`, and `reopen()` on the model, and expose them as Filament actions guarded on the current status.
+- Status is a Spatie model-states machine in `States\` (`Open` stored as `new`, `Answered`, `Closed`), allowing every move between different statuses. Track the reply with `markAnswered()`, `close()`, and `reopen()`; `AnswerInquiryTransition` stamps `answered_at` and `ReopenInquiryTransition` clears it. Filament actions are visible when `canTransitionTo()` allows their target.
 - Derive tenant awareness through `misaf/vendra-support`. Apply `BelongsToTenant` to `Inquiry`. Never assign `tenant_id` directly or add a `tenant_aware` config toggle.
 - Keep `InquiryResource` in the shared `CustomersCluster` under `src/Filament/Clusters/Resources`, with forms in `Schemas`, tables in `Tables`, and status changes in `Actions`.
 - Keep the complete resource tree under `src/Filament/Clusters/Resources/`, use the matching `Misaf\VendraInquiry\Filament\Clusters\Resources` namespace, and keep plugin registration aligned. Any future resource without a `$cluster` must instead live under `src/Filament/Resources/`.

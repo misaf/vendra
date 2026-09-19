@@ -14,9 +14,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\VendraInquiry\Database\Factories\InquiryFactory;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
+use Misaf\VendraInquiry\States\Answered;
+use Misaf\VendraInquiry\States\Closed;
+use Misaf\VendraInquiry\States\InquiryState;
+use Misaf\VendraInquiry\States\Open;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
+use Spatie\ModelStates\HasStates;
 
 /**
  * @property int $id
@@ -26,7 +30,7 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
  * @property string|null $phone
  * @property string|null $occasion
  * @property string $message
- * @property InquiryStatusEnum $status
+ * @property InquiryState $status
  * @property string|null $source
  * @property string|null $locale
  * @property array<string, mixed>|null $metadata
@@ -56,14 +60,8 @@ final class Inquiry extends Model implements ShouldLogActivity
     /** @use HasFactory<InquiryFactory> */
     use HasFactory;
 
+    use HasStates;
     use SoftDeletes;
-
-    /**
-     * @var array<string, mixed>
-     */
-    protected $attributes = [
-        'status' => InquiryStatusEnum::New->value,
-    ];
 
     /**
      * @return array<string, string>
@@ -73,7 +71,7 @@ final class Inquiry extends Model implements ShouldLogActivity
         return [
             'id' => 'integer',
             'tenant_id' => 'integer',
-            'status' => InquiryStatusEnum::class,
+            'status' => InquiryState::class,
             'metadata' => 'array',
             'answered_at' => 'datetime',
         ];
@@ -81,23 +79,17 @@ final class Inquiry extends Model implements ShouldLogActivity
 
     public function markAnswered(): void
     {
-        $this->forceFill([
-            'status' => InquiryStatusEnum::Answered,
-            'answered_at' => now(),
-        ])->save();
+        $this->status->transitionTo(Answered::class);
     }
 
     public function close(): void
     {
-        $this->forceFill(['status' => InquiryStatusEnum::Closed])->save();
+        $this->status->transitionTo(Closed::class);
     }
 
     public function reopen(): void
     {
-        $this->forceFill([
-            'status' => InquiryStatusEnum::New,
-            'answered_at' => null,
-        ])->save();
+        $this->status->transitionTo(Open::class);
     }
 
     /**
@@ -106,6 +98,6 @@ final class Inquiry extends Model implements ShouldLogActivity
     #[Scope]
     protected function unanswered(Builder $builder): void
     {
-        $builder->where('status', InquiryStatusEnum::New);
+        $builder->whereState('status', Open::class);
     }
 }

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\States\Open;
 
 beforeEach(function (): void {
     makeCurrentTestTenant();
@@ -29,7 +29,7 @@ it('accepts a contact enquiry from an unauthenticated visitor', function (): voi
         ->and($inquiry->occasion)->toBe('wedding')
         ->and($inquiry->locale)->toBe('fa')
         ->and($inquiry->source)->toBe('storefront')
-        ->and($inquiry->status)->toBe(InquiryStatusEnum::New);
+        ->and($inquiry->status)->toBeInstanceOf(Open::class);
 });
 
 it('rejects an enquiry the studio could not answer', function (array $payload): void {

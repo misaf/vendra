@@ -8,8 +8,8 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Misaf\VendraInquiry\Actions\ReopenInquiryAction;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\States\Open;
 
 final class ReopenInquiryTableAction
 {
@@ -21,7 +21,7 @@ final class ReopenInquiryTableAction
             ->icon(Heroicon::OutlinedArrowPath)
             ->label(__('vendra-inquiry::messages.reopen'))
             ->requiresConfirmation()
-            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::New)
+            ->visible(fn (Inquiry $record): bool => $record->status->canTransitionTo(Open::class))
             ->action(function (Inquiry $record): void {
                 resolve(ReopenInquiryAction::class)->execute($record);
 

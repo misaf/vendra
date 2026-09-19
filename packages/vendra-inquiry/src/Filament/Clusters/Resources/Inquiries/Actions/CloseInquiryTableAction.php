@@ -8,8 +8,8 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Misaf\VendraInquiry\Actions\CloseInquiryAction;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\States\Closed;
 
 final class CloseInquiryTableAction
 {
@@ -21,7 +21,7 @@ final class CloseInquiryTableAction
             ->icon(Heroicon::OutlinedArchiveBox)
             ->label(__('vendra-inquiry::messages.close'))
             ->requiresConfirmation()
-            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::Closed)
+            ->visible(fn (Inquiry $record): bool => $record->status->canTransitionTo(Closed::class))
             ->action(function (Inquiry $record): void {
                 resolve(CloseInquiryAction::class)->execute($record);
 

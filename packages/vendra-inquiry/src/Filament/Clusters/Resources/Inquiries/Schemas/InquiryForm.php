@@ -9,7 +9,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
+use Misaf\VendraInquiry\States\InquiryState;
 
 final class InquiryForm
 {
@@ -34,7 +34,7 @@ final class InquiryForm
 
                         Select::make('status')
                             ->label(__('vendra-inquiry::attributes.status'))
-                            ->options(InquiryStatusEnum::class),
+                            ->options(InquiryState::options()),
 
                         Textarea::make('message')
                             ->columnSpanFull()

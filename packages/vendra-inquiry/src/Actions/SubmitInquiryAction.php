@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraInquiry\Actions;
 
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
 
 final class SubmitInquiryAction
@@ -37,7 +36,6 @@ final class SubmitInquiryAction
         return Inquiry::query()->create([
             ...$attributes,
             'metadata' => $metadata,
-            'status' => InquiryStatusEnum::New,
         ]);
     }
 }

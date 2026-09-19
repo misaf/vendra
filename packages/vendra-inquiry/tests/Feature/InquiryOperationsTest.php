@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 use Misaf\VendraInquiry\Actions\SubmitInquiryAction;
 use Misaf\VendraInquiry\Database\Factories\InquiryFactory;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\States\Answered;
+use Misaf\VendraInquiry\States\Closed;
+use Misaf\VendraInquiry\States\Open;
 
 beforeEach(function (): void {
     makeCurrentTestTenant();
@@ -25,7 +27,7 @@ it('records an enquiry exactly as it was written', function (): void {
     );
 
     expect($inquiry->message)->toBe($message)
-        ->and($inquiry->status)->toBe(InquiryStatusEnum::New)
+        ->and($inquiry->status)->toBeInstanceOf(Open::class)
         ->and($inquiry->occasion)->toBe('wedding')
         ->and($inquiry->locale)->toBe('fa')
         ->and($inquiry->answered_at)->toBeNull();
@@ -36,7 +38,7 @@ it('marks an enquiry answered and stamps when', function (): void {
 
     $inquiry->markAnswered();
 
-    expect($inquiry->status)->toBe(InquiryStatusEnum::Answered)
+    expect($inquiry->status)->toBeInstanceOf(Answered::class)
         ->and($inquiry->answered_at)->not->toBeNull();
 });
 
@@ -45,11 +47,11 @@ it('closes and reopens an enquiry', function (): void {
 
     $inquiry->close();
 
-    expect($inquiry->status)->toBe(InquiryStatusEnum::Closed);
+    expect($inquiry->status)->toBeInstanceOf(Closed::class);
 
     $inquiry->reopen();
 
-    expect($inquiry->status)->toBe(InquiryStatusEnum::New)
+    expect($inquiry->status)->toBeInstanceOf(Open::class)
         ->and($inquiry->answered_at)->toBeNull();
 });
 

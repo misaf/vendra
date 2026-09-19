@@ -22,6 +22,7 @@
         "php": "^8.4",
         "misaf/filament-jalali": "^5.1.4",
         "misaf/vendra-support": "self.version",
+        "spatie/laravel-model-states": "^2.11",
         "spatie/laravel-package-tools": "^1.93.1"
     },
     "autoload": {

@@ -1,6 +1,6 @@
 ---
 name: vendra-inquiry-development
-description: "Create, modify, review, or test the Vendra Inquiry module in packages/vendra-inquiry. Use for Inquiry, contact enquiries, the storefront contact form, SubmitInquiryAction, InquiryStatusEnum, answering, closing and reopening enquiries, inquiry migrations and factories, inquiry policies and permission seeders, the vendra-inquiry:seed command, InquiryPlugin, CustomersCluster, InquiryResource, translations, or configuration."
+description: "Create, modify, review, or test the Vendra Inquiry module in packages/vendra-inquiry. Use for Inquiry, contact enquiries, the storefront contact form, SubmitInquiryAction, InquiryState (Spatie model states: Open, Answered, Closed), answering, closing and reopening enquiries, inquiry migrations and factories, inquiry policies and permission seeders, the vendra-inquiry:seed command, InquiryPlugin, CustomersCluster, InquiryResource, translations, or configuration."
 ---
 
 # Vendra Inquiry
@@ -42,10 +42,10 @@ Treat `packages/vendra-inquiry` as the source of storefront contact-enquiry beha
 
 ## Domain Standards
 
-- Model an enquiry with a name, email, optional phone, optional occasion slug, verbatim message, `InquiryStatusEnum` status, optional source and locale, optional metadata, and an `answered_at` stamp.
-- Default a new enquiry to `InquiryStatusEnum::New` and badge the inbox on that scope.
+- Model an enquiry with a name, email, optional phone, optional occasion slug, verbatim message, an `InquiryState` status (Spatie model states), optional source and locale, optional metadata, and an `answered_at` stamp.
+- A new enquiry starts in `States\Open` (stored as `new`); badge the inbox on the `unanswered()` scope. The state class is `Open` because `New` is a reserved word.
 - Validate at the caller (e.g. `misaf/vendra-inquiry-api`'s `SubmitInquiryRequest`) before calling `SubmitInquiryAction`; the action does not validate.
-- Keep status changes on the model (`markAnswered()`, `close()`, `reopen()`); they are single writes and need no action wrapper.
+- Change status only through `markAnswered()`, `close()`, and `reopen()`, which run `InquiryState` transitions. `AnswerInquiryTransition` stamps `answered_at` and `ReopenInquiryTransition` clears it; never write the status column directly.
 - Use typed Eloquent relationships with PHPDoc generics, Laravel model attributes, explicit casts, final classes, and `declare(strict_types=1)`.
 
 ## Tenant Awareness
@@ -60,7 +60,7 @@ Treat `packages/vendra-inquiry` as the source of storefront contact-enquiry beha
 - Register `InquiryResource` through `InquiryPlugin` and `InquiryServiceProvider`, respecting configured panel IDs.
 - Keep every resource that declares a `$cluster`, including its complete supporting tree, under `src/Filament/Clusters/Resources/` with the matching `Misaf\VendraInquiry\Filament\Clusters\Resources` namespace and plugin registration. Resources without a cluster belong under `src/Filament/Resources/`; delegate schemas and tables to dedicated classes.
 - Keep the inbox read-and-triage only: enquiries arrive from the storefront, so `create` is denied.
-- Guard each status action on the current status so an already-answered enquiry cannot be answered twice.
+- Any move between two different statuses is allowed; moving to the current status throws `TransitionNotFound`. Filament actions show themselves with `$record->status->canTransitionTo(...)`, so the UI and the state config never disagree.
 - Use Filament v5 namespaces: fields from `Filament\Forms\Components`, layout from `Filament\Schemas\Components`, columns from `Filament\Tables\Columns`, actions from `Filament\Actions`, and icons from `Filament\Support\Icons\Heroicon`.
 - Use `vendra-inquiry::attributes`, `vendra-inquiry::navigation`, `vendra-inquiry::enums`, and `vendra-inquiry::messages` translation keys for every visible label.
 - Keep `InquiryResource` ungrouped and assign `$navigationSort` from `NavigationPriority::Inquiries`; never hardcode numeric resource sort values.

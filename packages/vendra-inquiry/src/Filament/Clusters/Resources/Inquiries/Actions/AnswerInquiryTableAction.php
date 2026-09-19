@@ -8,8 +8,8 @@ use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Misaf\VendraInquiry\Actions\AnswerInquiryAction;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\States\Answered;
 
 final class AnswerInquiryTableAction
 {
@@ -21,7 +21,7 @@ final class AnswerInquiryTableAction
             ->icon(Heroicon::OutlinedCheckCircle)
             ->label(__('vendra-inquiry::messages.answer'))
             ->requiresConfirmation()
-            ->visible(fn (Inquiry $record): bool => $record->status !== InquiryStatusEnum::Answered)
+            ->visible(fn (Inquiry $record): bool => $record->status->canTransitionTo(Answered::class))
             ->action(function (Inquiry $record): void {
                 resolve(AnswerInquiryAction::class)->execute($record);
 

@@ -7,8 +7,10 @@ namespace Misaf\VendraInquiry\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Attributes\UseModel;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\States\Answered;
+use Misaf\VendraInquiry\States\Closed;
+use Misaf\VendraInquiry\States\Open;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 /**
@@ -28,7 +30,7 @@ final class InquiryFactory extends Factory
             'phone' => null,
             'occasion' => fake()->randomElement(['wedding', 'event', 'sympathy', 'corporate', 'other']),
             'message' => fake()->paragraph(),
-            'status' => InquiryStatusEnum::New,
+            'status' => Open::class,
             'source' => 'contact-form',
             'locale' => 'en',
         ];
@@ -37,7 +39,7 @@ final class InquiryFactory extends Factory
     public function answered(): static
     {
         return $this->state(fn (): array => [
-            'status' => InquiryStatusEnum::Answered,
+            'status' => Answered::class,
             'answered_at' => now(),
         ]);
     }
@@ -45,7 +47,7 @@ final class InquiryFactory extends Factory
     public function closed(): static
     {
         return $this->state(fn (): array => [
-            'status' => InquiryStatusEnum::Closed,
+            'status' => Closed::class,
         ]);
     }
 

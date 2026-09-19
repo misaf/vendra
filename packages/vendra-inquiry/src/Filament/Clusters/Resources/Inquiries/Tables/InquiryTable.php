@@ -16,10 +16,10 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
-use Misaf\VendraInquiry\Enums\InquiryStatusEnum;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\AnswerInquiryTableAction;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\CloseInquiryTableAction;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\ReopenInquiryTableAction;
+use Misaf\VendraInquiry\States\InquiryState;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
@@ -48,6 +48,9 @@ final class InquiryTable
 
                 TextColumn::make('status')
                     ->badge()
+                    ->color(fn (InquiryState $state): array => $state->getColor())
+                    ->formatStateUsing(fn (InquiryState $state): string => $state->getLabel())
+                    ->icon(fn (InquiryState $state): Heroicon => $state->getIcon())
                     ->label(__('vendra-inquiry::attributes.status')),
 
                 TextColumn::make('message')
@@ -87,7 +90,7 @@ final class InquiryTable
 
                         SelectConstraint::make('status')
                             ->label(__('vendra-inquiry::attributes.status'))
-                            ->options(InquiryStatusEnum::class),
+                            ->options(InquiryState::options()),
 
                         DateConstraint::make('created_at')
                             ->label(__('vendra-inquiry::attributes.created_at')),
