@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Misaf\VendraSubscription\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 use Misaf\VendraSubscription\Database\Factories\SubscriptionPaymentFactory;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
+use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 
 /**
@@ -66,6 +69,20 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
             'failed_at' => 'datetime',
             'next_retry_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Paid payments whose subscription was never activated.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function awaitingActivation(Builder $query): Builder
+    {
+        return $query
+            ->where('status', SubscriptionPaymentStatus::Paid)
+            ->whereHas('subscription', fn (Builder $query): Builder => $query->where('status', SubscriptionStatus::PendingPayment));
     }
 
     /**

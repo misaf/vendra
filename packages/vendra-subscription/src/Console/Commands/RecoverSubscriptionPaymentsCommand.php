@@ -9,7 +9,6 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
-use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Jobs\ProcessSubscriptionPayment;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSupport\Context\RequestJobContext;
@@ -50,11 +49,7 @@ final class RecoverSubscriptionPaymentsCommand extends Command
                                         ->orWhere('next_retry_at', '<=', now());
                                 });
                         })
-                        ->orWhere(function (Builder $query): void {
-                            $query
-                                ->where('status', SubscriptionPaymentStatus::Paid)
-                                ->whereHas('subscription', fn (Builder $query): Builder => $query->where('status', SubscriptionStatus::PendingPayment));
-                        });
+                        ->orWhere(fn (Builder $query): Builder => $query->awaitingActivation());
                 })
                 ->select('id')
                 ->chunkById(100, function ($payments) use (&$count): void {
