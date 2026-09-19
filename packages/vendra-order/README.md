@@ -41,6 +41,11 @@ configured panels. Orders are created by the application through
 `PlaceOrderAction`; the administration UI inspects orders and moves them
 through their lifecycle.
 
+`CancelOrderAction` locks the order, cancels it, and dispatches
+`Events\OrderCancelled` inside the same transaction, so a listener that returns
+stock commits or rolls back with the cancellation. Cancel through the action,
+not `Order::cancel()`, or no listener hears about it.
+
 ## Placing an order
 
 The module never reads the catalog. Callers price the lines and hand the action
