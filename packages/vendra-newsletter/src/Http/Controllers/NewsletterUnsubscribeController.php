@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraNewsletter\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
+use Misaf\VendraNewsletter\Actions\UnsubscribeNewsletterSubscriberAction;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 
 final class NewsletterUnsubscribeController
@@ -15,8 +16,8 @@ final class NewsletterUnsubscribeController
             ->where('unsubscribe_token', $token)
             ->first();
 
-        if ($subscriber instanceof NewsletterSubscriber && $subscriber->isSubscribed()) {
-            $subscriber->forceFill(['unsubscribed_at' => now()])->save();
+        if ($subscriber instanceof NewsletterSubscriber) {
+            resolve(UnsubscribeNewsletterSubscriberAction::class)->execute($subscriber);
         }
 
         return view('vendra-newsletter::unsubscribe', [

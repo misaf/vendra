@@ -19,6 +19,8 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Misaf\VendraNewsletter\Actions\ResubscribeNewsletterSubscriberAction;
+use Misaf\VendraNewsletter\Actions\UnsubscribeNewsletterSubscriberAction;
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource;
 use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
@@ -52,10 +54,9 @@ final class NewsletterSubscriberTable
                     ->onIcon(Heroicon::Bolt)
                     ->state(fn (NewsletterSubscriber $record): bool => $record->isSubscribed())
                     ->updateStateUsing(function (NewsletterSubscriber $record, bool $state): bool {
-                        $record->update([
-                            'subscribed_at' => $state ? now() : $record->subscribed_at,
-                            'unsubscribed_at' => $state ? null : now(),
-                        ]);
+                        $state
+                            ? resolve(ResubscribeNewsletterSubscriberAction::class)->execute($record)
+                            : resolve(UnsubscribeNewsletterSubscriberAction::class)->execute($record);
 
                         return $state;
                     }),

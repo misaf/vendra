@@ -44,7 +44,7 @@ The `misaf/vendra-newsletter` package owns newsletter domain behavior and the Fi
 
 ### Unsubscribe
 
-- Keep the public opt-out in `Http\Controllers\NewsletterUnsubscribeController` + `routes/web.php` (`vendra-newsletter.unsubscribe`) + `resources/views/unsubscribe.blade.php`. Resolve the subscriber by its `unsubscribe_token`; the current tenant is resolved from the request domain, so no tenant handling belongs in the controller.
+- Keep the public opt-out in `Http\Controllers\NewsletterUnsubscribeController` + `routes/web.php` (`vendra-newsletter.unsubscribe`) + `resources/views/unsubscribe.blade.php`. Resolve the subscriber by its `unsubscribe_token`; the current tenant is resolved from the request domain, so no tenant handling belongs in the controller. Opting out goes through `Actions\UnsubscribeNewsletterSubscriberAction`, which the admin subscription toggle also uses, paired with `ResubscribeNewsletterSubscriberAction`; an already unsubscribed row keeps its original `unsubscribed_at`.
 
 ### Conventions
 
