@@ -84,3 +84,17 @@ it('refuses to decline or fail an approved transaction from a stale copy', funct
     'decline' => [DeclineTransactionAction::class],
     'fail' => [FailTransactionAction::class],
 ]);
+
+it('refuses to decline or fail a stale copy directly on the model', function (string $method): void {
+    Event::fake([TransactionDeclined::class, TransactionFailed::class]);
+    $transaction = TransactionFactory::new()->deposit()->create(['amount' => 4_000]);
+    $staleCopy = $transaction->fresh();
+
+    $transaction->fail();
+
+    expect(fn (): mixed => $staleCopy->{$method}())->toThrow(TransitionNotFound::class)
+        ->and($transaction->fresh()?->status)->toBeInstanceOf(Failed::class);
+
+    Event::assertDispatchedTimes(TransactionFailed::class, 1);
+    Event::assertNotDispatched(TransactionDeclined::class);
+})->with(['decline', 'fail']);

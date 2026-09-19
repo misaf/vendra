@@ -26,8 +26,8 @@ abstract class TransactionState extends State implements HasColor, HasIcon, HasL
             ->allowTransition(Pending::class, Processing::class)
             ->allowTransition([Pending::class, Processing::class], Review::class)
             ->allowTransition([Pending::class, Processing::class, Review::class], Approved::class, ApproveTransactionTransition::class)
-            ->allowTransition([Pending::class, Processing::class, Review::class], Declined::class)
-            ->allowTransition([Pending::class, Processing::class, Review::class], Failed::class);
+            ->allowTransition([Pending::class, Processing::class, Review::class], Declined::class, DeclineTransactionTransition::class)
+            ->allowTransition([Pending::class, Processing::class, Review::class], Failed::class, FailTransactionTransition::class);
     }
 
     public function isFinal(): bool

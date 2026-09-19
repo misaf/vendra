@@ -25,7 +25,10 @@ cluster for transactions, gateways, and wallets.
    by `approve()`, `decline()`, `fail()`, `markProcessing()`, and
    `markReview()`. Settlement into the ledger happens exactly once, inside
    the transition to `Approved` — principal, mirrored transfer credit, and
-   fee commit atomically with the status change. Call
+   fee commit atomically with the status change. `DeclineTransactionTransition`
+   and `FailTransactionTransition` lock the row and dispatch
+   `TransactionDeclined` or `TransactionFailed`, as `ApproveTransactionTransition`
+   dispatches `TransactionApproved`. Call
    `ApproveTransactionAction`, `DeclineTransactionAction`, or
    `FailTransactionAction` rather than the model methods: each re-reads the
    transaction under a row lock, so a stale copy cannot decline a transaction

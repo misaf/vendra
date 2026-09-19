@@ -22,8 +22,6 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraTransaction\Database\Factories\TransactionFactory;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
-use Misaf\VendraTransaction\Events\TransactionDeclined;
-use Misaf\VendraTransaction\Events\TransactionFailed;
 use Misaf\VendraTransaction\States\Approved;
 use Misaf\VendraTransaction\States\Declined;
 use Misaf\VendraTransaction\States\Failed;
@@ -147,15 +145,11 @@ final class Transaction extends Model implements ShouldLogActivity
     public function decline(): void
     {
         $this->status->transitionTo(Declined::class);
-
-        event(new TransactionDeclined($this));
     }
 
     public function fail(): void
     {
         $this->status->transitionTo(Failed::class);
-
-        event(new TransactionFailed($this));
     }
 
     public function markProcessing(): void
