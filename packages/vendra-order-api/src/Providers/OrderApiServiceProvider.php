@@ -9,8 +9,11 @@ use ApiPlatform\State\ProcessorInterface;
 use Composer\InstalledVersions;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Misaf\VendraOrder\Events\OrderCancelled;
 use Misaf\VendraOrderApi\ApiResource\OrderResource;
+use Misaf\VendraOrderApi\Listeners\RestockCancelledOrder;
 use Misaf\VendraOrderApi\Policies\CustomerOrderPolicy;
 use Misaf\VendraOrderApi\State\OrderLinksHandler;
 use Misaf\VendraOrderApi\State\PlaceOrderProcessor;
@@ -40,6 +43,8 @@ final class OrderApiServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        Event::listen(OrderCancelled::class, RestockCancelledOrder::class);
+
         AboutCommand::add('Vendra Order API', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-order-api')]);
     }
 }

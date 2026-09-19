@@ -57,7 +57,7 @@ composer require misaf/vendra-order-api
 
 The service provider registers the resources and processors automatically.
 
-Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility; eligibility and unit prices come from `ProductPurchaseQuoter` in `vendra-product`, which loads the whole cart's products in one query.
+Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility; eligibility and unit prices come from `ProductPurchaseQuoter` in `vendra-product`, which loads the whole cart's products in one query. Checkout then takes the ordered stock through `DeductProductStockAction` in the same transaction, refusing the cart with `out_of_stock` if another checkout took it first, and `Listeners\RestockCancelledOrder` returns it when `CancelOrderAction` cancels the order.
 
 ## Testing
 

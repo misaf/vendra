@@ -11,6 +11,7 @@ use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraDelivery\Database\Factories\DeliverySlotFactory;
 use Misaf\VendraDelivery\Database\Factories\DeliveryZoneFactory;
 use Misaf\VendraDelivery\Models\Delivery;
+use Misaf\VendraOrder\Actions\CancelOrderAction;
 use Misaf\VendraOrder\Database\Factories\OrderFactory;
 use Misaf\VendraOrder\Database\Factories\OrderLineFactory;
 use Misaf\VendraOrder\Models\Order;
@@ -336,7 +337,7 @@ it('names the cart item that cannot be bought', function (Closure $fillCart, Clo
     ],
 ]);
 
-it('prices a cart of several products from one catalog query', function (): void {
+it('prices and locks a cart of several products with one query each', function (): void {
     $user = createTestUser();
     $cart = CartFactory::new()->forOwner($user)->createOne();
     CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct(price: 1000))->createOne(['quantity' => 1]);
@@ -356,5 +357,46 @@ it('prices a cart of several products from one catalog query', function (): void
         ->assertCreated()
         ->assertJsonPath('itemsAmount', 6900);
 
-    expect($productQueries)->toBe(1);
+    expect($productQueries)->toBe(2);
+});
+
+it('takes the ordered stock and refuses a second checkout for the last unit', function (): void {
+    $product = orderApiProduct(quantity: 3);
+    $firstBuyer = createTestUser();
+    $firstCart = CartFactory::new()->forOwner($firstBuyer)->createOne();
+    CartItemFactory::new()->forCart($firstCart)->forSellable($product)->createOne(['quantity' => 3]);
+    $secondBuyer = createTestUser();
+    $secondCart = CartFactory::new()->forOwner($secondBuyer)->createOne();
+    $secondItem = CartItemFactory::new()->forCart($secondCart)->forSellable($product)->createOne(['quantity' => 1]);
+
+    $this->actingAs($firstBuyer)
+        ->postJson('/api/sales/checkout', ['cartToken' => $firstCart->token, 'currencyCode' => 'USD'])
+        ->assertCreated();
+
+    expect($product->fresh()?->quantity)->toBe(0);
+
+    $this->actingAs($secondBuyer)
+        ->postJson('/api/sales/checkout', ['cartToken' => $secondCart->token, 'currencyCode' => 'USD'])
+        ->assertUnprocessable();
+
+    expect(Order::query()->count())->toBe(1)
+        ->and($product->fresh()?->quantity)->toBe(0);
+    $this->assertModelExists($secondItem);
+});
+
+it('returns the stock when a placed order is cancelled', function (): void {
+    $user = createTestUser();
+    $product = orderApiProduct(quantity: 5);
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne(['quantity' => 2]);
+
+    $this->actingAs($user)
+        ->postJson('/api/sales/checkout', ['cartToken' => $cart->token, 'currencyCode' => 'USD'])
+        ->assertCreated();
+
+    expect($product->fresh()?->quantity)->toBe(3);
+
+    resolve(CancelOrderAction::class)->execute(Order::query()->sole());
+
+    expect($product->fresh()?->quantity)->toBe(5);
 });

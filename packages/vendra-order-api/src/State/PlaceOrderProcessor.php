@@ -25,8 +25,10 @@ use Misaf\VendraOrder\Actions\PlaceOrderAction;
 use Misaf\VendraOrder\Data\OrderLineDraft;
 use Misaf\VendraOrderApi\ApiResource\CheckoutResource;
 use Misaf\VendraOrderApi\ApiResource\OrderResource;
+use Misaf\VendraProduct\Actions\DeductProductStockAction;
 use Misaf\VendraProduct\Data\ProductPurchaseRequest;
 use Misaf\VendraProduct\Enums\ProductPurchaseRefusalEnum;
+use Misaf\VendraProduct\Exceptions\InsufficientProductStockException;
 use Misaf\VendraProduct\Models\Product;
 use Misaf\VendraProduct\Models\ProductPrice;
 use Misaf\VendraProduct\Services\ProductPurchaseQuoter;
@@ -34,7 +36,8 @@ use Misaf\VendraTransaction\Models\TransactionGateway;
 
 /**
  * Prices and delivery fees come from the catalog and delivery bands, never the
- * client. Addresses that need a manual quote are refused.
+ * client. Addresses that need a manual quote are refused. Stock is taken in
+ * the same transaction, so the last unit cannot be sold twice.
  *
  * @implements ProcessorInterface<CheckoutResource, OrderResource>
  */
@@ -49,6 +52,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         private DeliverySchedule $deliverySchedule,
         private OrderMapper $orderMapper,
         private ProductPurchaseQuoter $productPurchaseQuoter,
+        private DeductProductStockAction $deductProductStock,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): OrderResource
@@ -71,10 +75,14 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
                 $this->reject('deliveryDate', __('vendra-order-api::messages.delivery_date_unavailable'));
             }
 
+            $lines = $this->resolveLines($cart, $currencyCode);
+
+            $this->deductStock($lines);
+
             $order = $this->placeOrder->execute(
                 cart: $cart,
                 currencyCode: $currencyCode,
-                lines: $this->resolveLines($cart, $currencyCode),
+                lines: $lines,
                 customer: $user,
                 deliveryAmount: $quote instanceof DeliveryQuote ? $quote->feeAmount : 0,
                 cardMessage: $data->cardMessage,
@@ -155,6 +163,27 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         }
 
         return $lines;
+    }
+
+    /**
+     * Take the ordered quantities off the products.
+     *
+     * @param  list<OrderLineDraft>  $lines
+     */
+    private function deductStock(array $lines): void
+    {
+        $quantities = [];
+
+        foreach ($lines as $line) {
+            $productId = (int) $line->sellable->getKey();
+            $quantities[$productId] = ($quantities[$productId] ?? 0) + $line->quantity;
+        }
+
+        try {
+            $this->deductProductStock->execute($quantities);
+        } catch (InsufficientProductStockException $exception) {
+            $this->reject('cartToken', __('vendra-order-api::messages.out_of_stock', ['product' => $exception->productId]));
+        }
     }
 
     private function rejectItem(CartItem $item, ProductPurchaseRefusalEnum $refusal): never
