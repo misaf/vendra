@@ -153,6 +153,14 @@ reseller they resolve, so the flow exists once. It creates the tenant, the admin
 user, and the administrator role, then queues the work that finishes
 provisioning.
 
+`CompleteStoreProvisioningJob` finishes it through `CompleteStoreProvisioningAction`,
+which seeds, caches routes, and activates the store, saving a checkpoint after
+each step so a retry resumes where the last attempt stopped. A failed attempt,
+and the job's final `failed()` hook, go through `FailStoreProvisioningAction`,
+which never marks a store that is already ready. The job keeps the queue
+concerns: retries, backoff, the per-store `WithoutOverlapping` lock, and the
+request context.
+
 ### Reassigning a store's billing reseller
 
 ```php

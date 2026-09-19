@@ -9,14 +9,11 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\Attributes\Timeout;
 use Illuminate\Queue\Attributes\Tries;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
-use Illuminate\Support\Str;
-use Misaf\VendraStore\Contracts\StoreResellerResolver;
+use Misaf\VendraStore\Actions\CompleteStoreProvisioningAction;
+use Misaf\VendraStore\Actions\FailStoreProvisioningAction;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
-use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
-use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
-use Misaf\VendraTenant\Jobs\CacheTenantRoutesJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Throwable;
 
@@ -40,56 +37,11 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
         ];
     }
 
-    public function handle(): void
+    public function handle(CompleteStoreProvisioningAction $completeStoreProvisioningAction): void
     {
         $store = Store::query()->findOrFail($this->tenantId);
 
-        $this->context($store)->scope(fn () => $this->provision($store));
-    }
-
-    private function provision(Store $store): void
-    {
-        if ($store->provisioning_status === TenantProvisioningStatus::Ready) {
-            return;
-        }
-
-        $store->forceFill([
-            'active' => false,
-            'provisioning_status' => TenantProvisioningStatus::Processing,
-            'provisioning_failed_at' => null,
-            'provisioning_error' => null,
-        ])->save();
-
-        try {
-            if ($store->provisioning_should_seed && $store->provisioning_seeded_at === null) {
-                event(new TenantProvisioned($store, shouldSeed: true));
-
-                $store->forceFill(['provisioning_seeded_at' => now()])->save();
-            }
-
-            if ($store->routes_cached_at === null) {
-                dispatch_sync(new CacheTenantRoutesJob($store->id));
-
-                $store->forceFill(['routes_cached_at' => now()])->save();
-            }
-
-            $billingSuspendedAt = $this->shouldStartBillingSuspended($store)
-                ? now()
-                : null;
-
-            $store->forceFill([
-                'active' => true,
-                'billing_suspended_at' => $billingSuspendedAt,
-                'provisioning_status' => TenantProvisioningStatus::Ready,
-                'provisioned_at' => now(),
-                'provisioning_failed_at' => null,
-                'provisioning_error' => null,
-            ])->save();
-        } catch (Throwable $exception) {
-            $this->markFailed($exception);
-
-            throw $exception;
-        }
+        $this->context($store)->scope(fn () => $completeStoreProvisioningAction->execute($store));
     }
 
     /**
@@ -104,40 +56,7 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
     {
         $store = Store::query()->find($this->tenantId);
 
-        $this->context($store)->scope(fn () => $this->markFailed($exception));
-    }
-
-    /**
-     * Determine if the store should start suspended because its reseller is not paying.
-     *
-     * A store without a reseller starts active; an unresolvable reseller fails closed.
-     */
-    private function shouldStartBillingSuspended(Store $store): bool
-    {
-        if ($store->reseller_id === null) {
-            return false;
-        }
-
-        $reseller = resolve(StoreResellerResolver::class)->find($store->reseller_id);
-
-        return $reseller === null
-            || ! $reseller->canHoldUnits()
-            || $reseller->activeSubscription() === null;
-    }
-
-    private function markFailed(?Throwable $exception): void
-    {
-        Store::query()
-            ->whereKey($this->tenantId)
-            ->where('provisioning_status', '!=', TenantProvisioningStatus::Ready->value)
-            ->update([
-                'active' => false,
-                'provisioning_status' => TenantProvisioningStatus::Failed->value,
-                'provisioning_failed_at' => now(),
-                'provisioning_error' => $exception === null
-                    ? 'Store provisioning failed.'
-                    : Str::limit($exception->getMessage(), 2000, ''),
-            ]);
+        $this->context($store)->scope(fn () => resolve(FailStoreProvisioningAction::class)->execute($this->tenantId, $exception));
     }
 
     private function context(?Store $store): RequestJobContext
