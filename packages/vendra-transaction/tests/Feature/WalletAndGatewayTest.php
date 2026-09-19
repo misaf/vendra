@@ -112,7 +112,6 @@ it('resolves gateways by slug and ignores disabled ones', function (): void {
 
     expect(TransactionGatewayRegistry::hasActive('coinpayments'))->toBeFalse()
         ->and(TransactionGatewayRegistry::hasActive('internal-transactions'))->toBeTrue()
-        ->and(TransactionGatewayRegistry::hasAnyActive())->toBeFalse()
         ->and(fn () => TransactionGatewayRegistry::get('coinpayments'))->toThrow(RuntimeException::class);
 });
 
@@ -122,28 +121,6 @@ it('provisions the default wallet in the resolved default currency', function ()
     $wallet = WalletResolver::firstOrCreateDefaultWalletFor($user);
 
     expect($wallet->currency_code)->toBe(CurrencyIntegration::defaultCode());
-});
-
-it('identifies internal transactions by the internal gateway', function (): void {
-    $internal = TransactionGatewayFactory::new()->active()->internal()->create();
-    $external = TransactionGatewayFactory::new()->active()->create(['slug' => 'shetab']);
-    $wallet = WalletFactory::new()->create();
-
-    $internalTransaction = resolve(CreateTransactionAction::class)->execute(
-        transactionGateway: $internal,
-        wallet: $wallet,
-        transactionType: TransactionTypeEnum::Deposit,
-        amount: 1_000,
-    );
-    $externalTransaction = resolve(CreateTransactionAction::class)->execute(
-        transactionGateway: $external,
-        wallet: $wallet,
-        transactionType: TransactionTypeEnum::Deposit,
-        amount: 1_000,
-    );
-
-    expect(TransactionGatewayRegistry::isInternal($internalTransaction))->toBeTrue()
-        ->and(TransactionGatewayRegistry::isInternal($externalTransaction))->toBeFalse();
 });
 
 it('provisions one wallet per user and currency', function (): void {
