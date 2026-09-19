@@ -21,6 +21,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | packages/*/src/Providers/** | .ai/rules/providers.md |
 | packages/vendra-console/src/Filament/Resources/Resellers/** | .ai/rules/resellers.md |
 | packages/*/src/Filament/Resources/** | .ai/rules/resources.md |
+| **/database/seeders/** | .ai/rules/seeders.md |
 | app/Settings/** | .ai/rules/settings.md |
 | packages/*/src/** | .ai/rules/src.md |
 | packages/vendra-*/src/Filament/Resources/Stores/** | .ai/rules/stores.md |

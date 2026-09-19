@@ -7,17 +7,16 @@ namespace Misaf\VendraConsole\Console\Commands;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\Support\Uri;
 use Illuminate\Validation\Rules\Password;
 use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Actions\GrantConsoleAccessAction;
 use Misaf\VendraConsole\Actions\RevokeConsoleUserAction;
 use Misaf\VendraConsole\Exceptions\LastConsoleUserException;
 use Misaf\VendraConsole\Models\Console;
+use Misaf\VendraConsole\Support\ConsoleAddress;
 use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
 use Misaf\VendraUser\Models\User;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -47,7 +46,7 @@ final class ConsoleUserCommand extends Command
             return $this->revoke($emailOption);
         }
 
-        $email = $emailOption ?? $this->defaultEmail();
+        $email = $emailOption ?? ConsoleAddress::defaultEmail();
 
         $passwordOption = $this->option('password');
         $passwordOption = is_string($passwordOption) && $passwordOption !== '' ? $passwordOption : null;
@@ -168,26 +167,5 @@ final class ConsoleUserCommand extends Command
             ->where('email', $email)
             ->whereNull('tenant_id')
             ->first();
-    }
-
-    /**
-     * The console user's address follows the deployment's own host, the same
-     * host the console panel is served under.
-     */
-    private function defaultEmail(): string
-    {
-        return 'console@'.$this->appHost();
-    }
-
-    private function consoleUrl(): string
-    {
-        return sprintf('%s://console.%s', Uri::of(Config::string('app.url'))->scheme() ?? 'https', $this->appHost());
-    }
-
-    private function appHost(): string
-    {
-        $host = (string) Uri::of(Config::string('app.url'))->host();
-
-        return $host === '' ? 'localhost' : $host;
     }
 }

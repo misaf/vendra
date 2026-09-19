@@ -17,13 +17,13 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Uri;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Misaf\VendraLocalization\Http\Middleware\SetLocale;
 use Misaf\VendraReseller\Filament\Pages\Auth\EditProfile;
 use Misaf\VendraReseller\Filament\Pages\Auth\Login;
 use Misaf\VendraReseller\Filament\Pages\Auth\Register;
 use Misaf\VendraReseller\Http\Middleware\AddResellerToRequestJobContext;
+use Misaf\VendraReseller\Support\ResellerAddress;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
 
 /**
@@ -53,7 +53,7 @@ final class ResellerPanelServiceProvider extends PanelProvider
             ->homeUrl('/')
             ->authGuard('reseller')
             ->authPasswordBroker('reseller')
-            ->domain('reseller.'.Uri::of(config()->string('app.url'))->host())
+            ->domain(ResellerAddress::domain())
             ->login(Login::class)
             ->registration(Register::class)
             ->passwordReset()
