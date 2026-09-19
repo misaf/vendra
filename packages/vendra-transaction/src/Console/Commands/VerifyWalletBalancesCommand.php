@@ -7,6 +7,7 @@ namespace Misaf\VendraTransaction\Console\Commands;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
+use Misaf\VendraTransaction\Actions\RepairWalletBalanceAction;
 use Misaf\VendraTransaction\Models\Wallet;
 
 /**
@@ -16,6 +17,11 @@ use Misaf\VendraTransaction\Models\Wallet;
 #[Signature('vendra-transaction:verify-balances {--repair : Reset drifted cached balances to the ledger-derived value}')]
 final class VerifyWalletBalancesCommand extends Command
 {
+    public function __construct(private readonly RepairWalletBalanceAction $repairWalletBalanceAction)
+    {
+        parent::__construct();
+    }
+
     public function handle(): int
     {
         $drifted = 0;
@@ -35,8 +41,8 @@ final class VerifyWalletBalancesCommand extends Command
                     $this->error("Wallet [{$wallet->id}] cached balance [{$wallet->balance}] differs from ledger balance [{$ledgerBalance}].");
 
                     if ($this->option('repair')) {
-                        $wallet->forceFill(['balance' => $ledgerBalance])->save();
-                        $this->info("Wallet [{$wallet->id}] balance repaired to [{$ledgerBalance}].");
+                        $repairedBalance = $this->repairWalletBalanceAction->execute($wallet);
+                        $this->info("Wallet [{$wallet->id}] balance repaired to [{$repairedBalance}].");
                     }
                 }
             });

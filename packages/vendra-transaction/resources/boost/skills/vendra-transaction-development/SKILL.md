@@ -1,6 +1,6 @@
 ---
 name: vendra-transaction-development
-description: "Create, modify, review, or test the Vendra Transaction package in packages/vendra-transaction. Use for Wallet, LedgerEntry, Transaction, TransactionGateway, fees, limits, metadata, the transaction state machine (States, ApproveTransactionTransition), WalletResolver, TransactionGatewayRegistry, CreateTransactionAction, PostLedgerEntryAction, SettleTransactionAction, verify-balances command, policies, Filament resources and widgets, migrations, translations, and package wiring."
+description: "Create, modify, review, or test the Vendra Transaction package in packages/vendra-transaction. Use for Wallet, LedgerEntry, Transaction, TransactionGateway, fees, limits, metadata, the transaction state machine (States, ApproveTransactionTransition), WalletResolver, TransactionGatewayRegistry, CreateTransactionAction, PostLedgerEntryAction, RepairWalletBalanceAction, SettleTransactionAction, verify-balances command, policies, Filament resources and widgets, migrations, translations, and package wiring."
 ---
 
 # Vendra Transaction
