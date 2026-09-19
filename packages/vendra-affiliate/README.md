@@ -20,6 +20,9 @@ stats widgets.
    - **Signup** — a fixed bounty per attributed registration.
    - **Checkout** — host applications call `RecordCartConversionAction` from their
      checkout flow (vendra-cart has no checkout event yet).
+
+   Both the deposit and checkout conversions find the referrer through
+   `AffiliateReferral::forUser()`, and credit nothing when its affiliate is gone.
 5. `ProcessAffiliatePayoutAction` settles approved commissions atomically: it
    groups them into an `AffiliatePayout`, marks them paid, and credits the
    affiliate's default-currency wallet through an approved Commission

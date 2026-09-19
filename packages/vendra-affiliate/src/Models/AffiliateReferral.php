@@ -55,6 +55,17 @@ final class AffiliateReferral extends Model implements ShouldLogActivity
     }
 
     /**
+     * Find the referral that attributes a user, with its affiliate loaded.
+     */
+    public static function forUser(int $userId): ?self
+    {
+        return self::query()
+            ->with('affiliate')
+            ->where('user_id', $userId)
+            ->first();
+    }
+
+    /**
      * @return BelongsTo<AffiliateClick, $this>
      */
     public function click(): BelongsTo

@@ -9,6 +9,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Queue\InteractsWithQueue;
 use Misaf\VendraAffiliate\Actions\CreditCommissionAction;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
+use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Events\TransactionApproved;
@@ -40,15 +41,12 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
 
         $transaction->loadMissing('wallet');
 
-        $referral = AffiliateReferral::with('affiliate')
-            ->where('user_id', $transaction->wallet->user_id)
-            ->first();
+        $referral = AffiliateReferral::forUser($transaction->wallet->user_id);
+        $affiliate = $referral?->affiliate;
 
-        if (! $referral instanceof AffiliateReferral || $referral->affiliate === null) {
+        if (! $affiliate instanceof Affiliate) {
             return;
         }
-
-        $affiliate = $referral->affiliate;
 
         $this->creditCommission->execute(
             affiliate: $affiliate,

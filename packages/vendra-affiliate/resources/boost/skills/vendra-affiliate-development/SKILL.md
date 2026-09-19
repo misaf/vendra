@@ -50,6 +50,7 @@ Follow the existing affiliate, click, commission, payout, and referral models fo
 - Reuse only the traits and conventions present on the affected sibling model; do not infer translations, media, slugs, sorting, or soft deletes from another package.
 - Keep `ProcessAffiliatePayoutAction` atomic: consuming commissions, creating the payout, and creating **and approving** the Commission transaction (which settles the affiliate's wallet through the transaction module's ledger) happen in one database transaction. A payout becomes `Completed` only after its transaction is approved; on failure everything rolls back and the commissions stay `Approved` and payable. The missing-user branch records a `Failed` payout without consuming commissions.
 - `TransactionCommissionSubscriber` credits deposit commissions idempotently from `TransactionApproved` for referred users' deposits; it must stay `ShouldQueueAfterCommit`, react only to Deposit-type transactions, and never subscribe to generic `eloquent.updated` model events. Approval is final, so it reverses nothing.
+- Look up a referred user's referrer with `AffiliateReferral::forUser()` (affiliate eager-loaded); conversions skip a referral whose affiliate is deleted. Never repeat the referral query inline.
 
 ## Filament Standards
 

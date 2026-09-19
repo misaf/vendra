@@ -6,6 +6,7 @@ namespace Misaf\VendraAffiliate\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
+use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
 use Misaf\VendraUser\Models\User;
@@ -28,15 +29,12 @@ final class RecordCartConversionAction
             return null;
         }
 
-        $referral = AffiliateReferral::with('affiliate')
-            ->where('user_id', $buyer->id)
-            ->first();
+        $referral = AffiliateReferral::forUser($buyer->id);
+        $affiliate = $referral?->affiliate;
 
-        if (! $referral instanceof AffiliateReferral || $referral->affiliate === null) {
+        if (! $affiliate instanceof Affiliate) {
             return null;
         }
-
-        $affiliate = $referral->affiliate;
 
         return $this->creditCommission->execute(
             affiliate: $affiliate,
