@@ -95,6 +95,26 @@ $products = Product::query()
     ->get();
 ```
 
+Quote purchases for a checkout:
+
+```php
+use Misaf\VendraProduct\Data\ProductPurchaseQuote;
+use Misaf\VendraProduct\Data\ProductPurchaseRequest;
+use Misaf\VendraProduct\Services\ProductPurchaseQuoter;
+
+$quotes = app(ProductPurchaseQuoter::class)->quote([
+    'line-1' => new ProductPurchaseRequest(productId: $product->id, quantity: 2),
+], 'USD');
+
+$quote = $quotes['line-1']; // ProductPurchaseQuote, or a ProductPurchaseRefusalEnum case
+```
+
+The quoter loads every requested product in one query and keeps the request
+keys. A product can be bought when its category is active, it is in stock with
+enough quantity, and it has a price in the currency; otherwise the result is
+`Unavailable`, `OutOfStock`, or `PriceMissing`. It checks stock but never
+reserves it, and knows nothing about carts or orders.
+
 ### Optional tags
 
 Install `misaf/vendra-tagger` in the host application to enable the Tags tab and table column automatically. Product does not require or import Tagger or Spatie Tags; both packages communicate through the `TagResolver` contract in `misaf/vendra-support`.
