@@ -10,10 +10,10 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
-use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\AttachAction;
-use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\CreateAction;
-use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\DetachAction;
+use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\AttachTableAction;
+use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\CreateTableAction;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\DetachBulkAction;
+use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Permissions\DetachTableAction;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource;
 use Misaf\VendraPermission\Models\Role;
 
@@ -61,11 +61,11 @@ final class PermissionRelationManager extends RelationManager
     {
         return PermissionResource::table($table)
             ->headerActions([
-                AttachAction::make(),
-                CreateAction::make(),
+                AttachTableAction::make(),
+                CreateTableAction::make(),
             ])
             ->recordActions([
-                DetachAction::make(),
+                DetachTableAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

@@ -8,7 +8,8 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Collection;
-use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Actions\Roles\Concerns\ResolvesSelected;
+use Illuminate\Support\Arr;
+use InvalidArgumentException;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\Schemas\Components\RolesSelect;
 use Misaf\VendraPermission\Models\Permission;
 use Misaf\VendraPermission\Models\Role;
@@ -16,7 +17,6 @@ use Misaf\VendraPermission\Models\Role;
 final class SyncBulkAction extends BulkAction
 {
     use CanCustomizeProcess;
-    use ResolvesSelected;
 
     public static function getDefaultName(): ?string
     {
@@ -39,14 +39,12 @@ final class SyncBulkAction extends BulkAction
 
         $this->schema([
             RolesSelect::make('roles')
-                ->options(
-                    Role::query()
-                        ->orderBy('name')
-                        ->orderBy('guard_name')
-                        ->get(['id', 'name', 'guard_name'])
-                        ->mapWithKeys(static fn (Role $role): array => [$role->id => "{$role->name} ({$role->guard_name})"])
-                        ->all()
-                )
+                ->options(static fn (): array => Role::query()
+                    ->orderBy('name')
+                    ->orderBy('guard_name')
+                    ->get(['id', 'name', 'guard_name'])
+                    ->mapWithKeys(static fn (Role $role): array => [$role->id => "{$role->name} ({$role->guard_name})"])
+                    ->all())
                 ->required(),
         ]);
 
@@ -78,5 +76,53 @@ final class SyncBulkAction extends BulkAction
         );
 
         $this->deselectRecordsAfterCompletion();
+    }
+
+    /**
+     * @param  array{roles?: mixed}  $data
+     * @return array<string, list<ModelKey>>
+     */
+    private function resolveRoleIdsByGuardFromPayload(array $data): array
+    {
+        $rawRoleIds = Arr::get($data, 'roles', null);
+
+        throw_unless(is_array($rawRoleIds), InvalidArgumentException::class, 'Invalid roles provided.');
+
+        /** @var list<ModelKey> $roleIds */
+        $roleIds = [];
+
+        foreach ($rawRoleIds as $rawRoleId) {
+            if (is_int($rawRoleId) || is_string($rawRoleId)) {
+                $roleIds[] = $rawRoleId;
+            }
+        }
+
+        $roleIds = array_values(array_unique($roleIds, SORT_REGULAR));
+
+        throw_if($roleIds === [], InvalidArgumentException::class, 'Invalid roles provided.');
+
+        /** @var Collection<int, Role> $roles */
+        $roles = Role::query()
+            ->whereKey($roleIds)
+            ->get(['id', 'guard_name']);
+
+        throw_if($roles->count() !== count($roleIds), InvalidArgumentException::class, 'Invalid roles provided.');
+
+        /** @var array<string, list<ModelKey>> $resolvedRoleIdsByGuard */
+        $resolvedRoleIdsByGuard = $roles
+            ->groupBy('guard_name')
+            ->map(
+                /**
+                 * @param  Collection<int, Role>  $rolesInGuard
+                 * @return list<ModelKey>
+                 */
+                static fn (Collection $rolesInGuard): array => $rolesInGuard
+                    ->map(static fn (Role $role): int => $role->id)
+                    ->values()
+                    ->all()
+            )
+            ->all();
+
+        return $resolvedRoleIdsByGuard;
     }
 }
