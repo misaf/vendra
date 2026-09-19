@@ -42,6 +42,8 @@ Expired carts are pruned daily by default. Change the schedule in the
 published configuration or run `php artisan vendra-cart:prune-expired`
 manually.
 
+Adding an item locks the cart before its items, sharing the lock order used by checkout so additions cannot race with cart conversion.
+
 ## Testing
 
 Run the package checks from the project root:

@@ -85,3 +85,5 @@ Treat `packages/vendra-order` as the source of placed-order behavior and its Fil
 - Run `php artisan test --compact packages/vendra-order/tests`.
 - Run PHPStan against the module source, factories, and seeders.
 - Run `vendor/bin/pint --dirty --format agent` after changing PHP files.
+
+- Cart conversion locks and rechecks the persisted cart before creating an order. Empty or already consumed carts are rejected, including stale model instances. The cart token can be reused after adding new items.

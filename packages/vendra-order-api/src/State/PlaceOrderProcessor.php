@@ -10,12 +10,14 @@ use ApiPlatform\State\ProcessorInterface;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Misaf\VendraAddress\Models\Address;
 use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraCart\Models\CartItem;
 use Misaf\VendraDelivery\Actions\ScheduleDeliveryAction;
 use Misaf\VendraDelivery\Data\DeliveryQuote;
 use Misaf\VendraDelivery\Models\DeliverySlot;
+use Misaf\VendraDelivery\Support\DeliverySchedule;
 use Misaf\VendraDelivery\Support\DeliveryZoneMatcher;
 use Misaf\VendraOrder\Actions\PlaceOrderAction;
 use Misaf\VendraOrder\Data\OrderLineDraft;
@@ -42,6 +44,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         private PlaceOrderAction $placeOrder,
         private ScheduleDeliveryAction $scheduleDelivery,
         private DeliveryZoneMatcher $zoneMatcher,
+        private DeliverySchedule $deliverySchedule,
         private OrderMapper $orderMapper,
     ) {}
 
@@ -53,45 +56,58 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             $this->reject('cartToken', __('vendra-order-api::messages.cart_not_found'));
         }
 
-        $cart = $this->resolveCart($data->cartToken, $user);
-        $currencyCode = mb_strtoupper($data->currencyCode ?? ProductPrice::defaultCurrencyCode());
-        $quote = $this->resolveDeliveryQuote($data, $currencyCode);
+        return DB::transaction(function () use ($data, $user): OrderResource {
+            $cart = $this->resolveCart($data->cartToken, $user);
+            $currencyCode = mb_strtoupper($data->currencyCode ?? ProductPrice::defaultCurrencyCode());
+            $quote = $this->resolveDeliveryQuote($data, $currencyCode);
 
-        $order = $this->placeOrder->execute(
-            cart: $cart,
-            currencyCode: $currencyCode,
-            lines: $this->resolveLines($cart, $currencyCode),
-            customer: $user,
-            deliveryAmount: $quote instanceof DeliveryQuote ? $quote->feeAmount : 0,
-            cardMessage: $data->cardMessage,
-            transactionGateway: $this->resolveGateway($data->gateway),
-            paymentReference: $data->paymentReference,
-        );
+            $slot = $quote !== null ? $this->resolveSlot($data->deliverySlotId) : null;
+            $address = $quote !== null ? $this->resolveAddress($data->addressId, $user) : null;
 
-        if ($quote !== null) {
-            $this->scheduleDelivery->execute(
-                order: $order,
-                quote: $quote,
-                scheduledFor: $data->deliveryDate,
-                slot: $this->resolveSlot($data->deliverySlotId),
-                address: $this->resolveAddress($data->addressId, $user),
-                recipientName: $data->recipientName,
-                latitude: $data->latitude,
-                longitude: $data->longitude,
+            if ($quote !== null && $data->deliveryDate !== null && ! $this->deliverySchedule->isBookable($data->deliveryDate)) {
+                $this->reject('deliveryDate', __('vendra-order-api::messages.delivery_date_unavailable'));
+            }
+
+            $order = $this->placeOrder->execute(
+                cart: $cart,
+                currencyCode: $currencyCode,
+                lines: $this->resolveLines($cart, $currencyCode),
+                customer: $user,
+                deliveryAmount: $quote instanceof DeliveryQuote ? $quote->feeAmount : 0,
+                cardMessage: $data->cardMessage,
+                transactionGateway: $this->resolveGateway($data->gateway),
+                paymentReference: $data->paymentReference,
             );
-        }
 
-        return $this->orderMapper->map($order->load('lines'));
+            if ($quote !== null) {
+                $this->scheduleDelivery->execute(
+                    order: $order,
+                    quote: $quote,
+                    scheduledFor: $data->deliveryDate,
+                    slot: $slot,
+                    address: $address,
+                    recipientName: $data->recipientName,
+                    latitude: $data->latitude,
+                    longitude: $data->longitude,
+                );
+            }
+
+            return $this->orderMapper->map($order->load('lines'));
+        }, attempts: 3);
     }
 
     private function resolveCart(string $token, Model $user): Cart
     {
         $cart = Cart::query()
-            ->with('items')
             ->where('token', $token)
             ->where('owner_type', $user->getMorphClass())
             ->where('owner_id', $user->getKey())
+            ->lockForUpdate()
             ->first();
+
+        if ($cart instanceof Cart) {
+            $cart->setRelation('items', $cart->items()->lockForUpdate()->get());
+        }
 
         if (! $cart instanceof Cart || $cart->items->count() === 0) {
             $this->reject('cartToken', __('vendra-order-api::messages.cart_not_found'));
@@ -131,7 +147,10 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     private function resolveProduct(CartItem $item): Product
     {
         $product = $item->sellable_type === 'product'
-            ? Product::query()->with('productPrices')->find($item->sellable_id)
+            ? Product::query()
+                ->with('productPrices')
+                ->whereHas('productCategory', fn (Builder $query) => $query->where('active', true))
+                ->find($item->sellable_id)
             : null;
 
         if (! $product instanceof Product) {

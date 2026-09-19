@@ -33,3 +33,5 @@ The `misaf/vendra-cart` package owns temporary shopping selections before checko
 - Keep `DemoContentSeeder` standalone by resolving existing owners through Laravel's configured authentication model. Fall back to guest carts only when no owners exist, and never fabricate unresolved sellable references.
 - Add focused Pest coverage for relationships, migration constraints, policies, Filament registration, configuration, and meaningful user-visible behavior.
 - Keep architecture tests enforcing that `Misaf\VendraCart` does not use `Misaf\VendraTenant` or `Misaf\VendraProduct`.
+
+- Adding an item locks the cart before its items, sharing the lock order used by checkout so additions cannot race with cart conversion.

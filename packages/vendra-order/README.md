@@ -68,6 +68,8 @@ $order = app(PlaceOrderAction::class)->execute(
 );
 ```
 
+Cart conversion locks and rechecks the persisted cart before creating an order. Empty or already consumed carts are rejected, including stale model instances. The cart token can be reused after adding new items.
+
 ## Testing
 
 Run the package checks from the project root:

@@ -68,3 +68,24 @@ it('clears the converted cart items but keeps the cart', function (): void {
     expect($cart->items()->count())->toBe(0)
         ->and($cart->fresh())->not->toBeNull();
 });
+
+it('rejects a stale cart after its contents have already been checked out', function (): void {
+    $customer = createTestUser();
+    $cart = CartFactory::new()->forOwner($customer)->createOne();
+    CartItemFactory::new()->forCart($cart)->createOne();
+    $staleCart = $cart->fresh()->load('items');
+    $lines = [new OrderLineDraft($customer, ['en' => 'Bouquet'], 3800)];
+    $action = resolve(PlaceOrderAction::class);
+    $action->execute($cart, 'USD', $lines, $customer);
+
+    expect(fn () => $action->execute($staleCart, 'USD', $lines, $customer))
+        ->toThrow(RuntimeException::class, 'Cannot place an order from an empty or already checked out cart.');
+
+    $this->assertDatabaseCount('orders', 1);
+    $this->assertDatabaseCount('order_lines', 1);
+
+    CartItemFactory::new()->forCart($cart)->createOne();
+    $action->execute($cart, 'USD', $lines, $customer);
+
+    $this->assertDatabaseCount('orders', 2);
+});

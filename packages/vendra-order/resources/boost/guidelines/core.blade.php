@@ -33,3 +33,5 @@ The `misaf/vendra-order` package owns placed orders, their immutable line snapsh
 - Update English, German, and Persian translation files together and keep their keys in parity.
 - Add focused Pest coverage for the placement action, lifecycle transitions, migration constraints, policies, Filament registration, and configuration.
 - Keep architecture expectations enforcing that `Misaf\VendraOrder` does not use `Misaf\VendraTenant` or `Misaf\VendraProduct`.
+
+- Cart conversion locks and rechecks the persisted cart before creating an order. Empty or already consumed carts are rejected, including stale model instances. The cart token can be reused after adding new items.

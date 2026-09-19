@@ -25,6 +25,8 @@ final class AddCartItemAction
     public function execute(Cart $cart, Model $sellable, int $quantity = 1, ?array $metadata = null): CartItem
     {
         return DB::transaction(function () use ($cart, $sellable, $quantity, $metadata): CartItem {
+            $cart->refreshForUpdate();
+
             $attributes = [
                 'sellable_type' => $sellable->getMorphClass(),
                 'sellable_id' => $sellable->getKey(),

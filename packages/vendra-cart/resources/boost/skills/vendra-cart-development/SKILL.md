@@ -87,3 +87,5 @@ Treat `packages/vendra-cart` as the source of temporary shopping-selection behav
 - Run `php artisan test --compact packages/vendra-cart/tests`.
 - Run PHPStan against the module source, factories, and seeders.
 - Run `vendor/bin/pint --dirty --format agent` after changing PHP files.
+
+- Adding an item locks the cart before its items, sharing the lock order used by checkout so additions cannot race with cart conversion.

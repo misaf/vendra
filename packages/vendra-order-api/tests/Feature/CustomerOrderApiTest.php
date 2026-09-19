@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Misaf\VendraAddress\Database\Factories\AddressFactory;
 use Misaf\VendraCart\Database\Factories\CartFactory;
 use Misaf\VendraCart\Database\Factories\CartItemFactory;
 use Misaf\VendraDelivery\Database\Factories\DeliverySlotFactory;
@@ -10,6 +11,7 @@ use Misaf\VendraDelivery\Models\Delivery;
 use Misaf\VendraOrder\Database\Factories\OrderFactory;
 use Misaf\VendraOrder\Database\Factories\OrderLineFactory;
 use Misaf\VendraOrder\Models\Order;
+use Misaf\VendraProduct\Database\Factories\ProductCategoryFactory;
 use Misaf\VendraProduct\Database\Factories\ProductFactory;
 use Misaf\VendraProduct\Database\Factories\ProductPriceFactory;
 use Misaf\VendraProduct\Models\Product;
@@ -20,7 +22,7 @@ beforeEach(function (): void {
 
 function orderApiProduct(int $price = 4800, int $quantity = 10): Product
 {
-    $product = ProductFactory::new()->createOne([
+    $product = ProductFactory::new()->forCategory(ProductCategoryFactory::new()->active()->createOne())->createOne([
         'in_stock' => true,
         'quantity' => $quantity,
     ]);
@@ -214,4 +216,74 @@ it('places an order without delivery when no pin is dropped', function (): void 
         ->assertJsonPath('deliveryAmount', 0);
 
     expect(Delivery::query()->count())->toBe(0);
+});
+
+it('keeps the cart and writes no order when delivery details are rejected', function (string $invalidField): void {
+    $this->freezeTime();
+    $user = createTestUser();
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    $item = CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct())->createOne();
+    DeliveryZoneFactory::new()->active()->freeWithin(30)->createOne([
+        'origin_latitude' => 35.6892,
+        'origin_longitude' => 51.3890,
+    ]);
+    $invalidValue = match ($invalidField) {
+        'deliverySlotId' => DeliverySlotFactory::new()->createOne(['active' => false])->id,
+        'addressId' => AddressFactory::new()->createOne()->id,
+        'deliveryDate' => now()->subDay()->toDateString(),
+    };
+
+    $this->actingAs($user)->postJson('/api/sales/checkout', [
+        'cartToken' => $cart->token,
+        'currencyCode' => 'USD',
+        'latitude' => 35.6892,
+        'longitude' => 51.3890,
+        $invalidField => $invalidValue,
+    ])->assertUnprocessable();
+
+    $this->assertDatabaseCount('orders', 0);
+    $this->assertDatabaseCount('order_lines', 0);
+    $this->assertDatabaseCount('deliveries', 0);
+    $this->assertModelExists($item);
+})->with(['deliverySlotId', 'addressId', 'deliveryDate']);
+
+it('rejects products in a category disabled after they entered the cart', function (): void {
+    $user = createTestUser();
+    $product = orderApiProduct();
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    $item = CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne();
+    $product->productCategory->update(['active' => false]);
+
+    $this->actingAs($user)->postJson('/api/sales/checkout', [
+        'cartToken' => $cart->token,
+        'currencyCode' => 'USD',
+    ])->assertUnprocessable();
+
+    $this->assertDatabaseCount('orders', 0);
+    $this->assertModelExists($item);
+});
+
+it('rolls back the order and restores the cart when writing the delivery fails', function (): void {
+    $user = createTestUser();
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    $item = CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct())->createOne();
+    DeliveryZoneFactory::new()->active()->freeWithin(30)->createOne([
+        'origin_latitude' => 35.6892,
+        'origin_longitude' => 51.3890,
+    ]);
+    Delivery::creating(function (): never {
+        throw new RuntimeException('Delivery persistence failed.');
+    });
+
+    $this->actingAs($user)->postJson('/api/sales/checkout', [
+        'cartToken' => $cart->token,
+        'currencyCode' => 'USD',
+        'latitude' => 35.6892,
+        'longitude' => 51.3890,
+    ])->assertServerError();
+
+    $this->assertDatabaseCount('orders', 0);
+    $this->assertDatabaseCount('order_lines', 0);
+    $this->assertDatabaseCount('deliveries', 0);
+    $this->assertModelExists($item);
 });

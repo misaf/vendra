@@ -26,3 +26,5 @@ The `misaf/vendra-order-api` package owns API Platform resources (`ApiResource` 
 - Rely on the order models' support-layer tenant scope and keep production API code free of `Misaf\VendraTenant`. Feature tests may use a concrete tenant factory solely to establish tenant context.
 - Keep user-facing processor errors in `vendra-order-api::messages` and update `en`, `de`, and `fa` together.
 - Keep Pest architecture tests and focused resource/state-provider/policy tests current.
+
+- Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility.

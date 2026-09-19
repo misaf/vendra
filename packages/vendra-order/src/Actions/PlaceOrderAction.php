@@ -10,6 +10,7 @@ use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraOrder\Data\OrderLineDraft;
 use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraTransaction\Models\TransactionGateway;
+use RuntimeException;
 
 final class PlaceOrderAction
 {
@@ -57,6 +58,10 @@ final class PlaceOrderAction
             $transactionGateway,
             $paymentReference,
         ): Order {
+            $cart->refreshForUpdate();
+
+            throw_if($cart->items()->lockForUpdate()->first() === null, RuntimeException::class, 'Cannot place an order from an empty or already checked out cart.');
+
             $order = Order::query()->create([
                 'customer_type' => $customer?->getMorphClass(),
                 'customer_id' => $customer?->getKey(),
