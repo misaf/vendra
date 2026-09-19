@@ -102,6 +102,11 @@ Resources are registered on the `admin` panel through `PermissionPlugin`:
 
 Both resources live in the shared `Customers` cluster.
 
+Changing a role's guard goes through `ChangeRoleGuardAction`: each attached
+permission is swapped for the permission of the same name under the new guard,
+and dropped when that guard has none. Permissions are shared between roles, so
+their own guard is never changed.
+
 Access is feature-gated against the current scope returned by the shared
 `TenantResolver`:
 

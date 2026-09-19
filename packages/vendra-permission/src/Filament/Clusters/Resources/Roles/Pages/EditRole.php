@@ -7,10 +7,11 @@ namespace Misaf\VendraPermission\Filament\Clusters\Resources\Roles\Pages;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Misaf\VendraPermission\Actions\ChangeRoleGuardAction;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource;
-use Misaf\VendraPermission\Models\Permission;
 use Misaf\VendraPermission\Models\Role;
 
 final class EditRole extends EditRecord
@@ -33,28 +34,20 @@ final class EditRole extends EditRecord
 
     /**
      * @param  Role  $record
+     * @param  array<string, mixed>  $data
      */
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $previousGuardName = $record->guard_name;
+        $guardName = Arr::pull($data, 'guard_name');
 
-        $record->update($data);
+        return DB::transaction(function () use ($record, $data, $guardName): Role {
+            $record->update($data);
 
-        $nextGuardName = $record->guard_name;
+            if (is_string($guardName)) {
+                return resolve(ChangeRoleGuardAction::class)->execute($record, $guardName);
+            }
 
-        if ($previousGuardName === $nextGuardName) {
             return $record;
-        }
-
-        /** @var Collection<int, Permission> $permissions */
-        $permissions = $record->permissions()->get();
-
-        $permissions->each(static function (Permission $permission) use ($nextGuardName): void {
-            $permission->update([
-                'guard_name' => $nextGuardName,
-            ]);
         });
-
-        return $record;
     }
 }
