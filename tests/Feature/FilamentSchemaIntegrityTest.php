@@ -70,7 +70,7 @@ it('counts relation manager badges without preloaded relations', function (): vo
 });
 
 it('enforces active form uniqueness with tenant-aware database indexes', function (): void {
-    expect(indexNames('users'))->toContain('users_active_email_unique')
+    expect(indexNames('users'))->toContain('users_active_email_unique', 'users_active_username_unique')
         ->and(indexNames('user_profiles'))->toContain(
             'user_profiles_active_name_unique',
             'user_profiles_active_slug_unique',
