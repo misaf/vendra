@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraApi\ApiResource\ResourceReference;
 use Misaf\VendraApi\State\Concerns\MapsResourceReferences;
 use Misaf\VendraApi\State\Concerns\NormalizesResourceValues;
-use Misaf\VendraMultimediaApi\ApiResource\MultimediaResource;
 use Misaf\VendraMultimediaApi\State\MultimediaResourceFactory;
 use Misaf\VendraMultimediaApi\State\PublicMultimedia;
 use Misaf\VendraProduct\Models\Product;
@@ -48,7 +47,7 @@ trait MapsCatalogResources
                 : null,
             multimedia: $product->multimedia
                 ->filter(fn (Model $media): bool => PublicMultimedia::isPublic($media))
-                ->map(fn (Model $media): MultimediaResource => $this->toMultimediaResource($media))
+                ->map(MultimediaResourceFactory::make(...))
                 ->values()
                 ->all(),
             options: $this->attributeReferences($product),
@@ -72,7 +71,7 @@ trait MapsCatalogResources
             multimedia: $category->relationLoaded('multimedia')
                 ? $category->multimedia
                     ->filter(fn (Model $media): bool => PublicMultimedia::isPublic($media))
-                    ->map(fn (Model $media): MultimediaResource => $this->toMultimediaResource($media))
+                    ->map(MultimediaResourceFactory::make(...))
                     ->values()
                     ->all()
                 : [],
@@ -93,11 +92,6 @@ trait MapsCatalogResources
             formatted: $price->formattedPrice(),
             product: $this->productReference($product),
         );
-    }
-
-    protected function toMultimediaResource(Model $media): MultimediaResource
-    {
-        return MultimediaResourceFactory::make($media);
     }
 
     protected function productReference(?Product $product): ResourceReference
