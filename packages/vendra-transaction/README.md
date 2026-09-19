@@ -8,7 +8,7 @@ cluster for transactions, gateways, and wallets.
 ## Features
 
 1. Each user holds one `Wallet` per currency (created on first use via
-   `WalletResolver::walletFor()` / `defaultWalletFor()`), with a cached
+   `WalletResolver::firstOrCreateWalletFor()` / `firstOrCreateDefaultWalletFor()`), with a cached
    `balance` in the currency's minor units.
 2. The ledger is the single source of balance truth: every movement is an
    immutable `LedgerEntry` (signed amount, `balance_after` snapshot,

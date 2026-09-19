@@ -34,9 +34,9 @@ final class CreateTransaction extends CreateRecord
             $transactionType = $transactionType instanceof TransactionTypeEnum ? $transactionType : TransactionTypeEnum::from((string) $transactionType);
             $amount = (int) Arr::get($data, 'amount');
 
-            $wallet = self::walletFor(Arr::get($data, 'user_id'), $currencyCode);
+            $wallet = self::firstOrCreateWalletFor(Arr::get($data, 'user_id'), $currencyCode);
             $counterpartyWallet = filled(Arr::get($data, 'counterparty_user_id'))
-                ? self::walletFor(Arr::get($data, 'counterparty_user_id'), $currencyCode)
+                ? self::firstOrCreateWalletFor(Arr::get($data, 'counterparty_user_id'), $currencyCode)
                 : null;
 
             Validator::make(
@@ -54,8 +54,8 @@ final class CreateTransaction extends CreateRecord
         });
     }
 
-    private static function walletFor(mixed $userId, string $currencyCode): Wallet
+    private static function firstOrCreateWalletFor(mixed $userId, string $currencyCode): Wallet
     {
-        return WalletResolver::walletFor(TransactionUsers::model()::query()->findOrFail($userId), $currencyCode);
+        return WalletResolver::firstOrCreateWalletFor(TransactionUsers::model()::query()->findOrFail($userId), $currencyCode);
     }
 }

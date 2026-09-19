@@ -119,7 +119,7 @@ it('resolves gateways by slug and ignores disabled ones', function (): void {
 it('provisions the default wallet in the resolved default currency', function (): void {
     $user = TransactionUsers::model()::factory()->create();
 
-    $wallet = WalletResolver::defaultWalletFor($user);
+    $wallet = WalletResolver::firstOrCreateDefaultWalletFor($user);
 
     expect($wallet->currency_code)->toBe(CurrencyIntegration::defaultCode());
 });
@@ -149,8 +149,8 @@ it('identifies internal transactions by the internal gateway', function (): void
 it('provisions one wallet per user and currency', function (): void {
     $user = TransactionUsers::model()::factory()->create();
 
-    $wallet = WalletResolver::walletFor($user, 'EUR');
-    $again = WalletResolver::walletFor($user, 'EUR');
+    $wallet = WalletResolver::firstOrCreateWalletFor($user, 'EUR');
+    $again = WalletResolver::firstOrCreateWalletFor($user, 'EUR');
 
     expect($again->is($wallet))->toBeTrue()
         ->and($wallet->currency_code)->toBe('EUR')

@@ -11,7 +11,7 @@ use Misaf\VendraTransaction\Models\Wallet;
 
 final class WalletResolver
 {
-    public function walletFor(Model $user, string $currencyCode): Wallet
+    public function firstOrCreateWalletFor(Model $user, string $currencyCode): Wallet
     {
         return Wallet::query()->firstOrCreate([
             'user_id' => $user->getKey(),
@@ -19,8 +19,8 @@ final class WalletResolver
         ]);
     }
 
-    public function defaultWalletFor(Model $user): Wallet
+    public function firstOrCreateDefaultWalletFor(Model $user): Wallet
     {
-        return $this->walletFor($user, CurrencyIntegration::defaultCode());
+        return $this->firstOrCreateWalletFor($user, CurrencyIntegration::defaultCode());
     }
 }

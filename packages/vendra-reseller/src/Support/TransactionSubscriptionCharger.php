@@ -57,7 +57,7 @@ final readonly class TransactionSubscriptionCharger implements SubscriptionCharg
 
     private function chargeWithinContext(SubscriptionCharge $charge): SubscriptionChargeResult
     {
-        $wallet = WalletResolver::walletFor($charge->payer, $charge->currencyCode);
+        $wallet = WalletResolver::firstOrCreateWalletFor($charge->payer, $charge->currencyCode);
 
         $transaction = $this->createTransactionAction->execute(
             TransactionGatewayRegistryClass::INTERNAL_GATEWAY_SLUG,

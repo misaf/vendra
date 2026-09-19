@@ -66,7 +66,7 @@ final class ProcessAffiliatePayoutAction
 
             $transaction = $this->createTransactionAction->execute(
                 transactionGateway: Config::string('vendra-affiliate.payout.transaction_gateway', 'internal-transactions'),
-                wallet: WalletResolver::defaultWalletFor($affiliate->user),
+                wallet: WalletResolver::firstOrCreateDefaultWalletFor($affiliate->user),
                 transactionType: TransactionTypeEnum::Commission,
                 amount: $payout->amount,
                 metadata: [
