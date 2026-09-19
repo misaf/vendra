@@ -6,6 +6,7 @@ namespace Misaf\VendraSubscription\Actions;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use LogicException;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Events\SubscriptionCancelled;
@@ -24,6 +25,10 @@ final class CancelSubscriptionAction
 
             if ($lockedSubscription->status === SubscriptionStatus::Cancelled) {
                 return $lockedSubscription;
+            }
+
+            if (! $lockedSubscription->canBeCancelled()) {
+                throw new LogicException("Subscription [{$lockedSubscription->id}] is {$lockedSubscription->status->value} and cannot be cancelled.");
             }
 
             $lockedSubscription->payments()

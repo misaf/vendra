@@ -9,7 +9,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 use LogicException;
-use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Subscription;
 
 final class ExtendSubscriptionAction
@@ -21,12 +20,8 @@ final class ExtendSubscriptionAction
 
             throw_if($lockedSubscription->trashed(), (new ModelNotFoundException)->setModel(Subscription::class));
 
-            if ($lockedSubscription->status !== SubscriptionStatus::Active) {
-                throw new LogicException("Subscription [{$lockedSubscription->id}] must be active before it can be extended.");
-            }
-
-            if ($lockedSubscription->ends_at === null) {
-                throw new LogicException("Subscription [{$lockedSubscription->id}] does not expire.");
+            if (! $lockedSubscription->canBeExtended()) {
+                throw new LogicException("Subscription [{$lockedSubscription->id}] must be active and expiring before it can be extended.");
             }
 
             throw_if($endsAt->lessThanOrEqualTo($lockedSubscription->ends_at), InvalidArgumentException::class, 'The new subscription end must be later than the current end.');

@@ -182,6 +182,30 @@ final class Subscription extends Model implements ShouldLogActivity
         return $this->ends_at === null || $this->ends_at->isFuture();
     }
 
+    /**
+     * Determine if the subscription is still open to cancellation.
+     *
+     * The console buttons and the domain actions share these predicates, so
+     * nothing can do more than the console offers.
+     */
+    public function canBeCancelled(): bool
+    {
+        return in_array($this->status, [SubscriptionStatus::PendingPayment, SubscriptionStatus::Active, SubscriptionStatus::PastDue], true);
+    }
+
+    public function canBeReactivated(): bool
+    {
+        return in_array($this->status, [SubscriptionStatus::Cancelled, SubscriptionStatus::Expired, SubscriptionStatus::PastDue], true);
+    }
+
+    /**
+     * @phpstan-assert-if-true !null $this->ends_at
+     */
+    public function canBeExtended(): bool
+    {
+        return $this->status === SubscriptionStatus::Active && $this->ends_at !== null;
+    }
+
     public function activate(): bool
     {
         return $this->update(['status' => SubscriptionStatus::Active]);
