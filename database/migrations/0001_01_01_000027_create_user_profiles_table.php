@@ -42,7 +42,7 @@ return new class extends Migration
                 ->virtualAs('CASE WHEN deleted_at IS NULL THEN slug ELSE NULL END');
             $table->unsignedBigInteger('default_user_guard')
                 ->nullable()
-                ->virtualAs('CASE WHEN is_default THEN user_id ELSE NULL END');
+                ->virtualAs('CASE WHEN is_default AND deleted_at IS NULL THEN user_id ELSE NULL END');
 
             $table->index(TenantSchema::tenantIndex(['user_id']));
             $table->unique(TenantSchema::tenantIndex(['active_name_guard']), 'user_profiles_active_name_unique');

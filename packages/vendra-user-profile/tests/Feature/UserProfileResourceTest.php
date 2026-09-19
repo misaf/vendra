@@ -112,3 +112,15 @@ it('exposes the default toggle and keeps one default profile per user', function
         ->assertOk()
         ->assertFormFieldExists('is_default');
 });
+
+it('makes a new default profile after the previous default was deleted', function (): void {
+    makeCurrentTestTenant();
+
+    $user = User::factory()->create();
+    $deletedDefault = UserProfileFactory::new()->forUser($user)->createOne(['is_default' => true]);
+    $deletedDefault->delete();
+
+    $newDefault = UserProfileFactory::new()->forUser($user)->createOne(['is_default' => true]);
+
+    expect($newDefault->refresh()->is_default)->toBeTrue();
+});
