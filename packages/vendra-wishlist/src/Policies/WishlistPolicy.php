@@ -13,8 +13,7 @@ use Misaf\VendraWishlist\Enums\WishlistPolicyEnum;
 use Misaf\VendraWishlist\Models\Wishlist;
 
 /**
- * Wishlists belong to customers: administration may look at one and delete it,
- * but never write on a customer's behalf.
+ * Administrators may view and delete wishlists, but never write to them.
  */
 final class WishlistPolicy
 {

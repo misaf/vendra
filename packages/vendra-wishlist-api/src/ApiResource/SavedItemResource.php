@@ -13,13 +13,6 @@ use Misaf\VendraWishlistApi\State\ForgetWishlistItemProcessor;
 use Misaf\VendraWishlistApi\State\SaveWishlistItemProcessor;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
-/**
- * The heart button on a product card.
- *
- * Saving writes to the caller's default list, creating it on first use, and
- * answers with the whole list so the storefront can re-render every heart in
- * one round trip.
- */
 #[ApiResource(
     shortName: 'SavedItem',
     operations: [

@@ -24,12 +24,9 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * Name and guard name are the natural key — together they carry a
-     * tenant-scoped unique index — so an already seeded role is left alone
-     * rather than created a second time. The seed command makes the tenant
-     * current for the run, so the lookup is scoped to it. Store provisioning
-     * retries the whole seed list on failure, so a partial run has to be safe
-     * to repeat.
+     * Seed the fixtures idempotently, keyed on name and guard name.
+     *
+     * Store provisioning retries the whole seed list, so a partial run must be repeatable.
      *
      * @param  list<array<string, mixed>>  $records
      */

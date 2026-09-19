@@ -13,10 +13,7 @@ use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
 
 /**
- * Lifecycle of an order: it is placed as Pending while payment is still
- * outstanding, becomes Confirmed once the payment is matched, and ends in
- * Completed when it has been handed over — or Cancelled from either open
- * state.
+ * An order's state: Pending until paid, then Confirmed, ending in Completed or Cancelled.
  *
  * @extends State<Order>
  */
@@ -31,9 +28,6 @@ abstract class OrderState extends State implements HasColor, HasIcon, HasLabel
             ->allowTransition([Pending::class, Confirmed::class], Cancelled::class);
     }
 
-    /**
-     * Whether the state is terminal and allows no further transitions.
-     */
     public function isFinal(): bool
     {
         return false;

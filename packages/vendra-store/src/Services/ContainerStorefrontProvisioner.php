@@ -17,18 +17,8 @@ use Misaf\VendraStore\Support\StorefrontSettings;
 use RuntimeException;
 
 /**
- * Runs each storefront as one container, through whichever runtime is bound.
- *
- * This class is the whole of the store layer's knowledge about containers,
- * It composes a storefront-specific definition and hands it to the runtime
- * adapter backed by `misaf/laravel-docker-engine`. Docker and Podman selection
- * stays in that package's Laravel Manager configuration.
- *
- * The platform owns the storefront containers and nothing around them. The
- * network, the reverse proxy, and the TLS material belong to whoever runs the
- * estate, so this reads that environment and refuses to guess at it: an absent
- * network is an error naming the network, not an improvised bridge the proxy is
- * not attached to.
+ * The network, proxy, and TLS belong to the host environment, so a missing
+ * network is an error rather than something created here.
  */
 final readonly class ContainerStorefrontProvisioner implements StorefrontProvisioner
 {
@@ -105,13 +95,8 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     }
 
     /**
-     * The runtime is pinged first, and deliberately so.
-     *
-     * `find()` cannot tell "no such container" from "the daemon answered with an
-     * error" — both decode to null. Reconciliation reads a null as an absent
-     * storefront and rebuilds it, so a momentarily confused daemon would cost the
-     * estate a redeploy of everything it could not describe. Establishing the
-     * runtime is answering first turns that into a named failure.
+     * Ping the runtime first, since `find()` returns null for both a missing
+     * container and a daemon error.
      */
     public function observe(StorefrontReference $storefront): StorefrontObservation
     {
@@ -141,10 +126,7 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     }
 
     /**
-     * Fail before anything is placed when the runtime is not answering.
-     *
-     * `ping()` reports rather than throws, so the message an administrator sees names
-     * the endpoint and whether it was the API version that was refused.
+     * Fail with the endpoint's details when the runtime is not answering.
      */
     private function assertRuntimeReachable(): StorefrontRuntimeStatus
     {
@@ -158,14 +140,9 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     }
 
     /**
-     * An absent network is reported against the daemon that was actually asked.
+     * Fail when the network is missing, naming the daemon that was asked.
      *
-     * Networks are per-daemon, so "it does not exist" and "you are talking to a
-     * different daemon than you think" produce the identical symptom. Naming the
-     * endpoint and what answered there separates them without the administrator
-     * having to go looking, and a configured/reported engine mismatch is called
-     * out because it is the likeliest way to arrive here with the network sitting
-     * in front of you on the other runtime.
+     * Networks are per daemon, so an engine mismatch is called out explicitly.
      */
     private function assertNetworkExists(StorefrontRuntimeStatus $status): void
     {
@@ -195,10 +172,7 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
     /**
      * Refuse to touch a container the platform did not place.
      *
-     * Container names are chosen by an administrator-configurable prefix, so a
-     * collision with something else on the same runtime is possible. Removing
-     * somebody else's container because it happened to answer to the name we
-     * wanted is not a recoverable mistake, so ownership is checked first.
+     * The name prefix is configurable, so a collision with another container is possible.
      */
     private function assertPlatformOwned(string $container): void
     {

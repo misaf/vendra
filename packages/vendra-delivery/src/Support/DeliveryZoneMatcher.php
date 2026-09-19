@@ -9,11 +9,7 @@ use Misaf\VendraDelivery\Data\DeliveryQuote;
 use Misaf\VendraDelivery\Models\DeliveryZone;
 
 /**
- * Prices a dropped pin against the tenant's delivery bands.
- *
- * This is a read: it decides nothing and records nothing, so it stays a plain
- * service rather than an action. Bands are consulted in `position` order —
- * tightest radius first — and the first one that still covers the point wins.
+ * Price a dropped pin with the first delivery band, by `position`, that covers it.
  */
 final class DeliveryZoneMatcher
 {

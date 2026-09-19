@@ -13,12 +13,7 @@ use Misaf\VendraInquiry\Actions\SubmitInquiryAction;
 use Misaf\VendraInquiryApi\ApiResource\InquiryResource;
 
 /**
- * Record a contact enquiry from the storefront.
- *
- * Nothing is echoed back: answering `204` keeps the endpoint from confirming
- * whether an address is already known, and there is nothing here a sender
- * needs to read. Where it came from is captured from the request rather than
- * accepted from the body, so the source cannot be spoofed.
+ * The source is taken from the request, not the body, so it cannot be spoofed.
  *
  * @implements ProcessorInterface<InquiryResource, void>
  */
@@ -45,9 +40,7 @@ final readonly class SubmitInquiryProcessor implements ProcessorInterface
     }
 
     /**
-     * The HTTP operation and the MCP tool share `SubmitInquiryRequest::RULES`,
-     * a constant, so the configured occasion list is enforced here where both
-     * paths meet.
+     * Reject an occasion outside the configured list, which a constant rule cannot check.
      */
     private function ensureConfiguredOccasion(?string $occasion): void
     {

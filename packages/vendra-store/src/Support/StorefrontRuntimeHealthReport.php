@@ -9,20 +9,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Date;
 
 /**
- * The container runtime's health as the storefront worker last saw it.
- *
- * Only the storefront worker holds a runtime socket, so the panels never probe
- * the runtime themselves: they read the report the worker recorded. It travels
- * through the cache as a plain array, because the host's
- * `cache.serializable_classes` allow-list turns any cached object into
- * `__PHP_Incomplete_Class`.
+ * Cached as a plain array, since `cache.serializable_classes` blocks objects.
  */
 final readonly class StorefrontRuntimeHealthReport
 {
-    /**
-     * A report older than this means the worker or the scheduler stopped
-     * recording, so its contents can no longer be trusted as current.
-     */
     public const int STALE_AFTER_SECONDS = 300;
 
     public function __construct(

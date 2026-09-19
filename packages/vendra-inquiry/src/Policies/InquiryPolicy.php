@@ -15,7 +15,7 @@ use Misaf\VendraSupport\Authorization\AuthorizesViewAbilities;
 use Misaf\VendraSupport\Authorization\ResolvesPolicyPermissions;
 
 /**
- * Enquiries arrive from the storefront, never from the administration UI.
+ * Enquiries only arrive from the storefront, never the admin panel.
  */
 final class InquiryPolicy
 {

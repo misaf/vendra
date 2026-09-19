@@ -49,9 +49,7 @@ final class ActivityLogServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        // spatie/laravel-activitylog v5 dropped the `table_name` and
-        // `database_connection` config keys; the table is fixed to `activity_log`
-        // on the default connection.
+        // Activitylog v5 fixes the table to `activity_log` on the default connection.
         $this->app->make(TenantTableRegistry::class)->registerOnConnection(
             null,
             'activity_log',
@@ -63,11 +61,6 @@ final class ActivityLogServiceProvider extends PackageServiceProvider
         $this->registerActivityLogListeners();
     }
 
-    /**
-     * Bind the activity logger to the wildcard Eloquent lifecycle events so any
-     * model implementing ShouldLogActivity is logged without depending on this
-     * package. Absence of this provider means no listeners and no logging.
-     */
     private function registerActivityLogListeners(): void
     {
         foreach (['created', 'updated', 'deleted', 'restored'] as $event) {

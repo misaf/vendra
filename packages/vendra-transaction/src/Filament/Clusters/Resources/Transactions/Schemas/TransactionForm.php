@@ -16,9 +16,7 @@ use Misaf\VendraTransaction\Models\TransactionGateway;
 use Misaf\VendraTransaction\Support\TransactionUsers;
 
 /**
- * The create form selects a user and a currency instead of a raw wallet;
- * the wallet is resolved (and provisioned on first use) from that pair in
- * `CreateTransaction::mutateFormDataBeforeCreate()`.
+ * The create form picks a user and currency, which `CreateTransaction` resolves to a wallet.
  */
 final class TransactionForm
 {
@@ -94,8 +92,7 @@ final class TransactionForm
     }
 
     /**
-     * The type state may hold the raw value or the cast enum depending on
-     * whether it was hydrated from user input or the model cast.
+     * Determine if the selected type, raw or cast, is a transfer.
      */
     private static function isTransfer(Get $get): bool
     {

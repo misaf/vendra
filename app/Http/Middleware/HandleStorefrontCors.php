@@ -13,13 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraStore\Support\StorefrontOrigins;
 
 /**
- * Supplies the canonical API's CORS allowlist at request time.
- *
- * The allowed origins are the active storefront domains — data that changes
- * whenever a store is onboarded — so they cannot be a static config array.
- * They have to be injected here rather than into the CorsService binding
- * because the parent re-applies `config('cors')` over the service on every
- * request, discarding anything set earlier at resolve time.
+ * Set here because the parent reapplies `config('cors')` on every request.
  */
 final class HandleStorefrontCors extends HandleCors
 {
@@ -36,8 +30,7 @@ final class HandleStorefrontCors extends HandleCors
      */
     public function handle($request, Closure $next)
     {
-        // Only for paths CORS actually covers (api/*), so panel page loads do
-        // not pay for a cache lookup they will never use.
+        // Only look up origins for paths CORS covers, such as `api/*`.
         if ($this->hasMatchingPath($request)) {
             Config::set('cors.allowed_origins', $this->origins->all());
         }

@@ -9,15 +9,8 @@ use Filament\Support\Contracts\HasLabel;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
 /**
- * The one status an administrator reads a store by.
- *
- * A store's condition is stored across three columns — `provisioning_status`,
- * `active`, and `billing_suspended_at` — because each is written by a different
- * concern: the provisioner, the administrator, and billing enforcement. Nobody
- * reading a console table wants those three; they want to know whether the
- * store is up. This enum is that reading, derived rather than persisted, so the
- * columns stay the source of truth and no new state can drift out of sync with
- * them.
+ * `provisioning_status`, `active`, and `billing_suspended_at` each have their own
+ * writer and stay the source of truth.
  */
 enum StoreStatus: string implements HasColor, HasLabel
 {
@@ -27,7 +20,7 @@ enum StoreStatus: string implements HasColor, HasLabel
     /** Provisioning is running. */
     case Provisioning = 'provisioning';
 
-    /** Provisioned, enabled, and not suspended — the store serves requests. */
+    /** Provisioned, enabled, and not suspended. */
     case Active = 'active';
 
     /** Provisioned, but disabled by an administrator or suspended by billing. */
@@ -37,8 +30,9 @@ enum StoreStatus: string implements HasColor, HasLabel
     case Failed = 'failed';
 
     /**
-     * Derives the status from the three columns that own it. Suspension
-     * outranks readiness, but never an unfinished or failed provisioning.
+     * Derive the status from the store's columns.
+     *
+     * Suspension outranks readiness but not unfinished or failed provisioning.
      */
     public static function fromColumns(TenantProvisioningStatus $provisioningStatus, bool $active, bool $billingSuspended): self
     {
@@ -52,19 +46,15 @@ enum StoreStatus: string implements HasColor, HasLabel
     }
 
     /**
-     * Whether a store in this status may serve requests.
+     * Determine if the store may serve requests.
      *
-     * The counterpart of `Store::scopeAccessible()`, which is the same rule
-     * expressed as a query.
+     * Mirrors `Store::scopeAccessible()`.
      */
     public function isServing(): bool
     {
         return $this === self::Active;
     }
 
-    /**
-     * Whether provisioning has finished, successfully or not.
-     */
     public function isSettled(): bool
     {
         return match ($this) {

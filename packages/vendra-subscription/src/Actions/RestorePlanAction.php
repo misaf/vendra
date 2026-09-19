@@ -10,8 +10,7 @@ use Misaf\VendraSubscription\Models\Plan;
 final class RestorePlanAction
 {
     /**
-     * Restores a soft-deleted plan as a non-default plan: another plan took the
-     * default when this one was deleted, and only one plan may hold it.
+     * The plan comes back as non-default, since another plan took the default.
      */
     public function execute(Plan $plan): Plan
     {

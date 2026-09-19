@@ -19,12 +19,6 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * Someone writing in from the storefront.
- *
- * An enquiry is what a customer said, captured verbatim: the studio answers it
- * by hand. It is deliberately not a ticketing system — there are no threads,
- * assignees, or SLAs here.
- *
  * @property int $id
  * @property int $tenant_id
  * @property string $name
@@ -85,9 +79,6 @@ final class Inquiry extends Model implements ShouldLogActivity
         ];
     }
 
-    /**
-     * Record that a person has written back.
-     */
     public function markAnswered(): void
     {
         $this->forceFill([

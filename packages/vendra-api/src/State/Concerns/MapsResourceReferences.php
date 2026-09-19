@@ -8,23 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraApi\ApiResource\ResourceReference;
 use UnexpectedValueException;
 
-/**
- * Turning a related model into a ResourceReference, and asserting that a mapper
- * was handed the model it expects.
- *
- * Every content mapper repeated both: the same instanceof-guard-and-throw, and
- * the same "read the related row's localized name, keep it only if it really is
- * a string" dance. Repeated by hand they drifted — the label attribute and the
- * null handling were re-decided per package.
- */
 trait MapsResourceReferences
 {
     /**
-     * Asserts a mapper was handed what it expects.
+     * Assert the mapper received the expected model.
      *
-     * Takes mixed rather than Model deliberately: the common failure is an
-     * absent relation, and null has to surface as the mapper's own message
-     * rather than a TypeError from the guard itself.
+     * Accepts mixed so a missing relation throws the mapper's message, not a TypeError.
      *
      * @template T of Model
      *
@@ -38,9 +27,9 @@ trait MapsResourceReferences
     }
 
     /**
-     * A reference to a related record, labelled with its name in the active
-     * locale. The label is dropped rather than coerced when the translation is
-     * missing or is not a string.
+     * Reference a related record, labeled with its name in the active locale.
+     *
+     * The label is dropped when the translation is missing or not a string.
      */
     protected function referenceTo(Model $related, string $type, string $labelAttribute = 'name'): ResourceReference
     {

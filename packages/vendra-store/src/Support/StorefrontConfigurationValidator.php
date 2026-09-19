@@ -8,18 +8,8 @@ use Illuminate\Support\Arr;
 use InvalidArgumentException;
 
 /**
- * Validates a storefront before a container is created for it.
- *
- * The storefront image validates its encoded configuration at boot and refuses
- * to render without the required fields, so an unchecked deployment turns into a
- * crash-looping container and a deployment row stuck in "requested". Failing here
- * turns that into an immediate failure naming the missing field.
- *
- * Formerly named `StorefrontSpecification`, which promised the composability of
- * the Specification pattern that it never had: this throws with an administrator-facing
- * message rather than answering a boolean, so it is named for what it does. The
- * same field maps also drive {@see deploymentRules()}, so the console form and
- * the provisioner agree on what "complete" means instead of describing it twice.
+ * The image crash-loops on an incomplete configuration, so this fails early
+ * with the missing field. {@see deploymentRules()} shares the same field lists.
  */
 final class StorefrontConfigurationValidator
 {
@@ -28,19 +18,16 @@ final class StorefrontConfigurationValidator
     private const string DOMAIN = '/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/i';
 
     /**
-     * Identity fields the platform derives from the deployment row rather than
-     * the console form, so they are excluded from the form-time rules.
+     * The fields derived from the deployment row rather than the form.
      *
      * @var list<string>
      */
     private const array IDENTITY = ['slug', 'domain', 'siteUrl'];
 
     /**
-     * Fields the image requires at boot, mirroring its properties/schema.json.
+     * The fields the image requires at boot, mirroring its schema.
      *
-     * ogImage is deliberately absent: it is optional there, and the console sends
-     * an empty string rather than omitting the key when a property has no share
-     * image, so requiring it would reject a configuration the image accepts.
+     * `ogImage` is optional there and sent as an empty string, so it is not required.
      *
      * @var list<string>
      */
@@ -55,10 +42,6 @@ final class StorefrontConfigurationValidator
     ];
 
     /**
-     * Validation rules for the configuration the console assembles, ready for
-     * `Validator::make()`. Identity fields are omitted — the platform supplies
-     * those when the deployment is provisioned, not when the form is submitted.
-     *
      * @return array<string, string>
      */
     public static function deploymentRules(): array

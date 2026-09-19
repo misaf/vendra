@@ -19,7 +19,6 @@ use Illuminate\Support\Str;
 use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Observers\CurrencyObserver;
-use Misaf\VendraCurrency\Support\CurrencyRegistry;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Money\Currencies\CurrencyList;
@@ -29,10 +28,7 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * A currency a tenant has installed from the fiat/crypto catalog exposed by
- * {@see CurrencyRegistry}. Name, symbol, and
- * decimal places are snapshotted at install time and remain editable, while
- * `active` controls availability and exactly one active row is the default.
+ * Exactly one active currency is the default.
  *
  * @property int $id
  * @property int $tenant_id
@@ -61,9 +57,7 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
     use SortableTrait;
 
     /**
-     * Pin sortable behavior regardless of the global `eloquent-sortable`
-     * configuration values: order on the `position` column and always assign
-     * the next position when creating.
+     * Pin the sortable behavior regardless of the global config.
      *
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
@@ -88,19 +82,13 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
         return $query->where('active', true);
     }
 
-    /**
-     * The given amount of minor units (e.g. cents, satoshi) as a money value
-     * in this currency.
-     */
     public function money(int|string $minorUnits): Money
     {
         return new Money($minorUnits, new MoneyCurrency($this->code));
     }
 
     /**
-     * Format the given amount of minor units for display, e.g. `$10.00` for
-     * fiat currencies or `0.00150000 BTC` for crypto currencies unknown to
-     * the intl formatter.
+     * Format minor units for display, such as `$10.00` or `0.00150000 BTC`.
      */
     public function formatAmount(int|string $minorUnits): string
     {

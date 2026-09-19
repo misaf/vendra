@@ -21,10 +21,6 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * A ledger entry crediting an affiliate for a single conversion; the source
- * morph points at the record that produced it (transaction, user, or cart)
- * and is unique per conversion type to keep crediting idempotent.
- *
  * @property int $id
  * @property int $tenant_id
  * @property int $affiliate_id

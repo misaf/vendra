@@ -7,10 +7,6 @@ namespace Misaf\VendraTransaction\Support;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
-/**
- * Resolves the host application's user model so the module can reference
- * wallet owners without depending on a concrete user package.
- */
 final class TransactionUsers
 {
     /**

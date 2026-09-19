@@ -92,10 +92,9 @@ final class ConsoleUserCommand extends Command
     }
 
     /**
-     * An existing user is never changed silently: granting console access to
-     * a user who lacks it, or replacing a console user's password with a
-     * generated one, both ask first. An explicit --password is taken as the
-     * intent to reset, so scripts are not prompted.
+     * Confirm before granting access to, or generating a password for, an existing user.
+     *
+     * An explicit `--password` counts as confirmation, so scripts are not prompted.
      */
     private function confirmChangesToExistingUser(string $email, bool $hasConsoleAccess, bool $passwordGiven): bool
     {
@@ -121,7 +120,7 @@ final class ConsoleUserCommand extends Command
     private function reportPassword(string $message, User $user, string $password): int
     {
         $this->components->info($message);
-        $this->components->twoColumnDetail('URL', $this->consoleUrl());
+        $this->components->twoColumnDetail('URL', ConsoleAddress::url());
         $this->components->twoColumnDetail('Email', $user->email);
         $this->components->twoColumnDetail('Password', OutputFormatter::escape($password));
         $this->newLine();

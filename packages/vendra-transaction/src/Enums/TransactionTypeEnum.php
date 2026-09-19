@@ -26,9 +26,6 @@ enum TransactionTypeEnum: string implements HasColor, HasIcon, HasLabel
         return array_column(self::cases(), 'value');
     }
 
-    /**
-     * The sign applied to ledger entries posted against the source wallet.
-     */
     public function ledgerSign(): int
     {
         return match ($this) {

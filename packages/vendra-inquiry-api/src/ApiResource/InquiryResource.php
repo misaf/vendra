@@ -12,10 +12,7 @@ use Misaf\VendraInquiryApi\State\SubmitInquiryProcessor;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
 /**
- * The storefront contact form.
- *
- * Anyone may write in, so the operation is unauthenticated and throttled, and
- * it answers `204` — an enquiry is not a resource the sender may read back.
+ * The storefront contact form: unauthenticated, throttled, and answered with `204`.
  */
 #[ApiResource(
     shortName: 'Inquiry',
@@ -52,9 +49,7 @@ final class InquiryResource
     public ?string $occasion = null;
 
     /**
-     * The configured name converter maps camelCase wire names onto snake_case
-     * PHP properties, so every multi-word input carries an explicit serialized
-     * name and stays camelCase on both sides.
+     * Keep multi-word inputs camelCase on the wire despite the snake_case name converter.
      */
     #[SerializedName('preferredLocale')]
     public ?string $preferredLocale = null;

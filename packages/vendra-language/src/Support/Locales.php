@@ -8,23 +8,17 @@ use Illuminate\Support\Str;
 use Symfony\Component\Intl\Locales as IntlLocales;
 
 /**
- * Locale reference data backed by `symfony/intl` (bundled ICU data).
- *
- * Values are exposed in web/BCP-47 form (hyphen separated, e.g. `pt-BR`) to
- * match Laravel locale strings and the `LanguageLine` translation keys, while
- * ICU works internally with the underscore form (`pt_BR`).
+ * Locale data from `symfony/intl`, in hyphenated web form such as `pt-BR`.
  */
 final class Locales
 {
     /**
-     * Upper bound on a stored locale tag, aligned with the `locale` column
-     * and the form input. Longer ICU locales (e.g. `zh-Hant-TW`) are excluded.
+     * The maximum locale tag length, matching the `locale` column.
      */
     private const int MAX_LENGTH = 8;
 
     /**
-     * Every selectable locale as `value => label`, e.g. `['pt-BR' => 'Portuguese (pt-BR)']`,
-     * rendered in the given display locale and sorted alphabetically.
+     * Get the locale options, such as `['pt-BR' => 'Portuguese (pt-BR)']`, sorted by name.
      *
      * @return array<string, string>
      */
@@ -36,7 +30,7 @@ final class Locales
     }
 
     /**
-     * The given locale tags as `value => label`, e.g. `['en' => 'English (en)']`.
+     * Get the labels for the given locales, such as `['en' => 'English (en)']`.
      *
      * @param  array<int, string>  $locales
      * @return array<string, string>
@@ -53,7 +47,7 @@ final class Locales
     }
 
     /**
-     * The display name for a single locale, falling back to the tag itself.
+     * Get a locale's display name, falling back to the tag.
      */
     public static function name(string $locale, ?string $displayLocale = null): string
     {
@@ -67,8 +61,6 @@ final class Locales
     }
 
     /**
-     * All supported locale tags in web form, e.g. `en`, `de`, `pt-BR`.
-     *
      * @return array<int, string>
      */
     public static function all(): array
@@ -77,7 +69,7 @@ final class Locales
     }
 
     /**
-     * The canonical, ICU-supported platform locale catalog.
+     * Get the platform's configured locales that ICU supports.
      *
      * @return list<string>
      */
@@ -100,8 +92,6 @@ final class Locales
     }
 
     /**
-     * Empty translation values keyed by the configured locale catalog.
-     *
      * @return array<string, string>
      */
     public static function translationDefaults(): array
@@ -109,18 +99,13 @@ final class Locales
         return array_fill_keys(self::configured(), '');
     }
 
-    /**
-     * Whether the given locale tag maps to a known ICU locale.
-     */
     public static function isSupported(string $locale): bool
     {
         return filled(self::normalize($locale));
     }
 
     /**
-     * Normalize arbitrary input to a supported web-form locale tag, or `null`
-     * when it does not resolve to a known locale. Matching is case-insensitive
-     * and separator-agnostic, e.g. `pt_br` resolves to `pt-BR`.
+     * Normalize input to a supported locale tag, so `pt_br` becomes `pt-BR`.
      */
     public static function normalize(string $locale): ?string
     {
@@ -130,8 +115,7 @@ final class Locales
     }
 
     /**
-     * The supported locales as `lowercase web tag => canonical web tag`,
-     * memoized for the process lifetime (the underlying ICU data is immutable).
+     * Get the supported tags keyed by their lowercase form, memoized.
      *
      * @return array<string, string>
      */

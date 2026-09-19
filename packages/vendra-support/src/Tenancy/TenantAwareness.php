@@ -10,9 +10,7 @@ use Misaf\VendraSupport\Contracts\TenantResolver;
 final class TenantAwareness
 {
     /**
-     * Tenant awareness is derived from the bound tenant resolver: installing a
-     * tenant provider (e.g. misaf/vendra-tenant) binds a resolver that reports
-     * itself available, while the default null resolver keeps it disabled.
+     * Determine if a tenant provider, such as `misaf/vendra-tenant`, is bound.
      */
     public static function enabled(): bool
     {

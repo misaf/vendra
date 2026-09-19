@@ -11,18 +11,9 @@ use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * Rebuilds every storefront the platform intends to be running.
- *
- * Destructive by design, which is why it is its own command rather than a flag
- * on `vendra-store:reconcile`. Provisioning replaces a container instead of
- * updating it, so each storefront here is removed and recreated and is down for
- * its own pull, start, and health gate — sequentially, since one worker serves
- * the storefront queue. On an estate of any size that is an outage, and it
- * should be asked for by name.
- *
- * Reach for it when the change is one convergence cannot see: a storefront image
- * republished under the same reference, or an edge label that only a fresh
- * container will carry. Ordinary drift is `vendra-store:reconcile`.
+ * Every storefront goes down while its container is replaced, so this is a
+ * separate command. Use it for changes convergence cannot see, such as an image
+ * republished under the same tag; ordinary drift is `vendra-store:reconcile`.
  */
 #[Description('Rebuild every storefront intended to be running, whatever its recorded status')]
 #[Signature('vendra-store:redeploy
@@ -31,10 +22,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 final class RedeployStorefrontsCommand extends StorefrontDeploymentDispatchCommand
 {
     /**
-     * Only storefronts meant to be up.
-     *
-     * A storefront somebody deliberately stopped is not rebuilt: doing so would
-     * start it again, which is the one thing `desired_state` exists to prevent.
+     * Select only storefronts meant to be running, so stopped ones stay stopped.
      *
      * @return Builder<StorefrontDeployment>
      */
@@ -44,8 +32,7 @@ final class RedeployStorefrontsCommand extends StorefrontDeploymentDispatchComma
     }
 
     /**
-     * Forced: rebuilding is the entire request, so a Ready status must not
-     * short-circuit it.
+     * Force the deploy so a Ready status does not skip the rebuild.
      */
     protected function jobFor(int $deploymentId): object
     {

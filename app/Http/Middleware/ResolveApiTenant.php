@@ -13,14 +13,8 @@ use Spatie\Multitenancy\Contracts\IsTenant;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Resolves the tenant an API request belongs to.
- *
- * Every other surface is reached on a host that names its tenant, so the host
- * is the identifier. The canonical API is the exception: one host serves every
- * store, and the caller is a storefront on a customer domain. There the
- * request origin selects the tenant, matched against the same active tenant
- * domains that produce the CORS allowlist — so onboarding a store needs no
- * second registration.
+ * The canonical API serves every store on one host, so there the request
+ * origin selects the tenant instead of the host.
  */
 final readonly class ResolveApiTenant
 {
@@ -30,8 +24,6 @@ final readonly class ResolveApiTenant
     ) {}
 
     /**
-     * Handle an incoming request.
-     *
      * @param  Closure(Request): Response  $next
      */
     public function handle(Request $request, Closure $next): Response
@@ -63,9 +55,7 @@ final readonly class ResolveApiTenant
             return $tenant;
         }
 
-        // A browser sends Origin on cross-origin calls; a storefront rendering
-        // on the server sends it explicitly. Referer is the fallback for
-        // navigations that carry no Origin.
+        // Prefer Origin, falling back to Referer for navigations without one.
         foreach ([$request->headers->get('Origin'), $request->headers->get('Referer')] as $origin) {
             if (! is_string($origin) || $origin === '') {
                 continue;
@@ -81,10 +71,6 @@ final readonly class ResolveApiTenant
         return null;
     }
 
-    /**
-     * Origin-based resolution is confined to the canonical API host so that the
-     * panel host shapes keep failing closed on an unknown host.
-     */
     private function isCanonicalApiHost(Request $request): bool
     {
         return Str::lower($request->getHost())

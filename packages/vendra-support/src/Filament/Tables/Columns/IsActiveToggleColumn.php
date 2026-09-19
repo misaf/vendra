@@ -18,9 +18,9 @@ final class IsActiveToggleColumn extends ToggleColumn
     }
 
     /**
-     * Filament only skips an inline update when the column is disabled; it never
-     * consults the record's policy. Deny the toggle unless the panel user may
-     * update the record, and leave policy-less models to their panel's access gate.
+     * Disable the toggle unless the user may update the record.
+     *
+     * Filament does not consult the policy for inline updates on its own.
      */
     public function isDisabled(): bool
     {

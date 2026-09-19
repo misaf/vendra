@@ -18,16 +18,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use RuntimeException;
 
 /**
- * Single generic read provider for every Eloquent-backed API resource.
- *
- * Delegates fetching to the built-in Eloquent item/collection providers, then
- * maps each model to its resource through the {@see ResourceMapper} declared on
- * the operation's {@see EloquentResourceOptions}. Query scoping stays in the
- * resource's own {@see LinksHandlerInterface}.
- *
- * Collections are re-wrapped as an Eloquent {@see Paginator} (not a
- * TraversablePaginator) so ApiPlatform's access checker resolves the operation
- * policy against the resource rather than the paginator object.
+ * Scoping stays in each resource's {@see LinksHandlerInterface}. Collections are
+ * wrapped in a {@see Paginator} so policies resolve against the resource.
  *
  * @implements ProviderInterface<object>
  */

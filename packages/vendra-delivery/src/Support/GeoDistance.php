@@ -6,16 +6,12 @@ namespace Misaf\VendraDelivery\Support;
 
 final class GeoDistance
 {
-    /**
-     * Mean earth radius in kilometres.
-     */
     private const float EARTH_RADIUS_KM = 6371.0088;
 
     /**
-     * Great-circle distance between two points, in kilometres.
+     * Get the great-circle distance between two points in kilometers.
      *
-     * Deliveries are priced in bands a few kilometres wide, so the haversine
-     * formula on a spherical earth is precise enough and needs no projection.
+     * The haversine formula is precise enough for bands a few kilometers wide.
      */
     public static function kilometres(
         float $fromLatitude,

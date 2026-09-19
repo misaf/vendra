@@ -9,12 +9,7 @@ use Misaf\VendraStore\Jobs\RestartStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * Restarts an already-deployed storefront.
- *
- * This is not a deployment: nothing is built, pulled, or replaced, so the
- * recorded status and image stay exactly as they were. The intent is recorded
- * here and the restart runs on the storefront queue, the only worker holding a
- * container-runtime socket.
+ * The restart runs on the storefront queue, the only worker with a runtime socket.
  */
 final class RestartStoreStorefrontAction
 {

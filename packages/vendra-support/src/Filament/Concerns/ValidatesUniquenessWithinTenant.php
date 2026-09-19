@@ -13,8 +13,9 @@ trait ValidatesUniquenessWithinTenant
     use InteractsWithTranslatedFormFields;
 
     /**
-     * Require a value unique within the current tenant, ignoring trashed rows. Translatable
-     * columns validate against the translation of the form's active locale.
+     * Require a value unique within the current tenant, ignoring trashed rows.
+     *
+     * Translatable columns check the form's active locale.
      */
     public function uniqueWithinTenant(bool $perLocale = false): static
     {

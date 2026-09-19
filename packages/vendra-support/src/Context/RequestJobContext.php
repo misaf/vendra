@@ -9,13 +9,7 @@ use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Str;
 
 /**
- * Structured observability metadata for the current request, job, or command.
- *
- * Only cross-cutting identifiers every layer shares are first-class here: trace
- * id, actor, operation, tenant, and the hidden idempotency key. Domain-specific
- * keys — reseller, subscription, payment, panel, newsletter, … — are supplied by
- * their owning package through the generic {@see $metadata} bag, keeping this
- * support-layer value object free of domain vocabulary.
+ * Domain packages add their own keys through {@see $metadata}.
  */
 final readonly class RequestJobContext
 {
@@ -62,9 +56,6 @@ final readonly class RequestJobContext
         return self::string(Context::get(self::TRACE_ID)) ?? (string) Str::uuid();
     }
 
-    /**
-     * Remove the given visible keys from the current context.
-     */
     public static function forget(string ...$keys): void
     {
         Context::forget($keys);
@@ -128,9 +119,6 @@ final readonly class RequestJobContext
     }
 
     /**
-     * Visible context keys that are not first-class properties, snapshotted so
-     * domain metadata round-trips through {@see current()}.
-     *
      * @return array<string, int|string>
      */
     private static function currentMetadata(): array

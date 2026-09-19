@@ -22,8 +22,6 @@ use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 
 /**
- * A window of the day a customer can be delivered in, such as "Morning 9–12".
- *
  * @property int $id
  * @property int $tenant_id
  * @property array<string, string> $name
@@ -89,8 +87,7 @@ final class DeliverySlot extends Model implements ShouldLogActivity, Sortable
     }
 
     /**
-     * Whether the slot still has room on the given date. A slot without a
-     * capacity is unlimited.
+     * Determine if the slot has room on the given date; no capacity means unlimited.
      */
     public function hasRoomOn(string $date): bool
     {

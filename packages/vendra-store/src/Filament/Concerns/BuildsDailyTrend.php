@@ -11,13 +11,9 @@ use Illuminate\Support\Facades\Date;
 trait BuildsDailyTrend
 {
     /**
-     * Per-day record counts over the trailing window, oldest day first, for use
-     * as a stat sparkline.
+     * Get per-day record counts over the trailing window, oldest day first.
      *
-     * The window is read once and bucketed in PHP rather than grouped in SQL,
-     * because truncating a timestamp to its date has no portable expression
-     * across the drivers this app runs on. One query beats a count per day, and
-     * a trailing week of new records is small enough to bucket in memory.
+     * Bucketed in PHP because date truncation has no portable SQL expression.
      *
      * @param  Builder<*>  $query
      * @return list<float>

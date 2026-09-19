@@ -19,13 +19,7 @@ final class ResetPasswordNotification extends ResetPassword implements NotTenant
     use Queueable;
 
     /**
-     * Password broker the reset link was issued by.
-     *
-     * Platform panels (console, reseller) use their own broker and token
-     * store, so the default broker's expiry would be the wrong number to
-     * quote here. The notification is resolved while the panel is still
-     * current, so the broker is captured now and travels with the queued
-     * job.
+     * The password broker that issued the link, captured for its expiry.
      */
     public string $broker;
 

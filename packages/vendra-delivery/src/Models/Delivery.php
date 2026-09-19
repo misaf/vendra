@@ -20,11 +20,6 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * Where and when one order travels, plus the fee that was quoted for it.
- *
- * The fee is a snapshot: re-pricing a zone later never rewrites what a
- * customer was charged, and the order keeps its own `delivery_amount`.
- *
  * @property int $id
  * @property int $tenant_id
  * @property int $order_id

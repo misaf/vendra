@@ -78,9 +78,7 @@ it('only configures Vendra package skills that have a canonical definition', fun
         ->values()
         ->all();
 
-    // boost.json curates which package skills are generated; the set may be a
-    // subset, but every configured skill must resolve to a real SKILL.md so a
-    // renamed or misspelled reference is still caught.
+    // Every skill in boost.json must resolve to a real SKILL.md.
     expect(array_values(array_diff($configuredSkills, $canonicalSkills)))->toBeEmpty();
 })->skip(
     fn (): bool => ! File::exists(base_path('boost.json')),

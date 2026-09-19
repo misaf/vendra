@@ -17,12 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // CORS first: storefronts are served on customer domains but fetch from
-        // the canonical api.<base> host, so every browser call is cross-origin
-        // and preflights. Preflight OPTIONS requests must be answered before
-        // routing, which is why this is global middleware rather than route
-        // middleware. The allowlist is built per-request from the active
-        // storefront domains — see HandleStorefrontCors and config/cors.php.
+        // CORS runs first so preflight requests are answered before routing.
         $middleware->prepend([
             HandleStorefrontCors::class,
             AddRequestContext::class,
@@ -30,11 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
         $middleware->append(SecureMcpTransport::class);
 
-        // The app runs behind a TLS-terminating reverse proxy (Traefik) that
-        // forwards to FrankenPHP as plain HTTP with X-Forwarded-* headers. The
-        // :8080 listener is never published, so the immediate peer is always the
-        // proxy — trust it, otherwise Laravel treats requests as insecure and
-        // generates http:// asset URLs (mixed-content on the https page).
+        // Trust the TLS-terminating proxy, the only peer that can reach the app.
         $middleware->trustProxies(
             at: '*',
             headers: Request::HEADER_X_FORWARDED_FOR

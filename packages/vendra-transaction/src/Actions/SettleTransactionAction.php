@@ -9,9 +9,7 @@ use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Models\Transaction;
 
 /**
- * Settles an approved transaction into the ledger: the signed principal
- * against the source wallet, the mirrored credit on the counterparty wallet
- * for transfers, and any fee as its own negative entry.
+ * Posts the principal, the counterparty credit for transfers, and any fee.
  */
 final readonly class SettleTransactionAction
 {

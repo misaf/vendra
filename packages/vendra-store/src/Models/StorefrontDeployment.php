@@ -20,13 +20,8 @@ use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
 use Misaf\VendraStore\Exceptions\StoreNotServingException;
 
 /**
- * The storefront one store owns: its configuration, and the state of the
- * workload the platform runs for it.
- *
- * `desired_state` is what the platform intends; `status`, `container_name` and
- * `image_digest` are what it last observed. Keeping both is what lets a stopped
- * storefront stay stopped through a reconciliation pass instead of being started
- * again on the assumption that stopped means broken.
+ * `desired_state` is the intent; `status`, `container_name`, and `image_digest`
+ * are what was last observed.
  *
  * @property int $id
  * @property int $store_id
@@ -58,11 +53,7 @@ final class StorefrontDeployment extends Model
     use HasFactory;
 
     /**
-     * The store this storefront belongs to.
-     *
-     * Deliberately unscoped: reconciliation, retries and the console's status
-     * columns all read deployments from outside any store's context. Offboarded
-     * stores stay resolvable so their deployments still name what they served.
+     * Get the store, unscoped and including trashed stores.
      *
      * @return BelongsTo<Store, $this>
      */
@@ -78,8 +69,6 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * Deployments the platform intends to have running.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -89,16 +78,13 @@ final class StorefrontDeployment extends Model
         return $query->where('desired_state', StorefrontDesiredState::Running->value);
     }
 
-    /**
-     * The public storefront, served over TLS by the edge proxy.
-     */
     public function url(): string
     {
         return 'https://'.$this->domain;
     }
 
     /**
-     * Enter provisioning, clearing any previous failure.
+     * Mark the deployment as processing, clearing any previous failure.
      */
     public function markProcessing(): void
     {
@@ -108,9 +94,6 @@ final class StorefrontDeployment extends Model
         ]);
     }
 
-    /**
-     * The storefront is placed and passed its health gate.
-     */
     public function markReady(?string $containerName, ?string $image, ?string $imageDigest): void
     {
         $this->transitionTo(StorefrontDeploymentStatus::Ready, [
@@ -123,7 +106,7 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * The storefront is placed but unproven — reconciliation revisits it.
+     * Mark the deployment as placed but unverified, for reconciliation to revisit.
      */
     public function markRequested(?string $containerName, ?string $image, ?string $imageDigest): void
     {
@@ -137,8 +120,7 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * Provisioning gave up. Written only once the queue has exhausted its
-     * attempts, so a deployment that is still retrying never reads as failed.
+     * Mark the deployment as failed once the queue has exhausted its attempts.
      */
     public function markFailed(string $error): void
     {
@@ -149,11 +131,7 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * Record the intent behind a lifecycle command.
-     *
-     * Separate from the status transitions: stopping a storefront does not
-     * un-deploy it, and the row must still say what image is placed so it can be
-     * started again without a redeploy.
+     * Record the intended state without touching the deployment status.
      */
     public function markDesiredState(StorefrontDesiredState $state): void
     {
@@ -161,9 +139,10 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * The columns an administrator changes to ask for a different storefront.
-     * A job compares it before and after its run to catch a change whose own
-     * dispatch the unique lock discarded while it was working.
+     * Get the columns that describe the requested storefront.
+     *
+     * Jobs compare it before and after running to catch a change whose dispatch
+     * the unique lock discarded.
      *
      * @return array<string, mixed>
      */
@@ -179,8 +158,7 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * Whether this storefront may be asked to run. Read with trashed stores
-     * included, because an offboarded store is exactly the case being refused.
+     * Determine if the storefront's store, including a trashed one, may serve.
      */
     public function storeMayServe(): bool
     {
@@ -215,9 +193,6 @@ final class StorefrontDeployment extends Model
     }
 
     /**
-     * Move to a status the current one allows, writing the attributes that go
-     * with it in the same save.
-     *
      * @param  array<string, mixed>  $attributes
      *
      * @throws InvalidStorefrontTransitionException

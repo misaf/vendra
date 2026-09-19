@@ -10,9 +10,7 @@ use Misaf\VendraPermission\Models\Permission;
 final class CreatePermissionAction
 {
     /**
-     * When a tenant is supplied its scoped `execute()` context is used so the
-     * permission is created for that tenant; without one (tenant-agnostic
-     * install) the permission is created globally.
+     * A null tenant creates a global permission.
      */
     public function execute(
         ?Model $tenant,

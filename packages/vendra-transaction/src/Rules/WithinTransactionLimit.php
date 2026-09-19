@@ -9,10 +9,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Models\Wallet;
 
-/**
- * Validates a submitted amount against the wallet's configured per-type
- * transaction limit, when one exists.
- */
 final readonly class WithinTransactionLimit implements ValidationRule
 {
     public function __construct(

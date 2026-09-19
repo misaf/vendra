@@ -9,11 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
 
 /**
- * The dates a customer may still choose from.
- *
- * Same-day delivery closes at the configured cutoff hour — the studio buys at
- * the dawn market and ties the bouquet the morning it travels, so an order
- * placed after the cutoff starts from tomorrow.
+ * After the configured cutoff hour, the earliest date is tomorrow.
  */
 final class DeliverySchedule
 {

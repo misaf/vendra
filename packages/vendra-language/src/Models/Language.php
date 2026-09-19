@@ -23,9 +23,6 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * A locale a tenant has installed from the ICU catalog. Display names derive
- * from that catalog, while active controls whether the locale is active.
- *
  * @property int $id
  * @property int $tenant_id
  * @property string $locale
@@ -50,9 +47,7 @@ final class Language extends Model implements ShouldLogActivity, Sortable
     use SortableTrait;
 
     /**
-     * Pin sortable behavior regardless of the global `eloquent-sortable`
-     * configuration values: order on the `position` column and always assign
-     * the next position when creating.
+     * Pin the sortable behavior regardless of the global config.
      *
      * @var array{order_column_name: string, sort_when_creating: bool}
      */
@@ -67,9 +62,6 @@ final class Language extends Model implements ShouldLogActivity, Sortable
         'is_default' => false,
     ];
 
-    /**
-     * The localized display name resolved from the ICU catalog.
-     */
     protected function name(): Attribute
     {
         return Attribute::make(get: fn () => Locales::name($this->locale));

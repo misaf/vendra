@@ -12,8 +12,7 @@ use Misaf\VendraOrderApi\State\PlaceOrderProcessor;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
 /**
- * Checkout input. Prices are never accepted from the client: the processor
- * reads them from the catalog and snapshots them onto the order.
+ * Checkout input; prices always come from the catalog, never the client.
  */
 #[ApiResource(
     shortName: 'Checkout',
@@ -39,9 +38,7 @@ use Symfony\Component\Serializer\Attribute\SerializedName;
 final class CheckoutResource
 {
     /**
-     * The configured name converter maps camelCase wire names onto snake_case
-     * PHP properties, so every multi-word input carries an explicit serialized
-     * name and stays camelCase on both sides.
+     * Keep multi-word inputs camelCase on the wire despite the snake_case name converter.
      */
     #[SerializedName('cartToken')]
     public string $cartToken = '';

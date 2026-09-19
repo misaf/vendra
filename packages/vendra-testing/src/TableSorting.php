@@ -10,14 +10,10 @@ use Livewire\Features\SupportTesting\Testable;
 final class TableSorting
 {
     /**
-     * Sorts every sortable column of the page's table in both directions and
-     * asserts the rendered record order matches the persisted values. Records
-     * must be created so each one sorts before the next on every sortable
-     * column (for example ascending names, amounts, and creation order).
+     * Assert that every sortable column sorts the records in both directions.
      *
-     * Set `$assertDescendingOrder` to false for tables whose grouping pins the
-     * visible record order regardless of the sort direction; the descending
-     * pass then only asserts the records remain visible.
+     * The records must already be in ascending order on every sortable column.
+     * Pass `$assertDescendingOrder` as false for tables whose grouping fixes the order.
      *
      * @param  array<int, Model>  $recordsInAscendingOrder
      */

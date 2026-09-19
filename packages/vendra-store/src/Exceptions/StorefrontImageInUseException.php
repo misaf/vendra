@@ -8,8 +8,7 @@ use DomainException;
 use Misaf\VendraStore\Models\StorefrontImage;
 
 /**
- * A storefront image was asked to be deleted while deployments still provision
- * from it. Deactivating it is the way to retire a build that is still in use.
+ * Deactivate the image instead.
  */
 final class StorefrontImageInUseException extends DomainException
 {

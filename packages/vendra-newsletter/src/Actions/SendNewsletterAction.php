@@ -14,10 +14,6 @@ use Misaf\VendraNewsletter\Models\NewsletterSubscriber;
 
 final class SendNewsletterAction
 {
-    /**
-     * Fan the newsletter out to every subscribed recipient in tenant-scoped
-     * chunks, then mark it as sent. Returns the number of recipients queued.
-     */
     public function execute(Newsletter $newsletter): int
     {
         return DB::transaction(function () use ($newsletter): int {

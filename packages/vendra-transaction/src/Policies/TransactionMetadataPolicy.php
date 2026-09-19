@@ -13,8 +13,7 @@ use Misaf\VendraSupport\Authorization\ResolvesPolicyPermissions;
 use Misaf\VendraTransaction\Enums\TransactionPolicyEnum;
 
 /**
- * Metadata rows are managed inline on their transaction, so they are
- * governed by the transaction permissions rather than their own set.
+ * Metadata is managed on its transaction and governed by the transaction permissions.
  */
 final class TransactionMetadataPolicy
 {

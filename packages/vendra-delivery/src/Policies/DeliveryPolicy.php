@@ -13,8 +13,7 @@ use Misaf\VendraSupport\Authorization\AuthorizesViewAbilities;
 use Misaf\VendraSupport\Authorization\ResolvesPolicyPermissions;
 
 /**
- * Deliveries are scheduled by the checkout, never created by hand in the
- * administration UI.
+ * Deliveries are scheduled by checkout and never created by hand.
  */
 final class DeliveryPolicy
 {

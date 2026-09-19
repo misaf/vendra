@@ -28,8 +28,7 @@ final readonly class ChainLocaleResolver implements LocaleResolver, ProvidesVary
     }
 
     /**
-     * Build a chain from config values or middleware parameters, where each
-     * source is a resolver class name or a SOURCE_ALIASES key.
+     * Build a chain from resolver class names or `SOURCE_ALIASES` keys.
      *
      * @param  array<mixed>  $sources
      */

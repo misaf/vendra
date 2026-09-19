@@ -10,11 +10,6 @@ use Misaf\VendraTransaction\Events\TransactionApproved;
 use Misaf\VendraTransaction\Models\Transaction;
 use Spatie\ModelStates\Transition;
 
-/**
- * Approval settles the transaction into the ledger atomically with the
- * state change: entries, cached balances, and the status column commit
- * together or not at all.
- */
 final class ApproveTransactionTransition extends Transition
 {
     public function __construct(private readonly Transaction $transaction) {}

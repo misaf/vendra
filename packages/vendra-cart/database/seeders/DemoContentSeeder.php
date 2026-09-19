@@ -41,10 +41,9 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * The cart token is the natural key — it already carries a unique index —
-     * so a repeated run inserts nothing instead of tripping that index. Store
-     * provisioning retries the whole seed list on failure, so a partial run
-     * has to be safe to repeat.
+     * Seed the fixtures idempotently, keyed on the cart token.
+     *
+     * Store provisioning retries the whole seed list, so a partial run must be repeatable.
      *
      * @param  list<array<string, mixed>>  $records
      */

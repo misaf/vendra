@@ -9,21 +9,10 @@ use Illuminate\Support\Facades\Schema;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Throwable;
 
-/**
- * The single source of truth for the tenant foreign key.
- *
- * The column name is never hard-coded: it comes from the bound
- * {@see TenantResolver}. Vendra keeps the neutral `tenant_id`, so every
- * reusable domain package works under any tenant model; an application that
- * would rather name the column after its own tenant configures `company_id` or
- * `workspace_id` and every helper here follows.
- */
 final class TenantSchema
 {
     /**
-     * The column used when no tenant provider is installed, and the one Vendra
-     * itself keeps. It exists so provider-agnostic code has a stable answer
-     * even with tenancy switched off.
+     * The foreign key used when no tenant provider is installed.
      */
     public const string DEFAULT_FOREIGN_KEY = 'tenant_id';
 
@@ -37,9 +26,6 @@ final class TenantSchema
         return resolve(TenantResolver::class)->available();
     }
 
-    /**
-     * The tenant foreign key every tenant-scoped table carries.
-     */
     public static function column(): string
     {
         if (! app()->bound(TenantResolver::class)) {

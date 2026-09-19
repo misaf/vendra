@@ -11,9 +11,7 @@ use Throwable;
 trait RendersRichContent
 {
     /**
-     * Render persisted rich-editor state defensively: plain strings render
-     * as-is, TipTap documents are normalized first, and content the renderer
-     * cannot parse degrades to escaped plain text instead of failing the page.
+     * Render stored rich-editor content, falling back to escaped text if it cannot be parsed.
      *
      * @param  array<array-key, mixed>|string|null  $state
      */
@@ -33,8 +31,7 @@ trait RendersRichContent
     }
 
     /**
-     * Wrap stray top-level text nodes in paragraphs so legacy documents match
-     * the TipTap schema.
+     * Wrap stray top-level text nodes in paragraphs to match the TipTap schema.
      *
      * @param  array<array-key, mixed>  $document
      * @return array<array-key, mixed>

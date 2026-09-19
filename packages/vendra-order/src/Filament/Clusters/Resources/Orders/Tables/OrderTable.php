@@ -126,9 +126,6 @@ final class OrderTable
     }
 
     /**
-     * The selectable lifecycle states, keyed by the value persisted in the
-     * status column.
-     *
      * @return array<string, string>
      */
     private static function statusOptions(): array

@@ -10,8 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * A model that does NOT implement the marker contract and therefore must never
- * be logged, even while activity logging is enabled.
+ * A model without the marker contract, which is never logged.
  */
 #[Fillable(['name', 'description'])]
 #[Table(name: 'activity_log_widgets')]

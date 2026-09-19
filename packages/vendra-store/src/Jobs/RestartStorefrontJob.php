@@ -16,11 +16,7 @@ use Misaf\VendraStore\Support\StorefrontReference;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 
 /**
- * Restarts one storefront container on the storefront queue, the only worker
- * holding a container-runtime socket.
- *
- * Skipped when the intent changed to Stopped before the job ran: restarting
- * would bring up a storefront somebody has since taken down.
+ * Skipped if the storefront was stopped before the job ran.
  */
 #[Timeout(300)]
 #[Tries(3)]

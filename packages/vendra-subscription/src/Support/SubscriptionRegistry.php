@@ -15,17 +15,12 @@ use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
 
 /**
- * Owns the write and locking operations on a subscriber's subscriptions and
- * payments. The engine performs these against its own {@see Subscription} and
- * {@see SubscriptionPayment} models keyed by the subscriber's polymorphic
- * identity, so subscribers only expose intent-level capabilities and never carry
- * subscription orchestration on their models.
+ * Keeps subscription orchestration off the subscriber models.
  */
 final class SubscriptionRegistry
 {
     /**
-     * Re-fetch the subscriber under a row lock so a subscription transaction can
-     * serialize concurrent billing operations for it.
+     * Lock the subscriber's row to serialize concurrent billing operations.
      *
      * @template TSubscriber of Model&SubscriptionSubscriber
      *
@@ -42,8 +37,6 @@ final class SubscriptionRegistry
     }
 
     /**
-     * Create a subscription period owned by the subscriber.
-     *
      * @param  array<string, mixed>  $attributes
      */
     public function create(Model&SubscriptionSubscriber $subscriber, array $attributes): Subscription
@@ -55,11 +48,6 @@ final class SubscriptionRegistry
         return $subscription;
     }
 
-    /**
-     * Cancel the subscriber's active subscriptions, optionally keeping one.
-     *
-     * @return int the number of subscriptions cancelled
-     */
     public function cancelActive(Model&SubscriptionSubscriber $subscriber, ?int $exceptKey = null): int
     {
         $query = $this->subscriptionsQuery($subscriber)
@@ -73,11 +61,9 @@ final class SubscriptionRegistry
     }
 
     /**
-     * Cancel every non-terminal subscription held by a subscriber, and its open
-     * payments with it: a pending payment left behind would otherwise still be
-     * charged by payment recovery after the subscriber is gone.
+     * Cancel the subscriber's open subscriptions and their pending payments.
      *
-     * @return int the number of subscriptions cancelled
+     * A pending payment left behind would still be charged by payment recovery.
      */
     public function cancelOpen(Model&SubscriptionSubscriber $subscriber): int
     {
@@ -93,10 +79,7 @@ final class SubscriptionRegistry
     }
 
     /**
-     * Cancel the subscriber's pending-payment subscriptions with the given keys.
-     *
      * @param  array<int, int>  $keys
-     * @return int the number of subscriptions cancelled
      */
     public function cancelPending(Model&SubscriptionSubscriber $subscriber, array $keys): int
     {
@@ -107,8 +90,6 @@ final class SubscriptionRegistry
     }
 
     /**
-     * Lock and return the subscriber's open (non-terminal) subscription payments.
-     *
      * @return Collection<int, SubscriptionPayment>
      */
     public function lockOpenPayments(Model&SubscriptionSubscriber $subscriber): Collection
@@ -125,12 +106,6 @@ final class SubscriptionRegistry
             ->get();
     }
 
-    /**
-     * Point the subscriber's open payments at a new payer, so a replaced main
-     * account is not charged for renewals after it lost access.
-     *
-     * @return int the number of payments reassigned
-     */
     public function reassignOpenPayments(Model&SubscriptionSubscriber $subscriber, Model $payer): int
     {
         $payments = $this->lockOpenPayments($subscriber);

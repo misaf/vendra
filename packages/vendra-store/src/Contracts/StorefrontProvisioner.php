@@ -9,60 +9,39 @@ use Misaf\VendraStore\Support\StorefrontProvisionRequest;
 use Misaf\VendraStore\Support\StorefrontProvisionResult;
 use Misaf\VendraStore\Support\StorefrontReference;
 
-/**
- * The port between the store layer and whatever actually runs a storefront.
- *
- * Every value crossing it is typed, so an adapter can be written against this
- * interface alone — the array-in/array-out shape it replaced documented nothing
- * and forced every caller to re-validate what it received.
- *
- * The store layer decides *when* a storefront should be deployed, stopped, or
- * destroyed and what it should contain; an implementation decides how a runtime
- * is made to agree. Nothing here mentions containers, because a future
- * implementation need not use them.
- */
 interface StorefrontProvisioner
 {
     /**
-     * Place the storefront described by the request, replacing any predecessor.
+     * Provision the storefront, replacing any predecessor.
      *
-     * Idempotent by contract: calling it twice with the same request leaves one
-     * storefront running, which is what reconciliation and retry depend on.
+     * Must be idempotent, since reconciliation and retries depend on it.
      */
     public function provision(StorefrontProvisionRequest $request): StorefrontProvisionResult;
 
     /**
-     * Bring an already-deployed storefront back up. Already running is success.
+     * Start a deployed storefront; one already running is a success.
      */
     public function start(StorefrontReference $storefront): void;
 
     /**
-     * Take a storefront down without discarding it. Already stopped is success.
+     * Stop a storefront without removing it; one already stopped is a success.
      */
     public function stop(StorefrontReference $storefront): void;
 
     public function restart(StorefrontReference $storefront): void;
 
     /**
-     * Remove the storefront entirely. Absent is success.
+     * Remove the storefront; one already absent is a success.
      */
     public function destroy(StorefrontReference $storefront): void;
 
     /**
-     * What is actually running for this storefront right now.
+     * Observe what is currently running for the storefront.
      *
-     * Reconciliation decides what to do from this and the deployment row alone,
-     * so it must report enough to distinguish "stopped" from "running the wrong
-     * image" — a bare state enum forced a redeploy to establish either.
-     *
-     * Implementations must not answer "absent" for a runtime they could not
-     * reach: a converge pass would read that as a missing storefront and rebuild
-     * a healthy one.
+     * Throw rather than report "absent" for an unreachable runtime, or
+     * reconciliation will rebuild a healthy storefront.
      */
     public function observe(StorefrontReference $storefront): StorefrontObservation;
 
-    /**
-     * Recent output from the storefront, for diagnosing a failed deployment.
-     */
     public function logs(StorefrontReference $storefront, int $lines = 200): string;
 }

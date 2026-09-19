@@ -15,14 +15,6 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Throwable;
 
-/**
- * Runs one storefront deployment off the request lifecycle.
- *
- * Orchestration only: the deployment decision belongs to
- * {@see DeployStoreStorefrontAction} and the status transitions to the model.
- * The job decides *when* that happens, how often it is retried, and what a final
- * failure means.
- */
 #[Timeout(300)]
 #[Tries(5)]
 #[UniqueFor(3600)]
@@ -31,12 +23,9 @@ final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
     use Queueable;
 
     /**
-     * The only queue whose worker holds container-runtime credentials.
+     * The only queue whose worker holds the container-runtime socket.
      *
-     * Deploying needs a runtime socket, which is root-equivalent on the host
-     * under Docker. Isolating it here means one small worker container carries
-     * that access instead of every queued job in the system sharing it. Horizon's
-     * supervisor deliberately does not list this queue.
+     * The socket is root-equivalent, so Horizon deliberately does not run this queue.
      */
     public const string QUEUE = 'storefronts';
 
@@ -86,12 +75,7 @@ final class ProvisionStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
     }
 
     /**
-     * Record the terminal failure.
-     *
-     * Only here, never in a catch around {@see handle()}: a thrown attempt that
-     * still has retries left is not a failed deployment, and writing Failed on
-     * every attempt made the panel show a deployment as dead while the queue was
-     * still working on it.
+     * Record the failure once retries are exhausted, not on every attempt.
      */
     public function failed(?Throwable $exception): void
     {

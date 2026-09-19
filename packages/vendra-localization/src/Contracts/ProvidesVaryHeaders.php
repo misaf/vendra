@@ -7,8 +7,7 @@ namespace Misaf\VendraLocalization\Contracts;
 interface ProvidesVaryHeaders
 {
     /**
-     * The request headers this resolver reads, to be echoed in the
-     * response Vary header so HTTP caches key on them.
+     * Get the request headers to add to the response's `Vary` header.
      *
      * @return list<string>
      */

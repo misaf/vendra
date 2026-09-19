@@ -17,13 +17,7 @@ use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Throwable;
 
 /**
- * Shared body of the commands that push storefront deployments back through
- * provisioning.
- *
- * Reconcile and retry-failed differ only in which rows they select and whether
- * they override a Ready status, so the selection and those two words are the
- * subclass's entire job — the guard, chunking, sync/queue switch, and reporting
- * are identical and live here.
+ * Subclasses choose the rows and the job; chunking, locking, and reporting live here.
  */
 abstract class StorefrontDeploymentDispatchCommand extends Command
 {
@@ -84,9 +78,9 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     }
 
     /**
-     * Run one deployment in this process under the same unique lock a queued job
-     * takes, so a sync pass cannot provision a storefront a worker is already
-     * provisioning. One failure is recorded and the pass moves on.
+     * Run one deployment in this process under the queued job's unique lock.
+     *
+     * A failure is recorded and the pass moves on.
      *
      * @param  list<mixed>  $outcomes
      * @param  array<int, string>  $failures
@@ -118,14 +112,10 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     }
 
     /**
-     * Drop a unique lock so this dispatch is accepted.
+     * Release a job's unique lock so this dispatch is accepted.
      *
-     * For one situation only: a worker killed mid-provision never releases its
-     * lock, so the deployment is unqueueable for the whole `uniqueFor` window —
-     * an hour — with no other way out. The lock cannot say whether its owner is
-     * dead or merely slow, which is why this is a flag an administrator types and not
-     * a timeout the command applies on its own: used while a job really is in
-     * flight, it lets a second one provision the same storefront concurrently.
+     * Only for a worker killed mid-provision, which holds its lock for the full
+     * `uniqueFor` window. Using it while a job is running provisions twice.
      */
     private function releaseUniqueLock(object $job): void
     {
@@ -133,25 +123,13 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     }
 
     /**
-     * Collect the deployments the bus refuses to queue a second job for.
+     * Collect the deployments whose unique job was discarded as a duplicate.
      *
-     * `ProvisionStorefrontJob` is `ShouldBeUnique`, so dispatching one for a
-     * deployment that already has a job in flight is discarded — silently, and
-     * correctly: a storefront must not be provisioned twice at once. What was
-     * wrong is that this command counted what it *handed to* the bus rather than
-     * what the bus took, so a run in which nothing at all was queued still
-     * reported every deployment as queued and read as success.
+     * Listening for the discard event is race-free, unlike checking the lock
+     * first. The listener is registered once because Artisan reuses the command
+     * instance.
      *
-     * The framework announces each discard, which is race-free and costs nothing
-     * — unlike inspecting the lock before dispatching, which is both a guess and
-     * a second chance to lose the race.
-     *
-     * Artisan reuses one command instance across calls in a process, so the
-     * listener is registered once and writes into the current run's collection
-     * rather than piling up a new listener per run.
-     *
-     * @return ArrayObject<int, int> deployment ids; an object so the listener's
-     *                               writes are visible to the caller
+     * @return ArrayObject<int, int>
      */
     private function recordSkippedDispatches(): ArrayObject
     {
@@ -198,14 +176,12 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     }
 
     /**
-     * The deployments this command acts on.
-     *
      * @return Builder<StorefrontDeployment>
      */
     abstract protected function query(): Builder;
 
     /**
-     * A `sprintf` template taking the count and the verb.
+     * Get the `sprintf` summary template, taking the count and the verb.
      */
     abstract protected function summary(): string;
 
@@ -213,23 +189,13 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
 
     abstract protected function queuedVerb(): string;
 
-    /**
-     * The job that carries out this command's intent for one deployment.
-     *
-     * Each subclass wants a different verb applied — retry provisioning, force a
-     * redeploy, converge — so the job is the subclass's choice rather than a flag
-     * on one job that has to mean all three.
-     */
     abstract protected function jobFor(int $deploymentId): object;
 
     /**
-     * Do the work for one deployment in this process, returning anything worth
-     * reporting afterwards.
+     * Run one deployment in this process and return its reportable outcome.
      *
-     * Note what this cannot be: `dispatch_sync()` on a queueable job hands it to
-     * the sync *queue driver*, so what comes back is the driver's push result and
-     * never the handler's return value. A command that wants an outcome has to
-     * override this and call the operation itself.
+     * `dispatch_sync()` returns the queue driver's result, not the handler's, so
+     * a command that needs the outcome overrides this.
      */
     protected function performSync(int $deploymentId): mixed
     {
@@ -237,10 +203,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
     }
 
     /**
-     * Summarise what a synchronous pass actually did.
-     *
-     * Only a `--sync` run has anything to report: a queued job has not run yet,
-     * so there is no outcome to collect.
+     * Report what a `--sync` pass did; queued jobs have no outcome yet.
      *
      * @param  list<mixed>  $outcomes
      */

@@ -9,10 +9,6 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Misaf\VendraSubscription\Models\Subscription;
 
-/**
- * A subscription was explicitly cancelled. Consumers decide how their
- * subscriber-specific units should react to the loss of access.
- */
 final readonly class SubscriptionCancelled implements ShouldDispatchAfterCommit
 {
     use Dispatchable;

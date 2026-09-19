@@ -25,9 +25,7 @@ use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Translatable\HasTranslations;
 
 /**
- * A delivery band measured from the studio it is anchored to. Bands are
- * ordered by `position` from the tightest radius outwards, and the first one
- * that still covers a dropped pin prices the delivery.
+ * A delivery band around the studio; the first band by `position` that covers a pin prices it.
  *
  * @property int $id
  * @property int $tenant_id
@@ -112,9 +110,6 @@ final class DeliveryZone extends Model implements ShouldLogActivity, Sortable
         return $this->hasMany(Delivery::class);
     }
 
-    /**
-     * Kilometres between this band's anchor and the given point.
-     */
     public function distanceTo(float $latitude, float $longitude): float
     {
         return GeoDistance::kilometres(
@@ -126,7 +121,7 @@ final class DeliveryZone extends Model implements ShouldLogActivity, Sortable
     }
 
     /**
-     * A band without a maximum distance is the catch-all outer band.
+     * Determine if the band covers the distance; no maximum means it covers all.
      */
     public function covers(float $distanceKm): bool
     {

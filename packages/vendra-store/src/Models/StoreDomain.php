@@ -23,9 +23,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
- * One of a store's domains. The active one (active = true) is what resolves the
- * store from a request host; replaced domains are kept, trashed and inactive, as
- * history.
+ * The active domain resolves the store; replaced domains are kept trashed as history.
  *
  * @property int $id
  * @property int $store_id

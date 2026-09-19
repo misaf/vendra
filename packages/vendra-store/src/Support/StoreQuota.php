@@ -12,8 +12,6 @@ use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 final class StoreQuota
 {
     /**
-     * Whether the subscriber may create another store right now.
-     *
      * @param  Model&SubscriptionSubscriber  $subscriber
      */
     public function canCreateStore(SubscriptionSubscriber $subscriber): bool
@@ -22,8 +20,6 @@ final class StoreQuota
     }
 
     /**
-     * The number of additional stores the subscriber may still create.
-     *
      * @param  Model&SubscriptionSubscriber  $subscriber
      */
     public function remainingStores(SubscriptionSubscriber $subscriber): int
@@ -44,7 +40,7 @@ final class StoreQuota
     /**
      * @param  Model&SubscriptionSubscriber  $subscriber
      *
-     * @throws SubscriptionLimitException when the subscriber may not create a store
+     * @throws SubscriptionLimitException
      */
     public function assertCanCreateStore(SubscriptionSubscriber $subscriber): void
     {
@@ -64,9 +60,10 @@ final class StoreQuota
     }
 
     /**
-     * Re-reads the subscriber under a row lock, then checks its quota: two
-     * concurrent claims would otherwise both see the last free slot and both
-     * take it. Call inside the transaction that writes the store.
+     * Lock the subscriber's row and assert it may create another store.
+     *
+     * The lock stops two concurrent claims from taking the last slot. Call
+     * inside the transaction that writes the store.
      *
      * @template TSubscriber of Model&SubscriptionSubscriber
      *

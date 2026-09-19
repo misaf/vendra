@@ -53,15 +53,10 @@ final class MultimediaServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Make Spatie Media Library work without a published config/media-library.php:
-     * point it at the Vendra multimedia classes and apply the behavioural defaults
-     * this package standardises on.
+     * Configure Media Library to use this package's classes and defaults.
      *
-     * Runs in register() (not boot()) on purpose: Spatie's packageBooted() captures
-     * media_model to attach the MediaObserver, so the value must be set before any
-     * provider boots. The class settings keep an explicit host override untouched;
-     * the boolean settings are forced because a boolean value cannot be told apart
-     * from an app that deliberately chose the same value.
+     * Runs in `register()` because Media Library reads `media_model` while booting.
+     * Class settings respect host overrides; boolean settings are always forced.
      */
     private function registerMediaLibraryDefaults(): void
     {

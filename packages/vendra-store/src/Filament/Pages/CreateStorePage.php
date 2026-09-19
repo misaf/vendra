@@ -22,13 +22,7 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 
 /**
- * Creating a store is the same operation in every panel: provision the store,
- * hand the administrator their credentials, and request the storefront.
- *
- * Only the billing reseller is resolved differently — the console picks one from
- * the form, the reseller panel uses the authenticated reseller's own — so that
- * is the single hook subclasses fill in. The two pages previously carried
- * identical copies of everything below it, which is how they drift.
+ * Panels only differ in how they resolve the billing reseller.
  */
 abstract class CreateStorePage extends CreateRecord
 {
@@ -88,12 +82,10 @@ abstract class CreateStorePage extends CreateRecord
     }
 
     /**
-     * Validate the storefront here rather than leaving it to the provisioner.
+     * Validate the storefront before the store is provisioned.
      *
-     * The image refuses to boot on an incomplete configuration, so a field missed
-     * at this point used to surface minutes later as a failed deployment and a
-     * crash-looping container instead of as an error on the form. Checked before
-     * the store is provisioned, so a rejected storefront leaves no store behind.
+     * The image will not boot on an incomplete configuration, so errors surface
+     * on the form instead of as a failed deployment.
      *
      * @param  array<string, mixed>  $data
      *
@@ -113,8 +105,7 @@ abstract class CreateStorePage extends CreateRecord
     }
 
     /**
-     * The reseller this store is billed to, or null for a store the platform owns
-     * directly.
+     * Get the reseller billed for the store, or null for a platform store.
      *
      * @param  array<string, mixed>  $data
      * @return (Model&SubscriptionSubscriber)|null
@@ -122,10 +113,7 @@ abstract class CreateStorePage extends CreateRecord
     abstract protected function resolveReseller(array $data): ?SubscriptionSubscriber;
 
     /**
-     * Whether a storefront was asked for.
-     *
-     * Forms that make the storefront mandatory omit the toggle entirely, so an
-     * absent key means yes; only an explicit "off" skips it.
+     * Determine if a storefront was requested; a missing toggle means yes.
      *
      * @param  array<string, mixed>  $data
      */

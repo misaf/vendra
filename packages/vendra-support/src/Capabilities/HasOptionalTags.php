@@ -73,11 +73,6 @@ trait HasOptionalTags
         return $relationship->model;
     }
 
-    /**
-     * The tags relation is constrained to this model's single tag type, so any
-     * explicit type passed by callers such as Filament's Spatie tag components
-     * must match it.
-     */
     private function assertTagType(?string $type): void
     {
         if ($type !== null && $type !== $this->tagType()) {

@@ -12,26 +12,9 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Support\StorefrontOrigins;
 
 /**
- * Keeps a store's domains and its storefront in step with the store itself.
- *
- * Every hook runs inside `$store->execute()` so the domain query resolves
- * against this store rather than whatever tenant happens to be active on the
- * request. Synchronous because `deleting` has to see the domains while they are
- * still there, and because `isForceDeleting()` is request state that would not
- * survive a trip through the queue.
- *
- * The storefront cascade lives here rather than in the delete path a panel
- * happens to call, because there is no single such path: the console table, the
- * reseller table, and `OffboardResellerAction` all delete stores directly. A
- * store deleted with its container left running is an orphan still serving the
- * customer's domain, and once a force delete has taken the deployment row with
- * it, nothing is left that knows the container's name. This hook is the one
- * place every delete has to pass through.
- *
- * The runtime work is queued, never done here: only the storefront worker holds
- * a container socket, and the panels run in a container that does not. It is
- * also dispatched `afterCommit` — `OffboardResellerAction` deletes stores inside
- * a transaction, and a rolled-back offboarding must not leave a fleet stopped.
+ * Hooks run inside `$store->execute()` so queries target this store. Every
+ * delete path passes through here, so the storefront is never orphaned. Runtime
+ * work is queued after commit, so a rolled-back delete stops nothing.
  */
 final class StoreObserver
 {
@@ -84,12 +67,7 @@ final class StoreObserver
     }
 
     /**
-     * Bring the storefront in line with what deleting this store means.
-     *
-     * A soft delete is reversible, so the storefront is stopped and its
-     * deployment row kept: the image, the labels and the recorded status all
-     * survive, and restoring the store costs a start. A force delete is not
-     * reversible, so the container goes.
+     * Stop the storefront on a soft delete, or destroy it on a force delete.
      */
     private function settleStorefront(Store $store): void
     {

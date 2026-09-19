@@ -21,18 +21,14 @@ const RECONCILE_IMAGE = 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123';
 beforeEach(function (): void {
     Config::set('container.drivers.docker.host', 'unix:///var/run/docker.sock');
     Config::set('vendra-store.storefront.network', 'traefik-public');
-    // The redeploy paths run a real health gate; without a short budget an
-    // unhealthy container is polled for the production default of two minutes.
+    // Keep the health gate short so unhealthy containers are not polled for minutes.
     Config::set('vendra-store.storefront.health_timeout', 1);
 });
 
 /**
- * A configuration complete enough to survive validation on a redeploy.
+ * A configuration complete enough to pass validation on a redeploy.
  *
- * Deliberately local rather than borrowed from the provisioning tests: helpers
- * declared in a sibling test file only exist once that file has been loaded, so
- * reaching across would pass in a full run and fail whenever this file is run on
- * its own.
+ * Kept local, since sibling test helpers only exist once their file loads.
  *
  * @return array<string, mixed>
  */
@@ -63,11 +59,6 @@ function reconcilableConfiguration(): array
 }
 
 /**
- * A deployment complete enough that redeploying it would really succeed.
- *
- * Reconciliation reaches for a redeploy on several paths, and a half-filled
- * configuration would fail validation there rather than at the branch under test.
- *
  * @param  array<string, mixed>  $attributes
  */
 function reconcilable(array $attributes = []): StorefrontDeployment

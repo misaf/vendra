@@ -61,9 +61,7 @@ it('generates central panel assets from the current panel domain', function (str
 ]);
 
 it('keeps proxied central panel assets on https via X-Forwarded-Proto', function (string $origin): void {
-    // Simulate Traefik: the request reaches the app as plain HTTP but carries
-    // X-Forwarded-Proto: https. Trusted proxies must make asset URLs https,
-    // otherwise the https page blocks them as mixed content.
+    // Simulate the proxy forwarding plain HTTP with `X-Forwarded-Proto: https`.
     $httpUrl = str_replace('https://', 'http://', $origin).'/login';
 
     $this->get($httpUrl, ['X-Forwarded-Proto' => 'https'])

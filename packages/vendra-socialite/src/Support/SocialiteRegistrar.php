@@ -16,11 +16,6 @@ use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraUser\Actions\CreateUserAction;
 use Misaf\VendraUser\Models\User;
 
-/**
- * Builds the tenant-aware filament-socialite plugin: Google and GitHub OAuth
- * providers wired to the Vendra `User` and this module's `SocialiteUser`, with
- * account creation mapped onto the `username`-based user schema.
- */
 final class SocialiteRegistrar
 {
     public static function make(): FilamentSocialitePlugin
@@ -78,10 +73,7 @@ final class SocialiteRegistrar
     }
 
     /**
-     * Create a Vendra user from an OAuth identity through `CreateUserAction`,
-     * mapping the provider profile onto the `username`-based schema and treating
-     * the OAuth email as verified. The user joins the current tenant; without
-     * one it is created with no tenant, as before.
+     * Create a user in the current tenant from an OAuth identity, with a verified email.
      */
     public static function createUserUsing(string $provider, SocialiteUserContract $oauthUser, FilamentSocialitePlugin $plugin): User
     {
@@ -96,8 +88,7 @@ final class SocialiteRegistrar
     }
 
     /**
-     * Derive a unique, schema-valid username (letters, digits, dashes and
-     * underscores) from an OAuth profile value.
+     * Derive a unique, valid username from an OAuth profile value.
      */
     public static function generateUsername(?string $seed): string
     {

@@ -13,15 +13,8 @@ use Spatie\Multitenancy\Contracts\IsTenant;
 use Spatie\Multitenancy\TenantFinder\TenantFinder as SpatieTenantFinder;
 
 /**
- * Resolves the current store from the request host.
- *
- * This is the ecommerce adapter behind the engine's {@see HostTenantFinder}
- * port: a store owns its domains, so only this package knows how a host maps to
- * a tenant. It is also the `tenant_finder` Spatie itself calls.
- *
- * Two host shapes resolve a store: one of its own active domains, and its
- * administration host — either `<slug>.admin.<central host>` or `admin.` in
- * front of one of its domains.
+ * Matches an active store domain, `<slug>.admin.<central host>`, or `admin.`
+ * in front of a store domain.
  */
 final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFinder
 {
@@ -59,12 +52,9 @@ final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFi
     }
 
     /**
-     * Resolve the store that owns a storefront origin, e.g. "https://shop.com".
+     * Resolve the store that owns a storefront origin, such as "https://shop.com".
      *
-     * The canonical API answers on one host for every store, so a storefront
-     * identifies itself by the origin it calls from — the same active store
-     * domain data that backs the CORS allowlist. Admin host shapes are
-     * deliberately not accepted here: an origin is not an admin surface.
+     * Admin hosts are not accepted as origins.
      */
     public function findForOrigin(string $origin): ?IsTenant
     {

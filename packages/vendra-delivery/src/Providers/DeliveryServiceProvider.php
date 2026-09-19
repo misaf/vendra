@@ -52,10 +52,7 @@ final class DeliveryServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        /**
-         * Stable aliases keep persisted morph columns decoupled from the model
-         * FQCNs, so relocating a model class never orphans stored rows.
-         */
+        // Stable aliases, so moving a model class never orphans stored morph rows.
         Relation::morphMap([
             'delivery' => Delivery::class,
             'delivery_slot' => DeliverySlot::class,

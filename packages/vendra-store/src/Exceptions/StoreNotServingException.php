@@ -8,11 +8,7 @@ use DomainException;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * A storefront was asked to run while its store is suspended or offboarded.
- *
- * Suspension and offboarding record a Stopped intent; starting, restarting or
- * redeploying the storefront would override that decision while the store still
- * reads as down. Reactivating or restoring the store is the way back.
+ * Reactivate or restore the store instead.
  */
 final class StoreNotServingException extends DomainException
 {

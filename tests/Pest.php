@@ -22,15 +22,8 @@ pest()->extend(TestCase::class)->in(
 /**
  * Fake a Docker Engine where the storefront container already exists.
  *
- * The counterpart to `fakeDockerEngine()`, which starts with nothing placed.
- * Reconciliation is about a runtime that already has something in it, so its
- * tests need to describe that something — its state and the image it was created
- * with — before any call is made.
- *
- * Every mutating call is recorded on the returned recorder, so a test can assert
- * the *narrowest* verb was used rather than merely that the storefront ended up
- * correct. It is an object rather than an array on purpose: the fake mutates it
- * long after this function has returned, and a returned array would be a copy.
+ * Mutating calls are recorded on the returned object, which the fake keeps
+ * updating after this function returns.
  *
  * @param  array<string, mixed>  $state
  * @return object{calls: list<string>, transport: FakeDockerTransport}
@@ -66,8 +59,7 @@ function fakeExistingStorefront(
             $recorder->calls[] = 'logs:'.rawurldecode((string) Str::of($path)->between('/containers/', '/logs'));
         }
 
-        // A created container exists from then on, so a deployment can inspect
-        // what it just placed the way it would against a real engine.
+        // A created container can be inspected from then on.
         if (Str::endsWith($path, '/containers/create')) {
             $present = true;
         }
@@ -107,9 +99,7 @@ function fakeExistingStorefront(
 /**
  * Fake a Docker Engine that accepts every call and reports a healthy container.
  *
- * The container starts absent, so an inspect before the first create 404s the
- * way a real engine would; once `/containers/create` is seen the runtime's
- * inspects resolve to a placed, ownable container carrying the requested state.
+ * The container is absent until `/containers/create` is called.
  *
  * @param  array<string, mixed>  $state
  */
@@ -223,12 +213,6 @@ function dockerLogFrames(string $output): string
 }
 
 /**
- * Build a complete storefront configuration payload for the storefront wizard.
- *
- * Lives here rather than in a single feature file because two feature files
- * (provisioning and deployment lifecycle) build the same payload, and each test
- * file runs in its own worker process under `--parallel`.
- *
  * @return array<string, mixed>
  */
 function storefrontRequestData(string $slug = 'acme-flowers'): array

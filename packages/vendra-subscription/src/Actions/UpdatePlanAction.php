@@ -10,8 +10,7 @@ use Misaf\VendraSubscription\Models\Plan;
 final class UpdatePlanAction
 {
     /**
-     * Updates a plan. Deactivating or un-defaulting it makes `PlanObserver`
-     * move the default to another active plan, so both writes share a transaction.
+     * `PlanObserver` moves the default in the same transaction.
      *
      * @param  array<string, mixed>  $attributes
      */

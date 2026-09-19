@@ -7,20 +7,11 @@ namespace Misaf\VendraStore\Support;
 use Illuminate\Support\Arr;
 
 /**
- * Translates the flat `storefront_*` console form into the nested configuration
- * the storefront image boots on.
- *
- * Declarative on purpose. The mapping used to be twenty-odd hand-written
- * assignments in the action, which meant the console defined the field names in
- * one class and re-typed them as string literals in another — renaming a field
- * broke provisioning silently. Here the correspondence is data, and a test
- * asserts every key still exists in the Filament schema.
+ * A test asserts every mapped field still exists in the Filament schema.
  */
 final class StorefrontConfigurationMap
 {
     /**
-     * Form field name to its dot path in the configuration.
-     *
      * @var array<string, string>
      */
     public const array FIELDS = [
@@ -43,8 +34,6 @@ final class StorefrontConfigurationMap
     ];
 
     /**
-     * Fields the storefront expects as uppercase codes (ISO currency, ISO country).
-     *
      * @var list<string>
      */
     private const array UPPERCASED = ['storefront_price_currency', 'storefront_country'];
@@ -61,11 +50,7 @@ final class StorefrontConfigurationMap
             Arr::set($configuration, $path, self::value($form, $field));
         }
 
-        // Per-locale copy overrides. One image serves the whole fleet and its
-        // message catalogue is deliberately brand-neutral, so this is the only
-        // channel a store has for wording of its own — without it every
-        // storefront reads identically. Omitted when empty: the storefront
-        // treats an absent key and an empty object the same way.
+        // Per-locale copy overrides are the only way a store customizes its wording.
         $messages = self::messages($form);
 
         if ($messages !== []) {
@@ -87,13 +72,8 @@ final class StorefrontConfigurationMap
     }
 
     /**
-     * Locale-keyed message overrides, deep-merged over the storefront's base
-     * catalogue at render time.
-     *
-     * Shape: ['en' => ['products' => ['title' => 'Our Breads']], 'fa' => [...]].
-     * Anything that is not an array keyed by a locale string is dropped rather
-     * than passed on, because the storefront validates the encoded
-     * configuration at boot and refuses to render when it does not parse.
+     * Malformed entries are dropped, since the storefront refuses to boot on a
+     * configuration that does not parse.
      *
      * @param  array<string, mixed>  $form
      * @return array<string, array<string, mixed>>

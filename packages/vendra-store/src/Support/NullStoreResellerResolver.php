@@ -8,10 +8,7 @@ use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 
 /**
- * The default reseller resolver: with no reseller domain installed, a store
- * cannot have a billing reseller, so nothing resolves. Callers treat an
- * unresolvable reseller as "not paying", which fails closed rather than
- * granting free access.
+ * Callers treat an unresolved reseller as not paying, so this fails closed.
  */
 final class NullStoreResellerResolver implements StoreResellerResolver
 {

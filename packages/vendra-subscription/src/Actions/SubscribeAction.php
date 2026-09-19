@@ -32,14 +32,12 @@ final readonly class SubscribeAction
     ) {}
 
     /**
-     * Create a subscription period for any subscriber. Paid periods remain
-     * pending without replacing current access until their durable payment
-     * succeeds; immediately active periods raise SubscriptionActivated so
-     * consumers can react (e.g. notifying the subscriber).
+     * Paid periods stay pending until their payment succeeds, leaving current
+     * access in place.
      *
      * @param  Model&SubscriptionSubscriber  $subscriber
      *
-     * @throws SubscriptionLimitException when the plan cannot hold the subscriber's current units
+     * @throws SubscriptionLimitException
      */
     public function execute(SubscriptionSubscriber $subscriber, Plan $plan, ?Carbon $startsAt = null): Subscription
     {

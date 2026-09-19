@@ -19,10 +19,7 @@ use Misaf\VendraSupport\Context\RequestJobContext;
 use Throwable;
 
 /**
- * Processes one durable subscription payment. The engine stays multitenancy
- * agnostic: applications dispatching it from a context without a current tenant
- * register it under multitenancy's not_tenant_aware_jobs rather than the job
- * coupling itself to a tenancy provider.
+ * Hosts dispatching it without a tenant list it in `not_tenant_aware_jobs`.
  */
 #[Timeout(30)]
 #[Tries(5)]

@@ -15,19 +15,8 @@ use RuntimeException;
 final class PlaceOrderAction
 {
     /**
-     * Convert a cart into an order.
-     *
-     * Pricing stays with the caller: the catalog is not this module's concern,
-     * so priced drafts come in and an immutable snapshot goes out. Creating the
-     * order, its lines and clearing the cart are several writes, so the whole
-     * conversion runs in one transaction — a half-converted cart would let the
-     * customer pay for lines the order never recorded.
-     *
-     * The cart row itself survives so its token stays usable for the next
-     * order; only its items are cleared.
-     *
-     * The caller validates the currency, lines and amounts first — the
-     * checkout API does so with `PlaceOrderRequest` and its processor.
+     * The cart's items are cleared but the cart is kept, so its token stays
+     * usable. The caller validates the currency, lines, and amounts first.
      *
      * @param  list<OrderLineDraft>  $lines
      */

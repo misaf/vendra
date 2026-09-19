@@ -22,9 +22,7 @@ use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Support\TransactionUsers;
 
 /**
- * A per-user, per-currency balance holder. The cached `balance` column is
- * only ever written through the ledger, which records every movement as an
- * immutable entry.
+ * A user's balance in one currency; `balance` is only written through the ledger.
  *
  * @property int $id
  * @property int $tenant_id
@@ -103,12 +101,6 @@ final class Wallet extends Model implements ShouldLogActivity
         return $this->hasMany(TransactionLimit::class);
     }
 
-    /**
-     * The limit governing one kind of movement on this wallet, if one is set.
-     *
-     * A wallet's own limits are wallet state, so the lookup belongs here rather
-     * than on a service that callers had to reach for separately.
-     */
     public function limitFor(TransactionTypeEnum $transactionType): ?TransactionLimit
     {
         return $this->transactionLimits()

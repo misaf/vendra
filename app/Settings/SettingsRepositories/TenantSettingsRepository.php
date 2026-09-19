@@ -10,17 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 
 /**
- * Store-scoped settings, with the platform row as the default.
+ * Read a store's settings over the platform defaults, and write only the store's.
  *
- * A tenant only ever owns the properties it has actually saved. Everything else
- * is read from the platform row the settings migration created, which is what
- * keeps a freshly provisioned store from throwing `MissingSettings` on its
- * first visit to a settings page and removes any need to seed a row per tenant.
- *
- * Reads therefore union exactly two scopes — the platform's and the current
- * tenant's — and never see another tenant's rows. Writes always land in the
- * current tenant's scope, so saving a store's settings can never overwrite the
- * platform default other stores still read.
+ * Falling back to the platform rows keeps a new store from hitting `MissingSettings`.
  */
 final class TenantSettingsRepository extends ScopedSettingsRepository
 {

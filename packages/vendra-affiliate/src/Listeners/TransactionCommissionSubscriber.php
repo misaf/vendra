@@ -17,9 +17,7 @@ use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\Approved;
 
 /**
- * Reconciles deposit transactions of referred users with the commission
- * ledger: an approved deposit credits a commission (idempotently), and a
- * deposit that leaves the approved state reverses its unpaid commission.
+ * Credit a commission for a referred user's approved deposit, and reverse it if unapproved.
  */
 final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
 {

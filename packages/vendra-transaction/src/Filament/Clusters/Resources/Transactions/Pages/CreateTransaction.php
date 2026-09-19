@@ -15,9 +15,7 @@ final class CreateTransaction extends CreateRecord
     protected static string $resource = TransactionResource::class;
 
     /**
-     * Resolves the selected user + currency pair into a wallet, provisioning
-     * it on first use, so transactions can be created for users who have no
-     * wallet yet.
+     * Resolve the selected user and currency into a wallet, creating it if needed.
      *
      * @param  array<string, mixed>  $data
      * @return array<string, mixed>

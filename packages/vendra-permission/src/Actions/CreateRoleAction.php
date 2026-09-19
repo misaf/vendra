@@ -11,9 +11,7 @@ use Misaf\VendraPermission\Models\Role;
 final class CreateRoleAction
 {
     /**
-     * When a tenant is supplied its scoped `execute()` context is used so the
-     * role is created for that tenant; without one (tenant-agnostic install)
-     * the role is created globally.
+     * A null tenant creates a global role.
      */
     public function execute(
         ?Model $tenant,

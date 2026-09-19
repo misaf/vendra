@@ -10,10 +10,7 @@ use Misaf\VendraWishlist\Models\Wishlist;
 final class RemoveWishlistItemAction
 {
     /**
-     * Drop a sellable from a wishlist.
-     *
-     * Removing something that was never saved is not an error: the heart ends
-     * up off either way, which is all the caller asked for.
+     * Removing a sellable that was never saved is not an error.
      */
     public function execute(Wishlist $wishlist, Model $sellable): bool
     {

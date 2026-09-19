@@ -50,10 +50,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->app->bind(ResetPassword::class, ResetPasswordNotification::class);
         $this->app->bind(VerifyEmail::class, VerifyEmailNotification::class);
 
-        // vendra-support owns the SubscriptionCharger contract and its null default;
-        // vendra-transaction stays unaware of subscription semantics. As the
-        // composition root, the host app supplies the transaction-backed adapter
-        // and binds it over the null charger.
+        // Collect subscription payments through vendra-transaction.
         $this->app->singleton(SubscriptionCharger::class, TransactionSubscriptionCharger::class);
 
         $this->registerStorefrontProvisioning();
@@ -82,11 +79,7 @@ final class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * api-platform/laravel wires the Symfony MCP controller with the PSR-17
-     * factories of two more signatures ago, but symfony/mcp-bundle 0.12 added a
-     * required MiddlewareFactory argument to its constructor. Rebind the
-     * controller here so the streamable transport keeps its configurable
-     * DNS-rebinding middleware stack instead of failing to build.
+     * Rebind the MCP controller with the `MiddlewareFactory` that mcp-bundle 0.12 requires.
      */
     private function registerMcpControllerCompatibility(): void
     {
@@ -111,17 +104,12 @@ final class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * The storefront provisioning adapter and the settings it reads.
-     *
-     * Bound rather than shared: the configuration is read on each resolve, so a
-     * changed endpoint or image takes effect without a rebuilt container.
+     * Bind the storefront provisioner and its settings, read fresh on each resolve.
      */
     private function registerStorefrontProvisioning(): void
     {
         $this->app->bind(StorefrontSettings::class, static fn (): StorefrontSettings => StorefrontSettings::fromConfig());
 
-        // The platform runs the storefront containers itself through the
-        // default driver managed by misaf/laravel-docker-engine.
         $this->app->bind(StorefrontProvisioner::class, ContainerStorefrontProvisioner::class);
     }
 

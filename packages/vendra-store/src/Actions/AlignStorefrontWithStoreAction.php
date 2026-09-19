@@ -11,11 +11,8 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * Records the storefront intent a store's status implies and queues convergence.
- *
- * For writers that change a store's status without going through its own
- * lifecycle actions — billing suspension and reactivation above all. A store
- * still provisioning is left alone: its first deployment runs alongside.
+ * Used when a store's status changes outside its own lifecycle actions, such as
+ * billing suspension. A store that is still provisioning is left alone.
  */
 final class AlignStorefrontWithStoreAction
 {

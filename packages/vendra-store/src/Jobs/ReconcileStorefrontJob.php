@@ -16,13 +16,6 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Throwable;
 
-/**
- * Converges one storefront off the request lifecycle.
- *
- * Runs on the storefront queue for the same reason provisioning does: observing
- * and correcting a container needs the runtime socket, and only that worker
- * holds one.
- */
 #[Timeout(300)]
 #[Tries(3)]
 #[UniqueFor(3600)]
@@ -67,12 +60,7 @@ final class ReconcileStorefrontJob implements NotTenantAware, ShouldBeUnique, Sh
     }
 
     /**
-     * A failed convergence is not a failed deployment.
-     *
-     * The storefront may be serving perfectly and merely unreadable, so the row's
-     * status is left alone rather than marked Failed — that status means
-     * provisioning gave up, and claiming it here would strand a healthy
-     * storefront in the panel and feed it to `vendra-store:retry-failed`.
+     * Leave the deployment status alone, since the storefront may still be serving.
      */
     public function failed(?Throwable $exception): void
     {

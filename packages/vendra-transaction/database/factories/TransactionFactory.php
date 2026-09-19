@@ -122,9 +122,9 @@ final class TransactionFactory extends Factory
     }
 
     /**
-     * Sets the stored status directly, without settling into the ledger.
-     * Use `->create()->approve()` instead when the test needs ledger
-     * entries and balances to exist.
+     * Indicate that the transaction is approved, without settling into the ledger.
+     *
+     * Use `->create()->approve()` when the test needs ledger entries.
      */
     public function approved(): static
     {

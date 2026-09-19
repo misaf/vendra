@@ -18,10 +18,7 @@ use Misaf\VendraUser\Models\User;
 use Spatie\QueueableAction\QueueableAction;
 
 /**
- * Settles an affiliate's approved commissions: groups them into a payout,
- * marks them paid, and credits the wallet through an approved Commission
- * transaction. The whole payout commits atomically — if the transaction
- * cannot be created or settled, the commissions remain payable.
+ * If the wallet transaction fails, the commissions stay payable.
  */
 final class ProcessAffiliatePayoutAction
 {

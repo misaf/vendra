@@ -22,8 +22,6 @@ final class Countries
     }
 
     /**
-     * Official ISO 3166-1 alpha-2 country codes and their localized names.
-     *
      * @return array<string, string>
      */
     public static function options(?string $displayLocale = null): array

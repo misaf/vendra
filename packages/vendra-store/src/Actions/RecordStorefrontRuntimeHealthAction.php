@@ -11,9 +11,7 @@ use Misaf\VendraStore\Support\StorefrontSettings;
 use Throwable;
 
 /**
- * Probes the container runtime and the storefront network, and records what it
- * found for the panels. Runs on the storefront worker, the only process that can
- * reach the runtime.
+ * Runs on the storefront worker, the only process that can reach the runtime.
  */
 final readonly class RecordStorefrontRuntimeHealthAction
 {

@@ -7,10 +7,6 @@ namespace Misaf\VendraStore\Support;
 use Illuminate\Support\Facades\Cache;
 use Throwable;
 
-/**
- * Where the storefront worker leaves its latest runtime health report for the
- * panels to read.
- */
 final class StorefrontRuntimeHealth
 {
     private const string CACHE_KEY = 'vendra-store:storefront-runtime-health';

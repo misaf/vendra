@@ -15,9 +15,7 @@ use Misaf\VendraTransaction\Models\Wallet;
 use Misaf\VendraTransaction\Services\TransactionGatewayRegistry;
 
 /**
- * Creates a pending transaction against a wallet, together with its optional
- * fee and metadata rows. Settlement into the ledger only happens later, on the
- * transition to Approved.
+ * It settles into the ledger when approved.
  */
 final readonly class CreateTransactionAction
 {

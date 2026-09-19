@@ -11,13 +11,6 @@ use Filament\Tables\Table;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Cross-panel Filament defaults.
- *
- * These apply to all three panels, so they are configured once here rather than
- * repeated in each panel provider — and they are UI concerns, so they do not
- * belong in {@see AppServiceProvider}, whose job is composition and domain wiring.
- */
 final class FilamentDefaultsServiceProvider extends ServiceProvider
 {
     public function boot(): void

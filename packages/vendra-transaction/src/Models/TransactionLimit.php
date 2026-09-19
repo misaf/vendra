@@ -14,8 +14,7 @@ use Misaf\VendraTransaction\Database\Factories\TransactionLimitFactory;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 
 /**
- * A per-wallet, per-type ceiling on single transaction amounts, expressed
- * in the wallet currency's minor units.
+ * A wallet's maximum single transaction amount per type, in minor units.
  *
  * @property int $id
  * @property int $wallet_id

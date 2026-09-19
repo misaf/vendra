@@ -27,11 +27,7 @@ use Misaf\VendraReseller\Support\ResellerAddress;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
 
 /**
- * The reseller (self-service) panel.
- *
- * A reseller user manages their own billing reseller here: they see their
- * subscription and create/list stores within their plan's quota. It runs
- * outside the tenant middleware because a reseller spans multiple stores.
+ * Runs outside the tenant middleware because a reseller spans many stores.
  */
 final class ResellerPanelServiceProvider extends PanelProvider
 {

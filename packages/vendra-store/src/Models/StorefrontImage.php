@@ -15,8 +15,6 @@ use Illuminate\Support\Carbon;
 use Misaf\VendraStore\Database\Factories\StorefrontImageFactory;
 
 /**
- * An approved storefront artifact.
- *
  * @property int $id
  * @property string $image
  * @property string|null $notes

@@ -33,8 +33,7 @@ describe('the form-to-configuration map', function (): void {
             ...StorefrontConfigurationFields::contactFields(optional: false),
             ...StorefrontConfigurationFields::locationAndSocialFields(optional: false),
         ])->map(fn ($component): string => $component->getName())
-            // slug identifies the deployment row itself rather than travelling
-            // inside the encoded configuration.
+            // The slug identifies the row rather than living in the configuration.
             ->reject(fn (string $name): bool => in_array($name, ['storefront_image_id', 'storefront_slug'], true))
             ->all();
 

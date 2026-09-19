@@ -20,13 +20,6 @@ use Misaf\VendraProductApi\ApiResource\ProductResource;
 use Misaf\VendraSupport\Capabilities\AttributeIntegration;
 use UnexpectedValueException;
 
-/**
- * Shared mapping between catalog Eloquent models and their API resources.
- *
- * Catalog resources are compositionally nested — a product embeds its prices
- * and a category reference, a category embeds product references — so the
- * per-resource providers share one mapper rather than duplicating logic.
- */
 trait MapsCatalogResources
 {
     use MapsResourceReferences;

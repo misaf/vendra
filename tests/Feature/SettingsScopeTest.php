@@ -13,8 +13,7 @@ use Misaf\VendraStore\Support\StoreCreationPolicy;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 
 /**
- * Count the raw rows behind a property, ignoring every scope, so a duplicate
- * the repository would happily read past is still visible to the test.
+ * Count a property's raw rows across every scope, so duplicates are visible.
  */
 function settingsRowCount(string $group, string $name, ?string $scope = null): int
 {

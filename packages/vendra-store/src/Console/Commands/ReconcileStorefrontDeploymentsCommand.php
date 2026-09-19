@@ -13,16 +13,8 @@ use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * Makes the estate match what the database says it should be.
- *
- * Every deployment is examined, including the ones intended to be stopped: a
- * storefront still running against a Stopped intent is drift in the same way a
- * missing one is, and only a pass that looks at both can fix either.
- *
- * This is cheap and safe to repeat. It corrects with the narrowest verb that
- * works — start a stopped container, stop a running one, redeploy only what is
- * absent, unhealthy, or serving the wrong image — so a converged estate comes
- * through a pass untouched. Use `vendra-store:redeploy` to rebuild deliberately.
+ * Safe to repeat: each storefront gets the narrowest fix, so a converged estate
+ * is left untouched. Use `vendra-store:redeploy` to rebuild deliberately.
  */
 #[Description('Converge every storefront runtime with the state the database intends')]
 #[Signature('vendra-store:reconcile
@@ -44,10 +36,8 @@ final class ReconcileStorefrontDeploymentsCommand extends StorefrontDeploymentDi
     }
 
     /**
-     * Converge directly rather than through the job, so the outcome survives.
-     *
-     * The queue would swallow it: a queueable job dispatched synchronously
-     * returns the sync driver's push result, not what the handler decided.
+     * Converge directly, since a synchronously dispatched job does not return
+     * the handler's outcome.
      */
     protected function performSync(int $deploymentId): mixed
     {
@@ -74,9 +64,6 @@ final class ReconcileStorefrontDeploymentsCommand extends StorefrontDeploymentDi
     }
 
     /**
-     * A count alone hides the only thing worth knowing about a converge pass:
-     * which storefronts were actually touched.
-     *
      * @param  list<mixed>  $outcomes
      */
     protected function reportOutcomes(array $outcomes): void

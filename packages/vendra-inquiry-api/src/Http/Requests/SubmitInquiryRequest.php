@@ -11,9 +11,6 @@ final class SubmitInquiryRequest extends FormRequest
     /**
      * Validation rules shared by the HTTP operation and the MCP tool.
      *
-     * `SubmitInquiryAction` does not validate its input, so these are the
-     * checks an enquiry passes before a row is ever attempted.
-     *
      * @var array<string, array<int, string>>
      */
     public const array RULES = [

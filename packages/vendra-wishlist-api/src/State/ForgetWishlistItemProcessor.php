@@ -14,10 +14,7 @@ use Misaf\VendraWishlist\Models\WishlistItem;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Forget one saved item.
- *
- * The item is looked up through its list's owner, so an identifier belonging
- * to somebody else is indistinguishable from one that does not exist.
+ * Remove a saved item, looked up through the caller's own lists.
  *
  * @implements ProcessorInterface<mixed, void>
  */

@@ -67,13 +67,6 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
-     * The subscriber that owns this subscription — any model, resolved
-     * polymorphically via `subscriber_type`/`subscriber_id`. The package stays
-     * agnostic of concrete subscriber classes; the `(subscriber_type,
-     * active_subscriber_guard)` unique index enforces one active subscription
-     * per subscriber, keyed by type so different subscriber models never
-     * conflate ids.
-     *
      * @return MorphTo<Model, $this>
      */
     public function subscriber(): MorphTo
@@ -98,8 +91,6 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
-     * Limit the query to subscriptions that are active right now.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -117,8 +108,6 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
-     * Limit the query to active subscriptions whose period has already lapsed.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -132,9 +121,6 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
-     * Limit the query to active subscriptions ending within the given number of
-     * days, whether or not their expiry reminder has gone out.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -148,9 +134,6 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
-     * Limit the query to active subscriptions expiring within the given number
-     * of days that have not yet had an expiry reminder sent.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -165,8 +148,7 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
-     * The moment this subscription's units should be suspended, taking the
-     * plan's grace window into account. Null when it never expires.
+     * Get the date the subscription's units are suspended, or null if it never expires.
      */
     public function suspendAt(): ?Carbon
     {
@@ -179,16 +161,13 @@ final class Subscription extends Model implements ShouldLogActivity
         return $plan->resolveSuspendDate($this->ends_at);
     }
 
-    /**
-     * Whether this subscription is currently within its trial period.
-     */
     public function isOnTrial(): bool
     {
         return $this->trial_ends_at !== null && $this->trial_ends_at->isFuture();
     }
 
     /**
-     * Whether this subscription is active right now (status and period).
+     * Determine if the subscription is active by status and period.
      */
     public function isActive(): bool
     {

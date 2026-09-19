@@ -32,10 +32,7 @@ return [
         // 'middleware' => [],
     ],
 
-    // Each `misaf/vendra-*-api` package self-registers its own `src/ApiResource`
-    // directory from its service provider's `packageRegistered()`, so this list
-    // stays empty. Add a path here only for app-level resources that no package
-    // provider registers.
+    // Packages register their own resource paths; add app-level ones here.
     'resources' => [],
 
     'formats' => [
@@ -87,9 +84,7 @@ return [
     ],
 
     'jsonapi' => [
-        // API Platform 5 defaults this to false (scalar `data.id` plus a
-        // `data.links.self` IRI). Kept true so the JSON:API `data.id` stays the
-        // resource IRI that existing clients were built against under 4.x.
+        // Keep `data.id` as the IRI that clients built against 4.x expect.
         'use_iri_as_id' => true,
 
         // Allow client-generated IDs on JSON:API POST. Off to avoid id spoofing.

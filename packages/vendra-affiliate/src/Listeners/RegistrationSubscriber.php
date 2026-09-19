@@ -11,9 +11,7 @@ use Misaf\VendraAffiliate\Actions\AttributeReferralAction;
 use Misaf\VendraUser\Models\User;
 
 /**
- * Attributes a new registration to the affiliate referral cookie set by the
- * click-redirect route. Runs synchronously so it can read the current
- * request; the attribution itself is queued.
+ * Runs synchronously to read the request; the attribution itself is queued.
  */
 final readonly class RegistrationSubscriber
 {
@@ -49,7 +47,7 @@ final readonly class RegistrationSubscriber
     }
 
     /**
-     * Parses the `code|clickId` referral cookie from the current request.
+     * Parse the `code|clickId` referral cookie.
      *
      * @return array{0: string, 1: int|null}|null
      */

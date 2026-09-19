@@ -12,16 +12,9 @@ use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * For records that describe a Store rather than live inside one.
- *
- * Data belonging to a reusable domain package (products, posts, roles) is owned
- * through the generic `tenant_id` column and
- * {@see BelongsToTenant}. Store-specific records name their owner outright with
- * `store_id` and use this instead.
- *
- * Carrying `store_id` is not on its own a reason to use this trait: it adds a
- * global {@see StoreScope}. `StorefrontDeployment` stays off it so the
- * fleet-wide commands can sweep every store's deployments in one pass.
+ * Reusable domain data uses {@see BelongsToTenant} instead. The trait adds a
+ * global {@see StoreScope}, so `StorefrontDeployment` avoids it to allow
+ * fleet-wide sweeps.
  */
 trait BelongsToStore
 {

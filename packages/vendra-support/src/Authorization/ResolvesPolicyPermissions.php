@@ -10,8 +10,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable;
 trait ResolvesPolicyPermissions
 {
     /**
-     * The backed enum holding this policy's permission values, with one
-     * TitleCase case per ability (e.g. ViewAny, ForceDelete).
+     * Get the policy's permission enum, with one case per ability such as `ViewAny`.
      *
      * @return class-string<BackedEnum>
      */

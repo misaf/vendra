@@ -74,8 +74,7 @@ describe('force delete', function (): void {
 
         $store->forceDelete();
 
-        // The cascade has taken the row, which is exactly why the job cannot be
-        // addressed by its id.
+        // The row is gone, which is why the job is addressed by slug.
         expect(StorefrontDeployment::query()->whereKey($deployment->getKey())->exists())->toBeFalse();
 
         Queue::assertPushed(
@@ -99,7 +98,7 @@ describe('force delete', function (): void {
 
         app()->instance(StorefrontProvisioner::class, $provisioner);
 
-        // No store, no deployment — the state a force delete leaves behind.
+        // No store and no deployment, as after a force delete.
         app()->call([new DestroyStorefrontJob('closing-shop'), 'handle']);
 
         expect($destroyed)->toBe(['closing-shop']);

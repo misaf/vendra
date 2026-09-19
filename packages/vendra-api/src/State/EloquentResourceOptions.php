@@ -6,10 +6,6 @@ namespace Misaf\VendraApi\State;
 
 use ApiPlatform\Laravel\Eloquent\State\Options;
 
-/**
- * Eloquent state options extended with the {@see ResourceMapper} that
- * {@see EloquentResourceProvider} uses to turn models into resources.
- */
 final class EloquentResourceOptions extends Options
 {
     /**

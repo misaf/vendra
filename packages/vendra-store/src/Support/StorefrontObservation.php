@@ -6,15 +6,6 @@ namespace Misaf\VendraStore\Support;
 
 use Misaf\VendraStore\Enums\StorefrontRuntimeState;
 
-/**
- * What the runtime actually has for one storefront, right now.
- *
- * The port used to answer this with a bare state enum, so the only question
- * reconciliation could ask was "is it up?" — and the only way to be sure of
- * anything else was to redeploy. Carrying the image reference alongside the
- * state is what lets a converge pass tell a storefront serving the current
- * release from one still running the previous image.
- */
 final readonly class StorefrontObservation
 {
     public function __construct(
@@ -25,8 +16,7 @@ final readonly class StorefrontObservation
     ) {}
 
     /**
-     * A null container is Absent rather than an error: "there is nothing there"
-     * is the honest answer before a first deployment.
+     * Create an observation from a container; no container means Absent.
      */
     public static function fromContainer(?StorefrontContainer $container): self
     {
@@ -44,16 +34,10 @@ final readonly class StorefrontObservation
     }
 
     /**
-     * Whether the runtime is serving something other than the given image.
+     * Determine if the runtime is serving an image other than the given one.
      *
-     * Compared as *references* — the string the container was created with
-     * against the one settings now name — because those are the only two values
-     * here that are comparable at all. A container's `Image` is the runtime's
-     * local image id and a deployment's recorded `image_digest` is the registry's
-     * repo digest; they never match, so diffing those would report drift on every
-     * storefront on every pass and redeploy the whole estate.
-     *
-     * An unobserved image is not drift: nothing was learned, so nothing changes.
+     * Image references are compared because local image ids and registry digests
+     * never match. An unobserved image is not drift.
      */
     public function isServingOtherThan(string $image): bool
     {
@@ -61,17 +45,9 @@ final readonly class StorefrontObservation
     }
 
     /**
-     * Whether the runtime is routing this storefront on some other domain.
+     * Determine if the runtime is routing the storefront on a different domain.
      *
-     * The same shape as the image check, and for the same reason: a container's
-     * labels are fixed at creation, so a store that changed domain leaves one
-     * still carrying a `Host()` rule for the old one — serving the previous
-     * address and nothing at the new one. Without this, a converge pass sees a
-     * healthy container running the right image and calls it in sync.
-     *
-     * An unobserved domain is not drift: a container placed before this label
-     * existed reports nothing, and rebuilding the estate over a missing label is
-     * a worse answer than leaving it alone.
+     * An unobserved domain, from a container older than the label, is not drift.
      */
     public function isServingDomainOtherThan(string $domain): bool
     {

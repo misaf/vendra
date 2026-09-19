@@ -11,18 +11,12 @@ use Money\Currencies\ISOCurrencies;
 use Money\Currency as MoneyCurrency;
 
 /**
- * Currency reference data backed by `moneyphp/money` (ISO 4217 fiat
- * currencies) and `moneyphp/crypto-currencies` (crypto currencies).
- *
- * Fiat display names come from the bundled ISO resource; crypto currencies
- * carry no display name, so their code doubles as the name. When a code exists
- * in both catalogs the fiat entry wins.
+ * Crypto currencies use their code as the name; fiat wins when a code is in both.
  */
 final class CurrencyRegistry
 {
     /**
-     * Every known currency as `code => entry`, fiat first, e.g.
-     * `['USD' => ['code' => 'USD', 'name' => 'US Dollar', 'minor_unit' => 2, 'type' => CurrencyType::Fiat]]`.
+     * Get every known currency keyed by code, fiat first.
      *
      * @return array<string, array{code: string, name: string, minor_unit: int, type: CurrencyType}>
      */
@@ -32,8 +26,7 @@ final class CurrencyRegistry
     }
 
     /**
-     * Every selectable currency as `code => label`, e.g. `['USD' => 'US Dollar (USD)']`,
-     * sorted by display name and optionally narrowed to a single currency type.
+     * Get the currency options, such as `['USD' => 'US Dollar (USD)']`, sorted by name.
      *
      * @return array<string, string>
      */
@@ -53,8 +46,6 @@ final class CurrencyRegistry
     }
 
     /**
-     * All known currency codes.
-     *
      * @return list<string>
      */
     public static function codes(): array

@@ -16,9 +16,7 @@ use Misaf\VendraTransaction\Database\Factories\LedgerEntryFactory;
 use Misaf\VendraTransaction\Observers\LedgerEntryObserver;
 
 /**
- * An immutable, signed movement on a wallet. Each entry snapshots the
- * balance it produced, so the ledger is a complete audit trail and the
- * cached wallet balance can always be re-derived and verified.
+ * An immutable, signed wallet movement with the balance it produced.
  *
  * @property int $id
  * @property int $wallet_id

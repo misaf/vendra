@@ -18,8 +18,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 final class RetryFailedStorefrontDeploymentsCommand extends StorefrontDeploymentDispatchCommand
 {
     /**
-     * Only storefronts meant to be up: a failed deployment whose store was since
-     * suspended or offboarded stays failed until the store comes back.
+     * Select only storefronts meant to be running, so suspended stores stay failed.
      *
      * @return Builder<StorefrontDeployment>
      */
@@ -31,8 +30,7 @@ final class RetryFailedStorefrontDeploymentsCommand extends StorefrontDeployment
     }
 
     /**
-     * Unforced: these rows are Failed, so nothing short-circuits, and a status
-     * that changed since selection is worth respecting.
+     * Do not force, so a status that changed since selection is respected.
      */
     protected function jobFor(int $deploymentId): object
     {

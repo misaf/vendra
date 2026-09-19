@@ -22,10 +22,7 @@ final readonly class ChargeSubscriptionAction
     ) {}
 
     /**
-     * Process one durable payment operation without retaining its claim lock
-     * during provider I/O, then apply the provider lifecycle result. A payment
-     * reaching the Paid state raises SubscriptionPaymentPaid so consumers can
-     * react (e.g. activating the subscriber) outside the payment engine.
+     * The claim lock is released during provider I/O.
      */
     public function execute(SubscriptionPayment $payment): void
     {

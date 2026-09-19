@@ -14,9 +14,7 @@ use Misaf\VendraStore\Actions\RecordStorefrontRuntimeHealthAction;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 
 /**
- * Records the container runtime's health on the storefront queue, where the
- * runtime socket is. Scheduled every minute; a backed-up queue drops the extra
- * dispatches instead of stacking probes.
+ * Unique, so a backed-up queue drops extra dispatches instead of stacking probes.
  */
 #[Timeout(60)]
 #[Tries(1)]

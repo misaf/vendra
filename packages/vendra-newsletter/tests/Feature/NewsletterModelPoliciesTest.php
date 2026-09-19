@@ -17,9 +17,6 @@ use Misaf\VendraSupport\Tenancy\Scopes\TeamScope;
 use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 
-/**
- * Bind a tenant resolver reporting the given availability for the current test.
- */
 function fakeNewsletterTenantResolver(bool $available, ?int $currentId = null): TenantResolver
 {
     $resolver = Mockery::mock(TenantResolver::class);

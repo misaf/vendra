@@ -7,8 +7,7 @@ namespace Misaf\VendraLanguage\Observers;
 use Misaf\VendraLanguage\Models\LanguageLine;
 
 /**
- * Synchronous: the cache is flushed against the line's *original* attributes,
- * which only exist before the update is written.
+ * Flush the translation cache using the line's original attributes, before they change.
  */
 final class LanguageLineObserver
 {

@@ -20,14 +20,6 @@ use Misaf\VendraTenant\Jobs\CacheTenantRoutesJob;
 use Spatie\Multitenancy\Jobs\NotTenantAware;
 use Throwable;
 
-/**
- * Finishes provisioning one store off the request lifecycle: seeding, route
- * caching, and the switch to active.
- *
- * It is the application-orchestration half of store creation, so it lives
- * beside the domain rather than inside it — the action decides a store should
- * exist, this makes the slow parts happen and records whether they did.
- */
 #[Timeout(60)]
 #[Tries(5)]
 final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
@@ -116,12 +108,9 @@ final class CompleteStoreProvisioningJob implements NotTenantAware, ShouldQueue
     }
 
     /**
-     * A store whose billing reseller is not paying starts suspended.
+     * Determine if the store should start suspended because its reseller is not paying.
      *
-     * A store created straight from the console has no reseller, so there is
-     * nobody to suspend for and it starts active. The reseller is looked up through
-     * {@see StoreResellerResolver} so this package never names the reseller domain;
-     * a reseller key that resolves to nothing fails closed.
+     * A store without a reseller starts active; an unresolvable reseller fails closed.
      */
     private function shouldStartBillingSuspended(Store $store): bool
     {

@@ -72,10 +72,6 @@ final class TransactionServiceProvider extends PackageServiceProvider
         $this->registerUserRelationships();
     }
 
-    /**
-     * Attaches wallet relations to the host application's configured user
-     * model without depending on a concrete user package.
-     */
     private function registerUserRelationships(): void
     {
         $userModel = TransactionUsers::model();

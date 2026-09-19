@@ -15,8 +15,6 @@ use Misaf\VendraAffiliate\Traits\BelongsToAffiliate;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * An immutable click-log entry recorded when a visitor follows a referral link.
- *
  * @property int $id
  * @property int $tenant_id
  * @property int $affiliate_id

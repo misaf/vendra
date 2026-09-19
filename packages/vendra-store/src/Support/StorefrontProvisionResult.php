@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Support;
 
 /**
- * What a provisioner reports back after placing a storefront.
- *
- * `ready` means the container passed its health gate; anything else deployed but
- * unproven, which the deployment records as "requested" so reconciliation can
- * revisit it. Returning a typed result rather than a loose array is what lets the
- * job write its status without re-checking the shape of every field.
+ * `ready` means the health gate passed; otherwise the deployment is recorded as
+ * requested for reconciliation to revisit.
  */
 final readonly class StorefrontProvisionResult
 {
@@ -21,7 +17,7 @@ final readonly class StorefrontProvisionResult
     ) {}
 
     /**
-     * Normalise a reference and digest that may be absent or blank.
+     * Create a result, treating a blank reference or digest as null.
      */
     public static function make(bool $ready, ?string $reference, ?string $imageDigest): self
     {

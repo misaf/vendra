@@ -126,15 +126,9 @@ return [
     | storage. By default, no PHP classes will be unserialized from your
     | cache to prevent gadget chain attacks if your APP_KEY is leaked.
     |
-    | api-platform/laravel caches resource and property metadata through
-    | Cache::store(config('api-platform.cache')) (see CacheResourceCollectionMetadataFactory,
-    | CachePropertyNameCollectionMetadataFactory and CachePropertyMetadataFactory). unserialize()
-    | rejects every class in the cached object graph that isn't explicitly allow-listed here,
-    | not just the outermost one, so all of the following are required. This list was produced
-    | by serializing the ResourceMetadataCollection/PropertyNameCollection/ApiProperty for every
-    | registered API resource and recording every class that appeared; re-run that check (see
-    | tests/Feature/ApiPlatformMetadataCacheTest.php) if new resources introduce new operation,
-    | parameter, or property types.
+    | API Platform caches its metadata, so every class in that object graph
+    | must be listed here. When new resources add operation, parameter, or
+    | property types, rerun tests/Feature/CacheSerializableClassesTest.php.
     |
     */
 
@@ -143,7 +137,7 @@ return [
         Collection::class,
         CarbonImmutable::class,
 
-        // API Platform resource/property metadata (see comment above).
+        // API Platform resource and property metadata.
         ApiProperty::class,
         ApiResource::class,
         Delete::class,
@@ -165,18 +159,13 @@ return [
         QueryParameter::class,
         ResourceMetadataCollection::class,
 
-        // Custom Eloquent state options carried on each resource's stateOptions.
+        // Eloquent state options on each resource.
         EloquentResourceOptions::class,
 
-        // Validation rules api-platform derives from a parameter's JSON schema.
-        // Every other assertion it builds is a string; an "enum" in the schema
-        // is the one that becomes an object (ParameterValidationResourceMetadataCollectionFactory
-        // calls Rule::in()). Any sort parameter has one, because OrderFilter's
-        // schema enumerates asc/desc — so leaving this out fails every
-        // collection endpoint that can be ordered, not an obscure few.
+        // The `Rule::in()` built for schema enums, which every sort parameter has.
         In::class,
 
-        // Symfony type metadata nested inside ApiProperty/QueryParameter.
+        // Symfony type metadata inside ApiProperty and QueryParameter.
         ArrayShapeType::class,
         BuiltinType::class,
         CollectionType::class,

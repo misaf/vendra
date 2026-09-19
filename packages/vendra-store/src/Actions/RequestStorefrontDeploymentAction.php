@@ -15,20 +15,15 @@ use Misaf\VendraStore\Support\StorefrontConfigurationMap;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 
 /**
- * Records that a store should have a storefront, and asks for it to be built.
- *
- * The row is written whether or not a container runtime is configured: a
- * deployment nobody can act on yet is still the store's intent, and
- * reconciliation picks it up once the estate is up. Dispatching a job certain to
- * fail would only fill the failed-jobs table instead.
+ * The row is written even without a configured runtime, so reconciliation can
+ * pick it up later; the job is only dispatched when it can succeed.
  */
 final readonly class RequestStorefrontDeploymentAction
 {
     public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * The caller validates the configuration and the active image first, as
-     * `Filament\Pages\CreateStorePage` does, before any store is provisioned.
+     * The caller validates the configuration and the active image first.
      *
      * @param  array<string, mixed>  $form
      */

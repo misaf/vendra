@@ -10,10 +10,7 @@ use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * Tenant-aware socialite identity. Extends the package model so it maps to the
- * tenant-scoped `socialite_users` table, and overrides the base finders so
- * lookups and inserts honour the tenant scope (the base uses `self`, which
- * resolves to the parent class and would bypass tenancy).
+ * The base finders are overridden because they use `self`, which bypasses tenancy.
  */
 final class SocialiteUser extends BaseSocialiteUser
 {

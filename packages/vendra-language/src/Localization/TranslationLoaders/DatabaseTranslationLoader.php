@@ -12,7 +12,7 @@ use Spatie\TranslationLoader\TranslationLoaders\TranslationLoader;
 final class DatabaseTranslationLoader implements TranslationLoader
 {
     /**
-     * The translator uses `*` for application groups, which language lines store as a null namespace.
+     * Map the translator's `*` namespace to the null namespace language lines use.
      *
      * @return array<mixed>
      */

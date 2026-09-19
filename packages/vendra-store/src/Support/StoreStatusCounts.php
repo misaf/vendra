@@ -10,11 +10,7 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
 /**
- * How many stores are in each {@see StoreStatus}, read in one grouped query.
- *
- * The query groups by the three columns a status is derived from and maps each
- * group through {@see StoreStatus::fromColumns()}, so the counts follow the same
- * rule as a store's own status instead of restating it in SQL.
+ * Groups are mapped through {@see StoreStatus::fromColumns()} rather than restated in SQL.
  */
 final readonly class StoreStatusCounts
 {
@@ -65,9 +61,6 @@ final readonly class StoreStatusCounts
         return array_sum($this->counts);
     }
 
-    /**
-     * Stores still provisioning or whose provisioning failed.
-     */
     public function needingAttention(): int
     {
         return $this->count(StoreStatus::Pending) + $this->count(StoreStatus::Provisioning) + $this->count(StoreStatus::Failed);

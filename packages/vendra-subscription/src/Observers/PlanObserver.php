@@ -10,8 +10,7 @@ use Misaf\VendraSubscription\Models\Plan;
 final class PlanObserver
 {
     /**
-     * A plan that still backs a subscription cannot be removed. The throw has
-     * to abort the delete, so this observer stays synchronous.
+     * Abort deleting a plan that still backs a subscription.
      */
     public function deleting(Plan $plan): void
     {

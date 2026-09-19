@@ -25,11 +25,9 @@ trait RequiresCurrentTenant
     }
 
     /**
-     * The current tenant, or null when the application is not tenant-aware.
+     * Get the current tenant, or null when tenancy is disabled.
      *
-     * When tenant awareness is enabled a current tenant is still required, so a
-     * misconfigured tenant-aware seeding run fails loudly instead of silently
-     * producing unscoped records.
+     * With tenancy enabled a missing tenant throws, rather than seeding unscoped records.
      */
     protected function currentTenantOrNull(): ?Model
     {

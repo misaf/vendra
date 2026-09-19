@@ -11,14 +11,7 @@ use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 /**
- * Falls back to the signed-in user's own tenant when no tenant context has been
- * established — a panel-level convenience for surfaces that authenticate a user
- * before (or without) resolving a tenant from the request.
- *
- * This is not a second tenancy boundary: it reads the very same tenant foreign
- * key as {@see TenantScope} and never narrows below it. The historical "team"
- * name is kept because it predates the Store rename and describes the
- * user-membership fallback, not a Vendor/Team entity inside a Store.
+ * Uses the same foreign key as {@see TenantScope}; "team" is a historical name.
  *
  * @implements Scope<Model>
  */

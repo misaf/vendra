@@ -77,11 +77,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Default the spatie translation-loader config to this module's namespace-aware
-     * implementations while leaving host overrides intact: the stock `Db` loader is
-     * upgraded to the namespace-aware database loader, and the model and manager are
-     * only replaced while they still point at the spatie defaults. Hosts may publish
-     * their own loaders, model, and manager through `config/translation-loader.php`.
+     * Use this module's namespace-aware translation loaders unless the host overrides them.
      */
     private function configureTranslationLoader(): void
     {
@@ -111,9 +107,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * Bridge the language catalog into the localization module: the platform
-     * locales become the supported set, and the tenant's default language is
-     * appended to the resolver chain as the lowest-priority baseline.
+     * Supply the supported locales and the tenant locale resolver to localization.
      */
     private function configureLocalization(): void
     {
@@ -147,8 +141,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * The active locales for the current tenant, in display order. Falls back
-     * to the application fallback locale when a tenant has none active yet.
+     * Get the tenant's active locales, or the fallback locale when there are none.
      *
      * @return string[]
      */

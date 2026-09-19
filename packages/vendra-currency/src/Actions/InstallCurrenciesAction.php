@@ -11,9 +11,7 @@ use Misaf\VendraCurrency\Support\CurrencyRegistry;
 final class InstallCurrenciesAction
 {
     /**
-     * Install the given catalog codes, skipping anything unsupported or
-     * already installed. The comparison is case-insensitive; the model
-     * normalizes the stored code to uppercase. The caller requires at least
+     * Unsupported or installed codes are skipped. The caller requires at least
      * one code.
      *
      * @param  list<mixed>  $codes

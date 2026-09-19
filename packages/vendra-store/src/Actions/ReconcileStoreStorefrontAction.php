@@ -14,19 +14,9 @@ use Misaf\VendraStore\Support\StorefrontObservation;
 use Misaf\VendraStore\Support\StorefrontReference;
 
 /**
- * Brings one storefront's runtime into line with what the platform intends.
- *
- * Observe, diff, then apply the *smallest* verb that closes the gap. That last
- * part is the whole point: this used to be a forced redeploy of everything, and
- * since provisioning replaces a container rather than updating it, asking to
- * reconcile an estate took every storefront in it down and back up. A stopped
- * storefront needs starting, not rebuilding.
- *
- * Reconciliation reads intent and never writes it. `desired_state` is a decision
- * somebody made — an administrator stopping a storefront, a deployment requesting
- * one — and a converge pass that edited it would be deciding rather than
- * converging, which is how a deliberately stopped storefront gets started again
- * every pass.
+ * Apply the smallest action that closes the gap, since a redeploy replaces the
+ * container. Never write `desired_state`, or a deliberately stopped storefront
+ * would be started again on every pass.
  */
 final readonly class ReconcileStoreStorefrontAction
 {
@@ -44,9 +34,6 @@ final readonly class ReconcileStoreStorefrontAction
             : $this->settle($deployment, $observed);
     }
 
-    /**
-     * Close the gap for a storefront that is meant to be serving.
-     */
     private function converge(
         StorefrontDeployment $deployment,
         StorefrontObservation $observed,
@@ -99,9 +86,6 @@ final readonly class ReconcileStoreStorefrontAction
         return StorefrontReconciliationOutcome::Redeployed;
     }
 
-    /**
-     * Close the gap for a storefront that is meant to be down.
-     */
     private function settle(
         StorefrontDeployment $deployment,
         StorefrontObservation $observed,
@@ -116,10 +100,8 @@ final readonly class ReconcileStoreStorefrontAction
     }
 
     /**
-     * Forced on purpose: the recorded status is exactly what is not to be
-     * trusted here. A row reading Ready with nothing running is the case
-     * reconciliation exists to catch, and an unforced deploy would return
-     * without doing anything precisely then.
+     * Force the deploy, since a Ready row with nothing running is exactly the
+     * drift being repaired.
      */
     private function redeploy(StorefrontDeployment $deployment): void
     {

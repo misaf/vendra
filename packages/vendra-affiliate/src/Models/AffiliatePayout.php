@@ -18,9 +18,6 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
 /**
- * A settlement grouping the approved commissions that were paid out together;
- * `transaction_id` references the wallet Transaction created for the payout.
- *
  * @property int $id
  * @property int $tenant_id
  * @property int $affiliate_id

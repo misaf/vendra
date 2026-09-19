@@ -13,9 +13,7 @@ use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 
 /**
- * Records a referral-link click and drops the attribution cookie before
- * redirecting the visitor to the configured landing URL. Unknown codes
- * redirect silently so the endpoint cannot be used to probe codes.
+ * Unknown codes redirect silently so the endpoint cannot be used to probe codes.
  */
 final readonly class AffiliateRedirectController
 {

@@ -13,9 +13,7 @@ use Illuminate\Support\Carbon;
 use Misaf\VendraTransaction\Database\Factories\TransactionFeeFactory;
 
 /**
- * The fee charged for a transaction, stored as a positive amount in the
- * wallet currency's minor units. It settles as its own negative ledger
- * entry when the transaction is approved.
+ * A transaction's fee in minor units, settled as its own negative ledger entry.
  *
  * @property int $id
  * @property int $transaction_id

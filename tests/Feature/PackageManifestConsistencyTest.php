@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 use Illuminate\Support\Arr;
 
-/**
- * Determine whether a package's own source imports the tenant provider.
- */
 function packageSourceBindsTenantProvider(string $packagePath): bool
 {
     return array_any(glob("{$packagePath}/src/{,*/,*/*/,*/*/*/,*/*/*/*/,*/*/*/*/*/}*.php", GLOB_BRACE) ?: [], fn ($sourceFile) => preg_match('/^use Misaf\\\\VendraTenant\\\\/m', (string) file_get_contents($sourceFile)) === 1);
@@ -98,10 +95,7 @@ it('keeps package test suites tenant-provider agnostic', function (): void {
             continue;
         }
 
-        // A package whose own source binds to the tenant provider gains nothing
-        // from an agnostic test suite: its tests cannot be looser about the
-        // provider than the code they cover. The rule exists to keep the
-        // remaining packages swappable, so it only applies to those.
+        // Packages whose source uses the tenant provider may use it in tests too.
         if (packageSourceBindsTenantProvider($packagePath)) {
             continue;
         }

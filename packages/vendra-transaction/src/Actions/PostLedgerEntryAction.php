@@ -12,9 +12,7 @@ use Misaf\VendraTransaction\Models\LedgerEntry;
 use Misaf\VendraTransaction\Models\Wallet;
 
 /**
- * Posts an immutable ledger entry and keeps the cached wallet balance in
- * lockstep: the entry records the signed amount and the resulting balance,
- * written together with the wallet row under a pessimistic lock.
+ * Post a ledger entry and update the wallet balance under a row lock.
  */
 final class PostLedgerEntryAction
 {

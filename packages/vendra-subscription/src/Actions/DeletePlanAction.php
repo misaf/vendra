@@ -12,9 +12,9 @@ use Misaf\VendraSubscription\Models\Plan;
 final class DeletePlanAction
 {
     /**
-     * Soft-deletes a plan no subscription references.
+     * A plan that any subscription references, even a trashed one, is refused.
      *
-     * @throws PlanInUseException when a subscription, even a trashed one, still references the plan
+     * @throws PlanInUseException
      */
     public function execute(Plan $plan): void
     {

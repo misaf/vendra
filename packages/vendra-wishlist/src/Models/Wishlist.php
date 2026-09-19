@@ -19,11 +19,7 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraWishlist\Database\Factories\WishlistFactory;
 
 /**
- * A saved selection of things a customer wants to come back to.
- *
- * A wishlist is not a cart: nothing here is reserved, priced, or expiring. The
- * same customer may keep several lists, one of which is their default — the
- * one a heart button on a product card writes to.
+ * A customer's saved items; one of their lists is the default.
  *
  * @property int $id
  * @property int $tenant_id
@@ -46,10 +42,6 @@ final class Wishlist extends Model
     /** @use HasFactory<WishlistFactory> */
     use HasFactory;
 
-    /**
-     * Default the opaque token and the list name so a wishlist is never
-     * persisted without either.
-     */
     protected static function booted(): void
     {
         self::creating(function (self $wishlist): void {
@@ -63,12 +55,6 @@ final class Wishlist extends Model
         });
     }
 
-    /**
-     * The owner's default list, created on first use.
-     *
-     * The heart button on a product card has no list to pick, so resolving one
-     * has to be part of the domain rather than left to each caller.
-     */
     public static function defaultFor(Model $owner): self
     {
         return self::query()->firstOrCreate(

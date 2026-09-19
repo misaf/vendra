@@ -34,10 +34,9 @@ use Misaf\VendraTransaction\States\TransactionState;
 use Spatie\ModelStates\HasStates;
 
 /**
- * A gateway-facing money movement against a wallet. The `amount` is always
- * the absolute value in the wallet currency's minor units; the sign of the
- * eventual ledger entry derives from the transaction type. Settlement into
- * the ledger happens exactly once, on the transition to Approved.
+ * A money movement against a wallet, settled into the ledger once when approved.
+ *
+ * `amount` is unsigned minor units; the transaction type decides the sign.
  *
  * @property int $id
  * @property int $tenant_id
@@ -292,8 +291,7 @@ final class Transaction extends Model implements ShouldLogActivity
     }
 
     /**
-     * A transaction reference for humans to quote: digits only, no zero, so it
-     * survives being read aloud or copied off a receipt.
+     * Generate a digits-only token without zeros, so it is easy to read aloud.
      */
     private static function generateToken(): string
     {

@@ -15,11 +15,7 @@ use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSupport\Context\RequestJobContext;
 
 /**
- * Surfaces subscription payments that are stuck and need attention, so a silent
- * money-loss backlog cannot accumulate unnoticed. It only observes — the
- * {@see RecoverSubscriptionPaymentsCommand} is what actually re-drives payments.
- * When a backlog exists it emits a `Log::warning`, which downstream alerting
- * (Pulse, log drains) can trigger on.
+ * Only observes; {@see RecoverSubscriptionPaymentsCommand} retries payments.
  */
 #[Description('Report stuck subscription payments that need attention')]
 #[Signature('vendra-subscription:report-payment-backlog {--stale-minutes=30}')]

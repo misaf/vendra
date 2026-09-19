@@ -14,9 +14,6 @@ enum PeriodUnit: string implements HasLabel
     case Month = 'month';
     case Year = 'year';
 
-    /**
-     * Advance the given date by the supplied number of this unit.
-     */
     public function advance(CarbonInterface $date, int $count): CarbonInterface
     {
         return match ($this) {

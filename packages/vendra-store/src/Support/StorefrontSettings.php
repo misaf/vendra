@@ -8,17 +8,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 
 /**
- * The `vendra-store.storefront` block as an immutable, typed value.
- *
- * Every consumer used to reach into `Config` and re-implement the same
- * string/int/bool coercion, so the shape of the block was described three times
- * and enforced nowhere. Reading it once, here, means the deployment layer and
- * the container-definition factory receive settled values instead of an untyped
- * array and a private accessor triplet each.
- *
- * Note what is *not* here: the runtime endpoint and its API version. Those are
- * Laravel Docker Engine driver settings, and a storefront setting does not know
- * what a socket is.
+ * The runtime endpoint belongs to the Docker Engine driver config, not here.
  */
 final readonly class StorefrontSettings
 {
@@ -48,9 +38,7 @@ final readonly class StorefrontSettings
     /**
      * Read the current configuration.
      *
-     * Bound as a non-singleton so a configuration change — a test setting an
-     * image, an administrator reloading config — is picked up on the next resolve
-     * rather than frozen at first use.
+     * Not a singleton, so config changes are picked up on the next resolve.
      */
     public static function fromConfig(): self
     {
@@ -82,9 +70,6 @@ final readonly class StorefrontSettings
         return $this->namePrefix.$slug;
     }
 
-    /**
-     * The API origin storefront containers call, explicit or derived.
-     */
     public function resolvedApiUrl(): string
     {
         if ($this->apiUrl !== '') {
@@ -95,10 +80,7 @@ final readonly class StorefrontSettings
     }
 
     /**
-     * The CA bundle path inside the container.
-     *
-     * Resolved against the read-only certificate mount, so administrators configure a
-     * file name rather than an in-container path they cannot see.
+     * Get the CA bundle path inside the container's certificate mount.
      */
     public function resolvedCaFile(): string
     {
@@ -110,11 +92,7 @@ final readonly class StorefrontSettings
     }
 
     /**
-     * The fleet's per-storefront caps.
-     *
-     * A zero, a blank, or a missing key lifts that cap rather than setting it
-     * to nothing: the administrator-facing way to say "uncapped" is to empty the
-     * environment variable.
+     * Get the per-storefront resource caps; zero, blank, or missing means uncapped.
      *
      * @param  array<array-key, mixed>  $storefront
      */

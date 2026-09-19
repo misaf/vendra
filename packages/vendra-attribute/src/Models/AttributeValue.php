@@ -54,12 +54,6 @@ final class AttributeValue extends Model implements ShouldLogActivity, Sortable
         'sort_when_creating' => true,
     ];
 
-    /**
-     * The DB-level cascade on attribute_value_selections only fires on hard
-     * deletes, so soft deletes must detach selections themselves; restoring
-     * a value intentionally does not resurrect them.
-     */
-
     /** @return BelongsTo<Attribute, $this> */
     public function attribute(): BelongsTo
     {
@@ -73,9 +67,6 @@ final class AttributeValue extends Model implements ShouldLogActivity, Sortable
     }
 
     /**
-     * The entities that selected this attribute value through the
-     * attribute_value_selections pivot.
-     *
      * @return HasMany<AttributeValueSelection, $this>
      */
     public function selections(): HasMany

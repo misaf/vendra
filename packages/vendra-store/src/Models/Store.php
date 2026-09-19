@@ -22,7 +22,6 @@ use Misaf\VendraStore\Database\Factories\StoreFactory;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Observers\StoreObserver;
 use Misaf\VendraStore\Scopes\StoreScope;
-use Misaf\VendraStore\Services\StoreDomainFinder;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraTenant\Concerns\IsTenantModel;
 use Misaf\VendraTenant\Contracts\TenantContract;
@@ -33,22 +32,9 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
- * A store: the ecommerce business entity, and the tenancy boundary.
+ * A store is the tenant: domain data points at it through `tenant_id`.
  *
- * The Store *is* the tenant — it implements {@see TenantContract} rather than
- * pointing at a separate tenant row — so `stores` is the only table describing
- * it. Products, orders, customers and vendors all live inside one store; a
- * reseller may own several, and the platform console may own one directly
- * (`reseller_id` is nullable).
- *
- * Reusable domain packages stay tenant-agnostic and are owned through the
- * neutral `tenant_id` column, which resolves to a store because a store is what
- * plays the tenant role here. Only records describing the store itself — its
- * domains, its storefront deployment — name it outright with `store_id`.
- *
- * The reseller link is deliberately a bare key here: the reseller domain is a
- * layer above the store, and `misaf/vendra-reseller` supplies both sides of the
- * relationship so the store package stays installable without it.
+ * `reseller_id` is a bare key so this package does not depend on the reseller package.
  *
  * @property int $id
  * @property int|null $reseller_id
@@ -136,8 +122,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * Limit the query to stores that may currently serve requests.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -151,42 +135,29 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * The currency the store prices in, falling back to the platform default.
+     * Get the store's currency, falling back to the platform default.
      *
-     * Its siblings `locale` and `timezone` need no accessor here: the tenancy
-     * engine reads them through {@see IsTenantModel}, which already treats a
-     * blank column as "no opinion, keep the platform's".
+     * `locale` and `timezone` fall back through {@see IsTenantModel} instead.
      */
     public function resolvedCurrency(): string
     {
         return $this->stringSetting('currency') ?? Config::string('money.defaultCurrency');
     }
 
-    /**
-     * One platform annotation off {@see $metadata}, or the given default.
-     */
     public function metadata(string $key, mixed $default = null): mixed
     {
         return Arr::get($this->metadata ?? [], $key, $default);
     }
 
-    /**
-     * The store's condition as one value.
-     *
-     * Derived from the three columns that own it rather than stored, so the
-     * reading can never disagree with them. Suspension outranks readiness: a
-     * store an administrator disabled, or one billing suspended, is suspended even
-     * though it provisioned cleanly.
-     */
     public function status(): StoreStatus
     {
         return StoreStatus::fromColumns($this->provisioning_status, $this->active, $this->billing_suspended_at !== null);
     }
 
     /**
-     * Whether suspension or offboarding means this store's storefront must stay
-     * down. A store still provisioning is not held down: its first storefront
-     * deployment runs alongside provisioning.
+     * Determine if suspension or offboarding keeps the storefront down.
+     *
+     * A store that is still provisioning is not held down.
      */
     public function keepsStorefrontDown(): bool
     {
@@ -194,13 +165,9 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * The store's own admin panel, on the canonical host that
-     * {@see StoreDomainFinder::findForAdminHost()} resolves: the slug under
-     * `admin.<central host>`. The slug directly under the central host serves
-     * nothing.
+     * Get the store's admin panel URL on `<slug>.admin.<central host>`.
      *
-     * Panels are served over TLS by the edge proxy, so the scheme is fixed
-     * rather than derived from the request.
+     * Always HTTPS, since the edge proxy terminates TLS.
      */
     public function adminUrl(): string
     {
@@ -208,11 +175,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * Limit the query to stores whose derived {@see status()} is the given one.
-     *
-     * The match arms above expressed as SQL, so a console filter and a status
-     * badge cannot disagree about what "suspended" means.
-     *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
@@ -241,10 +203,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * A store's domains are always scoped to itself by the relationship's
-     * foreign key, so {@see StoreScope} (which targets the currently active
-     * store) must be dropped to read them from another store's context such as
-     * the console or reseller panels.
+     * Get the store's domains without {@see StoreScope}, so other panels can read them.
      *
      * @return HasMany<StoreDomain, $this>
      */
@@ -254,9 +213,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * The storefront the platform runs for this store, when one was requested.
-     * `storefront_deployments.store_id` is unique, so a store owns at most one.
-     *
      * @return HasOne<StorefrontDeployment, $this>
      */
     public function storefrontDeployment(): HasOne
@@ -266,8 +222,6 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * Users who may access this store through the tenant membership pivot.
-     *
      * @return BelongsToMany<User, $this>
      */
     public function users(): BelongsToMany
@@ -276,10 +230,7 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
-     * A configured string attribute, or null when the store leaves it unset.
-     *
-     * Blank is treated as unset: a form that submits an empty select should
-     * mean "follow the platform", not "this store speaks nothing".
+     * Get a string attribute, treating blank as unset.
      */
     private function stringSetting(string $attribute): ?string
     {

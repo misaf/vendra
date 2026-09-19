@@ -16,9 +16,6 @@ final class DescriptionEntry extends TextEntry
         return 'description';
     }
 
-    /**
-     * Render persisted rich-editor content as HTML instead of plain text.
-     */
     public function richContent(): static
     {
         return $this

@@ -73,11 +73,7 @@ final class StorefrontDeploymentStatusCommand extends Command
     }
 
     /**
-     * A daemon that will not answer is reported per row rather than aborting.
-     *
-     * The recorded state is still worth printing when the runtime is down, and
-     * this command is most useful precisely when something about the runtime is
-     * wrong.
+     * Report an unreachable runtime per row so the recorded state still prints.
      */
     private function observe(StorefrontProvisioner $provisioner, StorefrontDeployment $deployment): ?StorefrontRuntimeState
     {
@@ -104,12 +100,10 @@ final class StorefrontDeploymentStatusCommand extends Command
     }
 
     /**
-     * Say plainly when the runtime has nothing for a storefront it should have.
+     * Warn when the runtime has no container for a deployed storefront.
      *
-     * The common cause is not a container that died but a daemon that changed:
-     * switching CONTAINER_DRIVER or its configured host leaves the old
-     * containers running on the old daemon, invisible and unmanaged, while every
-     * deployment row reads as though it were fine.
+     * The usual cause is a changed `CONTAINER_DRIVER` or host, which leaves the
+     * old containers running unmanaged on the previous daemon.
      *
      * @param  Collection<int, StorefrontDeployment>  $deployments
      * @param  Collection<string, StorefrontRuntimeState|null>  $observed

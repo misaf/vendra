@@ -41,8 +41,7 @@ final readonly class SetLocale
     }
 
     /**
-     * Match the resolved locale against the supported locales, tolerating
-     * region variants (e.g. fr-CA or fr_CA matches a supported fr).
+     * Match a locale to a supported one, so `fr-CA` matches `fr`.
      */
     private function supportedLocale(?string $locale): ?string
     {

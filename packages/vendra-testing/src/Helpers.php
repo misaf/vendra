@@ -16,8 +16,6 @@ use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use PHPUnit\Framework\Assert;
 
 /**
- * Resolve the tenant model class bound by the installed tenant provider.
- *
  * @return class-string<Model>
  */
 function testTenantModel(): string
@@ -26,10 +24,7 @@ function testTenantModel(): string
 }
 
 /**
- * Create a persisted, active tenant through the bound tenant provider.
- *
- * Returns null when tenancy is disabled so suites stay provider-agnostic:
- * the same test runs with or without a tenant provider installed.
+ * Create an active tenant, or return null when tenancy is disabled.
  *
  * @param  array<string, mixed>  $attributes
  */
@@ -55,9 +50,7 @@ function createTestTenant(array $attributes = []): ?Model
 }
 
 /**
- * Create an active tenant and make it the current tenant context.
- *
- * No-op returning null when tenancy is disabled.
+ * Create an active tenant and make it current, or return null when tenancy is disabled.
  *
  * @param  array<string, mixed>  $attributes
  */
@@ -73,15 +66,9 @@ function makeCurrentTestTenant(array $attributes = []): ?Model
 }
 
 /**
- * Switch the current tenant context to an already created tenant.
+ * Make the given tenant current; null is a no-op.
  *
- * Accepts null so call sites composed with createTestTenant() stay a no-op
- * when tenancy is disabled.
- *
- * A Filament panel context keeps its own tenant, and the resource `creating`
- * hook re-associates new records with it after BelongsToTenant has stamped the
- * resolver's tenant. Keep the two in step, as a real admin request does, so
- * records created after a switch land in the tenant the test switched to.
+ * The Filament panel tenant is switched too, so new records land in this tenant.
  */
 function switchToTestTenant(Model|int|string|null $tenant): void
 {
@@ -97,17 +84,11 @@ function switchToTestTenant(Model|int|string|null $tenant): void
     }
 }
 
-/**
- * Resolve the current tenant through the bound tenant provider.
- */
 function currentTestTenant(): ?Model
 {
     return resolve(TenantResolver::class)->current();
 }
 
-/**
- * Clear the current tenant context. No-op when tenancy is disabled.
- */
 function forgetCurrentTestTenant(): void
 {
     if (! TenantAwareness::enabled()) {
@@ -122,9 +103,6 @@ function forgetCurrentTestTenant(): void
 }
 
 /**
- * Resolve the authenticatable user model from the host application's auth
- * configuration instead of importing a concrete user package.
- *
  * @return class-string<Model>
  */
 function testUserModel(): string
@@ -139,8 +117,6 @@ function testUserModel(): string
 }
 
 /**
- * Create a persisted user through the configured auth user model.
- *
  * @param  array<string, mixed>  $attributes
  */
 function createTestUser(array $attributes = []): Model
@@ -155,11 +131,7 @@ function createTestUser(array $attributes = []): Model
 }
 
 /**
- * Create the current tenant with a deterministic Pennant feature state.
- *
- * Every feature key configured by an installed permission provider is
- * deactivated unless explicitly requested, so tenant state never depends on
- * published feature defaults. Fails when no tenant provider is installed.
+ * Create the current tenant with only the requested features active.
  *
  * @param  list<string>  $features
  */
@@ -182,12 +154,7 @@ function makeCurrentTestTenantWithFeatures(array $features = []): Model
 }
 
 /**
- * Boot a default Filament admin panel acting as an admin user.
- *
- * The admin role is resolved through the Spatie permission and
- * vendra-permission configuration instead of importing a concrete permission
- * package, so any module test suite can use this helper without declaring a
- * permission dependency. Returns the current tenant.
+ * Boot the admin panel as an admin user and return the current tenant.
  *
  * @param  list<class-string>  $resources
  * @param  list<string>  $features
@@ -237,10 +204,7 @@ function setUpFilamentAdminTestContext(array $resources = [], ?array $features =
 }
 
 /**
- * Register and boot a default Filament admin panel, acting as the given user
- * within the given tenant context. Shared low-level primitive behind the
- * module test contexts so panel, table, and route wiring stay identical across
- * suites. Pass a null tenant for panels that are not tenant-scoped.
+ * Boot the admin panel as the given user, in the given tenant if any.
  *
  * @param  list<class-string>  $resources
  */

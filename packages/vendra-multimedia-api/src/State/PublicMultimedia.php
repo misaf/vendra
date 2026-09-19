@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 
-/**
- * Read model for public media API operations.
- */
 #[Unguarded]
 #[Table(name: 'media')]
 final class PublicMultimedia extends Model

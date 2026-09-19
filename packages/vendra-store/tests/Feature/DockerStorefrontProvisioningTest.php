@@ -185,8 +185,7 @@ it('keeps a retrying deployment out of the failed state until the queue gives up
     expect(fn () => app()->call($job->handle(...)))
         ->toThrow(RuntimeException::class, 'exited while starting');
 
-    // A thrown attempt is not a failed deployment: it is still Processing and
-    // the queue will come back to it.
+    // A thrown attempt stays Processing until the queue gives up.
     expect($deployment->refresh()->status)->toBe(StorefrontDeploymentStatus::Processing)
         ->and($deployment->error)->toBeNull();
 
@@ -398,8 +397,7 @@ describe('podman compatibility', function (): void {
     });
 
     it('leaves logging to the runtime when no driver is named', function (): void {
-        // Podman rejects json-file's options rather than ignoring them, so an
-        // empty driver has to omit the block entirely, not send an empty one.
+        // Podman rejects json-file options, so an empty driver omits the block.
         Config::set('vendra-store.storefront.log_driver', '');
         fakeDockerEngine();
 
@@ -449,9 +447,7 @@ describe('podman compatibility', function (): void {
     });
 
     it('deploys and warns when the runtime never runs the health check', function (): void {
-        // Podman executes health checks through transient systemd timers; with
-        // no systemd the state stays empty forever. The storefront still runs,
-        // so it deploys — but the lost gate must not be silent.
+        // Without systemd, Podman never reports health, so the deploy logs a warning.
         Log::spy();
         fakeDockerEngine(['Status' => 'running']);
 

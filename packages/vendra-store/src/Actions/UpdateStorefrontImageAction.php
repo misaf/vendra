@@ -9,8 +9,7 @@ use Misaf\VendraStore\Models\StorefrontImage;
 final class UpdateStorefrontImageAction
 {
     /**
-     * Updates a catalog entry. Deactivating an image only removes it from new
-     * storefront selection; deployments already using it keep provisioning from it.
+     * Deactivating an image hides it from new stores; existing deployments keep it.
      *
      * @param  array{image?: string, notes?: string|null, active?: bool}  $attributes
      */

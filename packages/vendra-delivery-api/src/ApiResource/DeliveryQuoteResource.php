@@ -12,9 +12,7 @@ use Misaf\VendraDeliveryApi\State\QuoteDeliveryProcessor;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 
 /**
- * Prices a dropped pin. The response tells the storefront which band the
- * address falls in, what it costs, and whether the studio must quote it by
- * hand instead.
+ * Price a dropped pin: its band, fee, and whether it needs a manual quote.
  */
 #[ApiResource(
     shortName: 'DeliveryQuote',
@@ -44,9 +42,7 @@ final class DeliveryQuoteResource
     public float $longitude = 0.0;
 
     /**
-     * The configured name converter maps camelCase wire names onto snake_case
-     * PHP properties, so every multi-word input carries an explicit serialized
-     * name and stays camelCase on both sides.
+     * Keep multi-word inputs camelCase on the wire despite the snake_case name converter.
      */
     #[SerializedName('currencyCode')]
     public ?string $currencyCode = null;

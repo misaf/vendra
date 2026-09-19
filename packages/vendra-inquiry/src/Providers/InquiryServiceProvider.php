@@ -50,10 +50,7 @@ final class InquiryServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        /**
-         * A stable alias keeps persisted morph columns decoupled from the model
-         * FQCN, so relocating the model class never orphans stored rows.
-         */
+        // A stable alias, so moving the model class never orphans stored morph rows.
         Relation::morphMap([
             'inquiry' => Inquiry::class,
         ]);

@@ -6,14 +6,6 @@ namespace Misaf\VendraStore\Enums;
 
 use Misaf\VendraStore\Support\StorefrontContainer;
 
-/**
- * What is actually running for a storefront right now.
- *
- * The deployment row records what the platform *decided*; this reports what the
- * runtime *has*. They disagree whenever somebody stops a container by hand, a
- * host reboots, or a deployment failed halfway — which is exactly what
- * reconciliation exists to find.
- */
 enum StorefrontRuntimeState: string
 {
     case Absent = 'absent';
@@ -24,11 +16,7 @@ enum StorefrontRuntimeState: string
     case Unknown = 'unknown';
 
     /**
-     * Reduce a container's reported state to the storefront's own vocabulary.
-     *
-     * A null container is Absent rather than an error: "there is nothing there"
-     * is a legitimate answer to a status question and the common one before a
-     * first deployment.
+     * Map a container's state to a runtime state; no container means Absent.
      */
     public static function fromContainer(?StorefrontContainer $container): self
     {
@@ -52,9 +40,6 @@ enum StorefrontRuntimeState: string
             : self::Running;
     }
 
-    /**
-     * Whether the storefront is up and nothing contradicts it.
-     */
     public function isServing(): bool
     {
         return $this === self::Running;

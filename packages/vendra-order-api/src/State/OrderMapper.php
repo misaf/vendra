@@ -47,8 +47,7 @@ final class OrderMapper implements ResourceMapper
     }
 
     /**
-     * The line's name snapshot in the active locale, falling back to whatever
-     * the order was placed with.
+     * Get the line's name in the active locale, falling back to any stored one.
      */
     private static function localizedName(OrderLineModel $line): string
     {

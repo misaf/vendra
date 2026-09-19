@@ -8,11 +8,8 @@ use Closure;
 use Illuminate\Support\Facades\Config;
 
 /**
- * Standard navigation-group resolution for Vendra panel plugins: an explicit
- * fluent override wins, then the module's `<plugin-id>.navigation_group`
- * config key, then the module's default `vendra-support::navigation.groups.*`
- * key. The resolved key is translated at call time so the request locale is
- * honoured after locale middleware runs.
+ * A fluent override wins, then `<plugin-id>.navigation_group` config, then the
+ * default. The key is translated at call time so the request locale applies.
  */
 trait HasPluginNavigationGroup
 {
@@ -21,8 +18,7 @@ trait HasPluginNavigationGroup
     abstract public function getId(): string;
 
     /**
-     * The `vendra-support::navigation.groups.*` key used when neither a
-     * fluent override nor module config provides a group.
+     * Get the default `vendra-support::navigation.groups.*` key.
      */
     abstract protected function defaultNavigationGroup(): string;
 

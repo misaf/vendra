@@ -10,11 +10,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\McpTool;
 use Misaf\VendraDeliveryApi\State\DeliveryScheduleProvider;
 
-/**
- * Everything a checkout needs to offer a date and a window in one call: the
- * dates still bookable after the same-day cutoff, and the windows the studio
- * delivers in.
- */
 #[ApiResource(
     shortName: 'DeliverySchedule',
     operations: [

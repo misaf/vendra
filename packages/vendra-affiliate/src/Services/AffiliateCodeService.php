@@ -10,8 +10,7 @@ use RuntimeException;
 final class AffiliateCodeService
 {
     /**
-     * Unambiguous uppercase alphabet: no 0/O, 1/I/L to keep codes readable
-     * when shared verbally or in print.
+     * An alphabet without 0, O, 1, I, or L, so codes are easy to read aloud.
      */
     private const string CODE_CHARACTERS = '23456789ABCDEFGHJKMNPQRSTUVWXYZ';
 

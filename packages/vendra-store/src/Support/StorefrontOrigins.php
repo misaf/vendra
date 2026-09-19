@@ -13,27 +13,14 @@ use Misaf\VendraSupport\Tenancy\Scopes\TeamScope;
 use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
 
 /**
- * The CORS allowlist for the canonical API.
- *
- * Storefronts are served on customer domains but fetch their data from
- * https://api.<base>, so every browser call is cross-origin. The allowlist
- * therefore has to be data, not config: it changes whenever a store is
- * onboarded. A wildcard is not an option — it cannot be combined with
- * credentials, and it would let any site on the internet read the API through a
- * visitor's browser.
- *
- * The cache entry is always read and cleared in landlord context. Domains are
- * created inside `$store->execute()`, and the tenant cache prefix would
- * otherwise send the clear to a key nobody reads, leaving a new store's domain
- * blocked until the cache is flushed by hand.
+ * The cache is always read and cleared in landlord context, or a clear from
+ * inside a tenant would miss the shared key.
  */
 final class StorefrontOrigins
 {
     public const string CACHE_KEY = 'cors:storefront-origins';
 
     /**
-     * Active storefront origins, e.g. ['https://abbas.com', 'https://www.abbas.com'].
-     *
      * @return list<string>
      */
     public function all(): array
@@ -83,9 +70,7 @@ final class StorefrontOrigins
                 ->where('active', true)
                 ->pluck('name');
         } catch (QueryException) {
-            // No database yet (fresh install, pre-migration CI). An empty
-            // allowlist denies every cross-origin call, which is the safe way to
-            // fail: it never widens access.
+            // Without a database, deny every cross-origin call.
             return [];
         }
 

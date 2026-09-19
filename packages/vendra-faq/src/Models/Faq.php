@@ -64,13 +64,7 @@ final class Faq extends Model implements HasMedia, ShouldLogActivity, Sortable
     public const string MEDIA_COLLECTION = 'faqs';
 
     /**
-     * Pin sortable behavior regardless of the global `eloquent-sortable`
-     * configuration values: order on the `position` column and always assign
-     * the next position when creating.
-     *
-     * Note: `ignore_timestamps` cannot be pinned here because the package reads
-     * it directly from config (no per-model override), and it already defaults
-     * to `false` both in config and in the package.
+     * Pin the sortable behavior regardless of the global config.
      *
      * @var array{order_column_name: string, sort_when_creating: bool}
      */

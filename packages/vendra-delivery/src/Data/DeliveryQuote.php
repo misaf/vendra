@@ -7,10 +7,7 @@ namespace Misaf\VendraDelivery\Data;
 use Misaf\VendraDelivery\Models\DeliveryZone;
 
 /**
- * What one dropped pin costs to deliver to.
- *
- * `requiresQuote` marks an address the studio prices by hand — beyond the
- * usual range — so checkout must refuse it rather than invent a fee.
+ * `requiresQuote` marks an address priced by hand, which checkout must refuse.
  */
 final readonly class DeliveryQuote
 {
@@ -23,7 +20,7 @@ final readonly class DeliveryQuote
     ) {}
 
     /**
-     * The quote used when no band covers the point at all.
+     * Create the quote for a point no band covers.
      */
     public static function outOfRange(float $distanceKm, string $currencyCode): self
     {

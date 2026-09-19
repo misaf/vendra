@@ -30,10 +30,9 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * Fixtures are keyed on the translated slug of the record's first locale,
-     * so a repeated run of the same fixture file updates nothing and inserts
-     * nothing. Store provisioning retries the whole seed list on failure, so a
-     * partial run has to be safe to repeat.
+     * Seed the fixtures idempotently, keyed on the first locale's slug.
+     *
+     * Store provisioning retries the whole seed list, so a partial run must be repeatable.
      *
      * @param  list<array<string, mixed>>  $records
      */

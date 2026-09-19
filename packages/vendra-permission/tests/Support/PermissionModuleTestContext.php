@@ -27,8 +27,7 @@ final class PermissionModuleTestContext
             Assert::fail('Permission module tests require an installed tenant provider.');
         }
 
-        // Every permission feature defaults to active in the real published config, so
-        // deactivate whatever wasn't explicitly requested to keep tenant state deterministic.
+        // Deactivate every feature not requested, since they all default to active.
         $allFeatures = array_map(fn (PermissionFeatureEnum $feature): string => $feature->value, PermissionFeatureEnum::cases());
 
         Feature::for($tenant)->deactivate(array_values(array_diff($allFeatures, $features)));

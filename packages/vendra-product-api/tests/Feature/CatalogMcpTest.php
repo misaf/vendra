@@ -9,8 +9,7 @@ use Misaf\VendraProduct\Database\Factories\ProductCategoryFactory;
 use Misaf\VendraProduct\Database\Factories\ProductFactory;
 
 beforeEach(function (): void {
-    // The MCP transport's DNS-rebinding guard only permits localhost-family
-    // hosts, so drive the endpoint through a localhost root URL.
+    // The MCP DNS-rebinding guard only permits localhost hosts.
     config(['app.url' => 'http://localhost']);
     URL::forceRootUrl('http://localhost');
 
@@ -19,8 +18,7 @@ beforeEach(function (): void {
 });
 
 /**
- * Perform a JSON-RPC call against the MCP endpoint, decoding the JSON or
- * Server-Sent-Events payload the streamable HTTP transport returns.
+ * Make a JSON-RPC call to the MCP endpoint, decoding a JSON or SSE response.
  *
  * @param  array<string, mixed>  $payload
  * @return array{response: TestResponse, body: array<string, mixed>}
@@ -58,9 +56,6 @@ function mcpCall(array $payload, ?string $sessionId = null, string $url = 'http:
     return ['response' => $response, 'body' => $decoded];
 }
 
-/**
- * Run the initialize handshake and return the negotiated session id.
- */
 function mcpInitialize(string $url = 'http://localhost/mcp'): string
 {
     $result = mcpCall([

@@ -10,12 +10,7 @@ use Misaf\VendraInquiry\Models\Inquiry;
 final class SubmitInquiryAction
 {
     /**
-     * Record what someone wrote in from the storefront.
-     *
-     * The message is stored verbatim — it is evidence of what a customer
-     * asked for, so nothing here trims, formats, or interprets it. The caller
-     * validates the fields first — the storefront API does so with
-     * `SubmitInquiryRequest`.
+     * The message is stored verbatim. The caller validates the fields first.
      *
      * @param  array<string, mixed>|null  $metadata
      */

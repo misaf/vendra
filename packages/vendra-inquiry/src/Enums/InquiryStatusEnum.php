@@ -10,10 +10,6 @@ use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
 
-/**
- * Where an enquiry stands in the studio's inbox. Answering is the point, so
- * the states track a reply rather than a workflow.
- */
 enum InquiryStatusEnum: string implements HasColor, HasIcon, HasLabel
 {
     case New = 'new';

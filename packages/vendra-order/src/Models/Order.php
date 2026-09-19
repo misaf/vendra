@@ -81,10 +81,6 @@ final class Order extends Model implements ShouldLogActivity
     use HasStates;
     use SoftDeletes;
 
-    /**
-     * Default the customer-facing number so an order is never persisted
-     * without the reference customers quote back to support.
-     */
     protected static function booted(): void
     {
         self::creating(function (self $order): void {

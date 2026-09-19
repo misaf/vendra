@@ -8,15 +8,6 @@ use InvalidArgumentException;
 use JsonException;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
-/**
- * Everything a provisioner needs to place one storefront, as a typed value.
- *
- * The port used to speak in `array<string, mixed>`, which meant the real
- * contract lived in the adapter's key lookups and the caller re-validated every
- * field it got back. Assembling the request in one named place also keeps the
- * job out of the payload-building business: it moves a deployment through its
- * states and nothing more.
- */
 final readonly class StorefrontProvisionRequest
 {
     /**
@@ -30,11 +21,9 @@ final readonly class StorefrontProvisionRequest
     ) {}
 
     /**
-     * Build the request for a stored deployment.
+     * Build the request for a deployment.
      *
-     * The identity fields are re-derived from the deployment row rather than
-     * trusted from the stored configuration, so a container is never created for
-     * a domain the deployment does not claim.
+     * Identity fields come from the deployment row, never the stored configuration.
      */
     public static function for(StorefrontDeployment $deployment): self
     {
@@ -56,8 +45,6 @@ final readonly class StorefrontProvisionRequest
     }
 
     /**
-     * The configuration as the container receives it: base64-encoded JSON.
-     *
      * @throws JsonException
      */
     public function encodedConfiguration(): string

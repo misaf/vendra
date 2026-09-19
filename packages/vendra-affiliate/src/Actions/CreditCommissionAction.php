@@ -16,9 +16,7 @@ use Misaf\VendraAffiliate\Models\AffiliateReferral;
 use Spatie\QueueableAction\QueueableAction;
 
 /**
- * The single writer for the commission ledger. Crediting is idempotent per
- * conversion source: the (conversion_type, source_type, source_id) unique
- * index guarantees repeated events cannot double-credit.
+ * A unique index on the conversion source keeps repeated events from double-crediting.
  */
 final class CreditCommissionAction
 {

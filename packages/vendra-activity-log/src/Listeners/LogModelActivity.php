@@ -14,25 +14,17 @@ use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 
 /**
- * Records activity for any model implementing {@see ShouldLogActivity}.
- *
- * This listener is bound to the wildcard Eloquent lifecycle events by
- * {@see ActivityLogServiceProvider}, which
- * means models opt into logging purely by implementing the marker contract and
- * never need to depend on this package directly. It mirrors the previous
- * Spatie `LogsActivity` behaviour of logging fillable attributes (except `id`).
+ * Bound to the wildcard Eloquent events by {@see ActivityLogServiceProvider}.
  */
 final class LogModelActivity
 {
     /**
-     * Attributes that are never logged unless a model narrows the list itself.
-     *
      * @var list<string>
      */
     private const array DEFAULT_EXCEPT = ['id'];
 
     /**
-     * Handle a wildcard Eloquent model event (e.g. "eloquent.updated: App\Models\Foo").
+     * The event name looks like "eloquent.updated: App\Models\Foo".
      *
      * @param  array<int, mixed>  $payload
      */
@@ -65,7 +57,7 @@ final class LogModelActivity
     }
 
     /**
-     * Extract the bare event name ("updated") from the full event ("eloquent.updated: Foo").
+     * Get the bare event name, such as "updated", from the full event name.
      */
     private function eventFrom(string $eventName): string
     {
@@ -85,9 +77,6 @@ final class LogModelActivity
     }
 
     /**
-     * Tracked model changes, stored in the dedicated `attribute_changes` column
-     * (spatie/laravel-activitylog v5 keeps these separate from `properties`).
-     *
      * @param  list<string>  $attributes
      * @return array<string, mixed>
      */
@@ -117,8 +106,6 @@ final class LogModelActivity
     }
 
     /**
-     * Custom, non-change metadata stored in the `properties` column.
-     *
      * @return array<string, mixed>
      */
     private function properties(): array

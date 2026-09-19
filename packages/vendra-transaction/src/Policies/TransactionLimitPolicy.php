@@ -13,8 +13,7 @@ use Misaf\VendraSupport\Authorization\ResolvesPolicyPermissions;
 use Misaf\VendraTransaction\Enums\WalletPolicyEnum;
 
 /**
- * Limits are managed inline on their wallet, so they are governed by the
- * wallet permissions rather than their own set.
+ * Limits are managed on their wallet and governed by the wallet permissions.
  */
 final class TransactionLimitPolicy
 {

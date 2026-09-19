@@ -7,10 +7,6 @@ namespace Misaf\VendraStore\Exceptions;
 use DomainException;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 
-/**
- * A storefront deployment was asked to move to a status its current one does not
- * allow — for example back to Failed while the queue is still retrying it.
- */
 final class InvalidStorefrontTransitionException extends DomainException
 {
     public static function between(StorefrontDeploymentStatus $from, StorefrontDeploymentStatus $to): self

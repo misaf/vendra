@@ -129,26 +129,20 @@ final class Plan extends Model implements ShouldLogActivity
         return $this->subscriptions()->withTrashed()->exists();
     }
 
-    /**
-     * Resolve the subscription end date for a period starting at the given date.
-     */
     public function resolveEndDate(Carbon $start): Carbon
     {
         return Date::instance($this->period_unit->advance($start, $this->period_count));
     }
 
-    /**
-     * Whether this plan has no recurring charge.
-     */
     public function isFree(): bool
     {
         return $this->price === 0;
     }
 
     /**
-     * The plan's recurring charge formatted for display, e.g. `$29.00`.
-     * Falls back to a plain number and code for currencies the money
-     * formatter does not recognize.
+     * Format the plan's price for display, such as `$29.00`.
+     *
+     * Unknown currencies fall back to a plain number and code.
      */
     public function formattedPrice(): string
     {
@@ -164,34 +158,23 @@ final class Plan extends Model implements ShouldLogActivity
     }
 
     /**
-     * The price rendered as a plain localized number, falling back to the raw
-     * value when the formatter cannot render it.
+     * Format the price as a plain localized number, or the raw value on failure.
      */
     private function formatPlainPrice(): string
     {
         return Number::format($this->price, locale: 'en') ?: (string) $this->price;
     }
 
-    /**
-     * Whether the plan offers a trial period.
-     */
     public function hasTrial(): bool
     {
         return $this->trial_days > 0;
     }
 
-    /**
-     * Whether the plan grants the given feature entitlement.
-     */
     public function allows(string $feature): bool
     {
         return in_array($feature, $this->features ?? [], true);
     }
 
-    /**
-     * The moment a lapsed subscription should fall out of grace:
-     * the period end plus the plan's grace window.
-     */
     public function resolveSuspendDate(Carbon $endsAt): Carbon
     {
         return $endsAt->copy()->addDays($this->grace_days);

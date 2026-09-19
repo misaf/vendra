@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Traversable;
 
 /**
- * Restricts the generated OpenAPI document to the operations carrying one of the
- * tags requested through the `tags` query parameter, e.g.
- * `/api/docs.jsonopenapi?tags=Product`.
+ * Limit the OpenAPI document to the `tags` query parameter, such as `?tags=Product`.
  */
 final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterface
 {
@@ -27,8 +25,6 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
     private const string SCHEMA_REF_PREFIX = '#/components/schemas/';
 
     /**
-     * Every HTTP method exposed by a path item, mapped to its accessor pair.
-     *
      * @var array<int, string>
      */
     private const array METHODS = ['Get', 'Put', 'Post', 'Delete', 'Options', 'Head', 'Patch', 'Trace'];
@@ -67,9 +63,6 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
         return $this->pruneSchemas($openApi);
     }
 
-    /**
-     * Drops the component schemas that the remaining paths no longer reference.
-     */
     private function pruneSchemas(OpenApi $openApi): OpenApi
     {
         $components = $openApi->getComponents();
@@ -105,8 +98,6 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
     }
 
     /**
-     * Recursively gathers every `#/components/schemas/*` reference held by the value.
-     *
      * @return array<int, string>
      */
     private function collectSchemaReferences(mixed $value): array

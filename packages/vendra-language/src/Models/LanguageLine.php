@@ -100,10 +100,6 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
         ];
     }
 
-    /**
-     * Public because LanguageLineObserver drives it; a private method was only
-     * reachable while this ran in a same-class `booted()` closure.
-     */
     public function flushOriginalTranslationCache(): void
     {
         $group = $this->getRawOriginal('group');

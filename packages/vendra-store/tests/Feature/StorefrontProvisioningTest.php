@@ -14,8 +14,7 @@ use Misaf\VendraStore\Models\StorefrontDeployment;
 beforeEach(function (): void {
     Queue::fake();
 
-    // Container provisioning itself has its own file; this one covers the
-    // configuration the platform builds and the commands that queue it.
+    // Covers the built configuration and commands; container provisioning has its own file.
     Config::set('container.drivers.docker.host', 'unix:///var/run/docker.sock');
 });
 

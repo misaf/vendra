@@ -11,16 +11,9 @@ use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Spatie\LaravelSettings\SettingsRepositories\DatabaseSettingsRepository as SpatieDatabaseSettingsRepository;
 
 /**
- * A database settings repository that reads and writes one scope.
- *
- * Both concrete repositories share every query here; they differ only in the
- * tenant they answer for. Reads and writes are keyed on the non-null
- * {@see SettingsScope} column rather than on `tenant_id`, so an upsert conflicts
- * with the row it means to replace for platform rows too.
- *
- * The tenant global scopes on the property model are deliberately dropped: they
- * add no constraint at all when no tenant is current, which would let a console
- * request read whichever tenant's row happened to come first.
+ * Queries key on the non-null scope column so upserts also work for platform
+ * rows. Tenant global scopes are dropped, since they constrain nothing without
+ * a current tenant.
  */
 abstract class ScopedSettingsRepository extends SpatieDatabaseSettingsRepository
 {
@@ -67,9 +60,6 @@ abstract class ScopedSettingsRepository extends SpatieDatabaseSettingsRepository
         $this->persist($rows, ['payload']);
     }
 
-    /**
-     * The tenant this repository answers for, or null for the platform.
-     */
     abstract protected function tenantId(): ?int;
 
     protected function scope(): string

@@ -14,13 +14,6 @@ use Filament\Schemas\Schema;
 use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
-/**
- * The store's own general settings.
- *
- * The admin panel runs inside the tenant middleware stack, so saving here
- * writes rows in the current store's scope; until it does, the values shown are
- * the platform defaults the settings migration created.
- */
 final class ManageGeneralSettings extends SettingsPage
 {
     /**

@@ -8,20 +8,12 @@ use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 use RuntimeException;
 
-/**
- * Look-up of the active payment gateways, and of the built-in internal one that
- * moves money between wallets without leaving the platform.
- *
- * Split out of the former TransactionService so that callers needing a gateway
- * no longer also receive wallet resolution and limit look-up.
- */
 final class TransactionGatewayRegistry
 {
     public const string INTERNAL_GATEWAY_SLUG = 'internal-transactions';
 
     /**
-     * Whether any *external* gateway is active. The internal one is always
-     * present, so counting it would make this answer meaningless.
+     * Determine if any external gateway is active.
      */
     public function hasAnyActive(): bool
     {

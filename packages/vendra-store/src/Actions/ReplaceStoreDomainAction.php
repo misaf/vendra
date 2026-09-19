@@ -18,29 +18,10 @@ final readonly class ReplaceStoreDomainAction
     public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * Replace a store's active domain, retaining the previous one as history.
-     *
-     * The current active domain (active = true) is demoted to a replaced
-     * history record (active = false) and soft-deleted, so it stops resolving
-     * but stays visible behind the trashed filter. A fresh active domain is
-     * then created. Runs in the store's own tenant context so the domain
-     * records are scoped to this store regardless of the currently active one.
-     *
-     * Demotion and creation share one transaction. Without it a failing
-     * create — a unique collision on the new domain is the likely one — leaves
-     * the previous domain already deactivated and trashed, so the store
-     * resolves to nothing and is unreachable with no automatic way back.
-     *
-     * The storefront moves with it. A storefront is routed by a `Host()` rule in
-     * a container label, and a container's labels cannot be edited in place, so
-     * following the store to its new domain means replacing the container —
-     * which is what provisioning does anyway. Leaving that out was the bug: the
-     * storefront went on answering the old domain, the new one had no router at
-     * all, and convergence could not see the difference.
-     *
-     * The caller normalizes and validates the domain — the active-domain rules
-     * and a free storefront deployment domain — as
-     * `Filament\Actions\ReplaceDomainTableAction` does.
+     * The previous domain is kept as trashed history. Demotion and creation
+     * share a transaction so a failed create never leaves the store without a
+     * domain. The storefront is redeployed because its routing label cannot
+     * change in place. The caller validates the domain first.
      */
     public function execute(Store $store, string $domain): StoreDomain
     {

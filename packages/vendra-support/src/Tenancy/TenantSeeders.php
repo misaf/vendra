@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Tenancy;
 
-/**
- * Registry of tenant seed commands, populated by each seedable module from its
- * own service provider. The provisioning flow runs them in ascending priority
- * order, so no single module has to know the full list of seeders.
- */
 final class TenantSeeders
 {
     /**
@@ -22,8 +17,7 @@ final class TenantSeeders
     }
 
     /**
-     * Seed command signatures ordered by ascending priority. PHP's asort is
-     * stable, so commands registered with equal priority keep insertion order.
+     * Get the seed commands by ascending priority, keeping registration order for ties.
      *
      * @return list<string>
      */

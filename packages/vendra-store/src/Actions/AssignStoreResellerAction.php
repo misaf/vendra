@@ -12,22 +12,9 @@ use Misaf\VendraStore\Support\StoreQuota;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 
 /**
- * Move a store to a different billing reseller, or to none.
- *
- * The console owns this operation: a store may be created for one reseller and
- * later handed to another, or taken back and run by the platform directly. A
- * null reseller is that second case, not an error.
- *
- * Reassignment is a creation as far as the receiving reseller's plan is
- * concerned — it consumes a slot they have to have — so it goes through the
- * same {@see StoreQuota} check and the same row lock as a fresh store. Without
- * the lock, two administrators handing two stores to the same reseller could
- * both see its last free slot.
- *
- * This action names no reseller class: the store package sits below the
- * reseller domain, so the reseller arrives typed as a `SubscriptionSubscriber`
- * and only `stores.reseller_id` — a plain nullable key here — records which one
- * it was.
+ * A null reseller means the platform runs the store directly. Reassignment
+ * consumes a slot in the receiving reseller's plan, so it takes the same
+ * {@see StoreQuota} check and row lock as a new store.
  */
 final readonly class AssignStoreResellerAction
 {
@@ -69,12 +56,9 @@ final readonly class AssignStoreResellerAction
     }
 
     /**
-     * The receiving reseller's key, once their plan is known to have room.
+     * Get the receiving reseller's key once their plan is known to have room.
      *
-     * A store already belonging to this reseller is a no-op rather than a quota
-     * failure: re-selecting the current reseller must not fail because they are
-     * at their limit, since the store they are "gaining" is one they already
-     * have.
+     * Re-selecting the store's current reseller never fails the quota check.
      *
      * @param  Model&SubscriptionSubscriber  $reseller
      */

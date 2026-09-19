@@ -16,13 +16,6 @@ enum StorefrontDeploymentStatus: string implements HasColor, HasLabel
     case Failed = 'failed';
 
     /**
-     * Statuses reachable from this one.
-     *
-     * The lifecycle used to live in scattered `forceFill(['status' => ...])`
-     * calls, which is how a deployment could be marked Failed by a job attempt
-     * that was still going to retry. Declaring it here means an illegal
-     * transition is a rejected write rather than a status nobody notices is wrong.
-     *
      * @return list<self>
      */
     public function transitions(): array
@@ -41,9 +34,6 @@ enum StorefrontDeploymentStatus: string implements HasColor, HasLabel
         return in_array($status, $this->transitions(), true);
     }
 
-    /**
-     * Whether provisioning finished, successfully or not.
-     */
     public function isSettled(): bool
     {
         return match ($this) {

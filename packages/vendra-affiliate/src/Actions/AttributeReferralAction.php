@@ -13,8 +13,7 @@ use Misaf\VendraUser\Models\User;
 use Spatie\QueueableAction\QueueableAction;
 
 /**
- * Binds a newly registered user to the affiliate whose code referred them.
- * A user can only ever be attributed once; self-referrals are ignored.
+ * A user is attributed once; self-referrals are ignored.
  */
 final class AttributeReferralAction
 {

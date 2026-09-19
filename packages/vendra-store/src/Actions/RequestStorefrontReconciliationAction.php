@@ -8,11 +8,8 @@ use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * Asks the storefront worker to converge one storefront.
- *
- * Panels run in a container without a runtime socket, so they cannot observe or
- * correct a container themselves; {@see ReconcileStoreStorefrontAction} does that
- * work on the storefront queue.
+ * Panels have no runtime socket, so {@see ReconcileStoreStorefrontAction} runs
+ * on the storefront queue.
  */
 final class RequestStorefrontReconciliationAction
 {

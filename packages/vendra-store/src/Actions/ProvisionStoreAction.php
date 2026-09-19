@@ -18,12 +18,8 @@ use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraUser\Models\User;
 
 /**
- * Creates a store and everything it needs to be usable: the administrator user,
- * the administrator role, and the queued work that finishes provisioning.
- *
- * The console and the reseller panel both call this — they differ only in which
- * reseller they resolve — so the flow exists once instead of being copied into
- * each panel. Callers pass a normalized, validated domain and email.
+ * Shared by the console and reseller panels. Callers pass a normalized,
+ * validated domain and email.
  */
 final readonly class ProvisionStoreAction
 {

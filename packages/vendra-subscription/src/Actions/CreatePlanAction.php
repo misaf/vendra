@@ -10,8 +10,7 @@ use Misaf\VendraSubscription\Models\Plan;
 final class CreatePlanAction
 {
     /**
-     * Creates a plan. `PlanObserver` settles the single active default inside
-     * the same transaction, so the write and its default hand-off land together.
+     * `PlanObserver` settles the default in the same transaction.
      *
      * @param  array<string, mixed>  $attributes
      */

@@ -51,11 +51,7 @@ final class OrderServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        /**
-         * Stable aliases keep persisted morph columns (order customers, and
-         * orders referenced as a source elsewhere) decoupled from the model
-         * FQCNs, so relocating a model class never orphans stored rows.
-         */
+        // Stable aliases, so moving a model class never orphans stored morph rows.
         Relation::morphMap([
             'order' => Order::class,
             'order_line' => OrderLine::class,

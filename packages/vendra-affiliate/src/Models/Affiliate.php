@@ -107,7 +107,7 @@ final class Affiliate extends Model implements ShouldLogActivity
     }
 
     /**
-     * The approved-but-unpaid commission total in minor units.
+     * Get the approved but unpaid commission total in minor units.
      */
     public function pendingBalance(): int
     {
@@ -123,9 +123,6 @@ final class Affiliate extends Model implements ShouldLogActivity
             ->sum('amount');
     }
 
-    /**
-     * The bounty credited for an attributed signup, in minor units.
-     */
     public function signupBounty(): int
     {
         return $this->signup_bounty ?? Config::integer('vendra-affiliate.defaults.signup_bounty', 0);

@@ -39,8 +39,7 @@ final class Cart extends Model
     use HasFactory;
 
     /**
-     * Default the expiry from configuration unless the caller provided one,
-     * including an explicit null for carts that should never expire.
+     * Default the expiry from config unless one, even null, was given.
      */
     protected static function booted(): void
     {

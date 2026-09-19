@@ -17,10 +17,6 @@ use Misaf\VendraOrder\Database\Factories\OrderLineFactory;
 use Spatie\Translatable\HasTranslations;
 
 /**
- * An immutable purchase snapshot. The translatable name, unit amount and
- * currency are copied from the catalog when the order is placed so later
- * catalog edits never rewrite what a customer bought.
- *
  * @property int $id
  * @property int $order_id
  * @property string $sellable_type

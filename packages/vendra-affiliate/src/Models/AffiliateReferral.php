@@ -18,9 +18,6 @@ use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraUser\Traits\BelongsToUser;
 
 /**
- * The attribution record linking a referred user to the affiliate who
- * recruited them; each user can be attributed to at most one affiliate.
- *
  * @property int $id
  * @property int $tenant_id
  * @property int $affiliate_id

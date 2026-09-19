@@ -13,9 +13,7 @@ use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
 
 /**
- * Lifecycle of a transaction: it enters as Pending, may pass through
- * Processing and Review, and terminates in Approved (settled to the
- * ledger), Declined, or Failed.
+ * A transaction's state: Pending, Processing, or Review, ending in Approved, Declined, or Failed.
  *
  * @extends State<Transaction>
  */
@@ -32,9 +30,6 @@ abstract class TransactionState extends State implements HasColor, HasIcon, HasL
             ->allowTransition([Pending::class, Processing::class, Review::class], Failed::class);
     }
 
-    /**
-     * Whether the state is terminal and allows no further transitions.
-     */
     public function isFinal(): bool
     {
         return false;

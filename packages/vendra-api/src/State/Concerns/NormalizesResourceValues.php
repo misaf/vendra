@@ -24,8 +24,7 @@ trait NormalizesResourceValues
     }
 
     /**
-     * Normalize rich-text translations that are stored as structured documents
-     * (Tiptap JSON) rather than plain strings, keeping the document intact.
+     * Normalize rich-text translations stored as Tiptap documents.
      *
      * @param  array<array-key, mixed>  $translations
      * @return array<string, array<array-key, mixed>|string>

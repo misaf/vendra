@@ -10,9 +10,7 @@ use Illuminate\Console\Command;
 use Misaf\VendraTransaction\Models\Wallet;
 
 /**
- * Recomputes every wallet balance from its immutable ledger entries and
- * reports wallets whose cached balance has drifted. With --repair the
- * cached balance is reset to the ledger-derived value.
+ * With `--repair`, the balance is reset from the ledger.
  */
 #[Description('Verify cached wallet balances against the ledger')]
 #[Signature('vendra-transaction:verify-balances {--repair : Reset drifted cached balances to the ledger-derived value}')]

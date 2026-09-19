@@ -11,7 +11,7 @@ use Misaf\VendraStore\Models\StorefrontImage;
 final class DeleteStorefrontImageAction
 {
     /**
-     * @throws StorefrontImageInUseException when a deployment still references the image
+     * @throws StorefrontImageInUseException
      */
     public function execute(StorefrontImage $image): void
     {

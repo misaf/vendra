@@ -7,10 +7,6 @@ namespace Misaf\VendraDeveloperLogins\Support;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 
-/**
- * Resolves the host application's user model so the module can offer
- * developer logins without depending on a concrete user package.
- */
 final class DeveloperLoginsUsers
 {
     /**

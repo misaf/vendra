@@ -8,12 +8,8 @@ use Misaf\VendraSupport\Contracts\AttributeApiResolver;
 use Throwable;
 
 /**
- * Resolves the optional misaf/vendra-attribute-api integration.
- *
- * Attribute-value schemas, relationships, filters, and include paths are only
- * exposed when the API package is installed *and* the domain module
- * (vendra-attribute) is registered; consumers must remain fully functional
- * without either.
+ * Attribute API features are only exposed when both the API and domain packages
+ * are installed; consumers must work without them.
  */
 final class AttributeApiIntegration
 {

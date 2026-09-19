@@ -7,43 +7,22 @@ namespace Misaf\VendraStore\Support;
 use JsonException;
 
 /**
- * Turns a storefront deployment request plus the estate's settings into the
- * container definition that should run for it.
- *
- * This is the seam between the two layers: everything above it is a store
- * with a domain and a configuration; everything below it is a
- * container the runtime knows how to place. A mapper, not a builder — two typed
- * inputs in, one typed value out, no state of its own beyond the settings it is
- * constructed with.
- *
- * What it deliberately does not do is speak Docker. Nanoseconds, `KEY=VALUE`
- * the Engine's payload shape is kept inside the storefront runtime adapter;
- * callers above this factory still name only storefront concerns.
+ * Docker payload details stay in the runtime adapter.
  */
 final readonly class StorefrontContainerDefinitionFactory
 {
     /**
-     * The label a platform-placed storefront carries, and its value.
+     * The label that marks a container as placed by the platform.
      *
-     * Checked before anything is replaced or removed: the platform manages the
-     * containers it created and never touches one somebody else put on the same
-     * runtime.
-     *
-     * A container's labels cannot be edited in place, so changing this value
-     * makes every container already carrying the old one unrecognisable — the
-     * platform will refuse to replace them rather than adopt them. Any change
-     * here has to be paired with destroying and redeploying the estate.
+     * Labels cannot change in place, so renaming this orphans every existing
+     * container until the estate is destroyed and redeployed.
      */
     public const string MANAGED_BY_LABEL = 'io.vendra.managed-by';
 
     public const string MANAGED_BY = 'vendra';
 
     /**
-     * The domain a placed storefront is routed on.
-     *
-     * Read back by reconciliation: a container's labels cannot be edited, so
-     * this is what a running storefront still believes its host is, and the only
-     * way a converge pass can tell that a store's domain has moved on without it.
+     * The label holding the storefront's routed domain, read back by reconciliation.
      */
     public const string DOMAIN_LABEL = 'io.vendra.domain';
 
@@ -99,11 +78,9 @@ final readonly class StorefrontContainerDefinitionFactory
     }
 
     /**
-     * Traefik routing, plus the markers that say who placed the container.
+     * Get the Traefik routing and ownership labels.
      *
-     * The load balancer health check matters as much as the container's own:
-     * without it Traefik keeps routing to a container the runtime already knows
-     * is unhealthy, so a bad deploy 502s instead of draining.
+     * The load balancer health check stops Traefik routing to an unhealthy container.
      *
      * @return array<string, string>
      */
@@ -124,8 +101,7 @@ final readonly class StorefrontContainerDefinitionFactory
             "traefik.http.routers.{$slug}.entrypoints" => 'websecure',
             "traefik.http.routers.{$slug}.tls" => 'true',
 
-            // Ownership markers, so the platform can tell a container it placed
-            // from one it did not and never replaces or removes somebody else's.
+            // Ownership markers, so the platform never touches another container.
             self::MANAGED_BY_LABEL => self::MANAGED_BY,
             'io.vendra.slug' => $slug,
             self::DOMAIN_LABEL => $domain,

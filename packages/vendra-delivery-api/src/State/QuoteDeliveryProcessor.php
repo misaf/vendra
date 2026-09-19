@@ -12,10 +12,7 @@ use Misaf\VendraDeliveryApi\ApiResource\DeliveryQuoteResource;
 use Misaf\VendraDeliveryApi\ApiResource\QuotedDelivery;
 
 /**
- * Price one dropped pin.
- *
- * The answer is deliberately read-only: nothing is reserved and nothing is
- * written, so the storefront may call it on every drag of the map pin.
+ * Price a dropped pin without writing anything, so it can run on every drag.
  *
  * @implements ProcessorInterface<DeliveryQuoteResource, QuotedDelivery>
  */

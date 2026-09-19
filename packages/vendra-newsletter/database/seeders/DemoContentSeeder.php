@@ -28,10 +28,9 @@ final class DemoContentSeeder extends BaseDemoContentSeeder
     }
 
     /**
-     * Newsletters are keyed on their subject and subscribers on their email
-     * address (a tenant-scoped unique), so a repeated run inserts nothing.
-     * Store provisioning retries the whole seed list on failure, so a partial
-     * run has to be safe to repeat.
+     * Seed the fixtures idempotently, keyed on subject and subscriber email.
+     *
+     * Store provisioning retries the whole seed list, so a partial run must be repeatable.
      *
      * @param  list<array<string, mixed>>  $records
      */

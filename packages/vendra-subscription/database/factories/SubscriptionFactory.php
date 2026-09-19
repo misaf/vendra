@@ -33,8 +33,7 @@ final class SubscriptionFactory extends Factory
     }
 
     /**
-     * Attach the subscription to a subscriber — a model (resolved
-     * polymorphically) or a bare id under the default subscriber type.
+     * Attach the subscription to a subscriber model, or an id of the default type.
      */
     public function forSubscriber(Model|int $subscriber): static
     {

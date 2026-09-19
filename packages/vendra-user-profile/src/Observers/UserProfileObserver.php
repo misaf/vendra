@@ -6,13 +6,6 @@ namespace Misaf\VendraUserProfile\Observers;
 
 use Misaf\VendraUserProfile\Models\UserProfile;
 
-/**
- * Holds the "one default profile per user" invariant.
- *
- * Synchronous: the demotion of the previous default has to land in the same
- * write as the promotion, or a reader between the two sees either two defaults
- * or none.
- */
 final class UserProfileObserver
 {
     public function saving(UserProfile $userProfile): void

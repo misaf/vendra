@@ -9,14 +9,9 @@ return [
     | Cross-Origin Resource Sharing (CORS)
     |--------------------------------------------------------------------------
     |
-    | Only the canonical API is cross-origin. The admin, console and reseller
-    | panels are same-origin Livewire apps and must NOT be exposed here.
-    |
-    | `allowed_origins` is intentionally empty: the real allowlist is the set of
-    | active storefront domains, which is data rather than configuration. It is
-    | injected at request time by App\Http\Middleware\HandleStorefrontCors from
-    | Misaf\VendraStore\Support\StorefrontOrigins. An empty list denies every cross-origin
-    | call, so a misconfiguration fails closed.
+    | Only the canonical API is cross-origin; the panels must not be exposed.
+    | The allowed origins are the active storefront domains, which
+    | HandleStorefrontCors supplies per request. An empty list fails closed.
     |
     */
 
@@ -42,12 +37,7 @@ return [
 
     'max_age' => 3600,
 
-    /*
-     | Storefront calls are not cookie-authenticated: the API is stateless and a
-     | per-storefront credential is the intended mechanism. Keep this false until
-     | that lands — flipping it on requires an exact-origin echo (never `*`),
-     | which the allowlist above already guarantees.
-     */
+    // The API is stateless, so storefront calls carry no cookies.
     'supports_credentials' => false,
 
 ];

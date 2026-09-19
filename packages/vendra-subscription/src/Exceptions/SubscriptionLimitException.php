@@ -57,9 +57,6 @@ final class SubscriptionLimitException extends RuntimeException
         ));
     }
 
-    /**
-     * Render a model primary key for a diagnostic message.
-     */
     private static function formatKey(mixed $key): string
     {
         return is_scalar($key) ? (string) $key : '';

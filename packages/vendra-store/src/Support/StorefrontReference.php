@@ -8,12 +8,7 @@ use InvalidArgumentException;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
 /**
- * Which storefront a lifecycle call is about.
- *
- * The slug is the platform's stable handle for a storefront: the container name
- * derives from it, so start/stop/destroy/status need nothing else. It is a value
- * rather than a bare string so a lifecycle port cannot be called with a domain,
- * an id, or a container name by mistake.
+ * Identify a storefront by its slug, from which the container name derives.
  */
 final readonly class StorefrontReference
 {

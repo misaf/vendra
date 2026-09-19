@@ -10,10 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Misaf\VendraSubscription\Models\Subscription;
 
 /**
- * A subscriber's most recent subscription ended more than the plan's grace
- * window ago while it still holds active units. Consumers react by
- * suspending those units and notifying the contact. Carries the lapsed
- * subscription; resolve its subscriber to act.
+ * Dispatched when a subscriber with active units is past its plan's grace window.
  */
 final readonly class SubscriptionGraceExpired implements ShouldDispatchAfterCommit
 {

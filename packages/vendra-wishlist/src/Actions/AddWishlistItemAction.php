@@ -12,12 +12,8 @@ use Misaf\VendraWishlist\Models\WishlistItem;
 final class AddWishlistItemAction
 {
     /**
-     * Save a sellable to a wishlist.
-     *
-     * Adding is idempotent: a customer tapping the heart twice keeps one row,
-     * not two. The row lock inside the transaction makes the "is it already
-     * saved" check hold until the write lands, so two taps racing each other
-     * cannot both insert past the unique index.
+     * Saving an item twice is a no-op. A row lock stops concurrent saves from
+     * inserting twice.
      *
      * @param  array<string, mixed>|null  $metadata
      */

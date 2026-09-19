@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Spatie\LaravelSettings\Migrations\SettingsMigration;
 
 /**
- * The platform row every store reads until it saves general settings of its
- * own. Written with no tenant current, so it lands in the platform scope.
+ * Create the platform defaults every store reads until it saves its own.
  */
 return new class extends SettingsMigration
 {

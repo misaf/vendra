@@ -14,9 +14,7 @@ abstract class TenantSeedCommand extends SeedCommand
     private const int TENANT_SEARCH_LIMIT = 10;
 
     /**
-     * When the application is not tenant-aware, seeding runs globally and no
-     * tenant is required. Otherwise a tenant is resolved from the optional
-     * argument (or prompted for interactively) and made current for the run.
+     * Make the given or prompted tenant current, unless tenancy is disabled.
      */
     protected function prepareForSeeding(): bool
     {

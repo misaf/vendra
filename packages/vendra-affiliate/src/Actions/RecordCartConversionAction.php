@@ -12,9 +12,7 @@ use Misaf\VendraUser\Models\User;
 use Spatie\QueueableAction\QueueableAction;
 
 /**
- * Credits a checkout commission for a referred buyer. vendra-cart has no
- * checkout event or stored totals yet, so host applications call this action
- * from their checkout flow with the order total in minor units.
+ * vendra-cart has no checkout event yet, so hosts call this with the order total.
  */
 final class RecordCartConversionAction
 {

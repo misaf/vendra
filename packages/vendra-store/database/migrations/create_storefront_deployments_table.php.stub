@@ -21,8 +21,7 @@ return new class extends Migration
             // What the platform last observed.
             $table->string('status')->index();
 
-            // What the platform intends, so a deliberately stopped storefront is
-            // not restarted by the next reconciliation pass.
+            // What the platform intends.
             $table->string('desired_state')->default('running')->index();
 
             $table->string('container_name')->nullable();

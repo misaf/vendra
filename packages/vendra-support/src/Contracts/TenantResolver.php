@@ -21,9 +21,7 @@ interface TenantResolver
     public function modelClass(): string;
 
     /**
-     * The foreign key tenant-scoped tables carry. Vendra keeps the neutral
-     * `tenant_id`; an application may configure `company_id` or `workspace_id`
-     * instead, so read it from here rather than assuming.
+     * Get the tenant foreign key, such as `tenant_id`; never assume the name.
      */
     public function foreignKey(): string;
 
@@ -32,16 +30,16 @@ interface TenantResolver
     public function makeCurrent(Model|int|string $tenant): bool;
 
     /**
-     * Run the callback within the given tenant's context, restoring the
-     * previous context afterwards. Runs the callback as-is when tenancy
-     * is disabled.
+     * Run the callback in the tenant's context, then restore the previous one.
+     *
+     * Runs the callback as-is when tenancy is disabled.
      */
     public function execute(Model|int|string $tenant, Closure $callback): mixed;
 
     /**
-     * Run the callback once within each tenant's context, restoring the
-     * previous context afterwards. Runs the callback once with no tenant
-     * context when tenancy is disabled.
+     * Run the callback in each tenant's context, then restore the previous one.
+     *
+     * Runs the callback once without a tenant when tenancy is disabled.
      */
     public function eachTenant(Closure $callback): void;
 

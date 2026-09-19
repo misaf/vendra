@@ -16,12 +16,6 @@ use Misaf\VendraWishlistApi\ApiResource\SavedItemResource;
 use Misaf\VendraWishlistApi\ApiResource\WishlistResource;
 
 /**
- * Save a product to the caller's default list.
- *
- * The list is resolved rather than chosen: a heart on a product card has no
- * list to pick, so the first tap creates one. The answer is the whole list so
- * the storefront can re-render every heart in a single round trip.
- *
  * @implements ProcessorInterface<SavedItemResource, WishlistResource>
  */
 final readonly class SaveWishlistItemProcessor implements ProcessorInterface
@@ -46,10 +40,6 @@ final readonly class SaveWishlistItemProcessor implements ProcessorInterface
         return $this->wishlistMapper->map($wishlist->load('items'));
     }
 
-    /**
-     * Only real catalog rows may be saved: an unchecked identifier would let a
-     * list fill up with things that never existed.
-     */
     private function resolveSellable(SavedItemResource $data): Model
     {
         $product = $data->sellableType === 'product'

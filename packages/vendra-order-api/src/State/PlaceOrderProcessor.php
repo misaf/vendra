@@ -28,13 +28,8 @@ use Misaf\VendraProduct\Models\ProductPrice;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
 /**
- * Convert the authenticated customer's cart into an order.
- *
- * Prices, names and availability are read from the catalog here rather than
- * accepted from the client, so a caller cannot dictate what it pays. The same
- * holds for delivery: the fee comes from the band `misaf/vendra-delivery`
- * matches the dropped pin to, never from the request. An address that module
- * prices by hand is refused outright rather than charged a guessed fee.
+ * Prices and delivery fees come from the catalog and delivery bands, never the
+ * client. Addresses that need a manual quote are refused.
  *
  * @implements ProcessorInterface<CheckoutResource, OrderResource>
  */
@@ -183,11 +178,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     }
 
     /**
-     * Price the delivery from the dropped pin.
-     *
-     * Without a pin there is nothing to price: the order is placed with a zero
-     * delivery amount and no delivery is scheduled, which is what an in-store
-     * collection or a hand-arranged address looks like.
+     * Price the delivery from the dropped pin; without one, nothing is delivered.
      */
     private function resolveDeliveryQuote(CheckoutResource $data, string $currencyCode): ?DeliveryQuote
     {
@@ -220,8 +211,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     }
 
     /**
-     * Only an address on one of the caller's own profiles may be delivered to,
-     * so a guessed identifier cannot address someone else's doorstep.
+     * Resolve an address from the caller's own profiles only.
      */
     private function resolveAddress(?int $addressId, Model $user): ?Address
     {
@@ -241,8 +231,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     }
 
     /**
-     * The product's name in every locale it has one, snapshotted onto the
-     * order line so a later catalog rename never rewrites the purchase.
+     * Get the product's name in every locale, to snapshot onto the order line.
      *
      * @return array<string, string>
      */
@@ -260,8 +249,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     }
 
     /**
-     * Refuse the checkout with a 422 the storefront can show against the
-     * offending field, instead of a partially written order.
+     * Refuse the checkout with a 422 error on the given field.
      */
     private function reject(string $property, string $message): never
     {

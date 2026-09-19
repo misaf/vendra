@@ -6,9 +6,6 @@ namespace Misaf\VendraDeliveryApi\ApiResource;
 
 use ApiPlatform\Metadata\ApiProperty;
 
-/**
- * The priced answer to a dropped pin.
- */
 final readonly class QuotedDelivery
 {
     /**

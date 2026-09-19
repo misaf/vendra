@@ -12,8 +12,7 @@ use Misaf\VendraSupport\Authorization\AuthorizesViewAbilities;
 use Misaf\VendraSupport\Authorization\ResolvesPolicyPermissions;
 
 /**
- * Order lines are immutable purchase snapshots: they are created with their
- * order and never edited or removed on their own.
+ * Order lines are created with their order and never edited or removed.
  */
 final class OrderLinePolicy
 {

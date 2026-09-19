@@ -14,14 +14,8 @@ use Misaf\VendraUser\Actions\CreateUserAction;
 use Misaf\VendraUser\Models\User;
 
 /**
- * Creates one store, its first domain, and its administrator user in a single
- * transaction.
- *
- * A store is either created directly from the console with no billing reseller,
- * or by a reseller that runs it. Which panel the request came from is not
- * recorded, because it is not business state. The reseller is typed as a
- * subscription subscriber rather than a concrete Reseller, so the store domain
- * stays below the reseller domain in the dependency graph.
+ * The reseller is typed as a subscription subscriber so the store package does
+ * not depend on the reseller package.
  */
 final readonly class CreateStoreAction
 {
@@ -31,14 +25,10 @@ final readonly class CreateStoreAction
     ) {}
 
     /**
-     * @param  (Model&SubscriptionSubscriber)|null  $reseller  the reseller billed
-     *                                                         for this store, or
-     *                                                         null for a direct
-     *                                                         console store
-     * @return array{store: Store, user: User}
+     * The caller normalizes and validates the domain first.
      *
-     * The caller normalizes and validates the domain with
-     * `StoreDomain::normalizeDomain()` and `StoreDomain::activeDomainRules()`.
+     * @param  (Model&SubscriptionSubscriber)|null  $reseller
+     * @return array{store: Store, user: User}
      */
     public function execute(
         string $name,
