@@ -88,6 +88,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
                 cardMessage: $data->cardMessage,
                 transactionGateway: $this->resolveGateway($data->gateway),
                 paymentReference: $data->paymentReference,
+                stockDeducted: true,
             );
 
             if ($quote !== null) {

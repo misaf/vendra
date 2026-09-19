@@ -396,7 +396,22 @@ it('returns the stock when a placed order is cancelled', function (): void {
 
     expect($product->fresh()?->quantity)->toBe(3);
 
-    resolve(CancelOrderAction::class)->execute(Order::query()->sole());
+    $order = Order::query()->sole();
+
+    expect($order->stock_deducted)->toBeTrue();
+
+    $order->cancel();
+
+    expect($product->fresh()?->quantity)->toBe(5)
+        ->and($order->fresh()?->stock_deducted)->toBeFalse();
+});
+
+it('returns no stock for a cancelled order that never took any', function (): void {
+    $product = orderApiProduct(quantity: 5);
+    $order = OrderFactory::new()->createOne();
+    OrderLineFactory::new()->forOrder($order)->forSellable($product)->createOne(['quantity' => 2]);
+
+    resolve(CancelOrderAction::class)->execute($order);
 
     expect($product->fresh()?->quantity)->toBe(5);
 });

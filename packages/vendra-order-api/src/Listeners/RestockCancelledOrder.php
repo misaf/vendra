@@ -12,6 +12,9 @@ use Misaf\VendraProduct\Models\Product;
 
 /**
  * Return the stock checkout took for a cancelled order's product lines.
+ *
+ * Orders that never took stock are skipped, and the flag is cleared once the
+ * stock is back, so it is never returned twice.
  */
 final readonly class RestockCancelledOrder
 {
@@ -19,9 +22,15 @@ final readonly class RestockCancelledOrder
 
     public function handle(OrderCancelled $event): void
     {
+        $order = $event->order;
+
+        if (! $order->stock_deducted) {
+            return;
+        }
+
         $quantities = [];
 
-        $event->order->lines()
+        $order->lines()
             ->where('sellable_type', Relation::getMorphAlias(Product::class))
             ->get()
             ->each(function (OrderLine $line) use (&$quantities): void {
@@ -29,5 +38,7 @@ final readonly class RestockCancelledOrder
             });
 
         $this->restockProducts->execute($quantities);
+
+        $order->update(['stock_deducted' => false]);
     }
 }
