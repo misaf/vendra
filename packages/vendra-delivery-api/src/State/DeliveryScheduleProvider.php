@@ -6,6 +6,7 @@ namespace Misaf\VendraDeliveryApi\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Misaf\VendraApi\State\Concerns\NormalizesResourceValues;
 use Misaf\VendraDelivery\Models\DeliverySlot;
 use Misaf\VendraDelivery\Support\DeliverySchedule;
 use Misaf\VendraDeliveryApi\ApiResource\DeliveryScheduleResource;
@@ -16,6 +17,8 @@ use Misaf\VendraDeliveryApi\ApiResource\DeliverySlot as DeliverySlotResource;
  */
 final readonly class DeliveryScheduleProvider implements ProviderInterface
 {
+    use NormalizesResourceValues;
+
     public function __construct(private DeliverySchedule $schedule) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): DeliveryScheduleResource
@@ -26,7 +29,7 @@ final readonly class DeliveryScheduleProvider implements ProviderInterface
             ->get()
             ->map(fn (DeliverySlot $slot): DeliverySlotResource => new DeliverySlotResource(
                 id: $slot->id,
-                name: self::translations($slot),
+                name: $this->normalizeTranslations($slot->getTranslations('name')),
                 startsAt: $slot->starts_at,
                 endsAt: $slot->ends_at,
             ))
@@ -37,21 +40,5 @@ final readonly class DeliveryScheduleProvider implements ProviderInterface
             dates: $this->schedule->bookableDates(),
             slots: $slots,
         );
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private static function translations(DeliverySlot $slot): array
-    {
-        $translations = [];
-
-        foreach ($slot->getTranslations('name') as $locale => $value) {
-            if (is_string($locale) && is_string($value)) {
-                $translations[$locale] = $value;
-            }
-        }
-
-        return $translations;
     }
 }

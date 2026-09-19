@@ -6,6 +6,7 @@ namespace Misaf\VendraDeliveryApi\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use Misaf\VendraApi\State\Concerns\NormalizesResourceValues;
 use Misaf\VendraDelivery\Models\DeliveryZone;
 use Misaf\VendraDelivery\Support\DeliveryZoneMatcher;
 use Misaf\VendraDeliveryApi\ApiResource\DeliveryQuoteResource;
@@ -18,6 +19,8 @@ use Misaf\VendraDeliveryApi\ApiResource\QuotedDelivery;
  */
 final readonly class QuoteDeliveryProcessor implements ProcessorInterface
 {
+    use NormalizesResourceValues;
+
     public function __construct(private DeliveryZoneMatcher $zoneMatcher) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): QuotedDelivery
@@ -31,27 +34,11 @@ final readonly class QuoteDeliveryProcessor implements ProcessorInterface
         return new QuotedDelivery(
             id: 'current',
             zoneId: $quote->zone?->id,
-            zoneName: $quote->zone instanceof DeliveryZone ? self::translations($quote->zone) : null,
+            zoneName: $quote->zone instanceof DeliveryZone ? $this->normalizeTranslations($quote->zone->getTranslations('name')) : null,
             distanceKm: $quote->distanceKm,
             feeAmount: $quote->feeAmount,
             currencyCode: $quote->currencyCode,
             requiresQuote: $quote->requiresQuote,
         );
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    private static function translations(DeliveryZone $zone): array
-    {
-        $translations = [];
-
-        foreach ($zone->getTranslations('name') as $locale => $value) {
-            if (is_string($locale) && is_string($value)) {
-                $translations[$locale] = $value;
-            }
-        }
-
-        return $translations;
     }
 }

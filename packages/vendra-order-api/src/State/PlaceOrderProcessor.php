@@ -9,9 +9,11 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraAddress\Models\Address;
+use Misaf\VendraApi\State\Concerns\NormalizesResourceValues;
 use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraCart\Models\CartItem;
 use Misaf\VendraDelivery\Actions\ScheduleDeliveryAction;
@@ -35,6 +37,8 @@ use Misaf\VendraTransaction\Models\TransactionGateway;
  */
 final readonly class PlaceOrderProcessor implements ProcessorInterface
 {
+    use NormalizesResourceValues;
+
     public function __construct(
         private PlaceOrderAction $placeOrder,
         private ScheduleDeliveryAction $scheduleDelivery,
@@ -129,7 +133,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
 
             $lines[] = new OrderLineDraft(
                 sellable: $product,
-                name: self::translatedName($product),
+                name: $this->normalizeTranslations($product->getTranslations('name')),
                 unitAmount: (int) $price->price->getAmount(),
                 quantity: $item->quantity,
                 metadata: $item->metadata,
@@ -141,7 +145,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
 
     private function resolveProduct(CartItem $item): Product
     {
-        $product = $item->sellable_type === 'product'
+        $product = $item->sellable_type === Relation::getMorphAlias(Product::class)
             ? Product::query()
                 ->with('productPrices')
                 ->whereHas('productCategory', fn (Builder $query) => $query->where('active', true))
@@ -167,7 +171,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
 
         $gateway = TransactionGateway::query()
             ->where('slug', $slug)
-            ->where('active', true)
+            ->active()
             ->first();
 
         if (! $gateway instanceof TransactionGateway) {
@@ -201,7 +205,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             return null;
         }
 
-        $slot = DeliverySlot::query()->where('active', true)->find($slotId);
+        $slot = DeliverySlot::query()->active()->find($slotId);
 
         if (! $slot instanceof DeliverySlot) {
             $this->reject('deliverySlotId', __('vendra-order-api::messages.delivery_slot_unavailable'));
@@ -228,24 +232,6 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         }
 
         return $address;
-    }
-
-    /**
-     * Get the product's name in every locale, to snapshot onto the order line.
-     *
-     * @return array<string, string>
-     */
-    private static function translatedName(Product $product): array
-    {
-        $translations = [];
-
-        foreach ($product->getTranslations('name') as $locale => $value) {
-            if (is_string($locale) && is_string($value)) {
-                $translations[$locale] = $value;
-            }
-        }
-
-        return $translations;
     }
 
     /**
