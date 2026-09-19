@@ -113,7 +113,14 @@ The quoter loads every requested product in one query and keeps the request
 keys. A product can be bought when its category is active, it is in stock with
 enough quantity, and it has a price in the currency; otherwise the result is
 `Unavailable`, `OutOfStock`, or `PriceMissing`. It checks stock but never
-reserves it, and knows nothing about carts or orders.
+takes it, and knows nothing about carts or orders.
+
+Take and return stock with `DeductProductStockAction` and
+`RestockProductsAction`, both keyed by product id. Deduction locks the products
+in id order, rechecks `in_stock` and the quantity under the lock, and takes
+nothing when any product falls short, throwing
+`InsufficientProductStockException` with that product's id. Restocking also
+returns stock to deleted products.
 
 ### Optional tags
 
