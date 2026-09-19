@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions;
+namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\Concerns;
 
-use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Config;
@@ -12,11 +11,18 @@ use Misaf\VendraAffiliate\Actions\ProcessAffiliatePayoutAction;
 use Misaf\VendraAffiliate\Enums\AffiliatePayoutPolicyEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 
-final class ProcessPayoutAction
+trait ProcessesPayout
 {
-    public static function make(): Action
+    public static function getDefaultName(): string
     {
-        return Action::make('processPayout')
+        return 'processPayout';
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this
             ->authorize(fn (): bool => (bool) auth()->user()?->can(AffiliatePayoutPolicyEnum::Process->value))
             ->color('success')
             ->disabled(fn (Affiliate $record): bool => $record->pendingBalance() < Config::integer('vendra-affiliate.payout.minimum', 0))

@@ -25,7 +25,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
-use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\ProcessPayoutAction;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\ProcessPayoutTableAction;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
@@ -128,7 +128,7 @@ final class AffiliateTable
             )
             ->recordActions([
                 ActionGroup::make([
-                    ProcessPayoutAction::make(),
+                    ProcessPayoutTableAction::make(),
 
                     ViewAction::make(),
 

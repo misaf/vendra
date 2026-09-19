@@ -6,7 +6,7 @@ namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Pages;
 
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
-use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\ProcessPayoutAction;
+use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\ProcessPayoutPageAction;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
 
 final class ViewAffiliate extends ViewRecord
@@ -21,7 +21,7 @@ final class ViewAffiliate extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            ProcessPayoutAction::make(),
+            ProcessPayoutPageAction::make(),
 
             EditAction::make(),
         ];
