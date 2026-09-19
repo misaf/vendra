@@ -33,8 +33,7 @@ it('allows creating a property below the plan limit', function (): void {
     $reseller = resellerWithPlan(maxUnits: 2, existingProperties: 1);
     $quota = resolve(StoreQuota::class);
 
-    expect($quota->canCreateStore($reseller))->toBeTrue()
-        ->and($quota->remainingStores($reseller))->toBe(1);
+    expect($quota->remainingStores($reseller))->toBe(1);
 
     $quota->assertCanCreateStore($reseller);
 });
@@ -43,8 +42,7 @@ it('blocks creating a property at the plan limit', function (): void {
     $reseller = resellerWithPlan(maxUnits: 1, existingProperties: 1);
     $quota = resolve(StoreQuota::class);
 
-    expect($quota->canCreateStore($reseller))->toBeFalse()
-        ->and($quota->remainingStores($reseller))->toBe(0);
+    expect($quota->remainingStores($reseller))->toBe(0);
 
     $quota->assertCanCreateStore($reseller);
 })->throws(SubscriptionLimitException::class);
@@ -55,8 +53,7 @@ it('blocks property creation when no subscription is active', function (): void 
 
     $quota = resolve(StoreQuota::class);
 
-    expect($quota->canCreateStore($reseller))->toBeFalse()
-        ->and($quota->remainingStores($reseller))->toBe(0);
+    expect($quota->remainingStores($reseller))->toBe(0);
 
     $quota->assertCanCreateStore($reseller);
 })->throws(SubscriptionLimitException::class);
@@ -67,8 +64,7 @@ it('blocks property creation for an inactive reseller with an active subscriptio
 
     $quota = resolve(StoreQuota::class);
 
-    expect($quota->canCreateStore($reseller))->toBeFalse()
-        ->and($quota->remainingStores($reseller))->toBe(0);
+    expect($quota->remainingStores($reseller))->toBe(0);
 
     $quota->assertCanCreateStore($reseller);
 })->throws(SubscriptionLimitException::class, 'is inactive');

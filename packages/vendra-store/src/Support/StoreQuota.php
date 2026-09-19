@@ -8,16 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
+use Misaf\VendraSubscription\Support\SubscriptionRegistry;
 
-final class StoreQuota
+final readonly class StoreQuota
 {
-    /**
-     * @param  Model&SubscriptionSubscriber  $subscriber
-     */
-    public function canCreateStore(SubscriptionSubscriber $subscriber): bool
-    {
-        return $this->remainingStores($subscriber) > 0;
-    }
+    public function __construct(private SubscriptionRegistry $subscriptionRegistry) {}
 
     /**
      * @param  Model&SubscriptionSubscriber  $subscriber
@@ -75,9 +70,7 @@ final class StoreQuota
      */
     public function lockAndAssertCanCreateStore(SubscriptionSubscriber $subscriber): SubscriptionSubscriber
     {
-        $lockedSubscriber = $subscriber->refreshForUpdate();
-
-        throw_if(method_exists($lockedSubscriber, 'trashed') && $lockedSubscriber->trashed(), (new ModelNotFoundException)->setModel($subscriber::class));
+        $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
 
         $this->assertCanCreateStore($lockedSubscriber);
 
