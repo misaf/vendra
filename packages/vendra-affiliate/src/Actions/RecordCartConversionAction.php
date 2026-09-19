@@ -41,7 +41,7 @@ final class RecordCartConversionAction
         return $this->creditCommission->execute(
             affiliate: $affiliate,
             conversionType: ConversionTypeEnum::Checkout,
-            amount: intdiv($totalMinor * $affiliate->commission_percent, 100),
+            amount: $affiliate->commissionFor($totalMinor),
             source: $source,
             referral: $referral,
         );

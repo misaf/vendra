@@ -8,7 +8,6 @@ use ApiPlatform\Laravel\Eloquent\State\LinksHandlerInterface;
 use ApiPlatform\Metadata\CollectionOperationInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 
 /**
@@ -24,7 +23,7 @@ final class AffiliateLinksHandler implements LinksHandlerInterface
     {
         $builder
             ->select(['id', 'user_id', 'code', 'commission_percent', 'signup_bounty', 'status', 'created_at'])
-            ->where('status', AffiliateStatusEnum::Active);
+            ->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

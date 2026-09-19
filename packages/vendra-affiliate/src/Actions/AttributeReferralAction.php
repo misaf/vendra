@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Actions;
 
-use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Events\ReferralAttributedEvent;
 use Misaf\VendraAffiliate\Models\Affiliate;
@@ -25,9 +24,7 @@ final class AttributeReferralAction
 
     public function execute(string $code, User $user, ?int $clickId = null): ?AffiliateReferral
     {
-        $affiliate = Affiliate::query()->where('code', $code)
-            ->where('status', AffiliateStatusEnum::Active)
-            ->first();
+        $affiliate = Affiliate::query()->active()->where('code', $code)->first();
 
         if (! $affiliate instanceof Affiliate || $affiliate->user_id === $user->id) {
             return null;

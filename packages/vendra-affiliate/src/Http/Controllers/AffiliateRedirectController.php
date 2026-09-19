@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
 use Misaf\VendraAffiliate\Actions\RecordAffiliateClickAction;
-use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 
 /**
@@ -25,9 +24,7 @@ final readonly class AffiliateRedirectController
     {
         $redirectUrl = Config::string('vendra-affiliate.attribution.redirect_url', '/');
 
-        $affiliate = Affiliate::query()->where('code', $code)
-            ->where('status', AffiliateStatusEnum::Active)
-            ->first();
+        $affiliate = Affiliate::query()->active()->where('code', $code)->first();
 
         if (! $affiliate instanceof Affiliate) {
             return redirect($redirectUrl);

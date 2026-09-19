@@ -73,7 +73,7 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
         $this->creditCommission->execute(
             affiliate: $affiliate,
             conversionType: ConversionTypeEnum::Deposit,
-            amount: intdiv(abs($transaction->amount) * $affiliate->commission_percent, 100),
+            amount: $affiliate->commissionFor(abs($transaction->amount)),
             source: $transaction,
             referral: $referral,
         );

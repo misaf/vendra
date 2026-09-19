@@ -7,7 +7,9 @@ namespace Misaf\VendraAffiliate\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -70,6 +72,16 @@ final class Affiliate extends Model implements ShouldLogActivity
     }
 
     /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function active(Builder $query): Builder
+    {
+        return $query->where('status', AffiliateStatusEnum::Active);
+    }
+
+    /**
      * @return HasMany<AffiliateClick, $this>
      */
     public function clicks(): HasMany
@@ -104,6 +116,14 @@ final class Affiliate extends Model implements ShouldLogActivity
     public function isActive(): bool
     {
         return $this->status === AffiliateStatusEnum::Active;
+    }
+
+    /**
+     * Round the commission on a minor-unit amount down to a whole unit.
+     */
+    public function commissionFor(int $amount): int
+    {
+        return intdiv($amount * $this->commission_percent, 100);
     }
 
     /**
