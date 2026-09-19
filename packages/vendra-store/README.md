@@ -84,8 +84,7 @@ tenant-scoped `spatie/laravel-settings` rows, not a column here.
 
 Not every setting belongs to a store. `Settings\StoreCreationSettings` (group
 `store_creation`, `global` repository) says whether the platform is creating
-stores at all, and `Support\StoreCreationPolicy` is what both store-creating
-panels read. It lives here rather than in the console because
+stores at all, and both store-creating panels read its `open` flag. It lives here rather than in the console because
 `misaf/vendra-reseller` must honour the same rule and sits below the console.
 
 ## Configuration

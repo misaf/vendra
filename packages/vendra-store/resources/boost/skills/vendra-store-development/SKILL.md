@@ -62,7 +62,7 @@ description: "Create, modify, review, or test the Vendra Store module in package
 ## Configuration
 
 - Read infrastructure values in `config/vendra-store.php` only through the injected `Support\StorefrontSettings`. Keep it bound with `bind()` so config changes are picked up on the next resolve.
-- Whether the platform is creating stores at all is `Settings\StoreCreationSettings` (group `store_creation`, `global` repository), read through `Support\StoreCreationPolicy`. Console and reseller store creation both consume the policy, so the shared rule lives below both panels.
+- Whether the platform is creating stores at all is `Settings\StoreCreationSettings` (group `store_creation`, `global` repository), read directly as `->open`. Console and reseller store creation both read it, so the shared rule lives below both panels.
 - Runtime differences (Docker vs. a Podman compatibility socket, log driver, health-check behaviour) are configuration, never a branch. Do not add runtime sniffing.
 
 ## Testing

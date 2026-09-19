@@ -51,9 +51,7 @@ it('treats an active store as the one that may serve requests', function (): voi
     $active = Store::factory()->active()->create();
     $suspended = Store::factory()->active()->suspended()->create();
 
-    expect($active->status()->isServing())->toBeTrue()
-        ->and($suspended->status()->isServing())->toBeFalse()
-        ->and(Store::query()->accessible()->pluck('id')->all())->toBe([$active->id])
+    expect(Store::query()->accessible()->pluck('id')->all())->toBe([$active->id])
         ->and(StoreStatus::Provisioning->isSettled())->toBeFalse()
         ->and(StoreStatus::Failed->isSettled())->toBeTrue();
 });

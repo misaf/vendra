@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Settings\StoreCreationSettings;
-use Misaf\VendraStore\Support\StoreCreationPolicy;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 
 /**
@@ -162,14 +161,13 @@ it('keeps the tenancy retrofit away from platform settings rows', function (): v
     expect($tables)->not->toContain('settings');
 });
 
-describe('store creation policy', function (): void {
+describe('store creation settings', function (): void {
     it('answers from the platform setting outside any tenant', function (): void {
-        expect(resolve(StoreCreationPolicy::class)->isOpen())->toBeTrue();
+        expect(resolve(StoreCreationSettings::class)->open)->toBeTrue();
 
         resolve(StoreCreationSettings::class)->fill(['open' => false])->save();
         app()->forgetInstance(StoreCreationSettings::class);
-        app()->forgetInstance(StoreCreationPolicy::class);
 
-        expect(resolve(StoreCreationPolicy::class)->isOpen())->toBeFalse();
+        expect(resolve(StoreCreationSettings::class)->open)->toBeFalse();
     });
 });

@@ -45,16 +45,6 @@ enum StoreStatus: string implements HasColor, HasLabel
         };
     }
 
-    /**
-     * Determine if the store may serve requests.
-     *
-     * Mirrors `Store::scopeAccessible()`.
-     */
-    public function isServing(): bool
-    {
-        return $this === self::Active;
-    }
-
     public function isSettled(): bool
     {
         return match ($this) {
