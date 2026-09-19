@@ -29,8 +29,4 @@ interface SubscriptionSubscriber
     public function subscribedUnitCount(): int;
 
     public function activeSubscribedUnitCount(): int;
-
-    public function suspendActiveUnits(): int;
-
-    public function reactivateSuspendedUnits(): int;
 }

@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\Event;
 use Misaf\VendraSubscription\Console\Commands\EnforceSubscriptionsCommand;
 use Misaf\VendraSubscription\Console\Commands\RecoverSubscriptionPaymentsCommand;
 use Misaf\VendraSubscription\Console\Commands\ReportSubscriptionPaymentBacklogCommand;
+use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
 use Misaf\VendraSubscription\Events\SubscriptionPaymentPaid;
 use Misaf\VendraSubscription\Listeners\ActivateSubscriptionOnPayment;
+use Misaf\VendraSubscription\Support\NullSubscriptionUnitSuspender;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -33,6 +35,11 @@ final class SubscriptionServiceProvider extends PackageServiceProvider
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-subscription');
             });
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singletonIf(SubscriptionUnitSuspender::class, NullSubscriptionUnitSuspender::class);
     }
 
     public function packageBooted(): void

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use LogicException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
+use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Events\SubscriptionActivated;
@@ -17,7 +18,10 @@ use Misaf\VendraSubscription\Support\SubscriptionRegistry;
 
 final readonly class ActivateSubscriptionAction
 {
-    public function __construct(private SubscriptionRegistry $subscriptionRegistry) {}
+    public function __construct(
+        private SubscriptionRegistry $subscriptionRegistry,
+        private SubscriptionUnitSuspender $unitSuspender,
+    ) {}
 
     /**
      * A subscriber that is not a `SubscriptionSubscriber` throws rather than
@@ -48,7 +52,7 @@ final readonly class ActivateSubscriptionAction
 
             $this->subscriptionRegistry->cancelActive($lockedSubscriber, $lockedSubscription->id);
             $lockedSubscription->activate();
-            $lockedSubscriber->reactivateSuspendedUnits();
+            $this->unitSuspender->reactivateSuspendedUnits($lockedSubscriber);
 
             return $lockedSubscription;
         }, attempts: 5);
