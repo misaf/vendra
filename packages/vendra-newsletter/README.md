@@ -77,6 +77,8 @@ Resources are available in the shared `Marketing` cluster on the `admin` panel:
 - Newsletters
 - Subscribers
 
+Demo seeders use bundled JSON fixtures in production and when their declared factory classes are unavailable. Local monorepo development continues to use factories when they are autoloadable.
+
 ## Testing
 
 Run the package checks from the project root:

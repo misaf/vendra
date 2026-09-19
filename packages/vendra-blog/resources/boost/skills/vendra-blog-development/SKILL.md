@@ -94,3 +94,5 @@ Prefer focused Pest tests in the module.
 - Add feature or Livewire tests when changing Filament behavior with meaningful user-visible effects.
 - Run checks from the host app: `php artisan test --compact --testsuite=vendra-blog` and `composer stan`.
 - If PHP files changed, run Pint for the touched code: `vendor/bin/pint --dirty --format agent` from the host app.
+
+- Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.

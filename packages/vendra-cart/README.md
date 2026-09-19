@@ -42,6 +42,8 @@ Expired carts are pruned daily by default. Change the schedule in the
 published configuration or run `php artisan vendra-cart:prune-expired`
 manually.
 
+Demo seeders use bundled JSON fixtures in production and when their declared factory classes are unavailable. Local monorepo development continues to use factories when they are autoloadable.
+
 Adding an item locks the cart before its items, sharing the lock order used by checkout so additions cannot race with cart conversion.
 
 ## Testing

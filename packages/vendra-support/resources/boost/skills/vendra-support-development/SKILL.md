@@ -103,3 +103,5 @@ Use `Misaf\VendraSupport\Filament\Navigation\NavigationGroup` as the single sour
 - Keep Pest architecture tests in `tests/ArchTest.php`: the `php`, `security`, and `laravel` presets, plus `arch()->expect('Misaf\VendraSupport')->not->toUse('Misaf\VendraTenant')` — support must never couple to a concrete provider.
 - Run checks from the host app: `php artisan test --compact --testsuite=vendra-support` and `composer stan`.
 - If PHP files changed, run `vendor/bin/pint --dirty --format agent`.
+
+- Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.

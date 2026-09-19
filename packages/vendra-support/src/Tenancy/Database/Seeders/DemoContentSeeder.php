@@ -14,6 +14,9 @@ abstract class DemoContentSeeder extends Seeder
 {
     use RequiresCurrentTenant;
 
+    /** @var list<class-string> */
+    protected const array FACTORIES = [];
+
     protected const string FIXTURE_FILE = 'demo-content.json';
 
     final public function run(): void
@@ -36,7 +39,8 @@ abstract class DemoContentSeeder extends Seeder
 
     protected function shouldUseFixtures(): bool
     {
-        return app()->isProduction();
+        return app()->isProduction()
+            || array_any(static::FACTORIES, fn (string $factory): bool => ! class_exists($factory));
     }
 
     /**

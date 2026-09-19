@@ -110,3 +110,5 @@ Prefer focused Pest tests in the module.
 - Keep Pest architecture tests in `tests/ArchTest.php`: the `php`, `security`, and `laravel` presets, plus `arch()->expect('Misaf\VendraNewsletter')->not->toUse('Misaf\VendraTenant')`.
 - Run checks from the host app: `php artisan test --compact --testsuite=vendra-newsletter` and `composer stan`.
 - If PHP files changed, run Pint for the touched code: `vendor/bin/pint --dirty --format agent`.
+
+- Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.

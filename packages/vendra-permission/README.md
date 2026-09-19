@@ -172,6 +172,8 @@ Use this package's tenant feature flags and console command to control access in
 Role/permission CRUD and assignment semantics follow Spatie Permission.
 See: https://spatie.be/docs/laravel-permission
 
+Demo seeders use bundled JSON fixtures in production and when their declared factory classes are unavailable. Local monorepo development continues to use factories when they are autoloadable.
+
 ## Testing
 
 Run the package checks from the project root:

@@ -88,4 +88,6 @@ Treat `packages/vendra-cart` as the source of temporary shopping-selection behav
 - Run PHPStan against the module source, factories, and seeders.
 - Run `vendor/bin/pint --dirty --format agent` after changing PHP files.
 
+- Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.
+
 - Adding an item locks the cart before its items, sharing the lock order used by checkout so additions cannot race with cart conversion.

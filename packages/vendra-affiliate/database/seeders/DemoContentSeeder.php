@@ -16,6 +16,8 @@ use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoCo
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
+    protected const array FACTORIES = [AffiliateClickFactory::class, AffiliateCommissionFactory::class, AffiliateFactory::class, AffiliateReferralFactory::class];
+
     protected function seedFactories(): void
     {
         AffiliateFactory::new()

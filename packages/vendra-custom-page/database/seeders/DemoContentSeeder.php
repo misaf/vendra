@@ -14,6 +14,8 @@ use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoCo
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
+    protected const array FACTORIES = [CustomPageCategoryFactory::class, CustomPageFactory::class];
+
     protected function seedFactories(): void
     {
         CustomPageCategoryFactory::new()

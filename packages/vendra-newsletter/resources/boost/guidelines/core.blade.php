@@ -52,3 +52,5 @@ The `misaf/vendra-newsletter` package owns newsletter domain behavior and the Fi
 - Add or update Pest tests for policy coverage, config/navigation/schedule behavior, translation parity, model contracts, the send pipeline, durable delivery receipts and failed-send rollback, per-tenant isolation, subscriber restoration, and the unsubscribe flow.
 - Keep tests purposeful and prevent unnecessary ones: cover behavior, contracts, and edge cases — not framework internals or trivially typed code.
 - Keep Pest architecture tests in `tests/ArchTest.php`: the `php`, `security`, and `laravel` presets plus a tenant-agnostic expectation, e.g. `arch()->expect('Misaf\VendraNewsletter')->not->toUse('Misaf\VendraTenant')`.
+
+- Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.

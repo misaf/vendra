@@ -14,6 +14,8 @@ use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoCo
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
+    protected const array FACTORIES = [RoleFactory::class];
+
     public function __construct(private readonly CreateRoleAction $createRoleAction) {}
 
     protected function seedFactories(): void

@@ -15,6 +15,8 @@ use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoCo
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
+    protected const array FACTORIES = [NewsletterFactory::class, NewsletterSubscriberFactory::class];
+
     protected function seedFactories(): void
     {
         NewsletterFactory::new()->draft()->count(3)->create();

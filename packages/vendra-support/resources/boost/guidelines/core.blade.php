@@ -43,3 +43,5 @@ The `misaf/vendra-support` package owns the shared support layer for every Vendr
 - Browser-check the sidebar in a non-default locale after navigation changes. Do not register a navigation entry until its destination renders successfully.
 - Follow Laravel comment style: document with PHPDoc (array shapes, generics, `@see`) and reserve inline comments for genuinely complex logic.
 - Keep Pest architecture tests in `tests/ArchTest.php`: the `php`, `security`, and `laravel` presets plus `arch()->expect('Misaf\VendraSupport')->not->toUse('Misaf\VendraTenant')`.
+
+- Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.

@@ -15,6 +15,8 @@ use Misaf\VendraSupport\Tenancy\Database\Seeders\DemoContentSeeder as BaseDemoCo
 
 final class DemoContentSeeder extends BaseDemoContentSeeder
 {
+    protected const array FACTORIES = [CartFactory::class];
+
     protected function seedFactories(): void
     {
         $owners = $this->owners();
