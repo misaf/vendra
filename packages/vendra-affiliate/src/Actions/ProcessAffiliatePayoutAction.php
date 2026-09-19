@@ -11,6 +11,7 @@ use Misaf\VendraAffiliate\Enums\PayoutStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraAffiliate\Models\AffiliatePayout;
+use Misaf\VendraTransaction\Actions\ApproveTransactionAction;
 use Misaf\VendraTransaction\Actions\CreateTransactionAction;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Facades\WalletResolver;
@@ -24,7 +25,10 @@ final class ProcessAffiliatePayoutAction
 {
     use QueueableAction;
 
-    public function __construct(private readonly CreateTransactionAction $createTransactionAction) {}
+    public function __construct(
+        private readonly CreateTransactionAction $createTransactionAction,
+        private readonly ApproveTransactionAction $approveTransactionAction,
+    ) {}
 
     public function execute(Affiliate $affiliate): ?AffiliatePayout
     {
@@ -75,7 +79,7 @@ final class ProcessAffiliatePayoutAction
                 ],
             );
 
-            $transaction->approve();
+            $this->approveTransactionAction->execute($transaction);
 
             $payout->update([
                 'status' => PayoutStatusEnum::Completed,

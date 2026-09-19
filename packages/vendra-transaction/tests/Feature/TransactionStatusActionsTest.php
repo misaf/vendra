@@ -68,3 +68,19 @@ it('forbids approving out of a terminal state', function (): void {
     expect(fn (): mixed => resolve(ApproveTransactionAction::class)->execute($transaction))
         ->toThrow(TransitionNotFound::class);
 });
+
+it('refuses to decline or fail an approved transaction from a stale copy', function (string $action): void {
+    $wallet = WalletFactory::new()->create();
+    $transaction = TransactionFactory::new()->forWallet($wallet)->deposit()->create(['amount' => 4_000]);
+    $staleCopy = $transaction->fresh();
+
+    resolve(ApproveTransactionAction::class)->execute($transaction);
+
+    expect(fn (): mixed => resolve($action)->execute($staleCopy))
+        ->toThrow(TransitionNotFound::class)
+        ->and($transaction->fresh()?->status)->toBeInstanceOf(Approved::class)
+        ->and($wallet->fresh()?->balance)->toBe(4_000);
+})->with([
+    'decline' => [DeclineTransactionAction::class],
+    'fail' => [FailTransactionAction::class],
+]);

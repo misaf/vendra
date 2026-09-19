@@ -12,7 +12,9 @@ use Misaf\VendraSupport\Contracts\SubscriptionCharger;
 use Misaf\VendraSupport\Data\SubscriptionCharge;
 use Misaf\VendraSupport\Data\SubscriptionChargeResult;
 use Misaf\VendraSupport\Enums\SubscriptionChargeStatus;
+use Misaf\VendraTransaction\Actions\ApproveTransactionAction;
 use Misaf\VendraTransaction\Actions\CreateTransactionAction;
+use Misaf\VendraTransaction\Actions\DeclineTransactionAction;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Exceptions\InsufficientBalanceException;
 use Misaf\VendraTransaction\Facades\TransactionGatewayRegistry;
@@ -26,7 +28,11 @@ use Misaf\VendraUser\Models\User;
 
 final readonly class TransactionSubscriptionCharger implements SubscriptionCharger
 {
-    public function __construct(private CreateTransactionAction $createTransactionAction) {}
+    public function __construct(
+        private CreateTransactionAction $createTransactionAction,
+        private ApproveTransactionAction $approveTransactionAction,
+        private DeclineTransactionAction $declineTransactionAction,
+    ) {}
 
     public function provider(): string
     {
@@ -70,10 +76,10 @@ final readonly class TransactionSubscriptionCharger implements SubscriptionCharg
 
         if ($transaction->status->canTransitionTo(Approved::class)) {
             try {
-                $transaction->approve();
+                $this->approveTransactionAction->execute($transaction);
             } catch (InsufficientBalanceException $exception) {
                 if ($transaction->status->canTransitionTo(Declined::class)) {
-                    $transaction->decline();
+                    $this->declineTransactionAction->execute($transaction);
                 }
 
                 return new SubscriptionChargeResult(
