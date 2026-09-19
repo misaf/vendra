@@ -27,4 +27,4 @@ The `misaf/vendra-order-api` package owns API Platform resources (`ApiResource` 
 - Keep user-facing processor errors in `vendra-order-api::messages` and update `en`, `de`, and `fa` together.
 - Keep Pest architecture tests and focused resource/state-provider/policy tests current.
 
-- Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility.
+- Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility; eligibility and unit prices come from `ProductPurchaseQuoter` in `vendra-product`, which loads the whole cart's products in one query.

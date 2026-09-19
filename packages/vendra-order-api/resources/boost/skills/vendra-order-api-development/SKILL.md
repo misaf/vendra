@@ -55,4 +55,4 @@ Treat `packages/vendra-order-api` as the HTTP and MCP surface of `misaf/vendra-o
 - Run `php artisan test --compact packages/vendra-order-api/tests`.
 - Run `vendor/bin/pint --dirty --format agent` after changing PHP files.
 
-- Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility.
+- Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility; eligibility and unit prices come from `ProductPurchaseQuoter` in `vendra-product`, which loads the whole cart's products in one query.

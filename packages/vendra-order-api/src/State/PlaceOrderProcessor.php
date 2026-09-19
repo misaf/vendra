@@ -25,8 +25,11 @@ use Misaf\VendraOrder\Actions\PlaceOrderAction;
 use Misaf\VendraOrder\Data\OrderLineDraft;
 use Misaf\VendraOrderApi\ApiResource\CheckoutResource;
 use Misaf\VendraOrderApi\ApiResource\OrderResource;
+use Misaf\VendraProduct\Data\ProductPurchaseRequest;
+use Misaf\VendraProduct\Enums\ProductPurchaseRefusalEnum;
 use Misaf\VendraProduct\Models\Product;
 use Misaf\VendraProduct\Models\ProductPrice;
+use Misaf\VendraProduct\Services\ProductPurchaseQuoter;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
 /**
@@ -45,6 +48,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         private DeliveryZoneMatcher $zoneMatcher,
         private DeliverySchedule $deliverySchedule,
         private OrderMapper $orderMapper,
+        private ProductPurchaseQuoter $productPurchaseQuoter,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): OrderResource
@@ -116,25 +120,35 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     }
 
     /**
+     * Price every cart item from one catalog query, refusing any item that cannot be bought.
+     *
      * @return list<OrderLineDraft>
      */
     private function resolveLines(Cart $cart, string $currencyCode): array
     {
+        $productMorphAlias = Relation::getMorphAlias(Product::class);
+
+        $quotes = $this->productPurchaseQuoter->quote(
+            $cart->items
+                ->filter(fn (CartItem $item): bool => $item->sellable_type === $productMorphAlias)
+                ->map(fn (CartItem $item): ProductPurchaseRequest => new ProductPurchaseRequest($item->sellable_id, $item->quantity))
+                ->all(),
+            $currencyCode,
+        );
+
         $lines = [];
 
-        foreach ($cart->items as $item) {
-            $product = $this->resolveProduct($item);
-            $price = $product->productPrices
-                ->firstWhere('currency_code', $currencyCode);
+        foreach ($cart->items as $key => $item) {
+            $quote = $quotes[$key] ?? ProductPurchaseRefusalEnum::Unavailable;
 
-            if (! $price instanceof ProductPrice) {
-                $this->reject('cartToken', __('vendra-order-api::messages.price_missing', ['product' => $product->id]));
+            if ($quote instanceof ProductPurchaseRefusalEnum) {
+                $this->rejectItem($item, $quote);
             }
 
             $lines[] = new OrderLineDraft(
-                sellable: $product,
-                name: $this->normalizeTranslations($product->getTranslations('name')),
-                unitAmount: (int) $price->price->getAmount(),
+                sellable: $quote->product,
+                name: $this->normalizeTranslations($quote->product->getTranslations('name')),
+                unitAmount: $quote->unitAmount,
                 quantity: $item->quantity,
                 metadata: $item->metadata,
             );
@@ -143,24 +157,13 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         return $lines;
     }
 
-    private function resolveProduct(CartItem $item): Product
+    private function rejectItem(CartItem $item, ProductPurchaseRefusalEnum $refusal): never
     {
-        $product = $item->sellable_type === Relation::getMorphAlias(Product::class)
-            ? Product::query()
-                ->with('productPrices')
-                ->whereHas('productCategory', fn (Builder $query) => $query->where('active', true))
-                ->find($item->sellable_id)
-            : null;
-
-        if (! $product instanceof Product) {
-            $this->reject('cartToken', __('vendra-order-api::messages.sellable_unsupported', ['type' => $item->sellable_type]));
-        }
-
-        if (! $product->in_stock || $product->quantity < $item->quantity) {
-            $this->reject('cartToken', __('vendra-order-api::messages.out_of_stock', ['product' => $product->id]));
-        }
-
-        return $product;
+        $this->reject('cartToken', match ($refusal) {
+            ProductPurchaseRefusalEnum::Unavailable => __('vendra-order-api::messages.sellable_unsupported', ['type' => $item->sellable_type]),
+            ProductPurchaseRefusalEnum::OutOfStock => __('vendra-order-api::messages.out_of_stock', ['product' => $item->sellable_id]),
+            ProductPurchaseRefusalEnum::PriceMissing => __('vendra-order-api::messages.price_missing', ['product' => $item->sellable_id]),
+        });
     }
 
     private function resolveGateway(?string $slug): ?TransactionGateway

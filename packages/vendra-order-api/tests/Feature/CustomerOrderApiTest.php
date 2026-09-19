@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Misaf\VendraAddress\Database\Factories\AddressFactory;
 use Misaf\VendraCart\Database\Factories\CartFactory;
 use Misaf\VendraCart\Database\Factories\CartItemFactory;
+use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraDelivery\Database\Factories\DeliverySlotFactory;
 use Misaf\VendraDelivery\Database\Factories\DeliveryZoneFactory;
 use Misaf\VendraDelivery\Models\Delivery;
@@ -286,4 +289,72 @@ it('rolls back the order and restores the cart when writing the delivery fails',
     $this->assertDatabaseCount('order_lines', 0);
     $this->assertDatabaseCount('deliveries', 0);
     $this->assertModelExists($item);
+});
+
+it('names the cart item that cannot be bought', function (Closure $fillCart, Closure $expectedMessage): void {
+    $user = createTestUser();
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    $context = $fillCart($cart);
+
+    $this->actingAs($user)->postJson('/api/sales/checkout', [
+        'cartToken' => $cart->token,
+        'currencyCode' => 'USD',
+    ])
+        ->assertUnprocessable()
+        ->assertJsonFragment(['propertyPath' => 'cartToken', 'message' => $expectedMessage($context)]);
+
+    $this->assertDatabaseCount('orders', 0);
+})->with([
+    'an item that is not a product' => [
+        function (Cart $cart): null {
+            CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct())->createOne(['quantity' => 1]);
+            CartItemFactory::new()->forCart($cart)->createOne(['sellable_type' => 'gift-card', 'sellable_id' => 1]);
+
+            return null;
+        },
+        fn (): string => __('vendra-order-api::messages.sellable_unsupported', ['type' => 'gift-card']),
+    ],
+    'a product without enough stock' => [
+        function (Cart $cart): Product {
+            $product = orderApiProduct(quantity: 1);
+            CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct())->createOne(['quantity' => 1]);
+            CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne(['quantity' => 2]);
+
+            return $product;
+        },
+        fn (Product $product): string => __('vendra-order-api::messages.out_of_stock', ['product' => $product->id]),
+    ],
+    'a product without a price in the currency' => [
+        function (Cart $cart): Product {
+            $product = orderApiProduct();
+            $product->productPrices()->delete();
+            CartItemFactory::new()->forCart($cart)->forSellable($product)->createOne(['quantity' => 1]);
+
+            return $product;
+        },
+        fn (Product $product): string => __('vendra-order-api::messages.price_missing', ['product' => $product->id]),
+    ],
+]);
+
+it('prices a cart of several products from one catalog query', function (): void {
+    $user = createTestUser();
+    $cart = CartFactory::new()->forOwner($user)->createOne();
+    CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct(price: 1000))->createOne(['quantity' => 1]);
+    CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct(price: 2500))->createOne(['quantity' => 2]);
+    CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct(price: 300))->createOne(['quantity' => 3]);
+    $productQueries = 0;
+    DB::listen(function (QueryExecuted $query) use (&$productQueries): void {
+        if (preg_match('/^select .* from ["`]products["`]/i', $query->sql) === 1) {
+            $productQueries++;
+        }
+    });
+
+    $this->actingAs($user)->postJson('/api/sales/checkout', [
+        'cartToken' => $cart->token,
+        'currencyCode' => 'USD',
+    ])
+        ->assertCreated()
+        ->assertJsonPath('itemsAmount', 6900);
+
+    expect($productQueries)->toBe(1);
 });
