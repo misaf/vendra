@@ -69,3 +69,16 @@ it('cancels instead of charging a payment whose subscription was cancelled', fun
 
     expect($payment->refresh()->status)->toBe(SubscriptionPaymentStatus::Cancelled);
 });
+
+it('treats only payments still being collected as open', function (): void {
+    foreach (SubscriptionPaymentStatus::cases() as $status) {
+        SubscriptionPayment::factory()->create(['status' => $status]);
+    }
+
+    expect(SubscriptionPayment::query()->open()->pluck('status')->all())->toEqualCanonicalizing([
+        SubscriptionPaymentStatus::Pending,
+        SubscriptionPaymentStatus::Processing,
+        SubscriptionPaymentStatus::RequiresAction,
+        SubscriptionPaymentStatus::NeedsReconciliation,
+    ]);
+});

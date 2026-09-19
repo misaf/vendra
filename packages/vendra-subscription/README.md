@@ -43,8 +43,9 @@ renewals also continue to use `SubscribeAction`.
 
 `Subscription::canBeCancelled()`, `canBeReactivated()`, and `canBeExtended()`
 decide which change a status allows: cancel while pending payment, active, or
-past due; reactivate while cancelled, expired, or past due; extend while active
-with an end date. The actions refuse anything else and the console shows its
+past due (`SubscriptionStatus::cancellable()`); reactivate while cancelled,
+expired, or past due; extend while active with an end date. The payments a
+cancellation stops are the `SubscriptionPayment::open()` scope. The actions refuse anything else and the console shows its
 buttons from the same predicates. Reactivation locks the subscription while it
 checks.
 

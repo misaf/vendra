@@ -72,6 +72,23 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     }
 
     /**
+     * Payments still being collected, which a cancellation must stop.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function open(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            SubscriptionPaymentStatus::Pending,
+            SubscriptionPaymentStatus::Processing,
+            SubscriptionPaymentStatus::RequiresAction,
+            SubscriptionPaymentStatus::NeedsReconciliation,
+        ]);
+    }
+
+    /**
      * Paid payments whose subscription was never activated.
      *
      * @param  Builder<self>  $query

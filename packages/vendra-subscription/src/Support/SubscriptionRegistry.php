@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
-use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
@@ -36,18 +35,6 @@ final class SubscriptionRegistry
         return $subscriber;
     }
 
-    /**
-     * @param  array<string, mixed>  $attributes
-     */
-    public function create(Model&SubscriptionSubscriber $subscriber, array $attributes): Subscription
-    {
-        $subscription = new Subscription($attributes);
-        $subscription->subscriber()->associate($subscriber);
-        $subscription->save();
-
-        return $subscription;
-    }
-
     public function cancelActive(Model&SubscriptionSubscriber $subscriber, ?int $exceptKey = null): int
     {
         $query = $this->subscriptionsQuery($subscriber)
@@ -70,11 +57,7 @@ final class SubscriptionRegistry
         $this->lockOpenPayments($subscriber)->each->cancel();
 
         return $this->subscriptionsQuery($subscriber)
-            ->whereIn('status', [
-                SubscriptionStatus::PendingPayment->value,
-                SubscriptionStatus::Active->value,
-                SubscriptionStatus::PastDue->value,
-            ])
+            ->whereIn('status', SubscriptionStatus::cancellable())
             ->update(['status' => SubscriptionStatus::Cancelled->value]);
     }
 
@@ -96,12 +79,7 @@ final class SubscriptionRegistry
     {
         return SubscriptionPayment::query()
             ->whereIn('subscription_id', $this->subscriptionsQuery($subscriber)->select('id'))
-            ->whereIn('status', [
-                SubscriptionPaymentStatus::Pending,
-                SubscriptionPaymentStatus::Processing,
-                SubscriptionPaymentStatus::RequiresAction,
-                SubscriptionPaymentStatus::NeedsReconciliation,
-            ])
+            ->open()
             ->lockForUpdate()
             ->get();
     }

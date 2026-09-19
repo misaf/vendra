@@ -15,6 +15,14 @@ enum SubscriptionStatus: string implements HasColor, HasLabel
     case Expired = 'expired';
     case Cancelled = 'cancelled';
 
+    /**
+     * @return list<self>
+     */
+    public static function cancellable(): array
+    {
+        return [self::PendingPayment, self::Active, self::PastDue];
+    }
+
     public function getColor(): string
     {
         return match ($this) {

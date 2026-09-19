@@ -190,7 +190,7 @@ final class Subscription extends Model implements ShouldLogActivity
      */
     public function canBeCancelled(): bool
     {
-        return in_array($this->status, [SubscriptionStatus::PendingPayment, SubscriptionStatus::Active, SubscriptionStatus::PastDue], true);
+        return in_array($this->status, SubscriptionStatus::cancellable(), true);
     }
 
     public function canBeReactivated(): bool
