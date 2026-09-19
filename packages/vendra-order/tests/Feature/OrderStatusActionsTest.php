@@ -8,6 +8,7 @@ use Misaf\VendraOrder\Actions\CompleteOrderAction;
 use Misaf\VendraOrder\Actions\ConfirmOrderAction;
 use Misaf\VendraOrder\Database\Factories\OrderFactory;
 use Misaf\VendraOrder\Events\OrderCancelled;
+use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraOrder\States\Cancelled;
 use Misaf\VendraOrder\States\Completed;
 use Misaf\VendraOrder\States\Confirmed;
@@ -45,16 +46,26 @@ it('cancels an order from either open state through the domain action', function
     'confirmed' => [Confirmed::class],
 ]);
 
-it('announces a cancellation once, so stock is returned once', function (): void {
+it('announces a cancellation once, even from a stale copy', function (): void {
     Event::fake([OrderCancelled::class]);
     $order = OrderFactory::new()->createOne();
+    $staleCopy = Order::query()->findOrFail($order->id);
 
     resolve(CancelOrderAction::class)->execute($order);
 
-    expect(fn (): mixed => resolve(CancelOrderAction::class)->execute($order))
+    expect(fn (): mixed => resolve(CancelOrderAction::class)->execute($staleCopy))
         ->toThrow(TransitionNotFound::class);
 
     Event::assertDispatchedTimes(OrderCancelled::class, 1);
+    Event::assertDispatched(fn (OrderCancelled $event): bool => $event->order->is($order));
+});
+
+it('announces a cancellation made directly on the model', function (): void {
+    Event::fake([OrderCancelled::class]);
+    $order = OrderFactory::new()->createOne();
+
+    $order->cancel();
+
     Event::assertDispatched(fn (OrderCancelled $event): bool => $event->order->is($order));
 });
 

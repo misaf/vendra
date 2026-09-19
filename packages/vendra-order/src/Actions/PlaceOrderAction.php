@@ -17,6 +17,8 @@ final class PlaceOrderAction
     /**
      * The cart's items are cleared but the cart is kept, so its token stays
      * usable. The caller validates the currency, lines, and amounts first.
+     * Pass `$stockDeducted` when the caller took stock for the lines, so a
+     * cancellation knows there is stock to return.
      *
      * @param  list<OrderLineDraft>  $lines
      */
@@ -29,6 +31,7 @@ final class PlaceOrderAction
         ?string $cardMessage = null,
         ?TransactionGateway $transactionGateway = null,
         ?string $paymentReference = null,
+        bool $stockDeducted = false,
     ): Order {
         $itemsAmount = 0;
 
@@ -46,6 +49,7 @@ final class PlaceOrderAction
             $cardMessage,
             $transactionGateway,
             $paymentReference,
+            $stockDeducted,
         ): Order {
             $cart->refreshForUpdate();
 
@@ -62,6 +66,7 @@ final class PlaceOrderAction
                 'total_amount' => $itemsAmount + $deliveryAmount,
                 'payment_reference' => $paymentReference,
                 'card_message' => $cardMessage,
+                'stock_deducted' => $stockDeducted,
                 'placed_at' => now(),
             ]);
 

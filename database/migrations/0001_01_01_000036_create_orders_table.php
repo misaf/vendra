@@ -54,6 +54,8 @@ return new class extends Migration
                 ->nullable();
             $table->text('card_message')
                 ->nullable();
+            $table->boolean('stock_deducted')
+                ->default(false);
             $table->timestampTz('placed_at')
                 ->nullable();
             $table->timestampsTz();

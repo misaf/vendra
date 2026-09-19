@@ -1,6 +1,6 @@
 ---
 name: vendra-order-development
-description: "Create, modify, review, or test the Vendra Order module in packages/vendra-order. Use for Order, OrderLine, checkout, cart-to-order conversion, PlaceOrderAction, CancelOrderAction, OrderCancelled, OrderLineDraft, order numbers, order lifecycle states (pending, confirmed, completed, cancelled), money snapshots, payment references against transaction gateways, order migrations and factories, order policies and permission seeders, the vendra-order:seed command, OrderPlugin, SalesCluster, OrderResource, order line relation managers, translations, or configuration."
+description: "Create, modify, review, or test the Vendra Order module in packages/vendra-order. Use for Order, OrderLine, checkout, cart-to-order conversion, PlaceOrderAction, CancelOrderAction, CancelOrderTransition, OrderCancelled, stock_deducted, OrderLineDraft, order numbers, order lifecycle states (pending, confirmed, completed, cancelled), money snapshots, payment references against transaction gateways, order migrations and factories, order policies and permission seeders, the vendra-order:seed command, OrderPlugin, SalesCluster, OrderResource, order line relation managers, translations, or configuration."
 ---
 
 # Vendra Order
@@ -46,7 +46,7 @@ Treat `packages/vendra-order` as the source of placed-order behavior and its Fil
 - Model each line with its parent order, polymorphic `sellable`, translatable `name` snapshot, currency code, positive quantity, unit amount, line amount, and optional JSON metadata.
 - Store money as unsigned integers in minor units cast with `MoneyIntegerCast` against the row's own `currency_code`.
 - Resolve prices outside this module. `PlaceOrderAction::execute()` accepts `OrderLineDraft` values and performs the whole conversion — order, lines, and cart clearing — inside one `DB::transaction()`.
-- Cancel through `CancelOrderAction`; it locks the order and dispatches `Events\OrderCancelled` inside its transaction so stock listeners commit or roll back with it. `Order::cancel()` alone skips the event.
+- Every cancellation runs `States\CancelOrderTransition`, which locks the order and dispatches `Events\OrderCancelled` inside its transaction so stock listeners commit or roll back with it. Never set the status to `Cancelled` by hand. `stock_deducted` records that the caller took stock at placement (`PlaceOrderAction`'s `stockDeducted`).
 - Leave the cart row intact after conversion so its token stays usable; only its items are cleared.
 - Never mutate a placed order's lines or amounts. Corrections are new domain events, not edits.
 - Use typed Eloquent relationships with PHPDoc generics, Laravel model attributes, explicit casts, final classes, and `declare(strict_types=1)`.

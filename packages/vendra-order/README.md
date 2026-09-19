@@ -41,10 +41,13 @@ configured panels. Orders are created by the application through
 `PlaceOrderAction`; the administration UI inspects orders and moves them
 through their lifecycle.
 
-`CancelOrderAction` locks the order, cancels it, and dispatches
-`Events\OrderCancelled` inside the same transaction, so a listener that returns
-stock commits or rolls back with the cancellation. Cancel through the action,
-not `Order::cancel()`, or no listener hears about it.
+Every cancellation, whether through `CancelOrderAction` or `Order::cancel()`,
+runs `States\CancelOrderTransition`. It locks the order, cancels it, and
+dispatches `Events\OrderCancelled` inside the same transaction, so a listener
+that returns stock commits or rolls back with the cancellation. Pass
+`stockDeducted: true` to `PlaceOrderAction` when the caller took stock for the
+lines; the order's `stock_deducted` flag tells listeners there is stock to
+return.
 
 ## Placing an order
 

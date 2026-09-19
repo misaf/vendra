@@ -25,7 +25,7 @@ abstract class OrderState extends State implements HasColor, HasIcon, HasLabel
             ->default(Pending::class)
             ->allowTransition(Pending::class, Confirmed::class)
             ->allowTransition(Confirmed::class, Completed::class)
-            ->allowTransition([Pending::class, Confirmed::class], Cancelled::class);
+            ->allowTransition([Pending::class, Confirmed::class], Cancelled::class, CancelOrderTransition::class);
     }
 
     public function isFinal(): bool

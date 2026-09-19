@@ -49,6 +49,7 @@ use Spatie\ModelStates\HasStates;
  * @property Money $total_amount
  * @property string|null $payment_reference
  * @property string|null $card_message
+ * @property bool $stock_deducted
  * @property Carbon|null $placed_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -67,6 +68,7 @@ use Spatie\ModelStates\HasStates;
     'total_amount',
     'payment_reference',
     'card_message',
+    'stock_deducted',
     'placed_at',
 ])]
 #[Hidden(['tenant_id'])]
@@ -114,6 +116,7 @@ final class Order extends Model implements ShouldLogActivity
             'items_amount' => MoneyIntegerCast::class.':currency_code',
             'delivery_amount' => MoneyIntegerCast::class.':currency_code',
             'total_amount' => MoneyIntegerCast::class.':currency_code',
+            'stock_deducted' => 'boolean',
             'placed_at' => 'datetime',
         ];
     }
