@@ -96,3 +96,14 @@ it('promotes another enabled plan when the default is deleted', function (): voi
 
     expect($other->refresh()->is_default)->toBeTrue();
 });
+
+it('clears the flag on a deleted default so restoring it leaves the new default alone', function (): void {
+    $default = Plan::factory()->active()->default()->create();
+    $other = Plan::factory()->active()->create();
+
+    $default->delete();
+    $default->restore();
+
+    expect($default->refresh()->is_default)->toBeFalse()
+        ->and($other->refresh()->is_default)->toBeTrue();
+});

@@ -15,6 +15,7 @@ Shared support infrastructure used by every Vendra module.
 - `IsActiveEntry` infolist entry, `IsActiveConstraint` query-builder constraint, and `IsActiveFilter` ternary filter (Active / Inactive) for reading and filtering the same columns
 - `IsDefaultToggle` form field, `IsDefaultEntry` infolist entry, `IsDefaultIconColumn` table column, `IsDefaultFilter` ternary filter, and `IsDefaultConstraint` query-builder constraint for boolean `is_default` columns
 - `IsPrimaryToggle` form field and `IsPrimaryIconColumn` table column for boolean `is_primary` columns
+- `Observers\Concerns\MaintainsSingleActiveDefault` observer trait that keeps exactly one active row flagged `is_default`, promotes the first active row (by `ordered`, else by key) when the default goes away, and clears the flag on a soft-deleted default
 - `CreatedAtColumn`, `UpdatedAtColumn`, `DeletedAtColumn`, and `RowIndexColumn` table columns for timestamps (Jalali under the `fa` locale) and the `#` row index
 - `CreatedAtEntry`, `UpdatedAtEntry`, and `DateTimeEntry` infolist entries with the same timestamp formatting, `IsActiveIconColumn`, and `PositionConstraint`, `NameConstraint`, and `SlugConstraint` query-builder constraints
 - `SluggableNameInput`, `SlugInput`, and `DescriptionTextarea` form fields, `NameEntry`, `SlugEntry`, and `DescriptionEntry` infolist entries, and `SlugColumn` for the common translated name/slug/description attributes
