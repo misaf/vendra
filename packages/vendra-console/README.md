@@ -35,6 +35,9 @@ console user or issues a new password, generating one unless `--password` is giv
 New users require an explicit username: pass `--username=admin` or enter it at the prompt.
 Non-interactive creation requires `--username`; existing-user operations keep the current username.
 Duplicate usernames fail rather than receive an automatic suffix.
+Usernames must contain 3–12 letters, numbers, dashes, or underscores and be unique among platform users that have not been soft-deleted.
+Supplied and generated passwords must pass the application's default password rules; an explicitly empty or whitespace-only password is rejected.
+Generated passwords come from `UserRules::generatePassword()`, so tightening the policy in a provider never leaves the command unable to issue one.
 It asks before granting console access to an existing user who does not already have it
 (the default `console@<app host>` address included), and before replacing a console
 user's password with a generated one; passing `--password` skips that second prompt.

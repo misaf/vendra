@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Validator;
 use Misaf\VendraStore\Actions\ProvisionStoreAction;
 use Misaf\VendraStore\Jobs\CompleteStoreProvisioningJob;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
+use Misaf\VendraUser\Support\UserRules;
 
 beforeEach(function (): void {
     Event::fake([TenantProvisioned::class]);
@@ -29,7 +31,7 @@ it('hashes a provided administrator password', function (): void {
         ->and(Hash::check('secret-password', Arr::get($result, 'user')->password))->toBeTrue();
 });
 
-it('generates a random administrator password when none is provided', function (): void {
+it('generates a random administrator password that satisfies the application password rules', function (): void {
     $result = resolve(ProvisionStoreAction::class)->execute([
         'name' => 'Acme',
         'domain' => 'acme.test',
@@ -37,8 +39,11 @@ it('generates a random administrator password when none is provided', function (
         'email' => 'admin@acme.test',
     ]);
 
-    expect(Arr::get($result, 'password'))->toHaveLength(8)
-        ->and(Hash::check(Arr::get($result, 'password'), Arr::get($result, 'user')->password))->toBeTrue();
+    $password = Arr::get($result, 'password');
+
+    expect($password)->toHaveLength(UserRules::PASSWORD_LENGTH)
+        ->and(Validator::make(['password' => $password], ['password' => UserRules::password()])->passes())->toBeTrue()
+        ->and(Hash::check($password, Arr::get($result, 'user')->password))->toBeTrue();
 });
 
 it('assigns the administrator role for the user guard when another guard is active', function (): void {

@@ -62,7 +62,13 @@ being removed, demoted, or disabled. `UpdateUserEmailAction` and
 `UpdateUserPasswordAction` provide normalized/validated credential changes,
 framework hashing, and remember-token rotation without exposing stored hashes.
 
-Forms in any panel validate usernames and emails through `Support\UserRules`.
+Forms and commands validate user credentials through `Support\UserRules`.
+`username()` supplies the shared 3–12 character `alpha_dash` rules; the username
+length constants also drive form inputs. `password()` uses the application
+`Password::default()` policy, and `generatePassword()` derives its length and
+character set from that same policy, so seeded and command-issued passwords
+pass the rules a supplied password must meet. Callers add required/optional, confirmation, and
+scoped uniqueness rules; reseller registration additionally requires ASCII.
 `UserRules::email()` is the strict email rule, and `UserRules::unique()` checks
 a value within one tenant, or among platform users when the tenant is null.
 Soft-deleted users release their username and email, matching the

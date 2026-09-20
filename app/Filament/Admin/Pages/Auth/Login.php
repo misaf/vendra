@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
+use Misaf\VendraUser\Support\UserRules;
 
 final class Login extends \Filament\Auth\Pages\Login
 {
@@ -43,8 +44,8 @@ final class Login extends \Filament\Auth\Pages\Login
             ->extraAttributes(['dir' => 'ltr'])
             ->extraInputAttributes(['tabindex' => 1])
             ->label(__('vendra-user::attributes.username'))
-            ->maxLength(12)
-            ->minLength(3)
+            ->maxLength(UserRules::USERNAME_MAX_LENGTH)
+            ->minLength(UserRules::USERNAME_MIN_LENGTH)
             ->required()
             ->string();
     }

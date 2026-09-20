@@ -31,6 +31,12 @@ stays intact.
   `misaf/vendra-tenant`, `misaf/vendra-localization`, `misaf/vendra-user`
   and `misaf/vendra-support`
 
+Registration and provisioning validate credentials through `vendra-user`’s
+`Support\UserRules::username()` and `password()`. Username rules require 3–12
+letters, numbers, dashes, or underscores; registration additionally requires ASCII.
+Password strength follows the application default policy, for a supplied
+`--password` and for the generated one alike.
+
 ## Installation
 
 ```bash

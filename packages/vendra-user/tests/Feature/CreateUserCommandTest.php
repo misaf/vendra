@@ -22,6 +22,24 @@ function createUserCommandRole(Model|int|string $tenant, string $name = 'admin')
     );
 }
 
+it('rejects credentials that fail the shared user rules', function (string $username, string $password): void {
+    $tenant = createTestTenant();
+    createUserCommandRole($tenant);
+
+    $this->artisan('vendra-user:create', [
+        '--tenant' => $tenant->getKey(),
+        '--username' => $username,
+        '--email' => 'florist@example.test',
+        '--password' => $password,
+        '--role' => 'admin',
+    ])->assertFailed();
+
+    assertDatabaseMissing('users', ['email' => 'florist@example.test']);
+})->with([
+    'invalid username' => ['bad.name', 'secret-password'],
+    'weak password' => ['florist', 'short'],
+]);
+
 it('creates the user inside the selected tenant and assigns the role', function (): void {
     $tenant = createTestTenant();
     createUserCommandRole($tenant);
