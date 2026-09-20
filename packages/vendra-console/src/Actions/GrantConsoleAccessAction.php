@@ -18,7 +18,7 @@ final readonly class GrantConsoleAccessAction
      */
     public function execute(User $user): bool
     {
-        if ($user->tenant_id !== null) {
+        if ($user->hasTenant()) {
             throw new InvalidArgumentException("User [{$user->id}] belongs to a tenant and cannot be a console user.");
         }
 

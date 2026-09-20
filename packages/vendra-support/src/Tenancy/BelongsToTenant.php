@@ -23,6 +23,11 @@ trait BelongsToTenant
         return $this->belongsTo($this->tenantModelClass(), TenantSchema::column());
     }
 
+    public function hasTenant(): bool
+    {
+        return $this->getAttribute(TenantSchema::column()) !== null;
+    }
+
     protected static function bootBelongsToTenant(): void
     {
         static::addGlobalScope(new TenantScope);
