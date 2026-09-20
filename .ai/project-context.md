@@ -10,7 +10,7 @@
 ```bash
 composer setup                 # install deps, .env, key, migrate, npm build
 composer dev                   # serve + queue:listen + pail + vite (concurrently)
-composer test                  # config:clear then php artisan test --parallel
+composer test                  # config:clear then pest --parallel --tia
 composer stan                  # phpstan (larastan), 1G memory limit
 npm run dev | npm run build    # Vite only
 ```
