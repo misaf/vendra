@@ -16,8 +16,9 @@ final class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            ConsoleSeeder::class,
             PlanSeeder::class,
         ]);
+
+        $this->callSilent(ConsoleSeeder::class);
     }
 }

@@ -17,7 +17,7 @@ it('seeds a console user on a fresh install and prints its generated password', 
     Artisan::call('db:seed', ['--class' => ConsoleSeeder::class, '--force' => true]);
 
     $output = Artisan::output();
-    $printedPassword = Str::of($output)->match('/Password: (\S+)/')->toString();
+    $printedPassword = Str::of($output)->match('/\|\s*https:\/\/[^|]+\|\s*[^|]+\|\s*(\S+)\s*\|/')->toString();
     $consoleUser = User::query()->sole();
 
     expect($consoleUser->email)->toBe('console@www.vendra.test')
@@ -26,7 +26,7 @@ it('seeds a console user on a fresh install and prints its generated password', 
         ->and($consoleUser->hasVerifiedEmail())->toBeTrue()
         ->and($consoleUser->canAccessPanel(Filament::getPanel('console')))->toBeTrue()
         ->and($output)->toContain('https://console.www.vendra.test')
-        ->and($printedPassword)->toHaveLength(32)
+        ->and($printedPassword)->toHaveLength(16)
         ->and(Hash::check($printedPassword, $consoleUser->password))->toBeTrue();
 });
 
@@ -54,6 +54,15 @@ it('fails the seed when the default console email belongs to an existing user', 
     User::factory()->create(['tenant_id' => null, 'email' => 'console@vendra.test']);
 
     expect(fn (): int => Artisan::call('db:seed', ['--class' => ConsoleSeeder::class, '--force' => true, '--no-interaction' => true]))
-        ->toThrow(RuntimeException::class, 'No console user was seeded.')
+        ->toThrow(RuntimeException::class, 'Console username or email')
+        ->and(Console::query()->count())->toBe(0);
+});
+
+it('fails the seed when the console username is already taken', function (): void {
+    User::factory()->create(['tenant_id' => null, 'username' => 'console']);
+
+    expect(fn () => resolve(ConsoleSeeder::class)->__invoke())
+        ->toThrow(RuntimeException::class, 'Console username or email')
+        ->and(User::query()->count())->toBe(1)
         ->and(Console::query()->count())->toBe(0);
 });
