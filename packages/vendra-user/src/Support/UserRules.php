@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\Unique;
-use Misaf\LaravelEmailVerification\Rules\EmailValidation;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Misaf\VendraUser\Models\User;
 
@@ -60,11 +59,11 @@ final class UserRules
     }
 
     /**
-     * @return list<mixed>
+     * @return list<string>
      */
     public static function email(): array
     {
-        return ['bail', 'email:rfc,strict,spoof,filter,filter_unicode', new EmailValidation];
+        return ['bail', 'email:rfc,strict,spoof,filter,filter_unicode'];
     }
 
     /**
