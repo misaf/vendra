@@ -12,8 +12,6 @@ use Misaf\VendraUser\Models\User;
 final readonly class RevokeConsoleUserAction
 {
     /**
-     * The row is kept so access can be granted again.
-     *
      * @throws LastConsoleUserException
      */
     public function execute(User $user): bool
