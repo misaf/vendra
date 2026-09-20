@@ -12,8 +12,6 @@ use Misaf\VendraUser\Models\User;
 final readonly class GrantConsoleAccessAction
 {
     /**
-     * Returns false when the user already had active access.
-     *
      * @throws InvalidArgumentException
      */
     public function execute(User $user): bool
@@ -35,7 +33,7 @@ final readonly class GrantConsoleAccessAction
                 return false;
             }
 
-            $lockedConsole->forceFill(['active' => true])->save();
+            $lockedConsole->update(['active' => true]);
 
             return true;
         });
