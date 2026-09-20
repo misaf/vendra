@@ -68,7 +68,7 @@ final class UserRules
     }
 
     /**
-     * Require a username or email unique among one tenant's users, or among platform users when the tenant is null.
+     * Require a username or email unique among one tenant's users, or among tenantless users when the tenant is null.
      *
      * Soft-deleted users release their values, as the users table indexes do.
      */

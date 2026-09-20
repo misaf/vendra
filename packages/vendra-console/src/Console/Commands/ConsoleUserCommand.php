@@ -48,7 +48,7 @@ final class ConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        $user = User::query()->platform()->where('email', $email)->first();
+        $user = User::query()->tenantless()->where('email', $email)->first();
 
         if ($user === null) {
             $username = $this->resolveUsername();
@@ -163,10 +163,10 @@ final class ConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        $user = User::query()->platform()->where('email', $email)->first();
+        $user = User::query()->tenantless()->where('email', $email)->first();
 
         if ($user === null) {
-            $this->components->error("No platform user has the email [{$email}].");
+            $this->components->error("No tenantless user has the email [{$email}].");
 
             return self::FAILURE;
         }

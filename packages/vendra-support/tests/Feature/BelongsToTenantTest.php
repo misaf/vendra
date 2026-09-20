@@ -15,10 +15,10 @@ beforeEach(function (): void {
 
 it('reports whether a record belongs to a tenant', function (): void {
     $tenantRecord = new TeamScopeTenantRecord(['tenant_id' => 1]);
-    $platformRecord = new TeamScopeTenantRecord(['tenant_id' => null]);
+    $tenantlessRecord = new TeamScopeTenantRecord(['tenant_id' => null]);
 
     expect($tenantRecord->hasTenant())->toBeTrue()
-        ->and($platformRecord->hasTenant())->toBeFalse()
+        ->and($tenantlessRecord->hasTenant())->toBeFalse()
         ->and(new TeamScopeTenantRecord()->hasTenant())->toBeFalse();
 });
 

@@ -73,7 +73,7 @@ it('trims and lowercases the given email before creating a console user', functi
         ->and(User::query()->sole()->username)->toBe('chosen_name');
 });
 
-it('resets only the platform user password inside a tenant context', function (bool $authenticatedTenantUser): void {
+it('resets only the tenantless user password inside a tenant context', function (bool $authenticatedTenantUser): void {
     $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
     grantConsoleAccess($consoleUser);
     makeCurrentTestTenant();
@@ -94,7 +94,7 @@ it('resets only the platform user password inside a tenant context', function (b
         ->and(Console::query()->forUser($tenantUser)->exists())->toBeFalse();
 })->with(['current tenant' => false, 'authenticated tenant user' => true]);
 
-it('revokes platform console access inside a tenant context', function (bool $authenticatedTenantUser): void {
+it('revokes tenantless console access inside a tenant context', function (bool $authenticatedTenantUser): void {
     $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
     grantConsoleAccess($consoleUser);
     Console::factory()->active()->create();
@@ -114,13 +114,13 @@ it('revokes platform console access inside a tenant context', function (bool $au
         ->and(Console::query()->active()->count())->toBe(1);
 })->with(['current tenant' => false, 'authenticated tenant user' => true]);
 
-it('does not find a soft-deleted platform user when revoking console access', function (): void {
+it('does not find a soft-deleted tenantless user when revoking console access', function (): void {
     $consoleUser = User::factory()->trashed()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
     grantConsoleAccess($consoleUser);
     makeCurrentTestTenant();
 
     $this->artisan('vendra-console:user', ['--email' => $consoleUser->email, '--revoke' => true])
-        ->expectsOutputToContain('No platform user has the email [ops@vendra.test].')
+        ->expectsOutputToContain('No tenantless user has the email [ops@vendra.test].')
         ->assertFailed();
 
     expect(Console::query()->forUser($consoleUser)->sole()->active)->toBeTrue();
@@ -183,7 +183,7 @@ it('falls back to localhost for the email and console url when the app url has n
         ->toContain('https://console.localhost');
 });
 
-it('rejects a username another platform user already holds', function (): void {
+it('rejects a username another tenantless user already holds', function (): void {
     User::factory()->create(['tenant_id' => null, 'username' => 'operations_1', 'email' => 'operations_1@a.test']);
 
     $this->artisan('vendra-console:user', ['--username' => 'operations_1', '--email' => 'operations_1@b.test'])
@@ -343,7 +343,7 @@ it('accepts usernames at the allowed length boundaries', function (string $usern
     expect(User::query()->sole()->username)->toBe($username);
 })->with(['minimum' => 'a_1', 'maximum' => 'user-name_12']);
 
-it('allows a username held by a tenant user or a soft-deleted platform user', function (): void {
+it('allows a username held by a tenant user or a soft-deleted tenantless user', function (): void {
     User::factory()->trashed()->create(['tenant_id' => null, 'username' => 'chosen_name']);
     makeCurrentTestTenant();
     User::factory()->create(['username' => 'chosen_name']);

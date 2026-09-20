@@ -88,16 +88,16 @@ return [
         | Console and reseller identities are the same canonical User with a
         | null tenant id, but each panel keeps its own provider so a panel's
         | lookups can be retargeted without moving the other's. Both use the
-        | platform-scoped driver, which constrains every lookup to
+        | tenantless driver, which constrains every lookup to
         | `tenant_id IS NULL`.
         */
         'console' => [
-            'driver' => 'platform-eloquent',
+            'driver' => 'tenantless-eloquent',
             'model' => env('AUTH_MODEL', User::class),
         ],
 
         'reseller' => [
-            'driver' => 'platform-eloquent',
+            'driver' => 'tenantless-eloquent',
             'model' => env('AUTH_MODEL', User::class),
         ],
     ],
@@ -134,7 +134,7 @@ return [
         | are keyed by email alone, so any shared table would let one scope
         | overwrite or consume another's token — both against the tenant-facing
         | `users` broker, whose emails may legitimately collide, and against
-        | each other, since one platform identity may hold both a console
+        | each other, since one tenantless identity may hold both a console
         | grant and a reseller membership. Expiry and throttle stay at the
         | framework defaults.
         */

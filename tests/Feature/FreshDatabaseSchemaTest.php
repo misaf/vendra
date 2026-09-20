@@ -14,7 +14,7 @@ it('contains every package table in the fresh database baseline', function (): v
         ->and(Schema::hasColumn('tags', 'order_column'))->toBeFalse()
         ->and(Schema::hasColumns('console_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
         ->and(Schema::hasColumns('reseller_password_reset_tokens', ['email', 'token', 'created_at']))->toBeTrue()
-        ->and(Schema::hasTable('platform_password_reset_tokens'))->toBeFalse()
+        ->and(Schema::hasTable('tenantless_password_reset_tokens'))->toBeFalse()
         ->and(Schema::hasTable('reseller_users'))->toBeFalse()
         ->and(Schema::hasTable('console_users'))->toBeFalse()
         ->and(Schema::hasColumns('consoles', ['user_id', 'active']))->toBeTrue()
@@ -156,7 +156,7 @@ it('enforces one console per user', function (): void {
         ->and(Schema::hasForeignKey('consoles', ['user_id']))->toBeTrue();
 });
 
-it('keeps platform-level user identities globally unique', function (): void {
+it('keeps tenantless user identities globally unique', function (): void {
     expect(Schema::hasIndex('users', ['global_email_guard'], 'unique'))->toBeTrue()
         ->and(Schema::hasIndex('users', ['global_username_guard'], 'unique'))->toBeTrue();
 });
@@ -219,7 +219,7 @@ it('ships every non-framework application baseline as a package migration stub',
  | The registry drives `vendra-tenant:enable`, which backfills every null tenant
  | id and then forces the column NOT NULL. `settings` is excluded because its
  | null `tenant_id` is the platform scope and must stay null; `users` is
- | excluded because platform-level identities (console users, reseller
+ | excluded because tenantless identities (console users, reseller
  | users) legitimately carry a null tenant id; `store_domains` and
  | `store_user` are keyed by `store_id` instead.
  */

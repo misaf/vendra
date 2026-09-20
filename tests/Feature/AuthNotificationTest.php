@@ -59,11 +59,11 @@ it('quotes the expiry of the broker that issued the reset link', function (): vo
 
     Filament::setCurrentPanel(Filament::getPanel('console'));
 
-    $platform = new ResetPasswordNotification;
-    $platform->url = 'https://console.vendra.test/reset-password';
+    $console = new ResetPasswordNotification;
+    $console->url = 'https://console.vendra.test/reset-password';
 
-    expect($platform->broker)->toBe('console')
-        ->and($platform->toMail($user)->outroLines)
+    expect($console->broker)->toBe('console')
+        ->and($console->toMail($user)->outroLines)
         ->toContain(__('mail.reset_password.expire', ['count' => 45]));
 
     Filament::setCurrentPanel(Filament::getPanel('admin'));

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Misaf\VendraUser\Models\User;
 
-it('finds the platform identity when a tenant user holds the same email', function (): void {
+it('finds the tenantless identity when a tenant user holds the same email', function (): void {
     $tenant = createTestTenant();
     $email = 'shared@example.test';
 
@@ -13,26 +13,26 @@ it('finds the platform identity when a tenant user holds the same email', functi
         'email' => $email,
     ]);
 
-    $platformUser = User::factory()->create([
+    $tenantlessUser = User::factory()->create([
         'tenant_id' => null,
-        'username' => 'platform_user',
+        'username' => 'tenantless_user',
         'email' => $email,
     ]);
 
     switchToTestTenant($tenant);
 
-    $found = User::query()->platform()->where('email', $email)->first();
+    $found = User::query()->tenantless()->where('email', $email)->first();
 
-    expect($found?->getKey())->toBe($platformUser->getKey())
+    expect($found?->getKey())->toBe($tenantlessUser->getKey())
         ->and($found?->getKey())->not->toBe($tenantUser->getKey());
 });
 
-it('leaves tenant users out of the platform query', function (): void {
+it('leaves tenant users out of the tenantless query', function (): void {
     $tenant = createTestTenant();
 
     User::factory()->forTenant($tenant)->create(['username' => 'only_tenant', 'email' => 'tenant-only@example.test']);
 
     switchToTestTenant($tenant);
 
-    expect(User::query()->platform()->where('email', 'tenant-only@example.test')->exists())->toBeFalse();
+    expect(User::query()->tenantless()->where('email', 'tenant-only@example.test')->exists())->toBeFalse();
 });

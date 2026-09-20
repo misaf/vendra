@@ -94,17 +94,17 @@ final class User extends Authenticatable implements FilamentUser, HasLocalePrefe
     }
 
     /**
-     * Limit the query to platform users — the identities that belong to no
+     * Limit the query to tenantless users — the identities that belong to no
      * tenant, such as console and reseller users.
      *
-     * A tenant user may hold the same email as a platform user, so the tenant
+     * A tenant user may hold the same email as a tenantless user, so the tenant
      * scopes come off rather than being left to the ambient tenant context.
      *
      * @param  Builder<self>  $query
      * @return Builder<self>
      */
     #[Scope]
-    protected function platform(Builder $query): Builder
+    protected function tenantless(Builder $query): Builder
     {
         $query->withoutGlobalScopes([TenantScope::class, TeamScope::class]);
 
