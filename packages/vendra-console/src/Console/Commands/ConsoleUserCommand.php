@@ -7,7 +7,6 @@ namespace Misaf\VendraConsole\Console\Commands;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,9 +18,6 @@ use Misaf\VendraConsole\Exceptions\LastConsoleUserException;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleAddress;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
-use Misaf\VendraSupport\Tenancy\Scopes\TeamScope;
-use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
-use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
 use Misaf\VendraUser\Models\User;
 use Misaf\VendraUser\Support\UserRules;
@@ -52,7 +48,7 @@ final class ConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        $user = $this->findPlatformUser($email);
+        $user = User::query()->platform()->where('email', $email)->first();
 
         if ($user === null) {
             $username = $this->resolveUsername();
@@ -167,7 +163,7 @@ final class ConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        $user = $this->findPlatformUser($email);
+        $user = User::query()->platform()->where('email', $email)->first();
 
         if ($user === null) {
             $this->components->error("No platform user has the email [{$email}].");
@@ -209,14 +205,5 @@ final class ConsoleUserCommand extends Command
         $this->components->error('The password was not changed.');
 
         return false;
-    }
-
-    private function findPlatformUser(string $email): ?User
-    {
-        return User::query()
-            ->withoutGlobalScopes([TenantScope::class, TeamScope::class])
-            ->where('email', $email)
-            ->when(TenantSchema::enabled(), fn (Builder $query): Builder => $query->whereNull(TenantSchema::column()))
-            ->first();
     }
 }
