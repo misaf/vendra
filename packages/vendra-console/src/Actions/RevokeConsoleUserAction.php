@@ -31,7 +31,7 @@ final readonly class RevokeConsoleUserAction
                 throw LastConsoleUserException::forUser($user->email);
             }
 
-            $console->forceFill(['active' => false])->save();
+            $console->update(['active' => false]);
 
             return true;
         });
