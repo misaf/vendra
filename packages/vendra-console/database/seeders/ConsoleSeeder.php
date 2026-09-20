@@ -34,10 +34,6 @@ final class ConsoleSeeder extends Seeder
             throw new RuntimeException("Console username or email [{$email}] is taken. Run `php artisan vendra-console:user`.", previous: $exception);
         }
 
-        if (! isset($this->command)) {
-            return;
-        }
-
         $this->command->info('Console access details');
         $this->command->table(['Console URL', 'Email', 'Password'], [
             [ConsoleAddress::url(), $user->email, $password],
