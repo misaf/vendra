@@ -354,3 +354,57 @@ it('allows a username held by a tenant user or a soft-deleted tenantless user', 
 
     expect(User::query()->whereNull('tenant_id')->sole()->username)->toBe('chosen_name');
 });
+
+it('grants console access to an existing user without a prompt when forced', function (): void {
+    $user = User::factory()->create(['tenant_id' => null, 'email' => 'reseller@vendra.test']);
+
+    $this->artisan('vendra-console:user', [
+        '--email' => 'reseller@vendra.test',
+        '--password' => 'the-new-password',
+        '--force' => true,
+        '--no-interaction' => true,
+    ])
+        ->expectsOutputToContain('Console access granted and password updated.')
+        ->assertSuccessful();
+
+    expect($user->refresh()->canAccessPanel(Filament::getPanel('console')))->toBeTrue()
+        ->and(Hash::check('the-new-password', $user->password))->toBeTrue();
+});
+
+it('issues a new password to a console user without a prompt when forced', function (): void {
+    $consoleUser = User::factory()->create([
+        'tenant_id' => null,
+        'email' => 'ops@vendra.test',
+        'password' => Hash::make('the-old-password'),
+    ]);
+    grantConsoleAccess($consoleUser);
+
+    $this->artisan('vendra-console:user', ['--email' => 'ops@vendra.test', '--force' => true, '--no-interaction' => true])
+        ->expectsOutputToContain('Console user password updated.')
+        ->assertSuccessful();
+
+    expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeFalse();
+});
+
+it('rejects a blank email instead of falling back to the default console address', function (string $email): void {
+    Config::set('app.url', 'https://vendra.test');
+
+    $this->artisan('vendra-console:user', ['--username' => 'chosen_name', '--email' => $email])
+        ->expectsOutputToContain('The --email option cannot be blank.')
+        ->assertFailed();
+
+    expect(User::query()->count())->toBe(0)
+        ->and(Console::query()->count())->toBe(0);
+})->with(['empty' => '', 'whitespace' => '   ']);
+
+it('requires a non-blank email to revoke console access', function (): void {
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
+    grantConsoleAccess($consoleUser);
+    Console::factory()->active()->create();
+
+    $this->artisan('vendra-console:user', ['--email' => '   ', '--revoke' => true])
+        ->expectsOutputToContain('The --revoke option requires --email.')
+        ->assertFailed();
+
+    expect(Console::query()->active()->count())->toBe(2);
+});

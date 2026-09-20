@@ -40,7 +40,9 @@ Supplied and generated passwords must pass the application's default password ru
 Generated passwords come from `UserRules::generatePassword()`, so tightening the policy in a provider never leaves the command unable to issue one.
 It asks before granting console access to an existing user who does not already have it
 (the default `console@<app host>` address included), and before replacing a console
-user's password with a generated one; passing `--password` skips that second prompt.
+user's password with a generated one; passing `--password` skips that second prompt and
+`--force` skips both, which is how an unattended run grants access.
+A blank `--email` is rejected rather than treated as the default `console@<app host>` address.
 `php artisan vendra-console:user --revoke --email=…` deactivates the user's console while keeping the
 user, and refuses to deactivate the last active console user; granting access again reactivates it.
 

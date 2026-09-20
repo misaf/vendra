@@ -27,7 +27,8 @@ use Misaf\VendraUser\Support\UserRules;
         {--username= : Username for a new console user; prompts when omitted}
         {--email= : Email address for the console user; defaults to console@<app host>}
         {--password= : Password to set; a strong one is generated when omitted}
-        {--revoke : Revoke console access from the user given by --email}')]
+        {--revoke : Revoke console access from the user given by --email}
+        {--force : Run without confirmation}')]
 final class ConsoleUserCommand extends Command
 {
     public function handle(): int
@@ -119,14 +120,18 @@ final class ConsoleUserCommand extends Command
     private function resolveEmail(): ?string
     {
         $email = $this->option('email');
-        $email = is_string($email) && mb_trim($email) !== '' ? Str::lower(mb_trim($email)) : null;
+        $email = is_string($email) ? Str::lower(mb_trim($email)) : null;
 
         if ($this->option('revoke') === true) {
-            return $email;
+            return $email === '' ? null : $email;
         }
 
         $email ??= ConsoleAddress::defaultEmail();
-        $validator = Validator::make(['email' => $email], ['email' => ['required', 'email']]);
+        $validator = Validator::make(
+            ['email' => $email],
+            ['email' => ['bail', 'required', 'email']],
+            ['email.required' => 'The --email option cannot be blank.'],
+        );
 
         if ($validator->fails()) {
             $this->components->error($validator->errors()->first());
@@ -188,6 +193,10 @@ final class ConsoleUserCommand extends Command
 
     private function confirmChangesToExistingUser(string $email, bool $hasConsoleAccess, bool $passwordGiven): bool
     {
+        if ($this->option('force') === true) {
+            return true;
+        }
+
         if (! $hasConsoleAccess) {
             if ($this->confirm("[{$email}] is an existing user without console access. Grant console access and issue a new password?")) {
                 return true;
