@@ -40,6 +40,42 @@ it('rejects credentials that fail the shared user rules', function (string $user
     'weak password' => ['florist', 'short'],
 ]);
 
+it('rejects an email that fails the shared user rules', function (string $email): void {
+    $tenant = createTestTenant();
+    createUserCommandRole($tenant);
+
+    $this->artisan('vendra-user:create', [
+        '--tenant' => $tenant->getKey(),
+        '--username' => 'florist',
+        '--email' => $email,
+        '--password' => 'secret-password',
+        '--role' => 'admin',
+    ])->assertFailed();
+
+    expect(User::query()->count())->toBe(0);
+})->with([
+    'no domain' => 'not-an-email',
+    'whitespace only' => '   ',
+    'spoofable' => 'florist@exampłe.test',
+]);
+
+it('normalizes the email before creating the user', function (): void {
+    $tenant = createTestTenant();
+    createUserCommandRole($tenant);
+
+    $this->artisan('vendra-user:create', [
+        '--tenant' => $tenant->getKey(),
+        '--username' => 'florist',
+        '--email' => '  Florist@Example.test ',
+        '--password' => 'secret-password',
+        '--role' => 'admin',
+    ])
+        ->expectsOutput('Created user florist (florist@example.test) and assigned role [admin].')
+        ->assertSuccessful();
+
+    assertDatabaseHas('users', ['email' => 'florist@example.test']);
+});
+
 it('creates the user inside the selected tenant and assigns the role', function (): void {
     $tenant = createTestTenant();
     createUserCommandRole($tenant);

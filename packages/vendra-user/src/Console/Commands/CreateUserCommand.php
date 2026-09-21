@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Misaf\VendraUser\Actions\CreateUserAction;
@@ -56,9 +57,14 @@ final class CreateUserCommand extends Command
             return self::FAILURE;
         }
 
+        $email = Str::lower(mb_trim($email));
         $validator = Validator::make(
-            ['username' => $username, 'password' => $password],
-            ['username' => ['required', ...UserRules::username()], 'password' => ['required', ...UserRules::password()]],
+            ['username' => $username, 'email' => $email, 'password' => $password],
+            [
+                'username' => ['required', ...UserRules::username()],
+                'email' => ['required', ...UserRules::email()],
+                'password' => ['required', ...UserRules::password()],
+            ],
         );
 
         if ($validator->fails()) {
@@ -123,14 +129,6 @@ final class CreateUserCommand extends Command
         return $tenant;
     }
 
-    /**
-     * @return class-string<Role>
-     */
-    private function roleModelClass(): string
-    {
-        return resolve(PermissionRegistrar::class)->getRoleClass();
-    }
-
     private function requiredInput(string $option, string $label, ?string $default = null, bool $secret = false): ?string
     {
         $value = $this->option($option);
@@ -150,5 +148,13 @@ final class CreateUserCommand extends Command
             : $this->ask($label, $default);
 
         return is_string($answer) && $answer !== '' ? $answer : null;
+    }
+
+    /**
+     * @return class-string<Role>
+     */
+    private function roleModelClass(): string
+    {
+        return resolve(PermissionRegistrar::class)->getRoleClass();
     }
 }
