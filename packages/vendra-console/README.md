@@ -45,6 +45,8 @@ user's password with a generated one; passing `--password` skips that second pro
 A blank `--email` is rejected rather than treated as the default `console@<app host>` address.
 `php artisan vendra-console:user --revoke --email=…` deactivates the user's console while keeping the
 user, and refuses to deactivate the last active console user; granting access again reactivates it.
+Revoking names the user by `--email` or `--username`, and rejects a run that passes both rather than
+preferring one. Unlike creation, it never prompts: neither `--force` nor `--password` applies.
 
 ## The panel
 

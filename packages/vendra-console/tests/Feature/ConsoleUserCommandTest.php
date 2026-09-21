@@ -244,14 +244,48 @@ it('refuses to revoke the last console user from the command', function (): void
     expect(Console::query()->count())->toBe(1);
 });
 
-it('requires an email to revoke console access', function (): void {
+it('requires an email or a username to revoke console access', function (): void {
     Console::factory()->active()->count(2)->create();
 
     $this->artisan('vendra-console:user', ['--revoke' => true])
-        ->expectsOutputToContain('The --revoke option requires --email.')
+        ->expectsOutputToContain('The --revoke option requires --email or --username.')
         ->assertFailed();
 
     expect(Console::query()->count())->toBe(2);
+});
+
+it('revokes console access from the user given by username', function (): void {
+    $revokedUser = User::factory()->create(['tenant_id' => null, 'username' => 'chosen_name']);
+    grantConsoleAccess($revokedUser);
+    Console::factory()->active()->create();
+
+    $this->artisan('vendra-console:user', ['--username' => ' chosen_name ', '--revoke' => true])
+        ->expectsOutputToContain("Console access revoked from [{$revokedUser->email}].")
+        ->assertSuccessful();
+
+    expect($revokedUser->canAccessPanel(Filament::getPanel('console')))->toBeFalse();
+});
+
+it('reports an unknown username when revoking console access', function (): void {
+    Console::factory()->active()->count(2)->create();
+
+    $this->artisan('vendra-console:user', ['--username' => 'no_such_user', '--revoke' => true])
+        ->expectsOutputToContain('No tenantless user has the username [no_such_user].')
+        ->assertFailed();
+
+    expect(Console::query()->active()->count())->toBe(2);
+});
+
+it('refuses to revoke when an email and a username are both given', function (): void {
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test', 'username' => 'chosen_name']);
+    grantConsoleAccess($consoleUser);
+    Console::factory()->active()->create();
+
+    $this->artisan('vendra-console:user', ['--email' => 'ops@vendra.test', '--username' => 'chosen_name', '--revoke' => true])
+        ->expectsOutputToContain('Pass either --email or --username to --revoke, not both.')
+        ->assertFailed();
+
+    expect(Console::query()->active()->count())->toBe(2);
 });
 
 it('asks before granting console access when the default email belongs to an existing user', function (): void {
@@ -397,14 +431,14 @@ it('rejects a blank email instead of falling back to the default console address
         ->and(Console::query()->count())->toBe(0);
 })->with(['empty' => '', 'whitespace' => '   ']);
 
-it('requires a non-blank email to revoke console access', function (): void {
+it('requires a non-blank identifier to revoke console access', function (string $option): void {
     $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
     grantConsoleAccess($consoleUser);
     Console::factory()->active()->create();
 
-    $this->artisan('vendra-console:user', ['--email' => '   ', '--revoke' => true])
-        ->expectsOutputToContain('The --revoke option requires --email.')
+    $this->artisan('vendra-console:user', [$option => '   ', '--revoke' => true])
+        ->expectsOutputToContain('The --revoke option requires --email or --username.')
         ->assertFailed();
 
     expect(Console::query()->active()->count())->toBe(2);
-});
+})->with(['email' => '--email', 'username' => '--username']);

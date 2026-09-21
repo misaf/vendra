@@ -24,20 +24,20 @@ use Misaf\VendraUser\Support\UserRules;
 
 #[Description('Create a console user, issue a new password to an existing one, or revoke console access')]
 #[Signature('vendra-console:user
-        {--username= : Username for a new console user; prompts when omitted}
+        {--username= : Username for a new console user; prompts when omitted. Identifies the user with --revoke}
         {--email= : Email address for the console user; defaults to console@<app host>}
         {--password= : Password to set; a strong one is generated when omitted}
-        {--revoke : Revoke console access from the user given by --email}
+        {--revoke : Revoke console access from the user given by --email or --username}
         {--force : Run without confirmation}')]
 final class ConsoleUserCommand extends Command
 {
     public function handle(): int
     {
-        $email = $this->resolveEmail();
-
         if ($this->option('revoke') === true) {
-            return $this->revoke($email);
+            return $this->revoke();
         }
+
+        $email = $this->resolveEmail();
 
         if ($email === null) {
             return self::FAILURE;
@@ -51,29 +51,37 @@ final class ConsoleUserCommand extends Command
 
         $user = User::query()->tenantless()->where('email', $email)->first();
 
-        if ($user === null) {
-            $username = $this->resolveUsername();
+        return $user === null
+            ? $this->createUser($email, $password)
+            : $this->updateExistingUser($user, $password);
+    }
 
-            if ($username === null) {
-                return self::FAILURE;
-            }
+    private function createUser(string $email, string $password): int
+    {
+        $username = $this->resolveUsername();
 
-            try {
-                $user = resolve(CreateConsoleUserAction::class)->execute($username, $email, $password);
-            } catch (UniqueConstraintViolationException) {
-                $this->components->error('The username or email is already taken. Choose another.');
-
-                return self::FAILURE;
-            }
-
-            ConsoleCredentials::report($this, 'Console user created.', $user->email, $password);
-
-            return self::SUCCESS;
+        if ($username === null) {
+            return self::FAILURE;
         }
 
+        try {
+            $user = resolve(CreateConsoleUserAction::class)->execute($username, $email, $password);
+        } catch (UniqueConstraintViolationException) {
+            $this->components->error('The username or email is already taken. Choose another.');
+
+            return self::FAILURE;
+        }
+
+        ConsoleCredentials::report($this, 'Console user created.', $user->email, $password);
+
+        return self::SUCCESS;
+    }
+
+    private function updateExistingUser(User $user, string $password): int
+    {
         $hasConsoleAccess = Console::query()->active()->forUser($user)->exists();
 
-        if (! $this->confirmChangesToExistingUser($email, $hasConsoleAccess, is_string($this->option('password')))) {
+        if (! $this->confirmChangesToExistingUser($user, $hasConsoleAccess)) {
             return self::FAILURE;
         }
 
@@ -91,6 +99,73 @@ final class ConsoleUserCommand extends Command
         );
 
         return self::SUCCESS;
+    }
+
+    private function revoke(): int
+    {
+        $email = $this->revokeEmail();
+        $username = $this->revokeUsername();
+
+        if ($email !== null && $username !== null) {
+            $this->components->error('Pass either --email or --username to --revoke, not both.');
+
+            return self::FAILURE;
+        }
+
+        if ($email === null && $username === null) {
+            $this->components->error('The --revoke option requires --email or --username.');
+
+            return self::FAILURE;
+        }
+
+        [$column, $identifier] = $email !== null ? ['email', $email] : ['username', $username];
+
+        $user = User::query()->tenantless()->where($column, $identifier)->first();
+
+        if ($user === null) {
+            $this->components->error("No tenantless user has the {$column} [{$identifier}].");
+
+            return self::FAILURE;
+        }
+
+        try {
+            $revoked = resolve(RevokeConsoleUserAction::class)->execute($user);
+        } catch (LastConsoleUserException $exception) {
+            $this->components->error($exception->getMessage());
+
+            return self::FAILURE;
+        }
+
+        $this->components->info($revoked
+            ? "Console access revoked from [{$user->email}]."
+            : "[{$user->email}] has no console access.");
+
+        return self::SUCCESS;
+    }
+
+    private function confirmChangesToExistingUser(User $user, bool $hasConsoleAccess): bool
+    {
+        if ($this->option('force') === true) {
+            return true;
+        }
+
+        if (! $hasConsoleAccess) {
+            if ($this->confirm("[{$user->email}] is an existing user without console access. Grant console access and issue a new password?")) {
+                return true;
+            }
+
+            $this->components->error('No console access was granted.');
+
+            return false;
+        }
+
+        if (is_string($this->option('password')) || $this->confirm("[{$user->email}] is already a console user. Issue a new password?")) {
+            return true;
+        }
+
+        $this->components->error('The password was not changed.');
+
+        return false;
     }
 
     private function resolveUsername(): ?string
@@ -117,16 +192,22 @@ final class ConsoleUserCommand extends Command
         return $username;
     }
 
+    private function revokeUsername(): ?string
+    {
+        $username = $this->option('username');
+        $username = is_string($username) ? mb_trim($username) : null;
+
+        return $username === '' ? null : $username;
+    }
+
+    /**
+     * Validate the format only, without the shared UserRules::email() checks.
+     * The default address falls back to console@localhost when app.url has no
+     * host, and the stricter rules reject that.
+     */
     private function resolveEmail(): ?string
     {
-        $email = $this->option('email');
-        $email = is_string($email) ? Str::lower(mb_trim($email)) : null;
-
-        if ($this->option('revoke') === true) {
-            return $email === '' ? null : $email;
-        }
-
-        $email ??= ConsoleAddress::defaultEmail();
+        $email = $this->normalizedEmail() ?? ConsoleAddress::defaultEmail();
         $validator = Validator::make(
             ['email' => $email],
             ['email' => ['bail', 'required', 'email']],
@@ -140,6 +221,20 @@ final class ConsoleUserCommand extends Command
         }
 
         return $email;
+    }
+
+    private function revokeEmail(): ?string
+    {
+        $email = $this->normalizedEmail();
+
+        return $email === '' ? null : $email;
+    }
+
+    private function normalizedEmail(): ?string
+    {
+        $email = $this->option('email');
+
+        return is_string($email) ? Str::lower(mb_trim($email)) : null;
     }
 
     private function resolvePassword(): ?string
@@ -158,61 +253,5 @@ final class ConsoleUserCommand extends Command
         }
 
         return $password;
-    }
-
-    private function revoke(?string $email): int
-    {
-        if ($email === null) {
-            $this->components->error('The --revoke option requires --email.');
-
-            return self::FAILURE;
-        }
-
-        $user = User::query()->tenantless()->where('email', $email)->first();
-
-        if ($user === null) {
-            $this->components->error("No tenantless user has the email [{$email}].");
-
-            return self::FAILURE;
-        }
-
-        try {
-            $revoked = resolve(RevokeConsoleUserAction::class)->execute($user);
-        } catch (LastConsoleUserException $exception) {
-            $this->components->error($exception->getMessage());
-
-            return self::FAILURE;
-        }
-
-        $this->components->info($revoked
-            ? "Console access revoked from [{$user->email}]."
-            : "[{$user->email}] has no console access.");
-
-        return self::SUCCESS;
-    }
-
-    private function confirmChangesToExistingUser(string $email, bool $hasConsoleAccess, bool $passwordGiven): bool
-    {
-        if ($this->option('force') === true) {
-            return true;
-        }
-
-        if (! $hasConsoleAccess) {
-            if ($this->confirm("[{$email}] is an existing user without console access. Grant console access and issue a new password?")) {
-                return true;
-            }
-
-            $this->components->error('No console access was granted.');
-
-            return false;
-        }
-
-        if ($passwordGiven || $this->confirm("[{$email}] is already a console user. Issue a new password?")) {
-            return true;
-        }
-
-        $this->components->error('The password was not changed.');
-
-        return false;
     }
 }
