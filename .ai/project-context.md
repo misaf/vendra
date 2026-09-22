@@ -60,10 +60,10 @@ Package layering:
 `app/Filament/<Panel>/` discovery root:
 - `admin` — default panel, root path on the tenant domain, runs *inside* the tenant
   middleware stack (`NeedsTenant`, `EnsureValidTenantSession`, `EnsureAdminDomain`).
-- `console` — `console.<app host>`, console users managing resellers/plans/stores across
-  all tenants; runs **outside** tenant middleware.
-- `reseller` — `reseller.<app host>`; a reseller spans multiple stores, so it also
-  runs **outside** tenant middleware.
+- `console` — `vendra-console.domain` (defaults to `console.<app host>`), console users
+  managing resellers/plans/stores across all tenants; runs **outside** tenant middleware.
+- `reseller` — `vendra-reseller.domain` (defaults to `reseller.<app host>`); a reseller
+  spans multiple stores, so it also runs **outside** tenant middleware.
 
 When adding a resource, put it under the panel directory whose tenancy scope matches
 the data, and check whether the panel is tenant-aware before assuming a current tenant.

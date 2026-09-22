@@ -6,9 +6,9 @@ namespace Misaf\VendraConsole\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Config;
 use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Models\Console;
-use Misaf\VendraConsole\Support\ConsoleAddress;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
 use Misaf\VendraUser\Support\UserRules;
 use RuntimeException;
@@ -26,7 +26,7 @@ final class ConsoleSeeder extends Seeder
             return;
         }
 
-        $email = ConsoleAddress::defaultEmail();
+        $email = Config::string('vendra-console.default_email');
         $password = UserRules::generatePassword();
 
         try {

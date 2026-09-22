@@ -19,6 +19,7 @@ final class ConsoleServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('vendra-console')
+            ->hasConfigFile()
             ->hasTranslations()
             ->hasMigrations([
                 'create_consoles_table',
