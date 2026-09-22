@@ -9,7 +9,9 @@ use Misaf\DockerEngine\Transport\Request;
 use Misaf\DockerEngine\Transport\Response;
 use Misaf\DockerEngine\Transport\StreamResponse;
 use Misaf\LaravelDockerEngine\ContainerManager;
+use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraStore\Models\StorefrontImage;
+use Misaf\VendraUser\Models\User;
 use Tests\Support\FakeDockerTransport;
 use Tests\Support\StringDockerStream;
 use Tests\TestCase;
@@ -18,6 +20,19 @@ pest()->extend(TestCase::class)->in(
     'Feature',
     '../packages/*/tests/Feature',
 );
+
+/**
+ * Read the password out of the credentials table a console command prints.
+ */
+function printedConsolePassword(string $output): string
+{
+    return Str::of($output)->match('/\|\s*https:\/\/[^|]+\|\s*[^|]+\|\s*(\S+)\s*\|/')->toString();
+}
+
+function grantConsoleAccess(User $user): void
+{
+    Console::factory()->active()->for($user)->create();
+}
 
 /**
  * Fake a Docker Engine where the storefront container already exists.

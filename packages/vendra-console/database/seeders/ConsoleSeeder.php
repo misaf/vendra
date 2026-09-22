@@ -32,7 +32,7 @@ final class ConsoleSeeder extends Seeder
         try {
             $user = $this->createConsoleUserAction->execute('console', $email, $password);
         } catch (UniqueConstraintViolationException $exception) {
-            throw new RuntimeException("Console username or email [{$email}] is taken. Run `php artisan vendra-console:user`.", previous: $exception);
+            throw new RuntimeException("Console username or email [{$email}] is taken. Run `php artisan vendra-console:user-create`.", previous: $exception);
         }
 
         ConsoleCredentials::report($this->command, 'Console access details', $user->email, $password);
