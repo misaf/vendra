@@ -157,6 +157,22 @@ it('keeps a console user password when the generated reset is declined', functio
     expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeTrue();
 });
 
+it('points at --force when a generated reset cannot be confirmed without interaction', function (): void {
+    $consoleUser = User::factory()->create([
+        'tenant_id' => null,
+        'email' => 'ops@vendra.test',
+        'password' => Hash::make('the-old-password'),
+    ]);
+    grantConsoleAccess($consoleUser);
+
+    $this->artisan('vendra-console:user-password', ['--email' => 'ops@vendra.test', '--no-interaction' => true])
+        ->expectsOutputToContain('The password was not changed.')
+        ->expectsOutputToContain('Pass --force, or give --password, to issue a password without a prompt.')
+        ->assertFailed();
+
+    expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeTrue();
+});
+
 it('issues a generated password to a console user once the reset is confirmed', function (): void {
     Config::set('app.url', 'https://vendra.test');
     $consoleUser = User::factory()->create([

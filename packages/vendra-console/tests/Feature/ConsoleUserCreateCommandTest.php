@@ -94,28 +94,43 @@ it('rejects an email the shared user rules reject', function (): void {
     expect(User::query()->count())->toBe(0);
 });
 
-it('rejects a username another tenantless user holds alongside an unknown email', function (): void {
+it('points at the grant command when another tenantless user holds the username', function (): void {
     User::factory()->create(['tenant_id' => null, 'username' => 'operations_1', 'email' => 'operations_1@a.test']);
 
     $this->artisan('vendra-console:user-create', ['--username' => 'operations_1', '--email' => 'operations_1@b.test'])
-        ->expectsOutputToContain('username has already been taken')
+        ->expectsOutputToContain('The username [operations_1] already belongs to [operations_1@a.test].')
+        ->expectsOutputToContain('Use vendra-console:user-grant to grant [operations_1@a.test] console access.')
+        ->doesntExpectOutputToContain('vendra-console:user-password')
         ->assertFailed();
 
     expect(User::query()->count())->toBe(1)
         ->and(Console::query()->count())->toBe(0);
 });
 
-it('points at the sibling commands when the email already belongs to a user', function (): void {
+it('points at the grant command when the email belongs to a user without console access', function (): void {
     User::factory()->create(['tenant_id' => null, 'username' => 'existing_one', 'email' => 'ops@vendra.test']);
 
     $this->artisan('vendra-console:user-create', ['--username' => 'chosen_name', '--email' => 'ops@vendra.test'])
-        ->expectsOutputToContain('[ops@vendra.test] already exists.')
-        ->expectsOutputToContain('vendra-console:user-password')
+        ->expectsOutputToContain('The email [ops@vendra.test] already belongs to a tenantless user.')
         ->expectsOutputToContain('vendra-console:user-grant')
+        ->doesntExpectOutputToContain('vendra-console:user-password')
         ->assertFailed();
 
     expect(User::query()->count())->toBe(1)
         ->and(Console::query()->count())->toBe(0);
+});
+
+it('points at the password command when the email belongs to a console user', function (): void {
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'username' => 'existing_one', 'email' => 'ops@vendra.test']);
+    grantConsoleAccess($consoleUser);
+
+    $this->artisan('vendra-console:user-create', ['--username' => 'chosen_name', '--email' => 'ops@vendra.test'])
+        ->expectsOutputToContain('[ops@vendra.test] already has console access. Use vendra-console:user-password to issue a new password.')
+        ->doesntExpectOutputToContain('vendra-console:user-grant')
+        ->assertFailed();
+
+    expect(User::query()->count())->toBe(1)
+        ->and(Console::query()->count())->toBe(1);
 });
 
 it('requires an explicit username to create a console user', function (): void {

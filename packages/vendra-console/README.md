@@ -41,13 +41,15 @@ user it names is in the wrong state.
 - `php artisan vendra-console:user-create` creates a console user with `--username`,
   `--email` and `--password`. `--username` and `--email` are both required (the configured
   address belongs to the seeded user, so the command never falls back to it); the password
-  is generated unless `--password` is given. The command never prompts. It
-  never turns into a password reset or a grant — when the address or username already belongs to a tenantless user, the
-  run fails and names the command to use instead.
+  is generated unless `--password` is given. The command never prompts. It never turns
+  into a password reset or a grant: when the address or username already belongs to a
+  tenantless user, the run fails and names the one command that applies, `user-password`
+  when that user already has console access and `user-grant` otherwise.
 - `php artisan vendra-console:user-password` issues a new password to an existing console
   user, found by `--username`, `--email` or both, and falling back to the configured
   address when neither is given. It asks before replacing a password with a generated one;
-  `--password` or `--force` skips that prompt. It never creates a user and never grants
+  `--password` or `--force` skips that prompt, and a run without interaction fails and
+  points at them instead of prompting. It never creates a user and never grants
   access: an unknown user or one without console access fails with a pointer.
 - `php artisan vendra-console:user-grant` grants console access to an existing tenantless
   user, reactivating a revoked console rather than adding a second row, and optionally sets

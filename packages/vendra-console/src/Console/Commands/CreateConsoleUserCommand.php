@@ -11,7 +11,9 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
+use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
+use Misaf\VendraUser\Models\User;
 use Misaf\VendraUser\Support\UserRules;
 
 #[Description('Create a console user')]
@@ -34,7 +36,7 @@ final class CreateConsoleUserCommand extends Command
             ['email' => $email, 'username' => $username, 'password' => $password],
             [
                 'email' => ['required', ...UserRules::email()],
-                'username' => ['bail', 'required', ...UserRules::username(), UserRules::unique('username')],
+                'username' => ['bail', 'required', ...UserRules::username()],
                 'password' => ['required', ...UserRules::password()],
             ],
             [
@@ -49,14 +51,15 @@ final class CreateConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        ['user' => $existingUser] = $this->findIdentifiedUser($email, null);
+        ['user' => $userWithEmail] = $this->findIdentifiedUser($email, null);
+        ['user' => $userWithUsername] = $this->findIdentifiedUser(null, $username);
 
-        if ($existingUser !== null) {
-            $this->components->error("[{$existingUser->email}] already exists.");
-            $this->line('  Use vendra-console:user-password to issue a new password.');
-            $this->line('  Use vendra-console:user-grant to grant console access.');
+        if ($userWithEmail !== null) {
+            return $this->reportExistingUser($userWithEmail, "The email [{$email}] already belongs to a tenantless user.");
+        }
 
-            return self::FAILURE;
+        if ($userWithUsername !== null) {
+            return $this->reportExistingUser($userWithUsername, "The username [{$username}] already belongs to [{$userWithUsername->email}].");
         }
 
         try {
@@ -70,5 +73,18 @@ final class CreateConsoleUserCommand extends Command
         ConsoleCredentials::report($this, 'Console user created.', $user->email, $password);
 
         return self::SUCCESS;
+    }
+
+    private function reportExistingUser(User $user, string $message): int
+    {
+        $this->components->error($message);
+
+        if (Console::query()->active()->forUser($user)->exists()) {
+            $this->line("  [{$user->email}] already has console access. Use vendra-console:user-password to issue a new password.");
+        } else {
+            $this->line("  Use vendra-console:user-grant to grant [{$user->email}] console access.");
+        }
+
+        return self::FAILURE;
     }
 }

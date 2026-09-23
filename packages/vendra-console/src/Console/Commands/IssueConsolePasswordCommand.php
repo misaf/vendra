@@ -78,6 +78,13 @@ final class IssueConsolePasswordCommand extends Command
 
         $skipConfirmation = $this->option('force') === true || is_string($givenPassword);
 
+        if (! $skipConfirmation && ! $this->input->isInteractive()) {
+            $this->components->error('The password was not changed.');
+            $this->line('  Pass --force, or give --password, to issue a password without a prompt.');
+
+            return self::FAILURE;
+        }
+
         if (! $skipConfirmation && ! $this->confirm("[{$user->email}] is already a console user. Issue a new password?")) {
             $this->components->error('The password was not changed.');
 
