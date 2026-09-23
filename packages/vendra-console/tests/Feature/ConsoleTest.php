@@ -21,6 +21,15 @@ it('links a console to its canonical user', function (): void {
     expect($console->user->is($user))->toBeTrue();
 });
 
+it('creates an inactive console when no state is given', function (): void {
+    $user = User::factory()->create(['tenant_id' => null]);
+
+    $console = Console::query()->create(['user_id' => $user->getKey()]);
+
+    expect($console->refresh()->active)->toBeFalse()
+        ->and($user->canAccessPanel(Filament::getPanel('console')))->toBeFalse();
+});
+
 it('scopes consoles to the given user', function (): void {
     $grantedUser = User::factory()->create(['tenant_id' => null]);
     $otherUser = User::factory()->create(['tenant_id' => null]);
