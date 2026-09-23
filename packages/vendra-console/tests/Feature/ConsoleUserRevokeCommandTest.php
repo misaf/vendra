@@ -75,10 +75,10 @@ it('refuses to revoke the last console user from the command', function (): void
     grantConsoleAccess($lastUser);
 
     $this->artisan('vendra-console:user-revoke', ['--email' => 'ops@vendra.test'])
-        ->expectsOutputToContain('[ops@vendra.test] is the last console user.')
+        ->expectsOutputToContain('[ops@vendra.test] is the last console user. Grant console access to another user before revoking it.')
         ->assertFailed();
 
-    expect(Console::query()->count())->toBe(1);
+    expect($lastUser->canAccessPanel(Filament::getPanel('console')))->toBeTrue();
 });
 
 it('requires an email or a username to revoke console access without interaction', function (): void {
