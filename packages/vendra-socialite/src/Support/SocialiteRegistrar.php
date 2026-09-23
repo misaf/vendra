@@ -15,6 +15,7 @@ use Misaf\VendraSocialite\Models\SocialiteUser;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraUser\Actions\CreateUserAction;
 use Misaf\VendraUser\Models\User;
+use Misaf\VendraUser\Support\PasswordGenerator;
 
 final class SocialiteRegistrar
 {
@@ -83,7 +84,7 @@ final class SocialiteRegistrar
             tenant: resolve(TenantResolver::class)->current(),
             username: self::generateUsername($oauthUser->getNickname() ?? $oauthUser->getName() ?? $email),
             email: $email,
-            password: Str::password(32),
+            password: PasswordGenerator::generate(),
         );
     }
 

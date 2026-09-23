@@ -43,7 +43,7 @@ Use `socialite-development` for OAuth flows, `laravel-best-practices` for Larave
 - `SocialiteUser` extends `dutchcodingcompany/filament-socialite`'s base model and adds `BelongsToTenant`, overriding `findForProvider`/`createForProvider` (the base uses `self`, which bypasses the tenant scope).
 - Derive tenancy from `misaf/vendra-support` (`BelongsToTenant`, `TenantSchema`), never `Misaf\VendraTenant`.
 - Register the `filament-socialite` plugin on the panels in `config/vendra-socialite.php` through `SocialiteServiceProvider`; build the plugin in `SocialiteRegistrar::make()`.
-- Map OAuth accounts onto the `misaf/vendra-user` `username`-based schema in `SocialiteRegistrar::createUserUsing` (unique username, verified email, random password), creating the user through `vendra-user`'s `CreateUserAction` with the current tenant from `TenantResolver`.
+- Map OAuth accounts onto the `misaf/vendra-user` `username`-based schema in `SocialiteRegistrar::createUserUsing` (unique username, verified email, a random password from `vendra-user`'s `PasswordGenerator::generate()`), creating the user through `vendra-user`'s `CreateUserAction` with the current tenant from `TenantResolver`.
 - Provider OAuth credentials belong in the host `config/services.php` (`google`, `github`), not in this module.
 
 ## Testing
