@@ -30,6 +30,14 @@ it('scopes consoles to the given user', function (): void {
         ->and(Console::query()->forUser($otherUser)->exists())->toBeFalse();
 });
 
+it('scopes consoles to active or inactive ones', function (): void {
+    $activeConsole = Console::factory()->active()->create();
+    $inactiveConsole = Console::factory()->inactive()->create();
+
+    expect(Console::query()->active()->sole()->is($activeConsole))->toBeTrue()
+        ->and(Console::query()->inactive()->sole()->is($inactiveConsole))->toBeTrue();
+});
+
 it('denies console panel access to an inactive console while keeping the user', function (): void {
     $user = User::factory()->create(['tenant_id' => null]);
     $console = Console::factory()->active()->for($user)->create();

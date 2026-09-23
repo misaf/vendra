@@ -66,6 +66,16 @@ final class Console extends Model
      * @return Builder<self>
      */
     #[Scope]
+    protected function inactive(Builder $query): Builder
+    {
+        return $query->where('active', false);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
     protected function forUser(Builder $query, User $user): Builder
     {
         return $query->where('user_id', $user->getKey());
