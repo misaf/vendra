@@ -207,8 +207,7 @@ it('issues a new password to a console user without a prompt when forced', funct
 
 it('points at the create command when no tenantless user matches', function (): void {
     $this->artisan('vendra-console:user-password', ['--email' => 'ops@vendra.test', '--password' => 'the-new-password'])
-        ->expectsOutputToContain('No tenantless user has the email [ops@vendra.test].')
-        ->expectsOutputToContain('vendra-console:user-create')
+        ->expectsOutputToContain('No tenantless user has the email [ops@vendra.test]. Use vendra-console:user-create to create one.')
         ->assertFailed();
 
     expect(User::query()->count())->toBe(0)

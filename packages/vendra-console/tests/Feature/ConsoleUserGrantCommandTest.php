@@ -101,8 +101,7 @@ it('requires an email or a username to grant console access', function (array $o
 
 it('points at the create command when no tenantless user matches', function (): void {
     $this->artisan('vendra-console:user-grant', ['--username' => 'no_such_user'])
-        ->expectsOutputToContain('No tenantless user has the username [no_such_user].')
-        ->expectsOutputToContain('vendra-console:user-create')
+        ->expectsOutputToContain('No tenantless user has the username [no_such_user]. Use vendra-console:user-create to create one.')
         ->assertFailed();
 
     expect(Console::query()->count())->toBe(0);

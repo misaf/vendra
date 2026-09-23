@@ -132,6 +132,7 @@ it('rejects an invalid email without revoking console access', function (): void
 });
 
 it('rejects revocation when either supplied identifier is invalid', function (string $email, string $username, string $message): void {
+    User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
     Console::factory()->active()->count(2)->create();
 
     $this->artisan('vendra-console:user-revoke', ['--email' => $email, '--username' => $username])

@@ -13,14 +13,11 @@ it('refuses to look up a console user without an identifier', function (): void 
     {
         use IdentifiesConsoleUser;
 
-        /**
-         * @return array{user: ?User, mismatched: bool, unmatched: 'email'|'username'|null}
-         */
-        public function lookUpWithoutIdentifiers(): array
+        public function lookUpWithoutIdentifiers(): ?User
         {
             return $this->findIdentifiedUser(null, null);
         }
     };
 
-    expect(fn (): array => $command->lookUpWithoutIdentifiers())->toThrow(InvalidArgumentException::class);
+    expect(fn (): ?User => $command->lookUpWithoutIdentifiers())->toThrow(InvalidArgumentException::class);
 });

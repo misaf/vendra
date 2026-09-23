@@ -26,49 +26,21 @@ trait IdentifiesConsoleUser
     }
 
     /**
-     * @return array{user: ?User, mismatched: bool, unmatched: 'email'|'username'|null}
+     * Find the tenantless user every supplied identifier names.
+     *
+     * Callers validate that each identifier exists on its own, so a null result
+     * means the email and the username name different users.
      *
      * @throws InvalidArgumentException
      */
-    private function findIdentifiedUser(?string $email, ?string $username): array
+    private function findIdentifiedUser(?string $email, ?string $username): ?User
     {
         // Without an identifier the lookup would match every tenantless user.
         throw_if($email === null && $username === null, InvalidArgumentException::class, 'An email or a username is required to identify a console user.');
 
-        $users = User::query()->tenantless()
-            ->where(function (Builder $query) use ($email, $username): void {
-                if ($email !== null) {
-                    $query->where('email', $email);
-                }
-
-                if ($username !== null) {
-                    $query->orWhere('username', $username);
-                }
-            })
-            // Keep matching consistent with the database's collation.
-            ->selectRaw('users.*, email = ? AS matches_email, username = ? AS matches_username', [$email, $username])
-            ->get();
-
-        $emailUser = $email === null ? null : $users->first(fn (User $user): bool => (bool) $user->getAttribute('matches_email'));
-        $usernameUser = $username === null ? null : $users->first(fn (User $user): bool => (bool) $user->getAttribute('matches_username'));
-
-        $users->each(function (User $user): void {
-            $user->offsetUnset('matches_email');
-            $user->offsetUnset('matches_username');
-        });
-
-        $unmatched = match (true) {
-            $email !== null && $emailUser === null => 'email',
-            $username !== null && $usernameUser === null => 'username',
-            default => null,
-        };
-
-        $mismatched = $emailUser !== null && $usernameUser !== null && ! $emailUser->is($usernameUser);
-
-        return [
-            'user' => $unmatched === null && ! $mismatched ? $emailUser ?? $usernameUser : null,
-            'mismatched' => $mismatched,
-            'unmatched' => $unmatched,
-        ];
+        return User::query()->tenantless()
+            ->when($email !== null, fn (Builder $query): Builder => $query->where('email', $email))
+            ->when($username !== null, fn (Builder $query): Builder => $query->where('username', $username))
+            ->first();
     }
 }

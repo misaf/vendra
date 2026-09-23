@@ -41,11 +41,15 @@ final class IssueConsolePasswordCommand extends Command
         $validator = Validator::make(
             ['email' => $email, 'username' => $username, 'password' => $password],
             [
-                'email' => ['bail', 'exclude_if:email,null', 'filled', ...UserRules::email()],
-                'username' => ['bail', 'exclude_if:username,null', 'filled', ...UserRules::username()],
+                'email' => ['bail', 'exclude_if:email,null', 'filled', ...UserRules::email(), UserRules::exists('email')],
+                'username' => ['bail', 'exclude_if:username,null', 'filled', ...UserRules::username(), UserRules::exists('username')],
                 'password' => ['required', ...UserRules::password()],
             ],
-            ['email.filled' => 'The --email option cannot be blank.'],
+            [
+                'email.exists' => 'No tenantless user has the email [:input]. Use vendra-console:user-create to create one.',
+                'username.exists' => 'No tenantless user has the username [:input]. Use vendra-console:user-create to create one.',
+                'email.filled' => 'The --email option cannot be blank.',
+            ],
         );
 
         if ($validator->fails()) {
@@ -54,19 +58,10 @@ final class IssueConsolePasswordCommand extends Command
             return self::FAILURE;
         }
 
-        ['user' => $user, 'mismatched' => $mismatched, 'unmatched' => $unmatched] = $this->findIdentifiedUser($email, $username);
-
-        if ($mismatched) {
-            $this->components->error('The --email and --username options identify different users.');
-
-            return self::FAILURE;
-        }
+        $user = $this->findIdentifiedUser($email, $username);
 
         if ($user === null) {
-            $this->components->error($unmatched === 'email'
-                ? "No tenantless user has the email [{$email}]."
-                : "No tenantless user has the username [{$username}].");
-            $this->line('  Use vendra-console:user-create to create one.');
+            $this->components->error('The --email and --username options identify different users.');
 
             return self::FAILURE;
         }

@@ -7,6 +7,7 @@ namespace Misaf\VendraUser\Support;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Exists;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules\Unique;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
@@ -74,6 +75,24 @@ final class UserRules
     public static function unique(string $column, ?int $tenantId = null, ?int $ignoreUserId = null): Unique
     {
         $rule = Rule::unique(User::class, $column)->ignore($ignoreUserId)->withoutTrashed();
+
+        if (! TenantSchema::enabled()) {
+            return $rule;
+        }
+
+        return $tenantId === null
+            ? $rule->whereNull(TenantSchema::column())
+            : $rule->where(TenantSchema::column(), $tenantId);
+    }
+
+    /**
+     * Require a username or email held by one tenant's users, or by tenantless users when the tenant is null.
+     *
+     * Soft-deleted users are left out, as they are by unique().
+     */
+    public static function exists(string $column, ?int $tenantId = null): Exists
+    {
+        $rule = Rule::exists(User::class, $column)->withoutTrashed();
 
         if (! TenantSchema::enabled()) {
             return $rule;

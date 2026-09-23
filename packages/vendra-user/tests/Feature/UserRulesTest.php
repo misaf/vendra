@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Misaf\VendraUser\Models\User;
 use Misaf\VendraUser\Support\UserRules;
 
 function withPasswordPolicy(Password $policy, Closure $assertions): void
@@ -53,4 +54,22 @@ it('omits symbols unless the password policy requires them', function (): void {
     withPasswordPolicy(Password::min(8)->symbols(), function (): void {
         expect(UserRules::generatePassword())->toMatch('/[^\pL\pN]/u');
     });
+});
+
+it('requires a value held by a tenantless user when no tenant is given', function (): void {
+    $tenant = createTestTenant();
+    User::factory()->create(['tenant_id' => null, 'email' => 'console@example.test']);
+    User::factory()->forTenant($tenant)->create(['email' => 'tenant@example.test']);
+    User::factory()->trashed()->create(['tenant_id' => null, 'email' => 'deleted@example.test']);
+
+    $passes = fn (string $email, ?int $tenantId = null): bool => Validator::make(
+        ['email' => $email],
+        ['email' => [UserRules::exists('email', $tenantId)]],
+    )->passes();
+
+    expect($passes('console@example.test'))->toBeTrue()
+        ->and($passes('tenant@example.test'))->toBeFalse()
+        ->and($passes('deleted@example.test'))->toBeFalse()
+        ->and($passes('tenant@example.test', $tenant->getKey()))->toBeTrue()
+        ->and($passes('console@example.test', $tenant->getKey()))->toBeFalse();
 });

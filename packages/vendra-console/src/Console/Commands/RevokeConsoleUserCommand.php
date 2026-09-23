@@ -30,10 +30,12 @@ final class RevokeConsoleUserCommand extends Command
             ['email' => $email, 'username' => $username],
             [
                 // Keep required_without ahead of exclude_if, which stops the rest of a null field's rules.
-                'email' => ['bail', 'required_without:username', 'exclude_if:email,null', 'filled', ...UserRules::email()],
-                'username' => ['bail', 'required_without:email', 'exclude_if:username,null', 'filled', ...UserRules::username()],
+                'email' => ['bail', 'required_without:username', 'exclude_if:email,null', 'filled', ...UserRules::email(), UserRules::exists('email')],
+                'username' => ['bail', 'required_without:email', 'exclude_if:username,null', 'filled', ...UserRules::username(), UserRules::exists('username')],
             ],
             [
+                'email.exists' => 'No tenantless user has the email [:input].',
+                'username.exists' => 'No tenantless user has the username [:input].',
                 'email.filled' => 'Revoking console access requires --email or --username.',
                 'email.required_without' => 'Revoking console access requires --email or --username.',
                 'username.filled' => 'Revoking console access requires --email or --username.',
@@ -47,18 +49,10 @@ final class RevokeConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        ['user' => $user, 'mismatched' => $mismatched, 'unmatched' => $unmatched] = $this->findIdentifiedUser($email, $username);
-
-        if ($mismatched) {
-            $this->components->error('The --email and --username options identify different users.');
-
-            return self::FAILURE;
-        }
+        $user = $this->findIdentifiedUser($email, $username);
 
         if ($user === null) {
-            $this->components->error($unmatched === 'email'
-                ? "No tenantless user has the email [{$email}]."
-                : "No tenantless user has the username [{$username}].");
+            $this->components->error('The --email and --username options identify different users.');
 
             return self::FAILURE;
         }

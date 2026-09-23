@@ -70,8 +70,9 @@ character set from that same policy, so seeded and command-issued passwords
 pass the rules a supplied password must meet. Callers add required/optional, confirmation, and
 scoped uniqueness rules; reseller registration additionally requires ASCII.
 `UserRules::email()` is the strict email rule, and `UserRules::unique()` checks
-a value within one tenant, or among tenantless users when the tenant is null.
-Soft-deleted users release their username and email, matching the
+a value within one tenant, or among tenantless users when the tenant is null;
+`UserRules::exists()` is its counterpart, requiring a value some user in that same
+scope holds. Soft-deleted users release their username and email, matching the
 `users_active_username_unique` and `users_active_email_unique` indexes.
 
 Look a tenantless identity up with the `User` model's `tenantless()` scope —
