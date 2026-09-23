@@ -14,6 +14,7 @@ use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
 use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
 use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
+use Misaf\VendraUser\Models\User;
 use Misaf\VendraUser\Support\UserRules;
 
 #[Description('Grant console access to an existing tenantless user')]
@@ -56,7 +57,8 @@ final class GrantConsoleAccessCommand extends Command
             return self::FAILURE;
         }
 
-        $user = $this->findIdentifiedUser($email, $username);
+        // Each identifier exists on its own, so no user matching both means they name different users.
+        $user = User::query()->tenantless()->identifiedBy($email, $username)->first();
 
         if ($user === null) {
             $this->components->error('The --email and --username options identify different users.');

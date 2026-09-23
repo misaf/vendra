@@ -52,8 +52,8 @@ final class CreateConsoleUserCommand extends Command
             return self::FAILURE;
         }
 
-        $userWithEmail = $this->findIdentifiedUser($email, null);
-        $userWithUsername = $this->findIdentifiedUser(null, $username);
+        $userWithEmail = User::query()->tenantless()->identifiedBy(email: $email)->first();
+        $userWithUsername = User::query()->tenantless()->identifiedBy(username: $username)->first();
 
         if ($userWithEmail !== null) {
             return $this->reportExistingUser($userWithEmail, "The email [{$email}] already belongs to a tenantless user.");
