@@ -32,7 +32,9 @@ final class IssueConsolePasswordCommand extends Command
 
     public function handle(): int
     {
-        $this->searchForMissingUser('Which console user should get a new password?', withConsoleAccess: true);
+        if (! $this->searchForMissingUser('Which console user should get a new password?', withConsoleAccess: true, noUserMessage: 'No tenantless user has console access. Use vendra-console:user-create to create one.')) {
+            return self::FAILURE;
+        }
 
         $email = $this->givenEmail();
         $username = $this->givenUsername();

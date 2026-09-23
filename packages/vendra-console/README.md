@@ -68,6 +68,7 @@ again.
 When an interactive `user-grant`, `user-revoke` or `user-password` run gives neither
 `--email` nor `--username`, it searches tenantless users by email or username and lets you
 pick one: users without console access for `user-grant`, console users for the other two.
+When nobody fits, the run fails with a message instead of searching.
 Without interaction, `user-grant` and `user-revoke` require an identifier instead.
 
 Every command that takes both `--email` and `--username` requires them to resolve to the

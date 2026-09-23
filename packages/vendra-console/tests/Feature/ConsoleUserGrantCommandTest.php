@@ -173,3 +173,11 @@ it('searches tenantless users without console access when an interactive run nam
 
     expect(Console::query()->active()->forUser($user)->exists())->toBeTrue();
 });
+
+it('fails instead of searching when every tenantless user already has console access', function (): void {
+    grantConsoleAccess(User::factory()->create(['tenant_id' => null]));
+
+    $this->artisan('vendra-console:user-grant')
+        ->expectsOutputToContain('Every tenantless user already has console access. Use vendra-console:user-create to create one.')
+        ->assertFailed();
+});

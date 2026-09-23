@@ -48,7 +48,11 @@ final class CreateConsoleUserCommand extends Command
         }
 
         try {
-            $user = resolve(CreateConsoleUserAction::class)->execute($username, $email, $password);
+            $user = resolve(CreateConsoleUserAction::class)->execute(
+                $validator->safe()->string('username')->toString(),
+                $validator->safe()->string('email')->toString(),
+                $password,
+            );
         } catch (UniqueConstraintViolationException) {
             $this->components->error("The username [{$username}] or the email [{$email}] is already taken. Choose another.");
 

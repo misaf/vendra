@@ -211,3 +211,11 @@ it('searches console users when an interactive run names no user', function (): 
         ->expectsOutputToContain('Console access revoked from [ops@vendra.test].')
         ->assertSuccessful();
 });
+
+it('fails instead of searching when no tenantless user has console access', function (): void {
+    User::factory()->create(['tenant_id' => null]);
+
+    $this->artisan('vendra-console:user-revoke')
+        ->expectsOutputToContain('No tenantless user has console access.')
+        ->assertFailed();
+});

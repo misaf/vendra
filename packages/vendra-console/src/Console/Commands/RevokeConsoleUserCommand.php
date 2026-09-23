@@ -24,7 +24,9 @@ final class RevokeConsoleUserCommand extends Command
 
     public function handle(): int
     {
-        $this->searchForMissingUser('Which console user should lose access?', withConsoleAccess: true);
+        if (! $this->searchForMissingUser('Which console user should lose access?', withConsoleAccess: true, noUserMessage: 'No tenantless user has console access.')) {
+            return self::FAILURE;
+        }
 
         $email = $this->givenEmail();
         $username = $this->givenUsername();

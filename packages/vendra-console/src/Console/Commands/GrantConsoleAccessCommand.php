@@ -29,7 +29,9 @@ final class GrantConsoleAccessCommand extends Command
 
     public function handle(): int
     {
-        $this->searchForMissingUser('Which user should get console access?', withConsoleAccess: false);
+        if (! $this->searchForMissingUser('Which user should get console access?', withConsoleAccess: false, noUserMessage: 'Every tenantless user already has console access. Use vendra-console:user-create to create one.')) {
+            return self::FAILURE;
+        }
 
         $email = $this->givenEmail();
         $username = $this->givenUsername();

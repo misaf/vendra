@@ -277,3 +277,14 @@ it('searches console users when an interactive run names no user', function (): 
 
     expect(Hash::check('the-new-password', $consoleUser->refresh()->password))->toBeTrue();
 });
+
+it('fails instead of searching when no tenantless user has console access', function (): void {
+    $user = User::factory()->create(['tenant_id' => null]);
+    $password = $user->password;
+
+    $this->artisan('vendra-console:user-password')
+        ->expectsOutputToContain('No tenantless user has console access. Use vendra-console:user-create to create one.')
+        ->assertFailed();
+
+    expect($user->refresh()->password)->toBe($password);
+});

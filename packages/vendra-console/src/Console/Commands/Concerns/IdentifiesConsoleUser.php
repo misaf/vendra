@@ -19,11 +19,18 @@ trait IdentifiesConsoleUser
      * Search for the user by email or username when an interactive run names neither.
      *
      * The chosen email is written back into --email, so it is validated like the option.
+     * With no user to choose from, the run fails with the given message instead.
      */
-    private function searchForMissingUser(string $label, bool $withConsoleAccess): void
+    private function searchForMissingUser(string $label, bool $withConsoleAccess, string $noUserMessage): bool
     {
         if (! $this->input->isInteractive() || $this->option('email') !== null || $this->option('username') !== null) {
-            return;
+            return true;
+        }
+
+        if ($this->searchUsers('', $withConsoleAccess) === []) {
+            $this->components->error($noUserMessage);
+
+            return false;
         }
 
         $this->input->setOption('email', search(
@@ -32,6 +39,8 @@ trait IdentifiesConsoleUser
             options: fn (string $value): array => $this->searchUsers($value, $withConsoleAccess),
             scroll: self::USER_SEARCH_LIMIT,
         ));
+
+        return true;
     }
 
     /**
