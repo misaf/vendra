@@ -10,6 +10,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
+use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
 use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
@@ -19,18 +20,19 @@ use Misaf\VendraUser\Support\UserRules;
 #[Signature('vendra-console:user-password
         {--username= : Username of the console user}
         {--email= : Email address of the console user; defaults to the vendra-console.default_email config value}
-        {--password= : Password to set; a strong one is generated when omitted}
+        {--password= : Password to set, asked for without echo when given no value; a strong one is generated when omitted}
         {--force : Run without confirmation}')]
 final class IssueConsolePasswordCommand extends Command
 {
     use IdentifiesConsoleUser;
+    use ReadsGivenPassword;
 
     public function handle(): int
     {
         $email = $this->givenEmail();
         $username = $this->givenUsername();
-        $givenPassword = $this->option('password');
-        $password = is_string($givenPassword) ? $givenPassword : UserRules::generatePassword();
+        $givenPassword = $this->givenPassword();
+        $password = $givenPassword ?? UserRules::generatePassword();
 
         if ($email === null && $username === null) {
             $email = Config::string('vendra-console.default_email');
@@ -76,7 +78,7 @@ final class IssueConsolePasswordCommand extends Command
             return self::FAILURE;
         }
 
-        $skipConfirmation = $this->option('force') === true || is_string($givenPassword);
+        $skipConfirmation = $this->option('force') === true || $givenPassword !== null;
 
         if (! $skipConfirmation && ! $this->input->isInteractive()) {
             $this->components->error('The password was not changed.');

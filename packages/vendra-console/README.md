@@ -41,7 +41,7 @@ user it names is in the wrong state.
 - `php artisan vendra-console:user-create` creates a console user with `--username`,
   `--email` and `--password`. `--username` and `--email` are both required (the configured
   address belongs to the seeded user, so the command never falls back to it); the password
-  is generated unless `--password` is given. The command never prompts. It never turns
+  is generated unless `--password` is given. It never turns
   into a password reset or a grant: when the address or username already belongs to a
   tenantless user, the run fails and names the one command that applies, `user-password`
   when that user already has console access and `user-grant` otherwise.
@@ -53,12 +53,15 @@ user it names is in the wrong state.
   access: an unknown user or one without console access fails with a pointer.
 - `php artisan vendra-console:user-grant` grants console access to an existing tenantless
   user, reactivating a revoked console rather than adding a second row, and optionally sets
-  a password with `--password`. It requires `--email`, `--username` or both, never prompts,
-  and reports a user who already has access without changing anything. Given `--password`
+  a password with `--password`. It requires `--email`, `--username` or both, and reports a user who already has access without changing anything. Given `--password`
   for a user who already has access it fails and points at `vendra-console:user-password`.
 - `php artisan vendra-console:user-revoke` deactivates the user's console while keeping the
   user, and refuses to deactivate the last active console user. It names the user the same
   way and never prompts.
+
+`user-create`, `user-password` and `user-grant` ask for the password without echoing it
+when `--password` is given without a value, which keeps it out of shell history and the
+process list. Without interaction that fails rather than falling back to a generated one.
 
 Every command that takes both `--email` and `--username` requires them to resolve to the
 same tenantless user: an identifier that names nobody fails naming it, and two that name

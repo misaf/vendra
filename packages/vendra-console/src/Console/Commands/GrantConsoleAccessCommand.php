@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraConsole\Actions\GrantConsoleAccessAction;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
+use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
 use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
 use Misaf\VendraUser\Support\UserRules;
@@ -19,17 +20,17 @@ use Misaf\VendraUser\Support\UserRules;
 #[Signature('vendra-console:user-grant
         {--username= : Username of the user to grant console access to}
         {--email= : Email address of the user to grant console access to}
-        {--password= : Password to set when access is granted; the current one is kept when omitted}')]
+        {--password= : Password to set when access is granted, asked for without echo when given no value; the current one is kept when omitted}')]
 final class GrantConsoleAccessCommand extends Command
 {
     use IdentifiesConsoleUser;
+    use ReadsGivenPassword;
 
     public function handle(): int
     {
         $email = $this->givenEmail();
         $username = $this->givenUsername();
-        $password = $this->option('password');
-        $password = is_string($password) ? $password : null;
+        $password = $this->givenPassword();
 
         $validator = Validator::make(
             [
@@ -46,9 +47,9 @@ final class GrantConsoleAccessCommand extends Command
                 'password' => [$password === null ? 'nullable' : 'required', ...UserRules::password()],
             ],
             [
-                'identifier.required' => __('vendra-console::commands.grant_requires_identifier'),
-                'email.required' => __('vendra-console::commands.grant_requires_identifier'),
-                'username.required' => __('vendra-console::commands.grant_requires_identifier'),
+                'identifier.required' => 'Granting console access requires --email or --username.',
+                'email.required' => 'Granting console access requires --email or --username.',
+                'username.required' => 'Granting console access requires --email or --username.',
             ],
         );
 

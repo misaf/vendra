@@ -11,6 +11,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
+use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
 use Misaf\VendraUser\Models\User;
@@ -20,17 +21,17 @@ use Misaf\VendraUser\Support\UserRules;
 #[Signature('vendra-console:user-create
         {--username= : Username for the new console user}
         {--email= : Email address for the new console user}
-        {--password= : Password to set; a strong one is generated when omitted}')]
+        {--password= : Password to set, asked for without echo when given no value; a strong one is generated when omitted}')]
 final class CreateConsoleUserCommand extends Command
 {
     use IdentifiesConsoleUser;
+    use ReadsGivenPassword;
 
     public function handle(): int
     {
         $email = $this->givenEmail();
         $username = $this->givenUsername();
-        $password = $this->option('password');
-        $password = is_string($password) ? $password : UserRules::generatePassword();
+        $password = $this->givenPassword() ?? UserRules::generatePassword();
 
         $validator = Validator::make(
             ['email' => $email, 'username' => $username, 'password' => $password],

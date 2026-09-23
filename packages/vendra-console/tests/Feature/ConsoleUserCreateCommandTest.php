@@ -184,3 +184,19 @@ it('rejects a blank email', function (string $email): void {
     expect(User::query()->count())->toBe(0)
         ->and(Console::query()->count())->toBe(0);
 })->with(['empty' => '', 'whitespace' => '   ']);
+
+it('asks for the password without echo when --password is given no value', function (): void {
+    $this->artisan('vendra-console:user-create', ['--username' => 'chosen_name', '--email' => 'ops@vendra.test', '--password' => null])
+        ->expectsQuestion('Password', 'the-new-password')
+        ->assertSuccessful();
+
+    expect(Hash::check('the-new-password', User::query()->sole()->password))->toBeTrue();
+});
+
+it('rejects a valueless --password without interaction instead of generating one', function (): void {
+    $this->artisan('vendra-console:user-create', ['--username' => 'chosen_name', '--email' => 'ops@vendra.test', '--password' => null, '--no-interaction' => true])
+        ->expectsOutputToContain('password')
+        ->assertFailed();
+
+    expect(User::query()->count())->toBe(0);
+});

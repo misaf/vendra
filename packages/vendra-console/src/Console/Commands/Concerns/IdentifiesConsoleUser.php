@@ -6,6 +6,7 @@ namespace Misaf\VendraConsole\Console\Commands\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 use Misaf\VendraUser\Models\User;
 
 trait IdentifiesConsoleUser
@@ -26,9 +27,14 @@ trait IdentifiesConsoleUser
 
     /**
      * @return array{user: ?User, mismatched: bool, unmatched: 'email'|'username'|null}
+     *
+     * @throws InvalidArgumentException
      */
     private function findIdentifiedUser(?string $email, ?string $username): array
     {
+        // Without an identifier the lookup would match every tenantless user.
+        throw_if($email === null && $username === null, InvalidArgumentException::class, 'An email or a username is required to identify a console user.');
+
         $users = User::query()->tenantless()
             ->where(function (Builder $query) use ($email, $username): void {
                 if ($email !== null) {

@@ -39,9 +39,9 @@ final class RevokeConsoleUserCommand extends Command
                 'username' => ['bail', $username === null ? 'nullable' : 'required', ...UserRules::username()],
             ],
             [
-                'identifier.required' => __('vendra-console::commands.revoke_requires_identifier'),
-                'email.required' => __('vendra-console::commands.revoke_requires_identifier'),
-                'username.required' => __('vendra-console::commands.revoke_requires_identifier'),
+                'identifier.required' => 'Revoking console access requires --email or --username.',
+                'email.required' => 'Revoking console access requires --email or --username.',
+                'username.required' => 'Revoking console access requires --email or --username.',
             ],
         );
 

@@ -242,3 +242,15 @@ it('rejects a blank email instead of falling back to the default console address
 
     expect($consoleUser->refresh()->password)->toBe($password);
 })->with(['empty' => '', 'whitespace' => '   ']);
+
+it('asks for the new password without echo and without a confirmation when --password is given no value', function (): void {
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
+    grantConsoleAccess($consoleUser);
+
+    $this->artisan('vendra-console:user-password', ['--email' => 'ops@vendra.test', '--password' => null])
+        ->expectsQuestion('Password', 'the-new-password')
+        ->expectsOutputToContain('Console user password updated.')
+        ->assertSuccessful();
+
+    expect(Hash::check('the-new-password', $consoleUser->refresh()->password))->toBeTrue();
+});
