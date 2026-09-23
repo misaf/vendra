@@ -267,6 +267,8 @@ than five minutes is stale, meaning the worker or the scheduler stopped.
 
 `Support\StoreStatusCounts::for(?Builder $stores)` counts stores per
 `StoreStatus` in one grouped query, using the same rule as `Store::status()`.
+`StoreStatusCounts::NEEDING_ATTENTION` lists the unsettled statuses
+`needingAttention()` sums, so a link to the matching stores filters the same set.
 
 ## Filament
 

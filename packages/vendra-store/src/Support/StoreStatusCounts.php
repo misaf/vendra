@@ -14,6 +14,13 @@ use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
  */
 final readonly class StoreStatusCounts
 {
+    /**
+     * The statuses of a store that has not reached a settled state.
+     *
+     * @var list<StoreStatus>
+     */
+    public const array NEEDING_ATTENTION = [StoreStatus::Pending, StoreStatus::Provisioning, StoreStatus::Failed];
+
     private const string BILLING_SUSPENDED = 'CASE WHEN billing_suspended_at IS NULL THEN 0 ELSE 1 END';
 
     /**
@@ -63,6 +70,6 @@ final readonly class StoreStatusCounts
 
     public function needingAttention(): int
     {
-        return $this->count(StoreStatus::Pending) + $this->count(StoreStatus::Provisioning) + $this->count(StoreStatus::Failed);
+        return array_sum(array_map($this->count(...), self::NEEDING_ATTENTION));
     }
 }
