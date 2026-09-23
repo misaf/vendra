@@ -17,6 +17,8 @@ use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
 use Misaf\VendraUser\Models\User;
 use Misaf\VendraUser\Support\UserRules;
 
+use function Laravel\Prompts\confirm;
+
 #[Description('Issue a new password to a console user')]
 #[Signature('vendra-console:user-password
         {--username= : Username of the console user}
@@ -84,7 +86,7 @@ final class IssueConsolePasswordCommand extends Command
             return self::FAILURE;
         }
 
-        if (! $skipConfirmation && ! $this->confirm("[{$user->email}] is already a console user. Issue a new password?")) {
+        if (! $skipConfirmation && ! confirm("[{$user->email}] is already a console user. Issue a new password?", default: false)) {
             $this->components->error('The password was not changed.');
 
             return self::FAILURE;

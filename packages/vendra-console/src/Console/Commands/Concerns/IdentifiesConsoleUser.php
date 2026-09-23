@@ -12,13 +12,23 @@ trait IdentifiesConsoleUser
     {
         $email = $this->option('email');
 
-        return is_string($email) ? Str::lower(mb_trim($email)) : null;
+        return is_string($email) ? $this->normalizeEmail($email) : null;
     }
 
     private function givenUsername(): ?string
     {
         $username = $this->option('username');
 
-        return is_string($username) ? mb_trim($username) : null;
+        return is_string($username) ? $this->normalizeUsername($username) : null;
+    }
+
+    private function normalizeEmail(string $email): string
+    {
+        return Str::lower(mb_trim($email));
+    }
+
+    private function normalizeUsername(string $username): string
+    {
+        return mb_trim($username);
     }
 }

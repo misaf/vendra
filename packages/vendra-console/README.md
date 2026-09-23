@@ -39,12 +39,12 @@ Four commands manage console users; each does one job and points at its sibling 
 user it names is in the wrong state.
 
 - `php artisan vendra-console:user-create` creates a console user with `--username`,
-  `--email` and `--password`. `--username` and `--email` are both required (the configured
-  address belongs to the seeded user, so the command never falls back to it); the password
-  is generated unless `--password` is given. It never turns
-  into a password reset or a grant: when the address or username already belongs to a
-  tenantless user, the run fails and names the one command that applies, `user-password`
-  when that user already has console access and `user-grant` otherwise.
+  `--email` and `--password`. `--username` and `--email` are both required and are asked for
+  when omitted from an interactive run (the configured address belongs to the seeded user,
+  so the command never falls back to it); the password is generated unless `--password` is
+  given. It never turns into a password reset or a grant: when the address or username
+  already belongs to a tenantless user, the run fails and points at `user-grant` and
+  `user-password`.
 - `php artisan vendra-console:user-password` issues a new password to an existing console
   user, found by `--username`, `--email` or both, and falling back to the configured
   address when neither is given. It asks before replacing a password with a generated one;
@@ -62,6 +62,8 @@ user it names is in the wrong state.
 `user-create`, `user-password` and `user-grant` ask for the password without echoing it
 when `--password` is given without a value, which keeps it out of shell history and the
 process list. Without interaction that fails rather than falling back to a generated one.
+An answer to any of these questions that fails the user rules is rejected and asked for
+again.
 
 Every command that takes both `--email` and `--username` requires them to resolve to the
 same tenantless user: an identifier that names nobody fails naming it, and two that name

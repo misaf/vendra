@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\Validator;
 use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
 use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
-use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
-use Misaf\VendraUser\Models\User;
 use Misaf\VendraUser\Support\UserRules;
+
+use function Laravel\Prompts\text;
 
 #[Description('Create a console user')]
 #[Signature('vendra-console:user-create
-        {--username= : Username for the new console user}
-        {--email= : Email address for the new console user}
+        {--username= : Username for the new console user, asked for when omitted}
+        {--email= : Email address for the new console user, asked for when omitted}
         {--password= : Password to set, asked for without echo when given no value; a strong one is generated when omitted}')]
 final class CreateConsoleUserCommand extends Command
 {
@@ -29,38 +29,22 @@ final class CreateConsoleUserCommand extends Command
 
     public function handle(): int
     {
+        $this->askForMissingIdentifiers();
+
         $email = $this->givenEmail();
         $username = $this->givenUsername();
         $password = $this->givenPassword() ?? UserRules::generatePassword();
 
         $validator = Validator::make(
             ['email' => $email, 'username' => $username, 'password' => $password],
-            [
-                'email' => ['required', ...UserRules::email()],
-                'username' => ['bail', 'required', ...UserRules::username()],
-                'password' => ['required', ...UserRules::password()],
-            ],
-            [
-                'email.required' => 'An email is required to create a console user. Use --email.',
-                'username.required' => 'A username is required to create a console user. Use --username.',
-            ],
+            $this->rules(),
+            $this->messages(),
         );
 
         if ($validator->fails()) {
             $this->components->error($validator->errors()->first());
 
             return self::FAILURE;
-        }
-
-        $userWithEmail = User::query()->tenantless()->identifiedBy(email: $email)->first();
-        $userWithUsername = User::query()->tenantless()->identifiedBy(username: $username)->first();
-
-        if ($userWithEmail !== null) {
-            return $this->reportExistingUser($userWithEmail, "The email [{$email}] already belongs to a tenantless user.");
-        }
-
-        if ($userWithUsername !== null) {
-            return $this->reportExistingUser($userWithUsername, "The username [{$username}] already belongs to [{$userWithUsername->email}].");
         }
 
         try {
@@ -76,16 +60,56 @@ final class CreateConsoleUserCommand extends Command
         return self::SUCCESS;
     }
 
-    private function reportExistingUser(User $user, string $message): int
+    private function askForMissingIdentifiers(): void
     {
-        $this->components->error($message);
-
-        if (Console::query()->active()->forUser($user)->exists()) {
-            $this->line("  [{$user->email}] already has console access. Use vendra-console:user-password to issue a new password.");
-        } else {
-            $this->line("  Use vendra-console:user-grant to grant [{$user->email}] console access.");
+        if (! $this->input->isInteractive()) {
+            return;
         }
 
-        return self::FAILURE;
+        // Validate the normalized answer, since Laravel checks rule arrays against the raw one.
+        if ($this->option('email') === null) {
+            $this->input->setOption('email', text(
+                label: 'Email',
+                required: 'An email is required.',
+                validate: fn (string $email): ?string => $this->validateAnswer('email', $this->normalizeEmail($email)),
+            ));
+        }
+
+        if ($this->option('username') === null) {
+            $this->input->setOption('username', text(
+                label: 'Username',
+                required: 'A username is required.',
+                validate: fn (string $username): ?string => $this->validateAnswer('username', $this->normalizeUsername($username)),
+            ));
+        }
+    }
+
+    private function validateAnswer(string $attribute, string $answer): ?string
+    {
+        return $this->validatePrompt($answer, (object) ['rules' => [$attribute => $this->rules()[$attribute]], 'messages' => $this->messages()]);
+    }
+
+    /**
+     * @return array<string, list<mixed>>
+     */
+    private function rules(): array
+    {
+        return [
+            'email' => ['required', ...UserRules::email(), UserRules::unique('email')],
+            'username' => ['bail', 'required', ...UserRules::username(), UserRules::unique('username')],
+            'password' => ['required', ...UserRules::password()],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function messages(): array
+    {
+        return [
+            'email.required' => 'An email is required to create a console user. Use --email.',
+            'username.required' => 'A username is required to create a console user. Use --username.',
+            'unique' => 'The :attribute [:input] already belongs to a tenantless user. Use vendra-console:user-grant or vendra-console:user-password.',
+        ];
     }
 }
