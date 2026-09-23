@@ -31,8 +31,8 @@ final class CreateConsoleUserCommand extends Command
     {
         $this->askForMissingIdentifiers();
 
-        $email = $this->givenEmail();
-        $username = $this->givenUsername();
+        $email = $this->givenEmail() ?? '';
+        $username = $this->givenUsername() ?? '';
         $password = $this->givenPassword() ?? UserRules::generatePassword();
 
         $validator = Validator::make(
@@ -48,11 +48,7 @@ final class CreateConsoleUserCommand extends Command
         }
 
         try {
-            $user = resolve(CreateConsoleUserAction::class)->execute(
-                $validator->safe()->string('username')->toString(),
-                $validator->safe()->string('email')->toString(),
-                $password,
-            );
+            $user = resolve(CreateConsoleUserAction::class)->execute($username, $email, $password);
         } catch (UniqueConstraintViolationException) {
             $this->components->error("The username [{$username}] or the email [{$email}] is already taken. Choose another.");
 
