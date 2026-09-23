@@ -22,7 +22,7 @@ use function Laravel\Prompts\confirm;
 #[Description('Issue a new password to a console user')]
 #[Signature('vendra-console:user-password
         {--username= : Username of the console user}
-        {--email= : Email address of the console user; defaults to the vendra-console.default_email config value}
+        {--email= : Email address of the console user; searched for when neither identifier is given, or defaults to the vendra-console.default_email config value without interaction}
         {--password= : Password to set, asked for without echo when given no value; a strong one is generated when omitted}
         {--force : Run without confirmation}')]
 final class IssueConsolePasswordCommand extends Command
@@ -32,6 +32,8 @@ final class IssueConsolePasswordCommand extends Command
 
     public function handle(): int
     {
+        $this->searchForMissingUser('Which console user should get a new password?', withConsoleAccess: true);
+
         $email = $this->givenEmail();
         $username = $this->givenUsername();
         $givenPassword = $this->givenPassword();

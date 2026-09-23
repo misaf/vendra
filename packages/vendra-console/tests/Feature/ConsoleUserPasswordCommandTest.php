@@ -149,7 +149,7 @@ it('keeps a console user password when the generated reset is declined', functio
     ]);
     grantConsoleAccess($consoleUser);
 
-    $this->artisan('vendra-console:user-password')
+    $this->artisan('vendra-console:user-password', ['--email' => 'console@vendra.test'])
         ->expectsConfirmation('[console@vendra.test] is already a console user. Issue a new password?', 'no')
         ->expectsOutputToContain('The password was not changed.')
         ->assertFailed();
@@ -182,7 +182,7 @@ it('issues a generated password to a console user once the reset is confirmed', 
     ]);
     grantConsoleAccess($consoleUser);
 
-    $this->artisan('vendra-console:user-password')
+    $this->artisan('vendra-console:user-password', ['--email' => 'console@vendra.test'])
         ->expectsConfirmation('[console@vendra.test] is already a console user. Issue a new password?', 'yes')
         ->expectsOutputToContain('Console user password updated.')
         ->assertSuccessful();
@@ -249,6 +249,30 @@ it('asks for the new password without echo and without a confirmation when --pas
     $this->artisan('vendra-console:user-password', ['--email' => 'ops@vendra.test', '--password' => null])
         ->expectsQuestion('Password', 'the-new-password')
         ->expectsOutputToContain('Console user password updated.')
+        ->assertSuccessful();
+
+    expect(Hash::check('the-new-password', $consoleUser->refresh()->password))->toBeTrue();
+});
+
+it('falls back to the default email without interaction when no identifier is given', function (): void {
+    Config::set('vendra-console.default_email', 'console@vendra.test');
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'console@vendra.test', 'password' => Hash::make('the-old-password')]);
+    grantConsoleAccess($consoleUser);
+
+    $this->artisan('vendra-console:user-password', ['--force' => true, '--no-interaction' => true])
+        ->expectsOutputToContain('Console user password updated.')
+        ->assertSuccessful();
+
+    expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeFalse();
+});
+
+it('searches console users when an interactive run names no user', function (): void {
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test', 'username' => 'ops_user']);
+    grantConsoleAccess($consoleUser);
+    User::factory()->create(['tenant_id' => null, 'email' => 'ops-plain@vendra.test', 'username' => 'ops_plain']);
+
+    $this->artisan('vendra-console:user-password', ['--password' => 'the-new-password'])
+        ->expectsSearch('Which console user should get a new password?', 'ops@vendra.test', 'ops', ['ops@vendra.test' => 'ops@vendra.test (ops_user)'])
         ->assertSuccessful();
 
     expect(Hash::check('the-new-password', $consoleUser->refresh()->password))->toBeTrue();

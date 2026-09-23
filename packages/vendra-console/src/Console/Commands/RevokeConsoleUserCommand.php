@@ -16,7 +16,7 @@ use Misaf\VendraUser\Support\UserRules;
 
 #[Description('Revoke console access from a console user')]
 #[Signature('vendra-console:user-revoke
-        {--username= : Username of the user to revoke console access from}
+        {--username= : Username of the user to revoke console access from; searched for when neither identifier is given}
         {--email= : Email address of the user to revoke console access from}')]
 final class RevokeConsoleUserCommand extends Command
 {
@@ -24,6 +24,8 @@ final class RevokeConsoleUserCommand extends Command
 
     public function handle(): int
     {
+        $this->searchForMissingUser('Which console user should lose access?', withConsoleAccess: true);
+
         $email = $this->givenEmail();
         $username = $this->givenUsername();
 

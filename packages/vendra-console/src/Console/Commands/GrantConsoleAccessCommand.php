@@ -19,7 +19,7 @@ use Misaf\VendraUser\Support\UserRules;
 
 #[Description('Grant console access to an existing tenantless user')]
 #[Signature('vendra-console:user-grant
-        {--username= : Username of the user to grant console access to}
+        {--username= : Username of the user to grant console access to; searched for when neither identifier is given}
         {--email= : Email address of the user to grant console access to}
         {--password= : Password to set when access is granted, asked for without echo when given no value; the current one is kept when omitted}')]
 final class GrantConsoleAccessCommand extends Command
@@ -29,6 +29,8 @@ final class GrantConsoleAccessCommand extends Command
 
     public function handle(): int
     {
+        $this->searchForMissingUser('Which user should get console access?', withConsoleAccess: false);
+
         $email = $this->givenEmail();
         $username = $this->givenUsername();
         $password = $this->givenPassword();

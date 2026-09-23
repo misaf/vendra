@@ -81,10 +81,10 @@ it('refuses to revoke the last console user from the command', function (): void
     expect(Console::query()->count())->toBe(1);
 });
 
-it('requires an email or a username to revoke console access', function (): void {
+it('requires an email or a username to revoke console access without interaction', function (): void {
     Console::factory()->active()->count(2)->create();
 
-    $this->artisan('vendra-console:user-revoke')
+    $this->artisan('vendra-console:user-revoke', ['--no-interaction' => true])
         ->expectsOutputToContain('Revoking console access requires --email or --username.')
         ->assertFailed();
 
@@ -200,3 +200,14 @@ it('names the identifier that matches no user when the other matches', function 
     'unknown username' => ['email', 'No tenantless user has the username [missing_user].'],
     'unknown email' => ['username', 'No tenantless user has the email [missing@vendra.test].'],
 ]);
+
+it('searches console users when an interactive run names no user', function (): void {
+    grantConsoleAccess(User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test', 'username' => 'ops_user']));
+    grantConsoleAccess(User::factory()->create(['tenant_id' => null, 'email' => 'admin@vendra.test', 'username' => 'admin_user']));
+    User::factory()->create(['tenant_id' => null, 'email' => 'ops-plain@vendra.test', 'username' => 'ops_plain']);
+
+    $this->artisan('vendra-console:user-revoke')
+        ->expectsSearch('Which console user should lose access?', 'ops@vendra.test', 'ops', ['ops@vendra.test' => 'ops@vendra.test (ops_user)'])
+        ->expectsOutputToContain('Console access revoked from [ops@vendra.test].')
+        ->assertSuccessful();
+});

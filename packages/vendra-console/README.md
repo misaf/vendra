@@ -47,23 +47,28 @@ user it names is in the wrong state.
   `user-password`.
 - `php artisan vendra-console:user-password` issues a new password to an existing console
   user, found by `--username`, `--email` or both, and falling back to the configured
-  address when neither is given. It asks before replacing a password with a generated one;
+  address when a run without interaction gives neither. It asks before replacing a password with a generated one;
   `--password` or `--force` skips that prompt, and a run without interaction fails and
   points at them instead of prompting. It never creates a user and never grants
   access: an unknown user or one without console access fails with a pointer.
 - `php artisan vendra-console:user-grant` grants console access to an existing tenantless
   user, reactivating a revoked console rather than adding a second row, and optionally sets
-  a password with `--password`. It requires `--email`, `--username` or both, and reports a user who already has access without changing anything. Given `--password`
+  a password with `--password`. It takes `--email`, `--username` or both, and reports a user who already has access without changing anything. Given `--password`
   for a user who already has access it fails and points at `vendra-console:user-password`.
 - `php artisan vendra-console:user-revoke` deactivates the user's console while keeping the
   user, and refuses to deactivate the last active console user. It names the user the same
-  way and never prompts.
+  way.
 
 `user-create`, `user-password` and `user-grant` ask for the password without echoing it
 when `--password` is given without a value, which keeps it out of shell history and the
 process list. Without interaction that fails rather than falling back to a generated one.
 An answer to any of these questions that fails the user rules is rejected and asked for
 again.
+
+When an interactive `user-grant`, `user-revoke` or `user-password` run gives neither
+`--email` nor `--username`, it searches tenantless users by email or username and lets you
+pick one: users without console access for `user-grant`, console users for the other two.
+Without interaction, `user-grant` and `user-revoke` require an identifier instead.
 
 Every command that takes both `--email` and `--username` requires them to resolve to the
 same tenantless user: an identifier that names nobody fails naming it, and two that name

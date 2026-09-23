@@ -94,7 +94,7 @@ it('requires an email or a username to grant console access', function (array $o
 
     expect(Console::query()->count())->toBe(0);
 })->with([
-    'neither' => [[]],
+    'neither' => [['--no-interaction' => true]],
     'blank email' => [['--email' => '   ']],
     'blank username' => [['--username' => '   ']],
 ]);
@@ -157,4 +157,19 @@ it('grants console access to a tenantless user inside a tenant context', functio
 
     expect(Console::query()->forUser($user)->sole()->active)->toBeTrue()
         ->and(Console::query()->forUser($tenantUser)->exists())->toBeFalse();
+});
+
+it('searches tenantless users without console access when an interactive run names no user', function (): void {
+    grantConsoleAccess(User::factory()->create(['tenant_id' => null, 'email' => 'ops-console@vendra.test', 'username' => 'ops_console']));
+    $user = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test', 'username' => 'ops_user']);
+    makeCurrentTestTenant();
+    User::factory()->create(['email' => 'ops-tenant@vendra.test', 'username' => 'ops_tenant']);
+    forgetCurrentTestTenant();
+
+    $this->artisan('vendra-console:user-grant')
+        ->expectsSearch('Which user should get console access?', 'ops@vendra.test', 'ops', ['ops@vendra.test' => 'ops@vendra.test (ops_user)'])
+        ->expectsOutputToContain('Console access granted to [ops@vendra.test].')
+        ->assertSuccessful();
+
+    expect(Console::query()->active()->forUser($user)->exists())->toBeTrue();
 });
