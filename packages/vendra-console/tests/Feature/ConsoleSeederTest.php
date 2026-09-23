@@ -53,7 +53,7 @@ it('fails the seed when the default console email belongs to an existing user', 
     User::factory()->create(['tenant_id' => null, 'email' => 'console@vendra.test']);
 
     expect(fn (): int => Artisan::call('db:seed', ['--class' => ConsoleSeeder::class, '--force' => true, '--no-interaction' => true]))
-        ->toThrow(RuntimeException::class, 'Console username or email')
+        ->toThrow(RuntimeException::class, 'The email [console@vendra.test] or the username [console] already belongs to a tenantless user. Use vendra-console:user-grant to give that user console access, or vendra-console:user-create with a different email and username.')
         ->and(Console::query()->count())->toBe(0);
 });
 
@@ -61,7 +61,16 @@ it('fails the seed when the console username is already taken', function (): voi
     User::factory()->create(['tenant_id' => null, 'username' => 'console']);
 
     expect(fn (): int => Artisan::call('db:seed', ['--class' => ConsoleSeeder::class, '--force' => true, '--no-interaction' => true]))
-        ->toThrow(RuntimeException::class, 'Console username or email')
+        ->toThrow(RuntimeException::class, 'or the username [console] already belongs to a tenantless user.')
         ->and(User::query()->count())->toBe(1)
         ->and(Console::query()->count())->toBe(0);
+});
+
+it('fails the seed when the console user was revoked', function (): void {
+    $revokedUser = User::factory()->create(['tenant_id' => null, 'username' => 'console']);
+    Console::factory()->inactive()->for($revokedUser)->create();
+
+    expect(fn (): int => Artisan::call('db:seed', ['--class' => ConsoleSeeder::class, '--force' => true, '--no-interaction' => true]))
+        ->toThrow(RuntimeException::class, 'Use vendra-console:user-grant to give that user console access')
+        ->and(Console::query()->active()->exists())->toBeFalse();
 });
