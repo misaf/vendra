@@ -8,6 +8,7 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
 use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
@@ -56,6 +57,7 @@ final class IssueConsolePasswordCommand extends Command
                 'email.exists' => 'No tenantless user has the email [:input]. Use vendra-console:user-create to create one.',
                 'username.exists' => 'No tenantless user has the username [:input]. Use vendra-console:user-create to create one.',
                 'email.filled' => 'The --email option cannot be blank.',
+                'username.filled' => 'The --username option cannot be blank.',
             ],
         );
 
@@ -75,8 +77,7 @@ final class IssueConsolePasswordCommand extends Command
         }
 
         if (! Console::query()->active()->forUser($user)->exists()) {
-            $this->components->error("[{$user->email}] has no console access.");
-            $this->line('  Use vendra-console:user-grant to grant it.');
+            $this->components->error("[{$user->email}] has no console access. Use vendra-console:user-grant to grant it.");
 
             return self::FAILURE;
         }
@@ -84,8 +85,7 @@ final class IssueConsolePasswordCommand extends Command
         $skipConfirmation = $this->option('force') === true || $givenPassword !== null;
 
         if (! $skipConfirmation && ! $this->input->isInteractive()) {
-            $this->components->error('The password was not changed.');
-            $this->line('  Pass --force, or give --password, to issue a password without a prompt.');
+            $this->components->error('The password was not changed. Pass --force, or give --password, to issue a password without a prompt.');
 
             return self::FAILURE;
         }
@@ -96,9 +96,18 @@ final class IssueConsolePasswordCommand extends Command
             return self::FAILURE;
         }
 
-        $user = resolve(UpdateUserPasswordAction::class)->execute($user, $password);
+        // Check access again under the lock user-revoke takes, since it may have changed while confirming.
+        $updatedUser = DB::transaction(fn (): ?User => Console::query()->active()->forUser($user)->lockForUpdate()->exists()
+            ? resolve(UpdateUserPasswordAction::class)->execute($user, $password)
+            : null);
 
-        ConsoleCredentials::report($this, 'Console user password updated.', $user->email, $password);
+        if ($updatedUser === null) {
+            $this->components->error("[{$user->email}] no longer has console access. The password was not changed.");
+
+            return self::FAILURE;
+        }
+
+        ConsoleCredentials::report($this, 'Console user password updated.', $updatedUser->email, $password);
 
         return self::SUCCESS;
     }

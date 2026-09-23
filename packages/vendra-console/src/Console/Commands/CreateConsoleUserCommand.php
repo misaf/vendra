@@ -50,7 +50,7 @@ final class CreateConsoleUserCommand extends Command
         try {
             $user = resolve(CreateConsoleUserAction::class)->execute($username, $email, $password);
         } catch (UniqueConstraintViolationException) {
-            $this->components->error("The username [{$username}] or the email [{$email}] is already taken. Choose another.");
+            $this->components->error("The email [{$email}] or the username [{$username}] already belongs to a tenantless user. Use vendra-console:user-grant or vendra-console:user-password.");
 
             return self::FAILURE;
         }

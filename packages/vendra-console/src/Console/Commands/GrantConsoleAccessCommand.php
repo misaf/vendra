@@ -19,8 +19,8 @@ use Misaf\VendraUser\Support\UserRules;
 
 #[Description('Grant console access to an existing tenantless user')]
 #[Signature('vendra-console:user-grant
-        {--username= : Username of the user to grant console access to; searched for when neither identifier is given}
-        {--email= : Email address of the user to grant console access to}
+        {--username= : Username of the user to grant console access to}
+        {--email= : Email address of the user to grant console access to; searched for when neither identifier is given}
         {--password= : Password to set when access is granted, asked for without echo when given no value; the current one is kept when omitted}')]
 final class GrantConsoleAccessCommand extends Command
 {
@@ -89,8 +89,7 @@ final class GrantConsoleAccessCommand extends Command
         }
 
         if (! $granted) {
-            $this->components->error("[{$user->email}] already has console access. The password was not changed.");
-            $this->line('  Use vendra-console:user-password to issue a new password.');
+            $this->components->error("[{$user->email}] already has console access. The password was not changed. Use vendra-console:user-password to issue a new password.");
 
             return self::FAILURE;
         }

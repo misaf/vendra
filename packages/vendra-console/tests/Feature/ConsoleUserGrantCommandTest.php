@@ -77,8 +77,7 @@ it('points at the password command instead of changing the password of a user wh
     grantConsoleAccess($consoleUser);
 
     $this->artisan('vendra-console:user-grant', ['--email' => 'ops@vendra.test', '--password' => 'the-new-password'])
-        ->expectsOutputToContain('[ops@vendra.test] already has console access. The password was not changed.')
-        ->expectsOutputToContain('vendra-console:user-password')
+        ->expectsOutputToContain('[ops@vendra.test] already has console access. The password was not changed. Use vendra-console:user-password to issue a new password.')
         ->assertFailed();
 
     expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeTrue()

@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Misaf\VendraConsole\Console\Commands\IssueConsolePasswordCommand;
 use Misaf\VendraConsole\Models\Console;
@@ -166,8 +168,7 @@ it('points at --force when a generated reset cannot be confirmed without interac
     grantConsoleAccess($consoleUser);
 
     $this->artisan('vendra-console:user-password', ['--email' => 'ops@vendra.test', '--no-interaction' => true])
-        ->expectsOutputToContain('The password was not changed.')
-        ->expectsOutputToContain('Pass --force, or give --password, to issue a password without a prompt.')
+        ->expectsOutputToContain('The password was not changed. Pass --force, or give --password, to issue a password without a prompt.')
         ->assertFailed();
 
     expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeTrue();
@@ -223,24 +224,28 @@ it('points at the grant command when the user has no console access', function (
     Console::factory()->inactive()->for($user)->create();
 
     $this->artisan('vendra-console:user-password', ['--email' => 'reseller@vendra.test', '--password' => 'the-new-password'])
-        ->expectsOutputToContain('[reseller@vendra.test] has no console access.')
-        ->expectsOutputToContain('vendra-console:user-grant')
+        ->expectsOutputToContain('[reseller@vendra.test] has no console access. Use vendra-console:user-grant to grant it.')
         ->assertFailed();
 
     expect(Hash::check('the-old-password', $user->refresh()->password))->toBeTrue();
 });
 
-it('rejects a blank email instead of falling back to the default console address', function (string $email): void {
+it('rejects a blank identifier instead of falling back to the default console address', function (string $option, string $value): void {
     $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'console@vendra.test']);
     grantConsoleAccess($consoleUser);
     $password = $consoleUser->password;
 
-    $this->artisan('vendra-console:user-password', ['--email' => $email, '--password' => 'the-new-password'])
-        ->expectsOutputToContain('The --email option cannot be blank.')
+    $this->artisan('vendra-console:user-password', ['--'.$option => $value, '--password' => 'the-new-password'])
+        ->expectsOutputToContain("The --{$option} option cannot be blank.")
         ->assertFailed();
 
     expect($consoleUser->refresh()->password)->toBe($password);
-})->with(['empty' => '', 'whitespace' => '   ']);
+})->with([
+    'empty email' => ['email', ''],
+    'whitespace email' => ['email', '   '],
+    'empty username' => ['username', ''],
+    'whitespace username' => ['username', '   '],
+]);
 
 it('asks for the new password without echo and without a confirmation when --password is given no value', function (): void {
     $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test']);
@@ -287,4 +292,23 @@ it('fails instead of searching when no tenantless user has console access', func
         ->assertFailed();
 
     expect($user->refresh()->password)->toBe($password);
+});
+
+it('keeps the password when console access is revoked after the first access check', function (): void {
+    $consoleUser = User::factory()->create(['tenant_id' => null, 'email' => 'ops@vendra.test', 'password' => Hash::make('the-old-password')]);
+    $console = Console::factory()->active()->for($consoleUser)->create();
+    $revoked = false;
+
+    DB::listen(function (QueryExecuted $query) use ($console, &$revoked): void {
+        if (! $revoked && str_contains($query->sql, 'consoles')) {
+            $revoked = true;
+            $console->update(['active' => false]);
+        }
+    });
+
+    $this->artisan('vendra-console:user-password', ['--email' => 'ops@vendra.test', '--password' => 'the-new-password'])
+        ->expectsOutputToContain('[ops@vendra.test] no longer has console access. The password was not changed.')
+        ->assertFailed();
+
+    expect(Hash::check('the-old-password', $consoleUser->refresh()->password))->toBeTrue();
 });
