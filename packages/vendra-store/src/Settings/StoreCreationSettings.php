@@ -18,10 +18,7 @@ final class StoreCreationSettings extends Settings
         return 'store_creation';
     }
 
-    /**
-     * Use the platform repository, since these settings have no tenant.
-     */
-    public static function repository(): ?string
+    public static function repository(): string
     {
         return 'global';
     }
