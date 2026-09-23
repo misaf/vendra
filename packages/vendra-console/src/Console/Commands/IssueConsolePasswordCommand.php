@@ -41,11 +41,11 @@ final class IssueConsolePasswordCommand extends Command
         $validator = Validator::make(
             ['email' => $email, 'username' => $username, 'password' => $password],
             [
-                'email' => [$email === null ? 'nullable' : 'required', ...UserRules::email()],
-                'username' => ['bail', $username === null ? 'nullable' : 'required', ...UserRules::username()],
+                'email' => ['bail', 'exclude_if:email,null', 'filled', ...UserRules::email()],
+                'username' => ['bail', 'exclude_if:username,null', 'filled', ...UserRules::username()],
                 'password' => ['required', ...UserRules::password()],
             ],
-            ['email.required' => 'The --email option cannot be blank.'],
+            ['email.filled' => 'The --email option cannot be blank.'],
         );
 
         if ($validator->fails()) {

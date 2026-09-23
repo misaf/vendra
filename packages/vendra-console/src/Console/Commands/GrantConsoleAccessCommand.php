@@ -33,23 +33,18 @@ final class GrantConsoleAccessCommand extends Command
         $password = $this->givenPassword();
 
         $validator = Validator::make(
+            ['email' => $email, 'username' => $username, 'password' => $password],
             [
-                // A supplied but blank option names nobody, so it cannot stand in for the other.
-                'identifier' => $email ?? $username,
-                'email' => $email,
-                'username' => $username,
-                'password' => $password,
+                // Keep required_without ahead of exclude_if, which stops the rest of a null field's rules.
+                'email' => ['bail', 'required_without:username', 'exclude_if:email,null', 'filled', ...UserRules::email()],
+                'username' => ['bail', 'required_without:email', 'exclude_if:username,null', 'filled', ...UserRules::username()],
+                'password' => ['bail', 'exclude_if:password,null', 'filled', ...UserRules::password()],
             ],
             [
-                'identifier' => ['required'],
-                'email' => [$email === null ? 'nullable' : 'required', ...UserRules::email()],
-                'username' => ['bail', $username === null ? 'nullable' : 'required', ...UserRules::username()],
-                'password' => [$password === null ? 'nullable' : 'required', ...UserRules::password()],
-            ],
-            [
-                'identifier.required' => 'Granting console access requires --email or --username.',
-                'email.required' => 'Granting console access requires --email or --username.',
-                'username.required' => 'Granting console access requires --email or --username.',
+                'email.filled' => 'Granting console access requires --email or --username.',
+                'email.required_without' => 'Granting console access requires --email or --username.',
+                'username.filled' => 'Granting console access requires --email or --username.',
+                'username.required_without' => 'Granting console access requires --email or --username.',
             ],
         );
 

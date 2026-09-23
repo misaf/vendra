@@ -27,21 +27,17 @@ final class RevokeConsoleUserCommand extends Command
         $username = $this->givenUsername();
 
         $validator = Validator::make(
+            ['email' => $email, 'username' => $username],
             [
-                // A supplied but blank option names nobody, so it cannot stand in for the other.
-                'identifier' => $email ?? $username,
-                'email' => $email,
-                'username' => $username,
+                // Keep required_without ahead of exclude_if, which stops the rest of a null field's rules.
+                'email' => ['bail', 'required_without:username', 'exclude_if:email,null', 'filled', ...UserRules::email()],
+                'username' => ['bail', 'required_without:email', 'exclude_if:username,null', 'filled', ...UserRules::username()],
             ],
             [
-                'identifier' => ['required'],
-                'email' => [$email === null ? 'nullable' : 'required', ...UserRules::email()],
-                'username' => ['bail', $username === null ? 'nullable' : 'required', ...UserRules::username()],
-            ],
-            [
-                'identifier.required' => 'Revoking console access requires --email or --username.',
-                'email.required' => 'Revoking console access requires --email or --username.',
-                'username.required' => 'Revoking console access requires --email or --username.',
+                'email.filled' => 'Revoking console access requires --email or --username.',
+                'email.required_without' => 'Revoking console access requires --email or --username.',
+                'username.filled' => 'Revoking console access requires --email or --username.',
+                'username.required_without' => 'Revoking console access requires --email or --username.',
             ],
         );
 
