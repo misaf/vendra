@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
-use Misaf\VendraUser\Support\UserRules;
+use Misaf\VendraUser\Support\PasswordGenerator;
 use RuntimeException;
 
 final class ConsoleSeeder extends Seeder
@@ -27,7 +27,7 @@ final class ConsoleSeeder extends Seeder
         }
 
         $email = Config::string('vendra-console.default_email');
-        $password = UserRules::generatePassword();
+        $password = PasswordGenerator::generate();
 
         try {
             $user = $this->createConsoleUserAction->execute('console', $email, $password);

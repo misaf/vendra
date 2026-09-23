@@ -78,7 +78,7 @@ numbers, dashes, or underscores and be unique among tenantless users that have n
 soft-deleted; duplicates fail rather than receive an automatic suffix. Supplied and
 generated passwords must pass the application's default password rules, so an explicitly
 empty or whitespace-only password is rejected. Generated passwords come from
-`UserRules::generatePassword()`, so tightening the policy in a provider never leaves a
+`PasswordGenerator::generate()`, so tightening the policy in a provider never leaves a
 command unable to issue one.
 
 ## The panel

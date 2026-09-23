@@ -12,6 +12,7 @@ use Misaf\VendraStore\Actions\ProvisionStoreAction;
 use Misaf\VendraStore\Jobs\CompleteStoreProvisioningJob;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
+use Misaf\VendraUser\Support\PasswordGenerator;
 use Misaf\VendraUser\Support\UserRules;
 
 beforeEach(function (): void {
@@ -41,7 +42,7 @@ it('generates a random administrator password that satisfies the application pas
 
     $password = Arr::get($result, 'password');
 
-    expect($password)->toHaveLength(UserRules::PASSWORD_LENGTH)
+    expect($password)->toHaveLength(PasswordGenerator::LENGTH)
         ->and(Validator::make(['password' => $password], ['password' => UserRules::password()])->passes())->toBeTrue()
         ->and(Hash::check($password, Arr::get($result, 'user')->password))->toBeTrue();
 });

@@ -13,6 +13,7 @@ use Misaf\VendraConsole\Actions\CreateConsoleUserAction;
 use Misaf\VendraConsole\Console\Commands\Concerns\IdentifiesConsoleUser;
 use Misaf\VendraConsole\Console\Commands\Concerns\ReadsGivenPassword;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
+use Misaf\VendraUser\Support\PasswordGenerator;
 use Misaf\VendraUser\Support\UserRules;
 
 use function Laravel\Prompts\text;
@@ -33,7 +34,7 @@ final class CreateConsoleUserCommand extends Command
 
         $email = $this->givenEmail() ?? '';
         $username = $this->givenUsername() ?? '';
-        $password = $this->givenPassword() ?? UserRules::generatePassword();
+        $password = $this->givenPassword() ?? PasswordGenerator::generate();
 
         $validator = Validator::make(
             ['email' => $email, 'username' => $username, 'password' => $password],

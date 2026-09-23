@@ -16,7 +16,7 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraUser\Models\User;
-use Misaf\VendraUser\Support\UserRules;
+use Misaf\VendraUser\Support\PasswordGenerator;
 
 /**
  * Shared by the console and reseller panels. Callers pass a normalized,
@@ -41,7 +41,7 @@ final readonly class ProvisionStoreAction
      */
     public function execute(array $data, bool $shouldSeed = false, ?string $password = null, ?SubscriptionSubscriber $reseller = null): array
     {
-        $password ??= UserRules::generatePassword();
+        $password ??= PasswordGenerator::generate();
         $domain = Arr::string($data, 'domain');
         $name = Arr::get($data, 'name', Str::headline(Str::before($domain, '.')));
         $username = Arr::get($data, 'username', $this->usernameFromEmail(Arr::get($data, 'email')));

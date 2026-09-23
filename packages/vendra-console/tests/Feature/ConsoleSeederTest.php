@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Misaf\VendraConsole\Database\Seeders\ConsoleSeeder;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraUser\Models\User;
-use Misaf\VendraUser\Support\UserRules;
+use Misaf\VendraUser\Support\PasswordGenerator;
 
 it('seeds a console user on a fresh install and prints its generated password', function (): void {
     Config::set('vendra-console.default_email', 'ops@acme.test');
@@ -27,7 +27,7 @@ it('seeds a console user on a fresh install and prints its generated password', 
         ->and($consoleUser->hasVerifiedEmail())->toBeTrue()
         ->and($consoleUser->canAccessPanel(Filament::getPanel('console')))->toBeTrue()
         ->and($output)->toContain('https://console.vendra.test/login')
-        ->and($printedPassword)->toHaveLength(UserRules::PASSWORD_LENGTH)
+        ->and($printedPassword)->toHaveLength(PasswordGenerator::LENGTH)
         ->and(Hash::check($printedPassword, $consoleUser->password))->toBeTrue();
 });
 

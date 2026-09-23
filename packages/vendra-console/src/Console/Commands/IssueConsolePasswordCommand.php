@@ -16,6 +16,7 @@ use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraConsole\Support\ConsoleCredentials;
 use Misaf\VendraUser\Actions\UpdateUserPasswordAction;
 use Misaf\VendraUser\Models\User;
+use Misaf\VendraUser\Support\PasswordGenerator;
 use Misaf\VendraUser\Support\UserRules;
 
 use function Laravel\Prompts\confirm;
@@ -40,7 +41,7 @@ final class IssueConsolePasswordCommand extends Command
         $email = $this->givenEmail();
         $username = $this->givenUsername();
         $givenPassword = $this->givenPassword();
-        $password = $givenPassword ?? UserRules::generatePassword();
+        $password = $givenPassword ?? PasswordGenerator::generate();
 
         if ($email === null && $username === null) {
             $email = Config::string('vendra-console.default_email');
