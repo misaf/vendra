@@ -169,7 +169,7 @@ tenant scope applies only while a tenant is current and this panel has none.
 The console keeps no config file. Everything a console user changes at runtime
 is a settings row, edited on `ManagePlatformSettings`.
 
-The panel's brand name is `Misaf\VendraConsole\Settings\ConsoleSettings::$platform_name`,
+The panel's brand name is `Misaf\VendraConsole\Settings\ConsoleSettings::$brand_name`,
 seeded as `Vendra Console` by a settings migration and read per request, so a
 rename takes effect on the next page load.
 

@@ -31,7 +31,7 @@ final class ConsolePanelServiceProvider extends PanelProvider
             ->id('console')
             ->brandLogo(fn (): string => asset('images/vendra-logo.svg'))
             ->brandLogoHeight('2rem')
-            ->brandName(fn (): string => resolve(ConsoleSettings::class)->platform_name)
+            ->brandName(fn (): string => resolve(ConsoleSettings::class)->brand_name)
             ->darkModeBrandLogo(fn (): string => asset('images/vendra-logo-dark.svg'))
             ->databaseNotifications()
             ->databaseTransactions()

@@ -9,6 +9,6 @@ return new class extends SettingsMigration
     public function up(): void
     {
         $this->migrator->repository('global');
-        $this->migrator->add('console.platform_name', 'Vendra Console');
+        $this->migrator->add('console.brand_name', 'Vendra Console');
     }
 };
