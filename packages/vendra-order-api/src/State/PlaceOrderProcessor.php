@@ -114,6 +114,7 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
             ->where('token', $token)
             ->where('owner_type', $user->getMorphClass())
             ->where('owner_id', $user->getKey())
+            ->unexpired()
             ->lockForUpdate()
             ->first();
 

@@ -146,6 +146,19 @@ it('rejects checkout when the cart is empty', function (): void {
     expect(Order::query()->count())->toBe(0);
 });
 
+it('rejects checkout of an expired cart that has not been pruned yet', function (): void {
+    $user = createTestUser();
+    $cart = CartFactory::new()->forOwner($user)->createOne(['expires_at' => now()->subMinute()]);
+    CartItemFactory::new()->forCart($cart)->forSellable(orderApiProduct())->createOne();
+
+    $this->actingAs($user)
+        ->postJson('/api/sales/checkout', ['cartToken' => $cart->token])
+        ->assertUnprocessable()
+        ->assertJsonPath('violations.0.propertyPath', 'cartToken');
+
+    expect(Order::query()->count())->toBe(0);
+});
+
 it('prices delivery from the dropped pin and schedules it', function (): void {
     $user = createTestUser();
     $product = orderApiProduct(price: 4800);
