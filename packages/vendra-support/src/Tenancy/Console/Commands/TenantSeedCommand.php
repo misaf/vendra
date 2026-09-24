@@ -42,7 +42,7 @@ abstract class TenantSeedCommand extends SeedCommand
 
     private function resolveTenantInput(TenantResolver $tenantResolver): int|string|null
     {
-        $tenantInput = $this->argument('tenant');
+        $tenantInput = $this->input->getArgument('tenant');
 
         if (is_int($tenantInput) || is_string($tenantInput)) {
             return $tenantInput;

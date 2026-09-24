@@ -18,7 +18,7 @@ final class GeneratePasswordAction extends Action
 
     protected ?string $confirmationField = null;
 
-    public static function getDefaultName(): ?string
+    public static function getDefaultName(): string
     {
         return 'generatePassword';
     }

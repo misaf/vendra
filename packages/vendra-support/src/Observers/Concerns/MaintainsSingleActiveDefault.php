@@ -100,6 +100,9 @@ trait MaintainsSingleActiveDefault
      */
     private function activeRows(Model $model): Builder
     {
-        return $model->newQuery()->scopes(['active']);
+        $query = $model->newQuery();
+        $scoped = $query->scopes(['active']);
+
+        return $scoped instanceof Builder ? $scoped : $query;
     }
 }

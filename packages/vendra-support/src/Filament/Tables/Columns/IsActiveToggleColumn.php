@@ -46,7 +46,7 @@ final class IsActiveToggleColumn extends ToggleColumn
 
         $policy = Gate::getPolicyFor($record);
 
-        if ($policy === null || ! method_exists($policy, 'update')) {
+        if (! is_object($policy) || ! method_exists($policy, 'update')) {
             return true;
         }
 

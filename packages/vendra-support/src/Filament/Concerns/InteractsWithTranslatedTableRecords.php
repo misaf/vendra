@@ -17,6 +17,10 @@ trait InteractsWithTranslatedTableRecords /** @phpstan-ignore trait.unused */
      */
     protected static function translatedAttribute(Model $record, string $attribute, Livewire $livewire): string
     {
+        if (! method_exists($record, 'getTranslation')) {
+            return '';
+        }
+
         $translation = $record->getTranslation($attribute, static::activeLocale($livewire));
 
         return is_string($translation) ? $translation : '';

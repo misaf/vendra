@@ -134,7 +134,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
      */
     private function requestedSeeders(): ?array
     {
-        $seeders = $this->argument('seeders');
+        $seeders = $this->input->getArgument('seeders');
 
         if (! is_array($seeders) || ! array_is_list($seeders)) {
             return null;

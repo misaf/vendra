@@ -34,11 +34,14 @@ trait RendersRichContent
      * Wrap stray top-level text nodes in paragraphs to match the TipTap schema.
      *
      * @param  array<array-key, mixed>  $document
-     * @return array<array-key, mixed>
+     * @return array<string, mixed>
      */
     private static function normalizeRichDocument(array $document): array
     {
-        if (! is_array(Arr::get($document, 'content', null))) {
+        $document = array_filter($document, is_string(...), ARRAY_FILTER_USE_KEY);
+        $content = Arr::get($document, 'content', null);
+
+        if (! is_array($content)) {
             return $document;
         }
 
@@ -46,7 +49,7 @@ trait RendersRichContent
             fn (mixed $node): mixed => is_array($node) && 'text' === (Arr::get($node, 'type', null))
                 ? ['type' => 'paragraph', 'content' => [$node]]
                 : $node,
-            Arr::get($document, 'content'),
+            $content,
         );
 
         return $document;
