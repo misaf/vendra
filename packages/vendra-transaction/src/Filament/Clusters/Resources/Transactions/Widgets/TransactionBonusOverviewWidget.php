@@ -9,13 +9,14 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
-use Misaf\VendraTransaction\Models\Transaction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\Concerns\QueriesRecordTransactions;
 
 final class TransactionBonusOverviewWidget extends StatsOverviewWidget
 {
+    use QueriesRecordTransactions;
+
     public ?Model $record = null;
 
     /**
@@ -52,15 +53,12 @@ final class TransactionBonusOverviewWidget extends StatsOverviewWidget
         $startOfWeek = now()->startOfWeek(6);
         $endOfWeek = now()->endOfWeek();
 
-        $bonusTransactionStats = Trend::query(Transaction::query()->bonus()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+        $bonusTransactionStats = Trend::query($this->transactions()->bonus()->approved())
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
-        $totalBonusAmount = (int) Transaction::query()->bonus()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
-            ->sum('amount');
+        $totalBonusAmount = (int) $this->transactions()->bonus()->approved()->sum('amount');
 
         $transactionBonus = Stat::make('bonus_transaction_stats', Number::format($totalBonusAmount))
             ->label(__('vendra-transaction::widgets.bonus_transaction_stats'))

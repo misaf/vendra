@@ -163,6 +163,17 @@ final class Transaction extends Model implements ShouldLogActivity
     }
 
     /**
+     * Match the transactions on the given user's wallets.
+     *
+     * @param  Builder<self>  $builder
+     */
+    #[Scope]
+    protected function ownedBy(Builder $builder, Model $user): void
+    {
+        $builder->whereHas('wallet', fn (Builder $wallet): Builder => $wallet->where('user_id', $user->getKey()));
+    }
+
+    /**
      * @param  Builder<self>  $builder
      */
     #[Scope]

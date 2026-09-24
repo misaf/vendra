@@ -9,13 +9,14 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
-use Misaf\VendraTransaction\Models\Transaction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\Concerns\QueriesRecordTransactions;
 
 final class TransactionDepositOverviewWidget extends StatsOverviewWidget
 {
+    use QueriesRecordTransactions;
+
     public ?Model $record = null;
 
     /**
@@ -52,15 +53,12 @@ final class TransactionDepositOverviewWidget extends StatsOverviewWidget
         $startOfWeek = now()->startOfWeek(6);
         $endOfWeek = now()->endOfWeek();
 
-        $depositTransactionStats = Trend::query(Transaction::query()->deposit()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+        $depositTransactionStats = Trend::query($this->transactions()->deposit()->approved())
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
-        $totalDepositAmount = (int) Transaction::query()->deposit()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
-            ->sum('amount');
+        $totalDepositAmount = (int) $this->transactions()->deposit()->approved()->sum('amount');
 
         $transactionDeposit = Stat::make('deposit_transaction_stats', Number::format($totalDepositAmount))
             ->label(__('vendra-transaction::widgets.deposit_transaction_stats'))

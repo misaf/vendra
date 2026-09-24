@@ -9,13 +9,14 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
-use Misaf\VendraTransaction\Models\Transaction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\Concerns\QueriesRecordTransactions;
 
 final class TransactionWithdrawalOverviewWidget extends StatsOverviewWidget
 {
+    use QueriesRecordTransactions;
+
     public ?Model $record = null;
 
     /**
@@ -52,15 +53,12 @@ final class TransactionWithdrawalOverviewWidget extends StatsOverviewWidget
         $startOfWeek = now()->startOfWeek(6);
         $endOfWeek = now()->endOfWeek();
 
-        $withdrawalTransactionStats = Trend::query(Transaction::query()->withdrawal()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+        $withdrawalTransactionStats = Trend::query($this->transactions()->withdrawal()->approved())
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
-        $totalWithdrawalAmount = (int) Transaction::query()->withdrawal()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
-            ->sum('amount');
+        $totalWithdrawalAmount = (int) $this->transactions()->withdrawal()->approved()->sum('amount');
 
         $transactionWithdrawal = Stat::make('withdrawal_transaction_stats', Number::format($totalWithdrawalAmount))
             ->label(__('vendra-transaction::widgets.withdrawal_transaction_stats'))

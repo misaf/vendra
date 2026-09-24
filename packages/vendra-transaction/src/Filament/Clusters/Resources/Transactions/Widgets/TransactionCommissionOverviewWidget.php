@@ -9,13 +9,14 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
-use Misaf\VendraTransaction\Models\Transaction;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\Concerns\QueriesRecordTransactions;
 
 final class TransactionCommissionOverviewWidget extends StatsOverviewWidget
 {
+    use QueriesRecordTransactions;
+
     public ?Model $record = null;
 
     /**
@@ -52,15 +53,12 @@ final class TransactionCommissionOverviewWidget extends StatsOverviewWidget
         $startOfWeek = now()->startOfWeek(6);
         $endOfWeek = now()->endOfWeek();
 
-        $commissionTransactionStats = Trend::query(Transaction::query()->commission()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+        $commissionTransactionStats = Trend::query($this->transactions()->commission()->approved())
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
-        $totalCommissionAmount = (int) Transaction::query()->commission()->approved()
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
-            ->sum('amount');
+        $totalCommissionAmount = (int) $this->transactions()->commission()->approved()->sum('amount');
 
         $transactionCommission = Stat::make('commission_transaction_stats', Number::format($totalCommissionAmount))
             ->label(__('vendra-transaction::widgets.commission_transaction_stats'))

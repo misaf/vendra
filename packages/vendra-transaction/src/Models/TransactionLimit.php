@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Misaf\VendraTransaction\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +43,26 @@ final class TransactionLimit extends Model
             'transaction_type' => TransactionTypeEnum::class,
             'amount' => 'integer',
         ];
+    }
+
+    /**
+     * Match the limits on the given user's wallets.
+     *
+     * @param  Builder<self>  $builder
+     */
+    #[Scope]
+    protected function ownedBy(Builder $builder, Model $user): void
+    {
+        $builder->whereHas('wallet', fn (Builder $wallet): Builder => $wallet->where('user_id', $user->getKey()));
+    }
+
+    /**
+     * @param  Builder<self>  $builder
+     */
+    #[Scope]
+    protected function ofType(Builder $builder, TransactionTypeEnum $transactionType): void
+    {
+        $builder->where('transaction_type', $transactionType);
     }
 
     /**

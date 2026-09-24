@@ -53,15 +53,12 @@ final class TransactionLimitOverviewWidget extends StatsOverviewWidget
         $startOfWeek = now()->startOfWeek(6);
         $endOfWeek = now()->endOfWeek();
 
-        $withdrawalTransactionStats = Trend::query(TransactionLimit::query()->where('transaction_type', TransactionTypeEnum::Withdrawal)
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey()))))
+        $withdrawalTransactionStats = Trend::query($this->withdrawalLimits())
             ->between($startOfWeek, $endOfWeek)
             ->perDay()
             ->sum('amount');
 
-        $totalWithdrawalAmount = (int) TransactionLimit::query()->where('transaction_type', TransactionTypeEnum::Withdrawal)
-            ->when($this->record, fn (Builder $builder) => $builder->whereHas('wallet', fn (Builder $walletQuery) => $walletQuery->where('user_id', $this->record->getKey())))
-            ->sum('amount');
+        $totalWithdrawalAmount = (int) $this->withdrawalLimits()->sum('amount');
 
         $transactionWithdrawal = Stat::make('withdrawal_transaction_stats', Number::format($totalWithdrawalAmount))
             ->label(__('vendra-transaction::widgets.withdrawal_transaction_stats'))
@@ -71,5 +68,17 @@ final class TransactionLimitOverviewWidget extends StatsOverviewWidget
             ->color('primary');
 
         return [$transactionWithdrawal];
+    }
+
+    /**
+     * Get the withdrawal limits, narrowed to the viewed user's wallets on a user's page.
+     *
+     * @return Builder<TransactionLimit>
+     */
+    private function withdrawalLimits(): Builder
+    {
+        $limits = TransactionLimit::query()->ofType(TransactionTypeEnum::Withdrawal);
+
+        return $this->record instanceof Model ? $limits->ownedBy($this->record) : $limits;
     }
 }
