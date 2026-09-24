@@ -82,6 +82,11 @@ abstract class AffiliateStatsOverviewWidget extends StatsOverviewWidget
     }
 
     /**
+     * Narrow the query to the widget's affiliate.
+     *
+     * An affiliate-scoped widget without an affiliate matches nothing rather than
+     * falling back to a placeholder id.
+     *
      * @template TModel of Model
      *
      * @param  Builder<TModel>  $query
@@ -93,7 +98,13 @@ abstract class AffiliateStatsOverviewWidget extends StatsOverviewWidget
             return $query;
         }
 
-        return $query->where('affiliate_id', $this->getAffiliateId() ?? 0);
+        $affiliateId = $this->getAffiliateId();
+
+        if ($affiliateId === null) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query->where('affiliate_id', $affiliateId);
     }
 
     /**
