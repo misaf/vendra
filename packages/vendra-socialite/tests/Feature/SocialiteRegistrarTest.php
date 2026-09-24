@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Provider;
+use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\Arr;
 use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 use Misaf\VendraSocialite\Support\SocialiteRegistrar;
@@ -64,3 +67,11 @@ it('creates a verified user mapped onto the module schema from an oauth identity
 it('refuses an oauth identity without an email address', function (): void {
     SocialiteRegistrar::createUserUsing('github', fakeOauthUser(['email' => null]), FilamentSocialitePlugin::make());
 })->throws(InvalidArgumentException::class, 'The [github] identity has no email address.');
+
+it('gives each provider button a registered brand color', function (): void {
+    $colors = collect(SocialiteRegistrar::make()->getProviders())->map(fn (Provider $provider): mixed => $provider->getColor());
+
+    expect($colors->all())->toBe(['google' => 'socialite-google', 'github' => 'socialite-github'])
+        ->and(FilamentColor::getColor('socialite-google'))->toBe(Color::hex('#ea4335'))
+        ->and(FilamentColor::getColor('socialite-github'))->toBe(Color::hex('#181717'));
+});

@@ -7,6 +7,7 @@ namespace Misaf\VendraSocialite\Support;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
@@ -21,6 +22,11 @@ final class SocialiteRegistrar
 {
     public static function make(): FilamentSocialitePlugin
     {
+        FilamentColor::register([
+            'socialite-google' => Color::hex('#ea4335'),
+            'socialite-github' => Color::hex('#181717'),
+        ]);
+
         return FilamentSocialitePlugin::make()
             ->providers(self::providers())
             ->registration(Config::boolean('vendra-socialite.registration', false))
@@ -39,14 +45,14 @@ final class SocialiteRegistrar
             Provider::make('google')
                 ->label('Google')
                 ->icon('fab-google')
-                ->color(Color::hex('#ea4335'))
+                ->color('socialite-google')
                 ->scopes(['openid', 'profile', 'email'])
                 ->visible(fn (): bool => filled(Config::get('services.google.client_id'))),
 
             Provider::make('github')
                 ->label('GitHub')
                 ->icon('fab-github')
-                ->color(Color::hex('#181717'))
+                ->color('socialite-github')
                 ->scopes(['read:user', 'user:email'])
                 ->visible(fn (): bool => filled(Config::get('services.github.client_id'))),
         ];
