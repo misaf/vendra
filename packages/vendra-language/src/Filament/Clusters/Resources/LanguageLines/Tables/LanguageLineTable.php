@@ -17,7 +17,6 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
-use Illuminate\Support\Arr;
 use Misaf\VendraLanguage\Models\LanguageLine;
 use Misaf\VendraLanguage\Support\TranslationProgress;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
@@ -65,26 +64,26 @@ final class LanguageLineTable
             TextColumn::make('translation_progress')
                 ->badge()
                 ->color(function (LanguageLine $record, TranslationProgress $progress): string {
-                    $coverage = $progress->forLanguageLine($record);
+                    ['percentage' => $percentage, 'total' => $total] = $progress->forLanguageLine($record);
 
-                    return static::progressColor(Arr::get($coverage, 'percentage'), Arr::get($coverage, 'total'));
+                    return static::progressColor($percentage, $total);
                 })
                 ->description(function (LanguageLine $record, TranslationProgress $progress): string {
-                    $coverage = $progress->forLanguageLine($record);
+                    ['percentage' => $percentage, 'remaining' => $remaining] = $progress->forLanguageLine($record);
 
                     return __('vendra-language::messages.coverage_summary', [
-                        'percentage' => Arr::get($coverage, 'percentage'),
-                        'remaining' => Arr::get($coverage, 'remaining'),
+                        'percentage' => $percentage,
+                        'remaining' => $remaining,
                     ]);
                 })
                 ->label(__('vendra-language::attributes.translation_progress'))
                 ->state(function (LanguageLine $record, TranslationProgress $progress): string {
-                    $coverage = $progress->forLanguageLine($record);
+                    ['translated' => $translated, 'total' => $total] = $progress->forLanguageLine($record);
 
-                    return Arr::get($coverage, 'translated').' / '.Arr::get($coverage, 'total');
+                    return "{$translated} / {$total}";
                 })
                 ->tooltip(function (LanguageLine $record, TranslationProgress $progress): ?string {
-                    $missingLocales = Arr::get($progress->forLanguageLine($record), 'missing_locales');
+                    ['missing_locales' => $missingLocales] = $progress->forLanguageLine($record);
 
                     if ($missingLocales === []) {
                         return null;

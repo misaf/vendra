@@ -62,9 +62,12 @@ final class Language extends Model implements ShouldLogActivity, Sortable
         'is_default' => false,
     ];
 
+    /**
+     * @return Attribute<string, never>
+     */
     protected function name(): Attribute
     {
-        return Attribute::make(get: fn () => Locales::name($this->locale));
+        return Attribute::make(get: fn (): string => Locales::name($this->locale));
     }
 
     /**

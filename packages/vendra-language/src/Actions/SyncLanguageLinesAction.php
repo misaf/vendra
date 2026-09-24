@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraLanguage\Actions;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraLanguage\Models\LanguageLine;
 use Misaf\VendraLanguage\Support\TranslationCatalog;
@@ -34,7 +33,8 @@ final readonly class SyncLanguageLinesAction
             $unchanged = 0;
 
             foreach ($catalogLines as $catalogLine) {
-                $identity = implode("\0", [Arr::get($catalogLine, 'namespace'), Arr::get($catalogLine, 'group'), Arr::get($catalogLine, 'key')]);
+                ['namespace' => $namespace, 'group' => $group, 'key' => $key, 'text' => $catalogText] = $catalogLine;
+                $identity = "{$namespace}\0{$group}\0{$key}";
                 $languageLine = $existingLanguageLines->get($identity);
 
                 if (! $languageLine instanceof LanguageLine) {
@@ -45,7 +45,7 @@ final readonly class SyncLanguageLinesAction
                 }
 
                 $text = $languageLine->text;
-                $mergedText = $text + Arr::get($catalogLine, 'text');
+                $mergedText = $text + $catalogText;
 
                 if ($mergedText === $text) {
                     $unchanged++;

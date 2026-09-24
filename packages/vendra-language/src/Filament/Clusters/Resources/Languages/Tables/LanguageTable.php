@@ -17,7 +17,6 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
-use Illuminate\Support\Arr;
 use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\Actions\SetDefaultLanguageTableAction;
 use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource;
 use Misaf\VendraLanguage\Models\Language;
@@ -62,23 +61,23 @@ final class LanguageTable
             TextColumn::make('translation_coverage')
                 ->badge()
                 ->color(function (Language $record, TranslationProgress $progress): string {
-                    $coverage = $progress->forLocale($record->locale);
+                    ['percentage' => $percentage, 'total' => $total] = $progress->forLocale($record->locale);
 
-                    return static::progressColor(Arr::get($coverage, 'percentage'), Arr::get($coverage, 'total'));
+                    return static::progressColor($percentage, $total);
                 })
                 ->description(function (Language $record, TranslationProgress $progress): string {
-                    $coverage = $progress->forLocale($record->locale);
+                    ['percentage' => $percentage, 'remaining' => $remaining] = $progress->forLocale($record->locale);
 
                     return __('vendra-language::messages.coverage_summary', [
-                        'percentage' => Arr::get($coverage, 'percentage'),
-                        'remaining' => Arr::get($coverage, 'remaining'),
+                        'percentage' => $percentage,
+                        'remaining' => $remaining,
                     ]);
                 })
                 ->label(__('vendra-language::attributes.translation_coverage'))
                 ->state(function (Language $record, TranslationProgress $progress): string {
-                    $coverage = $progress->forLocale($record->locale);
+                    ['translated' => $translated, 'total' => $total] = $progress->forLocale($record->locale);
 
-                    return Arr::get($coverage, 'translated').' / '.Arr::get($coverage, 'total');
+                    return "{$translated} / {$total}";
                 }),
 
             CreatedAtColumn::make(),
