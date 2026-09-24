@@ -44,7 +44,7 @@ it('round-trips the metadata of every API resource through the cache store', fun
 });
 
 /**
- * Every class in an object graph that `unserialize()` refused to restore.
+ * Collect every class in an object graph that `unserialize()` refused to restore.
  *
  * @return list<string>
  */

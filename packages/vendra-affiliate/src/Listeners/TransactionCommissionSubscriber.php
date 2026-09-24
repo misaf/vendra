@@ -40,7 +40,7 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
             return;
         }
 
-        // The listener runs after commit, so the wallet may have been soft-deleted since; its user still earned the referral.
+        // Include a wallet soft-deleted since the commit, since its user still earned the referral.
         $wallet = $transaction->wallet()->withTrashed()->first();
 
         if (! $wallet instanceof Wallet) {

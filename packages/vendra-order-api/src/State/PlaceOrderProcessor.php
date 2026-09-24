@@ -168,8 +168,6 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
     }
 
     /**
-     * Take the ordered quantities off the products.
-     *
      * @param  list<OrderLineDraft>  $lines
      */
     private function deductStock(array $lines): void

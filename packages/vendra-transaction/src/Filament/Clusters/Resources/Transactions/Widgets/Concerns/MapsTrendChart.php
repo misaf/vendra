@@ -10,8 +10,6 @@ use Illuminate\Support\Collection;
 trait MapsTrendChart
 {
     /**
-     * Get the numeric aggregates of a trend for a stat chart.
-     *
      * @param  Collection<(int|string), mixed>  $values
      * @return list<float>
      */

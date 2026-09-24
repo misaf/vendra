@@ -142,9 +142,7 @@ return [
      * Jobs not tenant aware even if these don't implement the NotTenantAware interface.
      */
     'not_tenant_aware_jobs' => [
-        // The subscription payment engine is dispatched from host-level/reseller
-        // flows that have no current tenant; it stays multitenancy agnostic and
-        // is marked not-tenant-aware here rather than coupling to this provider.
+        // Dispatched from host and reseller flows that have no current tenant.
         ProcessSubscriptionPayment::class,
     ],
 ];

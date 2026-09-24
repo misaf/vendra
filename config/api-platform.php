@@ -87,7 +87,7 @@ return [
         // Keep `data.id` as the IRI that clients built against 4.x expect.
         'use_iri_as_id' => true,
 
-        // Allow client-generated IDs on JSON:API POST. Off to avoid id spoofing.
+        // Refuse client-generated IDs on JSON:API POST to avoid id spoofing.
         'allow_client_generated_id' => false,
     ],
 
@@ -175,10 +175,11 @@ return [
         // 'datetime_format' => \DateTimeInterface::RFC3339,
     ],
 
-    // we recommend using "file" or "acpu". Kept env-driven so the test suite can
-    // pin a per-process store: the shared "file" pool is not written atomically
-    // across processes, so cold parallel workers can race and read incomplete
-    // resource/MCP metadata. Tests set this to "array" (see phpunit.xml).
+    /*
+     * Read from the environment so tests can pin a per-process "array" store.
+     * The shared "file" pool is not written atomically, so parallel workers
+     * can read incomplete resource and MCP metadata.
+     */
     'cache' => env('API_PLATFORM_CACHE_STORE', 'file'),
 
     // Path to an Eloquent model metadata file produced by `php artisan api-platform:metadata:dump`.

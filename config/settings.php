@@ -37,7 +37,7 @@ return [
     /*
      * Leave the settings cache off. Its key is the settings class and its
      * prefix is static, so a cached store-scoped class would be served to the
-     * next store as well — the repository's scoping happens below the cache.
+     * next store as well. The repository's scoping happens below the cache.
      */
     'cache' => [
         'enabled' => false,
