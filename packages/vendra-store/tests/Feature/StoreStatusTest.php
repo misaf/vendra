@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\DB;
+use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StoreStatusCounts;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
@@ -45,6 +47,15 @@ it('filters by the same rule its accessor reads', function (): void {
             ->toBe([$store->id])
             ->and($store->status())->toBe($status);
     }
+});
+
+it('filters by any of several statuses', function (): void {
+    $pending = Store::factory()->provisioningPending()->active()->create();
+    Store::factory()->active()->create();
+    $suspended = Store::factory()->active()->suspended()->create();
+
+    expect(Store::query()->withAnyStatus([StoreStatus::Pending, StoreStatus::Suspended])->orderBy('id')->pluck('id')->all())
+        ->toBe([$pending->id, $suspended->id]);
 });
 
 it('treats an active store as the one that may serve requests', function (): void {
@@ -89,4 +100,24 @@ it('counts only the stores the given query selects', function (): void {
     expect($counts->count(StoreStatus::Active))->toBe(2)
         ->and($counts->needingAttention())->toBe(1)
         ->and($counts->total())->toBe(3);
+});
+
+it('filters by the status of the store\'s storefront deployment', function (): void {
+    $ready = StorefrontDeployment::factory()->create(['status' => StorefrontDeploymentStatus::Ready])->store;
+    StorefrontDeployment::factory()->create(['status' => StorefrontDeploymentStatus::Failed]);
+    Store::factory()->active()->create();
+
+    expect(Store::query()->withDeploymentStatus(StorefrontDeploymentStatus::Ready)->pluck('id')->all())->toBe([$ready->id]);
+});
+
+it('needs attention while provisioning is unsettled or failed, or when the storefront deployment failed', function (): void {
+    $pending = Store::factory()->provisioningPending()->active()->create();
+    $failed = Store::factory()->provisioningFailed()->active()->create();
+    $deploymentFailed = Store::factory()->active()->create();
+    StorefrontDeployment::factory()->for($deploymentFailed)->create(['status' => StorefrontDeploymentStatus::Failed]);
+    StorefrontDeployment::factory()->for(Store::factory()->active())->create(['status' => StorefrontDeploymentStatus::Ready]);
+    Store::factory()->active()->suspended()->create();
+
+    expect(Store::query()->needingAttention()->orderBy('id')->pluck('id')->all())
+        ->toBe([$pending->id, $failed->id, $deploymentFailed->id]);
 });

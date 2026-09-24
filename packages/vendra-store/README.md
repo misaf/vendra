@@ -62,9 +62,13 @@ A store's condition is spread over three columns, each written by a different
 concern: `provisioning_status` by the provisioner, `active` by an administrator, and
 `billing_suspended_at` by subscription enforcement. `Store::status()` derives the
 the one reading an administrator wants — `StoreStatus::Pending`, `Provisioning`, `Active`,
-`Suspended` or `Failed` — and `Store::query()->withStatus(...)` is that same rule
+`Suspended` or `Failed` — and `Store::query()->withStatus(...)` (or `withAnyStatus([...])` for several) is that same rule
 expressed as SQL. It is derived rather than stored, so no fourth column can drift
-out of step with the three that own it.
+out of step with the three that own it. `withDeploymentStatus(...)` filters by the
+storefront deployment's status, and `needingAttention()` matches the statuses
+`StoreStatusCounts::NEEDING_ATTENTION` counts plus stores whose deployment failed.
+`ownedBy($reseller)` matches a reseller's stores, and nothing when the reseller is
+null, since a null `reseller_id` marks a console-owned store.
 
 Each writer goes through an action that also aligns the storefront's desired state
 through `AlignStorefrontWithStoreAction`: `SuspendStoreAction` and
@@ -217,6 +221,9 @@ Status is written only through the model's `markProcessing()`, `markReady()`,
 `InvalidStorefrontTransitionException` otherwise. A job attempt that throws with
 retries left stays `Processing`; only `ProvisionStorefrontJob::failed()` writes
 `Failed`.
+
+`StorefrontDeployment::query()->requestedBetween($from, $until)` matches
+deployments requested on or between two calendar days; either bound may be null.
 
 ### The provisioner port
 

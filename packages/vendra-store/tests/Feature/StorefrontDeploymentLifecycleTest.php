@@ -96,3 +96,20 @@ it('still resolves the store of an offboarded storefront', function (): void {
 
     expect($deployment->fresh()?->store?->is($store))->toBeTrue();
 });
+
+it('filters deployments by the calendar days they were requested on', function (): void {
+    $july = StorefrontDeployment::factory()->create(['requested_at' => '2026-07-01 10:00:00']);
+    $lateAugust = StorefrontDeployment::factory()->create(['requested_at' => '2026-08-31 23:30:00']);
+    $september = StorefrontDeployment::factory()->create(['requested_at' => '2026-09-01 00:10:00']);
+
+    $requestedIds = fn (?string $from, ?string $until): array => StorefrontDeployment::query()
+        ->requestedBetween($from, $until)
+        ->orderBy('id')
+        ->pluck('id')
+        ->all();
+
+    expect($requestedIds('2026-08-01', '2026-08-31'))->toBe([$lateAugust->id])
+        ->and($requestedIds('2026-08-31', null))->toBe([$lateAugust->id, $september->id])
+        ->and($requestedIds(null, '2026-08-31'))->toBe([$july->id, $lateAugust->id])
+        ->and($requestedIds(null, null))->toBe([$july->id, $lateAugust->id, $september->id]);
+});

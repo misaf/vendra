@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraStore\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
@@ -76,6 +77,20 @@ final class StorefrontDeployment extends Model
     protected function desiredRunning(Builder $query): Builder
     {
         return $query->where('desired_state', StorefrontDesiredState::Running->value);
+    }
+
+    /**
+     * Match deployments requested on or between the given calendar days; a missing bound is open.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function requestedBetween(Builder $query, DateTimeInterface|string|null $from = null, DateTimeInterface|string|null $until = null): Builder
+    {
+        return $query
+            ->when($from !== null, fn (Builder $query): Builder => $query->whereDate('requested_at', '>=', $from))
+            ->when($until !== null, fn (Builder $query): Builder => $query->whereDate('requested_at', '<=', $until));
     }
 
     public function url(): string

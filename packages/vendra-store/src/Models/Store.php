@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -19,9 +20,12 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
 use Laravel\Pennant\Concerns\HasFeatures;
 use Misaf\VendraStore\Database\Factories\StoreFactory;
+use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StoreStatus;
 use Misaf\VendraStore\Observers\StoreObserver;
 use Misaf\VendraStore\Scopes\StoreScope;
+use Misaf\VendraStore\Support\StoreStatusCounts;
+use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraTenant\Concerns\IsTenantModel;
 use Misaf\VendraTenant\Contracts\TenantContract;
@@ -192,6 +196,63 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
                     ->orWhereNotNull('billing_suspended_at')),
             StoreStatus::Active => $query->accessible(),
         };
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @param  list<StoreStatus>  $statuses
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function withAnyStatus(Builder $query, array $statuses): Builder
+    {
+        return $query->where(function (Builder $query) use ($statuses): void {
+            foreach ($statuses as $status) {
+                $query->orWhere(fn (Builder $query): Builder => $query->withStatus($status));
+            }
+        });
+    }
+
+    /**
+     * Match the stores a reseller bills for; without one, match nothing.
+     *
+     * A null `reseller_id` marks a console-owned store, so filtering on a missing reseller's key would match every one of them.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function ownedBy(Builder $query, (Model&SubscriptionSubscriber)|null $reseller): Builder
+    {
+        if ($reseller === null) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query->where('reseller_id', $reseller->getKey());
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function withDeploymentStatus(Builder $query, StorefrontDeploymentStatus $status): Builder
+    {
+        return $query->whereHas('storefrontDeployment', fn (Builder $deployment): Builder => $deployment->where('status', $status));
+    }
+
+    /**
+     * Match the statuses {@see StoreStatusCounts::NEEDING_ATTENTION} counts, plus stores whose storefront deployment failed.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function needingAttention(Builder $query): Builder
+    {
+        return $query->where(fn (Builder $query): Builder => $query
+            ->withAnyStatus(StoreStatusCounts::NEEDING_ATTENTION)
+            ->orWhere(fn (Builder $query): Builder => $query->withDeploymentStatus(StorefrontDeploymentStatus::Failed)));
     }
 
     /**
