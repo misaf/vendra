@@ -102,7 +102,7 @@ it('counts only the stores the given query selects', function (): void {
         ->and($counts->total())->toBe(3);
 });
 
-it('filters by the status of the store\'s storefront deployment', function (): void {
+it("filters by the status of the store's storefront deployment", function (): void {
     $ready = StorefrontDeployment::factory()->create(['status' => StorefrontDeploymentStatus::Ready])->store;
     StorefrontDeployment::factory()->create(['status' => StorefrontDeploymentStatus::Failed]);
     Store::factory()->active()->create();

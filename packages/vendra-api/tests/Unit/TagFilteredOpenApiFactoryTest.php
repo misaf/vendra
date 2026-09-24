@@ -23,9 +23,9 @@ it('drops unrequested head, options, and trace operations', function (): void {
         head: new Operation(operationId: 'headOrders', tags: ['Order']),
     ));
 
-    $decorated = new class(new OpenApi(new Info('Vendra', '1.0'), [], $paths)) implements OpenApiFactoryInterface
+    $decorated = new readonly class(new OpenApi(new Info('Vendra', '1.0'), [], $paths)) implements OpenApiFactoryInterface
     {
-        public function __construct(private readonly OpenApi $openApi) {}
+        public function __construct(private OpenApi $openApi) {}
 
         public function __invoke(array $context = []): OpenApi
         {
@@ -35,10 +35,11 @@ it('drops unrequested head, options, and trace operations', function (): void {
 
     $openApi = (new TagFilteredOpenApiFactory($decorated))(['request' => Request::create('/api/docs', parameters: ['tags' => 'Product'])]);
     $filtered = $openApi->getPaths()->getPaths();
+    ['/products' => $products] = $filtered;
 
     expect(array_keys($filtered))->toBe(['/products'])
-        ->and($filtered['/products']->getGet()?->getOperationId())->toBe('getProducts')
-        ->and($filtered['/products']->getOptions())->toBeNull()
-        ->and($filtered['/products']->getHead())->toBeNull()
-        ->and($filtered['/products']->getTrace())->toBeNull();
+        ->and($products->getGet()?->getOperationId())->toBe('getProducts')
+        ->and($products->getOptions())->toBeNull()
+        ->and($products->getHead())->toBeNull()
+        ->and($products->getTrace())->toBeNull();
 });
