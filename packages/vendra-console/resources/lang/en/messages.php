@@ -11,7 +11,6 @@ return [
     'subscription_renewed' => 'Subscription renewed.',
     'renewal_blocked' => 'Renewal blocked',
     'user_password_updated' => 'User password updated.',
-    'url_copied' => 'URL copied',
     'account_disabled' => 'Account disabled',
     'account_enabled' => 'Account enabled',
     'administrator_added' => 'Administrator added',

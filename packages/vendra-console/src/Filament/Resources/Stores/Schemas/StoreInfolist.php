@@ -39,10 +39,6 @@ final class StoreInfolist
                             ->state(fn (Store $record): string => $record->adminUrl())
                             ->url(fn (Store $record): string => $record->adminUrl())
                             ->openUrlInNewTab()->copyable(),
-                        TextEntry::make('storefront_url')->label(__('vendra-console::attributes.storefront_url'))
-                            ->state(fn (Store $record): ?string => $record->storefrontDeployment?->domain)
-                            ->url(fn (Store $record): ?string => $record->storefrontDeployment?->url())
-                            ->openUrlInNewTab()->copyable()->placeholder('—'),
                         IsActiveEntry::make(),
                     ]),
                     DescriptionEntry::make()->placeholder('—'),

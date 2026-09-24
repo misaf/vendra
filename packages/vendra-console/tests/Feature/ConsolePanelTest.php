@@ -555,7 +555,6 @@ it('uses a store overview as the console record landing page', function (): void
         ->assertOk()
         ->assertSee('Console overview store')
         ->assertSee('overview.test')
-        ->assertSee('shop.overview.test')
         ->assertSee(StorefrontDesiredState::Stopped->getLabel());
 });
 

@@ -11,7 +11,6 @@ return [
     'subscription_renewed' => 'Abonnement verlängert.',
     'renewal_blocked' => 'Verlängerung blockiert',
     'user_password_updated' => 'Benutzer-Passwort aktualisiert.',
-    'url_copied' => 'URL kopiert',
     'account_disabled' => 'Konto deaktiviert',
     'account_enabled' => 'Konto aktiviert',
     'administrator_added' => 'Administrator hinzugefügt',

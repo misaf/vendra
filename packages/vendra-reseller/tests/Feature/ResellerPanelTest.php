@@ -165,7 +165,6 @@ it('uses a store overview as the reseller record landing page', function (): voi
         ->assertOk()
         ->assertSee('Acme Flowers')
         ->assertSee('acme.test')
-        ->assertSee('shop.acme.test')
         ->assertSee(StorefrontDesiredState::Stopped->getLabel());
 });
 

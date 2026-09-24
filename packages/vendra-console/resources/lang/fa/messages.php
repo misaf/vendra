@@ -11,7 +11,6 @@ return [
     'subscription_renewed' => 'اشتراک تمدید شد.',
     'renewal_blocked' => 'تمدید مسدود شد',
     'user_password_updated' => 'رمز عبور کاربر به‌روزرسانی شد.',
-    'url_copied' => 'URL کپی شد',
     'account_disabled' => 'حساب غیرفعال شد',
     'account_enabled' => 'حساب فعال شد',
     'administrator_added' => 'مدیر افزوده شد',
