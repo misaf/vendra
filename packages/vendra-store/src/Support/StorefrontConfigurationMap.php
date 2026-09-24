@@ -57,7 +57,7 @@ final class StorefrontConfigurationMap
             $configuration['messages'] = $messages;
         }
 
-        return $configuration;
+        return array_filter($configuration, is_string(...), ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -89,7 +89,13 @@ final class StorefrontConfigurationMap
         $messages = [];
 
         foreach ($value as $locale => $overrides) {
-            if (is_string($locale) && $locale !== '' && is_array($overrides) && $overrides !== []) {
+            if (! is_string($locale) || $locale === '' || ! is_array($overrides)) {
+                continue;
+            }
+
+            $overrides = array_filter($overrides, is_string(...), ARRAY_FILTER_USE_KEY);
+
+            if ($overrides !== []) {
                 $messages[$locale] = $overrides;
             }
         }
