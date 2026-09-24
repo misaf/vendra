@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
@@ -20,6 +22,8 @@ use Misaf\VendraPermission\Models\Role;
 final class PermissionRelationManager extends RelationManager
 {
     protected static string $relationship = 'permissions';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedKey;
 
     protected static bool $isBadgeDeferred = true;
 

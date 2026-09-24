@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -28,6 +29,8 @@ use Misaf\VendraTransaction\Models\Wallet;
 final class TransactionLimitsRelationManager extends RelationManager
 {
     protected static string $relationship = 'transactionLimits';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedScale;
 
     protected static bool $isBadgeDeferred = true;
 

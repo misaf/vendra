@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraUserProfile\Filament\Clusters\Resources\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
@@ -17,6 +19,8 @@ use Misaf\VendraUserProfile\Models\UserProfile;
 final class UserProfileRelationManager extends RelationManager
 {
     protected static string $relationship = 'userProfiles';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedIdentification;
 
     protected static bool $isBadgeDeferred = true;
 

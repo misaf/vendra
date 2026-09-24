@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\RelationManagers;
 
+use BackedEnum;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -15,6 +16,8 @@ use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 final class LedgerEntriesRelationManager extends RelationManager
 {
     protected static string $relationship = 'ledgerEntries';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedBookOpen;
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {

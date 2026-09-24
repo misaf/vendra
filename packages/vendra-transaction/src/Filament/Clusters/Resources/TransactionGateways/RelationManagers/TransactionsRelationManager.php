@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\TransactionGateways\RelationManagers;
 
+use BackedEnum;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +22,8 @@ use Misaf\VendraTransaction\Models\TransactionGateway;
 final class TransactionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'transactions';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedArrowsRightLeft;
 
     protected static bool $isBadgeDeferred = true;
 

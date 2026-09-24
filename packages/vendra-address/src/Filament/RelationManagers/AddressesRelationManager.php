@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAddress\Filament\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -26,6 +27,8 @@ use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
 final class AddressesRelationManager extends RelationManager
 {
     protected static string $relationship = 'addresses';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedMapPin;
 
     public static function getModelLabel(): string
     {

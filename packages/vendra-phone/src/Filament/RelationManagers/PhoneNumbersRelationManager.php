@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraPhone\Filament\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -30,6 +31,8 @@ use Ysfkaya\FilamentPhoneInput\Tables\PhoneColumn;
 final class PhoneNumbersRelationManager extends RelationManager
 {
     protected static string $relationship = 'phoneNumbers';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedPhone;
 
     public static function getModelLabel(): string
     {

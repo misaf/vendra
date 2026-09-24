@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDocument\Filament\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -26,6 +27,8 @@ use Misaf\VendraSupport\Capabilities\Countries;
 final class DocumentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'documents';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedDocumentDuplicate;
 
     public static function getModelLabel(): string
     {

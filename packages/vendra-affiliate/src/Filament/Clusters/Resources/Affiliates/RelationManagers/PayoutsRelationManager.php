@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\RelationManagers;
 
+use BackedEnum;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\Tables\AffiliatePayoutTable;
@@ -12,6 +14,8 @@ use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\Tables\Af
 final class PayoutsRelationManager extends RelationManager
 {
     protected static string $relationship = 'payouts';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedBanknotes;
 
     protected static bool $isLazy = false;
 

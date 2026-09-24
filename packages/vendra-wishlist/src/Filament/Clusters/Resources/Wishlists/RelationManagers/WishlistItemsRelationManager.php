@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Misaf\VendraWishlist\Models\Wishlist;
 final class WishlistItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'items';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedHeart;
 
     protected static bool $isBadgeDeferred = true;
 

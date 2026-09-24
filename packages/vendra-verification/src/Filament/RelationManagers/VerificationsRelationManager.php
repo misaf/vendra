@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraVerification\Filament\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
@@ -23,6 +24,8 @@ use Misaf\VendraSupport\Capabilities\Countries;
 final class VerificationsRelationManager extends RelationManager
 {
     protected static string $relationship = 'verifications';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedCheckBadge;
 
     public static function getModelLabel(): string
     {

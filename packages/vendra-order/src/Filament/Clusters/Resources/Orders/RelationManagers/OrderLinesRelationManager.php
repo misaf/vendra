@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraOrder\Filament\Clusters\Resources\Orders\RelationManagers;
 
+use BackedEnum;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -15,6 +16,8 @@ use Misaf\VendraOrder\Models\Order;
 final class OrderLinesRelationManager extends RelationManager
 {
     protected static string $relationship = 'lines';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedQueueList;
 
     protected static bool $isBadgeDeferred = true;
 

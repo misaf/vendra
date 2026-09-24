@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\ActionGroup;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
@@ -30,6 +32,8 @@ final class AdministratorsRelationManager extends RelationManager
     use InteractsWithAdministratorRecord;
 
     protected static string $relationship = 'users';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedUsers;
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {

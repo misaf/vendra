@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCart\Filament\Clusters\Resources\Carts\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
@@ -17,6 +18,8 @@ use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 final class CartItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'items';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedShoppingCart;
 
     protected static bool $isBadgeDeferred = true;
 

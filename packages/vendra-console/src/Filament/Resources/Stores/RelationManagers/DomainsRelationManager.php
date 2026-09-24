@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers;
 
+use BackedEnum;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
@@ -17,6 +18,8 @@ use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
 final class DomainsRelationManager extends RelationManager
 {
     protected static string $relationship = 'domains';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedGlobeAlt;
 
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\RelationManagers;
 
+use BackedEnum;
 use Filament\Actions\CreateAction;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
@@ -23,6 +25,8 @@ final class FaqRelationManager extends RelationManager
     public ?string $activeLocale = null;
 
     protected static string $relationship = 'faqs';
+
+    protected static string|BackedEnum|null $icon = Heroicon::OutlinedQuestionMarkCircle;
 
     protected static bool $isBadgeDeferred = true;
 
