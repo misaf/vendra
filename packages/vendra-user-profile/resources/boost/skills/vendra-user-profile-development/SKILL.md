@@ -70,6 +70,7 @@ Use policy enums and policies as the permission source.
 - Keep policy method names aligned with Filament actions: `viewAny`, `view`, `create`, `update`, `delete`, `deleteAny`, `restore`, `restoreAny`, `forceDelete`, `forceDeleteAny`, `replicate`, and `reorder` as applicable.
 - Update `PermissionPolicySeeder` when new permissions are introduced.
 - Keep navigation labels and groups configurable through the module `Plugin` and `config/vendra-user-profile.php`. Do not add a `tenant_aware` config value; tenant awareness derives from the bound `TenantResolver`.
+- Each user has exactly one default profile (`is_default`), kept by the synchronous `Observers\UserProfileObserver`, which uses vendra-support's `MaintainsSingleFlagPerOwner`; the `default_user_guard` unique index backs it in the database.
 - Keep feature configuration flat with `features_enabled`, `features_discover`, and `module_enabled`; do not introduce nested `features.*` keys. Default an installed module to enabled so User Profiles appears beside Users, but preserve explicit environment overrides. Check access through `Features\ModuleEnabled::class`, whose Pennant `before()` hook applies the global switches before persisted tenant values.
 
 ## Data And Localization

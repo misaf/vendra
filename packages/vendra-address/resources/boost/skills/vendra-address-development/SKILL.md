@@ -34,4 +34,4 @@ description: "Create, modify, review, or test the optional Vendra Address provid
 - Model international addresses with ISO country code and generic locality/administrative fields. Put country-specific structured fields in JSON metadata.
 - Do not mark address fields translatable unless explicitly added to `$translatable`; otherwise use scalar columns and normal Filament inputs.
 - Store no concrete tenant provider references; tenant ownership comes from Vendra Support.
-- Keep exactly one default address (`is_default`) per user profile through the synchronous `Observers\AddressObserver`: the first address becomes the default, flagging another clears the rest, the only default cannot be unflagged, and deleting it hands the flag to the oldest remaining address.
+- Keep exactly one default address (`is_default`) per user profile through the synchronous `Observers\AddressObserver`, which uses vendra-support's `MaintainsSingleFlagPerOwner`.

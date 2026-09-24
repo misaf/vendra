@@ -33,4 +33,5 @@ description: "Create, modify, review, or test the optional Vendra Phone provider
 - Keep `PhoneNumberPolicy`, `PhoneNumberPolicyEnum`, and `PermissionPolicySeeder` aligned for Filament strict authorization.
 - Use `ysfkaya/filament-phone-input`, store ISO country separately with `countryStatePath()`, and store the number in E.164 format.
 - Phone fields are scalar and non-translatable; JSON metadata is only for country/carrier-specific structured information.
+- Each user profile has exactly one primary phone number (`is_primary`), kept by the synchronous `Observers\PhoneNumberObserver`, which uses vendra-support's `MaintainsSingleFlagPerOwner`.
 - Never reference a concrete tenant provider.

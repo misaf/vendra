@@ -124,3 +124,28 @@ it('makes a new default profile after the previous default was deleted', functio
 
     expect($newDefault->refresh()->is_default)->toBeTrue();
 });
+
+it('makes a user first profile the default and refuses to unflag it', function (): void {
+    makeCurrentTestTenant();
+
+    $user = User::factory()->create();
+    $first = UserProfileFactory::new()->forUser($user)->createOne(['is_default' => false]);
+    $second = UserProfileFactory::new()->forUser($user)->createOne(['is_default' => false]);
+
+    $first->update(['is_default' => false]);
+
+    expect($first->refresh()->is_default)->toBeTrue()
+        ->and($second->refresh()->is_default)->toBeFalse();
+});
+
+it('hands the default to the oldest remaining profile when it is deleted', function (): void {
+    makeCurrentTestTenant();
+
+    $user = User::factory()->create();
+    $first = UserProfileFactory::new()->forUser($user)->createOne();
+    $second = UserProfileFactory::new()->forUser($user)->createOne();
+
+    $first->delete();
+
+    expect($second->refresh()->is_default)->toBeTrue();
+});

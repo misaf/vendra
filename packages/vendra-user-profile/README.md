@@ -5,6 +5,7 @@ Tenant-aware user profiles and Filament profile management for Vendra applicatio
 ## Features
 
 - Multiple named profiles per user
+- One default profile per user, kept automatically
 - Tenant-aware profile storage and authorization
 - Filament resource with create, view, edit, and list pages
 - Pennant-controlled module availability

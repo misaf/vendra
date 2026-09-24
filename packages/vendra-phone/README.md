@@ -8,6 +8,7 @@ International user profile phone numbers for Vendra applications.
 - Filament relation manager contributed through the User Profile extension registry
 - Canonical E.164 number storage with a separate ISO country state via `ysfkaya/filament-phone-input`
 - Open phone type strings and structured JSON metadata for country- or carrier-specific fields
+- One primary number per user profile, kept automatically
 - Tenant-aware storage and permission-seeded authorization
 
 ## Requirements

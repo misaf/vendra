@@ -19,3 +19,4 @@
 - Keep `PhoneNumberPolicy`, `PhoneNumberPolicyEnum`, and `PermissionPolicySeeder` aligned so Filament strict authorization remains valid.
 - Use `ysfkaya/filament-phone-input` with ISO country state and canonical E.164 number storage. Do not implement a competing free-text phone input.
 - Preserve international flexibility through open phone type strings and metadata.
+- Each user profile has exactly one primary phone number (`is_primary`), kept by the synchronous `Observers\PhoneNumberObserver`, which uses vendra-support's `MaintainsSingleFlagPerOwner`.

@@ -6,12 +6,14 @@ namespace Misaf\VendraPhone\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\VendraPhone\Database\Factories\PhoneNumberFactory;
+use Misaf\VendraPhone\Observers\PhoneNumberObserver;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
@@ -46,6 +48,7 @@ use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
     'verified_at',
 ])]
 #[Hidden(['tenant_id'])]
+#[ObservedBy([PhoneNumberObserver::class])]
 #[UseFactory(PhoneNumberFactory::class)]
 final class PhoneNumber extends Model implements ShouldLogActivity
 {
