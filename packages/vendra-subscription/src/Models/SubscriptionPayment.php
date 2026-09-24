@@ -89,6 +89,22 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     }
 
     /**
+     * Payments an operator has to look at: awaiting customer action, unreconciled, or a failed refund.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function needingReview(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            SubscriptionPaymentStatus::RequiresAction,
+            SubscriptionPaymentStatus::NeedsReconciliation,
+            SubscriptionPaymentStatus::RefundFailed,
+        ]);
+    }
+
+    /**
      * Paid payments whose subscription was never activated.
      *
      * @param  Builder<self>  $query

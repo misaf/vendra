@@ -49,6 +49,10 @@ cancellation stops are the `SubscriptionPayment::open()` scope. The actions refu
 buttons from the same predicates. Reactivation locks the subscription while it
 checks.
 
+Payments an operator has to look at — awaiting customer action, needing
+reconciliation, or with a failed refund — are the `SubscriptionPayment::needingReview()`
+scope, which the console's Needs attention widget counts.
+
 Requeue stale, interrupted, or reconciliation-ready payment operations after
 an outage with:
 
