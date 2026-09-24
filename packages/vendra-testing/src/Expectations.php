@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 use Livewire\Features\SupportTesting\Testable;
 use Misaf\VendraTesting\TableSorting;
 use Misaf\VendraTesting\TranslationParity;
@@ -48,13 +49,11 @@ if (function_exists('expect')) {
 
     /**
      * @param-closure-this Expectation<mixed> $this
-     *
-     * @param  array<int, Model>  $recordsInAscendingOrder
      */
     expect()->extend('toSortByEverySortableColumn', function (array $recordsInAscendingOrder, bool $assertDescendingOrder = true): Expectation {
         TableSorting::assertSortsByEverySortableColumn(
             listPage: vendraTestingListPage($this->value),
-            recordsInAscendingOrder: $recordsInAscendingOrder,
+            recordsInAscendingOrder: vendraTestingModels($recordsInAscendingOrder),
             assertDescendingOrder: $assertDescendingOrder,
         );
 
@@ -71,6 +70,28 @@ function vendraTestingLanguageDirectory(mixed $languageDirectory): string
     return $languageDirectory;
 }
 
+/**
+ * @param  array<mixed>  $records
+ * @return array<int, Model>
+ */
+function vendraTestingModels(array $records): array
+{
+    $models = [];
+
+    foreach ($records as $record) {
+        if (! $record instanceof Model) {
+            Assert::fail('The expected records must be Eloquent models.');
+        }
+
+        $models[] = $record;
+    }
+
+    return $models;
+}
+
+/**
+ * @return Testable<Component>
+ */
 function vendraTestingListPage(mixed $listPage): Testable
 {
     if (! $listPage instanceof Testable) {

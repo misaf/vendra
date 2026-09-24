@@ -34,11 +34,7 @@ function createTestTenant(array $attributes = []): ?Model
         return null;
     }
 
-    $factory = vendraTestingModelFactory(testTenantModel());
-
-    if (method_exists($factory, 'active')) {
-        $factory = $factory->active();
-    }
+    $factory = vendraTestingFactoryState(vendraTestingModelFactory(testTenantModel()), 'active');
 
     $tenant = $factory->create($attributes);
 
@@ -165,13 +161,7 @@ function setUpFilamentAdminTestContext(array $resources = [], ?array $features =
         $features ?? array_keys((array) config('vendra-permission.features.defaults', [])),
     );
 
-    $user = vendraTestingModelFactory(testUserModel());
-
-    if (method_exists($user, 'forTenant')) {
-        $user = $user->forTenant($tenant);
-    }
-
-    $user = $user->create([
+    $user = vendraTestingFactoryState(vendraTestingModelFactory(testUserModel()), 'forTenant', $tenant)->create([
         'username' => 'admin',
         'email' => 'admin@example.test',
     ]);
@@ -183,15 +173,8 @@ function setUpFilamentAdminTestContext(array $resources = [], ?array $features =
     $roleModel = config('permission.models.role');
 
     if (is_string($roleModel) && is_a($roleModel, Model::class, true) && method_exists($user, 'assignRole')) {
-        $role = vendraTestingModelFactory($roleModel);
-
-        if (method_exists($role, 'forTenant')) {
-            $role = $role->forTenant($tenant);
-        }
-
-        if (method_exists($role, 'forGuard')) {
-            $role = $role->forGuard('web');
-        }
+        $role = vendraTestingFactoryState(vendraTestingModelFactory($roleModel), 'forTenant', $tenant);
+        $role = vendraTestingFactoryState($role, 'forGuard', 'web');
 
         $user->assignRole($role->create([
             'name' => config('vendra-permission.admin_role'),
@@ -251,14 +234,37 @@ function bootFilamentAdminPanel(Model $user, ?Model $tenant = null, array $resou
  */
 function vendraTestingModelFactory(string $modelClass): Factory
 {
-    if (! method_exists($modelClass, 'factory')) {
+    $newFactory = [$modelClass, 'factory'];
+
+    if (! is_callable($newFactory)) {
         Assert::fail("The model [{$modelClass}] does not expose a factory.");
     }
 
-    $factory = $modelClass::factory();
+    $factory = $newFactory();
 
     if (! $factory instanceof Factory) {
         Assert::fail("The model [{$modelClass}] did not resolve an Eloquent factory.");
+    }
+
+    return $factory;
+}
+
+/**
+ * Apply a factory state that only some models' factories define.
+ *
+ * @param  Factory<Model>  $factory
+ * @return Factory<Model>
+ */
+function vendraTestingFactoryState(Factory $factory, string $state, mixed ...$arguments): Factory
+{
+    if (! method_exists($factory, $state)) {
+        return $factory;
+    }
+
+    $factory = $factory->{$state}(...$arguments);
+
+    if (! $factory instanceof Factory) {
+        Assert::fail("The factory state [{$state}] did not return an Eloquent factory.");
     }
 
     return $factory;

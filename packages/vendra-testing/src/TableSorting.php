@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTesting;
 
+use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Component;
 use Livewire\Features\SupportTesting\Testable;
+use PHPUnit\Framework\Assert;
 
 final class TableSorting
 {
@@ -15,6 +18,7 @@ final class TableSorting
      * The records must already be in ascending order on every sortable column.
      * Pass `$assertDescendingOrder` as false for tables whose grouping fixes the order.
      *
+     * @param  Testable<Component>  $listPage
      * @param  array<int, Model>  $recordsInAscendingOrder
      */
     public static function assertSortsByEverySortableColumn(
@@ -22,7 +26,13 @@ final class TableSorting
         array $recordsInAscendingOrder,
         bool $assertDescendingOrder = true,
     ): void {
-        foreach ($listPage->instance()->getTable()->getColumns() as $column) {
+        $component = $listPage->instance();
+
+        if (! $component instanceof HasTable) {
+            Assert::fail('The list page must render a Filament table.');
+        }
+
+        foreach ($component->getTable()->getColumns() as $column) {
             if (! $column->isSortable()) {
                 continue;
             }
