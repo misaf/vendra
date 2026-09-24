@@ -12,6 +12,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
 use Misaf\VendraOrder\Models\Order;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 
 final class OrderLinesRelationManager extends RelationManager
 {
@@ -54,8 +55,7 @@ final class OrderLinesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('name')
-                    ->label(__('vendra-order::attributes.name'))
+                NameColumn::make()
                     ->searchable(),
 
                 TextColumn::make('sellable_type')

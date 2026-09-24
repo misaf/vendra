@@ -25,6 +25,7 @@ use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
@@ -49,9 +50,7 @@ final class CurrencyTable
                 ->searchable()
                 ->sortable(),
 
-            TextColumn::make('name')
-                ->label(__('vendra-currency::attributes.name'))
-                ->icon(Heroicon::Tag)
+            NameColumn::make()
                 ->searchable()
                 ->sortable(),
 

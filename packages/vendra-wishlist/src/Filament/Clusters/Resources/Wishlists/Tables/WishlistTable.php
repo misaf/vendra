@@ -17,6 +17,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsDefaultConstraint;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\NameConstraint;
@@ -29,9 +30,8 @@ final class WishlistTable
             ->columns([
                 RowIndexColumn::make(),
 
-                TextColumn::make('name')
+                NameColumn::make()
                     ->icon(Heroicon::Heart)
-                    ->label(__('vendra-wishlist::attributes.name'))
                     ->searchable(),
 
                 TextColumn::make('owner_label')

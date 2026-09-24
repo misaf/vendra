@@ -23,6 +23,7 @@ use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\DescriptionColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\SlugColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
@@ -52,10 +53,7 @@ final class TransactionGatewayTable
                     ->collection(TransactionGateway::MEDIA_COLLECTION)
                     ->defaultImageUrl(fn (TransactionGateway $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire))),
 
-                TextColumn::make('name')
-                    ->alignStart()
-                    ->label(__('vendra-transaction::attributes.name'))
-                    ->icon(Heroicon::Tag)
+                NameColumn::make()
                     ->searchable(),
 
                 IsDefaultIconColumn::make(),

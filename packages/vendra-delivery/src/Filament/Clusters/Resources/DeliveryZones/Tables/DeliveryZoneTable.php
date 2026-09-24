@@ -22,6 +22,7 @@ use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneR
 use Misaf\VendraDelivery\Models\DeliveryZone;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
@@ -34,9 +35,8 @@ final class DeliveryZoneTable
                 RowIndexColumn::make()
                     ->sortable(['position']),
 
-                TextColumn::make('name')
+                NameColumn::make()
                     ->icon(Heroicon::MapPin)
-                    ->label(__('vendra-delivery::attributes.name'))
                     ->searchable(),
 
                 TextColumn::make('max_distance_km')

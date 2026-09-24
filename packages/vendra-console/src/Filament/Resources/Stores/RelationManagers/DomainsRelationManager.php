@@ -7,13 +7,13 @@ namespace Misaf\VendraConsole\Filament\Resources\Stores\RelationManagers;
 use BackedEnum;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\DeletedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 
 final class DomainsRelationManager extends RelationManager
 {
@@ -35,7 +35,7 @@ final class DomainsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                NameColumn::make()
                     ->label(__('vendra-console::attributes.domain'))
                     ->icon(Heroicon::GlobeAlt)
                     ->searchable(),

@@ -19,6 +19,7 @@ use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotR
 use Misaf\VendraDelivery\Models\DeliverySlot;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
 
@@ -31,9 +32,8 @@ final class DeliverySlotTable
                 RowIndexColumn::make()
                     ->sortable(['position']),
 
-                TextColumn::make('name')
+                NameColumn::make()
                     ->icon(Heroicon::Clock)
-                    ->label(__('vendra-delivery::attributes.name'))
                     ->searchable(),
 
                 TextColumn::make('starts_at')

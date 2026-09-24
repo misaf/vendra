@@ -25,6 +25,7 @@ use Misaf\VendraLanguage\Support\TranslationProgress;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveToggleColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\IsActiveConstraint;
@@ -48,9 +49,7 @@ final class LanguageTable
                 ->searchable()
                 ->sortable(),
 
-            TextColumn::make('name')
-                ->label(__('vendra-language::attributes.name'))
-                ->icon(Heroicon::Tag)
+            NameColumn::make()
                 ->state(fn (Language $record): string => Locales::name($record->locale)),
 
             IsDefaultIconColumn::make(),

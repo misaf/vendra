@@ -21,6 +21,7 @@ use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\CloseInqui
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\Actions\ReopenInquiryTableAction;
 use Misaf\VendraInquiry\States\InquiryState;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 
 final class InquiryTable
@@ -31,9 +32,8 @@ final class InquiryTable
             ->columns([
                 RowIndexColumn::make(),
 
-                TextColumn::make('name')
+                NameColumn::make()
                     ->icon(Heroicon::User)
-                    ->label(__('vendra-inquiry::attributes.name'))
                     ->searchable(),
 
                 TextColumn::make('email')
