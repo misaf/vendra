@@ -8,7 +8,6 @@ use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
-use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSupport\Context\RequestJobContext;
 
@@ -34,14 +33,9 @@ final class ReportSubscriptionPaymentBacklogCommand extends Command
         $staleMinutes = (int) $this->option('stale-minutes');
         $staleThreshold = now()->subMinutes($staleMinutes);
 
-        $needsReconciliation = SubscriptionPayment::query()
-            ->where('status', SubscriptionPaymentStatus::NeedsReconciliation)
-            ->count();
+        $needsReconciliation = SubscriptionPayment::query()->needsReconciliation()->count();
 
-        $stalledProcessing = SubscriptionPayment::query()
-            ->where('status', SubscriptionPaymentStatus::Processing)
-            ->where('processing_at', '<=', $staleThreshold)
-            ->count();
+        $stalledProcessing = SubscriptionPayment::query()->stalledProcessing($staleThreshold)->count();
 
         $activationGap = SubscriptionPayment::query()->awaitingActivation()->count();
 

@@ -7,8 +7,6 @@ namespace Misaf\VendraSubscription\Console\Commands;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Builder;
-use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Jobs\ProcessSubscriptionPayment;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSupport\Context\RequestJobContext;
@@ -26,31 +24,7 @@ final class RecoverSubscriptionPaymentsCommand extends Command
             operation: 'subscription_payment_recovery',
         )->scope(function () use (&$count): void {
             SubscriptionPayment::query()
-                ->where(function (Builder $query): void {
-                    $query
-                        ->where(function (Builder $query): void {
-                            $query
-                                ->where('status', SubscriptionPaymentStatus::Pending)
-                                ->where(function (Builder $query): void {
-                                    $query
-                                        ->whereNull('next_retry_at')
-                                        ->orWhere('next_retry_at', '<=', now());
-                                });
-                        })
-                        ->orWhere(function (Builder $query): void {
-                            $query
-                                ->whereIn('status', [
-                                    SubscriptionPaymentStatus::Processing,
-                                    SubscriptionPaymentStatus::NeedsReconciliation,
-                                ])
-                                ->where(function (Builder $query): void {
-                                    $query
-                                        ->whereNull('next_retry_at')
-                                        ->orWhere('next_retry_at', '<=', now());
-                                });
-                        })
-                        ->orWhere(fn (Builder $query): Builder => $query->awaitingActivation());
-                })
+                ->dueForRecovery()
                 ->select('id')
                 ->chunkById(100, function ($payments) use (&$count): void {
                     foreach ($payments as $payment) {

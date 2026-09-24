@@ -60,6 +60,9 @@ an outage with:
 php artisan vendra-subscription:recover-payments
 ```
 
+It requeues the `SubscriptionPayment::dueForRecovery()` scope: pending, processing
+or unreconciled payments whose retry is due, and paid payments awaiting activation.
+
 Inspect reconciliation, stalled-processing, and paid-but-not-activated backlog
 without mutating payments:
 
@@ -67,6 +70,9 @@ without mutating payments:
 php artisan vendra-subscription:report-payment-backlog
 php artisan vendra-subscription:report-payment-backlog --stale-minutes=60
 ```
+
+Its counts come from the `needsReconciliation()`, `stalledProcessing($threshold)`
+and `awaitingActivation()` scopes.
 
 ## Panel labels
 
