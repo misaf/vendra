@@ -9,13 +9,12 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\VendraDocument\Database\Factories\DocumentFactory;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
-use Misaf\VendraUserProfile\Models\UserProfile;
+use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -51,6 +50,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 final class Document extends Model implements HasMedia, ShouldLogActivity
 {
     use BelongsToTenant;
+    use BelongsToUserProfile;
 
     /** @use HasFactory<DocumentFactory> */
     use HasFactory;
@@ -59,12 +59,6 @@ final class Document extends Model implements HasMedia, ShouldLogActivity
     use SoftDeletes;
 
     public const string MEDIA_COLLECTION = 'documents';
-
-    /** @return BelongsTo<UserProfile, $this> */
-    public function userProfile(): BelongsTo
-    {
-        return $this->belongsTo(UserProfile::class);
-    }
 
     public function registerMediaCollections(): void
     {

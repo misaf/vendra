@@ -9,13 +9,12 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\VendraPhone\Database\Factories\PhoneNumberFactory;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
-use Misaf\VendraUserProfile\Models\UserProfile;
+use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
 
 /**
  * @property int $id
@@ -51,6 +50,7 @@ use Misaf\VendraUserProfile\Models\UserProfile;
 final class PhoneNumber extends Model implements ShouldLogActivity
 {
     use BelongsToTenant;
+    use BelongsToUserProfile;
 
     /** @use HasFactory<PhoneNumberFactory> */
     use HasFactory;
@@ -61,12 +61,6 @@ final class PhoneNumber extends Model implements ShouldLogActivity
         'type' => 'mobile',
         'is_primary' => false,
     ];
-
-    /** @return BelongsTo<UserProfile, $this> */
-    public function userProfile(): BelongsTo
-    {
-        return $this->belongsTo(UserProfile::class);
-    }
 
     /** @return array<string, string> */
     protected function casts(): array
