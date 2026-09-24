@@ -79,8 +79,6 @@ return [
     'updated_at' => 'Aktualisiert am',
     'active' => 'Aktiv',
     'inactive' => 'Inaktiv',
-    'administrator' => 'Administrator',
-    'enabled' => 'Aktiviert',
     'store_administrators' => 'Store-Administratoren',
     'container_name' => 'Containername',
     'container_runtime' => 'Container-Laufzeit',

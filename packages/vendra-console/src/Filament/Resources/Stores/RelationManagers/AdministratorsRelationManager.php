@@ -13,9 +13,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Config;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\AddAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\ChangeAdministratorEmailTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\ChangeAdministratorPasswordTableAction;
@@ -23,8 +22,8 @@ use Misaf\VendraConsole\Filament\Resources\Stores\Actions\Concerns\InteractsWith
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\DemoteAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\DisableAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\EnableAdministratorTableAction;
-use Misaf\VendraConsole\Filament\Resources\Stores\Actions\PromoteAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\RemoveAdministratorTableAction;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Misaf\VendraUser\Models\User;
 
 final class AdministratorsRelationManager extends RelationManager
@@ -43,9 +42,7 @@ final class AdministratorsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn (Builder $query): Builder => $query
-                ->withoutGlobalScopes([SoftDeletingScope::class])
-                ->afterQuery(fn (Collection $users): Collection => self::loadAdministratorRoles(self::administratorStore($this), $users)))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $this->onlyAdministrators($query))
             ->columns([
                 TextColumn::make('username')
                     ->label(__('vendra-console::attributes.username'))
@@ -55,17 +52,12 @@ final class AdministratorsRelationManager extends RelationManager
                     ->label(__('vendra-console::attributes.email'))
                     ->searchable(),
 
-                IconColumn::make('administrator')
-                    ->label(__('vendra-console::attributes.administrator'))
-                    ->boolean()
-                    ->state(fn (User $record): bool => self::isAdministrator(self::administratorStore($this), $record)),
-
-                IconColumn::make('enabled')
-                    ->label(__('vendra-console::attributes.enabled'))
+                IconColumn::make('active')
+                    ->label(__('vendra-support::attributes.active'))
                     ->boolean()
                     ->state(fn (User $record): bool => ! $record->trashed()),
             ])
-            ->filters([TrashedFilter::make()])
+            ->filters([TrashedFilter::make()->default(true)])
             ->headerActions([AddAdministratorTableAction::make()])
             ->recordActions([
                 ActionGroup::make([
@@ -74,7 +66,6 @@ final class AdministratorsRelationManager extends RelationManager
                         ChangeAdministratorEmailTableAction::make(),
                     ])->dropdown(false),
                     ActionGroup::make([
-                        PromoteAdministratorTableAction::make(),
                         DemoteAdministratorTableAction::make(),
                     ])->dropdown(false),
                     ActionGroup::make([
@@ -86,5 +77,22 @@ final class AdministratorsRelationManager extends RelationManager
                     ])->dropdown(false),
                 ]),
             ]);
+    }
+
+    /**
+     * Keep users holding the store's admin role; other store users are listed in the store's own panel.
+     *
+     * @param  Builder<User>  $query
+     * @return Builder<User>
+     */
+    private function onlyAdministrators(Builder $query): Builder
+    {
+        $store = self::administratorStore($this);
+
+        return $query->whereHas('roles', fn (Builder $roles): Builder => $roles
+            ->withoutGlobalScopes()
+            ->where($roles->qualifyColumn(TenantSchema::column()), $store->getKey())
+            ->where($roles->qualifyColumn('name'), Config::string('vendra-permission.admin_role'))
+            ->where($roles->qualifyColumn('guard_name'), 'web'));
     }
 }

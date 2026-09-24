@@ -17,7 +17,6 @@ return [
     'administrator_demoted' => 'Administrator herabgestuft',
     'administrator_email_updated' => 'Administrator-E-Mail aktualisiert',
     'administrator_password_updated' => 'Administrator-Passwort aktualisiert',
-    'administrator_promoted' => 'Administrator befördert',
     'administrator_removed' => 'Administrator entfernt',
     'last_administrator_required' => 'Mindestens ein aktiver Administrator ist erforderlich',
     'offboard_reseller_description' => 'Storniert offene Abonnements und entfernt den Zugriff auf alle Stores.',

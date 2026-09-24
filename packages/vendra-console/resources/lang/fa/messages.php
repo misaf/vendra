@@ -17,7 +17,6 @@ return [
     'administrator_demoted' => 'دسترسی مدیریت برداشته شد',
     'administrator_email_updated' => 'ایمیل مدیر به‌روزرسانی شد',
     'administrator_password_updated' => 'رمز عبور مدیر به‌روزرسانی شد',
-    'administrator_promoted' => 'کاربر به مدیر ارتقا یافت',
     'administrator_removed' => 'مدیر حذف شد',
     'last_administrator_required' => 'حداقل یک مدیر فعال الزامی است',
     'offboard_reseller_description' => 'اشتراک‌های باز را لغو می‌کند و دسترسی همه املاک را حذف می‌کند.',

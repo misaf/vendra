@@ -79,8 +79,6 @@ return [
     'updated_at' => 'به‌روزرسانی شده در',
     'active' => 'فعال',
     'inactive' => 'غیرفعال',
-    'administrator' => 'مدیر',
-    'enabled' => 'فعال',
     'store_administrators' => 'مدیران فروشگاه',
     'container_name' => 'نام کانتینر',
     'container_runtime' => 'محیط اجرای کانتینر',

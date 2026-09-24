@@ -17,7 +17,6 @@ return [
     'administrator_demoted' => 'Administrator demoted',
     'administrator_email_updated' => 'Administrator email updated',
     'administrator_password_updated' => 'Administrator password updated',
-    'administrator_promoted' => 'Administrator promoted',
     'administrator_removed' => 'Administrator removed',
     'last_administrator_required' => 'At least one enabled administrator is required',
     'offboard_reseller_description' => 'Cancels open subscriptions and removes access to every store.',

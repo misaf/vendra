@@ -79,8 +79,6 @@ return [
     'updated_at' => 'Updated at',
     'active' => 'Active',
     'inactive' => 'Inactive',
-    'administrator' => 'Administrator',
-    'enabled' => 'Enabled',
     'store_administrators' => 'Store administrators',
     'container_name' => 'Container name',
     'container_runtime' => 'Container runtime',
