@@ -43,7 +43,7 @@ abstract class CreateStorePage extends CreateRecord
         }
 
         try {
-            $result = resolve(ProvisionStoreAction::class)->execute(
+            ['store' => $store, 'user' => $user, 'password' => $password] = resolve(ProvisionStoreAction::class)->execute(
                 data: [
                     'domain' => $domain,
                     'email' => $email,
@@ -64,21 +64,21 @@ abstract class CreateStorePage extends CreateRecord
             ->success()
             ->title(__('vendra-store::messages.store_created'))
             ->body(__('vendra-store::attributes.administrator_credentials', [
-                'username' => Arr::get($result, 'user')->username,
-                'password' => Arr::get($result, 'password'),
+                'username' => $user->username,
+                'password' => $password,
             ]))
             ->persistent()
             ->send();
 
         if ($this->shouldRequestStorefront($data)) {
             resolve(RequestStorefrontDeploymentAction::class)->execute(
-                store: Arr::get($result, 'store'),
+                store: $store,
                 domain: $domain,
                 form: $data,
             );
         }
 
-        return Arr::get($result, 'store');
+        return $store;
     }
 
     /**

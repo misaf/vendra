@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Queue\Events\UniqueJobSkipped;
 use Illuminate\Support\Facades\Event;
+use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
+use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Throwable;
@@ -139,7 +141,7 @@ abstract class StorefrontDeploymentDispatchCommand extends Command
 
         if (! $this->listensForSkippedDispatches) {
             Event::listen(function (UniqueJobSkipped $event): void {
-                if ($this->skipped instanceof ArrayObject && property_exists($event->job, 'deploymentId')) {
+                if ($this->skipped instanceof ArrayObject && ($event->job instanceof ProvisionStorefrontJob || $event->job instanceof ReconcileStorefrontJob)) {
                     $this->skipped->append($event->job->deploymentId);
                 }
             });

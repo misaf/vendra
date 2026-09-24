@@ -32,15 +32,13 @@ trait BuildsDailyTrend
             ->pluck($column);
 
         foreach ($timestamps as $timestamp) {
-            if ($timestamp === null) {
-                continue;
-            }
+            $day = match (true) {
+                $timestamp instanceof CarbonInterface => $timestamp->toDateString(),
+                is_string($timestamp) => Date::parse($timestamp)->toDateString(),
+                default => null,
+            };
 
-            $day = $timestamp instanceof CarbonInterface
-                ? $timestamp->toDateString()
-                : Date::parse((string) $timestamp)->toDateString();
-
-            if (array_key_exists($day, $counts)) {
+            if ($day !== null && array_key_exists($day, $counts)) {
                 $counts[$day]++;
             }
         }

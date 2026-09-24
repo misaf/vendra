@@ -43,22 +43,23 @@ final readonly class ProvisionStoreAction
     {
         $password ??= PasswordGenerator::generate();
         $domain = Arr::string($data, 'domain');
-        $name = Arr::get($data, 'name', Str::headline(Str::before($domain, '.')));
-        $username = Arr::get($data, 'username', $this->usernameFromEmail(Arr::get($data, 'email')));
+        $email = Arr::string($data, 'email');
+        $name = Arr::string($data, 'name', Str::headline(Str::before($domain, '.')));
+        $username = Arr::string($data, 'username', $this->usernameFromEmail($email));
 
-        $result = DB::transaction(function () use ($data, $domain, $name, $username, $password, $reseller, $shouldSeed): array {
-            $result = $this->createStoreAction->execute(
+        $result = DB::transaction(function () use ($email, $domain, $name, $username, $password, $reseller, $shouldSeed): array {
+            ['store' => $store, 'user' => $user] = $this->createStoreAction->execute(
                 name: $name,
                 domain: $domain,
                 username: $username,
-                email: Arr::get($data, 'email'),
+                email: $email,
                 password: $password,
                 reseller: $reseller,
                 shouldSeed: $shouldSeed,
             );
 
             $role = $this->createRoleAction->execute(
-                tenant: Arr::get($result, 'store'),
+                tenant: $store,
                 name: Config::string('vendra-permission.admin_role'),
                 /*
                 | The tenant administrator role always lives on the
@@ -71,21 +72,24 @@ final readonly class ProvisionStoreAction
                 guardName: 'web',
             );
 
-            Arr::get($result, 'store')->execute(fn () => Arr::get($result, 'user')->assignRole($role));
+            $store->execute(fn () => $user->assignRole($role));
 
             return [
-                ...$result,
+                'store' => $store,
+                'user' => $user,
                 'password' => $password,
             ];
         });
 
+        ['store' => $store] = $result;
+
         new RequestJobContext(
             traceId: RequestJobContext::resolveTraceId(),
             operation: 'store_provision_dispatch',
-            tenantId: Arr::get($result, 'store')->id,
-            metadata: [ContextKeys::RESELLER_ID => Arr::get($result, 'store')->reseller_id],
+            tenantId: $store->id,
+            metadata: [ContextKeys::RESELLER_ID => $store->reseller_id],
         )->scope(
-            fn () => dispatch(new CompleteStoreProvisioningJob(Arr::get($result, 'store')->id))->afterCommit(),
+            fn () => dispatch(new CompleteStoreProvisioningJob($store->id))->afterCommit(),
         );
 
         return $result;

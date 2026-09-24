@@ -11,7 +11,6 @@ use LogicException;
 use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Support\StoreQuota;
-use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 
 final readonly class RestoreOffboardedStoreAction
@@ -56,7 +55,7 @@ final readonly class RestoreOffboardedStoreAction
 
         $reseller = $this->resellerResolver->find($store->reseller_id);
 
-        if (! $reseller instanceof Model || ! $reseller instanceof SubscriptionSubscriber) {
+        if (! $reseller instanceof Model) {
             throw new LogicException("Store [{$store->id}] cannot be restored because its billing reseller is unavailable.");
         }
 
