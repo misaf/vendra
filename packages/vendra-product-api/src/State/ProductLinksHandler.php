@@ -33,7 +33,7 @@ final class ProductLinksHandler implements LinksHandlerInterface
                 'multimedia',
                 ...$this->attributeRelations(),
             ])
-            ->whereHas('productCategory', fn (Builder $query): Builder => $query->where('active', true));
+            ->whereHas('productCategory', fn (Builder $query): Builder => $query->active());
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

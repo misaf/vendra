@@ -23,8 +23,8 @@ final class CustomPageLinksHandler implements LinksHandlerInterface
     {
         $builder
             ->with(['customPageCategory:id,name', 'multimedia'])
-            ->whereHas('customPageCategory', fn (Builder $query): Builder => $query->where('active', true))
-            ->where('active', true);
+            ->whereHas('customPageCategory', fn (Builder $query): Builder => $query->active())
+            ->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

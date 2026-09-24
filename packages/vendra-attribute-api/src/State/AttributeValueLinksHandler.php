@@ -23,7 +23,7 @@ final class AttributeValueLinksHandler implements LinksHandlerInterface
     {
         $builder
             ->with('attribute:id,name')
-            ->whereHas('attribute', fn (Builder $query): Builder => $query->where('active', true));
+            ->whereHas('attribute', fn (Builder $query): Builder => $query->active());
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

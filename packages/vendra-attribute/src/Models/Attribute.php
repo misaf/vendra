@@ -6,7 +6,9 @@ namespace Misaf\VendraAttribute\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -71,6 +73,16 @@ final class Attribute extends Model implements ShouldLogActivity, Sortable
             'position' => 'integer',
             'active' => 'boolean',
         ];
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function active(Builder $query): Builder
+    {
+        return $query->where('active', true);
     }
 
     protected function tagType(): string

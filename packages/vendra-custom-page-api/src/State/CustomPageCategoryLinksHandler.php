@@ -30,7 +30,7 @@ final class CustomPageCategoryLinksHandler implements LinksHandlerInterface
                         ->where('active', true);
                 },
             ])
-            ->where('active', true);
+            ->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

@@ -24,8 +24,8 @@ final class BlogPostLinksHandler implements LinksHandlerInterface
         $builder
             // The mapper only needs the category's id and name.
             ->with(['blogPostCategory:id,name', 'multimedia'])
-            ->whereHas('blogPostCategory', fn (Builder $query): Builder => $query->where('active', true))
-            ->where('active', true);
+            ->whereHas('blogPostCategory', fn (Builder $query): Builder => $query->active())
+            ->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

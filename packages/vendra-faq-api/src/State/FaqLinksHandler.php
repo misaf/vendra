@@ -24,8 +24,8 @@ final class FaqLinksHandler implements LinksHandlerInterface
         $builder
             // The mapper only needs the category's id and name.
             ->with(['faqCategory:id,name', 'multimedia'])
-            ->whereHas('faqCategory', fn (Builder $query): Builder => $query->where('active', true))
-            ->where('active', true);
+            ->whereHas('faqCategory', fn (Builder $query): Builder => $query->active())
+            ->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

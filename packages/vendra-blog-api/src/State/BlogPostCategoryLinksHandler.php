@@ -31,7 +31,7 @@ final class BlogPostCategoryLinksHandler implements LinksHandlerInterface
                 },
                 'multimedia',
             ])
-            ->where('active', true);
+            ->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);

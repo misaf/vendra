@@ -25,7 +25,7 @@ final class ProductPriceLinksHandler implements LinksHandlerInterface
             ->with('product:id,name')
             ->whereHas(
                 'product.productCategory',
-                fn (Builder $query): Builder => $query->where('active', true),
+                fn (Builder $query): Builder => $query->active(),
             );
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
