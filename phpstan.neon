@@ -2,8 +2,15 @@ parameters:
 
     paths:
         - app
-        - packages/vendra-console/src
-        - packages/vendra-subscription/src
+        - packages
+
+    # Only package sources are analysed; paths does not accept wildcards
+    excludePaths:
+        - packages/*/config/*
+        - packages/*/database/*
+        - packages/*/resources/*
+        - packages/*/routes/*
+        - packages/*/tests/*
 
     stubFiles:
         - packages/vendra-api/phpstan.stub
