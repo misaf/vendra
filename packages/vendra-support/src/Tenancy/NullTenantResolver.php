@@ -45,6 +45,12 @@ final class NullTenantResolver implements TenantResolver
         return false;
     }
 
+    /**
+     * @template TReturn
+     *
+     * @param  Closure(): TReturn  $callback
+     * @return TReturn
+     */
     public function execute(Model|int|string $tenant, Closure $callback): mixed
     {
         return $callback();

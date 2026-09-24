@@ -33,6 +33,11 @@ interface TenantResolver
      * Run the callback in the tenant's context, then restore the previous one.
      *
      * Runs the callback as-is when tenancy is disabled.
+     *
+     * @template TReturn
+     *
+     * @param  Closure(): TReturn  $callback
+     * @return TReturn
      */
     public function execute(Model|int|string $tenant, Closure $callback): mixed;
 
