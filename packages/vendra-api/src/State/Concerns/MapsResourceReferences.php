@@ -37,8 +37,12 @@ trait MapsResourceReferences
             ? $related->getTranslation($labelAttribute, app()->getLocale())
             : $related->getAttribute($labelAttribute);
 
+        $key = $related->getKey();
+
+        throw_unless(is_int($key) || is_string($key), UnexpectedValueException::class, 'A referenced record must have a key.');
+
         return new ResourceReference(
-            $related->getKey(),
+            $key,
             $type,
             is_string($label) ? $label : null,
         );

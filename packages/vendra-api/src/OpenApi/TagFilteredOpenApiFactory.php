@@ -24,11 +24,6 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
 
     private const string SCHEMA_REF_PREFIX = '#/components/schemas/';
 
-    /**
-     * @var array<int, string>
-     */
-    private const array METHODS = ['Get', 'Put', 'Post', 'Delete', 'Options', 'Head', 'Patch', 'Trace'];
-
     public function __construct(private OpenApiFactoryInterface $decorated) {}
 
     /**
@@ -46,6 +41,10 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
         $paths = new Paths;
 
         foreach ($openApi->getPaths()->getPaths() as $path => $pathItem) {
+            if (! $pathItem instanceof PathItem) {
+                continue;
+            }
+
             $filtered = $this->filterPathItem($pathItem, $tags);
 
             if ($filtered instanceof PathItem) {
@@ -57,7 +56,7 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
             ->withPaths($paths)
             ->withTags(array_values(array_filter(
                 $openApi->getTags(),
-                fn (Tag $tag): bool => $this->matches([$tag->getName()], $tags),
+                fn (mixed $tag): bool => $tag instanceof Tag && $this->matches([$tag->getName()], $tags),
             )));
 
         return $this->pruneSchemas($openApi);
@@ -86,13 +85,11 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
             $pending = [...$pending, ...$this->collectSchemaReferences($schemas[$name])];
         }
 
-        $kept = new ArrayObject;
-
-        foreach ($schemas as $name => $schema) {
-            if (isset($reachable[$name])) {
-                $kept[$name] = $schema;
-            }
-        }
+        $kept = new ArrayObject(array_filter(
+            $schemas->getArrayCopy(),
+            static fn (int|string $name): bool => isset($reachable[$name]),
+            ARRAY_FILTER_USE_KEY,
+        ));
 
         return $openApi->withComponents($components->withSchemas($kept));
     }
@@ -126,26 +123,36 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
      */
     private function filterPathItem(PathItem $pathItem, array $tags): ?PathItem
     {
-        $kept = false;
+        $keep = fn (?Operation $operation): ?Operation => $operation instanceof Operation
+            && $this->matches(array_values(array_filter($operation->getTags() ?? [], is_string(...))), $tags)
+                ? $operation
+                : null;
 
-        foreach (self::METHODS as $method) {
-            /** @var Operation|null $operation */
-            $operation = $pathItem->{'get'.$method}();
+        // Rebuild the item, since the options, head, and trace withers cannot clear an operation.
+        $filtered = new PathItem(
+            ref: $pathItem->getRef(),
+            summary: $pathItem->getSummary(),
+            description: $pathItem->getDescription(),
+            get: $keep($pathItem->getGet()),
+            put: $keep($pathItem->getPut()),
+            post: $keep($pathItem->getPost()),
+            delete: $keep($pathItem->getDelete()),
+            options: $keep($pathItem->getOptions()),
+            head: $keep($pathItem->getHead()),
+            patch: $keep($pathItem->getPatch()),
+            trace: $keep($pathItem->getTrace()),
+            servers: $pathItem->getServers(),
+            parameters: $pathItem->getParameters(),
+            query: $pathItem->getQuery(),
+            additionalOperations: $pathItem->getAdditionalOperations(),
+        );
 
-            if (! $operation instanceof Operation) {
-                continue;
-            }
+        $hasOperation = array_any(
+            [$filtered->getGet(), $filtered->getPut(), $filtered->getPost(), $filtered->getDelete(), $filtered->getOptions(), $filtered->getHead(), $filtered->getPatch(), $filtered->getTrace()],
+            static fn (?Operation $operation): bool => $operation instanceof Operation,
+        );
 
-            if ($this->matches($operation->getTags() ?? [], $tags)) {
-                $kept = true;
-
-                continue;
-            }
-
-            $pathItem = $pathItem->{'with'.$method}(null);
-        }
-
-        return $kept ? $pathItem : null;
+        return $hasOperation ? $filtered : null;
     }
 
     /**
@@ -170,10 +177,14 @@ final readonly class TagFilteredOpenApiFactory implements OpenApiFactoryInterfac
             return [];
         }
 
-        $values = is_array($raw) ? $raw : explode(',', (string) $raw);
+        $values = match (true) {
+            is_array($raw) => array_filter($raw, is_string(...)),
+            is_string($raw) => explode(',', $raw),
+            default => [],
+        };
 
         return array_values(array_unique(array_filter(array_map(
-            fn (mixed $value): string => mb_strtolower(mb_trim((string) $value)),
+            fn (string $value): string => mb_strtolower(mb_trim($value)),
             $values,
         ))));
     }
