@@ -158,6 +158,20 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     }
 
     /**
+     * Payments paid within the given moments, both inclusive.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function paidBetween(Builder $query, DateTimeInterface $from, DateTimeInterface $until): Builder
+    {
+        return $query
+            ->where('status', SubscriptionPaymentStatus::Paid)
+            ->whereBetween('paid_at', [$from, $until]);
+    }
+
+    /**
      * Paid payments whose subscription was never activated.
      *
      * @param  Builder<self>  $query

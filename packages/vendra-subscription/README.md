@@ -51,7 +51,8 @@ checks.
 
 Payments an operator has to look at — awaiting customer action, needing
 reconciliation, or with a failed refund — are the `SubscriptionPayment::needingReview()`
-scope, which the console's Needs attention widget counts.
+scope, which the console's Needs attention widget counts. `paidBetween($from, $until)`
+selects the payments paid in a window, which the console's revenue totals sum.
 
 Requeue stale, interrupted, or reconciliation-ready payment operations after
 an outage with:
