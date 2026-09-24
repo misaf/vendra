@@ -15,7 +15,7 @@ final class PruneExpiredCartsCommand extends Command
 {
     public function handle(): int
     {
-        $pruned = Cart::query()->expired()->delete();
+        $pruned = Cart::query()->expired()->toBase()->delete();
 
         $this->info("Pruned {$pruned} expired cart(s).");
 
