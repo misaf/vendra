@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCurrency\Support;
 
-use Illuminate\Support\Arr;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Money\Currencies\CryptoCurrencies;
 use Money\Currencies\ISOCurrencies;
-use Money\Currency as MoneyCurrency;
 
 /**
  * Crypto currencies use their code as the name; fiat wins when a code is in both.
@@ -32,17 +30,19 @@ final class CurrencyRegistry
      */
     public static function options(?CurrencyType $type = null): array
     {
-        return collect(self::all())
-            ->when($type instanceof CurrencyType, fn ($entries) => $entries
-                ->filter(fn (array $entry): bool => Arr::get($entry, 'type') === $type))
-            ->map(function (array $entry): string {
-                $name = (string) Arr::get($entry, 'name');
-                $code = (string) Arr::get($entry, 'code');
+        $options = [];
 
-                return $name === $code ? $code : "{$name} ({$code})";
-            })
-            ->sort()
-            ->all();
+        foreach (self::all() as $code => ['name' => $name, 'type' => $entryType]) {
+            if ($type instanceof CurrencyType && $entryType !== $type) {
+                continue;
+            }
+
+            $options[$code] = $name === $code ? $code : "{$name} ({$code})";
+        }
+
+        asort($options);
+
+        return $options;
     }
 
     /**
@@ -68,17 +68,41 @@ final class CurrencyRegistry
 
     public static function nameFor(string $code): string
     {
-        return Arr::get(self::get($code), 'name', mb_strtoupper($code));
+        $currency = self::get($code);
+
+        if ($currency === null) {
+            return mb_strtoupper($code);
+        }
+
+        ['name' => $name] = $currency;
+
+        return $name;
     }
 
     public static function minorUnitFor(string $code): ?int
     {
-        return Arr::get(self::get($code), 'minor_unit', null);
+        $currency = self::get($code);
+
+        if ($currency === null) {
+            return null;
+        }
+
+        ['minor_unit' => $minorUnit] = $currency;
+
+        return $minorUnit;
     }
 
     public static function typeFor(string $code): ?CurrencyType
     {
-        return Arr::get(self::get($code), 'type', null);
+        $currency = self::get($code);
+
+        if ($currency === null) {
+            return null;
+        }
+
+        ['type' => $type] = $currency;
+
+        return $type;
     }
 
     /**
@@ -94,16 +118,18 @@ final class CurrencyRegistry
             dirname(__DIR__, 3).'/moneyphp/money/resources/currency.php',
         );
 
-        return collect($isoCurrencies)
-            ->mapWithKeys(fn (MoneyCurrency $currency): array => [
-                $currency->getCode() => [
-                    'code' => $currency->getCode(),
-                    'name' => $isoRecords[$currency->getCode()]['currency'] ?? $currency->getCode(),
-                    'minor_unit' => $isoCurrencies->subunitFor($currency),
-                    'type' => CurrencyType::Fiat,
-                ],
-            ])
-            ->all();
+        $currencies = [];
+
+        foreach ($isoCurrencies as $currency) {
+            $currencies[$currency->getCode()] = [
+                'code' => $currency->getCode(),
+                'name' => $isoRecords[$currency->getCode()]['currency'] ?? $currency->getCode(),
+                'minor_unit' => $isoCurrencies->subunitFor($currency),
+                'type' => CurrencyType::Fiat,
+            ];
+        }
+
+        return $currencies;
     }
 
     /**
@@ -113,15 +139,17 @@ final class CurrencyRegistry
     {
         $cryptoCurrencies = new CryptoCurrencies;
 
-        return collect($cryptoCurrencies)
-            ->mapWithKeys(fn (MoneyCurrency $currency): array => [
-                $currency->getCode() => [
-                    'code' => $currency->getCode(),
-                    'name' => $currency->getCode(),
-                    'minor_unit' => $cryptoCurrencies->subunitFor($currency),
-                    'type' => CurrencyType::Crypto,
-                ],
-            ])
-            ->all();
+        $currencies = [];
+
+        foreach ($cryptoCurrencies as $currency) {
+            $currencies[$currency->getCode()] = [
+                'code' => $currency->getCode(),
+                'name' => $currency->getCode(),
+                'minor_unit' => $cryptoCurrencies->subunitFor($currency),
+                'type' => CurrencyType::Crypto,
+            ];
+        }
+
+        return $currencies;
     }
 }

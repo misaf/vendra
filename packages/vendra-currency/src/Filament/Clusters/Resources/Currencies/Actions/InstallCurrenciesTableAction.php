@@ -28,7 +28,7 @@ final class InstallCurrenciesTableAction
                     ->searchable(),
             ])
             ->action(function (array $data): void {
-                resolve(InstallCurrenciesAction::class)->execute((array) Arr::get($data, 'codes', []));
+                resolve(InstallCurrenciesAction::class)->execute(array_values(Arr::wrap(Arr::get($data, 'codes', []))));
             })
             ->icon(Heroicon::OutlinedSquaresPlus)
             ->label(__('vendra-currency::actions.install_from_catalog'))

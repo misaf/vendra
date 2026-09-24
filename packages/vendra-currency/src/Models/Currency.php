@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use LogicException;
 use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Observers\CurrencyObserver;
@@ -84,7 +85,7 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
 
     public function money(int|string $minorUnits): Money
     {
-        return new Money($minorUnits, new MoneyCurrency($this->code));
+        return new Money($minorUnits, $this->moneyCurrency());
     }
 
     /**
@@ -98,7 +99,8 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
             return $money->format();
         }
 
-        $formatter = new DecimalMoneyFormatter(new CurrencyList([$this->code => $this->decimal_places]));
+        $currency = $this->moneyCurrency();
+        $formatter = new DecimalMoneyFormatter(new CurrencyList([$currency->getCode() => max(0, $this->decimal_places)]));
 
         return "{$formatter->format($money->getMoney())} ".($this->symbol ?? $this->code);
     }
@@ -130,5 +132,12 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
         return Attribute::make(
             set: fn (string $value): string => Str::upper($value),
         );
+    }
+
+    private function moneyCurrency(): MoneyCurrency
+    {
+        throw_if($this->code === '', LogicException::class, 'A currency must have a code.');
+
+        return new MoneyCurrency($this->code);
     }
 }
