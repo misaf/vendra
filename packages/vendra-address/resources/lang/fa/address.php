@@ -8,7 +8,7 @@ return [
     'fields' => [
         'administrative_area' => 'استان / ایالت / منطقه',
         'country_code' => 'کشور',
-        'is_primary' => 'اصلی',
+        'is_default' => 'پیش‌فرض',
         'label' => 'عنوان',
         'line_one' => 'خط اول آدرس',
         'line_three' => 'خط سوم آدرس',

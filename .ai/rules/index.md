@@ -15,6 +15,7 @@ Before planning or editing, find the row whose globs match the file's path and r
 | packages/*/src/Filament/** | .ai/rules/filament.md |
 | **/*.php | .ai/rules/general.md |
 | packages/vendra-store/src/Jobs/CompleteStoreProvisioningJob.php | .ai/rules/jobs.md |
+| packages/*/database/migrations/** | .ai/rules/migrations.md |
 | packages/*/src/Models/** | .ai/rules/models.md |
 | packages/*/composer.json, packages/** | .ai/rules/packages.md |
 | packages/*/src/Filament/Resources/Stores/Pages/CreateStore.php | .ai/rules/pages.md |

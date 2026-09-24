@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('locale', 35)->nullable();
             $table->json('metadata')->nullable();
             $table->text('notes')->nullable();
-            $table->boolean('is_primary')->default(false);
+            $table->boolean('is_default')->default(false);
             $table->timestampTz('verified_at')->nullable();
             $table->timestampsTz();
             $table->softDeletesTz();
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->index(TenantSchema::tenantIndex(['user_profile_id']));
             $table->index(TenantSchema::tenantIndex(['country_code']));
             $table->index(TenantSchema::tenantIndex(['locality']));
-            $table->index(TenantSchema::tenantIndex(['is_primary']));
+            $table->index(TenantSchema::tenantIndex(['is_default']));
         });
     }
 

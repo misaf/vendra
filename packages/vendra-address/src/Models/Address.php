@@ -6,12 +6,14 @@ namespace Misaf\VendraAddress\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Misaf\VendraAddress\Database\Factories\AddressFactory;
+use Misaf\VendraAddress\Observers\AddressObserver;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
@@ -35,7 +37,7 @@ use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
  * @property string|null $locale
  * @property array<string, mixed>|null $metadata
  * @property string|null $notes
- * @property bool $is_primary
+ * @property bool $is_default
  * @property Carbon|null $verified_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
@@ -58,10 +60,11 @@ use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
     'locale',
     'metadata',
     'notes',
-    'is_primary',
+    'is_default',
     'verified_at',
 ])]
 #[Hidden(['tenant_id'])]
+#[ObservedBy([AddressObserver::class])]
 #[UseFactory(AddressFactory::class)]
 final class Address extends Model implements ShouldLogActivity
 {
@@ -75,7 +78,7 @@ final class Address extends Model implements ShouldLogActivity
 
     protected $attributes = [
         'type' => 'other',
-        'is_primary' => false,
+        'is_default' => false,
     ];
 
     /** @return array<string, string> */
@@ -100,7 +103,7 @@ final class Address extends Model implements ShouldLogActivity
             'locale' => 'string',
             'metadata' => 'array',
             'notes' => 'string',
-            'is_primary' => 'boolean',
+            'is_default' => 'boolean',
             'verified_at' => 'datetime',
         ];
     }

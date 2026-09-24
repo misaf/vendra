@@ -21,8 +21,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraAddress\Models\Address;
 use Misaf\VendraSupport\Capabilities\Countries;
-use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
-use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
+use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 
 final class AddressesRelationManager extends RelationManager
 {
@@ -77,7 +77,7 @@ final class AddressesRelationManager extends RelationManager
             Textarea::make('notes')
                 ->label(__('vendra-address::address.fields.notes'))
                 ->columnSpanFull(),
-            IsPrimaryToggle::make(),
+            IsDefaultToggle::make(),
         ]);
     }
 
@@ -89,7 +89,7 @@ final class AddressesRelationManager extends RelationManager
                     ->label(__('vendra-address::address.fields.label'))
                     ->icon(Heroicon::Tag)
                     ->default('—'),
-                IsPrimaryIconColumn::make(),
+                IsDefaultIconColumn::make(),
                 TextColumn::make('line_one')->label(__('vendra-address::address.fields.line_one'))->icon(Heroicon::MapPin)->searchable(),
                 TextColumn::make('locality')->label(__('vendra-address::address.fields.locality'))->icon(Heroicon::MapPin)->searchable(),
                 TextColumn::make('country_code')->label(__('vendra-address::address.fields.country_code'))->icon(Heroicon::GlobeAlt)->badge(),

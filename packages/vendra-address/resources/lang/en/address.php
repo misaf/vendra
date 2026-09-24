@@ -8,7 +8,7 @@ return [
     'fields' => [
         'administrative_area' => 'State / Province / Region',
         'country_code' => 'Country',
-        'is_primary' => 'Primary',
+        'is_default' => 'Default',
         'label' => 'Label',
         'line_one' => 'Address line 1',
         'line_three' => 'Address line 3',

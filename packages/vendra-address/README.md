@@ -8,6 +8,7 @@ Country-adaptable user profile addresses for Vendra applications.
 - Filament relation manager contributed through the User Profile extension registry
 - International address shape: ISO country code, three address lines, locality, administrative area, and sorting code
 - Structured JSON metadata for country-specific fields
+- One default address per user profile, kept automatically
 - Tenant-aware storage and permission-seeded authorization
 
 ## Requirements

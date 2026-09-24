@@ -37,7 +37,7 @@ final class AddressFactory extends Factory
             'locale' => fake()->locale(),
             'metadata' => [],
             'notes' => fake()->optional()->sentence(),
-            'is_primary' => false,
+            'is_default' => false,
             'verified_at' => null,
         ];
     }

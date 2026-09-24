@@ -8,7 +8,7 @@ return [
     'fields' => [
         'administrative_area' => 'Bundesland / Provinz / Region',
         'country_code' => 'Land',
-        'is_primary' => 'Primär',
+        'is_default' => 'Standard',
         'label' => 'Bezeichnung',
         'line_one' => 'Adresszeile 1',
         'line_three' => 'Adresszeile 3',

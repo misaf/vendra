@@ -12,8 +12,8 @@ use Illuminate\Support\Arr;
 use Misaf\VendraAddress\Database\Factories\AddressFactory;
 use Misaf\VendraAddress\Filament\RelationManagers\AddressesRelationManager;
 use Misaf\VendraSupport\Capabilities\Countries;
-use Misaf\VendraSupport\Filament\Forms\Components\IsPrimaryToggle;
-use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
+use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsDefaultIconColumn;
 
 it('uses a localized country select and free-text administrative fields', function (): void {
     app()->setLocale('fa');
@@ -51,13 +51,13 @@ it('updates verification state from table toggle', function (): void {
     expect($address->refresh()->verified_at)->toBeNull();
 });
 
-it('shows the primary flag as the shared icon column', function (): void {
+it('shows the default flag as the shared icon column', function (): void {
     makeCurrentTestTenant();
 
     $relationManager = new AddressesRelationManager;
     $table = $relationManager->table(Table::make($relationManager));
-    $primaryColumn = $table->getColumn('is_primary');
+    $defaultColumn = $table->getColumn('is_default');
 
-    expect($primaryColumn)->toBeInstanceOf(IsPrimaryIconColumn::class)
-        ->and(Arr::get($relationManager->form(Schema::make($relationManager))->getFlatFields(), 'is_primary'))->toBeInstanceOf(IsPrimaryToggle::class);
+    expect($defaultColumn)->toBeInstanceOf(IsDefaultIconColumn::class)
+        ->and(Arr::get($relationManager->form(Schema::make($relationManager))->getFlatFields(), 'is_default'))->toBeInstanceOf(IsDefaultToggle::class);
 });
