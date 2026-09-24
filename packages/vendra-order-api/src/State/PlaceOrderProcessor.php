@@ -177,8 +177,13 @@ final readonly class PlaceOrderProcessor implements ProcessorInterface
         $quantities = [];
 
         foreach ($lines as $line) {
-            $productId = (int) $line->sellable->getKey();
-            $quantities[$productId] = ($quantities[$productId] ?? 0) + $line->quantity;
+            $product = $line->sellable;
+
+            if (! $product instanceof Product) {
+                continue;
+            }
+
+            $quantities[$product->id] = ($quantities[$product->id] ?? 0) + $line->quantity;
         }
 
         try {
