@@ -15,10 +15,7 @@ final class PruneExpiredCartsCommand extends Command
 {
     public function handle(): int
     {
-        $pruned = Cart::query()
-            ->whereNotNull('expires_at')
-            ->where('expires_at', '<=', now())
-            ->delete();
+        $pruned = Cart::query()->expired()->delete();
 
         $this->info("Pruned {$pruned} expired cart(s).");
 

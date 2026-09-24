@@ -10,7 +10,6 @@ use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 use Misaf\VendraCart\Models\Cart;
@@ -29,13 +28,8 @@ final class CartOverviewWidget extends StatsOverviewWidget
         $startDate = now()->startOfWeek();
         $endDate = now()->endOfWeek();
         $carts = Cart::query();
-        $activeCarts = Cart::query()->where(function (Builder $query): void {
-            $query
-                ->whereNull('expires_at')
-                ->orWhere('expires_at', '>', now());
-        });
-
-        $expiredCarts = Cart::query()->where('expires_at', '<=', now());
+        $activeCarts = Cart::query()->unexpired();
+        $expiredCarts = Cart::query()->expired();
         $cartTrend = Trend::query(clone $carts)->between($startDate, $endDate)->perDay()->count();
         $activeCartTrend = Trend::query(clone $activeCarts)->between($startDate, $endDate)->perDay()->count();
         $expiredCartTrend = Trend::query(clone $expiredCarts)->between($startDate, $endDate)->perDay()->count();

@@ -91,3 +91,12 @@ it('schedules expired cart pruning daily', function (): void {
     expect($scheduled)->toHaveCount(1)
         ->and($scheduled->first()->expression)->toBe('0 0 * * *');
 });
+
+it('treats a cart without an expiry as never expiring', function (): void {
+    $expired = Cart::factory()->create(['expires_at' => now()->subMinute()]);
+    $active = Cart::factory()->create(['expires_at' => now()->addDay()]);
+    $everlasting = Cart::factory()->create(['expires_at' => null]);
+
+    expect(Cart::query()->expired()->pluck('id')->all())->toBe([$expired->id])
+        ->and(Cart::query()->unexpired()->orderBy('id')->pluck('id')->all())->toBe([$active->id, $everlasting->id]);
+});

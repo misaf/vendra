@@ -40,7 +40,8 @@ administration UI is limited to viewing and deletion.
 
 Expired carts are pruned daily by default. Change the schedule in the
 published configuration or run `php artisan vendra-cart:prune-expired`
-manually.
+manually. `Cart::query()->expired()` and `unexpired()` select the same carts; a
+cart without `expires_at` never expires.
 
 Demo seeders use bundled JSON fixtures in production and when their declared factory classes are unavailable. Local monorepo development continues to use factories when they are autoloadable.
 

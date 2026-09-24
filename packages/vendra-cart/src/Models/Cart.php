@@ -6,7 +6,9 @@ namespace Misaf\VendraCart\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -98,6 +100,30 @@ final class Cart extends Model
                     : null;
             },
         );
+    }
+
+    /**
+     * Match carts whose expiry time has passed; a cart without one never expires.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function expired(Builder $query): Builder
+    {
+        return $query->where('expires_at', '<=', now());
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function unexpired(Builder $query): Builder
+    {
+        return $query->where(fn (Builder $query): Builder => $query
+            ->whereNull('expires_at')
+            ->orWhere('expires_at', '>', now()));
     }
 
     /**
