@@ -11,7 +11,6 @@ return [
     'is_default_helper_text' => 'Enable to use this as the fallback locale when no translation exists.',
     'key' => 'Key',
     'locale' => 'Locale',
-    'name' => 'Name',
     'namespace' => 'Package',
     'namespace_help' => 'Translation package, such as vendra-product. Leave empty for application translations.',
     'namespace_none' => 'Application translations (no package)',

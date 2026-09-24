@@ -19,7 +19,6 @@ return [
     'is_default_helper_text' => 'Aktivieren, um dies als Standard-Zahlungsweg für neue Transaktionen zu verwenden.',
     'key_name' => 'Schlüssel',
     'key_value' => 'Wert',
-    'name' => 'Name',
     'position' => 'Position',
     'slug' => 'Slug',
     'slug_helper_text' => 'Eine eindeutige Kennung für die URL. Leer lassen, um sie automatisch aus dem Namen zu generieren.',

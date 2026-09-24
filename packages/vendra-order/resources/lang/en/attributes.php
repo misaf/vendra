@@ -13,7 +13,6 @@ return [
     'line_amount' => 'Line Total',
     'lines' => 'Lines',
     'metadata' => 'Metadata',
-    'name' => 'Name',
     'number' => 'Order Number',
     'payment_reference' => 'Payment Reference',
     'placed_at' => 'Placed At',

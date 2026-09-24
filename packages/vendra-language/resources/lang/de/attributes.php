@@ -11,7 +11,6 @@ return [
     'is_default_helper_text' => 'Aktivieren, um dies als Fallback-Sprache zu verwenden, wenn keine Übersetzung existiert.',
     'key' => 'Schluessel',
     'locale' => 'Sprache',
-    'name' => 'Name',
     'namespace' => 'Paket',
     'namespace_help' => 'Uebersetzungspaket, zum Beispiel vendra-product. Fuer Anwendungsuebersetzungen leer lassen.',
     'namespace_none' => 'Anwendungsuebersetzungen (kein Paket)',

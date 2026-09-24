@@ -19,7 +19,6 @@ return [
     'is_default_helper_text' => 'Enable to use this as the default gateway for new transactions.',
     'key_name' => 'Key',
     'key_value' => 'Value',
-    'name' => 'Name',
     'position' => 'Position',
     'slug' => 'Slug',
     'slug_helper_text' => 'A unique identifier for the URL. Leave empty to auto-generate from the name.',

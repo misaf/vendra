@@ -13,7 +13,6 @@ return [
     'line_amount' => 'Positionssumme',
     'lines' => 'Positionen',
     'metadata' => 'Metadaten',
-    'name' => 'Name',
     'number' => 'Bestellnummer',
     'payment_reference' => 'Zahlungsreferenz',
     'placed_at' => 'Bestellt am',

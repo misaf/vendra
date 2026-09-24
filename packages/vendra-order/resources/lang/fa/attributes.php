@@ -13,7 +13,6 @@ return [
     'line_amount' => 'جمع ردیف',
     'lines' => 'ردیف‌ها',
     'metadata' => 'فراداده',
-    'name' => 'نام',
     'number' => 'شماره سفارش',
     'payment_reference' => 'کد پیگیری پرداخت',
     'placed_at' => 'زمان ثبت',
