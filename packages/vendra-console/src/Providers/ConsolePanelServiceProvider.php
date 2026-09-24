@@ -43,7 +43,7 @@ final class ConsolePanelServiceProvider extends PanelProvider
             ->homeUrl('/')
             ->authGuard('console')
             ->authPasswordBroker('console')
-            ->domain(Config::string('vendra-console.domain'))
+            ->domain('console.'.Config::string('vendra-tenant.central_host'))
             ->login()
             ->passwordReset()
             ->emailVerification(isRequired: true)

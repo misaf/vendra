@@ -53,7 +53,7 @@ it('generates central panel assets from the current panel domain', function (str
         ->assertSee('data-update-uri="'.$origin.'/livewire-', escape: false);
 
     expect(config('app.url'))->toBe('https://vendra.test')
-        ->and(config('app.asset_url'))->toBe('https://vendra.test')
+        ->and(config('app.asset_url'))->toBeNull()
         ->and(asset('images/vendra-logo.svg'))->toBe('https://vendra.test/images/vendra-logo.svg');
 })->with([
     'console' => ['https://console.vendra.test/login', 'https://console.vendra.test'],

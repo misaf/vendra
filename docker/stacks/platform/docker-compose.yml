@@ -26,7 +26,6 @@ x-platform-environment: &platform-environment
   APP_KEY: "${APP_KEY:?required}"
   APP_DEBUG: "false"
   APP_URL: "https://${BASE_DOMAIN:?required}"
-  ASSET_URL: "https://${BASE_DOMAIN:?required}"
   TIMEZONE: "${TIMEZONE:-UTC}"
   DB_CONNECTION: mysql
   DB_HOST: mysql

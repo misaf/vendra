@@ -85,7 +85,7 @@ command unable to issue one.
 
 `Providers\ConsolePanelServiceProvider` registers everything:
 
-- served on `vendra-console.domain` (`VENDRA_CONSOLE_DOMAIN`), which the config file defaults to the `console.` subdomain of `APP_URL`'s host
+- served on the `console.` subdomain of `vendra-tenant.central_host`, the host in `APP_URL`
 - `console` auth guard against the canonical `User` (`misaf/vendra-user`)
   through the tenantless `console` provider and the
   `console` password broker, whose reset tokens live in

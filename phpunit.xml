@@ -162,7 +162,6 @@
         <env name="APP_ENV" value="testing"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="APP_URL" value="https://vendra.test" force="true"/>
-        <env name="ASSET_URL" value="https://vendra.test" force="true"/>
         <env name="API_PLATFORM_CACHE_STORE" value="array" force="true"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>

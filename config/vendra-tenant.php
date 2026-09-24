@@ -27,8 +27,9 @@ return [
     'foreign_key' => 'tenant_id',
 
     /*
-     | The platform's own host. A store's administration surface lives beneath
-     | it as `<store slug>.admin.<central host>`.
+     | The platform's own host, taken from APP_URL. The platform surfaces live
+     | beneath it: `console.`, `reseller.`, `api.`, and each store's
+     | administration at `<store slug>.admin.<central host>`.
      */
     'central_host' => Uri::of((string) env('APP_URL', 'http://localhost'))->host(),
 ];
