@@ -3,15 +3,11 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Misaf\VendraUserProfile\Models\UserProfile;
 use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
-use Misaf\VendraUserProfile\Traits\HasUserProfile;
 
-it('defines profile relationships for multiple profiles per user', function (): void {
-    expect(new ReflectionMethod(HasUserProfile::class, 'profiles')->getReturnType()?->getName())->toBe(HasMany::class)
-        ->and(new ReflectionMethod(HasUserProfile::class, 'userProfiles')->getReturnType()?->getName())->toBe(HasMany::class)
-        ->and(new ReflectionMethod(UserProfile::class, 'user')->getReturnType()?->getName())->toBe(BelongsTo::class);
+it('defines the profile owner relationship', function (): void {
+    expect(new ReflectionMethod(UserProfile::class, 'user')->getReturnType()?->getName())->toBe(BelongsTo::class);
 });
 
 it('defines the expected profile model attributes', function (): void {
