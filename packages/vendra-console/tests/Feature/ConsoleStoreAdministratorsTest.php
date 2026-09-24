@@ -165,6 +165,26 @@ it('lets an administrator take the email of a disabled account', function (): vo
     expect(consoleStoreUser($store, $administrator)->email)->toBe('disabled_admin@example.com');
 });
 
+it('filters store administrators by whether their email is verified', function (string $operator, bool $expectVerified): void {
+    $store = consoleStoreWithAdministratorRole();
+    $verified = consoleStoreAdministrator($store, 'verified_admin');
+    $unverified = consoleStoreAdministrator($store, 'unverified_admin');
+    $store->execute(fn (): bool => consoleStoreUser($store, $unverified)->forceFill(['email_verified_at' => null])->save());
+
+    [$shown, $hidden] = $expectVerified ? [$verified, $unverified] : [$unverified, $verified];
+
+    livewire(AdministratorsRelationManager::class, ['ownerRecord' => $store, 'pageClass' => EditStore::class])
+        ->loadTable()
+        ->filterTable('queryBuilder', ['rules' => [
+            'rule' => ['type' => 'email_verified_at', 'data' => ['operator' => $operator, 'settings' => []]],
+        ]])
+        ->assertCanSeeTableRecords([$shown])
+        ->assertCanNotSeeTableRecords([$hidden]);
+})->with([
+    'verified' => ['isFilled', true],
+    'unverified' => ['isFilled.inverse', false],
+]);
+
 it('lists disabled administrators as inactive by default', function (): void {
     $store = consoleStoreWithAdministratorRole();
     $disabled = consoleStoreAdministrator($store, 'disabled_admin');

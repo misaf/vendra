@@ -8,8 +8,8 @@ use BackedEnum;
 use Filament\Actions\ActionGroup;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +23,17 @@ use Misaf\VendraConsole\Filament\Resources\Stores\Actions\DemoteAdministratorTab
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\DisableAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\EnableAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\RemoveAdministratorTableAction;
+use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
+use Misaf\VendraUser\Filament\Tables\Columns\EmailColumn;
+use Misaf\VendraUser\Filament\Tables\Columns\EmailVerifiedAtColumn;
+use Misaf\VendraUser\Filament\Tables\Columns\UsernameColumn;
+use Misaf\VendraUser\Filament\Tables\Filters\QueryBuilder\Constraints\EmailConstraint;
+use Misaf\VendraUser\Filament\Tables\Filters\QueryBuilder\Constraints\EmailVerifiedAtConstraint;
+use Misaf\VendraUser\Filament\Tables\Filters\QueryBuilder\Constraints\UsernameConstraint;
 use Misaf\VendraUser\Models\User;
 
 final class AdministratorsRelationManager extends RelationManager
@@ -44,20 +54,33 @@ final class AdministratorsRelationManager extends RelationManager
         return $table
             ->modifyQueryUsing(fn (Builder $query): Builder => $this->onlyAdministrators($query))
             ->columns([
-                TextColumn::make('username')
-                    ->label(__('vendra-console::attributes.username'))
-                    ->searchable(),
+                RowIndexColumn::make(),
 
-                TextColumn::make('email')
-                    ->label(__('vendra-console::attributes.email'))
-                    ->searchable(),
+                UsernameColumn::make(),
 
-                IconColumn::make('active')
-                    ->label(__('vendra-support::attributes.active'))
-                    ->boolean()
+                EmailColumn::make(),
+
+                EmailVerifiedAtColumn::make(),
+
+                IsActiveIconColumn::make()
                     ->state(fn (User $record): bool => ! $record->trashed()),
+
+                CreatedAtColumn::make(),
+
+                UpdatedAtColumn::make(),
             ])
-            ->filters([TrashedFilter::make()->default(true)])
+            ->filters(
+                [
+                    TrashedFilter::make()->default(true),
+                    QueryBuilder::make()
+                        ->constraints([
+                            UsernameConstraint::make(),
+                            EmailConstraint::make(),
+                            EmailVerifiedAtConstraint::make(),
+                        ]),
+                ],
+                layout: FiltersLayout::AboveContentCollapsible,
+            )
             ->headerActions([AddAdministratorTableAction::make()])
             ->recordActions([
                 ActionGroup::make([
@@ -76,7 +99,8 @@ final class AdministratorsRelationManager extends RelationManager
                         RemoveAdministratorTableAction::make(),
                     ])->dropdown(false),
                 ]),
-            ]);
+            ])
+            ->defaultSort(column: 'id', direction: 'desc');
     }
 
     /**
