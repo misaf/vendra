@@ -29,10 +29,11 @@ final class CreateTransaction extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         return DB::transaction(function () use ($data): Transaction {
-            $currencyCode = (string) Arr::get($data, 'currency_code');
+            $currencyCode = Arr::string($data, 'currency_code');
             $transactionType = Arr::get($data, 'transaction_type');
-            $transactionType = $transactionType instanceof TransactionTypeEnum ? $transactionType : TransactionTypeEnum::from((string) $transactionType);
-            $amount = (int) Arr::get($data, 'amount');
+            $transactionType = $transactionType instanceof TransactionTypeEnum ? $transactionType : TransactionTypeEnum::from(is_string($transactionType) ? $transactionType : '');
+            $amount = Arr::get($data, 'amount');
+            $amount = is_numeric($amount) ? (int) $amount : 0;
 
             $wallet = self::firstOrCreateWalletFor(Arr::get($data, 'user_id'), $currencyCode);
             $counterpartyWallet = filled(Arr::get($data, 'counterparty_user_id'))
@@ -45,7 +46,7 @@ final class CreateTransaction extends CreateRecord
             )->validate();
 
             return resolve(CreateTransactionAction::class)->execute(
-                transactionGateway: TransactionGateway::query()->findOrFail(Arr::get($data, 'transaction_gateway_id')),
+                transactionGateway: TransactionGateway::query()->whereKey(Arr::get($data, 'transaction_gateway_id'))->firstOrFail(),
                 wallet: $wallet,
                 transactionType: $transactionType,
                 amount: $amount,
@@ -56,6 +57,6 @@ final class CreateTransaction extends CreateRecord
 
     private static function firstOrCreateWalletFor(mixed $userId, string $currencyCode): Wallet
     {
-        return WalletResolver::firstOrCreateWalletFor(TransactionUsers::model()::query()->findOrFail($userId), $currencyCode);
+        return WalletResolver::firstOrCreateWalletFor(TransactionUsers::model()::query()->whereKey($userId)->firstOrFail(), $currencyCode);
     }
 }

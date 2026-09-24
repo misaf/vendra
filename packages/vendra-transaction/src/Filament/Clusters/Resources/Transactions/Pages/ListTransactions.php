@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Pages;
 
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -33,45 +35,25 @@ final class ListTransactions extends ListRecords
      */
     public function getTabs(): array
     {
-        return [
+        $tabs = [
             'all' => Tab::make()
                 ->badge(static fn (): int => Transaction::query()->count())
                 ->deferBadge(),
-
-            TransactionTypeEnum::Deposit->value => Tab::make()
-                ->badge(static fn (): int => Transaction::query()->deposit()->count())
-                ->deferBadge()
-                ->label(TransactionTypeEnum::Deposit->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->deposit()),
-
-            TransactionTypeEnum::Withdrawal->value => Tab::make()
-                ->badge(static fn (): int => Transaction::query()->withdrawal()->count())
-                ->deferBadge()
-                ->label(TransactionTypeEnum::Withdrawal->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->withdrawal()),
-
-            TransactionTypeEnum::Commission->value => Tab::make()
-                ->badge(static fn (): int => Transaction::query()->commission()->count())
-                ->deferBadge()
-                ->label(TransactionTypeEnum::Commission->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->commission()),
-
-            TransactionTypeEnum::Transfer->value => Tab::make()
-                ->badge(static fn (): int => Transaction::query()->transfer()->count())
-                ->deferBadge()
-                ->label(TransactionTypeEnum::Transfer->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->transfer()),
-
-            TransactionTypeEnum::Bonus->value => Tab::make()
-                ->badge(static fn (): int => Transaction::query()->bonus()->count())
-                ->deferBadge()
-                ->label(TransactionTypeEnum::Bonus->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->bonus()),
         ];
+
+        foreach ([TransactionTypeEnum::Deposit, TransactionTypeEnum::Withdrawal, TransactionTypeEnum::Commission, TransactionTypeEnum::Transfer, TransactionTypeEnum::Bonus] as $type) {
+            $tabs[$type->value] = Tab::make()
+                ->badge(static fn (): int => Transaction::query()->ofType($type)->count())
+                ->deferBadge()
+                ->label($type->getLabel())
+                ->modifyQueryUsing(static fn (Builder $query): Builder => $query->where('transaction_type', $type));
+        }
+
+        return $tabs;
     }
 
     /**
-     * @return array<class-string<Widget>|WidgetConfiguration>
+     * @return array<Action|ActionGroup>
      */
     protected function getHeaderActions(): array
     {

@@ -50,7 +50,7 @@ final class TransactionGatewayTable
 
                 ModelImageColumn::make()
                     ->collection(TransactionGateway::MEDIA_COLLECTION)
-                    ->defaultImageUrl(fn (TransactionGateway $record): string => self::defaultAvatarImageUrl($record->name)),
+                    ->defaultImageUrl(fn (TransactionGateway $record, Livewire $livewire): string => self::defaultAvatarImageUrl(self::translatedAttribute($record, 'name', $livewire))),
 
                 TextColumn::make('name')
                     ->alignStart()

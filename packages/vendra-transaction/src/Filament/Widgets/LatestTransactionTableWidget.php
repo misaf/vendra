@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\TransactionState;
+use Misaf\VendraTransaction\Support\TransactionUsers;
 
 final class LatestTransactionTableWidget extends BaseWidget
 {
@@ -49,9 +50,7 @@ final class LatestTransactionTableWidget extends BaseWidget
 
                 TextColumn::make('wallet.user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(fn (Transaction $record): string => (string) ($record->wallet->user?->getAttribute('username')
-                        ?? $record->wallet->user?->getAttribute('name')
-                        ?? "#{$record->wallet->user_id}")),
+                    ->state(fn (Transaction $record): string => TransactionUsers::label($record->wallet?->user, $record->wallet?->user_id)),
 
                 TextColumn::make('transaction_type')
                     ->badge()

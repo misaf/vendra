@@ -17,8 +17,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Number;
+use Illuminate\Validation\Rules\Unique;
+use LogicException;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
+use Misaf\VendraTransaction\Models\TransactionLimit;
 use Misaf\VendraTransaction\Models\Wallet;
 
 final class TransactionLimitsRelationManager extends RelationManager
@@ -48,16 +52,16 @@ final class TransactionLimitsRelationManager extends RelationManager
     {
         $tabs = [
             'all' => Tab::make()
-                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactionLimits()->count()))
+                ->badge(fn (): string => (string) Number::format($this->transactionLimits()->count()))
                 ->deferBadge(),
         ];
 
         foreach (TransactionTypeEnum::cases() as $type) {
             $tabs[$type->value] = Tab::make()
-                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactionLimits()->where('transaction_type', $type)->count()))
+                ->badge(fn (): string => (string) Number::format($this->transactionLimits()->ofType($type)->count()))
                 ->deferBadge()
                 ->label($type->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('transaction_type', $type));
+                ->modifyQueryUsing(fn (Builder $query): Builder => $query->where('transaction_type', $type));
         }
 
         return $tabs;
@@ -72,7 +76,7 @@ final class TransactionLimitsRelationManager extends RelationManager
                     ->native(false)
                     ->options(TransactionTypeEnum::class)
                     ->required()
-                    ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) => $rule->where('wallet_id', $this->getOwnerRecord()->getKey())),
+                    ->unique(ignoreRecord: true, modifyRuleUsing: fn (Unique $rule): Unique => $rule->where('wallet_id', $this->wallet()->id)),
 
                 TextInput::make('amount')
                     ->extraInputAttributes(['dir' => 'ltr'])
@@ -108,5 +112,22 @@ final class TransactionLimitsRelationManager extends RelationManager
                 DeleteAction::make(),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
+    }
+
+    /**
+     * @return HasMany<TransactionLimit, Wallet>
+     */
+    private function transactionLimits(): HasMany
+    {
+        return $this->wallet()->transactionLimits();
+    }
+
+    private function wallet(): Wallet
+    {
+        $wallet = $this->getOwnerRecord();
+
+        throw_unless($wallet instanceof Wallet, LogicException::class, 'Transaction limits are listed only for a wallet.');
+
+        return $wallet;
     }
 }

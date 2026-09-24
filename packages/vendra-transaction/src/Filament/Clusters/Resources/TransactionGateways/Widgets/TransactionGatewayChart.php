@@ -35,7 +35,7 @@ final class TransactionGatewayChart extends ChartWidget
                 [
                     'label' => __('vendra-transaction::messages.weekly_chart'),
                     'data' => $trend
-                        ->map(static fn (TrendValue $value): int => is_numeric($value->aggregate) ? (int) $value->aggregate : 0)
+                        ->map(static fn (mixed $value): int => $value instanceof TrendValue && is_numeric($value->aggregate) ? (int) $value->aggregate : 0)
                         ->values()
                         ->all(),
                 ],

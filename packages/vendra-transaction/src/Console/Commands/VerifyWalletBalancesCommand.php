@@ -31,7 +31,8 @@ final class VerifyWalletBalancesCommand extends Command
             ->withSum('ledgerEntries as ledger_balance', 'amount')
             ->chunkById(500, function ($wallets) use (&$drifted): void {
                 foreach ($wallets as $wallet) {
-                    $ledgerBalance = (int) ($wallet->getAttribute('ledger_balance') ?? 0);
+                    $ledgerBalance = $wallet->getAttribute('ledger_balance');
+                    $ledgerBalance = is_numeric($ledgerBalance) ? (int) $ledgerBalance : 0;
 
                     if ($ledgerBalance === $wallet->balance) {
                         continue;

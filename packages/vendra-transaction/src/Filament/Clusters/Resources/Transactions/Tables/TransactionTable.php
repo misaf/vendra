@@ -17,6 +17,7 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
@@ -25,13 +26,14 @@ use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\Dec
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Actions\FailTransactionTableAction;
 use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\States\TransactionState;
+use Misaf\VendraTransaction\Support\TransactionUsers;
 
 final class TransactionTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with(['wallet.user', 'transactionGateway']))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with(['wallet.user', 'transactionGateway']))
             ->description(__('vendra-transaction::tables.description.transactions'))
             ->emptyStateHeading(__('vendra-transaction::tables.empty_state.heading.transactions'))
             ->emptyStateDescription(__('vendra-transaction::tables.empty_state.description.transactions'))
@@ -50,9 +52,7 @@ final class TransactionTable
 
                 TextColumn::make('wallet.user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(fn (Transaction $record): string => (string) ($record->wallet->user?->getAttribute('username')
-                        ?? $record->wallet->user?->getAttribute('name')
-                        ?? "#{$record->wallet->user_id}")),
+                    ->state(fn (Transaction $record): string => TransactionUsers::label($record->wallet?->user, $record->wallet?->user_id)),
 
                 TextColumn::make('wallet.currency_code')
                     ->badge()
@@ -103,9 +103,7 @@ final class TransactionTable
                             SelectConstraint::make('status')
                                 ->label(__('vendra-transaction::attributes.status'))
                                 ->options(
-                                    TransactionState::all()
-                                        ->mapWithKeys(fn (string $state): array => [$state::getMorphClass() => new $state(new Transaction)->getLabel()])
-                                        ->all(),
+                                    self::statusOptions(),
                                 ),
 
                             NumberConstraint::make('amount')
@@ -126,5 +124,21 @@ final class TransactionTable
                 ]),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private static function statusOptions(): array
+    {
+        $options = [];
+
+        foreach (TransactionState::all() as $state) {
+            if (is_string($state) && is_subclass_of($state, TransactionState::class)) {
+                $options[$state::getMorphClass()] = new $state(new Transaction)->getLabel();
+            }
+        }
+
+        return $options;
     }
 }

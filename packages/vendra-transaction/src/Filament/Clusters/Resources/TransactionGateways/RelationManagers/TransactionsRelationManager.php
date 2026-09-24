@@ -9,9 +9,12 @@ use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Number;
+use LogicException;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Tables\TransactionTable;
+use Misaf\VendraTransaction\Models\Transaction;
 use Misaf\VendraTransaction\Models\TransactionGateway;
 
 final class TransactionsRelationManager extends RelationManager
@@ -56,16 +59,16 @@ final class TransactionsRelationManager extends RelationManager
     {
         $tabs = [
             'all' => Tab::make()
-                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactions()->count()))
+                ->badge(fn (): string => (string) Number::format($this->transactions()->count()))
                 ->deferBadge(),
         ];
 
         foreach (TransactionTypeEnum::cases() as $type) {
             $tabs[$type->value] = Tab::make()
-                ->badge(fn (): string => (string) Number::format($this->getOwnerRecord()->transactions()->ofType($type)->count()))
+                ->badge(fn (): string => (string) Number::format($this->transactions()->ofType($type)->count()))
                 ->deferBadge()
                 ->label($type->getLabel())
-                ->modifyQueryUsing(fn (Builder $query) => $query->ofType($type));
+                ->modifyQueryUsing(fn (Builder $query): Builder => $query->where('transaction_type', $type));
         }
 
         return $tabs;
@@ -74,5 +77,17 @@ final class TransactionsRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return TransactionTable::configure($table);
+    }
+
+    /**
+     * @return HasMany<Transaction, TransactionGateway>
+     */
+    private function transactions(): HasMany
+    {
+        $transactionGateway = $this->getOwnerRecord();
+
+        throw_unless($transactionGateway instanceof TransactionGateway, LogicException::class, 'Transactions are listed only for a transaction gateway.');
+
+        return $transactionGateway->transactions();
     }
 }

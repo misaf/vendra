@@ -131,7 +131,11 @@ final class TransactionGateway extends Model implements HasMedia, ShouldLogActiv
     public function getSlugOptions(): SlugOptions
     {
         return SlugOptions::create()
-            ->generateSlugsFrom(fn (self $gateway): string => $gateway->getTranslation('name', config()->string('app.fallback_locale', 'en')))
+            ->generateSlugsFrom(function (self $gateway): string {
+                $name = $gateway->getTranslation('name', config()->string('app.fallback_locale', 'en'));
+
+                return is_string($name) ? $name : '';
+            })
             ->saveSlugsTo('slug')
             ->preventOverwrite();
     }

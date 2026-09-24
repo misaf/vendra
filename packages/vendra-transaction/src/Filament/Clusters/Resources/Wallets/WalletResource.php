@@ -53,9 +53,10 @@ final class WalletResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         $wallet = self::wallet($record);
+        $email = $wallet->user?->getAttribute('email');
 
         return [
-            __('vendra-user::attributes.email') => (string) $wallet->user?->getAttribute('email'),
+            __('vendra-user::attributes.email') => is_string($email) ? $email : '',
             __('vendra-transaction::attributes.currency') => $wallet->currency_code,
         ];
     }

@@ -8,7 +8,8 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\App;
 use Livewire\Component as Livewire;
 use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
@@ -47,12 +48,12 @@ final class TransactionForm
                 Select::make('transaction_gateway_id')
                     ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.transaction_gateway_id'))
                     ->columnSpan(['lg' => 1])
-                    ->getOptionLabelFromRecordUsing(fn (TransactionGateway $record): string => (string) $record->name)
+                    ->getOptionLabelFromRecordUsing(fn (TransactionGateway $record): string => self::gatewayName($record))
                     ->label(__('vendra-transaction::attributes.transaction_gateway'))
                     ->live()
                     ->native(false)
                     ->preload()
-                    ->relationship('transactionGateway', modifyQueryUsing: fn ($query) => $query->active())
+                    ->relationship('transactionGateway', modifyQueryUsing: fn (Builder $query): Builder => $query->where('active', true))
                     ->required()
                     ->searchable(),
 
@@ -99,7 +100,7 @@ final class TransactionForm
         $type = $get('transaction_type');
 
         if (! $type instanceof TransactionTypeEnum) {
-            $type = TransactionTypeEnum::tryFrom((string) ($type ?? ''));
+            $type = is_string($type) ? TransactionTypeEnum::tryFrom($type) : null;
         }
 
         return $type === TransactionTypeEnum::Transfer;
@@ -110,14 +111,23 @@ final class TransactionForm
      */
     private static function userOptions(): array
     {
-        return TransactionUsers::model()::query()
-            ->orderBy((new (TransactionUsers::model())())->getKeyName())
-            ->get()
-            ->mapWithKeys(fn (Model $user): array => [
-                (int) $user->getKey() => (string) ($user->getAttribute('username')
-                    ?? $user->getAttribute('name')
-                    ?? "#{$user->getKey()}"),
-            ])
-            ->all();
+        $options = [];
+
+        foreach (TransactionUsers::model()::query()->orderBy((new (TransactionUsers::model())())->getKeyName())->get() as $user) {
+            $userKey = $user->getKey();
+
+            if (is_int($userKey)) {
+                $options[$userKey] = TransactionUsers::label($user);
+            }
+        }
+
+        return $options;
+    }
+
+    private static function gatewayName(TransactionGateway $transactionGateway): string
+    {
+        $name = $transactionGateway->getTranslation('name', App::getLocale());
+
+        return is_string($name) ? $name : '';
     }
 }

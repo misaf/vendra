@@ -8,15 +8,17 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\Concerns\MapsTrendChart;
 use Misaf\VendraTransaction\Models\TransactionLimit;
 
 final class TransactionLimitOverviewWidget extends StatsOverviewWidget
 {
+    use MapsTrendChart;
+
     public ?Model $record = null;
 
     /**
@@ -64,7 +66,7 @@ final class TransactionLimitOverviewWidget extends StatsOverviewWidget
             ->label(__('vendra-transaction::widgets.withdrawal_transaction_stats'))
             ->description(__('vendra-transaction::widgets.withdrawal_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($withdrawalTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($this->chartValues($withdrawalTransactionStats))
             ->color('primary');
 
         return [$transactionWithdrawal];

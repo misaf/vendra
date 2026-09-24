@@ -14,16 +14,18 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\QueryBuilder;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraTransaction\Models\Wallet;
+use Misaf\VendraTransaction\Support\TransactionUsers;
 
 final class WalletTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn ($query) => $query->with(['user'])->withCount('transactions'))
+            ->modifyQueryUsing(fn (Builder $query): Builder => $query->with(['user'])->withCount('transactions'))
             ->description(__('vendra-transaction::tables.description.wallets'))
             ->emptyStateHeading(__('vendra-transaction::tables.empty_state.heading.wallets'))
             ->emptyStateDescription(__('vendra-transaction::tables.empty_state.description.wallets'))
@@ -33,9 +35,7 @@ final class WalletTable
 
                 TextColumn::make('user')
                     ->label(__('vendra-transaction::attributes.user'))
-                    ->state(fn (Wallet $record): string => (string) ($record->user?->getAttribute('username')
-                        ?? $record->user?->getAttribute('name')
-                        ?? "#{$record->user_id}")),
+                    ->state(fn (Wallet $record): string => TransactionUsers::label($record->user, $record->user_id)),
 
                 TextColumn::make('currency_code')
                     ->badge()

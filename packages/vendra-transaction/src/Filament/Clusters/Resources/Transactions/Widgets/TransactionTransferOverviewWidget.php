@@ -8,13 +8,15 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
+use Misaf\VendraTransaction\Filament\Clusters\Resources\Transactions\Widgets\Concerns\MapsTrendChart;
 use Misaf\VendraTransaction\Models\Transaction;
 
 final class TransactionTransferOverviewWidget extends StatsOverviewWidget
 {
+    use MapsTrendChart;
+
     public ?Model $record = null;
 
     /**
@@ -64,7 +66,7 @@ final class TransactionTransferOverviewWidget extends StatsOverviewWidget
             ->label(__('vendra-transaction::widgets.transfer_transaction_stats'))
             ->description(__('vendra-transaction::widgets.transfer_transaction_stats_description'))
             ->descriptionIcon(Heroicon::ArrowTrendingUp)
-            ->chart($transferTransactionStats->map(fn (TrendValue $value) => $value->aggregate)->toArray())
+            ->chart($this->chartValues($transferTransactionStats))
             ->color('primary');
 
         return [$transactionTransfer];
