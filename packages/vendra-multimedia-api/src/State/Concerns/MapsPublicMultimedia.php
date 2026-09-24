@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraMultimediaApi\State\Concerns;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraMultimediaApi\ApiResource\MultimediaResource;
 use Misaf\VendraMultimediaApi\State\MultimediaResourceFactory;
@@ -22,10 +23,15 @@ trait MapsPublicMultimedia
             return [];
         }
 
-        return $model->{$relation}
+        $multimedia = $model->getRelationValue($relation);
+
+        if (! $multimedia instanceof Collection) {
+            return [];
+        }
+
+        return array_values($multimedia
             ->filter(fn (Model $media): bool => PublicMultimedia::isPublic($media))
             ->map(fn (Model $media): MultimediaResource => MultimediaResourceFactory::make($media))
-            ->values()
-            ->all();
+            ->all());
     }
 }

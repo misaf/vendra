@@ -40,14 +40,6 @@ final class MultimediaResourceFactory
 
         throw_unless(is_array($generatedConversions), UnexpectedValueException::class, 'Media generated conversions must be an array.');
 
-        $normalizedConversions = [];
-
-        foreach ($generatedConversions as $key => $value) {
-            if (is_string($key)) {
-                $normalizedConversions[$key] = $value;
-            }
-        }
-
         $disk = $media->getAttribute('disk');
         $customProperties = $media->getAttribute('custom_properties');
         $responsiveImages = $media->getAttribute('responsive_images');
@@ -78,10 +70,21 @@ final class MultimediaResourceFactory
             bytes: $bytes,
             disk: $disk,
             url: self::safeUrl($media),
-            generatedConversions: $normalizedConversions,
-            customProperties: $customProperties,
-            responsiveImages: $responsiveImages,
+            generatedConversions: self::stringKeyed($generatedConversions),
+            customProperties: self::stringKeyed($customProperties),
+            responsiveImages: self::stringKeyed($responsiveImages),
         );
+    }
+
+    /**
+     * Keep only the string-keyed entries of a JSON column, the shape the resource exposes.
+     *
+     * @param  array<mixed>  $values
+     * @return array<string, mixed>
+     */
+    private static function stringKeyed(array $values): array
+    {
+        return array_filter($values, is_string(...), ARRAY_FILTER_USE_KEY);
     }
 
     private static function safeUrl(Model $media): ?string
