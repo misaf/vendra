@@ -2,6 +2,7 @@ parameters:
 
     paths:
         - app
+        - packages/vendra-console/src
         - packages/vendra-subscription/src
 
     stubFiles:
