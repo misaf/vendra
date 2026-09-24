@@ -36,10 +36,7 @@ final class DeveloperLoginsRegistrar
         $credentialColumn = Config::string('vendra-developer-logins.column', 'email');
         $labelColumn = Config::string('vendra-developer-logins.label_column', 'username');
 
-        $userModel = DeveloperLoginsUsers::model();
-
-        return $userModel::query()
-            ->role($role)
+        return $role->users()
             ->get([$labelColumn, $credentialColumn])
             ->mapWithKeys(static function (Model $user) use ($credentialColumn, $labelColumn): array {
                 $credential = $user->getAttribute($credentialColumn);
