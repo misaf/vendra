@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-// arch()->preset()->php();
-// arch()->preset()->security();
-// arch()->preset()->laravel();
+arch()->preset()->php();
+arch()->preset()->security();
+arch()->preset()->laravel();
 
 arch('vendra packages never depend on the host application')
     ->expect('Misaf')
