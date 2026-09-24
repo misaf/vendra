@@ -40,7 +40,11 @@ trait HasOptionalTags
     {
         $this->assertTagType($type);
 
-        return $this->getRelationValue('tags');
+        $tags = $this->getRelationValue('tags');
+
+        throw_unless($tags instanceof Collection, LogicException::class, 'The tags relationship did not load a collection.');
+
+        return $tags;
     }
 
     /** @param array<int, string>|ArrayAccess<int, string> $tags */
@@ -54,11 +58,21 @@ trait HasOptionalTags
     /** @param string|array<int, string>|ArrayAccess<int, string> $tags */
     public function syncTags(string|array|ArrayAccess $tags): static
     {
-        $className = static::getTagClassName();
+        $findOrCreate = [static::getTagClassName(), 'findOrCreate'];
 
-        $tags = collect($className::findOrCreate($tags, $this->tagType()));
+        throw_unless(is_callable($findOrCreate), LogicException::class, 'The tag model must provide findOrCreate().');
 
-        $this->tags()->sync($tags->pluck('id')->toArray());
+        // A single tag name resolves to one tag model rather than a collection.
+        $found = $findOrCreate($tags, $this->tagType());
+        $tagIds = [];
+
+        foreach ($found instanceof Model ? [$found] : (is_iterable($found) ? $found : []) as $tag) {
+            if ($tag instanceof Model) {
+                $tagIds[] = $tag->getKey();
+            }
+        }
+
+        $this->tags()->sync($tagIds);
 
         return $this;
     }
