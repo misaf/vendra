@@ -95,5 +95,6 @@ it('defaults the name and description columns to their shared labels and icons',
         ->and($descriptionColumn->getName())->toBe('description')
         ->and($descriptionColumn->getLabel())->toBe(__('vendra-support::attributes.description'))
         ->and($descriptionColumn->getIcon(null))->toBe(Heroicon::DocumentText)
-        ->and($descriptionColumn->isToggledHiddenByDefault())->toBeTrue();
+        ->and($descriptionColumn->isToggledHiddenByDefault())->toBeTrue()
+        ->and($descriptionColumn->getCharacterLimit())->toBe(50);
 });

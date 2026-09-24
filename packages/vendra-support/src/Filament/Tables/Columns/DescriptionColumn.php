@@ -21,6 +21,19 @@ final class DescriptionColumn extends TextColumn
         $this
             ->label(__('vendra-support::attributes.description'))
             ->icon(Heroicon::DocumentText)
+            ->limit(50)
+            ->tooltip(fn (): ?string => $this->truncatedState())
             ->toggleable(isToggledHiddenByDefault: true);
+    }
+
+    private function truncatedState(): ?string
+    {
+        $state = $this->getState();
+
+        if (! is_string($state) || mb_strlen($state) <= $this->getCharacterLimit()) {
+            return null;
+        }
+
+        return $state;
     }
 }
