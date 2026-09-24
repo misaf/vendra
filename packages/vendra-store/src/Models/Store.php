@@ -139,6 +139,18 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
+     * Stores suspended for billing, whatever their other status.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function billingSuspended(Builder $query): Builder
+    {
+        return $query->whereNotNull('billing_suspended_at');
+    }
+
+    /**
      * Get the store's currency, falling back to the platform default.
      *
      * `locale` and `timezone` fall back through {@see IsTenantModel} instead.

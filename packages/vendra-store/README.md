@@ -68,7 +68,8 @@ out of step with the three that own it. `withDeploymentStatus(...)` filters by t
 storefront deployment's status, and `needingAttention()` matches the statuses
 `StoreStatusCounts::NEEDING_ATTENTION` counts plus stores whose deployment failed.
 `ownedBy($reseller)` matches a reseller's stores, and nothing when the reseller is
-null, since a null `reseller_id` marks a console-owned store.
+null, since a null `reseller_id` marks a console-owned store. `billingSuspended()`
+matches stores suspended for billing, whatever their other columns say.
 
 Each writer goes through an action that also aligns the storefront's desired state
 through `AlignStorefrontWithStoreAction`: `SuspendStoreAction` and
