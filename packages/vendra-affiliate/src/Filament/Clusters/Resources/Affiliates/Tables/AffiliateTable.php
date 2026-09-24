@@ -89,7 +89,7 @@ final class AffiliateTable
 
         return $table
             ->modifyQueryUsing(fn (Builder $query): Builder => $query->withSum([
-                'commissions as pending_balance' => fn (Builder $commissionQuery): Builder => self::payableCommissions($commissionQuery),
+                'commissions as pending_balance' => self::payableCommissions(...),
             ], 'amount'))
             ->columns($columns)
             ->description(__('vendra-affiliate::tables.description.affiliates'))

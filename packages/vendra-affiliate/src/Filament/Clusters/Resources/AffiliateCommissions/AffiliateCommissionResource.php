@@ -54,8 +54,8 @@ final class AffiliateCommissionResource extends Resource
         $commission = self::commission($record);
 
         return [
-            __('vendra-affiliate::attributes.affiliate') => $commission->affiliate?->code ?? '',
-            __('vendra-user::attributes.email') => $commission->affiliate?->user?->email ?? '',
+            __('vendra-affiliate::attributes.affiliate') => $commission->affiliate->code ?? '',
+            __('vendra-user::attributes.email') => $commission->affiliate->user->email ?? '',
         ];
     }
 

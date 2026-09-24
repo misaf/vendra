@@ -54,8 +54,8 @@ final class AffiliatePayoutResource extends Resource
         $payout = self::payout($record);
 
         return [
-            __('vendra-affiliate::attributes.affiliate') => $payout->affiliate?->code ?? '',
-            __('vendra-user::attributes.email') => $payout->affiliate?->user?->email ?? '',
+            __('vendra-affiliate::attributes.affiliate') => $payout->affiliate->code ?? '',
+            __('vendra-user::attributes.email') => $payout->affiliate->user->email ?? '',
         ];
     }
 

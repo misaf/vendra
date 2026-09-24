@@ -65,7 +65,7 @@ final class AffiliateResource extends Resource
         $affiliate = self::affiliate($record);
 
         return [
-            __('vendra-user::attributes.email') => $affiliate->user?->email ?? '',
+            __('vendra-user::attributes.email') => $affiliate->user->email ?? '',
         ];
     }
 
