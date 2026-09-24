@@ -32,7 +32,7 @@ final class NeedsAttention extends StatsOverviewWidget
     protected function getStats(): array
     {
         $storesNeedingAttention = StoreStatusCounts::for()->needingAttention();
-        $failedDeployments = StorefrontDeployment::query()->where('status', StorefrontDeploymentStatus::Failed)->count();
+        $failedDeployments = StorefrontDeployment::query()->failed()->count();
         $pastDueSubscriptions = Subscription::query()->where('status', SubscriptionStatus::PastDue)->count();
         $endingSoon = Subscription::query()->endingWithin(7)->count();
         $paymentsNeedingReview = SubscriptionPayment::query()->needingReview()->count();

@@ -7,7 +7,6 @@ namespace Misaf\VendraStore\Console\Commands;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Database\Eloquent\Builder;
-use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 
@@ -26,7 +25,7 @@ final class RetryFailedStorefrontDeploymentsCommand extends StorefrontDeployment
     {
         return StorefrontDeployment::query()
             ->desiredRunning()
-            ->where('status', StorefrontDeploymentStatus::Failed->value);
+            ->failed();
     }
 
     /**

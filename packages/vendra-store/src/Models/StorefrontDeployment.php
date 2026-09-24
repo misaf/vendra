@@ -80,6 +80,16 @@ final class StorefrontDeployment extends Model
     }
 
     /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function failed(Builder $query): Builder
+    {
+        return $query->where('status', StorefrontDeploymentStatus::Failed->value);
+    }
+
+    /**
      * Match deployments requested on or between the given calendar days; a missing bound is open.
      *
      * @param  Builder<self>  $query
