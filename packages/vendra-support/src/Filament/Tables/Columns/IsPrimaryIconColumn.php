@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Filament\Tables\Columns;
 
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 
 final class IsPrimaryIconColumn extends IconColumn
@@ -20,7 +19,6 @@ final class IsPrimaryIconColumn extends IconColumn
 
         $this
             ->label(__('vendra-support::attributes.is_primary'))
-            ->boolean()
-            ->trueIcon(Heroicon::Bolt);
+            ->boolean();
     }
 }
