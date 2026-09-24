@@ -13,6 +13,7 @@ use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Events\TransactionApproved;
+use Misaf\VendraTransaction\Models\Wallet;
 
 /**
  * Credit a commission for a referred user's approved deposit.
@@ -39,9 +40,14 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
             return;
         }
 
-        $transaction->loadMissing('wallet');
+        // The listener runs after commit, so the wallet may have been soft-deleted since; its user still earned the referral.
+        $wallet = $transaction->wallet()->withTrashed()->first();
 
-        $referral = AffiliateReferral::forUser($transaction->wallet->user_id);
+        if (! $wallet instanceof Wallet) {
+            return;
+        }
+
+        $referral = AffiliateReferral::forUser($wallet->user_id);
         $affiliate = $referral?->affiliate;
 
         if (! $affiliate instanceof Affiliate) {

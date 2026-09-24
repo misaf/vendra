@@ -102,3 +102,14 @@ it('ignores deposits from users without a referral', function (): void {
 
     expect(AffiliateCommission::query()->count())->toBe(0);
 });
+
+it('credits a deposit whose wallet was deleted before the queued listener ran', function (): void {
+    config()->set('vendra-affiliate.conversions.deposit.enabled', true);
+
+    $transaction = referredDeposit(amount: 10_000, commissionPercent: 20);
+    $transaction->wallet->delete();
+
+    resolve(TransactionCommissionSubscriber::class)->transactionApproved(new TransactionApproved($transaction->fresh()));
+
+    expect(AffiliateCommission::query()->sole()->amount)->toBe(2_000);
+});
