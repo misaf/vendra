@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Providers\Filament\AdminPanelServiceProvider;
 use Filament\Panel;
 use Filament\Support\Enums\Width;
+use Illuminate\Support\Facades\Route;
 use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 use Misaf\VendraConsole\Providers\ConsolePanelServiceProvider;
 use Misaf\VendraReseller\Providers\ResellerPanelServiceProvider;
@@ -44,6 +45,38 @@ it('issues host-only session cookies for central panels', function (string $url)
     'console' => 'https://console.vendra.test/login',
     'reseller' => 'https://reseller.vendra.test/login',
 ]);
+
+it('requires a CSRF token for Livewire updates outside the testing environment', function (): void {
+    $environment = app()->environment();
+    app()->instance('env', 'production');
+
+    try {
+        $this->post('https://console.vendra.test'.route('default-livewire.update', absolute: false), [], [
+            'Sec-Fetch-Site' => 'cross-site',
+        ])->assertStatus(419);
+    } finally {
+        app()->instance('env', $environment);
+    }
+});
+
+it('does not exempt the former Livewire path from CSRF protection', function (): void {
+    Route::post('/livewire/csrf-probe', fn (): string => 'accepted')->middleware('web');
+    $environment = app()->environment();
+    app()->instance('env', 'production');
+
+    try {
+        $this->post('https://console.vendra.test/livewire/csrf-probe', [], [
+            'Sec-Fetch-Site' => 'cross-site',
+        ])->assertStatus(419);
+
+        $this->withSession(['_token' => 'valid-token'])
+            ->post('https://console.vendra.test/livewire/csrf-probe', ['_token' => 'valid-token'], [
+                'Sec-Fetch-Site' => 'cross-site',
+            ])->assertOk();
+    } finally {
+        app()->instance('env', $environment);
+    }
+});
 
 it('generates central panel assets from the current panel domain', function (string $url, string $origin): void {
     $this->get($url)
