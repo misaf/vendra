@@ -11,7 +11,7 @@ use Misaf\VendraPermission\Models\Role;
 
 final class DetachTableAction extends Action
 {
-    public static function getDefaultName(): ?string
+    public static function getDefaultName(): string
     {
         return 'detach';
     }

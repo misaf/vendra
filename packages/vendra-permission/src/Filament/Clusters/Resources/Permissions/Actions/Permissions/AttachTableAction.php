@@ -11,7 +11,7 @@ use Misaf\VendraPermission\Models\Role;
 
 final class AttachTableAction extends FilamentAttachAction
 {
-    public static function getDefaultName(): ?string
+    public static function getDefaultName(): string
     {
         return 'attach';
     }

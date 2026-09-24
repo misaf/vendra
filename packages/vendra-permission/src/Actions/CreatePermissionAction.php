@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraPermission\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use LogicException;
 use Misaf\VendraPermission\Models\Permission;
 
 final class CreatePermissionAction
@@ -18,11 +19,17 @@ final class CreatePermissionAction
         ?string $description,
         string $guardName,
     ): Permission {
-        $create = static fn (): Permission => Permission::create([
-            'name' => $name,
-            'description' => $description,
-            'guard_name' => $guardName,
-        ]);
+        $create = static function () use ($name, $description, $guardName): Permission {
+            $permission = Permission::create([
+                'name' => $name,
+                'description' => $description,
+                'guard_name' => $guardName,
+            ]);
+
+            throw_unless($permission instanceof Permission, LogicException::class, 'The permission model must be '.Permission::class.'.');
+
+            return $permission;
+        };
 
         if ($tenant instanceof Model && method_exists($tenant, 'execute')) {
             /** @var Permission $permission */

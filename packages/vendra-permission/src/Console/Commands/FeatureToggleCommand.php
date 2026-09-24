@@ -103,9 +103,8 @@ final class FeatureToggleCommand extends Command
         }
 
         $this->info(sprintf(
-            'Tenant [%s] (%d): %s %d feature(s).',
-            $tenant->slug,
-            $tenant->id,
+            'Tenant [%s]: %s %d feature(s).',
+            $this->tenantLabel($tenant, $tenantInput),
             $action === 'activate' ? 'activated' : 'deactivated',
             count($features),
         ));
@@ -127,6 +126,18 @@ final class FeatureToggleCommand extends Command
     private function resolveTenant(string $tenantInput): ?Model
     {
         return resolve(TenantResolver::class)->findByKeyOrSlug($tenantInput);
+    }
+
+    private function tenantLabel(Model $tenant, string $tenantInput): string
+    {
+        $slug = $tenant->getAttribute('slug');
+        $key = $tenant->getKey();
+
+        return sprintf(
+            '%s (%s)',
+            is_string($slug) ? $slug : $tenantInput,
+            is_int($key) || is_string($key) ? $key : '?',
+        );
     }
 
     /**

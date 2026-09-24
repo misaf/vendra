@@ -18,7 +18,7 @@ final class SyncBulkAction extends BulkAction
 {
     use CanCustomizeProcess;
 
-    public static function getDefaultName(): ?string
+    public static function getDefaultName(): string
     {
         return 'sync';
     }
@@ -80,7 +80,7 @@ final class SyncBulkAction extends BulkAction
 
     /**
      * @param  array{roles?: mixed}  $data
-     * @return array<string, list<ModelKey>>
+     * @return array<string, list<int>>
      */
     private function resolveRoleIdsByGuardFromPayload(array $data): array
     {
@@ -88,7 +88,7 @@ final class SyncBulkAction extends BulkAction
 
         throw_unless(is_array($rawRoleIds), InvalidArgumentException::class, 'Invalid roles provided.');
 
-        /** @var list<ModelKey> $roleIds */
+        /** @var list<int|string> $roleIds */
         $roleIds = [];
 
         foreach ($rawRoleIds as $rawRoleId) {
@@ -108,13 +108,13 @@ final class SyncBulkAction extends BulkAction
 
         throw_if($roles->count() !== count($roleIds), InvalidArgumentException::class, 'Invalid roles provided.');
 
-        /** @var array<string, list<ModelKey>> $resolvedRoleIdsByGuard */
+        /** @var array<string, list<int>> $resolvedRoleIdsByGuard */
         $resolvedRoleIdsByGuard = $roles
             ->groupBy('guard_name')
             ->map(
                 /**
                  * @param  Collection<int, Role>  $rolesInGuard
-                 * @return list<ModelKey>
+                 * @return list<int>
                  */
                 static fn (Collection $rolesInGuard): array => $rolesInGuard
                     ->map(static fn (Role $role): int => $role->id)

@@ -12,7 +12,7 @@ use Misaf\VendraPermission\Models\Permission;
 
 final class DeleteBulkAction extends FilamentDeleteBulkAction
 {
-    public static function getDefaultName(): ?string
+    public static function getDefaultName(): string
     {
         return 'delete';
     }

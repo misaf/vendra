@@ -57,14 +57,15 @@ final class EditPermission extends EditRecord
      */
     protected function resolveSelectedRoleIds(): array
     {
-        $selectedRoles = Arr::get($this->form->getRawState(), 'roles', []);
+        $rawState = $this->form->getRawState();
+        $selectedRoles = is_array($rawState) ? Arr::get($rawState, 'roles', []) : [];
 
         if (! is_array($selectedRoles)) {
             $selectedRoles = [];
         }
 
         return array_values(array_filter(
-            array_map(static fn (mixed $roleId): int => (int) $roleId, $selectedRoles),
+            array_map(static fn (mixed $roleId): int => is_numeric($roleId) ? (int) $roleId : 0, $selectedRoles),
             static fn (int $roleId): bool => $roleId > 0,
         ));
     }

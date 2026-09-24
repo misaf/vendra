@@ -11,7 +11,7 @@ use Misaf\VendraPermission\Models\Role;
 
 final class CreateTableAction extends FilamentCreateAction
 {
-    public static function getDefaultName(): ?string
+    public static function getDefaultName(): string
     {
         return 'create';
     }

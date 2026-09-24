@@ -6,6 +6,7 @@ namespace Misaf\VendraPermission\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Config;
+use LogicException;
 use Misaf\VendraPermission\Models\Role;
 
 final class CreateRoleAction
@@ -23,11 +24,17 @@ final class CreateRoleAction
             ? Config::string('auth.defaults.guard')
             : $guardName;
 
-        $create = static fn (): Role => Role::create([
-            'name' => $name,
-            'description' => $description,
-            'guard_name' => $guardName,
-        ]);
+        $create = static function () use ($name, $description, $guardName): Role {
+            $role = Role::create([
+                'name' => $name,
+                'description' => $description,
+                'guard_name' => $guardName,
+            ]);
+
+            throw_unless($role instanceof Role, LogicException::class, 'The role model must be '.Role::class.'.');
+
+            return $role;
+        };
 
         if ($tenant instanceof Model && method_exists($tenant, 'execute')) {
             /** @var Role $role */

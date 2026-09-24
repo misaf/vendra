@@ -38,10 +38,11 @@ final class EditRole extends EditRecord
      */
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $guardName = Arr::pull($data, 'guard_name');
+        $guardName = Arr::get($data, 'guard_name');
+        $attributes = array_diff_key($data, ['guard_name' => true]);
 
-        return DB::transaction(function () use ($record, $data, $guardName): Role {
-            $record->update($data);
+        return DB::transaction(function () use ($record, $attributes, $guardName): Role {
+            $record->update($attributes);
 
             if (is_string($guardName)) {
                 return resolve(ChangeRoleGuardAction::class)->execute($record, $guardName);
