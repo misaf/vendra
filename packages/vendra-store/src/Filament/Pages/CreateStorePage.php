@@ -18,6 +18,7 @@ use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
 use Misaf\VendraStore\Models\StorefrontImage;
 use Misaf\VendraStore\Support\StorefrontConfigurationMap;
 use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
+use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 
@@ -26,6 +27,10 @@ use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
  */
 abstract class CreateStorePage extends CreateRecord
 {
+    private ?string $administratorCredentials = null;
+
+    private ?string $storefrontStatus = null;
+
     /**
      * @param  array<string, mixed>  $data
      *
@@ -60,25 +65,37 @@ abstract class CreateStorePage extends CreateRecord
             throw new Halt;
         }
 
-        Notification::make()
-            ->success()
-            ->title(__('vendra-store::messages.store_created'))
-            ->body(__('vendra-store::attributes.administrator_credentials', [
-                'username' => $user->username,
-                'password' => $password,
-            ]))
-            ->persistent()
-            ->send();
-
         if ($this->shouldRequestStorefront($data)) {
             resolve(RequestStorefrontDeploymentAction::class)->execute(
                 store: $store,
                 domain: $domain,
                 form: $data,
             );
+
+            $this->storefrontStatus = resolve(StorefrontRuntimeConfiguration::class)->isConfigured()
+                ? __('vendra-store::messages.storefront_requested')
+                : __('vendra-store::messages.storefront_waiting_for_runtime');
         }
 
+        $this->administratorCredentials = __('vendra-store::attributes.administrator_credentials', [
+            'username' => $user->username,
+            'password' => $password,
+        ]);
+
         return $store;
+    }
+
+    protected function getCreatedNotification(): ?Notification
+    {
+        if ($this->administratorCredentials === null) {
+            return null;
+        }
+
+        return Notification::make()
+            ->success()
+            ->title(__('vendra-store::messages.store_created'))
+            ->body(implode("\n\n", array_filter([$this->administratorCredentials, $this->storefrontStatus])))
+            ->persistent();
     }
 
     /**
