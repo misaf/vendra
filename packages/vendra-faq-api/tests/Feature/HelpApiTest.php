@@ -42,3 +42,25 @@ it('exposes and filters active FAQs with storefront metadata', function (): void
     $this->getJson("/api/content/faqs/{$hiddenArticle->id}", ['Accept' => 'application/ld+json'])
         ->assertNotFound();
 });
+
+it('searches FAQs literally and without regard to case', function (): void {
+    $topic = FaqCategoryFactory::new()->active()->create();
+    $discount = FaqFactory::new()->forCategory($topic)->active()->create([
+        'name' => ['en' => 'Is there a 50% discount?'],
+        'slug' => ['en' => 'half-price'],
+    ]);
+    FaqFactory::new()->forCategory($topic)->active()->create([
+        'name' => ['en' => 'Do you ship 500 orders?'],
+        'slug' => ['en' => 'bulk-orders'],
+    ]);
+
+    foreach (['0%', 'DISCOUNT'] as $search) {
+        $this->getJson('/api/content/faqs?search='.rawurlencode($search), [
+            'Accept' => 'application/vnd.api+json',
+            'Accept-Language' => 'en',
+        ])
+            ->assertOk()
+            ->assertJsonPath('meta.totalItems', 1)
+            ->assertJsonPath('data.0.attributes.id', $discount->id);
+    }
+});
