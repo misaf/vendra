@@ -6,7 +6,9 @@ namespace Misaf\VendraAffiliate\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Attributes\UseFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -97,6 +99,32 @@ final class AffiliateCommission extends Model implements ShouldLogActivity
     public function source(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Match approved commissions no payout has claimed yet, the SQL form of {@see isPayable()}.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function payable(Builder $query): Builder
+    {
+        return $query
+            ->where('status', CommissionStatusEnum::Approved)
+            ->whereNull('affiliate_payout_id');
+    }
+
+    /**
+     * Match commissions the affiliate has earned, whether paid out yet or not.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function earned(Builder $query): Builder
+    {
+        return $query->whereIn('status', [CommissionStatusEnum::Approved, CommissionStatusEnum::Paid]);
     }
 
     public function isPayable(): bool

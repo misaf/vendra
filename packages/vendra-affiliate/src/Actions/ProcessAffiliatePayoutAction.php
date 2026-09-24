@@ -34,8 +34,7 @@ final class ProcessAffiliatePayoutAction
     {
         return DB::transaction(function () use ($affiliate): ?AffiliatePayout {
             $commissions = $affiliate->commissions()
-                ->where('status', CommissionStatusEnum::Approved)
-                ->whereNull('affiliate_payout_id')
+                ->payable()
                 ->lockForUpdate()
                 ->get();
 

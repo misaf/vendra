@@ -24,9 +24,9 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
-use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\ProcessPayoutTableAction;
 use Misaf\VendraAffiliate\Models\Affiliate;
+use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
@@ -89,9 +89,7 @@ final class AffiliateTable
 
         return $table
             ->modifyQueryUsing(fn (Builder $query): Builder => $query->withSum([
-                'commissions as pending_balance' => fn (Builder $commissionQuery): Builder => $commissionQuery
-                    ->where('status', CommissionStatusEnum::Approved)
-                    ->whereNull('affiliate_payout_id'),
+                'commissions as pending_balance' => fn (Builder $commissionQuery): Builder => self::payableCommissions($commissionQuery),
             ], 'amount'))
             ->columns($columns)
             ->description(__('vendra-affiliate::tables.description.affiliates'))
@@ -143,5 +141,14 @@ final class AffiliateTable
                 ]),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
+    }
+
+    /**
+     * @param  Builder<AffiliateCommission>  $query
+     * @return Builder<AffiliateCommission>
+     */
+    private static function payableCommissions(Builder $query): Builder
+    {
+        return $query->payable();
     }
 }

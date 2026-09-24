@@ -5,9 +5,11 @@ declare(strict_types=1);
 use Misaf\VendraAffiliate\Actions\ProcessAffiliatePayoutAction;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateCommissionFactory;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateFactory;
+use Misaf\VendraAffiliate\Database\Factories\AffiliatePayoutFactory;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\PayoutStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
+use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraTransaction\Database\Factories\TransactionGatewayFactory;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Models\Transaction;
@@ -111,4 +113,21 @@ it('does not pay pending or reversed commissions', function (): void {
     $payout = resolve(ProcessAffiliatePayoutAction::class)->execute($affiliate);
 
     expect($payout->amount)->toBe(700);
+});
+
+it('selects payable and earned commissions by the same rule isPayable reads', function (): void {
+    $affiliate = AffiliateFactory::new()->active()->create();
+    $commission = fn (): AffiliateCommissionFactory => AffiliateCommissionFactory::new()->forAffiliate($affiliate);
+
+    $pending = $commission()->pending()->create();
+    $approved = $commission()->approved()->create();
+    $claimed = $commission()->approved()->state(['affiliate_payout_id' => AffiliatePayoutFactory::new()->forAffiliate($affiliate)])->create();
+    $paid = $commission()->paid()->create();
+    $commission()->reversed()->create();
+
+    expect(AffiliateCommission::query()->payable()->pluck('id')->all())->toBe([$approved->id])
+        ->and($approved->isPayable())->toBeTrue()
+        ->and($claimed->isPayable())->toBeFalse()
+        ->and($pending->isPayable())->toBeFalse()
+        ->and(AffiliateCommission::query()->earned()->orderBy('id')->pluck('id')->all())->toBe([$approved->id, $claimed->id, $paid->id]);
 });

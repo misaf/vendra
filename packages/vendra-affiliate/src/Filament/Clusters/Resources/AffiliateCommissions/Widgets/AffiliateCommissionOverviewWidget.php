@@ -29,9 +29,7 @@ final class AffiliateCommissionOverviewWidget extends StatsOverviewWidget
         $startDate = now()->startOfWeek();
         $endDate = now()->endOfWeek();
         $commissions = AffiliateCommission::query();
-        $payableCommissions = AffiliateCommission::query()
-            ->where('status', CommissionStatusEnum::Approved)
-            ->whereNull('affiliate_payout_id');
+        $payableCommissions = AffiliateCommission::query()->payable();
         $paidCommissions = AffiliateCommission::query()->where('status', CommissionStatusEnum::Paid);
         $commissionTrend = Trend::query(clone $commissions)->between($startDate, $endDate)->perDay()->count();
         $payableTrend = Trend::query(clone $payableCommissions)->between($startDate, $endDate)->perDay()->count();

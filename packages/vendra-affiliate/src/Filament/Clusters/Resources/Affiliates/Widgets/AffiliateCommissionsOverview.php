@@ -13,7 +13,6 @@ use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Number;
-use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
 
 final class AffiliateCommissionsOverview extends StatsOverviewWidget
@@ -31,16 +30,10 @@ final class AffiliateCommissionsOverview extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $earnedTotal = (int) AffiliateCommission::query()->whereIn('status', [
-            CommissionStatusEnum::Approved,
-            CommissionStatusEnum::Paid,
-        ])->sum('amount');
+        $earnedTotal = (int) AffiliateCommission::query()->earned()->sum('amount');
 
         $trend = Trend::query(
-            AffiliateCommission::query()->whereIn('status', [
-                CommissionStatusEnum::Approved,
-                CommissionStatusEnum::Paid,
-            ]),
+            AffiliateCommission::query()->earned(),
         )
             ->between(Date::now()->startOfWeek(), Date::now()->endOfWeek())
             ->perDay()

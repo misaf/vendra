@@ -27,7 +27,9 @@ stats widgets.
    groups them into an `AffiliatePayout`, marks them paid, and credits the
    affiliate's default-currency wallet through an approved Commission
    transaction. If the transaction cannot be created or settled, everything
-   rolls back and the commissions remain payable.
+   rolls back and the commissions remain payable. `AffiliateCommission::payable()`
+   (approved and not yet in a payout) selects what it settles, and `earned()`
+   (approved or paid) is what the dashboards total.
 
 Each conversion type is toggled in `config/vendra-affiliate.php`, alongside
 the attribution cookie, payout minimum, and defaults.

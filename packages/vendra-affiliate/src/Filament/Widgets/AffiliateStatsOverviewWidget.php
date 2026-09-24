@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
-use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Models\AffiliateClick;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
@@ -45,11 +44,7 @@ abstract class AffiliateStatsOverviewWidget extends StatsOverviewWidget
             ->perDay()
             ->count();
 
-        $earnedCommissions = $this->scopeToAffiliate(AffiliateCommission::query())
-            ->whereIn('status', [
-                CommissionStatusEnum::Approved,
-                CommissionStatusEnum::Paid,
-            ]);
+        $earnedCommissions = $this->scopeToAffiliate(AffiliateCommission::query())->earned();
 
         $commissionTrend = Trend::query(clone $earnedCommissions)
             ->between($startDate, $endDate)
