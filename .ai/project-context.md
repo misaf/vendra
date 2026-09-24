@@ -42,11 +42,12 @@ Releases are tagged across all packages by `monorepo-builder.php` (default branc
 
 Package layering:
 - `vendra-support` holds provider-neutral **contracts** (`TenantResolver`,
-  `BelongsToTenant`, `TenantScope`, `TenantSchema`); every domain package depends on
-  it and on nothing tenant-specific.
+  `BelongsToTenant`, `TenantScope`, `TenantSchema`); reusable, tenant-agnostic
+  domain packages depend on it rather than a concrete tenancy provider.
 - `vendra-tenant` is the **generic tenancy engine**: it activates tenancy by binding
-  `ConfiguredTenantResolver`, and it names no business model. Domain and API packages
-  must never depend on it directly.
+  `ConfiguredTenantResolver`, and it names no business model. Tenant-agnostic domain
+  and API packages do not depend on it directly. The Store, Reseller, and Console
+  integration packages declare direct dependencies on the engine.
 - `vendra-store` supplies the **concrete tenant**: `Misaf\VendraStore\Models\Store`
   implements `Misaf\VendraTenant\Contracts\TenantContract`, so Store *is* the tenant
   — there is no separate `tenants` table. It also owns store domains and the

@@ -146,7 +146,7 @@ root-equivalent on the host. Four things to know before switching:
 ## Storefronts are not here
 
 The platform creates, replaces, and health-gates storefront containers itself
-through the Engine API — see `App\Services\DockerStorefrontProvisioner`.
+through the Engine API — see `Misaf\VendraStore\Services\ContainerStorefrontProvisioner`.
 There is no compose project per store. A storefront is one container carrying
 the `traefik.*` labels Traefik discovers and `io.vendra.*` labels marking it as
 platform-owned, so the platform never touches a container it did not place.
