@@ -12,6 +12,13 @@ beforeEach(function (): void {
     makeCurrentTestTenant();
 });
 
+it('rejects a nonpositive order line quantity', function (int $quantity): void {
+    $sellable = createTestUser();
+
+    expect(fn () => new OrderLineDraft($sellable, ['en' => 'Bouquet'], 3800, $quantity))
+        ->toThrow(InvalidArgumentException::class);
+})->with([0, -1]);
+
 it('converts a cart into a pending order with snapshot lines', function (): void {
     $customer = createTestUser();
     $cart = CartFactory::new()->forOwner($customer)->create();

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraOrder\Data;
 
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 final readonly class OrderLineDraft
 {
@@ -20,7 +21,9 @@ final readonly class OrderLineDraft
         public int $unitAmount,
         public int $quantity = 1,
         public ?array $metadata = null,
-    ) {}
+    ) {
+        throw_if($quantity < 1, InvalidArgumentException::class, 'Quantity must be positive.');
+    }
 
     public function lineAmount(): int
     {

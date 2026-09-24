@@ -6,6 +6,7 @@ namespace Misaf\VendraCart\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraCart\Models\CartItem;
 
@@ -18,6 +19,8 @@ final class AddCartItemAction
      */
     public function execute(Cart $cart, Model $sellable, int $quantity = 1, ?array $metadata = null): CartItem
     {
+        throw_if($quantity < 1, InvalidArgumentException::class, 'Quantity must be positive.');
+
         return DB::transaction(function () use ($cart, $sellable, $quantity, $metadata): CartItem {
             $cart->refreshForUpdate();
 

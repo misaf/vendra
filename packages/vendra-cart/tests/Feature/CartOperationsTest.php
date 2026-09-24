@@ -48,6 +48,21 @@ it('merges quantities when the sellable is already in the cart', function (): vo
         ->and($item->quantity)->toBe(5);
 });
 
+it('rejects nonpositive additions without changing the cart', function (int $quantity): void {
+    $cart = Cart::factory()->create();
+    $sellable = new class extends Model
+    {
+        use HasFactory;
+    };
+    $sellable->setAttribute('id', 7);
+    $action = new AddCartItemAction;
+    $existing = $action->execute($cart, $sellable, quantity: 2);
+
+    expect(fn () => $action->execute($cart, $sellable, quantity: $quantity))
+        ->toThrow(InvalidArgumentException::class)
+        ->and($existing->fresh()?->quantity)->toBe(2);
+})->with([0, -1]);
+
 it('prunes expired carts together with their items', function (): void {
     $expired = Cart::factory()->create(['expires_at' => now()->subMinute()]);
     CartItem::factory()->forCart($expired)->create();
