@@ -21,7 +21,7 @@ final class DeliveryZoneLinksHandler implements LinksHandlerInterface
      */
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
-        $builder->where('active', true);
+        $builder->active();
 
         if (! (Arr::get($context, 'operation', null)) instanceof CollectionOperationInterface) {
             $mcpData = Arr::get($context, 'mcp_data', []);
