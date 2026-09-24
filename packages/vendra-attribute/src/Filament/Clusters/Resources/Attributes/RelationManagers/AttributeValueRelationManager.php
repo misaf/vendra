@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Number;
 use Illuminate\Validation\Rules\Unique;
 use Misaf\VendraAttribute\Models\Attribute;
+use Misaf\VendraAttribute\Models\AttributeValue;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class AttributeValueRelationManager extends RelationManager
@@ -64,10 +65,10 @@ final class AttributeValueRelationManager extends RelationManager
                     ->maxLength(255)
                     ->unique(
                         ignoreRecord: true,
-                        modifyRuleUsing: fn (Unique $rule, ?Model $record): Unique => TenantAwareness::constrainUniqueRule($rule)
-                            ->where('attribute_id', $record?->getAttribute('attribute_id'))
-                            ->where('attributable_type', $record?->getAttribute('attributable_type'))
-                            ->where('attributable_id', $record?->getAttribute('attributable_id'))
+                        modifyRuleUsing: fn (Unique $rule, AttributeValue $record): Unique => TenantAwareness::constrainUniqueRule($rule)
+                            ->where('attribute_id', $record->attribute_id)
+                            ->where('attributable_type', $record->attributable_type)
+                            ->where('attributable_id', $record->attributable_id)
                             ->withoutTrashed(),
                     ),
             ]);
