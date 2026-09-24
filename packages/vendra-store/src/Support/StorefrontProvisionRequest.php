@@ -12,12 +12,14 @@ final readonly class StorefrontProvisionRequest
 {
     /**
      * @param  array<string, mixed>  $configuration  the configuration the storefront image boots on
+     * @param  list<string>  $aliases  the other domains the storefront also answers on
      */
     public function __construct(
         public string $slug,
         public string $domain,
         public string $image,
         public array $configuration,
+        public array $aliases = [],
     ) {}
 
     /**
@@ -41,6 +43,7 @@ final readonly class StorefrontProvisionRequest
                 'domain' => $deployment->domain,
                 'siteUrl' => 'https://'.$deployment->domain,
             ],
+            aliases: $deployment->aliasDomains(),
         );
     }
 

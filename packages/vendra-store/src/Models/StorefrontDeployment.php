@@ -19,6 +19,7 @@ use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Exceptions\InvalidStorefrontTransitionException;
 use Misaf\VendraStore\Exceptions\StoreNotServingException;
+use Misaf\VendraStore\Scopes\StoreScope;
 
 /**
  * `desired_state` is the intent; `status`, `container_name`, and `image_digest`
@@ -106,6 +107,25 @@ final class StorefrontDeployment extends Model
     public function url(): string
     {
         return 'https://'.$this->domain;
+    }
+
+    /**
+     * Get the store's alias domains the storefront also answers on.
+     *
+     * @return list<string>
+     */
+    public function aliasDomains(): array
+    {
+        return array_values(StoreDomain::query()
+            ->withoutGlobalScope(StoreScope::class)
+            ->where('store_id', $this->store_id)
+            ->where('active', true)
+            ->where('is_primary', false)
+            ->whereNot('name', $this->domain)
+            ->orderBy('name')
+            ->pluck('name')
+            ->filter(fn (mixed $name): bool => is_string($name))
+            ->all());
     }
 
     /**

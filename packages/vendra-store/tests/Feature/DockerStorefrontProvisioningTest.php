@@ -56,6 +56,7 @@ function storefrontRequest(array $overrides = []): StorefrontProvisionRequest
         domain: Arr::get($overrides, 'domain', 'acme.test'),
         image: Arr::get($overrides, 'image', 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123'),
         configuration: Arr::get($overrides, 'configuration', storefrontConfiguration()),
+        aliases: Arr::get($overrides, 'aliases', []),
     );
 }
 
@@ -129,6 +130,23 @@ it('routes the container with traefik labels the proxy already understands', fun
             && Arr::get($labels, 'traefik.http.services.acme-flowers.loadbalancer.healthcheck.path') === '/api/health'
             && Arr::get($labels, 'io.vendra.managed-by') === 'vendra'
             && Arr::get($labels, 'io.vendra.domain') === 'acme.test';
+    });
+});
+
+it('routes alias domains to the same storefront and labels them for reconciliation', function (): void {
+    fakeDockerEngine();
+
+    resolve(StorefrontProvisioner::class)->provision(storefrontRequest(['aliases' => ['acme.shop']]));
+
+    assertDockerRequestSent(function (Request $request): bool {
+        if (! Str::contains($request->target(), '/containers/create')) {
+            return false;
+        }
+
+        $labels = Arr::get($request->body, 'Labels');
+
+        return Arr::get($labels, 'traefik.http.routers.acme-flowers.rule') === 'Host(`acme.test`) || Host(`www.acme.test`) || Host(`acme.shop`) || Host(`www.acme.shop`)'
+            && Arr::get($labels, 'io.vendra.aliases') === 'acme.shop';
     });
 });
 

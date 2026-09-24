@@ -72,6 +72,10 @@ final class StorefrontConfigurationValidator
 
         throw_if(preg_match(self::DOMAIN, $request->domain) !== 1, InvalidArgumentException::class, 'The storefront domain is invalid.');
 
+        foreach ($request->aliases as $alias) {
+            throw_if(preg_match(self::DOMAIN, $alias) !== 1, InvalidArgumentException::class, 'A storefront alias domain is invalid.');
+        }
+
         throw_if(mb_trim($request->image) === '', InvalidArgumentException::class, 'A storefront image is required.');
 
         $configuration = $request->configuration;

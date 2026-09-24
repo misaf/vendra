@@ -191,6 +191,13 @@ makes the store's first domain primary, and `ReplaceStoreDomainAction` swaps the
 primary for a new one, keeping the old one as trashed history and leaving other
 active domains in place.
 
+The other active domains are aliases. `AddStoreDomainAliasAction` adds one and
+`MakeStoreDomainPrimaryAction` promotes one, demoting the previous primary to an
+alias, and `RemoveStoreDomainAliasAction` retires one as trashed history. The storefront answers on every active domain: its container's Traefik rule
+lists the primary and each alias, and reconciliation treats a container routing a
+different alias set as drift. Container labels cannot change in place, so each of
+these actions moves the deployment's `domain` where needed and forces a redeploy.
+
 ### Operating and offboarding a store
 
 `SuspendStoreAction` and `ReactivateStoreAction` own administrator-driven availability;
@@ -291,6 +298,8 @@ than five minutes is stale, meaning the worker or the scheduler stopped.
 
 This package ships the shared building blocks — `Filament\Pages\CreateStorePage`,
 `Filament\Schemas\StorefrontConfigurationFields`, `Filament\Actions\ReplaceDomainTableAction`,
+`Filament\Actions\AddDomainAliasTableAction`, `Filament\Actions\MakeDomainPrimaryTableAction`,
+`Filament\Actions\RemoveDomainAliasTableAction`,
 `Filament\Concerns\BuildsDailyTrend` — rather than panel resources. The console
 and reseller panels own those and differ only in which reseller they resolve as
 the store's billing reseller.

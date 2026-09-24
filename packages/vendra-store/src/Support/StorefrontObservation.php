@@ -13,6 +13,8 @@ final readonly class StorefrontObservation
         public ?string $image = null,
         public ?string $containerName = null,
         public ?string $domain = null,
+        /** @var list<string>|null */
+        public ?array $aliases = null,
     ) {}
 
     /**
@@ -25,7 +27,20 @@ final readonly class StorefrontObservation
             image: $container?->image,
             containerName: $container?->name,
             domain: $container?->labels[StorefrontContainerDefinitionFactory::DOMAIN_LABEL] ?? null,
+            aliases: self::aliasesFrom($container?->labels[StorefrontContainerDefinitionFactory::ALIASES_LABEL] ?? null),
         );
+    }
+
+    /**
+     * @return list<string>|null
+     */
+    private static function aliasesFrom(?string $label): ?array
+    {
+        if ($label === null) {
+            return null;
+        }
+
+        return array_values(array_filter(explode(',', $label), fn (string $alias): bool => $alias !== ''));
     }
 
     public function isAbsent(): bool
@@ -52,5 +67,25 @@ final readonly class StorefrontObservation
     public function isServingDomainOtherThan(string $domain): bool
     {
         return $this->domain !== null && $this->domain !== $domain;
+    }
+
+    /**
+     * Determine if the runtime is routing a different set of alias domains.
+     *
+     * Unobserved aliases, from a container older than the label, are not drift.
+     *
+     * @param  list<string>  $aliases
+     */
+    public function isServingAliasesOtherThan(array $aliases): bool
+    {
+        if ($this->aliases === null) {
+            return false;
+        }
+
+        $observed = $this->aliases;
+        sort($observed);
+        sort($aliases);
+
+        return $observed !== $aliases;
     }
 }

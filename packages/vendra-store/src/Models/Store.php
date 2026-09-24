@@ -296,6 +296,19 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
+     * Get the store's active domains other than the primary one.
+     *
+     * @return HasMany<StoreDomain, $this>
+     */
+    public function aliasDomains(): HasMany
+    {
+        return $this->domains()
+            ->where('active', true)
+            ->where('is_primary', false)
+            ->orderBy('name');
+    }
+
+    /**
      * @return HasOne<StorefrontDeployment, $this>
      */
     public function storefrontDeployment(): HasOne

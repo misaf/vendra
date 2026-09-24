@@ -28,4 +28,5 @@ return [
     'storefront_instagram_username' => 'Instagram-Benutzername',
     'administrator_credentials' => 'Administrator-Benutzername: :username · Passwort: :password',
     'new_domain' => 'Neue Domain',
+    'alias_domain' => 'Alias-Domain',
 ];

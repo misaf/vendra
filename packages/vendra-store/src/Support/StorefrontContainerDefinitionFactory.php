@@ -26,6 +26,11 @@ final readonly class StorefrontContainerDefinitionFactory
      */
     public const string DOMAIN_LABEL = 'io.vendra.domain';
 
+    /**
+     * The label holding the storefront's comma-separated alias domains, read back by reconciliation.
+     */
+    public const string ALIASES_LABEL = 'io.vendra.aliases';
+
     public function __construct(private StorefrontSettings $settings) {}
 
     /**
@@ -39,7 +44,7 @@ final readonly class StorefrontContainerDefinitionFactory
             name: $this->settings->containerName($request->slug),
             image: $request->image,
             environment: $this->environment($request),
-            labels: $this->labels($request->slug, $request->domain, $port),
+            labels: $this->labels($request->slug, $request->domain, $request->aliases, $port),
             port: $port,
             binds: $this->volumes(),
             network: $this->settings->network,
@@ -82,9 +87,10 @@ final readonly class StorefrontContainerDefinitionFactory
      *
      * The load balancer health check stops Traefik routing to an unhealthy container.
      *
+     * @param  list<string>  $aliases
      * @return array<string, string>
      */
-    private function labels(string $slug, string $domain, int $port): array
+    private function labels(string $slug, string $domain, array $aliases, int $port): array
     {
         $healthPath = $this->settings->healthPath;
 
@@ -97,7 +103,7 @@ final readonly class StorefrontContainerDefinitionFactory
             "traefik.http.services.{$slug}.loadbalancer.healthcheck.interval" => '10s',
             "traefik.http.services.{$slug}.loadbalancer.healthcheck.timeout" => '3s',
 
-            "traefik.http.routers.{$slug}.rule" => sprintf('Host(`%s`) || Host(`www.%s`)', $domain, $domain),
+            "traefik.http.routers.{$slug}.rule" => $this->routerRule([$domain, ...$aliases]),
             "traefik.http.routers.{$slug}.entrypoints" => 'websecure',
             "traefik.http.routers.{$slug}.tls" => 'true',
 
@@ -105,6 +111,7 @@ final readonly class StorefrontContainerDefinitionFactory
             self::MANAGED_BY_LABEL => self::MANAGED_BY,
             'io.vendra.slug' => $slug,
             self::DOMAIN_LABEL => $domain,
+            self::ALIASES_LABEL => implode(',', $aliases),
         ];
 
         if ($this->settings->certResolver !== '') {
@@ -116,6 +123,17 @@ final readonly class StorefrontContainerDefinitionFactory
         }
 
         return $labels;
+    }
+
+    /**
+     * @param  list<string>  $domains
+     */
+    private function routerRule(array $domains): string
+    {
+        return implode(' || ', array_map(
+            fn (string $domain): string => sprintf('Host(`%s`) || Host(`www.%s`)', $domain, $domain),
+            $domains,
+        ));
     }
 
     /** @return list<string> */

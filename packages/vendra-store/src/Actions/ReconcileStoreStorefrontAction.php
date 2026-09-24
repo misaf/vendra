@@ -57,7 +57,8 @@ final readonly class ReconcileStoreStorefrontAction
 
         if ($observed->state->isServing()
             && ! $observed->isServingOtherThan($this->desiredImage($deployment))
-            && ! $observed->isServingDomainOtherThan($deployment->domain)) {
+            && ! $observed->isServingDomainOtherThan($deployment->domain)
+            && ! $observed->isServingAliasesOtherThan($deployment->aliasDomains())) {
             /*
              | A deployment whose health gate timed out was recorded as Requested
              | for this pass to revisit. Serving the desired image on its domain
@@ -75,7 +76,7 @@ final readonly class ReconcileStoreStorefrontAction
         }
 
         /*
-         | Serving the wrong image, routed on a domain the store has moved off,
+         | Serving the wrong image, routed on domains the store has moved off,
          | failing its health check, or in a state this layer has no vocabulary
          | for. Replacing it is the only verb that reaches a known-good storefront
          | from any of them — and for the domain it is the only one available at
