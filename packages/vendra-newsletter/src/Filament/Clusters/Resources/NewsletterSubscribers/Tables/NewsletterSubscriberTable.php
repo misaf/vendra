@@ -97,8 +97,8 @@ final class NewsletterSubscriberTable
                         ->trueLabel(__('vendra-newsletter::attributes.active'))
                         ->falseLabel(__('vendra-newsletter::attributes.inactive'))
                         ->queries(
-                            true: fn (Builder $query): Builder => $query->whereNull('unsubscribed_at'),
-                            false: fn (Builder $query): Builder => $query->whereNotNull('unsubscribed_at'),
+                            true: fn (Builder $query): Builder => self::subscribed($query),
+                            false: fn (Builder $query): Builder => self::unsubscribed($query),
                         ),
                     QueryBuilder::make()
                         ->constraints([
@@ -127,5 +127,23 @@ final class NewsletterSubscriberTable
                 ]),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
+    }
+
+    /**
+     * @param  Builder<NewsletterSubscriber>  $query
+     * @return Builder<NewsletterSubscriber>
+     */
+    private static function subscribed(Builder $query): Builder
+    {
+        return $query->subscribed();
+    }
+
+    /**
+     * @param  Builder<NewsletterSubscriber>  $query
+     * @return Builder<NewsletterSubscriber>
+     */
+    private static function unsubscribed(Builder $query): Builder
+    {
+        return $query->unsubscribed();
     }
 }
