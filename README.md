@@ -68,11 +68,12 @@ site — lives in `docker/stacks/` and is driven by the host-level
 `docker/stacks/bin/vendra` script. See [docker/stacks/README.md](docker/stacks/README.md).
 
 Laravel stores tenant and storefront business state and owns the storefront
-containers: its queued provisioning, retry, and reconciliation workflows talk to
-a container runtime through `STOREFRONT_DOCKER_ENDPOINT` — Docker or a Podman
-compatibility socket, since only Engine-API calls are used — creating one container per
-storefront on the network named by `STOREFRONT_DOCKER_NETWORK`. It never creates
-the network, the proxy, or the TLS material — those belong to the estate.
+containers. Its queued provisioning, retry, and reconciliation workflows use
+`CONTAINER_DRIVER` to select Docker or Podman, connecting through the selected
+driver's `DOCKER_HOST` or `PODMAN_HOST` endpoint. They use only Engine-API calls
+and create one container per storefront on the network named by
+`STOREFRONT_NETWORK`. Laravel never creates the network, proxy, or TLS material;
+those belong to the estate.
 
 ## Module Development
 
