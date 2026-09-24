@@ -107,12 +107,19 @@ return new class extends Migration
                 ->index();
             $table->boolean('active')
                 ->index();
+            $table->boolean('is_primary')
+                ->default(false)
+                ->index();
             $table->timestampsTz();
             $table->softDeletesTz();
             $table->string('active_name_guard')
                 ->nullable()
                 ->virtualAs('CASE WHEN active = 1 AND deleted_at IS NULL THEN name ELSE NULL END');
             $table->unique('active_name_guard', 'store_domains_active_name_unique');
+            $table->unsignedBigInteger('primary_store_guard')
+                ->nullable()
+                ->virtualAs('CASE WHEN is_primary = 1 AND deleted_at IS NULL THEN store_id ELSE NULL END');
+            $table->unique('primary_store_guard', 'store_domains_primary_store_unique');
         });
     }
 

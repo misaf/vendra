@@ -18,7 +18,9 @@ final readonly class ReplaceStoreDomainAction
     public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * The previous domain is kept as trashed history. Demotion and creation
+     * Replace the primary domain; other active domains stay as aliases.
+     *
+     * The previous primary is kept as trashed history. Demotion and creation
      * share a transaction so a failed create never leaves the store without a
      * domain. The storefront is redeployed because its routing label cannot
      * change in place. The caller validates the domain first.
@@ -26,8 +28,8 @@ final readonly class ReplaceStoreDomainAction
     public function execute(Store $store, string $domain): StoreDomain
     {
         /*
-         | An offboarded store's trashed active domain is invisible here, so a
-         | replace would leave two active domains once the store is restored.
+         | An offboarded store's trashed primary domain is invisible here, so a
+         | replace would leave two primary domains once the store is restored.
          */
         throw_if($store->trashed(), (new ModelNotFoundException)->setModel(Store::class));
 
@@ -42,21 +44,22 @@ final readonly class ReplaceStoreDomainAction
 
         $storeDomain = $store->execute(fn (): StoreDomain => DB::transaction(function () use ($store, $domain, $deployment): StoreDomain {
             $store->storeDomains()
-                ->where('active', true)
+                ->primary()
                 ->get()
                 ->each(function (StoreDomain $current): void {
-                    $current->forceFill(['active' => false])->save();
+                    $current->forceFill(['active' => false, 'is_primary' => false])->save();
                     $current->delete();
                 });
 
             $created = $store->storeDomains()->create([
                 'name' => $domain,
                 'active' => true,
+                'is_primary' => true,
             ]);
 
             /*
              | Inside the transaction: the deployment's domain and the store's
-             | active domain describe the same fact, and a replace that applied
+             | primary domain describe the same fact, and a replace that applied
              | one without the other is exactly the state convergence would go on
              | reading as correct.
              */

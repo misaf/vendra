@@ -286,6 +286,16 @@ final class Store extends SpatieTenant implements ShouldLogActivity, TenantContr
     }
 
     /**
+     * @return HasOne<StoreDomain, $this>
+     */
+    public function primaryDomain(): HasOne
+    {
+        return $this->hasOne(StoreDomain::class)
+            ->withoutGlobalScope(StoreScope::class)
+            ->where('is_primary', true);
+    }
+
+    /**
      * @return HasOne<StorefrontDeployment, $this>
      */
     public function storefrontDeployment(): HasOne

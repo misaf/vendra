@@ -44,7 +44,7 @@ final class StoreTable
 
                 TextColumn::make('domain')
                     ->label(__('vendra-reseller::attributes.domain'))
-                    ->state(fn (Store $record): ?string => $record->domains->first()?->name)
+                    ->state(fn (Store $record): ?string => $record->primaryDomain?->name)
                     ->placeholder('—'),
 
                 TextColumn::make('storefront_status')

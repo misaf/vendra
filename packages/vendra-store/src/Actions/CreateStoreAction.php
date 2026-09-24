@@ -65,6 +65,7 @@ final readonly class CreateStoreAction
             $createdStore->execute(fn () => $createdStore->storeDomains()->create([
                 'name' => $domain,
                 'active' => true,
+                'is_primary' => true,
             ]));
 
             $createdUser = $this->createUserAction->execute(

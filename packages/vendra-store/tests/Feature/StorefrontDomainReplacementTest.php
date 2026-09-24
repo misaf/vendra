@@ -27,7 +27,7 @@ it('moves the storefront deployment to the new domain', function (): void {
     Queue::fake();
 
     $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
+    StoreDomain::factory()->for($store)->primary()->create(['name' => 'old.test']);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'old.test']);
 
     resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
@@ -39,7 +39,7 @@ it('forces a redeploy so the container is rebuilt with the new routing label', f
     Queue::fake();
 
     $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
+    StoreDomain::factory()->for($store)->primary()->create(['name' => 'old.test']);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'old.test']);
 
     resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
@@ -55,7 +55,7 @@ it('still records the new domain when no container runtime is configured', funct
     config()->set('container.drivers.docker.host', '');
 
     $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
+    StoreDomain::factory()->for($store)->primary()->create(['name' => 'old.test']);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'old.test']);
 
     resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
@@ -70,7 +70,7 @@ it('leaves a store with no storefront alone', function (): void {
     Queue::fake();
 
     $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->create(['name' => 'old.test', 'active' => true]);
+    StoreDomain::factory()->for($store)->primary()->create(['name' => 'old.test']);
 
     $replaced = resolve(ReplaceStoreDomainAction::class)->execute($store, 'new.test');
 

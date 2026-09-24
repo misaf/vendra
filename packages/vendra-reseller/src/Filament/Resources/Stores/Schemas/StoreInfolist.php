@@ -28,7 +28,7 @@ final class StoreInfolist
                         NameEntry::make(),
                         SlugEntry::make()->label(__('vendra-reseller::attributes.slug'))->copyable(),
                         TextEntry::make('active_domain')->label(__('vendra-reseller::attributes.domain'))
-                            ->state(fn (Store $record): ?string => $record->domains->first()?->name)->placeholder('—'),
+                            ->state(fn (Store $record): ?string => $record->primaryDomain?->name)->placeholder('—'),
                         TextEntry::make('admin_url')->label(__('vendra-reseller::attributes.admin_url'))
                             ->state(fn (Store $record): string => $record->adminUrl())
                             ->url(fn (Store $record): string => $record->adminUrl())

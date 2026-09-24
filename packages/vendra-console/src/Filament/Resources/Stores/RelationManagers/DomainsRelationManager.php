@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\DeletedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
+use Misaf\VendraSupport\Filament\Tables\Columns\IsPrimaryIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\NameColumn;
 
 final class DomainsRelationManager extends RelationManager
@@ -41,6 +42,8 @@ final class DomainsRelationManager extends RelationManager
                     ->searchable(),
 
                 IsActiveIconColumn::make(),
+
+                IsPrimaryIconColumn::make(),
 
                 CreatedAtColumn::make()
                     ->sortable(),

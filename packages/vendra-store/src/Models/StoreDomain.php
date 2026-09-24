@@ -23,7 +23,8 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
 /**
- * The active domain resolves the store; replaced domains are kept trashed as history.
+ * Every active domain resolves the store, and the primary one is its canonical host.
+ * Replaced domains are kept trashed as history.
  *
  * @property int $id
  * @property int $store_id
@@ -31,11 +32,12 @@ use Spatie\Sluggable\SlugOptions;
  * @property string $description
  * @property string $slug
  * @property bool $active
+ * @property bool $is_primary
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  */
-#[Fillable(['name', 'description', 'slug', 'active'])]
+#[Fillable(['name', 'description', 'slug', 'active', 'is_primary'])]
 #[UseFactory(StoreDomainFactory::class)]
 final class StoreDomain extends Model implements ShouldLogActivity
 {
@@ -60,6 +62,7 @@ final class StoreDomain extends Model implements ShouldLogActivity
             'description' => 'string',
             'slug' => 'string',
             'active' => 'boolean',
+            'is_primary' => 'boolean',
         ];
     }
 
@@ -81,6 +84,16 @@ final class StoreDomain extends Model implements ShouldLogActivity
     protected function inactive(Builder $query): Builder
     {
         return $query->where('active', false);
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function primary(Builder $query): Builder
+    {
+        return $query->where('is_primary', true);
     }
 
     /**

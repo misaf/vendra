@@ -28,6 +28,7 @@ final class StoreDomainFactory extends Factory
             'description' => fake()->text(),
             'slug' => fn (array $attributes) => Str::slug(Arr::get($attributes, 'name')),
             'active' => fake()->boolean(80),
+            'is_primary' => false,
         ];
     }
 
@@ -41,6 +42,11 @@ final class StoreDomainFactory extends Factory
     public function active(): static
     {
         return $this->state(fn (): array => ['active' => true]);
+    }
+
+    public function primary(): static
+    {
+        return $this->state(fn (): array => ['active' => true, 'is_primary' => true]);
     }
 
     public function inactive(): static

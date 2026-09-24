@@ -43,6 +43,18 @@ it('stamps the owning reseller on a store created under it', function (): void {
         ->and($reseller->stores()->count())->toBe(1);
 });
 
+it("makes the given domain the store's primary domain", function (): void {
+    $result = resolve(CreateStoreAction::class)->execute(
+        name: 'Acme Store',
+        domain: 'acme.test',
+        username: 'admin_acme',
+        email: 'admin@acme.test',
+        password: 'secret-password',
+    );
+
+    expect(Arr::get($result, 'store')->primaryDomain?->name)->toBe('acme.test');
+});
+
 it('rejects creating a store once the reseller reaches its plan limit', function (): void {
     $reseller = subscribedReseller(maxUnits: 1);
 

@@ -182,6 +182,15 @@ than a quota failure. The action names no reseller class — the reseller is a
 `SubscriptionSubscriber` — which is what keeps this package installable without
 `misaf/vendra-reseller`.
 
+### Store domains
+
+Every active domain resolves its store. One of them is the store's primary domain
+(`is_primary`), its canonical host, which the panels show and `Store::primaryDomain()`
+returns; the database allows only one live primary per store. `CreateStoreAction`
+makes the store's first domain primary, and `ReplaceStoreDomainAction` swaps the
+primary for a new one, keeping the old one as trashed history and leaving other
+active domains in place.
+
 ### Operating and offboarding a store
 
 `SuspendStoreAction` and `ReactivateStoreAction` own administrator-driven availability;
