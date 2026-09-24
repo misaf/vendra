@@ -14,7 +14,6 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\AddAdministratorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\ChangeAdministratorEmailTableAction;
 use Misaf\VendraConsole\Filament\Resources\Stores\Actions\ChangeAdministratorPasswordTableAction;
@@ -27,7 +26,6 @@ use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\UpdatedAtColumn;
-use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Misaf\VendraUser\Filament\Tables\Columns\EmailColumn;
 use Misaf\VendraUser\Filament\Tables\Columns\EmailVerifiedAtColumn;
 use Misaf\VendraUser\Filament\Tables\Columns\UsernameColumn;
@@ -104,19 +102,11 @@ final class AdministratorsRelationManager extends RelationManager
     }
 
     /**
-     * Keep users holding the store's admin role; other store users are listed in the store's own panel.
-     *
      * @param  Builder<User>  $query
      * @return Builder<User>
      */
     private function onlyAdministrators(Builder $query): Builder
     {
-        $store = self::administratorStore($this);
-
-        return $query->whereHas('roles', fn (Builder $roles): Builder => $roles
-            ->withoutGlobalScopes()
-            ->where($roles->qualifyColumn(TenantSchema::column()), $store->getKey())
-            ->where($roles->qualifyColumn('name'), Config::string('vendra-permission.admin_role'))
-            ->where($roles->qualifyColumn('guard_name'), 'web'));
+        return $query->administratorOf(self::administratorStore($this));
     }
 }
