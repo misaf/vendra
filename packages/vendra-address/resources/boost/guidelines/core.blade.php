@@ -19,4 +19,4 @@
 - Keep `AddressPolicy`, `AddressPolicyEnum`, and `PermissionPolicySeeder` aligned so Filament strict authorization remains valid.
 - Keep addresses country-adaptable: use ISO country code, locality, administrative area, sorting code, three address lines, locale, and JSON metadata for jurisdiction-specific fields.
 - Address metadata is structured provider/country data, not translated content.
-- Each user profile has exactly one default address (`is_default`), kept by the synchronous `Observers\AddressObserver`, which uses vendra-support's `MaintainsSingleFlagPerOwner`.
+- Each user profile has exactly one default address (`is_default`), kept by the synchronous `Observers\AddressObserver`, which uses vendra-support's `MaintainsSingleFlagPerOwner`; the `default_profile_guard` unique index backs it in the database.

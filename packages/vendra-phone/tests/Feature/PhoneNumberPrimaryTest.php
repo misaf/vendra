@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\UniqueConstraintViolationException;
 use Misaf\VendraPhone\Models\PhoneNumber;
 use Misaf\VendraUserProfile\Models\UserProfile;
 
@@ -56,3 +57,10 @@ it('hands the primary flag to the oldest remaining number when it is deleted', f
         ->and($second->refresh()->is_primary)->toBeTrue()
         ->and($third->refresh()->is_primary)->toBeFalse();
 });
+
+it('rejects a second primary number in the database', function (): void {
+    PhoneNumber::factory()->forUserProfile($this->profile)->create();
+    $second = PhoneNumber::factory()->forUserProfile($this->profile)->create();
+
+    $second->forceFill(['is_primary' => true])->saveQuietly();
+})->throws(UniqueConstraintViolationException::class);

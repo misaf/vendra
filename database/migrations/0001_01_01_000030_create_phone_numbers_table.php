@@ -28,11 +28,15 @@ return new class extends Migration
             $table->timestampTz('verified_at')->nullable();
             $table->timestampsTz();
             $table->softDeletesTz();
+            $table->unsignedBigInteger('primary_profile_guard')
+                ->nullable()
+                ->virtualAs('CASE WHEN is_primary AND deleted_at IS NULL THEN user_profile_id ELSE NULL END');
 
             $table->index(TenantSchema::tenantIndex(['user_profile_id']));
             $table->index(TenantSchema::tenantIndex(['country_code']));
             $table->index(TenantSchema::tenantIndex(['number']));
             $table->index(TenantSchema::tenantIndex(['is_primary']));
+            $table->unique(TenantSchema::tenantIndex(['primary_profile_guard']), 'phone_numbers_one_primary_per_profile_unique');
         });
     }
 

@@ -36,11 +36,15 @@ return new class extends Migration
             $table->timestampTz('verified_at')->nullable();
             $table->timestampsTz();
             $table->softDeletesTz();
+            $table->unsignedBigInteger('default_profile_guard')
+                ->nullable()
+                ->virtualAs('CASE WHEN is_default AND deleted_at IS NULL THEN user_profile_id ELSE NULL END');
 
             $table->index(TenantSchema::tenantIndex(['user_profile_id']));
             $table->index(TenantSchema::tenantIndex(['country_code']));
             $table->index(TenantSchema::tenantIndex(['locality']));
             $table->index(TenantSchema::tenantIndex(['is_default']));
+            $table->unique(TenantSchema::tenantIndex(['default_profile_guard']), 'addresses_one_default_per_profile_unique');
         });
     }
 

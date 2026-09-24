@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\UniqueConstraintViolationException;
 use Misaf\VendraAddress\Models\Address;
 use Misaf\VendraUserProfile\Models\UserProfile;
 
@@ -56,3 +57,10 @@ it('hands the default to the oldest remaining address when it is deleted', funct
         ->and($second->refresh()->is_default)->toBeTrue()
         ->and($third->refresh()->is_default)->toBeFalse();
 });
+
+it('rejects a second default address in the database', function (): void {
+    Address::factory()->forUserProfile($this->profile)->create();
+    $second = Address::factory()->forUserProfile($this->profile)->create();
+
+    $second->forceFill(['is_default' => true])->saveQuietly();
+})->throws(UniqueConstraintViolationException::class);

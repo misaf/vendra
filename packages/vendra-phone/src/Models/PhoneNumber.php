@@ -47,7 +47,7 @@ use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
     'is_primary',
     'verified_at',
 ])]
-#[Hidden(['tenant_id'])]
+#[Hidden(['tenant_id', 'primary_profile_guard'])]
 #[ObservedBy([PhoneNumberObserver::class])]
 #[UseFactory(PhoneNumberFactory::class)]
 final class PhoneNumber extends Model implements ShouldLogActivity

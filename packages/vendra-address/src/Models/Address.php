@@ -63,7 +63,7 @@ use Misaf\VendraUserProfile\Traits\BelongsToUserProfile;
     'is_default',
     'verified_at',
 ])]
-#[Hidden(['tenant_id'])]
+#[Hidden(['tenant_id', 'default_profile_guard'])]
 #[ObservedBy([AddressObserver::class])]
 #[UseFactory(AddressFactory::class)]
 final class Address extends Model implements ShouldLogActivity
