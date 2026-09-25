@@ -44,7 +44,7 @@ final class StoreServiceProvider extends PackageServiceProvider
                 'create_storefront_images_table',
                 'create_storefront_deployments_table',
             ])
-            ->hasCommands(
+            ->hasConsoleCommands(
                 ReconcileStorefrontDeploymentsCommand::class,
                 RedeployStorefrontsCommand::class,
                 RetryFailedStorefrontDeploymentsCommand::class,

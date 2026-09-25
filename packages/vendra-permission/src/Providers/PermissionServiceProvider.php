@@ -38,7 +38,7 @@ final class PermissionServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_permission_tables',
             ])
-            ->hasCommands(
+            ->hasConsoleCommands(
                 FeatureToggleCommand::class,
                 SeedCommand::class,
             )
@@ -68,7 +68,7 @@ final class PermissionServiceProvider extends PackageServiceProvider
             is_string($permissionsTable) ? $permissionsTable : 'permissions',
             is_string($rolesTable) ? $rolesTable : 'roles',
         );
-        $this->app->make(TenantSeeders::class)->register('vendra-permission:seed', priority: 10);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 10);
 
         AboutCommand::add('Vendra Permission', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-permission')]);
 

@@ -187,13 +187,12 @@ than a quota failure. The action names no reseller class — the reseller is a
 Every active domain resolves its store. One of them is the store's primary domain
 (`is_primary`), its canonical host, which the panels show and `Store::primaryDomain()`
 returns; the database allows only one live primary per store. `CreateStoreAction`
-makes the store's first domain primary, and `ReplaceStoreDomainAction` swaps the
-primary for a new one, keeping the old one as trashed history and leaving other
-active domains in place.
+makes the store's first domain primary, and it stays primary for the life of the
+store: nothing replaces, demotes or removes it.
 
 The other active domains are aliases. `AddStoreDomainAliasAction` adds one and
-`MakeStoreDomainPrimaryAction` promotes one, demoting the previous primary to an
-alias, and `RemoveStoreDomainAliasAction` retires one as trashed history. The storefront answers on every active domain: its container's Traefik rule
+`RemoveStoreDomainAliasAction` retires one as trashed history, refusing the
+primary. The storefront answers on every active domain: its container's Traefik rule
 lists the primary and each alias, and reconciliation treats a container routing a
 different alias set as drift. Container labels cannot change in place, so each of
 these actions moves the deployment's `domain` where needed and forces a redeploy.
@@ -306,9 +305,14 @@ than five minutes is stale, meaning the worker or the scheduler stopped.
 ## Filament
 
 This package ships the shared building blocks — `Filament\Pages\CreateStorePage`,
-`Filament\Schemas\StorefrontConfigurationFields`, `Filament\Actions\ReplaceDomainTableAction`,
-`Filament\Actions\AddDomainAliasTableAction`, `Filament\Actions\MakeDomainPrimaryTableAction`,
-`Filament\Actions\RemoveDomainAliasTableAction`,
+`Filament\Schemas\StorefrontConfigurationFields`,
+`Filament\RelationManagers\DomainsRelationManager` (a store's domains; panels
+subclass it and supply their `Filament\Actions\AddDomainAliasTableAction` header
+action and `Filament\Actions\RemoveDomainAliasTableAction` row action, which
+carry the panel's access rules),
+`Filament\Widgets\StoreStatusOverview` (a panel supplies the stores it may see and
+the filtered list URLs), `Filament\Widgets\StorePlanUsage` (a store record's usage
+against each plan limit, listed only when `hasStats()`), and
 `Filament\Concerns\BuildsDailyTrend` — rather than panel resources. The console
 and reseller panels own those and differ only in which reseller they resolve as
 the store's billing reseller.

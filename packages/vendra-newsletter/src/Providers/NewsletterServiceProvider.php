@@ -34,9 +34,9 @@ final class NewsletterServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_newsletters_table',
             ])
-            ->hasCommands(
-                SeedCommand::class,
+            ->hasConsoleCommands(
                 SendScheduledNewslettersCommand::class,
+                SeedCommand::class,
             )
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-newsletter');
@@ -57,7 +57,7 @@ final class NewsletterServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('newsletters', 'newsletter_subscribers');
-        $this->app->make(TenantSeeders::class)->register('vendra-newsletter:seed', priority: 70);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 70);
 
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
             if (! Config::boolean('vendra-newsletter.schedule.enabled', true)) {

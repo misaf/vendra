@@ -6,6 +6,7 @@ namespace Misaf\VendraSupport\Tenancy\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
+use Illuminate\Database\Seeder;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\multiselect;
@@ -33,7 +34,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
         if ($seederClasses === null) {
             $this->error(sprintf(
                 'Invalid seeder selection. Available seeders: all, %s.',
-                implode(', ', array_keys($this->seeders())),
+                implode(', ', array_keys(static::seeders())),
             ));
 
             return self::FAILURE;
@@ -74,9 +75,11 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
     }
 
     /**
-     * @return array<string, class-string>
+     * Get the module's seeders by key; tenant provisioning runs all of them.
+     *
+     * @return array<string, class-string<Seeder>>
      */
-    abstract protected function seeders(): array;
+    abstract public static function seeders(): array;
 
     protected function prepareForSeeding(): bool
     {
@@ -94,7 +97,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
 
         return array_values(array_filter(multiselect(
             label: 'Which seeders should run?',
-            options: array_keys($this->seeders()),
+            options: array_keys(static::seeders()),
             required: true,
             hint: 'Choose one or more seeders.',
         ), is_string(...)));
@@ -110,7 +113,7 @@ abstract class SeedCommand extends Command implements PromptsForMissingInput
             return null;
         }
 
-        $available = $this->seeders();
+        $available = static::seeders();
 
         if (in_array('all', $seeders, true)) {
             return array_values($available);

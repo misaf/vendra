@@ -21,7 +21,7 @@ final class SeedCommand extends TenantSeedCommand
     /**
      * @return array<string, class-string>
      */
-    protected function seeders(): array
+    public static function seeders(): array
     {
         return [
             'permission-policies' => PermissionPolicySeeder::class,

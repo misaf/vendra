@@ -27,6 +27,8 @@ return [
     'storefront_telegram_username' => 'نام کاربری تلگرام',
     'storefront_instagram_username' => 'نام کاربری اینستاگرام',
     'administrator_credentials' => 'نام کاربری مدیر: :username · رمز عبور: :password',
-    'new_domain' => 'دامنه جدید',
     'alias_domain' => 'دامنه فرعی',
+    'failed_storefronts' => 'فروشگاه‌های ناموفق',
+    'domain' => 'دامنه',
+    'domains' => 'دامنه‌ها',
 ];

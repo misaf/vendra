@@ -33,7 +33,10 @@ final class TransactionServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_transactions_table',
             ])
-            ->hasCommands(SeedCommand::class, VerifyWalletBalancesCommand::class)
+            ->hasConsoleCommands(
+                VerifyWalletBalancesCommand::class,
+                SeedCommand::class,
+            )
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-transaction');
             });
@@ -70,7 +73,7 @@ final class TransactionServiceProvider extends PackageServiceProvider
         | the `vendra-tenant:enable` retrofit must never backfill those rows or
         | force the column NOT NULL.
         */
-        $this->app->make(TenantSeeders::class)->register('vendra-transaction:seed', priority: 32);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 32);
 
         AboutCommand::add('Vendra Transaction', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-transaction')]);
 

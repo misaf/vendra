@@ -54,7 +54,7 @@ final class ResellerServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_resellers_table',
             ])
-            ->hasCommand(ProvisionStoreCommand::class);
+            ->hasConsoleCommand(ProvisionStoreCommand::class);
     }
 
     public function packageRegistered(): void

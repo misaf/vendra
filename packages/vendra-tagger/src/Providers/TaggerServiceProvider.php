@@ -35,7 +35,7 @@ final class TaggerServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_tag_tables',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-tagger');
             });
@@ -74,7 +74,7 @@ final class TaggerServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('tags');
-        $this->app->make(TenantSeeders::class)->register('vendra-tagger:seed', priority: 70);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 70);
 
         AboutCommand::add('Vendra Tagger', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-tagger')]);
     }

@@ -48,6 +48,13 @@ Optionally publish the shared panel configuration:
 php artisan vendor:publish --tag=vendra-support-config
 ```
 
+A module registers its seed command class with `Tenancy\TenantSeeders`
+(`register(SeedCommand::class, priority: 30)`). When a store is provisioned with
+seeding, `Tenancy\Listeners\RunTenantSeeders` runs every registered command's
+static `seeders()` directly inside the new tenant, not through Artisan, so seed
+commands are registered with `hasConsoleCommand()` and provisioning still seeds
+inside a web request.
+
 Demo seeders use bundled JSON fixtures in production and when their declared factory classes are unavailable. Local monorepo development continues to use factories when they are autoloadable.
 
 ## Testing

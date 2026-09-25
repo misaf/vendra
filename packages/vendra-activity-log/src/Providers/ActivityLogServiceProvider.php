@@ -30,7 +30,7 @@ final class ActivityLogServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_activity_log_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-activity-log');
             });
@@ -54,7 +54,7 @@ final class ActivityLogServiceProvider extends PackageServiceProvider
             null,
             'activity_log',
         );
-        $this->app->make(TenantSeeders::class)->register('vendra-activity-log:seed', priority: 85);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 85);
 
         AboutCommand::add('Vendra Activity Log', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-activity-log')]);
 

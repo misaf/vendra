@@ -27,6 +27,8 @@ return [
     'storefront_telegram_username' => 'Telegram username',
     'storefront_instagram_username' => 'Instagram username',
     'administrator_credentials' => 'Administrator username: :username · Password: :password',
-    'new_domain' => 'New domain',
     'alias_domain' => 'Alias domain',
+    'failed_storefronts' => 'Failed storefronts',
+    'domain' => 'Domain',
+    'domains' => 'Domains',
 ];

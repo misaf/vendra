@@ -32,7 +32,7 @@ final class WishlistServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_wishlists_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-wishlist');
             });
@@ -58,7 +58,7 @@ final class WishlistServiceProvider extends PackageServiceProvider
         ]);
 
         $this->app->make(TenantTableRegistry::class)->register('wishlists');
-        $this->app->make(TenantSeeders::class)->register('vendra-wishlist:seed', priority: 61);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 61);
 
         AboutCommand::add('Vendra Wishlist', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-wishlist')]);
     }

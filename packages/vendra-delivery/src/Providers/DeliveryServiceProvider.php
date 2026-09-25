@@ -33,7 +33,7 @@ final class DeliveryServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_deliveries_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-delivery');
             });
@@ -60,7 +60,7 @@ final class DeliveryServiceProvider extends PackageServiceProvider
         ]);
 
         $this->app->make(TenantTableRegistry::class)->register('delivery_zones', 'delivery_slots', 'deliveries');
-        $this->app->make(TenantSeeders::class)->register('vendra-delivery:seed', priority: 60);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 60);
 
         AboutCommand::add('Vendra Delivery', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-delivery')]);
     }

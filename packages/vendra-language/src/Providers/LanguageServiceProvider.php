@@ -43,7 +43,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_languages_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-language');
             });
@@ -67,7 +67,7 @@ final class LanguageServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('languages', 'language_lines');
-        $this->app->make(TenantSeeders::class)->register('vendra-language:seed', priority: 80);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 80);
 
         $this->configureLanguageSwitch();
 

@@ -200,7 +200,7 @@ final class PlanSummary extends StatsOverviewWidget
         $stat = Stat::make(__('vendra-reseller::attributes.active_stores'), $counts->count(StoreStatus::Active))
             ->icon(Heroicon::OutlinedBuildingStorefront)
             ->url(StoreResource::getUrl('index', [
-                'tableFilters' => ['status' => ['value' => StoreStatus::Active->value]],
+                'filters' => ['status' => ['value' => StoreStatus::Active->value]],
             ]));
 
         if ($billingSuspended > 0) {

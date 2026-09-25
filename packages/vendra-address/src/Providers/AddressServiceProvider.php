@@ -23,14 +23,14 @@ final class AddressServiceProvider extends PackageServiceProvider
         $package
             ->name('vendra-address')
             ->hasTranslations()
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasMigration('create_addresses_table');
     }
 
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('addresses');
-        $this->app->make(TenantSeeders::class)->register('vendra-address:seed', priority: 22);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 22);
 
         UserProfile::resolveRelationUsing(
             'addresses',

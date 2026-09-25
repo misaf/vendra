@@ -8,9 +8,12 @@ use Closure;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Arr;
+use LogicException;
 use Misaf\VendraStore\Actions\AddStoreDomainAliasAction;
+use Misaf\VendraStore\Filament\RelationManagers\DomainsRelationManager;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraSupport\Contracts\TenantEntitlements;
@@ -18,7 +21,8 @@ use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 
 /**
- * Panels override {@see authorizationCallback()} to apply their own access rules.
+ * Sits in the header of {@see DomainsRelationManager}. Panels override
+ * {@see authorizationCallback()} to apply their own access rules.
  */
 abstract class AddDomainAliasTableAction extends Action
 {
@@ -34,13 +38,13 @@ abstract class AddDomainAliasTableAction extends Action
         $this
             ->label(__('vendra-store::actions.add_domain_alias'))
             ->icon(Heroicon::OutlinedPlusCircle)
-            ->visible(fn (Store $record): bool => ! $record->trashed())
-            ->disabled(fn (Store $record, TenantEntitlements $entitlements): bool => ! $entitlements->canAdd(PlanLimit::DomainsPerStore, tenant: $record))
-            ->tooltip(fn (Store $record, TenantEntitlements $entitlements): ?string => $entitlements->canAdd(PlanLimit::DomainsPerStore, tenant: $record)
+            ->visible(fn (): bool => ! $this->domainStore()->trashed())
+            ->disabled(fn (TenantEntitlements $entitlements): bool => ! $entitlements->canAdd(PlanLimit::DomainsPerStore, tenant: $this->domainStore()))
+            ->tooltip(fn (TenantEntitlements $entitlements): ?string => $entitlements->canAdd(PlanLimit::DomainsPerStore, tenant: $this->domainStore())
                 ? null
                 : EntitlementExceededException::limitReached(
                     PlanLimit::DomainsPerStore,
-                    $entitlements->limit(PlanLimit::DomainsPerStore, $record) ?? 0,
+                    $entitlements->limit(PlanLimit::DomainsPerStore, $this->domainStore()) ?? 0,
                 )->getMessage())
             ->schema([
                 TextInput::make('domain')
@@ -52,7 +56,7 @@ abstract class AddDomainAliasTableAction extends Action
                         ? null
                         : StoreDomain::normalizeDomain($state)),
             ])
-            ->action(function (Store $record, array $data): void {
+            ->action(function (array $data): void {
                 $domain = Arr::get($data, 'domain');
 
                 if (! is_string($domain)) {
@@ -60,7 +64,7 @@ abstract class AddDomainAliasTableAction extends Action
                 }
 
                 try {
-                    resolve(AddStoreDomainAliasAction::class)->execute($record, $domain);
+                    resolve(AddStoreDomainAliasAction::class)->execute($this->domainStore(), $domain);
                 } catch (EntitlementExceededException $exception) {
                     Notification::make()
                         ->danger()
@@ -81,6 +85,19 @@ abstract class AddDomainAliasTableAction extends Action
         if ($authorization !== null) {
             $this->authorize($authorization);
         }
+    }
+
+    /**
+     * Get the store the alias is added to: the relation manager's owner record.
+     */
+    protected function domainStore(): Store
+    {
+        $livewire = $this->getLivewire();
+        $store = $livewire instanceof RelationManager ? $livewire->getOwnerRecord() : null;
+
+        throw_unless($store instanceof Store, LogicException::class, 'Adding a domain alias requires a Store parent record.');
+
+        return $store;
     }
 
     /**

@@ -32,7 +32,10 @@ final class CartServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_carts_table',
             ])
-            ->hasCommands(SeedCommand::class, PruneExpiredCartsCommand::class)
+            ->hasConsoleCommands(
+                PruneExpiredCartsCommand::class,
+                SeedCommand::class,
+            )
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-cart');
             });
@@ -52,7 +55,7 @@ final class CartServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('carts');
-        $this->app->make(TenantSeeders::class)->register('vendra-cart:seed', priority: 58);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 58);
 
         $this->callAfterResolving(Schedule::class, function (Schedule $schedule): void {
             if (! Config::boolean('vendra-cart.schedule.enabled', true)) {

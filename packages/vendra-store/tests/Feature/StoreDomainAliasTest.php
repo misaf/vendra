@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Validator;
 use Misaf\VendraStore\Actions\AddStoreDomainAliasAction;
-use Misaf\VendraStore\Actions\MakeStoreDomainPrimaryAction;
 use Misaf\VendraStore\Actions\RemoveStoreDomainAliasAction;
 use Misaf\VendraStore\Enums\StorefrontRuntimeState;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
@@ -34,37 +35,6 @@ it('adds an active alias domain and redeploys the storefront to route it', funct
     );
 });
 
-it('promotes an alias to primary and keeps the previous primary as an alias', function (): void {
-    Queue::fake();
-
-    $store = Store::factory()->create();
-    $previous = StoreDomain::factory()->for($store)->primary()->create(['name' => 'main.test']);
-    $alias = StoreDomain::factory()->for($store)->active()->create(['name' => 'alias.test']);
-    $deployment = StorefrontDeployment::factory()->for($store)->create(['domain' => 'main.test']);
-
-    resolve(MakeStoreDomainPrimaryAction::class)->execute($store, $alias);
-
-    expect($alias->fresh()?->is_primary)->toBeTrue()
-        ->and($previous->fresh()?->is_primary)->toBeFalse()
-        ->and($previous->fresh()?->active)->toBeTrue()
-        ->and($deployment->fresh()?->domain)->toBe('alias.test')
-        ->and($deployment->fresh()?->aliasDomains())->toBe(['main.test']);
-
-    Queue::assertPushed(
-        ProvisionStorefrontJob::class,
-        fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force,
-    );
-});
-
-it('refuses to make another store\'s domain primary', function (): void {
-    $store = Store::factory()->create();
-    StoreDomain::factory()->for($store)->primary()->create(['name' => 'main.test']);
-    $foreign = StoreDomain::factory()->for(Store::factory()->create())->active()->create(['name' => 'foreign.test']);
-
-    expect(fn () => resolve(MakeStoreDomainPrimaryAction::class)->execute($store, $foreign))
-        ->toThrow(InvalidArgumentException::class);
-});
-
 it('removes an alias as trashed history and redeploys the storefront without it', function (): void {
     Queue::fake();
 
@@ -79,7 +49,7 @@ it('removes an alias as trashed history and redeploys the storefront without it'
 
     expect($removed?->trashed())->toBeTrue()
         ->and($removed?->active)->toBeFalse()
-        ->and($deployment->aliasDomains())->toBe([]);
+        ->and($deployment->aliasDomains())->toBeEmpty();
 
     Queue::assertPushed(
         ProvisionStorefrontJob::class,
@@ -94,6 +64,20 @@ it('refuses to remove the primary domain as an alias', function (): void {
     expect(fn () => resolve(RemoveStoreDomainAliasAction::class)->execute($store, $primary))
         ->toThrow(InvalidArgumentException::class);
 });
+
+it('allows only one live primary domain per store', function (): void {
+    $store = Store::factory()->create();
+    StoreDomain::factory()->for($store)->primary()->create(['name' => 'first.test']);
+
+    expect(fn () => StoreDomain::factory()->for($store)->primary()->create(['name' => 'second.test']))
+        ->toThrow(UniqueConstraintViolationException::class);
+});
+
+it('rejects domains that collide with an administration host or a retained deployment', function (string $domain): void {
+    StorefrontDeployment::factory()->create(['domain' => 'held.test']);
+
+    expect(Validator::make(['domain' => $domain], ['domain' => StoreDomain::activeDomainRules()])->fails())->toBeTrue();
+})->with(['admin.shop.test', 'held.test']);
 
 it('reports drift when the container routes a different set of aliases', function (): void {
     $observed = new StorefrontObservation(

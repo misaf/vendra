@@ -29,7 +29,7 @@ final class BlogServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_blogs_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-blog');
             });
@@ -49,7 +49,7 @@ final class BlogServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('blog_post_categories', 'blog_posts');
-        $this->app->make(TenantSeeders::class)->register('vendra-blog:seed', priority: 55);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 55);
 
         AboutCommand::add('Vendra Blog', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-blog')]);
     }

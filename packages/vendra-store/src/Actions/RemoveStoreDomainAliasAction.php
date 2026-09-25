@@ -18,7 +18,8 @@ final readonly class RemoveStoreDomainAliasAction
     public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * The alias is kept as trashed history. The storefront is redeployed
+     * The primary domain is the one the store was created with and is never
+     * removed. The alias is kept as trashed history. The storefront is redeployed
      * because its routing label cannot change in place.
      */
     public function execute(Store $store, StoreDomain $domain): void

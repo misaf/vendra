@@ -28,7 +28,7 @@ final class CustomPageServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_custom_pages_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-custom-page');
             });
@@ -48,7 +48,7 @@ final class CustomPageServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('custom_page_categories', 'custom_pages');
-        $this->app->make(TenantSeeders::class)->register('vendra-custom-page:seed', priority: 60);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 60);
 
         AboutCommand::add('Vendra Custom Page', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-custom-page')]);
     }

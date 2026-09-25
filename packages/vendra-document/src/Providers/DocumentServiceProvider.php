@@ -23,14 +23,14 @@ final class DocumentServiceProvider extends PackageServiceProvider
         $package
             ->name('vendra-document')
             ->hasTranslations()
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasMigration('create_documents_table');
     }
 
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('documents');
-        $this->app->make(TenantSeeders::class)->register('vendra-document:seed', priority: 24);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 24);
 
         UserProfile::resolveRelationUsing(
             'documents',

@@ -38,7 +38,10 @@ final class MultimediaServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_media_table',
             ])
-            ->hasCommands(RelocateMediaCommand::class, SeedCommand::class)
+            ->hasConsoleCommands(
+                RelocateMediaCommand::class,
+                SeedCommand::class,
+            )
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-multimedia');
             });
@@ -87,7 +90,7 @@ final class MultimediaServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('media');
-        $this->app->make(TenantSeeders::class)->register('vendra-multimedia:seed', priority: 26);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 26);
         $this->app->make(TenantUsageRegistry::class)->register(
             PlanLimit::StorageMegabytesPerStore,
             fn (Model $tenant): int => (int) Multimedia::query()

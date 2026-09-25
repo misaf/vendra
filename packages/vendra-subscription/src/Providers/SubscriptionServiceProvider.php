@@ -35,9 +35,11 @@ final class SubscriptionServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_subscriptions_table',
             ])
-            ->hasCommand(EnforceSubscriptionsCommand::class)
-            ->hasCommand(RecoverSubscriptionPaymentsCommand::class)
-            ->hasCommand(ReportSubscriptionPaymentBacklogCommand::class)
+            ->hasConsoleCommands(
+                EnforceSubscriptionsCommand::class,
+                RecoverSubscriptionPaymentsCommand::class,
+                ReportSubscriptionPaymentBacklogCommand::class,
+            )
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-subscription');
             });

@@ -32,7 +32,7 @@ final class CurrencyServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_currencies_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-currency');
             });
@@ -57,7 +57,7 @@ final class CurrencyServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('currencies');
-        $this->app->make(TenantSeeders::class)->register('vendra-currency:seed', priority: 30);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 30);
 
         AboutCommand::add('Vendra Currency', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-currency')]);
     }

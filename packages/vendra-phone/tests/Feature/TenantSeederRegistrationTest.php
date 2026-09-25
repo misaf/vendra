@@ -5,16 +5,17 @@ declare(strict_types=1);
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Misaf\VendraPhone\Console\Commands\SeedCommand;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 
 it('registers its seed command for tenant provisioning', function (): void {
-    expect(resolve(TenantSeeders::class)->ordered())->toContain('vendra-phone:seed');
+    expect(resolve(TenantSeeders::class)->ordered())->toContain(SeedCommand::class);
 });
 
 it('seeds its module permissions through the registered seed command', function (): void {
     makeCurrentTestTenant();
 
-    $exitCode = Artisan::call('vendra-phone:seed', [
+    $exitCode = Artisan::call(SeedCommand::class, [
         'tenant' => 1,
         'seeders' => ['all'],
     ]);

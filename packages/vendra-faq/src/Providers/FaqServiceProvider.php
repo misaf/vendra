@@ -28,7 +28,7 @@ final class FaqServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_faqs_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-faq');
             });
@@ -48,7 +48,7 @@ final class FaqServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('faq_categories', 'faqs');
-        $this->app->make(TenantSeeders::class)->register('vendra-faq:seed', priority: 50);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 50);
 
         AboutCommand::add('Vendra Faq', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-faq')]);
     }

@@ -36,7 +36,7 @@ final class UserProfileServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_user_profiles_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-user-profile');
             });
@@ -58,7 +58,7 @@ final class UserProfileServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('user_profiles');
-        $this->app->make(TenantSeeders::class)->register('vendra-user-profile:seed', priority: 21);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 21);
 
         AboutCommand::add('Vendra User Profile', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-user-profile')]);
 

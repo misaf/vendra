@@ -223,8 +223,15 @@ registers the console command and the event listeners. The split is deliberate.
 
 Store screens are reused, not copied: the panel's resources extend
 `misaf/vendra-store`'s `CreateStorePage`, `StorefrontConfigurationFields`
-and its domain actions (`ReplaceDomainTableAction`, `AddDomainAliasTableAction`,
-`MakeDomainPrimaryTableAction`, `RemoveDomainAliasTableAction`), supplying the authenticated user's reseller.
+and its `DomainsRelationManager` with the alias actions (`AddDomainAliasTableAction`,
+`RemoveDomainAliasTableAction`, gated by `StoreResource::canManageStores()`),
+supplying the authenticated user's reseller. A store's primary domain, the one it
+was created with, never changes; the reseller adds and removes aliases from the
+store's domains tab.
+The store list carries `Resources\Stores\Widgets\StoreStatusOverview` (the
+reseller's stores per status and failed storefronts, each linking to the
+filtered list), and the store view shows `Misaf\VendraStore\Filament\Widgets\StorePlanUsage`
+when the plan sets per-store limits.
 Resolve the acting reseller with `Filament\Concerns\InteractsWithCurrentReseller`;
 `Http\Middleware\AddResellerToRequestJobContext` carries it into queued work.
 

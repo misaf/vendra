@@ -6,15 +6,19 @@ namespace Misaf\VendraStore\Filament\Actions;
 
 use Closure;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Arr;
+use LogicException;
 use Misaf\VendraStore\Actions\RemoveStoreDomainAliasAction;
+use Misaf\VendraStore\Filament\RelationManagers\DomainsRelationManager;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 
 /**
+ * Soft-deletes an alias row of {@see DomainsRelationManager}; the primary domain,
+ * the one the store was created with, is never offered.
+ *
  * Panels override {@see authorizationCallback()} to apply their own access rules.
  */
 abstract class RemoveDomainAliasTableAction extends Action
@@ -33,21 +37,12 @@ abstract class RemoveDomainAliasTableAction extends Action
             ->icon(Heroicon::OutlinedMinusCircle)
             ->color('danger')
             ->requiresConfirmation()
-            ->visible(fn (Store $record): bool => ! $record->trashed() && $record->aliasDomains->isNotEmpty())
-            ->schema([
-                Select::make('domain')
-                    ->label(__('vendra-store::attributes.alias_domain'))
-                    ->options(fn (Store $record): array => $record->aliasDomains->pluck('name', 'id')->all())
-                    ->required(),
-            ])
-            ->action(function (Store $record, array $data): void {
-                $domain = $record->aliasDomains()->find(Arr::get($data, 'domain'));
-
-                if (! $domain instanceof StoreDomain) {
-                    return;
-                }
-
-                resolve(RemoveStoreDomainAliasAction::class)->execute($record, $domain);
+            ->visible(fn (StoreDomain $record, RelationManager $livewire): bool => $record->active
+                && ! $record->is_primary
+                && ! $record->trashed()
+                && ! self::store($livewire)->trashed())
+            ->action(function (StoreDomain $record, RelationManager $livewire, RemoveStoreDomainAliasAction $removeAlias): void {
+                $removeAlias->execute(self::store($livewire), $record);
 
                 Notification::make()
                     ->success()
@@ -70,5 +65,14 @@ abstract class RemoveDomainAliasTableAction extends Action
     protected function authorizationCallback(): ?Closure
     {
         return null;
+    }
+
+    private static function store(RelationManager $livewire): Store
+    {
+        $store = $livewire->getOwnerRecord();
+
+        throw_unless($store instanceof Store, LogicException::class, 'Removing a domain alias requires a Store parent record.');
+
+        return $store;
     }
 }

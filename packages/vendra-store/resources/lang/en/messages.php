@@ -7,8 +7,6 @@ return [
     'store_limit_reached' => 'Store limit reached',
     'storefront_requested' => 'Storefront deployment requested. Check its status before using the storefront.',
     'storefront_waiting_for_runtime' => 'Storefront deployment is waiting for runtime configuration. It will remain pending until the runtime is configured and deployments are reconciled.',
-    'domain_replaced' => 'Domain replaced',
     'domain_alias_added' => 'Domain alias added',
     'domain_alias_removed' => 'Domain alias removed',
-    'domain_made_primary' => 'Primary domain changed',
 ];

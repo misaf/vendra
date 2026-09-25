@@ -31,7 +31,7 @@ final class InquiryServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_inquiries_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-inquiry');
             });
@@ -56,7 +56,7 @@ final class InquiryServiceProvider extends PackageServiceProvider
         ]);
 
         $this->app->make(TenantTableRegistry::class)->register('inquiries');
-        $this->app->make(TenantSeeders::class)->register('vendra-inquiry:seed', priority: 62);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 62);
 
         AboutCommand::add('Vendra Inquiry', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-inquiry')]);
     }

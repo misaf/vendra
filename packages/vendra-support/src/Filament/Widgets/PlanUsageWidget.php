@@ -15,6 +15,9 @@ use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 
 /**
  * Show the current store how much of each plan limit it uses.
+ *
+ * {@see statsFor()} and {@see descriptionFor()} serve widgets that show a
+ * store other than the current one.
  */
 final class PlanUsageWidget extends StatsOverviewWidget
 {
@@ -41,11 +44,7 @@ final class PlanUsageWidget extends StatsOverviewWidget
     {
         $tenant = resolve(TenantResolver::class)->current();
 
-        if (! $tenant instanceof Model || resolve(TenantLimitOverages::class)->exceeded($tenant) === []) {
-            return null;
-        }
-
-        return __('vendra-support::entitlements.plan_exceeded');
+        return $tenant instanceof Model ? self::descriptionFor($tenant) : null;
     }
 
     protected function getStats(): array
@@ -54,16 +53,24 @@ final class PlanUsageWidget extends StatsOverviewWidget
     }
 
     /**
-     * @return list<Stat>
+     * Warn when the tenant is over any plan limit, or null while it fits.
      */
-    private static function stats(): array
+    public static function descriptionFor(Model $tenant): ?string
     {
-        $tenant = resolve(TenantResolver::class)->current();
-
-        if (! $tenant instanceof Model) {
-            return [];
+        if (resolve(TenantLimitOverages::class)->exceeded($tenant) === []) {
+            return null;
         }
 
+        return __('vendra-support::entitlements.plan_exceeded');
+    }
+
+    /**
+     * One stat per plan limit the tenant has a cap and a usage counter for.
+     *
+     * @return list<Stat>
+     */
+    public static function statsFor(Model $tenant): array
+    {
         $entitlements = resolve(TenantEntitlements::class);
         $usageRegistry = resolve(TenantUsageRegistry::class);
         $stats = [];
@@ -78,6 +85,16 @@ final class PlanUsageWidget extends StatsOverviewWidget
         }
 
         return $stats;
+    }
+
+    /**
+     * @return list<Stat>
+     */
+    private static function stats(): array
+    {
+        $tenant = resolve(TenantResolver::class)->current();
+
+        return $tenant instanceof Model ? self::statsFor($tenant) : [];
     }
 
     private static function stat(PlanLimit $limit, int $used, int $allowed): Stat

@@ -39,7 +39,7 @@ final class AffiliateServiceProvider extends PackageServiceProvider
                 'create_affiliates_table',
             ])
             ->hasRoute('web')
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-affiliate');
             });
@@ -70,7 +70,7 @@ final class AffiliateServiceProvider extends PackageServiceProvider
             'affiliate_payouts',
             'affiliate_commissions',
         );
-        $this->app->make(TenantSeeders::class)->register('vendra-affiliate:seed', priority: 75);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 75);
 
         AboutCommand::add('Vendra Affiliate', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-affiliate')]);
 

@@ -23,14 +23,14 @@ final class VerificationServiceProvider extends PackageServiceProvider
         $package
             ->name('vendra-verification')
             ->hasTranslations()
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasMigration('create_verifications_table');
     }
 
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('verifications');
-        $this->app->make(TenantSeeders::class)->register('vendra-verification:seed', priority: 25);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 25);
 
         UserProfile::resolveRelationUsing(
             'verifications',

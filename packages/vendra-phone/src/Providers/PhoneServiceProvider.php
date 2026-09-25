@@ -23,14 +23,14 @@ final class PhoneServiceProvider extends PackageServiceProvider
         $package
             ->name('vendra-phone')
             ->hasTranslations()
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasMigration('create_phone_numbers_table');
     }
 
     public function packageBooted(): void
     {
         $this->app->make(TenantTableRegistry::class)->register('phone_numbers');
-        $this->app->make(TenantSeeders::class)->register('vendra-phone:seed', priority: 23);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 23);
 
         UserProfile::resolveRelationUsing(
             'phoneNumbers',

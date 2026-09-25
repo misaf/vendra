@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Misaf\VendraStore\Actions\AddStoreDomainAliasAction;
 use Misaf\VendraStore\Actions\CreateStoreAction;
-use Misaf\VendraStore\Actions\ReplaceStoreDomainAction;
 use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
@@ -88,21 +87,20 @@ describe('custom domains', function (): void {
         expect(Arr::get($result, 'store')->primaryDomain?->name)->toBe('shop.example.com');
     });
 
-    it('refuses a custom alias or replacement without the feature', function (string $action): void {
+    it('refuses a custom alias without the feature', function (): void {
         $store = entitledStore();
 
-        expect(fn () => resolve($action)->execute($store, 'shop.example.com'))
+        expect(fn () => resolve(AddStoreDomainAliasAction::class)->execute($store, 'shop.example.com'))
             ->toThrow(EntitlementExceededException::class)
             ->and($store->domains()->pluck('name')->all())->toBe(['shop.vendra.test']);
-    })->with([AddStoreDomainAliasAction::class, ReplaceStoreDomainAction::class]);
+    });
 
-    it('adds a custom alias and replaces with a custom domain with the feature', function (): void {
+    it('adds a custom alias with the feature', function (): void {
         $store = entitledStore(features: ['custom_domain']);
 
         resolve(AddStoreDomainAliasAction::class)->execute($store, 'alias.example.com');
-        resolve(ReplaceStoreDomainAction::class)->execute($store, 'shop.example.com');
 
-        expect($store->domains()->pluck('name')->sort()->values()->all())->toBe(['alias.example.com', 'shop.example.com']);
+        expect($store->domains()->pluck('name')->sort()->values()->all())->toBe(['alias.example.com', 'shop.vendra.test']);
     });
 });
 

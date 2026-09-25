@@ -25,7 +25,8 @@ use Spatie\Sluggable\SlugOptions;
 
 /**
  * Every active domain resolves the store, and the primary one is its canonical host.
- * Replaced domains are kept trashed as history.
+ * The primary is the domain the store was created with and never changes;
+ * removed aliases are kept trashed as history.
  *
  * @property int $id
  * @property int $store_id

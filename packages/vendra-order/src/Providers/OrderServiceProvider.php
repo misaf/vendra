@@ -32,7 +32,7 @@ final class OrderServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_orders_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasConsoleCommand(SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-order');
             });
@@ -58,7 +58,7 @@ final class OrderServiceProvider extends PackageServiceProvider
         ]);
 
         $this->app->make(TenantTableRegistry::class)->register('orders');
-        $this->app->make(TenantSeeders::class)->register('vendra-order:seed', priority: 59);
+        $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 59);
 
         AboutCommand::add('Vendra Order', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-order')]);
     }
