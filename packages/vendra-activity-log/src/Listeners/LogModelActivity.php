@@ -12,6 +12,8 @@ use Illuminate\Support\Str;
 use Misaf\VendraActivityLog\Providers\ActivityLogServiceProvider;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
+use Misaf\VendraSupport\Contracts\TenantResolver;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 /**
  * Bound to the wildcard Eloquent events by {@see ActivityLogServiceProvider}.
@@ -50,10 +52,38 @@ final class LogModelActivity
 
         activity()
             ->performedOn($model)
+            ->tap(function (Model $activity) use ($model): void {
+                $this->attributeToSubjectTenant($activity, $model);
+            })
             ->event($event)
             ->withChanges($this->attributeChanges($event, $model, $attributes))
             ->withProperties($this->properties())
             ->log($event);
+    }
+
+    /**
+     * Record the activity against the store that owns the subject.
+     *
+     * The current store still wins when there is one. Without it, as in the
+     * console and reseller panels, a store's own row is logged under that store
+     * and a tenantless row stays platform activity with a null tenant id.
+     */
+    private function attributeToSubjectTenant(Model $activity, Model $subject): void
+    {
+        $column = TenantSchema::column();
+
+        if (! TenantSchema::hasTenantColumn($activity->getTable())) {
+            return;
+        }
+
+        $resolver = resolve(TenantResolver::class);
+        $modelClass = $resolver->modelClass();
+
+        $tenantId = $resolver->available() && $subject instanceof $modelClass
+            ? $subject->getKey()
+            : (TenantSchema::hasTenantColumn($subject->getTable()) ? $subject->getAttribute($column) : null);
+
+        $activity->setAttribute($column, is_numeric($tenantId) ? (int) $tenantId : null);
     }
 
     /**

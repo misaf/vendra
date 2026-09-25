@@ -6675,7 +6675,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-activity-log",
-                "reference": "6b023dc32415751baa0d45e59b4e8cf9d29d05a8"
+                "reference": "956d6729ec12672483ce9384e2374f1eb42cf342"
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -6683,7 +6683,8 @@
                 "misaf/vendra-support": "self.version",
                 "php": "^8.4",
                 "spatie/laravel-activitylog": "^5.0",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {

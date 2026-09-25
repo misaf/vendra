@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Misaf\VendraAffiliate\Settings;
 
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
+use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Spatie\LaravelSettings\Settings;
 
-final class AffiliateSettings extends Settings
+final class AffiliateSettings extends Settings implements ShouldLogActivity
 {
     public int $commission_percent;
 

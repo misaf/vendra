@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Filament\Admin\Pages\ManageGeneralSettings;
 use App\Settings\SettingsScope;
 use Illuminate\Support\Facades\DB;
+use Misaf\VendraActivityLog\Listeners\LogSettingsActivity;
 use Misaf\VendraAffiliate\Filament\Pages\ManageAffiliateSettings;
 use Misaf\VendraCart\Filament\Pages\ManageCartSettings;
 use Misaf\VendraDelivery\Filament\Pages\ManageDeliverySettings;
@@ -15,6 +16,7 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
 use Misaf\VendraWishlist\Filament\Pages\ManageWishlistSettings;
 
+use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Livewire\livewire;
 
 /**
@@ -77,4 +79,21 @@ it('rejects an occasion that is not a slug', function (): void {
         ->fillForm(['occasions' => ['wedding', 'birth day']])
         ->call('save')
         ->assertHasFormErrors(['occasions.1']);
+});
+
+it('records who changed a store setting in the activity log', function (): void {
+    setUpFilamentAdminTestContext();
+    config(['activitylog.enabled' => true]);
+
+    livewire(ManageOrderSettings::class)
+        ->fillForm(['number_prefix' => 'FLW'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    assertDatabaseHas('activity_log', [
+        'log_name' => LogSettingsActivity::LOG_NAME,
+        'description' => 'order',
+        'causer_id' => auth()->id(),
+        'attribute_changes' => json_encode(['attributes' => ['number_prefix' => 'FLW'], 'old' => ['number_prefix' => 'ORD']]),
+    ]);
 });

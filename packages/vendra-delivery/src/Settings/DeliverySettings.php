@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Settings;
 
+use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Spatie\LaravelSettings\Settings;
 
-final class DeliverySettings extends Settings
+final class DeliverySettings extends Settings implements ShouldLogActivity
 {
     public int $advance_days;
 

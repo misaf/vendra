@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Misaf\VendraActivityLog\Tests\Fixtures\LoggableWidget;
 use Misaf\VendraActivityLog\Tests\Fixtures\PlainWidget;
 use Misaf\VendraSupport\Context\RequestJobContext;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 beforeEach(function (): void {
     if (! Schema::hasTable('activity_log_widgets')) {
@@ -71,4 +72,36 @@ it('records nothing while activity logging is disabled', function (): void {
     LoggableWidget::query()->create(['name' => 'Alpha']);
 
     expect(DB::table('activity_log')->count())->toBe(0);
+});
+
+describe('without a current store', function (): void {
+    beforeEach(function (): void {
+        forgetCurrentTestTenant();
+    });
+
+    it('logs a store it creates under that store instead of failing the write', function (): void {
+        $store = createTestTenant();
+
+        $activity = DB::table('activity_log')->where('subject_type', $store->getMorphClass())->sole();
+
+        expect((int) $activity->tenant_id)->toBe($store->getKey());
+    });
+
+    it('logs a store-owned row under the store that owns it', function (): void {
+        $store = createTestTenant();
+        $widget = (new LoggableWidget)->forceFill(['name' => 'Alpha', TenantSchema::column() => $store->getKey()]);
+        $widget->save();
+
+        $activity = DB::table('activity_log')->where('subject_type', $widget->getMorphClass())->sole();
+
+        expect((int) $activity->tenant_id)->toBe($store->getKey());
+    });
+
+    it('logs a tenantless row as platform activity', function (): void {
+        $widget = LoggableWidget::query()->create(['name' => 'Platform']);
+
+        $activity = DB::table('activity_log')->where('subject_type', $widget->getMorphClass())->sole();
+
+        expect($activity->tenant_id)->toBeNull();
+    });
 });

@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Event;
 use Misaf\VendraActivityLog\ActivityLogPlugin;
 use Misaf\VendraActivityLog\Console\Commands\SeedCommand;
 use Misaf\VendraActivityLog\Listeners\LogModelActivity;
+use Misaf\VendraActivityLog\Listeners\LogSettingsActivity;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
-use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Spatie\LaravelSettings\Events\SavingSettings;
 
 final class ActivityLogServiceProvider extends PackageServiceProvider
 {
@@ -49,11 +50,11 @@ final class ActivityLogServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        // Activitylog v5 fixes the table to `activity_log` on the default connection.
-        $this->app->make(TenantTableRegistry::class)->registerOnConnection(
-            null,
-            'activity_log',
-        );
+        /*
+        | `activity_log` is deliberately absent from the TenantTableRegistry: a
+        | null tenant id is platform activity, so the `vendra-tenant:enable`
+        | retrofit must never backfill those rows or force the column NOT NULL.
+        */
         $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 85);
 
         AboutCommand::add('Vendra Activity Log', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-activity-log')]);
@@ -66,5 +67,7 @@ final class ActivityLogServiceProvider extends PackageServiceProvider
         foreach (['created', 'updated', 'deleted', 'restored'] as $event) {
             Event::listen("eloquent.{$event}: *", LogModelActivity::class);
         }
+
+        Event::listen(SavingSettings::class, LogSettingsActivity::class);
     }
 }

@@ -226,6 +226,8 @@ console's own resource rather than the clustered, permission-gated one
 holds no tenant roles and is trusted by panel access alone, so the read is
 granted here and every write stays closed. Rows arrive unscoped because the
 tenant scope applies only while a tenant is current and this panel has none.
+Changes made in the console itself, such as creating a reseller or a platform
+language, are platform activity and show `Platform` in the Store column.
 
 ## Platform settings
 

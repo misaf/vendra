@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('activity_log', function (Blueprint $table): void {
             $table->bigIncrements('id');
-            TenantSchema::addTenantColumn($table);
+            // A null tenant id is platform activity, recorded outside any store.
+            TenantSchema::addTenantColumn($table, nullable: true);
             $table->string('log_name')->nullable();
             $table->text('description');
             $table->nullableMorphs('subject', 'subject');
