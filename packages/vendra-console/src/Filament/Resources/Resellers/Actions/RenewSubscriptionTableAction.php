@@ -9,8 +9,10 @@ use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\Concerns\InteractsWithResellerRecord;
 use Misaf\VendraReseller\Models\Reseller;
-use Misaf\VendraSubscription\Actions\SubscribeAction;
+use Misaf\VendraSubscription\Actions\RenewSubscriptionAction;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
+use Misaf\VendraSubscription\Exceptions\SubscriptionPaymentException;
+use Misaf\VendraSubscription\Models\Subscription;
 
 final class RenewSubscriptionTableAction extends Action
 {
@@ -27,19 +29,21 @@ final class RenewSubscriptionTableAction extends Action
 
         $this
             ->label(__('vendra-console::actions.renew'))->icon(Heroicon::OutlinedArrowPath)
-            ->hidden(fn (Reseller $record): bool => $record->trashed())
+            ->hidden(fn (Reseller $record): bool => $record->trashed() || ! $record->renewableSubscription() instanceof Subscription)
             ->requiresConfirmation()
+            ->modalDescription(fn (Reseller $record): ?string => $record->renewableSubscription()?->plan?->formattedPrice())
             ->action(function (Reseller $record): void {
-                $plan = ($record->activeSubscription() ?? $record->subscriptions()->latest('starts_at')->first())?->plan;
-                if ($plan === null) {
+                $subscription = $record->renewableSubscription();
+
+                if (! $subscription instanceof Subscription) {
                     Notification::make()->danger()->title(__('vendra-console::attributes.no_active_subscription'))->send();
 
                     return;
                 }
 
                 try {
-                    resolve(SubscribeAction::class)->execute($record, $plan);
-                } catch (SubscriptionLimitException $exception) {
+                    resolve(RenewSubscriptionAction::class)->execute($subscription);
+                } catch (SubscriptionLimitException|SubscriptionPaymentException $exception) {
                     Notification::make()->danger()->title(__('vendra-console::messages.renewal_blocked'))->body($exception->getMessage())->send();
 
                     return;

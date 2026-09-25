@@ -74,25 +74,36 @@ it('blocks a plan change that cannot hold the current stores', function (): void
     expect($reseller->activeSubscription()?->plan_id)->toBe($currentPlan->getKey());
 });
 
-it('renews the subscription through the table row action', function (): void {
+it('renews a lapsed subscription from where it ended through the table row action', function (): void {
+    actingConsoleAdmin();
+
+    $reseller = Reseller::factory()->active()->create();
+    $expired = Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->active()->graceDays(5))->expired()->create();
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('renew')->table($reseller));
+
+    $renewal = $reseller->subscriptions()->active()->sole();
+
+    expect($renewal->isNot($expired))->toBeTrue()
+        ->and($renewal->starts_at->equalTo($expired->ends_at))->toBeTrue();
+});
+
+it('hides renewal while a subscription is running', function (): void {
     actingConsoleAdmin();
 
     $reseller = Reseller::factory()->active()->create();
     Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->active())->create();
 
     livewire(ListResellers::class)
-        ->callAction(TestAction::make('renew')->table($reseller));
-
-    expect($reseller->subscriptions()->count())->toBe(2)
-        ->and($reseller->subscriptions()->active()->count())->toBe(1);
+        ->assertActionHidden(TestAction::make('renew')->table($reseller));
 });
 
 it('blocks a renewal that cannot hold the current stores', function (): void {
     actingConsoleAdmin();
 
     $reseller = Reseller::factory()->active()->create();
-    $plan = Plan::factory()->active()->maxUnits(1)->create();
-    Subscription::factory()->forSubscriber($reseller)->for($plan)->create();
+    Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->active()->maxUnits(1))->expired()->create();
     createTestTenant(['reseller_id' => $reseller->getKey()]);
     createTestTenant(['reseller_id' => $reseller->getKey()]);
 

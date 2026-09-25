@@ -10,7 +10,6 @@ use Filament\Support\Icons\Heroicon;
 use Misaf\VendraReseller\Filament\Pages\Billing\Actions\Concerns\InteractsWithResellerBilling;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraSubscription\Actions\RenewSubscriptionAction;
-use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Exceptions\SubscriptionPaymentException;
 use Misaf\VendraSubscription\Models\Plan;
@@ -62,18 +61,14 @@ final class RenewPageAction extends Action
     }
 
     /**
-     * The last live period, when nothing is running and no renewal is awaiting payment.
+     * The period to renew, when the reseller can still hold its stores.
      */
     private static function renewable(?Reseller $reseller): ?Subscription
     {
-        if (! $reseller instanceof Reseller || ! $reseller->canHoldUnits() || $reseller->activeSubscription() instanceof Subscription) {
+        if (! $reseller instanceof Reseller || ! $reseller->canHoldUnits()) {
             return null;
         }
 
-        if ($reseller->subscriptions()->where('status', SubscriptionStatus::PendingPayment)->exists()) {
-            return null;
-        }
-
-        return $reseller->latestActivatedSubscription();
+        return $reseller->renewableSubscription();
     }
 }

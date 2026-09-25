@@ -179,6 +179,23 @@ final class Reseller extends Model implements ShouldLogActivity, SubscriptionSub
         return $this->subscriptions()->activated()->latest('starts_at')->first();
     }
 
+    /**
+     * Get the period a renewal would continue from: the last live one, while
+     * nothing is running and no renewal is awaiting payment.
+     */
+    public function renewableSubscription(): ?Subscription
+    {
+        if ($this->activeSubscription() instanceof Subscription) {
+            return null;
+        }
+
+        if ($this->subscriptions()->where('status', SubscriptionStatus::PendingPayment)->exists()) {
+            return null;
+        }
+
+        return $this->latestActivatedSubscription();
+    }
+
     public function latestSubscription(): ?Subscription
     {
         return $this->subscriptions()->latest('starts_at')->first();
