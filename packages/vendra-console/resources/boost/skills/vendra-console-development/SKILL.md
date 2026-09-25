@@ -11,7 +11,7 @@ description: "Create, modify, review, or test the Vendra Console module in packa
 - Use Laravel Boost `application-info` and `search-docs` before code changes.
 - Apply `laravel-best-practices` to Laravel PHP and `pest-testing` whenever tests change.
 - Keep changes inside this package's boundary and preserve its public contracts.
-- `PlanForm` edits plan features (`PlanFeature`) and per-store limits (`PlanLimit`, under `limits`); `CreatePlan`/`EditPlan` normalize them with `PlanForm::normalizeLimits()` so empty limits stay unlimited.
+- `PlanForm` edits plan features (`PlanFeature`) and per-store limits (`PlanLimit`, under `limits`); `CreatePlan`/`EditPlan` normalize them with `PlanForm::normalizeLimits()` so empty limits stay unlimited. Lowering a plan is allowed, but `EditPlan` warns after a save that leaves resellers on the plan over it (`Misaf\VendraReseller\Support\ResellersOverPlan`), and the reseller table's `over_plan` filter lists every reseller whose stores no longer fit its active plan.
 - `ChangePlanTableAction` disables and labels plans a reseller's stores have outgrown (`PlanCoverage::covers()`); the current plan stays selectable to drop a scheduled change. `RenewSubscriptionTableAction` charges and describes the plan `PlanCoverage::renewalPlan()` returns and notes an outgrown scheduled downgrade. The reseller table and view show `PlanFeature::PrioritySupport` from the active plan (`has_priority_support`, a `withExists` on the resource query) and filter by it.
 - Add or update focused Pest coverage, then run `php artisan test --compact --testsuite=vendra-console` from the project root.
 

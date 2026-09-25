@@ -8,9 +8,12 @@ return [
     'feature_unavailable' => 'Your plan does not include :feature.',
     'limit_domains_per_store' => 'Domains per store',
     'limit_products_per_store' => 'Products per store',
-    'limit_reached' => 'You have reached your plan\'s limit for :limit (:allowed).',
+    'limit_reached' => "You have reached your plan's limit for :limit (:allowed).",
+    'limit_staff_per_store' => 'Staff accounts per store',
     'limit_storage_megabytes_per_store' => 'Storage per store (MB)',
+    'plan_exceeded' => 'This store uses more than its plan allows. Nothing more can be added until usage is back within the limits.',
     'plan_usage' => 'Plan usage',
     'usage_at_limit' => 'Limit reached. Ask your reseller to upgrade the plan.',
+    'usage_over_limit' => ':count over the limit. Remove some or ask your reseller to upgrade.',
     'usage_remaining' => ':count left',
 ];

@@ -14,6 +14,7 @@ enum PlanLimit: string implements HasLabel
     case DomainsPerStore = 'domains_per_store';
     case ProductsPerStore = 'products_per_store';
     case StorageMegabytesPerStore = 'storage_megabytes_per_store';
+    case StaffPerStore = 'staff_per_store';
 
     /**
      * Get how many counted units one unit of the limit stands for.
@@ -42,6 +43,7 @@ enum PlanLimit: string implements HasLabel
             self::DomainsPerStore => __('vendra-support::entitlements.limit_domains_per_store'),
             self::ProductsPerStore => __('vendra-support::entitlements.limit_products_per_store'),
             self::StorageMegabytesPerStore => __('vendra-support::entitlements.limit_storage_megabytes_per_store'),
+            self::StaffPerStore => __('vendra-support::entitlements.limit_staff_per_store'),
         };
     }
 }

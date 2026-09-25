@@ -60,6 +60,7 @@ return [
     'limit_per_store' => 'برای هر ملک',
     'stores_total' => 'کل فروشگاه‌ها: :count',
     'problem' => 'مشکل',
+    'over_plan_limits' => 'بیش از سقف طرح برای :limits',
     'subscription' => 'اشتراک',
     'auto_renews' => 'تمدید خودکار',
     'scheduled_plan' => 'تغییر برنامه‌ریزی‌شده',

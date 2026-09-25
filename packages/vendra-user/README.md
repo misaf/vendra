@@ -63,6 +63,11 @@ being removed, demoted, or disabled. `UpdateUserEmailAction` and
 `UpdateUserPasswordAction` provide normalized/validated credential changes,
 framework hashing, and remember-token rotation without exposing stored hashes.
 
+A store's staff are its users who hold a role. The package reports them as
+`PlanLimit::StaffPerStore` usage, and adding or promoting an administrator, or
+giving a user a role on the admin panel's user pages, is refused past the
+plan's staff limit. Customers hold no role and never count.
+
 Forms and commands validate user credentials through `Support\UserRules`.
 `username()` supplies the shared 3–12 character `alpha_dash` rules; the username
 length constants also drive form inputs. `password()` uses the application

@@ -60,6 +60,7 @@ return [
     'limit_per_store' => 'Applies to each store',
     'stores_total' => 'Total stores: :count',
     'problem' => 'Problem',
+    'over_plan_limits' => 'Over its plan limit for :limits',
     'subscription' => 'Subscription',
     'auto_renews' => 'Auto-renew',
     'scheduled_plan' => 'Scheduled change',

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Queue;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraReseller\Notifications\StoreLimitApproachedNotification;
 use Misaf\VendraStore\Actions\AddStoreDomainAliasAction;
+use Misaf\VendraStore\Events\StoreLimitApproached;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraSubscription\Models\Plan;
@@ -60,4 +61,12 @@ it('warns the reseller once as a store crosses 80% and again at the limit', func
         'Corner Shop is nearing its plan limit',
         'Corner Shop reached its plan limit',
     ]);
+});
+
+it('warns about each threshold only once in a subscription period', function (): void {
+    event(new StoreLimitApproached($this->store, PlanLimit::DomainsPerStore, 80));
+    event(new StoreLimitApproached($this->store, PlanLimit::DomainsPerStore, 80));
+    event(new StoreLimitApproached($this->store, PlanLimit::ProductsPerStore, 80));
+
+    expect(sentLimitSubjects($this->reseller))->toHaveCount(2);
 });

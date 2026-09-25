@@ -6,6 +6,7 @@ use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;
+use Misaf\VendraConsole\Filament\Resources\Plans\Pages\EditPlan;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ListResellers;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ViewReseller;
 use Misaf\VendraConsole\Filament\Widgets\PlatformMetrics;
@@ -14,6 +15,7 @@ use Misaf\VendraReseller\Actions\CreditResellerWalletAction;
 use Misaf\VendraReseller\Actions\OffboardResellerAction;
 use Misaf\VendraReseller\Filament\Pages\Auth\Login;
 use Misaf\VendraReseller\Models\Reseller;
+use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
@@ -188,6 +190,30 @@ it('flags and filters resellers whose plan includes priority support', function 
         ->filterTable('priority_support')
         ->assertCanSeeTableRecords([$priority])
         ->assertCanNotSeeTableRecords([$standard]);
+});
+
+it('warns when lowering a plan leaves resellers over it and filters them in the reseller list', function (): void {
+    actingConsoleAdmin();
+
+    $plan = Plan::factory()->active()->maxUnits(5)->create();
+    $over = Reseller::factory()->active()->create();
+    Subscription::factory()->forSubscriber($over)->for($plan)->create();
+    Store::factory()->count(2)->create(['reseller_id' => $over->getKey()]);
+    $within = Reseller::factory()->active()->create();
+    Subscription::factory()->forSubscriber($within)->for($plan)->create();
+    Store::factory()->create(['reseller_id' => $within->getKey()]);
+
+    livewire(EditPlan::class, ['record' => $plan->getKey()])
+        ->fillForm(['max_units' => 1])
+        ->call('save')
+        ->assertHasNoFormErrors()
+        ->assertNotified(trans_choice('vendra-console::messages.plan_leaves_resellers_over', 1, ['count' => 1]));
+
+    livewire(ListResellers::class)
+        ->loadTable()
+        ->filterTable('over_plan')
+        ->assertCanSeeTableRecords([$over])
+        ->assertCanNotSeeTableRecords([$within]);
 });
 
 it('deactivates and reactivates a reseller from the table through the domain action', function (): void {

@@ -54,6 +54,7 @@ return [
     'unlimited' => 'Unlimited',
     'active_subscriptions' => 'Active subscriptions',
     'expiring_soon' => 'Expiring in 7 days',
+    'over_plan' => 'Over plan limits',
     'description' => 'Description',
     'subscription_plan' => 'Subscription plan',
     'no_active_subscription' => 'This reseller has no subscription to renew.',

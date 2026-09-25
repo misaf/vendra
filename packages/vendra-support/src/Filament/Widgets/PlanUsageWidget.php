@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Contracts\TenantEntitlements;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Enums\PlanLimit;
+use Misaf\VendraSupport\Tenancy\TenantLimitOverages;
 use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 
 /**
@@ -34,6 +35,17 @@ final class PlanUsageWidget extends StatsOverviewWidget
     protected function getHeading(): string
     {
         return __('vendra-support::entitlements.plan_usage');
+    }
+
+    protected function getDescription(): ?string
+    {
+        $tenant = resolve(TenantResolver::class)->current();
+
+        if (! $tenant instanceof Model || resolve(TenantLimitOverages::class)->exceeded($tenant) === []) {
+            return null;
+        }
+
+        return __('vendra-support::entitlements.plan_exceeded');
     }
 
     protected function getStats(): array
@@ -72,6 +84,7 @@ final class PlanUsageWidget extends StatsOverviewWidget
     {
         return Stat::make($limit->getLabel(), $used.' / '.$allowed)
             ->description(match (true) {
+                $used > $allowed => __('vendra-support::entitlements.usage_over_limit', ['count' => $used - $allowed]),
                 $used >= $allowed => __('vendra-support::entitlements.usage_at_limit'),
                 default => __('vendra-support::entitlements.usage_remaining', ['count' => $allowed - $used]),
             })

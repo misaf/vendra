@@ -60,6 +60,7 @@ return [
     'limit_per_store' => 'Gilt für jeden Store',
     'stores_total' => 'Stores gesamt: :count',
     'problem' => 'Problem',
+    'over_plan_limits' => 'Über dem Tariflimit für :limits',
     'subscription' => 'Abonnement',
     'auto_renews' => 'Automatische Verlängerung',
     'scheduled_plan' => 'Geplante Änderung',

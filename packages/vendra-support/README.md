@@ -8,7 +8,7 @@ Shared support infrastructure used by every Vendra module.
 - Tenant-aware Eloquent traits, scopes, and migration helpers
 - Optional tag, attribute, and currency integration contracts
 - Provider-neutral subscription charging with idempotent operation results
-- Plan entitlements: `PlanFeature` and `PlanLimit` enums, the `TenantEntitlements` contract, and the `TenantUsageRegistry` that domain packages report their usage to, and the `PlanUsageWidget` that shows a store its usage on the admin dashboard
+- Plan entitlements: `PlanFeature` and `PlanLimit` enums, the `TenantEntitlements` contract, and the `TenantUsageRegistry` that domain packages report their usage to, the `TenantLimitOverages` lookup for limits a tenant already exceeds, and the `PlanUsageWidget` that shows a store its usage on the admin dashboard and flags any limit it is over
 - Request and queued-job context propagation primitives
 - Shared tenant seeders and console commands
 - Shared Filament clusters, navigation taxonomy, and concerns

@@ -165,7 +165,13 @@ them into reseller behaviour, wired in `Providers\ResellerServiceProvider`:
 | `TransactionApproved` (deposit) | `RenewAfterWalletDeposit` |
 
 `WarnResellerOfStoreLimit` emails the reseller once a store crosses 80% and
-again at 100% of a plan limit.
+again at 100% of a plan limit, at most once per threshold each subscription
+period. `RemindExpiringSubscriber`'s reminder also warns when the stores have
+outgrown the scheduled downgrade, before the renewal falls back to the current
+plan.
+
+`Support\ResellersOverPlan` lists resellers whose stores no longer fit their
+active plan, which happens when console staff lower a plan's limits.
 
 `RenewAfterWalletDeposit` retries an auto-renewing plan that expired or went
 past due for lack of funds as soon as the reseller's wallet is credited.
@@ -220,7 +226,7 @@ storefront and disappears once one is live; `PlanSummary` shows the plan, its
 renewal or trial end (warning a week ahead), store usage against the allowance,
 stores suspended for billing, and each per-store plan limit against the store
 that uses the most of it (warning from 80%); `StoresNeedingAttention` lists stores still
-provisioning, failed, or with a failed storefront, with the recorded reason;
+provisioning, failed, with a failed storefront, or over a plan limit, with the reason;
 `LatestStores` lists the newest stores. Store counts come from
 `Misaf\VendraStore\Support\StoreStatusCounts` in one grouped query. Store listings expose derived store and storefront-deployment
 statuses and filters, with all queries still rooted in

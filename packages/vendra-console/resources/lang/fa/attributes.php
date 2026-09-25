@@ -54,6 +54,7 @@ return [
     'unlimited' => 'نامحدود',
     'active_subscriptions' => 'اشتراک‌های فعال',
     'expiring_soon' => 'انقضا در ۷ روز',
+    'over_plan' => 'بیش از سقف طرح',
     'description' => 'توضیحات',
     'subscription_plan' => 'طرح اشتراک',
     'no_active_subscription' => 'این حساب اشتراکی برای تمدید ندارد.',

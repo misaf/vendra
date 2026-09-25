@@ -33,6 +33,7 @@ use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\ReplaceUserAccountT
 use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\ResetUserTwoFactorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Resellers\ResellerResource;
 use Misaf\VendraReseller\Models\Reseller;
+use Misaf\VendraReseller\Support\ResellersOverPlan;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSupport\Enums\PlanFeature;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
@@ -98,6 +99,11 @@ final class ResellerTable
                         ->label(PlanFeature::PrioritySupport->getLabel())
                         ->toggle()
                         ->query(fn (Builder $query): Builder => self::filterByPrioritySupport($query)),
+
+                    Filter::make('over_plan')
+                        ->label(__('vendra-console::attributes.over_plan'))
+                        ->toggle()
+                        ->query(fn (Builder $query): Builder => $query->whereKey(resolve(ResellersOverPlan::class)->ids())),
 
                     TrashedFilter::make(),
                 ],

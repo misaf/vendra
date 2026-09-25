@@ -247,6 +247,26 @@ describe('stores needing attention', function (): void {
             ->assertSee('Image pull failed.');
     });
 
+    it('lists a store that uses more than its plan allows', function (): void {
+        $reseller = Reseller::factory()->active()->create();
+        Subscription::factory()->forSubscriber($reseller)
+            ->for(Plan::factory()->active()->withLimits([PlanLimit::DomainsPerStore->value => 1]))
+            ->create();
+        $over = Store::factory()->active()->create(['reseller_id' => $reseller->getKey()]);
+        StoreDomain::factory()->for($over)->primary()->create(['name' => 'over.vendra.test']);
+        StoreDomain::factory()->for($over)->active()->create(['name' => 'alias.vendra.test']);
+        $within = Store::factory()->active()->create(['reseller_id' => $reseller->getKey()]);
+        StoreDomain::factory()->for($within)->primary()->create(['name' => 'within.vendra.test']);
+
+        actAsReseller($reseller);
+
+        livewire(StoresNeedingAttention::class)
+            ->call('loadTable')
+            ->assertCanSeeTableRecords([$over])
+            ->assertCanNotSeeTableRecords([$within])
+            ->assertSee(__('vendra-reseller::attributes.over_plan_limits', ['limits' => PlanLimit::DomainsPerStore->getLabel()]));
+    });
+
     it('is hidden when every store is healthy', function (): void {
         $reseller = Reseller::factory()->active()->create();
         Store::factory()->active()->create(['reseller_id' => $reseller->getKey()]);

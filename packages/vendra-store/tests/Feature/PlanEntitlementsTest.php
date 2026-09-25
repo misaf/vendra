@@ -165,6 +165,17 @@ describe('plan usage widget', function (): void {
             ->assertDontSee(PlanLimit::ProductsPerStore->getLabel());
     });
 
+    it('tells a store that is over a plan limit', function (): void {
+        $store = entitledStore(limits: [PlanLimit::DomainsPerStore->value => 1]);
+        StoreDomain::factory()->for($store)->active()->create(['name' => 'alias.vendra.test']);
+        $store->makeCurrent();
+
+        livewire(PlanUsageWidget::class)
+            ->assertSee('2 / 1')
+            ->assertSee(__('vendra-support::entitlements.usage_over_limit', ['count' => 1]))
+            ->assertSee(__('vendra-support::entitlements.plan_exceeded'));
+    });
+
     it('stays hidden for a store without limits', function (): void {
         entitledStore()->makeCurrent();
 

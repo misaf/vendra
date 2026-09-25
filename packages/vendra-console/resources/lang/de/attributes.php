@@ -54,6 +54,7 @@ return [
     'unlimited' => 'Unbegrenzt',
     'active_subscriptions' => 'Aktive Abonnements',
     'expiring_soon' => 'Läuft in 7 Tagen ab',
+    'over_plan' => 'Über Tariflimits',
     'description' => 'Beschreibung',
     'subscription_plan' => 'Abonnement-Tarif',
     'no_active_subscription' => 'Dieses Konto hat kein Abonnement zum Verlängern.',
