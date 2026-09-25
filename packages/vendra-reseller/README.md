@@ -125,7 +125,8 @@ answered by `misaf/vendra-subscription` and store quotas by
 here. `Support\ResellerPlanUsageGuard` refuses a plan change or renewal onto a
 plan whose per-store limits any of the reseller's stores already exceeds, or that
 drops `custom_domain` while a store uses a custom domain. The billing page's
-plan picker disables and labels plans the stores have outgrown, and the store
+plan picker disables and labels plans the stores have outgrown and lists what
+the chosen plan includes (stores, per-store limits, features), and the store
 table shows each store's usage against every per-store limit.
 
 ```php
@@ -155,6 +156,7 @@ them into reseller behaviour, wired in `Providers\ResellerServiceProvider`:
 
 | Event | Listener |
 | --- | --- |
+| `PlanEntitlementsChanged` | `WarnResellersOfOutgrownPlan` |
 | `ScheduledPlanChangeDropped` | `NotifyDroppedPlanChange` |
 | `StoreLimitApproached` (vendra-store) | `WarnResellerOfStoreLimit` |
 | `SubscriptionActivated` | `NotifyActivatedSubscriber` |
@@ -169,6 +171,12 @@ again at 100% of a plan limit, at most once per threshold each subscription
 period. `RemindExpiringSubscriber`'s reminder also warns when the stores have
 outgrown the scheduled downgrade, before the renewal falls back to the current
 plan.
+
+A reseller whose stores have outgrown its current plan cannot renew on it and
+has to change to a plan that fits. `WarnResellersOfOutgrownPlan` emails each
+affected reseller once per period when console staff change a plan's limits,
+the expiry reminder asks it to change plan instead of renewing, and the Billing
+page and `PlanSummary` flag it while the renew action is disabled.
 
 `Support\ResellersOverPlan` lists resellers whose stores no longer fit their
 active plan, which happens when console staff lower a plan's limits.

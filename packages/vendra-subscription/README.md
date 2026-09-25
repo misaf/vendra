@@ -60,7 +60,11 @@ continues from the old end date, so paying late loses no paid time; afterwards i
 starts now. A scheduled plan the subscriber has outgrown since choosing it
 is dropped: the period renews on the current plan and `ScheduledPlanChangeDropped`
 fires. `PlanCoverage::renewalPlan()` answers which plan a renewal will start, so
-panels can warn about an outgrown scheduled plan ahead of time.
+panels can warn about an outgrown scheduled plan ahead of time, and
+`PlanCoverage::renewalBlocked()` whether the stores have outgrown that plan too,
+in which case the renewal is refused and the subscriber has to change plan.
+`UpdatePlanAction` fires `PlanEntitlementsChanged` when a plan's `max_units`,
+`limits` or `features` change.
 `Subscription::onPlanWithFeature()` scopes periods whose plan includes a feature. `vendra-subscription:enforce` renews every lapsed period whose
 `auto_renews` flag is set before expiring it; `SetSubscriptionAutoRenewAction`
 turns the flag on or off. Grace is measured from the last period that was ever

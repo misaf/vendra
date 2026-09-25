@@ -65,6 +65,18 @@ final readonly class PlanCoverage
         return $current->plan;
     }
 
+    /**
+     * Whether the stores have outgrown the plan a renewal would start, so the
+     * subscriber has to choose a plan that fits before it can go on.
+     */
+    public function renewalBlocked(Subscription $current): bool
+    {
+        $plan = $this->renewalPlan($current);
+        $subscriber = $current->subscriber;
+
+        return $plan instanceof Plan && $subscriber instanceof SubscriptionSubscriber && ! $this->covers($subscriber, $plan);
+    }
+
     public function scheduledPlanOutgrown(Subscription $current): bool
     {
         return $current->scheduledPlan instanceof Plan && $this->renewalPlan($current) !== $current->scheduledPlan;
