@@ -47,7 +47,7 @@ final class ConsolePanelServiceProvider extends PanelProvider
             ->domain('console.'.Config::string('vendra-tenant.central_host'))
             ->login()
             ->passwordReset()
-            ->emailVerification(isRequired: true)
+            ->emailVerification()
             ->multiFactorAuthentication(AppAuthentication::make()->recoverable(), isRequired: true)
             ->maxContentWidth(Width::Full)
             ->middleware([
