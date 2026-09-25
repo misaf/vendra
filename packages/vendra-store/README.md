@@ -246,8 +246,8 @@ so provisioning starts immediately when the runtime is configured. The tenant
 administrator replaces the samples on the admin Storefront settings page; later changes
 redeploy the storefront. That page also holds the store's name and description, one
 per active language chosen with the header locale switcher, and sends the names
-as the storefront's `name`. A locale the
-store no longer edits keeps its deployed name. The contact, location, and social
+as the storefront's `name`, replacing the deployed names, so a language the
+store removed stops being published. The contact, location, and social
 tabs appear only while the store has a managed storefront.
 
 Status is written only through the model's `markProcessing()`, `markReady()`,

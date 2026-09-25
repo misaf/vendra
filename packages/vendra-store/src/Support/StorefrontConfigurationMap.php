@@ -122,14 +122,15 @@ final class StorefrontConfigurationMap
     public static function updateEditable(array $configuration, array $form): array
     {
         $names = Arr::get($form, 'storefront_name');
+        $names = is_array($names) ? array_filter(
+            $names,
+            fn (mixed $name, mixed $locale): bool => is_string($locale) && is_string($name) && mb_trim($name) !== '',
+            ARRAY_FILTER_USE_BOTH,
+        ) : [];
 
-        // Locales the store no longer edits keep their deployed name, so the storefront never loses one.
-        if (is_array($names)) {
-            $configuration['name'] = [...Arr::wrap(Arr::get($configuration, 'name', [])), ...array_filter(
-                $names,
-                fn (mixed $name, mixed $locale): bool => is_string($locale) && is_string($name) && mb_trim($name) !== '',
-                ARRAY_FILTER_USE_BOTH,
-            )];
+        // The store's names replace the deployed ones, so a removed language stops being published.
+        if ($names !== []) {
+            $configuration['name'] = $names;
         }
 
         foreach (self::EDITABLE_FIELDS as $field) {

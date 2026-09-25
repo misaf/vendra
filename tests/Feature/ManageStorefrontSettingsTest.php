@@ -81,7 +81,7 @@ it('lets the store administrator update contact details without changing another
         ->assertHasNoFormErrors();
 
     expect(Arr::get($deployment->fresh()->configuration, 'contact.officePhone'))->toBe('02199999999')
-        ->and(Arr::get($deployment->fresh()->configuration, 'name'))->toBe(['en' => 'Rose Garden', 'fa' => 'گل‌فروشی اکمی'])
+        ->and(Arr::get($deployment->fresh()->configuration, 'name'))->toBe(['en' => 'Rose Garden'])
         ->and(resolve(GeneralSettings::class)->name)->toBe(['en' => 'Rose Garden'])
         ->and(resolve(GeneralSettings::class)->description)->toBe(['en' => 'Fresh flowers daily.'])
         ->and(Arr::get($otherDeployment->fresh()->configuration, 'contact.officePhone'))->toBe('02100000000')
