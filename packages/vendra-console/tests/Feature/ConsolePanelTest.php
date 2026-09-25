@@ -47,6 +47,7 @@ use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
 use Misaf\VendraUser\Actions\AddTenantAdministratorAction;
+use Misaf\VendraUser\Filament\Pages\Auth\EditProfile;
 use Misaf\VendraUser\Models\User;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -1019,4 +1020,27 @@ it('counts every store by status above the console store list', function (): voi
         ->and($stats->get(StoreStatus::Suspended->getLabel())?->getValue())->toBe(1)
         ->and($stats->get(__('vendra-store::attributes.failed_storefronts'))?->getValue())->toBe(1)
         ->and(urldecode((string) $stats->get(StoreStatus::Suspended->getLabel())?->getUrl()))->toContain('filters[status][values][0]=suspended');
+});
+
+it('edits the console profile without a name field and changes the password through the user action', function (): void {
+    $user = actAsConsoleAdmin();
+    $user->forceFill(['password' => Hash::make('old-password'), 'remember_token' => 'old-token'])->save();
+
+    livewire(EditProfile::class)
+        ->assertFormFieldDoesNotExist('name')
+        ->assertFormFieldIsDisabled('username')
+        ->assertFormFieldIsDisabled('email')
+        ->assertSchemaStateSet(['username' => $user->username, 'email' => $user->email])
+        ->fillForm([
+            'password' => 'new-password-123',
+            'passwordConfirmation' => 'new-password-123',
+            'currentPassword' => 'old-password',
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $user->refresh();
+
+    expect(Hash::check('new-password-123', $user->password))->toBeTrue()
+        ->and($user->remember_token)->not->toBe('old-token');
 });

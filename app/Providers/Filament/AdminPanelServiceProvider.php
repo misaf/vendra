@@ -27,6 +27,7 @@ use Misaf\VendraLocalization\Http\Middleware\SetLocale;
 use Misaf\VendraReseller\Http\Middleware\AddResellerToRequestJobContext;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
 use Misaf\VendraTenant\Http\Middleware\EnsureAdminDomain;
+use Misaf\VendraUser\Filament\Pages\Auth\EditProfile;
 use Spatie\Multitenancy\Http\Middleware\EnsureValidTenantSession;
 use Spatie\Multitenancy\Http\Middleware\NeedsTenant;
 
@@ -89,7 +90,7 @@ final class AdminPanelServiceProvider extends PanelProvider
                 provider: SpatieGoogleFontProvider::class,
             )
             ->path('')
-            ->profile()
+            ->profile(EditProfile::class)
             ->spa(hasPrefetching: true)
             ->strictAuthorization()
             ->viteTheme('resources/css/filament/admin/theme.css')

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraReseller\Filament\Pages\Auth;
+namespace Misaf\VendraUser\Filament\Pages\Auth;
 
 use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
@@ -15,8 +15,9 @@ use Misaf\VendraUser\Models\User;
 use SensitiveParameter;
 
 /**
- * Filament's default profile would write fields users do not have and hash
- * the password outside vendra-user. The console changes the email.
+ * Filament's default profile edits a `name` users do not have and hashes the
+ * password outside vendra-user. The username and email are shown read-only:
+ * each panel changes them through its own actions.
  */
 final class EditProfile extends \Filament\Auth\Pages\EditProfile
 {
@@ -26,6 +27,14 @@ final class EditProfile extends \Filament\Auth\Pages\EditProfile
     {
         return $schema
             ->components([
+                TextInput::make('username')
+                    ->label(__('vendra-user::attributes.username'))
+                    ->disabled()
+                    ->dehydrated(false),
+                TextInput::make('email')
+                    ->label(__('vendra-user::attributes.email'))
+                    ->disabled()
+                    ->dehydrated(false),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
                 $this->getCurrentPasswordFormComponent(),
