@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Support;
 
 use Illuminate\Support\Arr;
+use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 
 /**
  * A test asserts every mapped field still exists in the Filament schema.
@@ -34,13 +35,13 @@ final class StorefrontConfigurationMap
     ];
 
     /**
-     * The store names its storefront through the admin's per-locale `storefront_name` instead.
+     * The store names its storefront through the admin's per-locale `storefront_name` instead,
+     * and its price currency follows the store's default currency.
      *
      * @var list<string>
      */
     public const array EDITABLE_FIELDS = [
-        'storefront_price_currency', 'storefront_og_image',
-        'storefront_locality', 'storefront_country', 'storefront_mobile_phone', 'storefront_office_phone',
+        'storefront_og_image', 'storefront_locality', 'storefront_country', 'storefront_mobile_phone', 'storefront_office_phone',
         'storefront_contact_email', 'storefront_hours_open', 'storefront_hours_close',
         'storefront_map_query', 'storefront_whatsapp_phone', 'storefront_telegram_username',
         'storefront_instagram_username',
@@ -62,7 +63,7 @@ final class StorefrontConfigurationMap
             'storefront_name_en' => $storeName,
             'storefront_name_fa' => $storeName,
             'storefront_business_type' => 'Florist',
-            'storefront_price_currency' => 'IRR',
+            'storefront_price_currency' => CurrencyIntegration::defaultCode(),
             'storefront_locality' => 'Tehran',
             'storefront_country' => 'IR',
             'storefront_mobile_phone' => '00000000000',
@@ -131,6 +132,10 @@ final class StorefrontConfigurationMap
         // The store's names replace the deployed ones, so a removed language stops being published.
         if ($names !== []) {
             $configuration['name'] = $names;
+        }
+
+        if (filled(Arr::get($form, 'storefront_price_currency', null))) {
+            $configuration['priceCurrency'] = self::value($form, 'storefront_price_currency');
         }
 
         foreach (self::EDITABLE_FIELDS as $field) {

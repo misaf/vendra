@@ -15,7 +15,6 @@ return [
     'storefront_image_hint' => 'یک نسخه تأییدشده فروشگاه را انتخاب کنید.',
     'storefront_name_en' => 'نام انگلیسی فروشگاه',
     'storefront_name_fa' => 'نام فارسی فروشگاه',
-    'storefront_price_currency' => 'واحد پول',
     'storefront_og_image' => 'تصویر اشتراک‌گذاری',
     'storefront_og_image_hint' => 'مسیر نسبی اختیاری، مانند /images/og.webp.',
     'storefront_locality' => 'شهر',

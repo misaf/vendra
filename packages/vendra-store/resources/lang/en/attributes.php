@@ -15,7 +15,6 @@ return [
     'storefront_image_hint' => 'Choose an approved storefront build.',
     'storefront_name_en' => 'English storefront name',
     'storefront_name_fa' => 'Persian storefront name',
-    'storefront_price_currency' => 'Price currency',
     'storefront_og_image' => 'Social share image',
     'storefront_og_image_hint' => 'Optional site-root-relative path, such as /images/og.webp.',
     'storefront_locality' => 'Locality',

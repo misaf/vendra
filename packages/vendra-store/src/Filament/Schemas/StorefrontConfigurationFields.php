@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Utilities\Get;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
 use Misaf\VendraStore\Support\StorefrontConfigurationMap;
+use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 
 final class StorefrontConfigurationFields
 {
@@ -126,11 +127,10 @@ final class StorefrontConfigurationFields
                 ->default('Florist')
                 ->required($required)
                 ->dehydrated(),
-            TextInput::make('storefront_price_currency')
-                ->label(__('vendra-store::attributes.storefront_price_currency'))
-                ->default('IRR')
+            Hidden::make('storefront_price_currency')
+                ->default(fn (): string => CurrencyIntegration::defaultCode())
                 ->required($required)
-                ->length(3),
+                ->dehydrated(),
             TextInput::make('storefront_og_image')
                 ->label(__('vendra-store::attributes.storefront_og_image'))
                 ->helperText(__('vendra-store::attributes.storefront_og_image_hint'))

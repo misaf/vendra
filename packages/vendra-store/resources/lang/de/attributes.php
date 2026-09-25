@@ -15,7 +15,6 @@ return [
     'storefront_image_hint' => 'Wählen Sie einen freigegebenen Storefront-Build.',
     'storefront_name_en' => 'Englischer Shopname',
     'storefront_name_fa' => 'Persischer Shopname',
-    'storefront_price_currency' => 'Währung',
     'storefront_og_image' => 'Social-Share-Bild',
     'storefront_og_image_hint' => 'Optionaler relativer Pfad, z. B. /images/og.webp.',
     'storefront_locality' => 'Ort',

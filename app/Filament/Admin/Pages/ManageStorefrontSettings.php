@@ -32,6 +32,7 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontConfigurationMap;
 use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
+use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
@@ -209,7 +210,7 @@ final class ManageStorefrontSettings extends Page
         $name = $this->translations($values, 'name');
         $description = $this->translations($values, 'description');
         $deployment = $this->currentDeployment();
-        $storefront = [...array_intersect_key($data, array_flip(StorefrontConfigurationMap::EDITABLE_FIELDS)), 'storefront_name' => $name];
+        $storefront = [...array_intersect_key($data, array_flip(StorefrontConfigurationMap::EDITABLE_FIELDS)), 'storefront_name' => $name, 'storefront_price_currency' => CurrencyIntegration::defaultCode()];
 
         if ($deployment instanceof StorefrontDeployment) {
             $this->validateConfiguration(StorefrontConfigurationMap::updateEditable($deployment->configuration, $storefront));

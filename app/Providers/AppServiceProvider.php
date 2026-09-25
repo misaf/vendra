@@ -27,10 +27,14 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Mcp\Server;
+use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraReseller\Support\TransactionSubscriptionCharger;
+use Misaf\VendraStore\Actions\UpdateStorefrontConfigurationAction;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
+use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
+use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Observers\StoreDomainObserver;
 use Misaf\VendraStore\Services\ContainerStorefrontProvisioner;
 use Misaf\VendraStore\Support\StorefrontSettings;
@@ -73,6 +77,8 @@ final class AppServiceProvider extends ServiceProvider
 
         StoreDomain::observe(StoreDomainObserver::class);
 
+        $this->syncStorefrontCurrency();
+
         $this->registerMcpControllerCompatibility();
         $this->configureRateLimiting();
         $this->configureAuthLogging();
@@ -111,6 +117,28 @@ final class AppServiceProvider extends ServiceProvider
         $this->app->bind(StorefrontSettings::class, static fn (): StorefrontSettings => StorefrontSettings::fromConfig());
 
         $this->app->bind(StorefrontProvisioner::class, ContainerStorefrontProvisioner::class);
+    }
+
+    /**
+     * Publish a store's new default currency on its managed storefront.
+     */
+    private function syncStorefrontCurrency(): void
+    {
+        Currency::saved(static function (Currency $currency): void {
+            if ($currency->tenant_id === null || ! $currency->is_default || ! $currency->active) {
+                return;
+            }
+
+            if (! $currency->wasRecentlyCreated && ! $currency->wasChanged(['code', 'active', 'is_default'])) {
+                return;
+            }
+
+            $deployment = Store::query()->find($currency->tenant_id)?->storefrontDeployment()->first();
+
+            if ($deployment instanceof StorefrontDeployment) {
+                resolve(UpdateStorefrontConfigurationAction::class)->execute($deployment, ['storefront_price_currency' => $currency->code]);
+            }
+        });
     }
 
     private function configureRateLimiting(): void

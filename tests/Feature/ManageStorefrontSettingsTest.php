@@ -8,6 +8,8 @@ use Filament\Facades\Filament;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
+use Misaf\VendraCurrency\Actions\SetDefaultCurrencyAction;
+use Misaf\VendraCurrency\Database\Factories\CurrencyFactory;
 use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
 use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
@@ -105,6 +107,27 @@ it('rejects an empty phone without changing storefront configuration', function 
 
     expect(Arr::get($deployment->fresh()->configuration, 'contact.mobilePhone'))->toBe('09120000000');
     Queue::assertNotPushed(ProvisionStorefrontJob::class);
+});
+
+it('publishes the store default currency instead of asking for one', function (): void {
+    $store = Store::factory()->active()->create();
+    actAsStoreAdministrator($store);
+    CurrencyFactory::new()->active()->code('EUR')->default()->createOne(['position' => 1]);
+    $deployment = StorefrontDeployment::factory()->for($store)->create([
+        'configuration' => StorefrontConfigurationMap::toConfiguration(storefrontRequestData()),
+    ]);
+    Queue::fake();
+
+    livewire(ManageStorefrontSettings::class)
+        ->assertFormFieldDoesNotExist('storefront_price_currency')
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect(Arr::get($deployment->fresh()->configuration, 'priceCurrency'))->toBe('EUR');
+
+    resolve(SetDefaultCurrencyAction::class)->execute(CurrencyFactory::new()->active()->code('USD')->createOne(['position' => 2]));
+
+    expect(Arr::get($deployment->fresh()->configuration, 'priceCurrency'))->toBe('USD');
 });
 
 it('lets a store without a managed storefront name itself and the admin panel', function (): void {
