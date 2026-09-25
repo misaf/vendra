@@ -143,7 +143,9 @@ cannot hold the reseller's current stores is refused with a notification.
 Plan changes go through `Misaf\VendraSubscription\Actions\ChangeSubscriptionPlanAction`:
 each option is labelled with its effect, an upgrade applies now with a
 prorated charge up to the current end date, a downgrade is scheduled for the
-period end, and picking the current plan drops a scheduled change. Renewal is offered only when nothing is running and no renewal awaits payment,
+period end, and picking the current plan drops a scheduled change. A change
+that charges now is refused with the charge and balance when the wallet cannot
+cover it, so staff credit the wallet first. Renewal is offered only when nothing is running and no renewal awaits payment,
 and goes through `Misaf\VendraSubscription\Actions\RenewSubscriptionAction`: it
 takes a scheduled downgrade, keeps the auto-renew choice, and continues from
 the old end date while within grace. The

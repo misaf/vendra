@@ -13,6 +13,8 @@ return [
     'plan_change_prorated' => 'charges :amount now',
     'plan_change_scheduled' => 'Switches to :plan when the current period ends.',
     'plan_change_pending_payment' => 'Switches to :plan once the wallet payment goes through.',
+    'insufficient_wallet_balance' => 'Not enough wallet balance',
+    'insufficient_wallet_balance_body' => 'This change charges :amount now and the wallet holds :balance. Credit the wallet first.',
     'subscription_renewed' => 'Subscription renewed.',
     'renewal_blocked' => 'Renewal blocked',
     'user_password_updated' => 'User password updated.',

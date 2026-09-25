@@ -5,10 +5,12 @@ declare(strict_types=1);
 use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Queue;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ListResellers;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ViewReseller;
 use Misaf\VendraConsole\Filament\Widgets\PlatformMetrics;
 use Misaf\VendraConsole\Models\Console;
+use Misaf\VendraReseller\Actions\CreditResellerWalletAction;
 use Misaf\VendraReseller\Actions\OffboardResellerAction;
 use Misaf\VendraReseller\Filament\Pages\Auth\Login;
 use Misaf\VendraReseller\Models\Reseller;
@@ -88,6 +90,32 @@ it('schedules a cheaper plan for the end of the period through the table row act
 
     expect($reseller->subscriptions()->count())->toBe(1)
         ->and($current->refresh()->scheduled_plan_id)->toBe($cheaper->getKey());
+});
+
+it('refuses an upgrade the wallet cannot cover and charges it once credited', function (): void {
+    actingConsoleAdmin();
+    Queue::fake();
+    TransactionGatewayFactory::new()->active()->internal()->create();
+
+    $reseller = Reseller::factory()->active()->create();
+    consoleResellerUserFor($reseller);
+    $plan = Plan::factory()->active()->priced(3_000)->maxUnits(1)->create();
+    Subscription::factory()->forSubscriber($reseller)->for($plan)->create(['price' => $plan->price, 'currency_code' => $plan->currency_code]);
+    $upgrade = Plan::factory()->active()->priced(6_000)->maxUnits(5)->create();
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('changePlan')->table($reseller), ['plan_id' => $upgrade->getKey()])
+        ->assertNotified(__('vendra-console::messages.insufficient_wallet_balance'));
+
+    expect($reseller->subscriptions()->count())->toBe(1);
+
+    resolve(CreditResellerWalletAction::class)->execute($reseller, 6_000, $upgrade->currency_code, 'Bank transfer');
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('changePlan')->table($reseller), ['plan_id' => $upgrade->getKey()])
+        ->assertNotified(__('vendra-console::messages.plan_change_pending_payment', ['plan' => $upgrade->name]));
+
+    expect($reseller->subscriptions()->where('status', SubscriptionStatus::PendingPayment)->sole()->plan_id)->toBe($upgrade->getKey());
 });
 
 it('renews a lapsed subscription from where it ended through the table row action', function (): void {
