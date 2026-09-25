@@ -23,13 +23,16 @@ final readonly class RequestStorefrontDeploymentAction
     public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
 
     /**
-     * The caller validates the configuration and the active image first.
+     * The caller validates the deployment identity and active image first.
      *
      * @param  array<string, mixed>  $form
      */
     public function execute(Store $store, string $domain, array $form): StorefrontDeployment
     {
-        $configuration = StorefrontConfigurationMap::toConfiguration($form);
+        $configuration = StorefrontConfigurationMap::toConfiguration([
+            ...StorefrontConfigurationMap::sampleForm($store->name, Arr::string($form, 'email', 'contact@'.$domain)),
+            ...$form,
+        ]);
 
         $storefrontImage = StorefrontImage::query()->findOrFail(Arr::integer($form, 'storefront_image_id'));
 

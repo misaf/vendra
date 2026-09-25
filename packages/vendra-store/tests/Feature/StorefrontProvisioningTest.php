@@ -10,6 +10,8 @@ use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
 use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
+use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
+use Misaf\VendraStore\Support\StorefrontProvisionRequest;
 
 beforeEach(function (): void {
     Queue::fake();
@@ -48,6 +50,24 @@ it('queues provisioning when the provider is configured', function (): void {
         ProvisionStorefrontJob::class,
         fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id,
     );
+});
+
+it('queues a new storefront with sample details when only its identity is supplied', function (): void {
+    $tenant = createTestTenant();
+    $form = storefrontRequestData();
+
+    $deployment = resolve(RequestStorefrontDeploymentAction::class)->execute(
+        $tenant,
+        'acme.test',
+        Arr::only($form, ['storefront_image_id', 'storefront_slug']),
+    );
+
+    expect($deployment->status)->toBe(StorefrontDeploymentStatus::Pending)
+        ->and(Arr::get($deployment->configuration, 'name.en'))->toBe($tenant->name)
+        ->and(Arr::get($deployment->configuration, 'contact.mobilePhone'))->toBe('00000000000')
+        ->and(Arr::get($deployment->configuration, 'contact.email'))->toBe('contact@acme.test');
+    resolve(StorefrontConfigurationValidator::class)->validate(StorefrontProvisionRequest::for($deployment));
+    Queue::assertPushed(ProvisionStorefrontJob::class, fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id);
 });
 
 it('reconciles every database deployment including ready storefronts', function (): void {

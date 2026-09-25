@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'storefront_configuration' => 'Floristen-Shop',
     'storefront_configuration_description' => 'Build und Bereitstellung des objektspezifischen Shops konfigurieren.',
+    'storefront_sample_description' => 'Neue Shops starten mit Beispieldaten. Ersetzen Sie die Kontakt-, Standort- und Social-Media-Daten durch Ihre eigenen.',
     'create_storefront' => 'Floristen-Shop erstellen',
     'create_storefront_hint' => 'Nach Erstellung des Mandanten einen objektspezifischen Shop bereitstellen.',
     'storefront_slug' => 'Shop-Slug',

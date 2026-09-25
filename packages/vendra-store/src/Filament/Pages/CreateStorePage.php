@@ -16,8 +16,6 @@ use InvalidArgumentException;
 use Misaf\VendraStore\Actions\ProvisionStoreAction;
 use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
 use Misaf\VendraStore\Models\StorefrontImage;
-use Misaf\VendraStore\Support\StorefrontConfigurationMap;
-use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
@@ -107,10 +105,7 @@ abstract class CreateStorePage extends CreateRecord
     }
 
     /**
-     * Validate the storefront before the store is provisioned.
-     *
-     * The image will not boot on an incomplete configuration, so errors surface
-     * on the form instead of as a failed deployment.
+     * Validate the deployment identity before the store is provisioned.
      *
      * @param  array<string, mixed>  $data
      *
@@ -118,9 +113,8 @@ abstract class CreateStorePage extends CreateRecord
      */
     private function validateStorefrontRequest(array $data): void
     {
-        Validator::make(StorefrontConfigurationMap::toConfiguration($data), StorefrontConfigurationValidator::deploymentRules())->validate();
-
         Validator::make($data, [
+            'storefront_slug' => ['required', 'string', 'max:100', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('storefront_deployments', 'slug')],
             'storefront_image_id' => [
                 'required',
                 'integer',

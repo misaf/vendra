@@ -235,10 +235,16 @@ is the only path. The job runs on its own `storefronts` queue
 (`ProvisionStorefrontJob::QUEUE`), served by the single worker that holds a
 runtime socket.
 
-The console create wizard may explicitly turn `create_storefront` off. The
+The console create form may explicitly turn `create_storefront` off. The
 shared `CreateStorePage` then creates the store and domain without calling
 `RequestStorefrontDeploymentAction`; this is useful when local storefront source
 runs outside the managed container runtime.
+
+When a managed storefront is requested, creation only requires its image and
+slug. Sample contact, location, and social details complete the configuration,
+so provisioning starts immediately when the runtime is configured. The tenant
+administrator replaces the samples in Admin General Settings; later changes
+redeploy the storefront.
 
 Status is written only through the model's `markProcessing()`, `markReady()`,
 `markRequested()` and `markFailed()`, which enforce the

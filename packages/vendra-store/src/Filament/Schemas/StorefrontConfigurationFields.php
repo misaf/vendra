@@ -13,9 +13,33 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
+use Misaf\VendraStore\Support\StorefrontConfigurationMap;
 
 final class StorefrontConfigurationFields
 {
+    /** @return list<Select|TextInput> */
+    public static function creationIdentityFields(bool $optional): array
+    {
+        return array_values(array_filter(
+            self::identityFields($optional),
+            fn (Select|TextInput|Hidden $field): bool => ($field instanceof Select || $field instanceof TextInput)
+                && in_array($field->getName(), ['storefront_image_id', 'storefront_slug'], true),
+        ));
+    }
+
+    public static function editable(): Section
+    {
+        return Section::make(__('vendra-store::attributes.storefront_configuration'))
+            ->description(__('vendra-store::attributes.storefront_sample_description'))
+            ->schema([
+                Grid::make(2)->schema(array_values(array_filter(
+                    [...self::identityFields(optional: false), ...self::contactFields(optional: false), ...self::locationAndSocialFields(optional: false)],
+                    fn (Select|TextInput|Hidden $field): bool => in_array($field->getName(), StorefrontConfigurationMap::EDITABLE_FIELDS, true),
+                ))),
+            ])
+            ->columnSpanFull();
+    }
+
     /**
      * @return list<Section>
      */

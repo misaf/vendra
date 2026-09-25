@@ -11,6 +11,14 @@ use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Validator;
+use Misaf\VendraStore\Actions\UpdateStorefrontConfigurationAction;
+use Misaf\VendraStore\Filament\Schemas\StorefrontConfigurationFields;
+use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Models\StorefrontDeployment;
+use Misaf\VendraStore\Support\StorefrontConfigurationMap;
+use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
+use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Filament\Clusters\SystemCluster;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 
@@ -61,7 +69,56 @@ final class ManageGeneralSettings extends SettingsPage
                             ->rows(5),
                     ])
                     ->columnSpanFull(),
+
+                StorefrontConfigurationFields::editable()
+                    ->visible(fn (): bool => $this->deployment() instanceof StorefrontDeployment),
             ]);
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $deployment = $this->deployment();
+
+        return $deployment instanceof StorefrontDeployment
+            ? [...$data, ...StorefrontConfigurationMap::toEditableForm($deployment->configuration)]
+            : $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $storefrontData = [];
+
+        foreach (StorefrontConfigurationMap::EDITABLE_FIELDS as $field) {
+            if (array_key_exists($field, $data)) {
+                $storefrontData[$field] = $data[$field];
+                unset($data[$field]);
+            }
+        }
+
+        $deployment = $this->deployment();
+
+        if ($deployment instanceof StorefrontDeployment && $storefrontData !== []) {
+            $configuration = StorefrontConfigurationMap::updateEditable($deployment->configuration, $storefrontData);
+            Validator::make($configuration, StorefrontConfigurationValidator::deploymentRules())->validate();
+            resolve(UpdateStorefrontConfigurationAction::class)->execute($deployment, $storefrontData);
+        }
+
+        return $data;
+    }
+
+    private function deployment(): ?StorefrontDeployment
+    {
+        $tenant = resolve(TenantResolver::class)->current();
+
+        return $tenant instanceof Store ? $tenant->storefrontDeployment()->first() : null;
     }
 
     public function getTitle(): string

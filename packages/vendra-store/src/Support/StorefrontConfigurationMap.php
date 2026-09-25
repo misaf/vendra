@@ -33,10 +33,41 @@ final class StorefrontConfigurationMap
         'storefront_instagram_username' => 'social.instagramUsername',
     ];
 
+    /** @var list<string> */
+    public const array EDITABLE_FIELDS = [
+        'storefront_name_en', 'storefront_name_fa', 'storefront_price_currency', 'storefront_og_image',
+        'storefront_locality', 'storefront_country', 'storefront_mobile_phone', 'storefront_office_phone',
+        'storefront_contact_email', 'storefront_hours_open', 'storefront_hours_close',
+        'storefront_map_query', 'storefront_whatsapp_phone', 'storefront_telegram_username',
+        'storefront_instagram_username',
+    ];
+
     /**
      * @var list<string>
      */
     private const array UPPERCASED = ['storefront_price_currency', 'storefront_country'];
+
+    /** @return array<string, string> */
+    public static function sampleForm(string $storeName, string $administratorEmail): array
+    {
+        return [
+            'storefront_name_en' => $storeName,
+            'storefront_name_fa' => $storeName,
+            'storefront_business_type' => 'Florist',
+            'storefront_price_currency' => 'IRR',
+            'storefront_locality' => 'Tehran',
+            'storefront_country' => 'IR',
+            'storefront_mobile_phone' => '00000000000',
+            'storefront_office_phone' => '00000000000',
+            'storefront_contact_email' => $administratorEmail,
+            'storefront_hours_open' => '08:00',
+            'storefront_hours_close' => '21:00',
+            'storefront_map_query' => '35.7,51.4',
+            'storefront_whatsapp_phone' => '00000000000',
+            'storefront_telegram_username' => 'sample_store',
+            'storefront_instagram_username' => 'sample_store',
+        ];
+    }
 
     /**
      * @param  array<string, mixed>  $form
@@ -58,6 +89,53 @@ final class StorefrontConfigurationMap
         }
 
         return array_filter($configuration, is_string(...), ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * @param  array<string, mixed>  $configuration
+     * @return array<string, mixed>
+     */
+    public static function toEditableForm(array $configuration): array
+    {
+        $form = [];
+
+        foreach (self::EDITABLE_FIELDS as $field) {
+            $form[$field] = Arr::get($configuration, self::FIELDS[$field]);
+        }
+
+        return $form;
+    }
+
+    /**
+     * @param  array<string, mixed>  $configuration
+     * @param  array<string, mixed>  $form
+     * @return array<string, mixed>
+     */
+    public static function updateEditable(array $configuration, array $form): array
+    {
+        foreach (self::EDITABLE_FIELDS as $field) {
+            if (! array_key_exists($field, $form)) {
+                continue;
+            }
+
+            $path = self::FIELDS[$field];
+            $separator = strpos($path, '.');
+
+            if ($separator === false) {
+                $configuration[$path] = self::value($form, $field);
+
+                continue;
+            }
+
+            $section = substr($path, 0, $separator);
+            $key = substr($path, $separator + 1);
+            $nested = $configuration[$section] ?? [];
+            $nested = is_array($nested) ? $nested : [];
+            $nested[$key] = self::value($form, $field);
+            $configuration[$section] = $nested;
+        }
+
+        return $configuration;
     }
 
     /**

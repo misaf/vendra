@@ -30,6 +30,22 @@ final class StorefrontDeploymentFactory extends Factory
             'domain' => fake()->unique()->domainName(),
             'configuration' => [
                 'name' => ['en' => fake()->company(), 'fa' => 'گل‌فروشی'],
+                'businessType' => 'Florist',
+                'priceCurrency' => 'IRR',
+                'address' => ['locality' => 'Tehran', 'country' => 'IR'],
+                'contact' => [
+                    'mobilePhone' => '09120000000',
+                    'officePhone' => '02100000000',
+                    'email' => 'contact@example.test',
+                    'hoursOpen' => '08:00',
+                    'hoursClose' => '21:00',
+                    'mapQuery' => '35.7,51.4',
+                ],
+                'social' => [
+                    'whatsappPhone' => '+989120000000',
+                    'telegramUsername' => 'flowers',
+                    'instagramUsername' => 'flowers',
+                ],
             ],
             'status' => StorefrontDeploymentStatus::Pending,
             'desired_state' => StorefrontDesiredState::Running,
