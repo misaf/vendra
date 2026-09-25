@@ -29,4 +29,11 @@ interface SubscriptionSubscriber
     public function subscribedUnitCount(): int;
 
     public function activeSubscribedUnitCount(): int;
+
+    /**
+     * The buyer named on invoices.
+     *
+     * @return array{name: string, email: string|null, address: string|null, tax_id: string|null}
+     */
+    public function billingDetails(): array;
 }

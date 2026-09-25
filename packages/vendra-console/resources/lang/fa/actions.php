@@ -40,4 +40,5 @@ return [
     'view_logs' => 'مشاهده لاگ‌ها',
     'view_all' => 'مشاهده همه',
     'credit_wallet' => 'شارژ کیف پول',
+    'download' => 'دانلود',
 ];

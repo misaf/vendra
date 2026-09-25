@@ -1,6 +1,6 @@
 ---
 name: vendra-console-development
-description: "Create, modify, review, or test the Vendra Console module in packages/vendra-console, changing the console (platform admin) panel that manages resellers, plans, and stores across every tenant. Use for ConsolePanelServiceProvider, ConsoleSeeder, Dashboard (NeedsAttention, PlatformMetrics, PlatformGrowthChart, RecentActivity), StoreResource, StoreForm, StoreTable, DomainsRelationManager, ResellerResource, ResellerForm, ResellerTable, PlanResource, PlanForm, PlanTable, the console auth guard, the consoles authorization table, and the console.<host> panel domain."
+description: "Create, modify, review, or test the Vendra Console module in packages/vendra-console, changing the console (platform admin) panel that manages resellers, plans, and stores across every tenant. Use for ConsolePanelServiceProvider, ConsoleSeeder, Dashboard (NeedsAttention, PlatformMetrics, PlatformGrowthChart, RecentActivity), StoreResource, StoreForm, StoreTable, DomainsRelationManager, ResellerResource, ResellerForm, ResellerTable, PlanResource, PlanForm, PlanTable, InvoiceResource, InvoiceTable, BillingSettings, SettingsBillingProfile, the console auth guard, the consoles authorization table, and the console.<host> panel domain."
 ---
 
 # Vendra Console
@@ -62,6 +62,7 @@ description: "Create, modify, review, or test the Vendra Console module in packa
 ## Platform Settings
 
 - The console has no config file. The brand name is `Settings\ConsoleSettings::$brand_name` (global repository), edited on `ManagePlatformSettings`. Anything a console user flips at runtime is a settings row.
+- `Filament\Pages\ManagePlatformSettings` also edits `Settings\BillingSettings` (seller details, tax rate in basis points, tax label); `Support\SettingsBillingProfile` is bound as the subscription engine's `BillingProfile`, so tax and seller come from there and never from panel code. `InvoiceResource` is read-only.
 - `Filament\Pages\ManagePlatformSettings` edits `Misaf\VendraStore\Settings\StoreCreationSettings`; `StoreResource::canCreate()` reads its `open` flag. A rule the reseller or store layer must honour belongs to the layer that enforces it.
 
 ## Testing

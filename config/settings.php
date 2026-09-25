@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Models\SettingsProperty;
 use App\Settings\SettingsRepositories\GlobalSettingsRepository;
 use App\Settings\SettingsRepositories\TenantSettingsRepository;
+use Misaf\VendraConsole\Settings\BillingSettings;
 use Misaf\VendraConsole\Settings\ConsoleSettings;
 use Misaf\VendraStore\Settings\StoreCreationSettings;
 use Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository;
@@ -16,6 +17,7 @@ return [
      * auto-discovered. Package settings classes are registered here.
      */
     'settings' => [
+        BillingSettings::class,
         ConsoleSettings::class,
         StoreCreationSettings::class,
     ],

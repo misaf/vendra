@@ -24,6 +24,7 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Subscription;
+use Misaf\VendraSubscription\Models\SubscriptionInvoice;
 use Misaf\VendraSubscription\Support\MoneyFormatter;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\Scopes\TeamScope;
@@ -35,6 +36,9 @@ use Misaf\VendraUser\Models\User;
  * @property int $id
  * @property int $user_id
  * @property bool $active
+ * @property string|null $billing_name
+ * @property string|null $billing_address
+ * @property string|null $tax_id
  * @property string|null $offboarding_reason
  * @property Carbon|null $offboarded_at
  * @property Carbon $created_at
@@ -43,7 +47,7 @@ use Misaf\VendraUser\Models\User;
  * @property-read User $user
  * @property-read Collection<int, Wallet> $wallets
  */
-#[Fillable(['user_id', 'active'])]
+#[Fillable(['user_id', 'active', 'billing_name', 'billing_address', 'tax_id'])]
 #[ObservedBy([ResellerObserver::class])]
 #[UseFactory(ResellerFactory::class)]
 final class Reseller extends Model implements ShouldLogActivity, SubscriptionSubscriber
@@ -140,6 +144,14 @@ final class Reseller extends Model implements ShouldLogActivity, SubscriptionSub
     public function subscriptions(): MorphMany
     {
         return $this->morphMany(Subscription::class, 'subscriber');
+    }
+
+    /**
+     * @return MorphMany<SubscriptionInvoice, $this>
+     */
+    public function invoices(): MorphMany
+    {
+        return $this->morphMany(SubscriptionInvoice::class, 'subscriber');
     }
 
     /**
@@ -259,6 +271,19 @@ final class Reseller extends Model implements ShouldLogActivity, SubscriptionSub
     public function notifyContact(Notification $notification): void
     {
         $this->user->notify($notification);
+    }
+
+    /**
+     * @return array{name: string, email: string|null, address: string|null, tax_id: string|null}
+     */
+    public function billingDetails(): array
+    {
+        return [
+            'name' => $this->billing_name ?? $this->displayName(),
+            'email' => $this->user->email,
+            'address' => $this->billing_address,
+            'tax_id' => $this->tax_id,
+        ];
     }
 
     public function subscriptionPayer(): User

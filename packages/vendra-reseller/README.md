@@ -150,6 +150,7 @@ them into reseller behaviour, wired in `Providers\ResellerServiceProvider`:
 | `SubscriptionCancelled` | `SuspendSubscriberStores` |
 | `SubscriptionExpiringSoon` | `RemindExpiringSubscriber` |
 | `SubscriptionGraceExpired` | `SuspendSubscriberStores` |
+| `SubscriptionInvoiceIssued` | `NotifyInvoiceIssued` |
 | `TransactionApproved` (deposit) | `RenewAfterWalletDeposit` |
 
 `RenewAfterWalletDeposit` retries an auto-renewing plan that expired or went
@@ -166,6 +167,13 @@ in `misaf/vendra-transaction` (`Reseller::wallets()`), through the platform's
 internal gateway (`PlatformGatewaySeeder`). Money reaches it only as a console
 credit: `Actions\CreditResellerWalletAction` records a payment made outside
 the platform as a settled deposit with a note.
+
+Every paid charge is invoiced by the subscription engine. `Reseller::billingDetails()`
+supplies the buyer: the optional `billing_name` (falling back to the username),
+`billing_address` and `tax_id`, which `Actions\UpdateResellerBillingDetailsAction`
+sets; invoices already issued keep the details they were issued with.
+`NotifyInvoiceIssued` emails the reseller user a link to its invoices through the
+queued `Notifications\InvoiceIssuedNotification`. `Reseller::invoices()` lists them.
 
 ## Commands
 
@@ -208,8 +216,11 @@ The `Filament\Pages\Billing` page shows the acting reseller's plan, auto-renew
 state, scheduled change, wallet balance and recent payments. Its header actions
 (`Filament\Pages\Billing\Actions\`) change the plan (quoting each option with
 `PlanChangeQuote`), renew a plan that is no longer running, turn auto-renew on or
-off, and cancel a scheduled downgrade. Anything that charges the wallet is
-refused up front when the balance cannot cover it.
+off, cancel a scheduled downgrade, and edit the billing details invoices name.
+Anything that charges the wallet is refused up front when the balance cannot
+cover it with tax added, and quoted charges include that tax. The
+`Filament\Pages\Invoices` page lists the reseller's invoices and downloads each
+as a PDF rendered on demand.
 
 ## Testing
 

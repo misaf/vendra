@@ -107,6 +107,7 @@ tenant-aware helpers, and join explicitly where a listing must be per-tenant.
 | `ResellerResource` | `Misaf\VendraReseller`'s reseller/user account actions and `misaf/vendra-subscription`'s lifecycle actions |
 | `PlanResource` | `misaf/vendra-subscription`'s plan model |
 | `ActivityLogResource` | `misaf/vendra-activity-log`'s model, read-only and across every tenant |
+| `InvoiceResource` | `misaf/vendra-subscription`'s issued invoices, read-only, filtered by reseller, with an on-demand PDF download |
 
 `DomainsRelationManager` manages a store's domains.
 
@@ -185,6 +186,14 @@ is a settings row, edited on `ManagePlatformSettings`.
 The panel's brand name is `Misaf\VendraConsole\Settings\ConsoleSettings::$brand_name`,
 seeded as `Vendra Console` by a settings migration and read per request, so a
 rename takes effect on the next page load.
+
+The Billing section edits `Settings\BillingSettings`: the seller name (falling
+back to the brand name), address and tax ID named on invoices, and the tax rate
+and label added to every plan charge. The rate is entered as a percentage and
+stored in basis points. `Support\SettingsBillingProfile` reads it as the
+subscription engine's `BillingProfile`, so a change applies to the next charge;
+issued invoices keep what they were issued with. The reseller overview counts a
+reseller's invoices and links to them.
 
 The page also exposes one platform rule: whether the platform is creating
 stores at all. That rule is

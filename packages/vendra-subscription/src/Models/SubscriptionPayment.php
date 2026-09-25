@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
 use Misaf\VendraSubscription\Database\Factories\SubscriptionPaymentFactory;
@@ -28,6 +29,9 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
  * @property string $idempotency_key
  * @property string|null $provider_reference
  * @property int $amount
+ * @property int $net_amount
+ * @property int $tax_amount
+ * @property int $tax_rate
  * @property string $currency_code
  * @property SubscriptionPaymentStatus $status
  * @property int $attempt_count
@@ -41,7 +45,7 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-#[Fillable(['subscription_id', 'payer_type', 'payer_id', 'provider', 'idempotency_key', 'provider_reference', 'amount', 'currency_code', 'status', 'attempt_count', 'failure_code', 'failure_message', 'metadata', 'processing_at', 'paid_at', 'failed_at', 'next_retry_at'])]
+#[Fillable(['subscription_id', 'payer_type', 'payer_id', 'provider', 'idempotency_key', 'provider_reference', 'amount', 'net_amount', 'tax_amount', 'tax_rate', 'currency_code', 'status', 'attempt_count', 'failure_code', 'failure_message', 'metadata', 'processing_at', 'paid_at', 'failed_at', 'next_retry_at'])]
 #[UseFactory(SubscriptionPaymentFactory::class)]
 final class SubscriptionPayment extends Model implements ShouldLogActivity
 {
@@ -51,6 +55,8 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     protected $attributes = [
         'status' => SubscriptionPaymentStatus::Pending->value,
         'attempt_count' => 0,
+        'tax_amount' => 0,
+        'tax_rate' => 0,
     ];
 
     /**
@@ -62,6 +68,9 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
             'subscription_id' => 'integer',
             'payer_id' => 'integer',
             'amount' => 'integer',
+            'net_amount' => 'integer',
+            'tax_amount' => 'integer',
+            'tax_rate' => 'integer',
             'status' => SubscriptionPaymentStatus::class,
             'attempt_count' => 'integer',
             'metadata' => 'array',
@@ -199,6 +208,14 @@ final class SubscriptionPayment extends Model implements ShouldLogActivity
     public function payer(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    /**
+     * @return HasOne<SubscriptionInvoice, $this>
+     */
+    public function invoice(): HasOne
+    {
+        return $this->hasOne(SubscriptionInvoice::class);
     }
 
     public function beginProcessing(): bool

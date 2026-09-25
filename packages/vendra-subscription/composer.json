@@ -24,6 +24,7 @@
         "php": "^8.4",
         "cknow/laravel-money": "^8.5",
         "misaf/vendra-support": "self.version",
+        "mpdf/mpdf": "^8.3",
         "spatie/laravel-package-tools": "^1.93.1"
     },
     "autoload": {

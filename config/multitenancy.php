@@ -11,6 +11,7 @@ use Illuminate\Queue\CallQueuedClosure;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Services\StoreDomainFinder;
 use Misaf\VendraSubscription\Jobs\ProcessSubscriptionPayment;
+use Misaf\VendraSubscription\Listeners\IssueInvoiceOnPayment;
 use Misaf\VendraTenant\Tasks\SwitchAppTask;
 use Misaf\VendraTenant\Tasks\SwitchMailTask;
 use Spatie\Multitenancy\Actions\ForgetCurrentTenantAction;
@@ -144,5 +145,6 @@ return [
     'not_tenant_aware_jobs' => [
         // Dispatched from host and reseller flows that have no current tenant.
         ProcessSubscriptionPayment::class,
+        IssueInvoiceOnPayment::class,
     ],
 ];

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Misaf\VendraConsole\Filament\Resources\Resellers\Schemas;
 
 use Carbon\CarbonInterface;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Misaf\VendraConsole\Filament\Resources\Invoices\InvoiceResource;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Subscription;
@@ -66,7 +69,17 @@ final class ResellerInfolist
                         ->state(fn (Reseller $record): array => $record->formattedWalletBalances())
                         ->listWithLineBreaks()
                         ->placeholder('—'),
+                    TextEntry::make('invoices')
+                        ->label(__('vendra-console::attributes.invoices'))
+                        ->state(fn (Reseller $record): int => $record->invoices()->count())
+                        ->suffixAction(
+                            Action::make('viewInvoices')
+                                ->label(__('vendra-console::attributes.view_invoices'))
+                                ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
+                                ->url(fn (Reseller $record): string => InvoiceResource::getUrl('index', ['filters' => ['reseller' => ['value' => $record->id]]])),
+                        ),
                 ])
+                ->columns(2)
                 ->columnSpanFull(),
         ]);
     }

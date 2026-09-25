@@ -19,6 +19,7 @@ use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Support\MoneyFormatter;
 use Misaf\VendraSubscription\Support\PlanChangeQuote;
+use Misaf\VendraSubscription\Support\TaxedAmount;
 
 final class ChangePlanTableAction extends Action
 {
@@ -89,7 +90,7 @@ final class ChangePlanTableAction extends Action
         }
 
         if ($quote->isProrated()) {
-            return $label.' · '.__('vendra-console::messages.plan_change_prorated', ['amount' => MoneyFormatter::format($quote->amount, $plan->currency_code)]);
+            return $label.' · '.__('vendra-console::messages.plan_change_prorated', ['amount' => MoneyFormatter::format(TaxedAmount::withProfileTax($quote->amount ?? 0)->total, $plan->currency_code)]);
         }
 
         return $label;

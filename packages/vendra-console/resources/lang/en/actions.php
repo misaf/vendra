@@ -40,4 +40,5 @@ return [
     'view_logs' => 'View logs',
     'view_all' => 'View all',
     'credit_wallet' => 'Credit wallet',
+    'download' => 'Download',
 ];

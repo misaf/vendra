@@ -16,6 +16,7 @@ use Filament\Support\Icons\Heroicon;
 use Misaf\VendraReseller\Filament\Concerns\InteractsWithCurrentReseller;
 use Misaf\VendraReseller\Filament\Pages\Billing\Actions\CancelScheduledChangePageAction;
 use Misaf\VendraReseller\Filament\Pages\Billing\Actions\ChangePlanPageAction;
+use Misaf\VendraReseller\Filament\Pages\Billing\Actions\EditBillingDetailsPageAction;
 use Misaf\VendraReseller\Filament\Pages\Billing\Actions\RenewPageAction;
 use Misaf\VendraReseller\Filament\Pages\Billing\Actions\ToggleAutoRenewPageAction;
 use Misaf\VendraReseller\Models\Reseller;
@@ -108,6 +109,7 @@ final class Billing extends Page
     {
         return [
             ChangePlanPageAction::make(),
+            EditBillingDetailsPageAction::make(),
             RenewPageAction::make(),
             ToggleAutoRenewPageAction::make(),
             CancelScheduledChangePageAction::make(),
@@ -152,14 +154,16 @@ final class Billing extends Page
 
         return array_values(SubscriptionPayment::query()
             ->whereIn('subscription_id', $reseller->subscriptions()->select('id'))
+            ->with('invoice')
             ->latest()
             ->limit(self::RECENT_PAYMENTS)
             ->get()
-            ->map(fn (SubscriptionPayment $payment): string => implode(' · ', [
+            ->map(fn (SubscriptionPayment $payment): string => implode(' · ', array_filter([
                 $payment->created_at->format('Y-m-d'),
                 MoneyFormatter::format($payment->amount, $payment->currency_code),
                 $payment->status->getLabel(),
-            ]))
+                $payment->invoice?->number,
+            ])))
             ->all());
     }
 }

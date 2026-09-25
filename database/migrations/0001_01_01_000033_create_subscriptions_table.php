@@ -13,10 +13,13 @@ return new class extends Migration
         $this->createPlansTable();
         $this->createSubscriptionsTable();
         $this->createSubscriptionPaymentsTable();
+        $this->createSubscriptionInvoicesTables();
     }
 
     public function down(): void
     {
+        Schema::dropIfExists('subscription_invoice_sequences');
+        Schema::dropIfExists('subscription_invoices');
         Schema::dropIfExists('subscription_payments');
         Schema::dropIfExists('subscriptions');
         Schema::dropIfExists('plans');
@@ -111,6 +114,11 @@ return new class extends Migration
             $table->string('provider_reference')
                 ->nullable();
             $table->unsignedBigInteger('amount');
+            $table->unsignedBigInteger('net_amount');
+            $table->unsignedBigInteger('tax_amount')
+                ->default(0);
+            $table->unsignedInteger('tax_rate')
+                ->default(0);
             $table->char('currency_code', 3);
             $table->string('status')
                 ->default('pending');
@@ -134,6 +142,41 @@ return new class extends Migration
 
             $table->unique(['provider', 'provider_reference']);
             $table->index(['status', 'next_retry_at']);
+        });
+    }
+
+    private function createSubscriptionInvoicesTables(): void
+    {
+        Schema::create('subscription_invoices', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('subscription_payment_id')
+                ->unique()
+                ->constrained()
+                ->restrictOnDelete();
+            $table->morphs('subscriber');
+            $table->string('number')
+                ->unique();
+            $table->timestampTz('issued_at')
+                ->index();
+            $table->char('currency_code', 3);
+            $table->unsignedBigInteger('net_amount');
+            $table->unsignedInteger('tax_rate');
+            $table->string('tax_label');
+            $table->unsignedBigInteger('tax_amount');
+            $table->unsignedBigInteger('total_amount');
+            $table->json('seller');
+            $table->json('buyer');
+            $table->json('lines');
+            $table->timestampsTz();
+        });
+
+        Schema::create('subscription_invoice_sequences', function (Blueprint $table): void {
+            $table->id();
+            $table->unsignedSmallInteger('year')
+                ->unique();
+            $table->unsignedBigInteger('last_number')
+                ->default(0);
+            $table->timestampsTz();
         });
     }
 };

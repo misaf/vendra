@@ -93,6 +93,11 @@ final class BillingSubscriber extends Model implements SubscriptionSubscriber
 
     public function notifyContact(Notification $notification): void {}
 
+    public function billingDetails(): array
+    {
+        return ['name' => 'Billing subscriber', 'email' => null, 'address' => null, 'tax_id' => null];
+    }
+
     public function subscriptionPayer(): ?Model
     {
         return null;

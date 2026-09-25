@@ -30,6 +30,7 @@ final class SubscriptionPaymentFactory extends Factory
             'provider' => 'testing',
             'idempotency_key' => (string) Str::uuid(),
             'amount' => 1_500,
+            'net_amount' => 1_500,
             'currency_code' => 'USD',
             'status' => SubscriptionPaymentStatus::Pending,
         ];
