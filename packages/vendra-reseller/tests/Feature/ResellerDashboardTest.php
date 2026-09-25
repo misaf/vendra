@@ -14,10 +14,12 @@ use Misaf\VendraReseller\Filament\Widgets\StoresNeedingAttention;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
+use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
 use Misaf\VendraUser\Models\User;
 
@@ -182,6 +184,25 @@ describe('plan summary', function (): void {
         livewire(PlanSummary::class)
             ->assertOk()
             ->assertSee(__('vendra-reseller::attributes.no_plan'));
+    });
+
+    it('shows each plan limit against the store that uses the most of it', function (): void {
+        $reseller = Reseller::factory()->active()->create();
+        Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->withLimits([PlanLimit::DomainsPerStore->value => 2]))->create();
+        $quietStore = Store::factory()->active()->create(['reseller_id' => $reseller->getKey()]);
+        StoreDomain::factory()->for($quietStore)->primary()->create();
+        $busyStore = Store::factory()->active()->create(['reseller_id' => $reseller->getKey(), 'name' => 'Busy Blooms']);
+        StoreDomain::factory()->for($busyStore)->primary()->create();
+        StoreDomain::factory()->for($busyStore)->active()->create();
+
+        actAsReseller($reseller);
+
+        livewire(PlanSummary::class)
+            ->assertOk()
+            ->assertSee(PlanLimit::DomainsPerStore->getLabel())
+            ->assertSee('2 / 2')
+            ->assertSee(__('vendra-reseller::attributes.busiest_store', ['store' => 'Busy Blooms']))
+            ->assertDontSee(PlanLimit::ProductsPerStore->getLabel());
     });
 
     it('flags stores suspended for billing', function (): void {

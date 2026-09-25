@@ -27,6 +27,11 @@ interface TenantEntitlements
     public function assertAllows(PlanFeature $feature, ?Model $tenant = null): void;
 
     /**
+     * Determine whether the tenant may add the given amount, counted like its usage counter.
+     */
+    public function canAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): bool;
+
+    /**
      * Assert the tenant may add the given amount, counted like its usage counter.
      *
      * @throws EntitlementExceededException

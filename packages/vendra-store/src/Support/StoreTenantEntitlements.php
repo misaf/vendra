@@ -61,18 +61,26 @@ final readonly class StoreTenantEntitlements implements TenantEntitlements
         throw_unless($this->allows($feature, $tenant), EntitlementExceededException::featureUnavailable($feature));
     }
 
-    public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
+    public function canAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): bool
     {
         $store = $tenant ?? $this->tenantResolver->current();
         $allowed = $this->limit($limit, $store);
 
         if ($allowed === null || $store === null) {
-            return;
+            return true;
         }
 
         $usage = $this->usageRegistry->usage($limit, $store) ?? 0;
 
-        throw_if($usage + $amount > $allowed * $limit->unitSize(), EntitlementExceededException::limitReached($limit, $allowed));
+        return $usage + $amount <= $allowed * $limit->unitSize();
+    }
+
+    public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
+    {
+        throw_unless(
+            $this->canAdd($limit, $amount, $tenant),
+            EntitlementExceededException::limitReached($limit, $this->limit($limit, $tenant) ?? 0),
+        );
     }
 
     /**

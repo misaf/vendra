@@ -23,5 +23,10 @@ final class NullTenantEntitlements implements TenantEntitlements
 
     public function assertAllows(PlanFeature $feature, ?Model $tenant = null): void {}
 
+    public function canAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): bool
+    {
+        return true;
+    }
+
     public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void {}
 }

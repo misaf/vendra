@@ -56,6 +56,8 @@ return [
     'subscribe_to_create_stores' => 'Subscribe to a plan to create stores',
     'capacity_requires_plan' => 'No active plan',
     'stores_suspended_for_billing' => '{1} 1 store suspended for billing|[2,*] :count stores suspended for billing',
+    'busiest_store' => 'Busiest store: :store',
+    'limit_per_store' => 'Applies to each store',
     'stores_total' => 'Total stores: :count',
     'problem' => 'Problem',
     'subscription' => 'Subscription',

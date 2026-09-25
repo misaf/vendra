@@ -31,7 +31,25 @@ final class ModelImageUpload extends SpatieMediaLibraryFileUpload
             ->panelLayout('grid')
             ->responsiveImages()
             ->rule(static fn (): Closure => self::storageLimitRule())
+            ->helperText(static fn (TenantEntitlements $entitlements): ?string => self::storageFullMessage($entitlements))
             ->columnSpanFull();
+    }
+
+    /**
+     * Explain up front that the store has no storage left, rather than only on upload.
+     *
+     * The field stays enabled so existing images can still be removed to free space.
+     */
+    public static function storageFullMessage(TenantEntitlements $entitlements): ?string
+    {
+        if ($entitlements->canAdd(PlanLimit::StorageMegabytesPerStore)) {
+            return null;
+        }
+
+        return EntitlementExceededException::limitReached(
+            PlanLimit::StorageMegabytesPerStore,
+            $entitlements->limit(PlanLimit::StorageMegabytesPerStore) ?? 0,
+        )->getMessage();
     }
 
     /**

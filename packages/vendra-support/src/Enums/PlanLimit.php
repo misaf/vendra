@@ -28,6 +28,14 @@ enum PlanLimit: string implements HasLabel
         };
     }
 
+    /**
+     * Convert a counted usage into the limit's own unit, rounding up.
+     */
+    public function toUnits(int $usage): int
+    {
+        return (int) ceil($usage / $this->unitSize());
+    }
+
     public function getLabel(): string
     {
         return match ($this) {

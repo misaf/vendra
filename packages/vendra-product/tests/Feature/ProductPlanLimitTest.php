@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
+use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 use Misaf\VendraProduct\Database\Factories\ProductCategoryFactory;
 use Misaf\VendraProduct\Database\Factories\ProductFactory;
 use Misaf\VendraProduct\Filament\Clusters\Resources\Products\Pages\CreateProduct;
+use Misaf\VendraProduct\Filament\Clusters\Resources\Products\Pages\ListProducts;
 use Misaf\VendraProduct\Models\Product;
 use Misaf\VendraProduct\Models\ProductPrice;
 use Misaf\VendraSupport\Contracts\TenantEntitlements;
@@ -41,6 +43,11 @@ function capProductsAtCurrentUsage(): void
         }
 
         public function assertAllows(PlanFeature $feature, ?Model $tenant = null): void {}
+
+        public function canAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): bool
+        {
+            return false;
+        }
 
         public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
         {
@@ -86,4 +93,18 @@ it('tells the user when the create page is past the plan limit', function (): vo
         ->assertNotified(__('vendra-support::entitlements.limit_reached', ['limit' => PlanLimit::ProductsPerStore->getLabel(), 'allowed' => 0]));
 
     expect(Product::query()->count())->toBe(0);
+});
+
+it('disables creating and duplicating products at the plan limit', function (): void {
+    $product = ProductFactory::new()->create();
+
+    livewire(ListProducts::class)
+        ->assertActionEnabled('create')
+        ->assertActionEnabled(TestAction::make('replicate')->table($product));
+
+    capProductsAtCurrentUsage();
+
+    livewire(ListProducts::class)
+        ->assertActionDisabled('create')
+        ->assertActionDisabled(TestAction::make('replicate')->table($product));
 });

@@ -41,11 +41,16 @@ function capStorageAtBytes(int $bytes): void
 
         public function assertAllows(PlanFeature $feature, ?Model $tenant = null): void {}
 
-        public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
+        public function canAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): bool
         {
             $usage = resolve(TenantUsageRegistry::class)->usage($limit, currentTestTenant()) ?? 0;
 
-            throw_if($usage + $amount > $this->bytes, EntitlementExceededException::limitReached($limit, 1));
+            return $usage + $amount <= $this->bytes;
+        }
+
+        public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
+        {
+            throw_unless($this->canAdd($limit, $amount, $tenant), EntitlementExceededException::limitReached($limit, 1));
         }
     });
 }
@@ -90,4 +95,15 @@ it('fails upload validation for a file past the plan storage limit', function ()
 
     expect($validate(1))->toBeTrue()
         ->and($validate(3))->toBeFalse();
+});
+
+it('warns on the upload field once the store storage is full', function (): void {
+    makeCurrentTestTenant();
+    capStorageAtBytes(10);
+
+    expect(ModelImageUpload::storageFullMessage(resolve(TenantEntitlements::class)))->toBeNull();
+
+    addLimitedGalleryMedia(str_repeat('a', 10));
+
+    expect(ModelImageUpload::storageFullMessage(resolve(TenantEntitlements::class)))->toContain(PlanLimit::StorageMegabytesPerStore->getLabel());
 });

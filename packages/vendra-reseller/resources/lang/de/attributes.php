@@ -56,6 +56,8 @@ return [
     'subscribe_to_create_stores' => 'Abonnieren Sie einen Tarif, um Stores zu erstellen',
     'capacity_requires_plan' => 'Kein aktiver Tarif',
     'stores_suspended_for_billing' => '{1} 1 Store wegen Abrechnung gesperrt|[2,*] :count Stores wegen Abrechnung gesperrt',
+    'busiest_store' => 'Am stärksten genutzt: :store',
+    'limit_per_store' => 'Gilt für jeden Store',
     'stores_total' => 'Stores gesamt: :count',
     'problem' => 'Problem',
     'subscription' => 'Abonnement',

@@ -211,7 +211,8 @@ The reseller dashboard (`Filament\Pages\Dashboard`) lists its widgets in a
 fixed order: `GettingStarted` walks a new reseller from subscribing to a live
 storefront and disappears once one is live; `PlanSummary` shows the plan, its
 renewal or trial end (warning a week ahead), store usage against the allowance,
-and stores suspended for billing; `StoresNeedingAttention` lists stores still
+stores suspended for billing, and each per-store plan limit against the store
+that uses the most of it (warning from 80%); `StoresNeedingAttention` lists stores still
 provisioning, failed, or with a failed storefront, with the recorded reason;
 `LatestStores` lists the newest stores. Store counts come from
 `Misaf\VendraStore\Support\StoreStatusCounts` in one grouped query. Store listings expose derived store and storefront-deployment

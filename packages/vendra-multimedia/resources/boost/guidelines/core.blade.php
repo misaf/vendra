@@ -15,7 +15,7 @@ The `misaf/vendra-multimedia` package owns multimedia and media library manageme
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
 - Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
-- Stored media counts against the store plan's `PlanLimit::StorageMegabytesPerStore`: the provider registers the byte counter with `TenantUsageRegistry`, `ModelImageUpload::storageLimitRule()` fails validation for an oversized upload, and `MultimediaObserver::creating` refuses any other write past the limit.
+- Stored media counts against the store plan's `PlanLimit::StorageMegabytesPerStore`: the provider registers the byte counter with `TenantUsageRegistry`, `ModelImageUpload::storageLimitRule()` fails validation for an oversized upload, `storageFullMessage()` shows the refusal as helper text once storage is full (the field stays enabled so images can be removed), and `MultimediaObserver::creating` refuses any other write past the limit.
 
 - Keep multimedia domain code inside `packages/vendra-multimedia` using the `Misaf\VendraMultimedia` namespace.
 - Use this package for models, migrations, factories, seeders, policies, permission enums, observers, Filament resources, translations, config, and package bootstrapping.

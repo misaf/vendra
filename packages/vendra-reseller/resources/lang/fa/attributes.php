@@ -56,6 +56,8 @@ return [
     'subscribe_to_create_stores' => 'برای ساخت فروشگاه یک پلن تهیه کنید',
     'capacity_requires_plan' => 'پلن فعالی ندارید',
     'stores_suspended_for_billing' => '{1} ۱ فروشگاه به دلیل صورتحساب تعلیق شده|[2,*] :count فروشگاه به دلیل صورتحساب تعلیق شده',
+    'busiest_store' => 'پرمصرف‌ترین ملک: :store',
+    'limit_per_store' => 'برای هر ملک',
     'stores_total' => 'کل فروشگاه‌ها: :count',
     'problem' => 'مشکل',
     'subscription' => 'اشتراک',

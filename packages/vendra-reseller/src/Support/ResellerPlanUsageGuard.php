@@ -51,7 +51,7 @@ final readonly class ResellerPlanUsageGuard implements PlanUsageGuard
                 $reseller,
                 $limit->getLabel(),
                 $allowed,
-                (int) ceil($usage / $limit->unitSize()),
+                $limit->toUnits($usage),
             );
         }
 
