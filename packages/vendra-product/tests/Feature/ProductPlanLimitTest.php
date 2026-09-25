@@ -53,6 +53,8 @@ function capProductsAtCurrentUsage(): void
         {
             throw EntitlementExceededException::limitReached($limit, 0);
         }
+
+        public function recordAdded(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void {}
     });
 }
 

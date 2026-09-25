@@ -18,6 +18,7 @@ return [
     'insufficient_wallet_balance_body' => 'Dies belastet jetzt :amount, das Guthaben beträgt :balance. Laden Sie zuerst das Guthaben auf.',
     'subscription_renewed' => 'Abonnement verlängert.',
     'renewal_blocked' => 'Verlängerung blockiert',
+    'scheduled_plan_outgrown' => 'Die Stores des Resellers nutzen mehr, als der geplante Tarif :plan erlaubt, daher wird stattdessen mit :current verlängert.',
     'user_password_updated' => 'Benutzer-Passwort aktualisiert.',
     'account_disabled' => 'Konto deaktiviert',
     'account_enabled' => 'Konto aktiviert',

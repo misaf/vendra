@@ -56,10 +56,15 @@ final class SupportServiceProvider extends ServiceProvider
                 return;
             }
 
-            $panel->discoverClusters(
-                in: __DIR__.'/../Filament/Clusters',
-                for: 'Misaf\\VendraSupport\\Filament\\Clusters',
-            );
+            $panel
+                ->discoverClusters(
+                    in: __DIR__.'/../Filament/Clusters',
+                    for: 'Misaf\\VendraSupport\\Filament\\Clusters',
+                )
+                ->discoverWidgets(
+                    in: __DIR__.'/../Filament/Widgets',
+                    for: 'Misaf\\VendraSupport\\Filament\\Widgets',
+                );
         });
     }
 

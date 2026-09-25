@@ -13,8 +13,8 @@ use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 /**
  * The synchronous product hooks that cannot run on the queue.
  *
- * `creating` aborts by throwing, `updated` reads `wasChanged()`, and
- * `forceDeleting` needs the pivot rows.
+ * `creating` aborts by throwing, `created` counts the new row, `updated`
+ * reads `wasChanged()`, and `forceDeleting` needs the pivot rows.
  */
 final readonly class ProductLifecycleObserver
 {
@@ -31,6 +31,11 @@ final readonly class ProductLifecycleObserver
     public function creating(Product $product): void
     {
         $this->entitlements->assertCanAdd(PlanLimit::ProductsPerStore);
+    }
+
+    public function created(Product $product): void
+    {
+        $this->entitlements->recordAdded(PlanLimit::ProductsPerStore);
     }
 
     public function updated(Product $product): void

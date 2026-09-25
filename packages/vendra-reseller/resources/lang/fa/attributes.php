@@ -64,6 +64,7 @@ return [
     'auto_renews' => 'تمدید خودکار',
     'scheduled_plan' => 'تغییر برنامه‌ریزی‌شده',
     'scheduled_plan_from' => ':plan از :date',
+    'scheduled_plan_outgrown' => 'املاک شما بیش از سقف :plan استفاده می‌کنند، بنابراین دوره بعد با :current تمدید می‌شود.',
     'wallet' => 'کیف پول',
     'wallet_top_up_hint' => 'هزینه طرح‌ها از کیف پول شما پرداخت می‌شود. برای شارژ، با جزئیات پرداخت با پشتیبانی تماس بگیرید.',
     'wallet_balance' => 'موجودی',

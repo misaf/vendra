@@ -24,6 +24,7 @@ use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
 use Misaf\VendraSubscription\Support\MoneyFormatter;
+use Misaf\VendraSubscription\Support\PlanCoverage;
 
 final class Billing extends Page
 {
@@ -76,6 +77,7 @@ final class Billing extends Page
                         TextEntry::make('scheduled_plan')
                             ->label(__('vendra-reseller::attributes.scheduled_plan'))
                             ->state(fn (): ?string => self::scheduledChange())
+                            ->color(fn (): ?string => self::scheduledPlanOutgrown() ? 'danger' : null)
                             ->placeholder('—'),
                     ]),
                 ])
@@ -135,10 +137,24 @@ final class Billing extends Page
             return null;
         }
 
+        if (self::scheduledPlanOutgrown()) {
+            return __('vendra-reseller::attributes.scheduled_plan_outgrown', [
+                'plan' => $plan->name,
+                'current' => $subscription->plan?->name,
+            ]);
+        }
+
         return __('vendra-reseller::attributes.scheduled_plan_from', [
             'plan' => $plan->name,
             'date' => $subscription->ends_at->format('Y-m-d'),
         ]);
+    }
+
+    private static function scheduledPlanOutgrown(): bool
+    {
+        $subscription = self::currentReseller()?->activeSubscription();
+
+        return $subscription instanceof Subscription && resolve(PlanCoverage::class)->scheduledPlanOutgrown($subscription);
     }
 
     /**

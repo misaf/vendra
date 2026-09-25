@@ -160,8 +160,11 @@ period end, and picking the current plan drops a scheduled change. A change
 that charges now is refused with the charge and balance when the wallet cannot
 cover it, so staff credit the wallet first. Renewal is offered only when nothing is running and no renewal awaits payment,
 and goes through `Misaf\VendraSubscription\Actions\RenewSubscriptionAction`: it
-takes a scheduled downgrade, keeps the auto-renew choice, and continues from
-the old end date while within grace. The
+takes a scheduled downgrade unless the stores have outgrown it (the modal says
+so and the renewal stays on the current plan), keeps the auto-renew choice, and
+continues from the old end date while within grace. The reseller table and
+overview show whether the active plan includes priority support, and the table
+filters by it. The
 `Credit wallet` row action records a payment the reseller made outside the
 platform through `Misaf\VendraReseller\Actions\CreditResellerWalletAction`
 (amount in minor units, currency, and a required note), and the reseller

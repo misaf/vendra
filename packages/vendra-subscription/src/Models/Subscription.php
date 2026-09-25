@@ -122,6 +122,16 @@ final class Subscription extends Model implements ShouldLogActivity
     }
 
     /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function onPlanWithFeature(Builder $query, string $feature): Builder
+    {
+        return $query->whereHas('plan', fn (Builder $query): Builder => $query->whereJsonContains('features', $feature));
+    }
+
+    /**
      * Periods that were live at some point, as opposed to renewals or
      * changes whose payment never went through.
      *

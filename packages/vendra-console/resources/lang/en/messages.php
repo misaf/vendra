@@ -18,6 +18,7 @@ return [
     'insufficient_wallet_balance_body' => 'This charges :amount now and the wallet holds :balance. Credit the wallet first.',
     'subscription_renewed' => 'Subscription renewed.',
     'renewal_blocked' => 'Renewal blocked',
+    'scheduled_plan_outgrown' => 'The reseller\'s stores use more than the scheduled :plan allows, so this renews on :current instead.',
     'user_password_updated' => 'User password updated.',
     'account_disabled' => 'Account disabled',
     'account_enabled' => 'Account enabled',

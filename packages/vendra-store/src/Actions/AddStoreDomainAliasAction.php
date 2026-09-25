@@ -45,11 +45,15 @@ final readonly class AddStoreDomainAliasAction
 
             $this->entitlements->assertCanAdd(PlanLimit::DomainsPerStore, tenant: $store);
 
-            return $store->storeDomains()->create([
+            $storeDomain = $store->storeDomains()->create([
                 'name' => $domain,
                 'active' => true,
                 'is_primary' => false,
             ]);
+
+            $this->entitlements->recordAdded(PlanLimit::DomainsPerStore, tenant: $store);
+
+            return $storeDomain;
         }));
 
         throw_unless($storeDomain instanceof StoreDomain, UnexpectedValueException::class, 'Adding a store domain alias did not return a domain model.');

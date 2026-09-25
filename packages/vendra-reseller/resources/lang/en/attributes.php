@@ -64,6 +64,7 @@ return [
     'auto_renews' => 'Auto-renew',
     'scheduled_plan' => 'Scheduled change',
     'scheduled_plan_from' => ':plan from :date',
+    'scheduled_plan_outgrown' => 'Your stores use more than :plan allows, so the next period renews on :current instead.',
     'wallet' => 'Wallet',
     'wallet_top_up_hint' => 'Plans are paid from your wallet. To add funds, contact support with your payment details.',
     'wallet_balance' => 'Balance',

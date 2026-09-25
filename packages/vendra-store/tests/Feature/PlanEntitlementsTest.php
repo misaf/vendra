@@ -19,6 +19,9 @@ use Misaf\VendraSupport\Contracts\TenantEntitlements;
 use Misaf\VendraSupport\Enums\PlanFeature;
 use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
+use Misaf\VendraSupport\Filament\Widgets\PlanUsageWidget;
+
+use function Pest\Livewire\livewire;
 
 beforeEach(function (): void {
     Queue::fake();
@@ -146,5 +149,25 @@ describe('store entitlements', function (): void {
         expect($entitlements->limit(PlanLimit::ProductsPerStore, $lapsedStore))->toBe(7)
             ->and($entitlements->limit(PlanLimit::ProductsPerStore, $unsubscribedStore))->toBe(0)
             ->and($entitlements->allows(PlanFeature::CustomDomain, $unsubscribedStore))->toBeFalse();
+    });
+});
+
+describe('plan usage widget', function (): void {
+    it('shows the current store its usage of each limited plan limit', function (): void {
+        $store = entitledStore(limits: [PlanLimit::DomainsPerStore->value => 2]);
+        $store->makeCurrent();
+
+        expect(PlanUsageWidget::canView())->toBeTrue();
+
+        livewire(PlanUsageWidget::class)
+            ->assertSee(PlanLimit::DomainsPerStore->getLabel())
+            ->assertSee('1 / 2')
+            ->assertDontSee(PlanLimit::ProductsPerStore->getLabel());
+    });
+
+    it('stays hidden for a store without limits', function (): void {
+        entitledStore()->makeCurrent();
+
+        expect(PlanUsageWidget::canView())->toBeFalse();
     });
 });

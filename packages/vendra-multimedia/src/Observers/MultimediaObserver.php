@@ -10,7 +10,8 @@ use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 
 /**
- * Synchronous, because `creating` aborts the write by throwing.
+ * Synchronous, because `creating` aborts the write by throwing and `created`
+ * counts the new file.
  */
 final readonly class MultimediaObserver
 {
@@ -24,5 +25,10 @@ final readonly class MultimediaObserver
     public function creating(Multimedia $multimedia): void
     {
         $this->entitlements->assertCanAdd(PlanLimit::StorageMegabytesPerStore, $multimedia->size);
+    }
+
+    public function created(Multimedia $multimedia): void
+    {
+        $this->entitlements->recordAdded(PlanLimit::StorageMegabytesPerStore, $multimedia->size);
     }
 }

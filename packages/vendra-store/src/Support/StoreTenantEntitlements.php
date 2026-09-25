@@ -6,6 +6,7 @@ namespace Misaf\VendraStore\Support;
 
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraStore\Contracts\StoreResellerResolver;
+use Misaf\VendraStore\Events\StoreLimitApproached;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Models\Plan;
@@ -26,6 +27,11 @@ use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
  */
 final readonly class StoreTenantEntitlements implements TenantEntitlements
 {
+    /**
+     * The shares of a limit, in percent, whose crossing warns the reseller.
+     */
+    private const array WARNING_PERCENTS = [100, 80];
+
     public function __construct(
         private StoreResellerResolver $resellerResolver,
         private TenantResolver $tenantResolver,
@@ -90,6 +96,31 @@ final readonly class StoreTenantEntitlements implements TenantEntitlements
             $this->canAdd($limit, $amount, $tenant),
             EntitlementExceededException::limitReached($limit, $this->limit($limit, $tenant) ?? 0),
         );
+    }
+
+    /**
+     * Fire one warning per threshold the added amount crossed, highest first.
+     */
+    public function recordAdded(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
+    {
+        $store = $tenant ?? $this->tenantResolver->current();
+        $allowed = $this->limit($limit, $store);
+
+        if (! $store instanceof Store || $allowed === null || $allowed === 0) {
+            return;
+        }
+
+        $capacity = $allowed * $limit->unitSize();
+        $usage = $this->usageRegistry->usage($limit, $store) ?? 0;
+        $before = $usage - $amount;
+
+        foreach (self::WARNING_PERCENTS as $percent) {
+            if ($before * 100 < $capacity * $percent && $usage * 100 >= $capacity * $percent) {
+                event(new StoreLimitApproached($store, $limit, $percent));
+
+                return;
+            }
+        }
     }
 
     /**

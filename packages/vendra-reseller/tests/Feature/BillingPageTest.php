@@ -116,6 +116,18 @@ it('schedules a downgrade and cancels it again', function (): void {
     expect($current->refresh()->scheduled_plan_id)->toBeNull();
 });
 
+it('warns when the stores have outgrown the scheduled downgrade', function (): void {
+    $reseller = billingReseller();
+    billingSubscription($reseller, Plan::factory()->active()->priced(6_000)->maxUnits(5)->create(['name' => 'Growth']), [
+        'scheduled_plan_id' => Plan::factory()->active()->priced(3_000)->maxUnits(1)->create(['name' => 'Starter'])->id,
+    ]);
+    Store::factory()->count(2)->create(['reseller_id' => $reseller->getKey()]);
+    actAsBillingReseller($reseller);
+
+    livewire(Billing::class)
+        ->assertSee(__('vendra-reseller::attributes.scheduled_plan_outgrown', ['plan' => 'Starter', 'current' => 'Growth']));
+});
+
 it('turns auto-renew off and on', function (): void {
     $reseller = billingReseller();
     $current = billingSubscription($reseller, Plan::factory()->active()->priced(3_000)->create());

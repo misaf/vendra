@@ -64,6 +64,7 @@ return [
     'auto_renews' => 'Automatische Verlängerung',
     'scheduled_plan' => 'Geplante Änderung',
     'scheduled_plan_from' => ':plan ab :date',
+    'scheduled_plan_outgrown' => 'Ihre Stores nutzen mehr, als :plan erlaubt, daher verlängert sich der nächste Zeitraum stattdessen mit :current.',
     'wallet' => 'Guthaben',
     'wallet_top_up_hint' => 'Tarife werden aus Ihrem Guthaben bezahlt. Wenden Sie sich zum Aufladen mit Ihren Zahlungsdaten an den Support.',
     'wallet_balance' => 'Kontostand',

@@ -17,11 +17,13 @@ use Misaf\VendraReseller\Listeners\NotifyInvoiceIssued;
 use Misaf\VendraReseller\Listeners\RemindExpiringSubscriber;
 use Misaf\VendraReseller\Listeners\RenewAfterWalletDeposit;
 use Misaf\VendraReseller\Listeners\SuspendSubscriberStores;
+use Misaf\VendraReseller\Listeners\WarnResellerOfStoreLimit;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraReseller\Support\EloquentStoreResellerResolver;
 use Misaf\VendraReseller\Support\ResellerPlanUsageGuard;
 use Misaf\VendraReseller\Support\ResellerStoreSuspender;
 use Misaf\VendraStore\Contracts\StoreResellerResolver;
+use Misaf\VendraStore\Events\StoreLimitApproached;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
@@ -88,6 +90,7 @@ final class ResellerServiceProvider extends PackageServiceProvider
         );
 
         Event::listen(ScheduledPlanChangeDropped::class, NotifyDroppedPlanChange::class);
+        Event::listen(StoreLimitApproached::class, WarnResellerOfStoreLimit::class);
         Event::listen(SubscriptionActivated::class, NotifyActivatedSubscriber::class);
         Event::listen(SubscriptionCancelled::class, SuspendSubscriberStores::class);
         Event::listen(SubscriptionExpiringSoon::class, RemindExpiringSubscriber::class);

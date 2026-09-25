@@ -42,7 +42,7 @@ description: "Create, modify, review, or test the Vendra Reseller module in pack
 
 ## Subscription Reactions
 
-- `Providers\ResellerServiceProvider` maps generic subscription events to reseller behaviour: `SubscriptionActivated` → `NotifyActivatedSubscriber`, `SubscriptionExpiringSoon` → `RemindExpiringSubscriber`, and both `SubscriptionCancelled` / `SubscriptionGraceExpired` → `SuspendSubscriberStores`.
+- `Providers\ResellerServiceProvider` maps generic subscription events to reseller behaviour: `SubscriptionActivated` → `NotifyActivatedSubscriber`, `SubscriptionExpiringSoon` → `RemindExpiringSubscriber`, both `SubscriptionCancelled` / `SubscriptionGraceExpired` → `SuspendSubscriberStores`, `ScheduledPlanChangeDropped` → `NotifyDroppedPlanChange`, and the store package's `StoreLimitApproached` → `WarnResellerOfStoreLimit`. The Billing page and renew action take the next plan from `PlanCoverage::renewalPlan()` and flag an outgrown scheduled downgrade.
 - Add new reactions as listeners here. Do not push reseller knowledge into the subscription engine, and do not register the same listeners again in the host app.
 
 ## Panel

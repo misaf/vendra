@@ -173,6 +173,23 @@ it('blocks a renewal that cannot hold the current stores', function (): void {
     expect($reseller->subscriptions()->count())->toBe(1);
 });
 
+it('flags and filters resellers whose plan includes priority support', function (): void {
+    actingConsoleAdmin();
+
+    $priority = Reseller::factory()->active()->create();
+    Subscription::factory()->forSubscriber($priority)->for(Plan::factory()->active()->withFeatures(['priority_support']))->create();
+    $standard = Reseller::factory()->active()->create();
+    Subscription::factory()->forSubscriber($standard)->for(Plan::factory()->active())->create();
+
+    livewire(ListResellers::class)
+        ->loadTable()
+        ->assertTableColumnStateSet('has_priority_support', true, $priority)
+        ->assertTableColumnStateSet('has_priority_support', false, $standard)
+        ->filterTable('priority_support')
+        ->assertCanSeeTableRecords([$priority])
+        ->assertCanNotSeeTableRecords([$standard]);
+});
+
 it('deactivates and reactivates a reseller from the table through the domain action', function (): void {
     actingConsoleAdmin();
 

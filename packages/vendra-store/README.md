@@ -204,7 +204,8 @@ aliasing or replacing onto one needs the plan's `custom_domain` feature; with no
 domain configured nothing counts as custom. Adding an alias also respects the plan's
 `domains_per_store` limit. Both throw `EntitlementExceededException`. Console-owned
 stores are unrestricted. `Support\StoreTenantEntitlements` answers these questions
-for every package through the support `TenantEntitlements` contract.
+for every package through the support `TenantEntitlements` contract. When an
+add crosses 80% or 100% of a limit, `recordAdded()` fires `StoreLimitApproached`.
 
 ### Operating and offboarding a store
 

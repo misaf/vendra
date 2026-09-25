@@ -8,8 +8,10 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -32,6 +34,7 @@ use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\ResetUserTwoFactorT
 use Misaf\VendraConsole\Filament\Resources\Resellers\ResellerResource;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
+use Misaf\VendraSupport\Enums\PlanFeature;
 use Misaf\VendraSupport\Filament\Tables\Columns\CreatedAtColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
 use Misaf\VendraSupport\Filament\Tables\Columns\RowIndexColumn;
@@ -60,6 +63,12 @@ final class ResellerTable
                     ->label(__('vendra-console::attributes.stores_count'))
                     ->alignCenter(),
 
+                IconColumn::make('has_priority_support')
+                    ->label(PlanFeature::PrioritySupport->getLabel())
+                    ->boolean()
+                    ->alignCenter()
+                    ->sortable(),
+
                 IsActiveIconColumn::make(),
 
                 CreatedAtColumn::make()
@@ -84,6 +93,11 @@ final class ResellerTable
                             'none' => __('vendra-console::attributes.no_active_subscription'),
                         ])
                         ->query(fn (Builder $query, array $data): Builder => self::filterBySubscription($query, Arr::get($data, 'value', null))),
+
+                    Filter::make('priority_support')
+                        ->label(PlanFeature::PrioritySupport->getLabel())
+                        ->toggle()
+                        ->query(fn (Builder $query): Builder => self::filterByPrioritySupport($query)),
 
                     TrashedFilter::make(),
                 ],
@@ -120,6 +134,15 @@ final class ResellerTable
                 ]),
             ])
             ->defaultSort(column: 'id', direction: 'desc');
+    }
+
+    /**
+     * @param  Builder<Reseller>  $query
+     * @return Builder<Reseller>
+     */
+    private static function filterByPrioritySupport(Builder $query): Builder
+    {
+        return $query->withPlanFeature(PlanFeature::PrioritySupport);
     }
 
     /**

@@ -54,7 +54,7 @@ final class Dashboard extends \Filament\Pages\Dashboard
      */
     private function getResponsiveWidgetsSchemaComponents(): array
     {
-        $components = $this->getWidgetsSchemaComponents($this->getWidgets());
+        $components = array_values($this->getWidgetsSchemaComponents($this->getWidgets()));
         $componentCount = count($components);
 
         foreach ($components as $index => $component) {

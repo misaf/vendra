@@ -9,6 +9,7 @@ use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
+use Misaf\VendraSubscription\Models\Subscription;
 
 /**
  * Decide whether a plan still fits what a subscriber already uses: its units and,
@@ -46,5 +47,26 @@ final readonly class PlanCoverage
         }
 
         return true;
+    }
+
+    /**
+     * The plan a renewal of this period starts: the scheduled one while it still
+     * fits the subscriber, otherwise the current one.
+     */
+    public function renewalPlan(Subscription $current): ?Plan
+    {
+        $scheduled = $current->scheduledPlan;
+        $subscriber = $current->subscriber;
+
+        if ($scheduled instanceof Plan && $subscriber instanceof SubscriptionSubscriber && $this->covers($subscriber, $scheduled)) {
+            return $scheduled;
+        }
+
+        return $current->plan;
+    }
+
+    public function scheduledPlanOutgrown(Subscription $current): bool
+    {
+        return $current->scheduledPlan instanceof Plan && $this->renewalPlan($current) !== $current->scheduledPlan;
     }
 }

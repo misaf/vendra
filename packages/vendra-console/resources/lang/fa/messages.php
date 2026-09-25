@@ -18,6 +18,7 @@ return [
     'insufficient_wallet_balance_body' => 'این کار اکنون :amount کسر می‌کند و موجودی کیف پول :balance است. ابتدا کیف پول را شارژ کنید.',
     'subscription_renewed' => 'اشتراک تمدید شد.',
     'renewal_blocked' => 'تمدید مسدود شد',
+    'scheduled_plan_outgrown' => 'املاک این نماینده بیش از سقف طرح برنامه‌ریزی‌شده :plan استفاده می‌کنند، بنابراین با :current تمدید می‌شود.',
     'user_password_updated' => 'رمز عبور کاربر به‌روزرسانی شد.',
     'account_disabled' => 'حساب غیرفعال شد',
     'account_enabled' => 'حساب فعال شد',

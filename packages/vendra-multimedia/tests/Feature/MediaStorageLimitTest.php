@@ -52,6 +52,8 @@ function capStorageAtBytes(int $bytes): void
         {
             throw_unless($this->canAdd($limit, $amount, $tenant), EntitlementExceededException::limitReached($limit, 1));
         }
+
+        public function recordAdded(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void {}
     });
 }
 

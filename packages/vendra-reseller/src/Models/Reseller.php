@@ -27,6 +27,7 @@ use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionInvoice;
 use Misaf\VendraSubscription\Support\MoneyFormatter;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
+use Misaf\VendraSupport\Enums\PlanFeature;
 use Misaf\VendraSupport\Tenancy\Scopes\TeamScope;
 use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
 use Misaf\VendraTransaction\Models\Wallet;
@@ -98,6 +99,16 @@ final class Reseller extends Model implements ShouldLogActivity, SubscriptionSub
     protected function withActiveSubscription(Builder $query): Builder
     {
         return $query->whereHas('subscriptions', fn (Builder $query): Builder => $query->active());
+    }
+
+    /**
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function withPlanFeature(Builder $query, PlanFeature $feature): Builder
+    {
+        return $query->whereHas('subscriptions', fn (Builder $query): Builder => $query->active()->onPlanWithFeature($feature->value));
     }
 
     /**

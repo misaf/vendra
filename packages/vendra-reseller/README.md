@@ -156,12 +156,16 @@ them into reseller behaviour, wired in `Providers\ResellerServiceProvider`:
 | Event | Listener |
 | --- | --- |
 | `ScheduledPlanChangeDropped` | `NotifyDroppedPlanChange` |
+| `StoreLimitApproached` (vendra-store) | `WarnResellerOfStoreLimit` |
 | `SubscriptionActivated` | `NotifyActivatedSubscriber` |
 | `SubscriptionCancelled` | `SuspendSubscriberStores` |
 | `SubscriptionExpiringSoon` | `RemindExpiringSubscriber` |
 | `SubscriptionGraceExpired` | `SuspendSubscriberStores` |
 | `SubscriptionInvoiceIssued` | `NotifyInvoiceIssued` |
 | `TransactionApproved` (deposit) | `RenewAfterWalletDeposit` |
+
+`WarnResellerOfStoreLimit` emails the reseller once a store crosses 80% and
+again at 100% of a plan limit.
 
 `RenewAfterWalletDeposit` retries an auto-renewing plan that expired or went
 past due for lack of funds as soon as the reseller's wallet is credited.

@@ -10,4 +10,7 @@ return [
     'limit_products_per_store' => 'Products per store',
     'limit_reached' => 'You have reached your plan\'s limit for :limit (:allowed).',
     'limit_storage_megabytes_per_store' => 'Storage per store (MB)',
+    'plan_usage' => 'Plan usage',
+    'usage_at_limit' => 'Limit reached. Ask your reseller to upgrade the plan.',
+    'usage_remaining' => ':count left',
 ];

@@ -10,4 +10,7 @@ return [
     'limit_products_per_store' => 'محصول برای هر ملک',
     'limit_reached' => 'به سقف طرح خود برای :limit (:allowed) رسیده‌اید.',
     'limit_storage_megabytes_per_store' => 'فضای ذخیره‌سازی هر ملک (مگابایت)',
+    'plan_usage' => 'مصرف طرح',
+    'usage_at_limit' => 'به سقف رسیده‌اید. از نماینده خود بخواهید طرح را ارتقا دهد.',
+    'usage_remaining' => ':count باقی‌مانده',
 ];

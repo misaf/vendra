@@ -40,4 +40,10 @@ interface TenantEntitlements
      * @throws EntitlementExceededException
      */
     public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void;
+
+    /**
+     * Report an amount that was just added, so the tenant's reseller can be warned
+     * when it pushes usage toward the limit.
+     */
+    public function recordAdded(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void;
 }
