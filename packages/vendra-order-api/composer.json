@@ -21,10 +21,14 @@
     "require": {
         "php": "^8.4",
         "illuminate/support": "^13.0",
+        "misaf/vendra-address": "self.version",
         "misaf/vendra-api": "self.version",
+        "misaf/vendra-cart": "self.version",
         "misaf/vendra-delivery": "self.version",
         "misaf/vendra-order": "self.version",
         "misaf/vendra-product": "self.version",
+        "misaf/vendra-support": "self.version",
+        "misaf/vendra-transaction": "self.version",
         "spatie/laravel-package-tools": "^1.93.1"
     },
     "autoload": {

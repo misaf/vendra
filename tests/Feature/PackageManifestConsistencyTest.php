@@ -268,6 +268,64 @@ it('requires vendra-multimedia in every package whose src uses the Spatie media 
     expect($undeclared)->toBeEmpty();
 });
 
+it('requires or suggests every Vendra module a package imports outside its tests', function (): void {
+    $manifestPaths = glob(base_path('packages/*/composer.json')) ?: [];
+    $namespacesByPackage = [];
+
+    foreach ($manifestPaths as $manifestPath) {
+        $manifest = json_decode(
+            file_get_contents($manifestPath),
+            true,
+            flags: JSON_THROW_ON_ERROR,
+        );
+
+        foreach (array_keys(Arr::get($manifest, 'autoload.psr-4', [])) as $namespace) {
+            $namespacesByPackage[Arr::get($manifest, 'name')][] = mb_rtrim($namespace, '\\');
+        }
+    }
+
+    $undeclared = [];
+
+    foreach ($manifestPaths as $manifestPath) {
+        $packagePath = dirname($manifestPath);
+        $manifest = json_decode(file_get_contents($manifestPath), true, flags: JSON_THROW_ON_ERROR);
+        // A suggested module is an optional integration its source guards before touching.
+        $declared = Arr::get($manifest, 'require', []) + Arr::get($manifest, 'suggest', []);
+
+        foreach (['src', 'config', 'database', 'routes'] as $directory) {
+            if (! is_dir("{$packagePath}/{$directory}")) {
+                continue;
+            }
+
+            $sourceFiles = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator("{$packagePath}/{$directory}", FilesystemIterator::SKIP_DOTS),
+            );
+
+            foreach ($sourceFiles as $sourceFile) {
+                if ($sourceFile->getExtension() !== 'php') {
+                    continue;
+                }
+
+                $contents = (string) file_get_contents($sourceFile->getPathname());
+
+                foreach ($namespacesByPackage as $package => $namespaces) {
+                    if ($package === Arr::get($manifest, 'name') || array_key_exists($package, $declared)) {
+                        continue;
+                    }
+
+                    foreach ($namespaces as $namespace) {
+                        if (preg_match('/^use '.preg_quote($namespace, '/').'\\\\/m', $contents) === 1) {
+                            $undeclared[basename($packagePath).' → '.$package] = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    expect(array_keys($undeclared))->toBeEmpty();
+});
+
 it('does not keep package-level Composer lock files', function (): void {
     expect(array_values(glob(base_path('packages/*/composer.lock')) ?: []))->toBeEmpty();
 });

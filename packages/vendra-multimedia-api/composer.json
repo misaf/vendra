@@ -23,6 +23,7 @@
         "illuminate/support": "^13.0",
         "misaf/vendra-api": "self.version",
         "misaf/vendra-multimedia": "self.version",
+        "misaf/vendra-support": "self.version",
         "spatie/laravel-package-tools": "^1.93.1"
     },
     "autoload": {
