@@ -8,6 +8,7 @@ use Composer\InstalledVersions;
 use Filament\Panel;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
+use Misaf\VendraMultimedia\Console\Commands\RelocateMediaCommand;
 use Misaf\VendraMultimedia\Console\Commands\SeedCommand;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraMultimedia\MultimediaPlugin;
@@ -33,7 +34,7 @@ final class MultimediaServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_media_table',
             ])
-            ->hasCommands(SeedCommand::class)
+            ->hasCommands(RelocateMediaCommand::class, SeedCommand::class)
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command->askToStarRepoOnGitHub('misaf/vendra-multimedia');
             });
