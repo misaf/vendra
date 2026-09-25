@@ -6,6 +6,7 @@ namespace Misaf\VendraMultimedia\Providers;
 
 use Composer\InstalledVersions;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Console\AboutCommand;
 use Illuminate\Support\Facades\Config;
 use Misaf\VendraMultimedia\Console\Commands\RelocateMediaCommand;
@@ -13,9 +14,12 @@ use Misaf\VendraMultimedia\Console\Commands\SeedCommand;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraMultimedia\MultimediaPlugin;
 use Misaf\VendraMultimedia\Support\DefaultPathGenerator;
+use Misaf\VendraSupport\Contracts\TenantResolver;
+use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
+use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -84,6 +88,13 @@ final class MultimediaServiceProvider extends PackageServiceProvider
     {
         $this->app->make(TenantTableRegistry::class)->register('media');
         $this->app->make(TenantSeeders::class)->register('vendra-multimedia:seed', priority: 26);
+        $this->app->make(TenantUsageRegistry::class)->register(
+            PlanLimit::StorageMegabytesPerStore,
+            fn (Model $tenant): int => (int) Multimedia::query()
+                ->withoutGlobalScopes()
+                ->where(resolve(TenantResolver::class)->foreignKey(), $tenant->getKey())
+                ->sum('size'),
+        );
         AboutCommand::add('Vendra Multimedia', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-multimedia')]);
     }
 }

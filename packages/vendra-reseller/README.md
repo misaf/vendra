@@ -122,7 +122,9 @@ reseller cannot create stores; an offboarded reseller cannot be reactivated.
 `Models\Reseller` implements `SubscriptionSubscriber`, so plan limits are
 answered by `misaf/vendra-subscription` and store quotas by
 `Misaf\VendraStore\Support\StoreQuota` — no limit arithmetic is duplicated
-here.
+here. `Support\ResellerPlanUsageGuard` refuses a plan change or renewal onto a
+plan whose per-store limits any of the reseller's stores already exceeds, or that
+drops `custom_domain` while a store uses a custom domain.
 
 ```php
 $reseller->canHoldUnits();

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Support\StoreQuota;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
+use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
+use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 use Misaf\VendraTenant\Enums\TenantProvisioningStatus;
 use Misaf\VendraUser\Actions\CreateUserAction;
 use Misaf\VendraUser\Models\User;
@@ -25,10 +27,14 @@ final readonly class CreateStoreAction
     ) {}
 
     /**
-     * The caller normalizes and validates the domain first.
+     * The caller normalizes and validates the domain first. A reseller's store
+     * needs a plan with the custom domain feature to use a custom domain.
      *
      * @param  (Model&SubscriptionSubscriber)|null  $reseller
      * @return array{store: Store, user: User}
+     *
+     * @throws EntitlementExceededException
+     * @throws SubscriptionLimitException
      */
     public function execute(
         string $name,
@@ -51,7 +57,9 @@ final readonly class CreateStoreAction
             $resellerId = null;
 
             if ($reseller !== null) {
-                $resellerId = $this->storeQuota->lockAndAssertCanCreateStore($reseller)->getKey();
+                $lockedReseller = $this->storeQuota->lockAndAssertCanCreateStore($reseller);
+                $this->storeQuota->assertCanUseDomain($lockedReseller, $domain);
+                $resellerId = $lockedReseller->getKey();
             }
 
             $createdStore = Store::query()->create([

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Misaf\VendraSubscription\Context\SubscriptionContextKeys;
 use Misaf\VendraSubscription\Contracts\BillingProfile;
+use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
@@ -32,6 +33,7 @@ final readonly class SubscribeAction
     public function __construct(
         private SubscriptionCharger $subscriptionCharger,
         private SubscriptionRegistry $subscriptionRegistry,
+        private PlanUsageGuard $planUsageGuard,
         private SubscriptionUnitSuspender $unitSuspender,
         private BillingProfile $billingProfile,
     ) {}
@@ -75,6 +77,8 @@ final readonly class SubscribeAction
                 if ($currentUnits > $plan->max_units) {
                     throw SubscriptionLimitException::planBelowUsage($lockedSubscriber, $plan->max_units, $currentUnits);
                 }
+
+                $this->planUsageGuard->assertPlanCovers($lockedSubscriber, $plan);
 
                 $openPayments = $this->subscriptionRegistry->lockOpenPayments($lockedSubscriber);
 

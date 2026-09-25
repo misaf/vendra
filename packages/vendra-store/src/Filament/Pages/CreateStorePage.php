@@ -21,6 +21,7 @@ use Misaf\VendraStore\Support\StorefrontConfigurationValidator;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
+use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 
 /**
  * Panels only differ in how they resolve the billing reseller.
@@ -60,6 +61,13 @@ abstract class CreateStorePage extends CreateRecord
                 ->danger()
                 ->title(__('vendra-store::messages.store_limit_reached'))
                 ->body($exception->getMessage())
+                ->send();
+
+            throw new Halt;
+        } catch (EntitlementExceededException $exception) {
+            Notification::make()
+                ->danger()
+                ->title($exception->getMessage())
                 ->send();
 
             throw new Halt;

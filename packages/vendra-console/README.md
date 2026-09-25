@@ -115,7 +115,7 @@ tenant-aware helpers, and join explicitly where a listing must be per-tenant.
 | `StoreResource` | `Misaf\VendraStore`'s provisioning, lifecycle, storefront, domain, billing-reseller, and offboarding actions; administrator membership delegates to `misaf/vendra-user` |
 | `StorefrontDeploymentResource` | Read-only deployment history, with live observation through `StorefrontProvisioner` in the lazy `StorefrontRuntimeObservation` footer widget; recovery delegates to `vendra-store` actions |
 | `ResellerResource` | `Misaf\VendraReseller`'s reseller/user account actions and `misaf/vendra-subscription`'s lifecycle actions |
-| `PlanResource` | `misaf/vendra-subscription`'s plan model |
+| `PlanResource` | `misaf/vendra-subscription`'s plan model; the form edits the plan's `PlanFeature` flags and one field per `PlanLimit`, where an empty limit means unlimited |
 | `ActivityLogResource` | `misaf/vendra-activity-log`'s model, read-only and across every tenant |
 | `InvoiceResource` | `misaf/vendra-subscription`'s issued invoices, read-only, filtered by reseller, with an on-demand PDF download |
 

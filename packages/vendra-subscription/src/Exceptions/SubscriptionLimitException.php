@@ -57,6 +57,32 @@ final class SubscriptionLimitException extends RuntimeException
         ));
     }
 
+    /**
+     * @param  Model&SubscriptionSubscriber  $subscriber
+     */
+    public static function planBelowEntitlementUsage(SubscriptionSubscriber $subscriber, string $limit, int $allowed, int $used): self
+    {
+        return new self(sprintf(
+            'Subscriber [%s] uses %d of [%s], which exceeds the [%d] allowed by the selected plan.',
+            self::formatKey($subscriber->getKey()),
+            $used,
+            $limit,
+            $allowed,
+        ));
+    }
+
+    /**
+     * @param  Model&SubscriptionSubscriber  $subscriber
+     */
+    public static function planLacksFeature(SubscriptionSubscriber $subscriber, string $feature): self
+    {
+        return new self(sprintf(
+            'Subscriber [%s] uses [%s], which the selected plan does not include.',
+            self::formatKey($subscriber->getKey()),
+            $feature,
+        ));
+    }
+
     private static function formatKey(mixed $key): string
     {
         return is_scalar($key) ? (string) $key : '';

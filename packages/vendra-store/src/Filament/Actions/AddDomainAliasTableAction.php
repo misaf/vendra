@@ -13,6 +13,7 @@ use Illuminate\Support\Arr;
 use Misaf\VendraStore\Actions\AddStoreDomainAliasAction;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
+use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 
 /**
  * Panels override {@see authorizationCallback()} to apply their own access rules.
@@ -49,7 +50,16 @@ abstract class AddDomainAliasTableAction extends Action
                     return;
                 }
 
-                resolve(AddStoreDomainAliasAction::class)->execute($record, $domain);
+                try {
+                    resolve(AddStoreDomainAliasAction::class)->execute($record, $domain);
+                } catch (EntitlementExceededException $exception) {
+                    Notification::make()
+                        ->danger()
+                        ->title($exception->getMessage())
+                        ->send();
+
+                    $this->halt();
+                }
 
                 Notification::make()
                     ->success()

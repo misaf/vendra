@@ -6,6 +6,7 @@ namespace Misaf\VendraSubscription\Actions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
@@ -18,6 +19,7 @@ final readonly class ChangeSubscriptionPlanAction
     public function __construct(
         private SubscribeAction $subscribeAction,
         private SubscriptionRegistry $subscriptionRegistry,
+        private PlanUsageGuard $planUsageGuard,
     ) {}
 
     /**
@@ -58,6 +60,8 @@ final readonly class ChangeSubscriptionPlanAction
             if ($currentUnits > $plan->max_units) {
                 throw SubscriptionLimitException::planBelowUsage($lockedSubscriber, $plan->max_units, $currentUnits);
             }
+
+            $this->planUsageGuard->assertPlanCovers($lockedSubscriber, $plan);
 
             $current->refreshForUpdate()->update(['scheduled_plan_id' => $plan->id]);
 

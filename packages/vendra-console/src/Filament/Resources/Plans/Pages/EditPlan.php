@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 use Misaf\VendraConsole\Filament\Resources\Plans\Actions\DeletePlanPageAction;
 use Misaf\VendraConsole\Filament\Resources\Plans\PlanResource;
+use Misaf\VendraConsole\Filament\Resources\Plans\Schemas\PlanForm;
 use Misaf\VendraSubscription\Actions\UpdatePlanAction;
 use Misaf\VendraSubscription\Models\Plan;
 
@@ -21,6 +22,11 @@ final class EditPlan extends EditRecord
         return [
             DeletePlanPageAction::make(),
         ];
+    }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return PlanForm::normalizeLimits($data);
     }
 
     /**

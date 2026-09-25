@@ -48,7 +48,9 @@ else for the next renewal in `scheduled_plan_id`. An upgrade from a paid,
 running period keeps its end date and collects only the price difference for the
 time left; `Support\PlanChangeQuote` computes that outcome for a panel to show
 before the change. A downgrade the subscriber's current units exceed throws
-`SubscriptionLimitException`. Choosing the current plan drops a scheduled change.
+`SubscriptionLimitException`, and so does any plan the bound `PlanUsageGuard`
+refuses (the null default refuses nothing). Plans keep their per-unit caps in a
+JSON `limits` map read with `Plan::limit()`, where a missing key means unlimited. Choosing the current plan drops a scheduled change.
 
 `RenewSubscriptionAction` starts the next period on the scheduled plan, or the
 same one, for a period that is no longer active. Within the grace window it

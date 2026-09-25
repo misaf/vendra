@@ -14,11 +14,13 @@ use Misaf\VendraSupport\Capabilities\NullAttributeResolver;
 use Misaf\VendraSupport\Capabilities\NullCurrencyResolver;
 use Misaf\VendraSupport\Capabilities\NullSubscriptionCharger;
 use Misaf\VendraSupport\Capabilities\NullTagResolver;
+use Misaf\VendraSupport\Capabilities\NullTenantEntitlements;
 use Misaf\VendraSupport\Contracts\AttributeApiResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Misaf\VendraSupport\Contracts\SubscriptionCharger;
 use Misaf\VendraSupport\Contracts\TagResolver;
+use Misaf\VendraSupport\Contracts\TenantEntitlements;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
@@ -26,6 +28,7 @@ use Misaf\VendraSupport\Tenancy\Listeners\RunTenantSeeders;
 use Misaf\VendraSupport\Tenancy\NullTenantResolver;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
+use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 
 final class SupportServiceProvider extends ServiceProvider
 {
@@ -43,8 +46,10 @@ final class SupportServiceProvider extends ServiceProvider
         $this->app->singletonIf(CurrencyResolver::class, NullCurrencyResolver::class);
         $this->app->singletonIf(TagResolver::class, NullTagResolver::class);
         $this->app->singletonIf(SubscriptionCharger::class, NullSubscriptionCharger::class);
+        $this->app->singletonIf(TenantEntitlements::class, NullTenantEntitlements::class);
         $this->app->singleton(TenantSeeders::class);
         $this->app->singleton(TenantTableRegistry::class);
+        $this->app->singleton(TenantUsageRegistry::class);
 
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-support')) {

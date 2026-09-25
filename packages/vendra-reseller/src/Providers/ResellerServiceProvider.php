@@ -18,9 +18,11 @@ use Misaf\VendraReseller\Listeners\RenewAfterWalletDeposit;
 use Misaf\VendraReseller\Listeners\SuspendSubscriberStores;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraReseller\Support\EloquentStoreResellerResolver;
+use Misaf\VendraReseller\Support\ResellerPlanUsageGuard;
 use Misaf\VendraReseller\Support\ResellerStoreSuspender;
 use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
+use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
 use Misaf\VendraSubscription\Events\SubscriptionActivated;
 use Misaf\VendraSubscription\Events\SubscriptionCancelled;
@@ -53,6 +55,7 @@ final class ResellerServiceProvider extends PackageServiceProvider
     {
         $this->app->bind(StoreResellerResolver::class, EloquentStoreResellerResolver::class);
         $this->app->singleton(SubscriptionUnitSuspender::class, ResellerStoreSuspender::class);
+        $this->app->singleton(PlanUsageGuard::class, ResellerPlanUsageGuard::class);
     }
 
     public function packageBooted(): void

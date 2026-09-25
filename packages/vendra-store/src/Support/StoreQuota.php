@@ -6,9 +6,12 @@ namespace Misaf\VendraStore\Support;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Support\SubscriptionRegistry;
+use Misaf\VendraSupport\Enums\PlanFeature;
+use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 
 final readonly class StoreQuota
 {
@@ -52,6 +55,27 @@ final readonly class StoreQuota
         if ($subscriber->subscribedUnitCount() >= $plan->max_units) {
             throw SubscriptionLimitException::unitQuotaReached($subscriber, $plan->max_units);
         }
+    }
+
+    /**
+     * Assert the subscriber's plan covers a store on the given domain.
+     *
+     * @param  Model&SubscriptionSubscriber  $subscriber
+     *
+     * @throws EntitlementExceededException
+     */
+    public function assertCanUseDomain(SubscriptionSubscriber $subscriber, string $domain): void
+    {
+        if (! StoreDomain::isCustom($domain)) {
+            return;
+        }
+
+        $plan = $subscriber->activeSubscription()?->plan;
+
+        throw_unless(
+            $plan?->allows(PlanFeature::CustomDomain->value) ?? false,
+            EntitlementExceededException::featureUnavailable(PlanFeature::CustomDomain),
+        );
     }
 
     /**

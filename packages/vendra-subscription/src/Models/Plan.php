@@ -37,13 +37,14 @@ use Spatie\Sluggable\SlugOptions;
  * @property string|null $currency_code
  * @property int $trial_days
  * @property list<string>|null $features
+ * @property array<string, int>|null $limits
  * @property bool $active
  * @property bool $is_default
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  */
-#[Fillable(['name', 'slug', 'description', 'max_units', 'period_unit', 'period_count', 'grace_days', 'price', 'currency_code', 'trial_days', 'features', 'active', 'is_default'])]
+#[Fillable(['name', 'slug', 'description', 'max_units', 'period_unit', 'period_count', 'grace_days', 'price', 'currency_code', 'trial_days', 'features', 'limits', 'active', 'is_default'])]
 #[Hidden(['default_guard'])]
 #[ObservedBy([PlanObserver::class])]
 #[UseFactory(PlanFactory::class)]
@@ -79,6 +80,7 @@ final class Plan extends Model implements ShouldLogActivity
             'currency_code' => 'string',
             'trial_days' => 'integer',
             'features' => 'array',
+            'limits' => 'array',
             'active' => 'boolean',
             'is_default' => 'boolean',
         ];
@@ -153,6 +155,16 @@ final class Plan extends Model implements ShouldLogActivity
     public function allows(string $feature): bool
     {
         return in_array($feature, $this->features ?? [], true);
+    }
+
+    /**
+     * Get the limit for the key, or null when the plan leaves it unlimited.
+     */
+    public function limit(string $key): ?int
+    {
+        $limit = $this->limits[$key] ?? null;
+
+        return $limit === null ? null : (int) $limit;
     }
 
     public function resolveSuspendDate(Carbon $endsAt): Carbon

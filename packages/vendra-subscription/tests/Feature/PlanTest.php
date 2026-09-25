@@ -25,6 +25,14 @@ it('grants only its listed feature entitlements', function (): void {
         ->and($plan->allows('priority_support'))->toBeFalse();
 });
 
+it('reads its limits and leaves a missing limit unlimited', function (): void {
+    $plan = Plan::factory()->active()->withLimits(['products_per_store' => 50])->create();
+
+    expect($plan->refresh()->limit('products_per_store'))->toBe(50)
+        ->and($plan->limit('domains_per_store'))->toBeNull()
+        ->and(Plan::factory()->create()->limit('products_per_store'))->toBeNull();
+});
+
 it('resolves the period end and the grace-adjusted suspend date', function (): void {
     $plan = Plan::factory()->active()->period(PeriodUnit::Month, 2)->graceDays(7)->create();
     $start = Date::parse('2026-01-01');

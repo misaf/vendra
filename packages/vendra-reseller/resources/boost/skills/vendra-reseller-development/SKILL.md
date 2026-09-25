@@ -38,7 +38,7 @@ description: "Create, modify, review, or test the Vendra Reseller module in pack
 - Two-factor authentication is optional on the reseller panel: it registers Filament's `AppAuthentication` provider with recovery codes, the reseller turns it on from the profile page, and the login challenges only a user who did. Console staff remove a lost authenticator from the reseller row; there is no reseller-side reset.
 - `Actions\OffboardResellerAction` is the only supported removal path. `Reseller::deleting` throws for a reseller that was not offboarded first, and `Events\ResellerOffboarded` is the extension point.
 - `Actions\SetResellerActiveAction` is the only supported way to change `active` after creation. It locks the row and throws for an offboarded reseller; an inactive reseller keeps its stores but its account cannot enter the panel.
-- `Models\Reseller` implements `SubscriptionSubscriber` and `ShouldLogActivity`. Read quota state through `Misaf\VendraStore\Support\StoreQuota`; do not recompute plan limits inline. Suspend or reactivate a reseller's stores for billing through `Support\ResellerStoreSuspender` (the `SubscriptionUnitSuspender` binding), never from the model.
+- `Models\Reseller` implements `SubscriptionSubscriber` and `ShouldLogActivity`. Read quota state through `Misaf\VendraStore\Support\StoreQuota`; do not recompute plan limits inline. Suspend or reactivate a reseller's stores for billing through `Support\ResellerStoreSuspender` (the `SubscriptionUnitSuspender` binding), never from the model. `Support\ResellerPlanUsageGuard` is the `PlanUsageGuard` binding: it refuses a plan any store outgrows in its per-store limits or custom-domain use.
 
 ## Subscription Reactions
 

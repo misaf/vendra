@@ -198,6 +198,14 @@ lists the primary and each alias, and reconciliation treats a container routing 
 different alias set as drift. Container labels cannot change in place, so each of
 these actions moves the deployment's `domain` where needed and forces a redeploy.
 
+A reseller's plan decides which domains its stores may use. A domain outside
+`*.{storefront.base_domain}` is custom (`StoreDomain::isCustom()`), and creating,
+aliasing or replacing onto one needs the plan's `custom_domain` feature; with no base
+domain configured nothing counts as custom. Adding an alias also respects the plan's
+`domains_per_store` limit. Both throw `EntitlementExceededException`. Console-owned
+stores are unrestricted. `Support\StoreTenantEntitlements` answers these questions
+for every package through the support `TenantEntitlements` contract.
+
 ### Operating and offboarding a store
 
 `SuspendStoreAction` and `ReactivateStoreAction` own administrator-driven availability;

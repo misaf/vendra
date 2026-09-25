@@ -48,6 +48,8 @@ return new class extends Migration
                 ->default(0);
             $table->json('features')
                 ->nullable();
+            $table->json('limits')
+                ->nullable();
             $table->boolean('active')
                 ->index();
             $table->boolean('is_default')

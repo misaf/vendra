@@ -11,5 +11,7 @@ it('seeds the default plans idempotently', function (): void {
     Artisan::call('db:seed', ['--class' => PlanSeeder::class, '--force' => true]);
 
     expect(Plan::query()->count())->toBe(3)
-        ->and(Plan::query()->where('slug', 'pro')->sole()->allows('priority_support'))->toBeTrue();
+        ->and(Plan::query()->where('slug', 'pro')->sole()->allows('priority_support'))->toBeTrue()
+        ->and(Plan::query()->where('slug', 'free')->sole()->limit('products_per_store'))->toBe(50)
+        ->and(Plan::query()->where('slug', 'pro')->sole()->limit('products_per_store'))->toBeNull();
 });

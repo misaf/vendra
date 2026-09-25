@@ -11,11 +11,17 @@ use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
+use Misaf\VendraSupport\Contracts\TenantEntitlements;
+use Misaf\VendraSupport\Enums\PlanFeature;
+use Misaf\VendraSupport\Exceptions\EntitlementExceededException;
 use UnexpectedValueException;
 
 final readonly class ReplaceStoreDomainAction
 {
-    public function __construct(private StorefrontRuntimeConfiguration $runtime) {}
+    public function __construct(
+        private StorefrontRuntimeConfiguration $runtime,
+        private TenantEntitlements $entitlements,
+    ) {}
 
     /**
      * Replace the primary domain; other active domains stay as aliases.
@@ -24,6 +30,8 @@ final readonly class ReplaceStoreDomainAction
      * share a transaction so a failed create never leaves the store without a
      * domain. The storefront is redeployed because its routing label cannot
      * change in place. The caller validates the domain first.
+     *
+     * @throws EntitlementExceededException
      */
     public function execute(Store $store, string $domain): StoreDomain
     {
@@ -32,6 +40,10 @@ final readonly class ReplaceStoreDomainAction
          | replace would leave two primary domains once the store is restored.
          */
         throw_if($store->trashed(), (new ModelNotFoundException)->setModel(Store::class));
+
+        if (StoreDomain::isCustom($domain)) {
+            $this->entitlements->assertAllows(PlanFeature::CustomDomain, $store);
+        }
 
         /*
          | Read before the transaction, written inside it. A store owns at most

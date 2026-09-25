@@ -41,13 +41,17 @@ final class BillingSubscriber extends Model implements SubscriptionSubscriber
         });
     }
 
-    public static function withPlan(int $maxUnits, int $existingStores = 0): self
+    /**
+     * @param  list<string>  $features
+     * @param  array<string, int>|null  $limits
+     */
+    public static function withPlan(int $maxUnits, int $existingStores = 0, array $features = [], ?array $limits = null): self
     {
         $subscriber = self::query()->create();
 
         Subscription::factory()
             ->forSubscriber($subscriber)
-            ->for(Plan::factory()->active()->maxUnits($maxUnits))
+            ->for(Plan::factory()->active()->maxUnits($maxUnits)->withFeatures($features)->state(['limits' => $limits]))
             ->create();
 
         Store::factory()->count($existingStores)->create(['reseller_id' => $subscriber->getKey()]);

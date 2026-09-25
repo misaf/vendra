@@ -18,6 +18,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Unique;
 use Misaf\VendraStore\Concerns\BelongsToStore;
 use Misaf\VendraStore\Database\Factories\StoreDomainFactory;
+use Misaf\VendraStore\Support\StorefrontSettings;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -120,6 +121,22 @@ final class StoreDomain extends Model implements ShouldLogActivity
     public static function normalizeDomain(string $domain): string
     {
         return Str::lower(mb_trim($domain));
+    }
+
+    /**
+     * Determine whether the domain lies outside the platform's storefront base domain.
+     *
+     * Without a base domain there is nothing to tell a custom domain from.
+     */
+    public static function isCustom(string $domain): bool
+    {
+        $baseDomain = Str::lower(resolve(StorefrontSettings::class)->baseDomain);
+
+        if ($baseDomain === '') {
+            return false;
+        }
+
+        return ! Str::endsWith(self::normalizeDomain($domain), '.'.$baseDomain);
     }
 
     public function getSlugOptions(): SlugOptions

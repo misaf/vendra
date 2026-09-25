@@ -7,6 +7,7 @@ Tenant-aware media management for Vendra applications.
 - Tenant-scoped Spatie Media Library model
 - Tenant-grouped media storage paths (`{tenant}/{uuid}/`)
 - Default WebP media conversions helper
+- A per-store storage cap from the reseller's plan (`storage_megabytes_per_store`), checked on upload and on write
 - `ModelImageUpload`, `ModelImageEntry`, and `ModelImageColumn` Filament components for model image collections
 - Filament resource and optional widget on the `admin` panel
 - Translation and migration publishing support

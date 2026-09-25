@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraStore\Providers;
 
 use Composer\InstalledVersions;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraStore\Console\Commands\ReconcileStorefrontDeploymentsCommand;
 use Misaf\VendraStore\Console\Commands\RedeployStorefrontsCommand;
@@ -15,11 +16,16 @@ use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Observers\StoreDomainObserver;
+use Misaf\VendraStore\Scopes\StoreScope;
 use Misaf\VendraStore\Services\ContainerStorefrontProvisioner;
 use Misaf\VendraStore\Services\StoreDomainFinder;
 use Misaf\VendraStore\Support\NullStoreResellerResolver;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Misaf\VendraStore\Support\StorefrontSettings;
+use Misaf\VendraStore\Support\StoreTenantEntitlements;
+use Misaf\VendraSupport\Contracts\TenantEntitlements;
+use Misaf\VendraSupport\Enums\PlanLimit;
+use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 use Misaf\VendraTenant\Contracts\HostTenantFinder;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -76,11 +82,23 @@ final class StoreServiceProvider extends PackageServiceProvider
          | keeps this a default rather than a race with provider order.
          */
         $this->app->bindIf(StoreResellerResolver::class, NullStoreResellerResolver::class);
+
+        // A store's entitlements come from its billing reseller's plan.
+        $this->app->bind(TenantEntitlements::class, StoreTenantEntitlements::class);
     }
 
     public function packageBooted(): void
     {
         StoreDomain::observe(StoreDomainObserver::class);
+
+        resolve(TenantUsageRegistry::class)->register(
+            PlanLimit::DomainsPerStore,
+            static fn (Model $store): int => StoreDomain::query()
+                ->withoutGlobalScope(StoreScope::class)
+                ->where('store_id', $store->getKey())
+                ->where('active', true)
+                ->count(),
+        );
 
         AboutCommand::add('Vendra Store', fn (): array => [
             'Version' => InstalledVersions::getPrettyVersion('misaf/vendra-store'),

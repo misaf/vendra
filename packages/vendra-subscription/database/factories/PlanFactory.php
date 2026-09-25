@@ -57,6 +57,14 @@ final class PlanFactory extends Factory
         return $this->state(fn (): array => ['features' => $features]);
     }
 
+    /**
+     * @param  array<string, int>  $limits
+     */
+    public function withLimits(array $limits): static
+    {
+        return $this->state(fn (): array => ['limits' => $limits]);
+    }
+
     public function graceDays(int $days): static
     {
         return $this->state(fn (): array => ['grace_days' => $days]);
