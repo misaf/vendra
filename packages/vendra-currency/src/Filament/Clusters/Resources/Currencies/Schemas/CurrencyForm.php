@@ -18,6 +18,7 @@ use Misaf\VendraCurrency\Support\CurrencyRegistry;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 final class CurrencyForm
 {
@@ -45,7 +46,7 @@ final class CurrencyForm
                     ->rule(Rule::in(CurrencyRegistry::codes()))
                     ->searchable()
                     ->unique(
-                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
+                        modifyRuleUsing: fn (Unique $rule): Unique => self::constrainToCurrentTenant($rule),
                     ),
 
                 TextInput::make('name')
@@ -92,10 +93,22 @@ final class CurrencyForm
             ->columns(2);
     }
 
+    /**
+     * Outside a tenant, the code is unique among the platform's currencies.
+     */
+    private static function constrainToCurrentTenant(Unique $rule): Unique
+    {
+        if (TenantAwareness::enabled() && TenantAwareness::currentId() === null) {
+            return $rule->whereNull(TenantSchema::column());
+        }
+
+        return TenantAwareness::constrainUniqueRule($rule);
+    }
+
     /** @return array<string, string> */
     private static function installableCurrencyOptions(?Currency $record): array
     {
-        $installedCurrenciesQuery = Currency::query();
+        $installedCurrenciesQuery = TenantAwareness::constrainToCurrentTenant(Currency::query());
 
         if ($record !== null) {
             $installedCurrenciesQuery->whereKeyNot($record->getKey());

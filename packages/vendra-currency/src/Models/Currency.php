@@ -22,6 +22,9 @@ use Misaf\VendraCurrency\Enums\CurrencyType;
 use Misaf\VendraCurrency\Observers\CurrencyObserver;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
+use Misaf\VendraSupport\Tenancy\Scopes\TenantScope;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Money\Currencies\CurrencyList;
 use Money\Currency as MoneyCurrency;
 use Money\Formatter\DecimalMoneyFormatter;
@@ -29,10 +32,11 @@ use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
 /**
- * Exactly one active currency is the default.
+ * Exactly one active currency is the default. Tenantless rows are the
+ * platform's own currencies, which the console bills resellers in.
  *
  * @property int $id
- * @property int $tenant_id
+ * @property int|null $tenant_id
  * @property string $code
  * @property string $name
  * @property string|null $symbol
@@ -45,7 +49,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property Carbon $updated_at
  */
 #[Fillable(['code', 'name', 'symbol', 'decimal_places', 'type', 'active', 'is_default', 'position'])]
-#[Hidden(['tenant_id', 'default_guard'])]
+#[Hidden(['tenant_id', 'default_guard', 'platform_code_guard', 'platform_default_guard'])]
 #[ObservedBy([CurrencyObserver::class])]
 #[UseFactory(CurrencyFactory::class)]
 final class Currency extends Model implements ShouldLogActivity, Sortable
@@ -81,6 +85,23 @@ final class Currency extends Model implements ShouldLogActivity, Sortable
     protected function active(Builder $query): Builder
     {
         return $query->where('active', true);
+    }
+
+    /**
+     * Limit the query to the platform's currencies, even inside a tenant.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function platform(Builder $query): Builder
+    {
+        if (! TenantAwareness::enabled()) {
+            return $query;
+        }
+
+        return $query->withoutGlobalScope(TenantScope::class)
+            ->whereNull($query->qualifyColumn(TenantSchema::column()));
     }
 
     public function money(int|string $minorUnits): Money

@@ -6,18 +6,24 @@ namespace Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\Actions;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\Select;
+use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Arr;
 use Misaf\VendraCurrency\Actions\InstallCurrenciesAction;
+use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class InstallCurrenciesTableAction
 {
-    public static function make(): Action
+    /**
+     * @param  class-string<resource>  $resource
+     */
+    public static function make(string $resource = CurrencyResource::class): Action
     {
         return Action::make('installCurrencies')
-            ->authorize(fn (): bool => auth()->user()?->can('create', Currency::class) ?? false)
+            ->authorize(fn (): bool => $resource::canCreate())
             ->schema([
                 Select::make('codes')
                     ->label(__('vendra-currency::attributes.code'))
@@ -38,7 +44,7 @@ final class InstallCurrenciesTableAction
     /** @return array<string, string> */
     private static function uninstalledCurrencyOptions(): array
     {
-        $installedCodes = Currency::query()
+        $installedCodes = TenantAwareness::constrainToCurrentTenant(Currency::query())
             ->get(['code'])
             ->map(fn (Currency $currency): string => $currency->code);
 

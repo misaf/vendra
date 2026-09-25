@@ -7,12 +7,13 @@ namespace Misaf\VendraCurrency\Actions;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraCurrency\Models\Currency;
 use Misaf\VendraCurrency\Support\CurrencyRegistry;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class InstallCurrenciesAction
 {
     /**
      * Unsupported or installed codes are skipped. The caller requires at least
-     * one code.
+     * one code. Outside a tenant, this installs platform currencies.
      *
      * @param  list<mixed>  $codes
      */
@@ -26,7 +27,7 @@ final class InstallCurrenciesAction
                     continue;
                 }
 
-                if (Currency::query()->where('code', mb_strtoupper($code))->exists()) {
+                if (TenantAwareness::constrainToCurrentTenant(Currency::query())->where('code', mb_strtoupper($code))->exists()) {
                     continue;
                 }
 

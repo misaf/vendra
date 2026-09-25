@@ -14,7 +14,6 @@ use Misaf\VendraSupport\Capabilities\EloquentCurrencyResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
-use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -56,7 +55,11 @@ final class CurrencyServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->app->make(TenantTableRegistry::class)->register('currencies');
+        /*
+        | `currencies` is deliberately absent from the TenantTableRegistry: a
+        | null tenant id is a platform currency, so the `vendra-tenant:enable`
+        | retrofit must never backfill those rows or force the column NOT NULL.
+        */
         $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 30);
 
         AboutCommand::add('Vendra Currency', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-currency')]);

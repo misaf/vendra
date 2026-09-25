@@ -6,6 +6,7 @@ namespace Misaf\VendraSupport\Observers\Concerns;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 /**
  * Keep exactly one active row flagged `is_default` for an observed model with
@@ -15,6 +16,9 @@ use Illuminate\Database\Eloquent\Model;
  * the default goes away the first active row by the model's `ordered` scope, or
  * by key, takes over. A soft-deleted default gives up the flag, so restoring it
  * does not take the default back.
+ *
+ * A tenant-scoped model keeps one default per tenant, and one among its
+ * tenantless rows, whether or not a tenant is current.
  */
 trait MaintainsSingleActiveDefault
 {
@@ -40,7 +44,7 @@ trait MaintainsSingleActiveDefault
         }
 
         if ($model->getAttribute('is_default')) {
-            $model->newQuery()
+            TenantAwareness::constrainToTenantOf($model->newQuery(), $model)
                 ->where('is_default', true)
                 ->whereKeyNot($model->getKey())
                 ->update(['is_default' => false]);
@@ -100,7 +104,7 @@ trait MaintainsSingleActiveDefault
      */
     private function activeRows(Model $model): Builder
     {
-        $query = $model->newQuery();
+        $query = TenantAwareness::constrainToTenantOf($model->newQuery(), $model);
         $scoped = $query->scopes(['active']);
 
         return $scoped instanceof Builder ? $scoped : $query;

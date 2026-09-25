@@ -42,7 +42,7 @@ return new class extends Migration
                 ->default(0);
             $table->unsignedBigInteger('price')
                 ->default(0);
-            $table->char('currency_code', 3)
+            $table->string('currency_code', 16)
                 ->nullable();
             $table->unsignedInteger('trial_days')
                 ->default(0);
@@ -76,7 +76,7 @@ return new class extends Migration
                 ->index();
             $table->unsignedBigInteger('price')
                 ->default(0);
-            $table->char('currency_code', 3)
+            $table->string('currency_code', 16)
                 ->nullable();
             $table->timestampTz('trial_ends_at')
                 ->nullable();
@@ -121,7 +121,7 @@ return new class extends Migration
                 ->default(0);
             $table->unsignedInteger('tax_rate')
                 ->default(0);
-            $table->char('currency_code', 3);
+            $table->string('currency_code', 16);
             $table->string('status')
                 ->default('pending');
             $table->unsignedInteger('attempt_count')
@@ -160,7 +160,7 @@ return new class extends Migration
                 ->unique();
             $table->timestampTz('issued_at')
                 ->index();
-            $table->char('currency_code', 3);
+            $table->string('currency_code', 16);
             $table->unsignedBigInteger('net_amount');
             $table->unsignedInteger('tax_rate');
             $table->string('tax_label');

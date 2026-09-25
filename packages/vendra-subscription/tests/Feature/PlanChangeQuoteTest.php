@@ -42,6 +42,16 @@ it('defers a cheaper plan to the end of the period', function (): void {
     expect($quote->appliesNow)->toBeFalse();
 });
 
+it('defers a pricier plan in another currency to the end of the period', function (): void {
+    $quote = PlanChangeQuote::for(
+        runningSubscriptionOn(Plan::factory()->priced(3_000)->maxUnits(1)->make()),
+        Plan::factory()->priced(6_000, 'EUR')->maxUnits(5)->make(),
+    );
+
+    expect($quote->appliesNow)->toBeFalse()
+        ->and($quote->amount)->toBeNull();
+});
+
 it('treats the same price with more units as an upgrade', function (): void {
     $quote = PlanChangeQuote::for(
         runningSubscriptionOn(Plan::factory()->priced(3_000)->maxUnits(1)->make()),

@@ -26,7 +26,7 @@ description: "Create, modify, review, or test the Vendra Currency package in pac
 - Do not add a redundant direct Composer requirement solely because source code imports a type from that exposed dependency.
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
-- Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Keep `currencies` out of `TenantTableRegistry`: its null tenant id is a platform currency, and `vendra-tenant:enable {tenant}` would backfill those rows and force the column NOT NULL. Register any new tenant-only table (a non-nullable `TenantSchema::addTenantColumn()`) there, preserving configured table names and connections.
 
 ## Module Boundary
 
@@ -46,6 +46,7 @@ Follow the existing `Currency` model pattern for new currency entities. The cata
 - Prefer the Laravel attributes already used here, such as `#[Fillable]`, `#[Hidden]`, `#[UseFactory]`, and `#[ObservedBy]`.
 - Keep the module tenant-agnostic: derive tenant awareness purely from the bound `TenantResolver` in `misaf/vendra-support` (`TenantAwareness`, `BelongsToTenant`, `TenantSchema`, `RequiresCurrentTenant`). The module must build and run whether or not a tenant provider is installed, so never reference a concrete provider such as `Misaf\VendraTenant` anywhere — models, migrations, factories, seeders, or fixtures. There is no `tenant_aware` config toggle.
 - Hide `tenant_id` and keep tenant behavior centralized in the support layer; do not duplicate tenant scoping or `tenant_id` assignment in models, Filament resources, factories, or seeders. `BelongsToTenant` assigns `tenant_id` on `creating` from the current tenant.
+- Tenantless `currencies` rows are the platform's currencies (the console's, for plans and reseller wallets); each tenant keeps its own set and default. Outside a tenant, the install and default actions, `CurrencyForm` and the bound `CurrencyResolver` work on the platform rows through `TenantAwareness::constrainToCurrentTenant()`, and `Currency::query()->platform()` reaches them from inside a tenant too. Keep the `platform_code_guard` and `platform_default_guard` unique columns in the migration. Pass the authorizing resource to `CurrencyTable::configure()`, `InstallCurrenciesTableAction::make()` and `SetDefaultCurrencyTableAction::make()` rather than checking the policy directly.
 - Reuse only the traits and conventions present on the affected sibling model; do not infer translations, media, slugs, sorting, or soft deletes from another package.
 
 ## Filament Standards

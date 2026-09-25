@@ -77,9 +77,23 @@ use Misaf\VendraCurrency\Actions\SetDefaultCurrencyAction;
 (new SetDefaultCurrencyAction())->execute($currency);
 ```
 
+## Platform currencies
+
+Rows with a null tenant id are the platform's own currencies, which the console
+prices plans and credits reseller wallets in. Each store keeps its own
+currencies and its own default, and neither ever changes the other. Outside a
+tenant, `InstallCurrenciesAction`, `SetDefaultCurrencyAction` and the bound
+`CurrencyResolver` work on the platform rows; `Currency::query()->platform()`
+reaches them from anywhere. The schema keeps platform codes unique and allows
+one platform default. `Database\Seeders\PlatformCurrencySeeder` installs USD
+for the seeded plans.
+
 ## Filament
 
-The `Currencies` resource lives in the Sales cluster on the `admin` panel. Install currencies from the searchable catalog, toggle their active state, reorder them, and pick the default via the table toggle or row action.
+The `Currencies` resource lives in the Sales cluster on the `admin` panel.
+`CurrencyTable::configure()`, `InstallCurrenciesTableAction::make()` and
+`SetDefaultCurrencyTableAction::make()` take the resource that authorizes them,
+so the console reuses them for platform currencies. Install currencies from the searchable catalog, toggle their active state, reorder them, and pick the default via the table toggle or row action.
 
 ## Testing
 

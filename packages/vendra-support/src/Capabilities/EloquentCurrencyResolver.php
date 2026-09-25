@@ -7,6 +7,7 @@ namespace Misaf\VendraSupport\Capabilities;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Throwable;
 
 final readonly class EloquentCurrencyResolver implements CurrencyResolver
@@ -92,10 +93,12 @@ final readonly class EloquentCurrencyResolver implements CurrencyResolver
     }
 
     /**
+     * Outside a tenant, this resolves the platform's tenantless currencies.
+     *
      * @return Builder<Model>
      */
     private function query(): Builder
     {
-        return (new $this->currencyModel)->newQuery();
+        return TenantAwareness::constrainToCurrentTenant((new $this->currencyModel)->newQuery());
     }
 }

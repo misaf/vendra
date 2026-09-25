@@ -10,6 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
@@ -35,7 +36,10 @@ use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\Positio
 
 final class CurrencyTable
 {
-    public static function configure(Table $table): Table
+    /**
+     * @param  class-string<resource>  $resource
+     */
+    public static function configure(Table $table, string $resource = CurrencyResource::class): Table
     {
         /**
          * @var array<int, Column> $columns
@@ -72,7 +76,7 @@ final class CurrencyTable
                 ->label(__('vendra-currency::attributes.decimal_places')),
 
             IsActiveToggleColumn::make()
-                ->disabled(fn (Currency $record): bool => ! CurrencyResource::canEdit($record)),
+                ->disabled(fn (Currency $record): bool => ! $resource::canEdit($record)),
 
             CreatedAtColumn::make(),
 
@@ -113,7 +117,7 @@ final class CurrencyTable
 
                     EditAction::make(),
 
-                    SetDefaultCurrencyTableAction::make(),
+                    SetDefaultCurrencyTableAction::make($resource),
 
                     DeleteAction::make(),
                 ]),

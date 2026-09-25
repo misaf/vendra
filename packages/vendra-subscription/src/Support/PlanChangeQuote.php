@@ -16,6 +16,9 @@ use Misaf\VendraSubscription\Models\Subscription;
  * applies now; anything else waits for the end of the current period. A paid,
  * running period keeps its billing anchor on upgrade and collects only the
  * price difference for the time left.
+ *
+ * Prices in different currencies cannot be compared or netted, so a change
+ * from a paid period to a paid plan in another currency waits too.
  */
 final readonly class PlanChangeQuote
 {
@@ -31,6 +34,10 @@ final readonly class PlanChangeQuote
 
         if ($current === null || ! $current->isActive() || $current->ends_at === null) {
             return new self(appliesNow: true, endsAt: null, amount: null);
+        }
+
+        if (self::changesPaidCurrency($current, $plan)) {
+            return new self(appliesNow: false, endsAt: null, amount: null);
         }
 
         $currentSeconds = self::seconds($current->starts_at, $current->ends_at);
@@ -64,6 +71,14 @@ final readonly class PlanChangeQuote
     public function isProrated(): bool
     {
         return $this->endsAt !== null && $this->amount !== null;
+    }
+
+    private static function changesPaidCurrency(Subscription $current, Plan $plan): bool
+    {
+        return $current->price > 0
+            && ! $current->isOnTrial()
+            && ! $plan->isFree()
+            && $current->currency_code !== $plan->currency_code;
     }
 
     private static function isUpgrade(Subscription $current, Plan $plan, int $currentSeconds, int $planSeconds): bool
