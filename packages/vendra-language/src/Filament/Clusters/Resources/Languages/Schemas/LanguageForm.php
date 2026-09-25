@@ -14,6 +14,7 @@ use Misaf\VendraLanguage\Support\Locales;
 use Misaf\VendraSupport\Filament\Forms\Components\IsActiveToggle;
 use Misaf\VendraSupport\Filament\Forms\Components\IsDefaultToggle;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 final class LanguageForm
 {
@@ -32,7 +33,7 @@ final class LanguageForm
                     ->rule(Rule::in(Locales::all()))
                     ->searchable()
                     ->unique(
-                        modifyRuleUsing: fn (Unique $rule): Unique => TenantAwareness::constrainUniqueRule($rule),
+                        modifyRuleUsing: fn (Unique $rule): Unique => self::constrainToCurrentTenant($rule),
                     ),
 
                 IsActiveToggle::make()
@@ -46,7 +47,7 @@ final class LanguageForm
     /** @return array<string, string> */
     private static function installableLocaleOptions(?Language $record): array
     {
-        $installedLanguagesQuery = Language::query();
+        $installedLanguagesQuery = TenantAwareness::constrainToCurrentTenant(Language::query());
 
         if ($record !== null) {
             $installedLanguagesQuery->whereKeyNot($record->getKey());
@@ -59,5 +60,14 @@ final class LanguageForm
         return collect(Locales::options())
             ->except($installedLocales)
             ->all();
+    }
+
+    private static function constrainToCurrentTenant(Unique $rule): Unique
+    {
+        if (TenantAwareness::enabled() && TenantAwareness::currentId() === null) {
+            return $rule->whereNull(TenantSchema::column());
+        }
+
+        return TenantAwareness::constrainUniqueRule($rule);
     }
 }

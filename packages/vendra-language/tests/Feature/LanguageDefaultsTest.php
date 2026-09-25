@@ -164,11 +164,14 @@ it('creates the fresh language schema expected by the model', function (): void 
 
     if (TenantAwareness::enabled()) {
         $columns[] = 'tenant_id';
+        $columns[] = 'platform_locale_guard';
+        $columns[] = 'platform_default_guard';
     }
 
     expect(Schema::hasColumns('languages', $columns))->toBeTrue()
         ->and(Schema::hasColumn('languages', 'iso_code'))->toBeFalse()
-        ->and(Schema::hasColumn('languages', 'deleted_at'))->toBeFalse();
+        ->and(Schema::hasColumn('languages', 'deleted_at'))->toBeFalse()
+        ->and(Schema::hasColumn('language_lines', 'platform_tenant_guard'))->toBe(TenantAwareness::enabled());
 });
 
 it('resolves language switch locales after the current tenant is available', function (): void {

@@ -6,6 +6,7 @@ Tenant-aware language catalogs and database-backed translation lines for Vendra 
 
 - A platform locale catalog backed by Symfony Intl and ICU
 - Per-tenant enabled languages with exactly one default and sortable display order
+- Platform languages and translation overrides for Console, separate from store rows
 - Locale-specific database overrides powered by `spatie/laravel-translation-loader`
 - A global Filament language switcher
 - An optional bridge to `misaf/vendra-localization`
@@ -111,7 +112,7 @@ When `misaf/vendra-localization` is installed, this package supplies its support
 
 ## Filament
 
-The configured panels expose Languages and Language Lines within the Localization cluster. Language lines can override keys discovered in application and Vendra package translation files. Their form displays all enabled tenant locales together and retains stored values for locales that are later disabled. Installed languages can be temporarily disabled from the Languages table without deleting them. The Languages table reports override coverage per locale, while the Language Lines table reports enabled-locale completion and identifies missing locales.
+The configured Admin panel exposes Languages and Language Lines within the Localization cluster. Console uses separate resources for tenantless platform languages and translations. Language lines can override keys discovered in application and Vendra package translation files. Their form displays the active locales for the current store or platform and retains stored values for locales that are later disabled. Installed languages can be temporarily disabled from the Languages table without deleting them. The Languages table reports override coverage per locale, while the Language Lines table reports enabled-locale completion and identifies missing locales.
 
 The global language switcher uses the current tenant's enabled languages in display order and falls back to `config('app.fallback_locale')` when none are enabled.
 

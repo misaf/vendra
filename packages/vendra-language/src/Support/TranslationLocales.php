@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraLanguage\Support;
 
 use Misaf\VendraLanguage\Models\Language;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class TranslationLocales
 {
@@ -13,7 +14,7 @@ final class TranslationLocales
      */
     public static function active(): array
     {
-        $locales = Language::query()
+        $locales = TenantAwareness::constrainToCurrentTenant(Language::query())
             ->active()
             ->ordered()
             ->pluck('locale')

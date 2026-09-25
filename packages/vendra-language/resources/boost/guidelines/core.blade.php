@@ -1,6 +1,6 @@
 ## Vendra Language
 
-The `misaf/vendra-language` package owns multi-language support with tenant-aware languages and database translation lines and the Filament admin UI for languages and translation lines.
+The `misaf/vendra-language` package owns multi-language support with store and tenantless platform languages, database translation lines, and shared Filament UI components for Admin and Console resources.
 
 ### Translatable Persistence
 
@@ -18,7 +18,7 @@ The `misaf/vendra-language` package owns multi-language support with tenant-awar
 
 - Keep language domain code inside `packages/vendra-language` using the `Misaf\VendraLanguage` namespace.
 - Use this package for models, migrations, factories, seeders, policies, permission enums, observers, Filament resources, translations, config, and package bootstrapping.
-- Keep fresh installs to the two final create migrations for `languages` and `language_lines`. Put namespace and uniqueness invariants in those create migrations; do not add schema-alter or data-backfill migrations to the fresh baseline.
+- Keep the fresh-install create migration for `languages` and `language_lines` as the schema baseline. Tenant IDs are nullable, with separate uniqueness guards for tenantless language and translation rows.
 - Follow the slim `Language` model conventions: tenant ownership via `BelongsToTenant`, an ICU-validated `locale` tag (web/BCP-47), a boolean `active`, an `is_default` flag, and a sortable integer `position`. There is no stored name, slug, description, or media — display names derive from the ICU catalog through `Misaf\VendraLanguage\Support\Locales` (`symfony/intl`). A row is installed; `active` determines whether it participates in language switches, translation locale lists, and tenant locale resolution.
 - Keep package translation synchronization centralized in `TranslationCatalog` and `SyncLanguageLinesAction`. Discover only registered `vendra-*` translation namespaces from the Laravel file loader, flatten nested PHP translation arrays to dot-notation keys, and collect every locale provided by each installed package.
 - Treat package files as import defaults and database language lines as user-owned overrides. Synchronization may create missing lines and add locale keys that are absent from an existing line, but it must never replace an existing database locale value, including an intentionally blank value. Keep synchronization idempotent, tenant-scoped through `BelongsToTenant`, and transaction-safe.

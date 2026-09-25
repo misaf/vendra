@@ -7,6 +7,7 @@ namespace Misaf\VendraLanguage\Actions;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraLanguage\Models\LanguageLine;
 use Misaf\VendraLanguage\Support\TranslationCatalog;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final readonly class SyncLanguageLinesAction
 {
@@ -22,7 +23,7 @@ final readonly class SyncLanguageLinesAction
         return DB::transaction(function (): array {
             $catalogLines = $this->catalog->languageLines();
             $namespaces = array_values(array_unique(array_column($catalogLines, 'namespace')));
-            $existingLanguageLines = LanguageLine::query()
+            $existingLanguageLines = TenantAwareness::constrainToCurrentTenant(LanguageLine::query())
                 ->whereIn('namespace', $namespaces)
                 ->get()
                 ->keyBy(

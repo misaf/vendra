@@ -10,6 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Resources\Resource;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\TextColumn;
@@ -34,7 +35,8 @@ use Misaf\VendraSupport\Filament\Tables\Filters\QueryBuilder\Constraints\Positio
 
 final class LanguageTable
 {
-    public static function configure(Table $table): Table
+    /** @param class-string<resource> $resource */
+    public static function configure(Table $table, string $resource = LanguageResource::class): Table
     {
         /**
          * @var array<int, Column> $columns
@@ -55,7 +57,7 @@ final class LanguageTable
             IsDefaultIconColumn::make(),
 
             IsActiveToggleColumn::make()
-                ->disabled(fn (Language $record): bool => ! LanguageResource::canEdit($record)),
+                ->disabled(fn (Language $record): bool => ! $resource::canEdit($record)),
 
             TextColumn::make('translation_coverage')
                 ->badge()
@@ -112,7 +114,7 @@ final class LanguageTable
 
                     EditAction::make(),
 
-                    SetDefaultLanguageTableAction::make(),
+                    SetDefaultLanguageTableAction::make($resource),
 
                     DeleteAction::make(),
                 ]),

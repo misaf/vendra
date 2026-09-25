@@ -24,7 +24,7 @@ use Spatie\EloquentSortable\SortableTrait;
 
 /**
  * @property int $id
- * @property int $tenant_id
+ * @property int|null $tenant_id
  * @property string $locale
  * @property bool $active
  * @property bool $is_default
@@ -34,7 +34,7 @@ use Spatie\EloquentSortable\SortableTrait;
  * @property-read string $name
  */
 #[Fillable(['locale', 'active', 'is_default', 'position'])]
-#[Hidden(['tenant_id', 'default_guard'])]
+#[Hidden(['tenant_id', 'default_guard', 'platform_locale_guard', 'platform_default_guard'])]
 #[ObservedBy([LanguageObserver::class])]
 #[UseFactory(LanguageFactory::class)]
 final class Language extends Model implements ShouldLogActivity, Sortable

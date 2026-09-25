@@ -27,6 +27,7 @@ description: "Create, modify, review, or test the Vendra Language package in pac
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
 - Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Platform language and translation rows have a null tenant ID. Scope shared form options, progress, translation loading, and synchronization to the current tenant or tenantless platform rows, and preserve the platform uniqueness guards in migrations.
 
 ## Module Boundary
 
@@ -83,7 +84,7 @@ Migrations, factories, seeders, and translation files are part of the contract.
 - Keep synchronization idempotent and transaction-safe. Load existing tenant-scoped lines in a batch, let `BelongsToTenant` assign ownership, and return created, updated, and unchanged counts for user feedback.
 - Keep the shared synchronization action available from both Languages and Language Lines list pages. Since synchronization can create and update rows, authorize both Language Line create and update abilities.
 - Use package migrations in `database/migrations`, with stubs only when the install flow expects publishing.
-- Keep fresh installs to final create migrations for `languages` and `language_lines`; define namespace and uniqueness invariants there and do not include data backfills in the fresh baseline.
+- Keep fresh installs to the create migration for `languages` and `language_lines`. Define tenantless platform uniqueness there; do not include data backfills in the fresh baseline.
 - Use factories under `database/factories` and seeders under `database/seeders`. Keep them tenant-safe: import no concrete tenant provider and set no `tenant_id` directly; let `BelongsToTenant` assign it from the current tenant so they work with tenancy on or off.
 - Keep demo fixtures deterministic and tenant-safe.
 - Update all supported locales together and keep translation keys sorted.

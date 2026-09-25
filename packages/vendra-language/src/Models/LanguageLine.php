@@ -21,7 +21,7 @@ use Spatie\TranslationLoader\LanguageLine as SpatieLanguageLine;
 
 /**
  * @property int $id
- * @property int $tenant_id
+ * @property int|null $tenant_id
  * @property string|null $namespace
  * @property string $group
  * @property string $key
@@ -29,7 +29,7 @@ use Spatie\TranslationLoader\LanguageLine as SpatieLanguageLine;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-#[Hidden(['tenant_id', 'namespace_guard'])]
+#[Hidden(['tenant_id', 'namespace_guard', 'platform_tenant_guard'])]
 #[ObservedBy([LanguageLineObserver::class])]
 #[UseFactory(LanguageLineFactory::class)]
 final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguageLine, ShouldLogActivity
@@ -46,7 +46,7 @@ final class LanguageLine extends SpatieLanguageLine implements NamespacedLanguag
     {
         return Cache::rememberForever(
             self::getCacheKey($group, $locale, $namespace),
-            fn (): array => self::query()
+            fn (): array => TenantAwareness::constrainToCurrentTenant(self::query())
                 ->where('namespace', $namespace)
                 ->where('group', $group)
                 ->get()

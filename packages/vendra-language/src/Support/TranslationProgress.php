@@ -7,6 +7,7 @@ namespace Misaf\VendraLanguage\Support;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use Misaf\VendraLanguage\Models\LanguageLine;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 
 final class TranslationProgress
 {
@@ -89,7 +90,8 @@ final class TranslationProgress
      */
     private function languageLines(): Collection
     {
-        return $this->languageLines ??= LanguageLine::query()->get(['id', 'text']);
+        return $this->languageLines ??= TenantAwareness::constrainToCurrentTenant(LanguageLine::query())
+            ->get(['id', 'text']);
     }
 
     /**

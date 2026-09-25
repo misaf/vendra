@@ -17,6 +17,7 @@ use Livewire\Component as Livewire;
 use Misaf\VendraLanguage\Support\TranslationCatalog;
 use Misaf\VendraLanguage\Support\TranslationLocales;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 final class LanguageLineForm
 {
@@ -77,7 +78,11 @@ final class LanguageLineForm
                     ->searchable()
                     ->unique(
                         modifyRuleUsing: function (Unique $rule, Get $get): void {
-                            TenantAwareness::constrainUniqueRule($rule);
+                            if (TenantAwareness::enabled() && TenantAwareness::currentId() === null) {
+                                $rule->whereNull(TenantSchema::column());
+                            } else {
+                                TenantAwareness::constrainUniqueRule($rule);
+                            }
 
                             $group = $get->string('group', isNullable: true);
 
