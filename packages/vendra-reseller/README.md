@@ -155,6 +155,7 @@ them into reseller behaviour, wired in `Providers\ResellerServiceProvider`:
 
 | Event | Listener |
 | --- | --- |
+| `ScheduledPlanChangeDropped` | `NotifyDroppedPlanChange` |
 | `SubscriptionActivated` | `NotifyActivatedSubscriber` |
 | `SubscriptionCancelled` | `SuspendSubscriberStores` |
 | `SubscriptionExpiringSoon` | `RemindExpiringSubscriber` |

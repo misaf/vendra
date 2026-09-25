@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Actions;
 
+use Illuminate\Database\Eloquent\Model;
 use LogicException;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
+use Misaf\VendraSubscription\Events\ScheduledPlanChangeDropped;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Exceptions\SubscriptionPaymentException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
+use Misaf\VendraSubscription\Support\PlanCoverage;
 
 final readonly class RenewSubscriptionAction
 {
-    public function __construct(private SubscribeAction $subscribeAction) {}
+    public function __construct(
+        private SubscribeAction $subscribeAction,
+        private PlanCoverage $planCoverage,
+    ) {}
 
     /**
      * Start the next period on the scheduled plan, or the same one.
@@ -35,7 +41,7 @@ final readonly class RenewSubscriptionAction
 
         throw_unless($subscriber instanceof SubscriptionSubscriber, LogicException::class, "Subscription [{$current->id}] has unsupported subscriber type [{$current->subscriber_type}].");
 
-        $plan = $current->scheduledPlan ?? $current->plan;
+        $plan = $this->planFor($current, $subscriber);
 
         throw_unless($plan instanceof Plan, LogicException::class, "Subscription [{$current->id}] has no plan to renew.");
 
@@ -49,5 +55,27 @@ final readonly class RenewSubscriptionAction
             startsAt: $startsAt,
             autoRenews: $current->auto_renews,
         );
+    }
+
+    /**
+     * @param  Model&SubscriptionSubscriber  $subscriber
+     */
+    private function planFor(Subscription $current, SubscriptionSubscriber $subscriber): ?Plan
+    {
+        $scheduled = $current->scheduledPlan;
+
+        if (! $scheduled instanceof Plan) {
+            return $current->plan;
+        }
+
+        if ($this->planCoverage->covers($subscriber, $scheduled)) {
+            return $scheduled;
+        }
+
+        $current->update(['scheduled_plan_id' => null]);
+
+        event(new ScheduledPlanChangeDropped($current, $scheduled));
+
+        return $current->plan;
     }
 }

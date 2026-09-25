@@ -57,7 +57,9 @@ JSON `limits` map read with `Plan::limit()`, where a missing key means unlimited
 `RenewSubscriptionAction` starts the next period on the scheduled plan, or the
 same one, for a period that is no longer active. Within the grace window it
 continues from the old end date, so paying late loses no paid time; afterwards it
-starts now. `vendra-subscription:enforce` renews every lapsed period whose
+starts now. A scheduled plan the subscriber has outgrown since choosing it
+is dropped: the period renews on the current plan and `ScheduledPlanChangeDropped`
+fires. `vendra-subscription:enforce` renews every lapsed period whose
 `auto_renews` flag is set before expiring it; `SetSubscriptionAutoRenewAction`
 turns the flag on or off. Grace is measured from the last period that was ever
 live (`activated_at`, the `activated()` scope), so an unpaid renewal never

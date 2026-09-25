@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Event;
 use Misaf\VendraReseller\Auth\ResellerPanelAccessResolver;
 use Misaf\VendraReseller\Console\Commands\ProvisionStoreCommand;
 use Misaf\VendraReseller\Listeners\NotifyActivatedSubscriber;
+use Misaf\VendraReseller\Listeners\NotifyDroppedPlanChange;
 use Misaf\VendraReseller\Listeners\NotifyInvoiceIssued;
 use Misaf\VendraReseller\Listeners\RemindExpiringSubscriber;
 use Misaf\VendraReseller\Listeners\RenewAfterWalletDeposit;
@@ -24,6 +25,7 @@ use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
+use Misaf\VendraSubscription\Events\ScheduledPlanChangeDropped;
 use Misaf\VendraSubscription\Events\SubscriptionActivated;
 use Misaf\VendraSubscription\Events\SubscriptionCancelled;
 use Misaf\VendraSubscription\Events\SubscriptionExpiringSoon;
@@ -85,6 +87,7 @@ final class ResellerServiceProvider extends PackageServiceProvider
             fn (Store $store): BelongsTo => $store->belongsTo(Reseller::class, 'reseller_id', 'id', 'reseller'),
         );
 
+        Event::listen(ScheduledPlanChangeDropped::class, NotifyDroppedPlanChange::class);
         Event::listen(SubscriptionActivated::class, NotifyActivatedSubscriber::class);
         Event::listen(SubscriptionCancelled::class, SuspendSubscriberStores::class);
         Event::listen(SubscriptionExpiringSoon::class, RemindExpiringSubscriber::class);
