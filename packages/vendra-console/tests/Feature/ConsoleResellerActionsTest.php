@@ -74,6 +74,22 @@ it('blocks a plan change that cannot hold the current stores', function (): void
     expect($reseller->activeSubscription()?->plan_id)->toBe($currentPlan->getKey());
 });
 
+it('schedules a cheaper plan for the end of the period through the table row action', function (): void {
+    actingConsoleAdmin();
+
+    $reseller = Reseller::factory()->active()->create();
+    $plan = Plan::factory()->active()->priced(6_000)->create();
+    $current = Subscription::factory()->forSubscriber($reseller)->for($plan)->create(['price' => $plan->price, 'currency_code' => $plan->currency_code]);
+    $cheaper = Plan::factory()->active()->priced(3_000)->create();
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('changePlan')->table($reseller), ['plan_id' => $cheaper->getKey()])
+        ->assertNotified(__('vendra-console::messages.plan_change_scheduled', ['plan' => $cheaper->name]));
+
+    expect($reseller->subscriptions()->count())->toBe(1)
+        ->and($current->refresh()->scheduled_plan_id)->toBe($cheaper->getKey());
+});
+
 it('renews a lapsed subscription from where it ended through the table row action', function (): void {
     actingConsoleAdmin();
 

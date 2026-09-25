@@ -140,7 +140,10 @@ administrator to be removed, demoted, or disabled. Reseller row actions manage
 user credentials/account replacement and subscription change, renewal,
 extension, cancellation, and reactivation; a plan change or renewal whose plan
 cannot hold the reseller's current stores is refused with a notification.
-Renewal is offered only when nothing is running and no renewal awaits payment,
+Plan changes go through `Misaf\VendraSubscription\Actions\ChangeSubscriptionPlanAction`:
+each option is labelled with its effect, an upgrade applies now with a
+prorated charge up to the current end date, a downgrade is scheduled for the
+period end, and picking the current plan drops a scheduled change. Renewal is offered only when nothing is running and no renewal awaits payment,
 and goes through `Misaf\VendraSubscription\Actions\RenewSubscriptionAction`: it
 takes a scheduled downgrade, keeps the auto-renew choice, and continues from
 the old end date while within grace. The
