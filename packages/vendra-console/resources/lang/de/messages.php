@@ -14,7 +14,7 @@ return [
     'plan_change_scheduled' => 'Wechselt zu :plan, wenn der aktuelle Zeitraum endet.',
     'plan_change_pending_payment' => 'Wechselt zu :plan, sobald die Zahlung aus dem Guthaben erfolgt ist.',
     'insufficient_wallet_balance' => 'Nicht genügend Guthaben',
-    'insufficient_wallet_balance_body' => 'Dieser Wechsel belastet jetzt :amount, das Guthaben beträgt :balance. Laden Sie zuerst das Guthaben auf.',
+    'insufficient_wallet_balance_body' => 'Dies belastet jetzt :amount, das Guthaben beträgt :balance. Laden Sie zuerst das Guthaben auf.',
     'subscription_renewed' => 'Abonnement verlängert.',
     'renewal_blocked' => 'Verlängerung blockiert',
     'user_password_updated' => 'Benutzer-Passwort aktualisiert.',

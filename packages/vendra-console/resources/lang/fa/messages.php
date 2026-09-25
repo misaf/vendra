@@ -14,7 +14,7 @@ return [
     'plan_change_scheduled' => 'با پایان دوره فعلی به :plan منتقل می‌شود.',
     'plan_change_pending_payment' => 'پس از پرداخت از کیف پول به :plan منتقل می‌شود.',
     'insufficient_wallet_balance' => 'موجودی کیف پول کافی نیست',
-    'insufficient_wallet_balance_body' => 'این تغییر اکنون :amount کسر می‌کند و موجودی کیف پول :balance است. ابتدا کیف پول را شارژ کنید.',
+    'insufficient_wallet_balance_body' => 'این کار اکنون :amount کسر می‌کند و موجودی کیف پول :balance است. ابتدا کیف پول را شارژ کنید.',
     'subscription_renewed' => 'اشتراک تمدید شد.',
     'renewal_blocked' => 'تمدید مسدود شد',
     'user_password_updated' => 'رمز عبور کاربر به‌روزرسانی شد.',

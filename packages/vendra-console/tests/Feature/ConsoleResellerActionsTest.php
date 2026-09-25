@@ -133,6 +133,20 @@ it('renews a lapsed subscription from where it ended through the table row actio
         ->and($renewal->starts_at->equalTo($expired->ends_at))->toBeTrue();
 });
 
+it('refuses a renewal the wallet cannot cover', function (): void {
+    actingConsoleAdmin();
+
+    $reseller = Reseller::factory()->active()->create();
+    consoleResellerUserFor($reseller);
+    Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->active()->priced(3_000)->graceDays(5))->expired()->create();
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('renew')->table($reseller))
+        ->assertNotified(__('vendra-console::messages.insufficient_wallet_balance'));
+
+    expect($reseller->subscriptions()->count())->toBe(1);
+});
+
 it('hides renewal while a subscription is running', function (): void {
     actingConsoleAdmin();
 

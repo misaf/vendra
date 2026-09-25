@@ -95,10 +95,6 @@ final class ChangePlanTableAction extends Action
         return $label;
     }
 
-    /**
-     * Refuse a change that charges now when the wallet cannot cover it, rather
-     * than letting the payment fail and cancel the new period.
-     */
     private static function walletCoversChange(Reseller $reseller, Plan $plan): bool
     {
         $current = $reseller->activeSubscription();
@@ -108,28 +104,8 @@ final class ChangePlanTableAction extends Action
         }
 
         $quote = PlanChangeQuote::for($current, $plan);
-        $amount = $quote->amount ?? $plan->price;
 
-        if (! $quote->appliesNow || $amount === 0 || $plan->currency_code === null) {
-            return true;
-        }
-
-        $balance = $reseller->walletBalance($plan->currency_code);
-
-        if ($balance >= $amount) {
-            return true;
-        }
-
-        Notification::make()
-            ->danger()
-            ->title(__('vendra-console::messages.insufficient_wallet_balance'))
-            ->body(__('vendra-console::messages.insufficient_wallet_balance_body', [
-                'amount' => MoneyFormatter::format($amount, $plan->currency_code),
-                'balance' => MoneyFormatter::format($balance, $plan->currency_code),
-            ]))
-            ->send();
-
-        return false;
+        return ! $quote->appliesNow || self::walletCovers($reseller, $quote->amount ?? $plan->price, $plan->currency_code);
     }
 
     private static function outcome(Subscription $subscription, Plan $plan): string
