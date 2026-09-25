@@ -10,6 +10,7 @@ use Misaf\VendraConsole\Auth\ConsolePanelAccessResolver;
 use Misaf\VendraConsole\Console\Commands\CreateConsoleUserCommand;
 use Misaf\VendraConsole\Console\Commands\GrantConsoleAccessCommand;
 use Misaf\VendraConsole\Console\Commands\IssueConsolePasswordCommand;
+use Misaf\VendraConsole\Console\Commands\ResetConsoleTwoFactorCommand;
 use Misaf\VendraConsole\Console\Commands\RevokeConsoleUserCommand;
 use Misaf\VendraConsole\Support\SettingsBillingProfile;
 use Misaf\VendraSubscription\Contracts\BillingProfile;
@@ -34,6 +35,7 @@ final class ConsoleServiceProvider extends PackageServiceProvider
                 IssueConsolePasswordCommand::class,
                 GrantConsoleAccessCommand::class,
                 RevokeConsoleUserCommand::class,
+                ResetConsoleTwoFactorCommand::class,
             ])
             ->hasInstallCommand(function (InstallCommand $command): void {
                 $command

@@ -61,4 +61,6 @@ return [
     'runtime_unavailable_message' => 'محیط اجرا در دسترس نیست: :message',
     'storefront_reconciled' => 'همگام‌سازی ویترین در صف قرار گرفت',
     'wallet_credited' => 'کیف پول شارژ شد',
+    'reset_user_two_factor_description' => 'برنامه احراز هویت و کدهای بازیابی کاربر را حذف می‌کند. کاربر با گذرواژه وارد می‌شود و می‌تواند دوباره آن را از نمایه خود فعال کند.',
+    'user_two_factor_reset' => 'ورود دومرحله‌ای بازنشانی شد',
 ];

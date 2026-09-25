@@ -33,7 +33,7 @@ final class InvoiceTable
                 TextColumn::make('buyer_name')
                     ->label(__('vendra-console::navigation.reseller'))
                     ->icon(Heroicon::OutlinedUser)
-                    ->state(fn (SubscriptionInvoice $record): string => Arr::get($record->buyer, 'name')),
+                    ->state(fn (SubscriptionInvoice $record): string => Arr::string($record->buyer, 'name')),
 
                 TextColumn::make('issued_at')
                     ->label(__('vendra-console::attributes.issued_at'))

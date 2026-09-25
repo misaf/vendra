@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraConsole\Providers;
 
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\FontProviders\SpatieGoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -47,6 +48,7 @@ final class ConsolePanelServiceProvider extends PanelProvider
             ->login()
             ->passwordReset()
             ->emailVerification(isRequired: true)
+            ->multiFactorAuthentication(AppAuthentication::make()->recoverable(), isRequired: true)
             ->maxContentWidth(Width::Full)
             ->middleware([
                 EncryptCookies::class,

@@ -28,6 +28,7 @@ use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\OffboardResellerTab
 use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\ReactivateSubscriptionTableAction;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\RenewSubscriptionTableAction;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\ReplaceUserAccountTableAction;
+use Misaf\VendraConsole\Filament\Resources\Resellers\Actions\ResetUserTwoFactorTableAction;
 use Misaf\VendraConsole\Filament\Resources\Resellers\ResellerResource;
 use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
@@ -95,6 +96,7 @@ final class ResellerTable
                         ChangeUserPasswordTableAction::make(),
                         ChangeUserEmailTableAction::make(),
                         ReplaceUserAccountTableAction::make(),
+                        ResetUserTwoFactorTableAction::make(),
                     ])->dropdown(false),
                     ActionGroup::make([
                         ChangePlanTableAction::make(),

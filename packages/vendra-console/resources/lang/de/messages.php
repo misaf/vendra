@@ -61,4 +61,6 @@ return [
     'runtime_unavailable_message' => 'Laufzeit nicht verfügbar: :message',
     'storefront_reconciled' => 'Abgleich der Storefront eingeplant',
     'wallet_credited' => 'Guthaben aufgeladen',
+    'reset_user_two_factor_description' => 'Entfernt die Authenticator-App und die Wiederherstellungscodes des Benutzers. Er meldet sich mit seinem Passwort an und kann sie im Profil erneut einrichten.',
+    'user_two_factor_reset' => 'Zwei-Faktor-Authentifizierung zurückgesetzt',
 ];

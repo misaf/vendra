@@ -10,6 +10,7 @@ Tenant-aware user management for Vendra applications.
 - User creation, admin assignment, and permission seeding commands
 - Optional tags resolved through the shared Support capability contract
 - Domain actions for tenant administrator membership and credential/account changes
+- Authenticator-app two-factor authentication with recovery codes, for panels that opt in
 
 ## Requirements
 
@@ -88,6 +89,21 @@ throws without an identifier rather than matching every user.
 
 The `verified()` and `unverified()` scopes split users on `email_verified_at`;
 the user overview widget counts through them.
+
+## Two-factor authentication
+
+`User` implements Filament's `HasAppAuthentication` and
+`HasAppAuthenticationRecovery`. The authenticator secret and the hashed
+recovery codes live in `app_authentication_secret` and
+`app_authentication_recovery_codes`, both encrypted and hidden from
+serialization. A panel turns the feature on with
+`->multiFactorAuthentication(AppAuthentication::make()->recoverable())`, and the
+user then manages it from the profile page. A panel that registers no provider
+never challenges, whatever the user has set up.
+
+`ResetUserAppAuthenticationAction` removes a user's authenticator and recovery
+codes, for someone who lost both. In tests, `User::factory()->withAppAuthentication()`
+creates a user who already has an authenticator.
 
 ## Optional tags
 

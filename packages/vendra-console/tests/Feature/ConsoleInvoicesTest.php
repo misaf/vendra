@@ -19,7 +19,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Livewire\livewire;
 
 beforeEach(function (): void {
-    $admin = User::factory()->create(['tenant_id' => null]);
+    $admin = User::factory()->withAppAuthentication()->create(['tenant_id' => null]);
     Console::factory()->active()->for($admin)->create();
     actingAs($admin, 'console');
     Filament::setCurrentPanel(Filament::getPanel('console'));

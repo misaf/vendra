@@ -54,6 +54,11 @@ enter the panel only while it is the main account of an active reseller:
 deactivating the reseller (`SetResellerActiveAction`) is how its account is
 locked out, and an offboarded reseller grants nothing.
 
+Two-factor authentication is optional: a reseller turns on an authenticator app,
+with recovery codes, from the profile page, and from then on the login asks for
+a code. A reseller who lost both asks the platform; console staff remove it from
+the reseller's row.
+
 The panel is served on the `reseller.` subdomain of `vendra-tenant.central_host`,
 the host in `APP_URL`. Because that value is resolved when config loads rather than
 per call, changing `app.url` at runtime does not move the panel.

@@ -35,7 +35,7 @@ output (the container's first-boot log). That address is a plain config value ra
 something derived from `app.url`, and it is validated by `UserRules::email()` like every
 other address in the application, so a dotless domain such as `console@localhost` is rejected.
 
-Four commands manage console users; each does one job and points at its sibling when the
+Five commands manage console users; each does one job and points at its sibling when the
 user it names is in the wrong state.
 
 - `php artisan vendra-console:user-create` creates a console user with `--username`,
@@ -58,6 +58,13 @@ user it names is in the wrong state.
 - `php artisan vendra-console:user-revoke` deactivates the user's console while keeping the
   user, and refuses to deactivate the last active console user. It names the user the same
   way.
+
+- `php artisan vendra-console:user-two-factor-reset` removes the authenticator
+  app and recovery codes of a console user who lost both, so they set it up
+  again on their next sign-in. It names the user like `user-revoke`, asks before
+  resetting unless `--force` is given, and reports a user without two-factor
+  without changing anything. There is deliberately no panel control for this,
+  so one console account cannot remove another's second factor.
 
 `user-create`, `user-password` and `user-grant` ask for the password without echoing it
 when `--password` is given without a value, which keeps it out of shell history and the
@@ -93,6 +100,9 @@ command unable to issue one.
   `consoles` row, with password reset and required email verification
 - top navigation, global search key bindings, database notifications and
   transactions
+- required two-factor authentication through an authenticator app, with
+  recovery codes: a console user without one is sent to set it up before any
+  page, and manages it from the profile page
 
 **It runs outside the tenant middleware stack** so a console user can work across
 every tenant. There is no current tenant: never scope a console query with
@@ -138,7 +148,8 @@ store, and request date and exposes confirmed recovery controls without copying
 provisioning logic into Filament. The edit
 page manages store administrators without permitting the final enabled
 administrator to be removed, demoted, or disabled. Reseller row actions manage
-user credentials/account replacement and subscription change, renewal,
+user credentials/account replacement, two-factor reset for a reseller user
+who lost their authenticator, and subscription change, renewal,
 extension, cancellation, and reactivation; a plan change or renewal whose plan
 cannot hold the reseller's current stores is refused with a notification.
 Plan changes go through `Misaf\VendraSubscription\Actions\ChangeSubscriptionPlanAction`:
@@ -221,6 +232,9 @@ Nothing depends on this package, so anything reusable belongs one layer down.
 ## Testing
 
 Act as a canonical user with an active `consoles` row on the `console` guard.
+A test that makes an HTTP request creates that user with
+`User::factory()->withAppAuthentication()`, or the panel redirects it to the
+two-factor setup page.
 A test that sets up a current tenant is testing the wrong panel. Assert that
 the domain action ran rather than re-asserting the domain package's own
 behaviour.

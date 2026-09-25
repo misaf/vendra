@@ -61,4 +61,6 @@ return [
     'runtime_unavailable_message' => 'Runtime unavailable: :message',
     'storefront_reconciled' => 'Storefront reconciliation queued',
     'wallet_credited' => 'Wallet credited',
+    'reset_user_two_factor_description' => 'Removes the user\'s authenticator app and recovery codes. They sign in with their password and can set it up again from their profile.',
+    'user_two_factor_reset' => 'Two-factor authentication reset',
 ];
