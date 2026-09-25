@@ -151,7 +151,8 @@ administrator to be removed, demoted, or disabled. Reseller row actions manage
 user credentials/account replacement, two-factor reset for a reseller user
 who lost their authenticator, and subscription change, renewal,
 extension, cancellation, and reactivation; a plan change or renewal whose plan
-cannot hold the reseller's current stores is refused with a notification.
+cannot hold the reseller's current stores is disabled and labelled in the
+plan picker, and refused with a notification if it slips through.
 Plan changes go through `Misaf\VendraSubscription\Actions\ChangeSubscriptionPlanAction`:
 each option is labelled with its effect, an upgrade applies now with a
 prorated charge up to the current end date, a downgrade is scheduled for the

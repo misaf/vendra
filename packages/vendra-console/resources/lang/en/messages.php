@@ -9,6 +9,7 @@ return [
     'plan_changed' => 'Subscription plan updated.',
     'downgrade_blocked' => 'Plan change blocked',
     'plan_change_current' => 'current plan · clears a scheduled change',
+    'plan_outgrown' => "the reseller's stores use more than this plan allows",
     'plan_change_from' => 'switches on :date',
     'plan_change_prorated' => 'charges :amount now',
     'plan_change_scheduled' => 'Switches to :plan when the current period ends.',
@@ -61,6 +62,6 @@ return [
     'runtime_unavailable_message' => 'Runtime unavailable: :message',
     'storefront_reconciled' => 'Storefront reconciliation queued',
     'wallet_credited' => 'Wallet credited',
-    'reset_user_two_factor_description' => 'Removes the user\'s authenticator app and recovery codes. They sign in with their password and can set it up again from their profile.',
+    'reset_user_two_factor_description' => "Removes the user's authenticator app and recovery codes. They sign in with their password and can set it up again from their profile.",
     'user_two_factor_reset' => 'Two-factor authentication reset',
 ];

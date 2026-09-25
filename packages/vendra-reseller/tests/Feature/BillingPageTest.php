@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Queue;
 use Misaf\VendraReseller\Actions\CreditResellerWalletAction;
 use Misaf\VendraReseller\Filament\Pages\Billing;
 use Misaf\VendraReseller\Models\Reseller;
+use Misaf\VendraStore\Models\Store;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
@@ -82,6 +83,20 @@ it('upgrades from the wallet and refuses when the wallet is short', function ():
         ->assertHasNoFormErrors();
 
     expect($reseller->subscriptions()->where('status', SubscriptionStatus::PendingPayment)->sole()->plan_id)->toBe($upgrade->id);
+});
+
+it('refuses a plan the reseller stores have outgrown before it is chosen', function (): void {
+    $reseller = billingReseller();
+    $current = billingSubscription($reseller, Plan::factory()->active()->priced(6_000)->maxUnits(5)->create());
+    $tooSmall = Plan::factory()->active()->priced(3_000)->maxUnits(1)->create();
+    Store::factory()->count(2)->create(['reseller_id' => $reseller->getKey()]);
+    actAsBillingReseller($reseller);
+
+    livewire(Billing::class)
+        ->callAction('changePlan', ['plan_id' => $tooSmall->id])
+        ->assertHasFormErrors(['plan_id']);
+
+    expect($current->refresh()->scheduled_plan_id)->toBeNull();
 });
 
 it('schedules a downgrade and cancels it again', function (): void {

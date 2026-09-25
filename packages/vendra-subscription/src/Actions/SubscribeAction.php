@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Misaf\VendraSubscription\Context\SubscriptionContextKeys;
 use Misaf\VendraSubscription\Contracts\BillingProfile;
-use Misaf\VendraSubscription\Contracts\PlanUsageGuard;
 use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Contracts\SubscriptionUnitSuspender;
 use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
@@ -23,6 +22,7 @@ use Misaf\VendraSubscription\Jobs\ProcessSubscriptionPayment;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSubscription\Models\SubscriptionPayment;
+use Misaf\VendraSubscription\Support\PlanCoverage;
 use Misaf\VendraSubscription\Support\SubscriptionRegistry;
 use Misaf\VendraSubscription\Support\TaxedAmount;
 use Misaf\VendraSupport\Context\RequestJobContext;
@@ -33,7 +33,7 @@ final readonly class SubscribeAction
     public function __construct(
         private SubscriptionCharger $subscriptionCharger,
         private SubscriptionRegistry $subscriptionRegistry,
-        private PlanUsageGuard $planUsageGuard,
+        private PlanCoverage $planCoverage,
         private SubscriptionUnitSuspender $unitSuspender,
         private BillingProfile $billingProfile,
     ) {}
@@ -72,13 +72,7 @@ final readonly class SubscribeAction
             function () use ($subscriber, $plan, $startsAt, $endsAt, $amount, $autoRenews): array {
                 $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
 
-                $currentUnits = $lockedSubscriber->subscribedUnitCount();
-
-                if ($currentUnits > $plan->max_units) {
-                    throw SubscriptionLimitException::planBelowUsage($lockedSubscriber, $plan->max_units, $currentUnits);
-                }
-
-                $this->planUsageGuard->assertPlanCovers($lockedSubscriber, $plan);
+                $this->planCoverage->assertCovers($lockedSubscriber, $plan);
 
                 $openPayments = $this->subscriptionRegistry->lockOpenPayments($lockedSubscriber);
 

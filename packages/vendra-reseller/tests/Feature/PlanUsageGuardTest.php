@@ -14,6 +14,7 @@ use Misaf\VendraSubscription\Actions\SubscribeAction;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
+use Misaf\VendraSubscription\Support\PlanCoverage;
 use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 
@@ -67,4 +68,12 @@ it('accepts a plan that covers every store', function (): void {
     $plan = Plan::factory()->active()->maxUnits(5)->withLimits([PlanLimit::DomainsPerStore->value => 2])->create();
 
     expect(resolve(SubscribeAction::class)->execute($this->reseller, $plan)->plan_id)->toBe($plan->id);
+});
+
+it('tells a plan picker which plans the stores have outgrown without refusing anything', function (): void {
+    $tooSmall = Plan::factory()->active()->maxUnits(5)->withFeatures(['custom_domain'])->withLimits([PlanLimit::DomainsPerStore->value => 1])->create();
+    $roomy = Plan::factory()->active()->maxUnits(5)->withFeatures(['custom_domain'])->withLimits([PlanLimit::DomainsPerStore->value => 2])->create();
+
+    expect(resolve(PlanCoverage::class)->covers($this->reseller, $tooSmall))->toBeFalse()
+        ->and(resolve(PlanCoverage::class)->covers($this->reseller, $roomy))->toBeTrue();
 });

@@ -73,6 +73,7 @@ return [
     'insufficient_wallet_balance_body' => 'این کار به :amount نیاز دارد و موجودی کیف پول شما :balance است. برای شارژ با پشتیبانی تماس بگیرید.',
     'change_plan' => 'تغییر طرح',
     'plan_change_failed' => 'تغییر طرح انجام نشد',
+    'plan_outgrown' => 'املاک شما بیش از سقف این طرح استفاده می‌کنند',
     'plan_change_from' => 'از :date تغییر می‌کند',
     'plan_change_prorated' => 'پرداخت :amount اکنون',
     'plan_change_scheduled' => 'با پایان دوره فعلی به :plan منتقل می‌شوید',

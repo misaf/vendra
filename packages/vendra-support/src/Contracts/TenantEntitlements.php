@@ -34,6 +34,9 @@ interface TenantEntitlements
     /**
      * Assert the tenant may add the given amount, counted like its usage counter.
      *
+     * Called inside a transaction, it holds a lock on the tenant until commit, so
+     * concurrent adds cannot both take the last slot.
+     *
      * @throws EntitlementExceededException
      */
     public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void;

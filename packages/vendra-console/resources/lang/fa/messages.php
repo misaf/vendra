@@ -9,6 +9,7 @@ return [
     'plan_changed' => 'طرح اشتراک به‌روزرسانی شد.',
     'downgrade_blocked' => 'تغییر طرح مسدود شد',
     'plan_change_current' => 'طرح فعلی · تغییر زمان‌بندی‌شده را لغو می‌کند',
+    'plan_outgrown' => 'املاک این نماینده بیش از سقف این طرح استفاده می‌کنند',
     'plan_change_from' => 'از :date تغییر می‌کند',
     'plan_change_prorated' => 'اکنون :amount کسر می‌شود',
     'plan_change_scheduled' => 'با پایان دوره فعلی به :plan منتقل می‌شود.',

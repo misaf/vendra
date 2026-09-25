@@ -71,7 +71,8 @@ it('blocks a plan change that cannot hold the current stores', function (): void
     createTestTenant(['reseller_id' => $reseller->getKey()]);
 
     livewire(ListResellers::class)
-        ->callAction(TestAction::make('changePlan')->table($reseller), ['plan_id' => Plan::factory()->active()->maxUnits(1)->create()->getKey()]);
+        ->callAction(TestAction::make('changePlan')->table($reseller), ['plan_id' => Plan::factory()->active()->maxUnits(1)->create()->getKey()])
+        ->assertHasFormErrors(['plan_id']);
 
     expect($reseller->activeSubscription()?->plan_id)->toBe($currentPlan->getKey());
 });

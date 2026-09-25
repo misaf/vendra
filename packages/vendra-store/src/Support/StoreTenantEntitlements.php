@@ -75,8 +75,17 @@ final readonly class StoreTenantEntitlements implements TenantEntitlements
         return $usage + $amount <= $allowed * $limit->unitSize();
     }
 
+    /**
+     * Lock the store row first, so concurrent adds inside transactions count one at a time.
+     */
     public function assertCanAdd(PlanLimit $limit, int $amount = 1, ?Model $tenant = null): void
     {
+        $store = $tenant ?? $this->tenantResolver->current();
+
+        if ($store instanceof Store) {
+            Store::query()->withoutGlobalScopes()->whereKey($store->getKey())->lockForUpdate()->value('id');
+        }
+
         throw_unless(
             $this->canAdd($limit, $amount, $tenant),
             EntitlementExceededException::limitReached($limit, $this->limit($limit, $tenant) ?? 0),

@@ -73,6 +73,7 @@ return [
     'insufficient_wallet_balance_body' => 'Benötigt werden :amount, Ihr Guthaben beträgt :balance. Wenden Sie sich zum Aufladen an den Support.',
     'change_plan' => 'Tarif wechseln',
     'plan_change_failed' => 'Der Tarif konnte nicht gewechselt werden',
+    'plan_outgrown' => 'Ihre Stores nutzen mehr, als dieser Tarif erlaubt',
     'plan_change_from' => 'wechselt am :date',
     'plan_change_prorated' => 'jetzt :amount zahlen',
     'plan_change_scheduled' => 'Sie wechseln zu :plan, wenn der aktuelle Zeitraum endet',

@@ -124,7 +124,9 @@ answered by `misaf/vendra-subscription` and store quotas by
 `Misaf\VendraStore\Support\StoreQuota` — no limit arithmetic is duplicated
 here. `Support\ResellerPlanUsageGuard` refuses a plan change or renewal onto a
 plan whose per-store limits any of the reseller's stores already exceeds, or that
-drops `custom_domain` while a store uses a custom domain.
+drops `custom_domain` while a store uses a custom domain. The billing page's
+plan picker disables and labels plans the stores have outgrown, and the store
+table shows each store's usage against every per-store limit.
 
 ```php
 $reseller->canHoldUnits();

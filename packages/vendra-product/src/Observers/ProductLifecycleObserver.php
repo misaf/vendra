@@ -23,7 +23,8 @@ final readonly class ProductLifecycleObserver
     /**
      * Refuse a product past the store's plan limit, whichever path creates it.
      *
-     * The count is not locked, so two concurrent creates may pass one over the limit.
+     * The panels and the duplicate action create inside a transaction, which keeps
+     * the store locked until commit so concurrent creates cannot pass the limit.
      *
      * @throws EntitlementExceededException
      */

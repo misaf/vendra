@@ -49,7 +49,9 @@ running period keeps its end date and collects only the price difference for the
 time left; `Support\PlanChangeQuote` computes that outcome for a panel to show
 before the change. A downgrade the subscriber's current units exceed throws
 `SubscriptionLimitException`, and so does any plan the bound `PlanUsageGuard`
-refuses (the null default refuses nothing). Plans keep their per-unit caps in a
+refuses (the null default refuses nothing). `Support\PlanCoverage` holds both
+checks: `assertCovers()` runs under the subscriber lock in the actions, and
+`covers()` answers without locking so a plan picker can flag outgrown plans. Plans keep their per-unit caps in a
 JSON `limits` map read with `Plan::limit()`, where a missing key means unlimited. Choosing the current plan drops a scheduled change.
 
 `RenewSubscriptionAction` starts the next period on the scheduled plan, or the

@@ -9,6 +9,7 @@ return [
     'plan_changed' => 'Abonnement-Tarif aktualisiert.',
     'downgrade_blocked' => 'Tarifwechsel blockiert',
     'plan_change_current' => 'aktueller Tarif · verwirft einen geplanten Wechsel',
+    'plan_outgrown' => 'die Stores des Resellers nutzen mehr, als dieser Tarif erlaubt',
     'plan_change_from' => 'wechselt am :date',
     'plan_change_prorated' => 'belastet jetzt :amount',
     'plan_change_scheduled' => 'Wechselt zu :plan, wenn der aktuelle Zeitraum endet.',

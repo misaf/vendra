@@ -466,6 +466,20 @@ it('disables adding a domain alias once the store reaches the plan domain limit'
         ->assertActionEnabled(TestAction::make('addDomainAlias')->table($roomyStore));
 });
 
+it('shows each store usage against the plan limits', function (): void {
+    $reseller = Reseller::factory()->active()->create();
+    Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->active()->maxUnits(2)->withLimits([PlanLimit::DomainsPerStore->value => 3]))->create();
+    $store = Store::factory()->create(['reseller_id' => $reseller->getKey(), 'active' => true]);
+    StoreDomain::factory()->for($store)->primary()->create();
+    StoreDomain::factory()->for($store)->active()->create();
+
+    actAsResellerUser($reseller);
+
+    livewire(ListStores::class)
+        ->call('loadTable')
+        ->assertTableColumnStateSet('usage_'.PlanLimit::DomainsPerStore->value, '2 / 3', $store);
+});
+
 it('shows a user only their own reseller stores', function (): void {
     $resellerA = Reseller::factory()->active()->create();
     $resellerB = Reseller::factory()->active()->create();

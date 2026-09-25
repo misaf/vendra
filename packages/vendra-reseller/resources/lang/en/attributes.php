@@ -73,6 +73,7 @@ return [
     'insufficient_wallet_balance_body' => 'This needs :amount and your wallet holds :balance. Contact support to add funds.',
     'change_plan' => 'Change plan',
     'plan_change_failed' => 'The plan could not be changed',
+    'plan_outgrown' => 'your stores use more than this plan allows',
     'plan_change_from' => 'switches on :date',
     'plan_change_prorated' => 'pay :amount now',
     'plan_change_scheduled' => 'You will switch to :plan when the current period ends',
