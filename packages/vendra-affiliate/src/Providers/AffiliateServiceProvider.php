@@ -17,7 +17,9 @@ use Misaf\VendraAffiliate\Listeners\TransactionCommissionSubscriber;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
 use Misaf\VendraAffiliate\Services\AffiliateCodeService;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Misaf\VendraUser\Models\User;
@@ -27,6 +29,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class AffiliateServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
     use ResolvesConfiguredPanels;
 
     public function configurePackage(Package $package): void
@@ -48,6 +51,7 @@ final class AffiliateServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(AffiliateCodeService::class);
+        $this->registerSettings([AffiliateSettings::class], __DIR__.'/../../database/settings');
 
         Panel::configureUsing(function (Panel $panel): void {
             if (

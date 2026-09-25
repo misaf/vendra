@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
 use Misaf\VendraAffiliate\Actions\RecordAffiliateClickAction;
 use Misaf\VendraAffiliate\Models\Affiliate;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 
 /**
  * Unknown codes redirect silently so the endpoint cannot be used to probe codes.
@@ -22,7 +23,7 @@ final readonly class AffiliateRedirectController
 
     public function __invoke(Request $request, string $code): RedirectResponse
     {
-        $redirectUrl = Config::string('vendra-affiliate.attribution.redirect_url', '/');
+        $redirectUrl = resolve(AffiliateSettings::class)->redirect_url;
 
         $affiliate = Affiliate::query()->active()->where('code', $code)->first();
 
@@ -41,7 +42,7 @@ final readonly class AffiliateRedirectController
         Cookie::queue(
             Config::string('vendra-affiliate.attribution.cookie_name', 'vendra_affiliate_ref'),
             sprintf('%s|%d', $affiliate->code, $click->id),
-            Config::integer('vendra-affiliate.attribution.cookie_ttl_days', 30) * 24 * 60,
+            resolve(AffiliateSettings::class)->cookie_ttl_days * 24 * 60,
         );
 
         return redirect($redirectUrl);

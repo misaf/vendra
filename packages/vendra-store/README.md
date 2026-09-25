@@ -243,7 +243,7 @@ runs outside the managed container runtime.
 When a managed storefront is requested, creation only requires its image and
 slug. Sample contact, location, and social details complete the configuration,
 so provisioning starts immediately when the runtime is configured. The tenant
-administrator replaces the samples in Admin General Settings; later changes
+administrator replaces the samples on the admin Storefront settings page; later changes
 redeploy the storefront.
 
 Status is written only through the model's `markProcessing()`, `markReady()`,

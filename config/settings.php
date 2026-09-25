@@ -5,25 +5,20 @@ declare(strict_types=1);
 use App\Models\SettingsProperty;
 use App\Settings\SettingsRepositories\GlobalSettingsRepository;
 use App\Settings\SettingsRepositories\TenantSettingsRepository;
-use Misaf\VendraConsole\Settings\BillingSettings;
-use Misaf\VendraConsole\Settings\ConsoleSettings;
-use Misaf\VendraStore\Settings\StoreCreationSettings;
 use Spatie\LaravelSettings\SettingsRepositories\RedisSettingsRepository;
 
 return [
 
     /*
      * Settings classes that live outside `app/Settings` and are therefore not
-     * auto-discovered. Package settings classes are registered here.
+     * auto-discovered. Packages add their own from their service provider with
+     * `Misaf\VendraSupport\Settings\RegistersSettings`.
      */
-    'settings' => [
-        BillingSettings::class,
-        ConsoleSettings::class,
-        StoreCreationSettings::class,
-    ],
+    'settings' => [],
 
     /*
      * Settings migrations are stored here and run with the ordinary migrations.
+     * Packages add their own `database/settings` directory the same way.
      * They seed the platform row every settings class reads before a store has
      * saved anything of its own, so a fresh install never needs manual seeding.
      */

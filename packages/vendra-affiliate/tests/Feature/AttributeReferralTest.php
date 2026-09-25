@@ -8,6 +8,7 @@ use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraUser\Models\User;
 
 beforeEach(function (): void {
@@ -57,7 +58,7 @@ it('attributes each user at most once', function (): void {
 });
 
 it('credits a signup bounty when the signup conversion is enabled', function (): void {
-    config()->set('vendra-affiliate.conversions.signup.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['signup_conversions' => true])->save();
 
     $affiliate = AffiliateFactory::new()->active()->withSignupBounty(500)->create();
     $user = User::factory()->create();
@@ -73,7 +74,7 @@ it('credits a signup bounty when the signup conversion is enabled', function ():
 });
 
 it('does not credit a signup bounty when the signup conversion is disabled', function (): void {
-    config()->set('vendra-affiliate.conversions.signup.enabled', false);
+    resolve(AffiliateSettings::class)->fill(['signup_conversions' => false])->save();
 
     $affiliate = AffiliateFactory::new()->active()->withSignupBounty(500)->create();
     $user = User::factory()->create();

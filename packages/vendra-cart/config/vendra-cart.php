@@ -36,20 +36,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cart Expiry
-    |--------------------------------------------------------------------------
-    |
-    | Here you may specify the number of days a newly created cart remains
-    | valid when no explicit expiry is provided. Expired carts are removed
-    | by the scheduled vendra-cart:prune-expired command. Set this to null
-    | to create carts without an expiry by default.
-    |
-    */
-
-    'expires_after_days' => 7,
-
-    /*
-    |--------------------------------------------------------------------------
     | Schedule
     |--------------------------------------------------------------------------
     |

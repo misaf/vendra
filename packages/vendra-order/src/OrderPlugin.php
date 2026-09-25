@@ -6,6 +6,7 @@ namespace Misaf\VendraOrder;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Misaf\VendraOrder\Filament\Pages\ManageOrderSettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesPluginInstances;
 
 final class OrderPlugin implements Plugin
@@ -25,6 +26,10 @@ final class OrderPlugin implements Plugin
             in: __DIR__.'/Filament/Clusters/Resources',
             for: 'Misaf\\VendraOrder\\Filament\\Clusters\\Resources',
         );
+
+        $panel->pages([
+            ManageOrderSettings::class,
+        ]);
     }
 
     public function boot(Panel $panel): void {}

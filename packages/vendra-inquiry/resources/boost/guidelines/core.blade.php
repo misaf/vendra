@@ -15,13 +15,14 @@ The `misaf/vendra-inquiry` package owns storefront contact enquiries — what a 
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
 - Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Store rules a store administrator may change (the occasion slugs the storefront contact form may send) live in `Settings\InquirySettings` (group `inquiry`, tenant repository), registered with `RegistersSettings` in the service provider and seeded as the platform default by `database/settings`. `Filament\Pages\ManageInquirySettings` edits them in the admin System cluster; read them with `resolve(InquirySettings::class)`, never from config.
 
 - Keep inquiry domain code inside `packages/vendra-inquiry` using the `Misaf\VendraInquiry` namespace.
 - `Inquiry` stores the sender's name, email, optional phone, optional occasion slug, the message verbatim, its status, and where it came from.
 - Store the message exactly as it was written: it is evidence of what a customer asked for, so never trim, reformat, or interpret it on the way in.
 - Keep this a contact inbox, not a ticketing system. There are no threads, assignees, SLAs, or canned replies here; a person answers by email.
 - Keep the sender's own words out of `$translatable`: a customer's message and name are user data in one language, stored in scalar columns.
-- Treat `occasion` as a stable slug chosen from configuration, and let the storefront translate it for display.
+- Treat `occasion` as a stable slug chosen from `InquirySettings::$occasions`, and let the storefront translate it for display.
 - Keep enquiries uncreatable from the administration UI: they arrive from the storefront through `SubmitInquiryAction`. The action does not validate; its caller does (the storefront API through `misaf/vendra-inquiry-api`'s `SubmitInquiryRequest`).
 - Status is a Spatie model-states machine in `States\` (`Open` stored as `new`, `Answered`, `Closed`), allowing every move between different statuses. Track the reply with `markAnswered()`, `close()`, and `reopen()`; `AnswerInquiryTransition` stamps `answered_at` and `ReopenInquiryTransition` clears it. Filament actions are visible when `canTransitionTo()` allows their target.
 - Derive tenant awareness through `misaf/vendra-support`. Apply `BelongsToTenant` to `Inquiry`. Never assign `tenant_id` directly or add a `tenant_aware` config toggle.

@@ -7,5 +7,6 @@ return [
     'wishlist' => 'Wunschliste',
     'wishlist_item' => 'Gemerkter Artikel',
     'wishlist_items' => 'Gemerkte Artikel',
+    'wishlist_settings' => 'Wunschlisten',
     'wishlists' => 'Wunschlisten',
 ];

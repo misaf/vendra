@@ -50,6 +50,9 @@ $wishlist->has($product);  // true
 app(RemoveWishlistItemAction::class)->execute($wishlist, $product);
 ```
 
+The default list's name is a store setting (`Settings\WishlistSettings`),
+edited on the wishlist settings page.
+
 A wishlist is not a cart: nothing here is reserved, priced, or expiring. Carts
 belong to `misaf/vendra-cart` and orders to `misaf/vendra-order`.
 

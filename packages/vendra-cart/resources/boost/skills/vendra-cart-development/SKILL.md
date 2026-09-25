@@ -27,6 +27,7 @@ description: "Create, modify, review, or test the Vendra Cart module in packages
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
 - Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Store rules a store administrator may change (how many days a new cart lives, or null for no expiry) live in `Settings\CartSettings` (group `cart`, tenant repository), registered with `RegistersSettings` in the service provider and seeded as the platform default by `database/settings`. `Filament\Pages\ManageCartSettings` edits them in the admin System cluster; read them with `resolve(CartSettings::class)`, never from config.
 
 Use this skill with `laravel-best-practices` for Laravel PHP, `pest-testing` when tests change, and `vendra-permission-development` when policies or permissions change. Use `tailwindcss-development` only for Blade or Tailwind UI.
 

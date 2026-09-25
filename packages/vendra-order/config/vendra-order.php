@@ -20,17 +20,4 @@ return [
 
     'panels' => ['admin'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Order Number Prefix
-    |--------------------------------------------------------------------------
-    |
-    | Every order receives a human-readable number that customers quote back to
-    | support. The prefix is combined with a random suffix when the order is
-    | created without an explicit number.
-    |
-    */
-
-    'number_prefix' => env('ORDER_NUMBER_PREFIX', 'ORD'),
-
 ];

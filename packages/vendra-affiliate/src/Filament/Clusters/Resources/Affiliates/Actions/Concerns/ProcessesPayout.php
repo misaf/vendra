@@ -6,10 +6,10 @@ namespace Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\Actions\C
 
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Config;
 use Misaf\VendraAffiliate\Actions\ProcessAffiliatePayoutAction;
 use Misaf\VendraAffiliate\Enums\AffiliatePayoutPolicyEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 
 trait ProcessesPayout
 {
@@ -25,7 +25,7 @@ trait ProcessesPayout
         $this
             ->authorize(fn (): bool => (bool) auth()->user()?->can(AffiliatePayoutPolicyEnum::Process->value))
             ->color('success')
-            ->disabled(fn (Affiliate $record): bool => $record->pendingBalance() < Config::integer('vendra-affiliate.payout.minimum', 0))
+            ->disabled(fn (Affiliate $record): bool => $record->pendingBalance() < resolve(AffiliateSettings::class)->payout_minimum)
             ->icon(Heroicon::OutlinedBanknotes)
             ->label(__('vendra-affiliate::messages.process_payout'))
             ->requiresConfirmation()

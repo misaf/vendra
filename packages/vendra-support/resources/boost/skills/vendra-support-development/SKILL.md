@@ -90,8 +90,9 @@ Use `Misaf\VendraSupport\Filament\Navigation\NavigationGroup` as the single sour
   - Content: Blog Posts 1, Blog Post Categories 2, Custom Pages 3, Custom Page Categories 4, FAQs 5, FAQ Categories 6, Multimedia 7, Tags 8.
   - Marketing: Affiliates 1, Affiliate Commissions 2, Affiliate Payouts 3, Newsletters 4, Newsletter Subscribers 5.
   - Localization: Languages 1, Language Lines 2.
-  - System: General Settings 1, Activity Logs 2.
+  - System: General Settings, Storefront, Orders, Carts, Delivery, Affiliates, Enquiries, Wishlists (settings pages, 7100 to 7170), then Activity Logs.
 - Give every resource a globally unique `NavigationPriority` case and assign `$navigationSort` from its backed value. Group values by domain cluster and leave gaps for future resources.
+- Package settings: a package registers its `spatie/laravel-settings` classes and its `database/settings` migration directory with `Settings\RegistersSettings::registerSettings()` from `packageRegistered()`, never by editing the host's `config/settings.php`. The registered class list is what the tenant switch walks to forget resolved settings, so an unregistered class would leak one store's values into the next. A store-level settings page extends `Filament\Pages\SystemSettingsPage` (admin System cluster, saved in a transaction, titled by its navigation label), edits only its own settings class, takes a `NavigationPriority` case in the 7100 System range, and is registered by the package plugin with `$panel->pages()`.
 - Give every resource separate singular and plural translation keys in `en`, `de`, and `fa`. Use the singular key for model labels and the plural key for navigation and plural model labels; keep navigation labels at 24 characters or fewer.
 - Use domain clusters as top-level sidebar items, set `$subNavigationPosition = SubNavigationPosition::Top`, and keep cluster resources ungrouped so `NavigationPriority` controls their visible tab order.
 - Set one distinct outlined `Heroicon` on every top-level cluster and resource. Keep navigation group headers icon-free.

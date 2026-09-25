@@ -15,6 +15,7 @@ The `misaf/vendra-delivery` package owns delivery zones, delivery windows, booka
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
 - Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Store rules a store administrator may change (the calendar rules `advance_days` and `same_day_cutoff_hour`) live in `Settings\DeliverySettings` (group `delivery`, tenant repository), registered with `RegistersSettings` in the service provider and seeded as the platform default by `database/settings`. `Filament\Pages\ManageDeliverySettings` edits them in the admin System cluster; read them with `resolve(DeliverySettings::class)`, never from config.
 
 - Keep delivery domain code inside `packages/vendra-delivery` using the `Misaf\VendraDelivery` namespace.
 - `DeliveryZone` is a distance band anchored to its own origin, `DeliverySlot` is a window of the day, and `Delivery` is where and when one order travels plus the fee snapshot it was charged.
@@ -25,7 +26,7 @@ The `misaf/vendra-delivery` package owns delivery zones, delivery windows, booka
 - Refuse to schedule a quote whose `requires_quote` is true. An address the studio prices by hand must reach a human, never a guessed fee.
 - Treat the fee on a delivery as a snapshot: re-pricing a zone later never rewrites what a customer was charged.
 - Derive tenant awareness through `misaf/vendra-support`. Apply `BelongsToTenant` to all three models and register their tables with `TenantTableRegistry`.
-- Keep zones, windows, and fees as tenant business data in the administration UI; keep only the calendar rules (`advance_days`, `same_day_cutoff_hour`) in configuration.
+- Keep zones, windows, and fees as tenant business data in the administration UI, and the calendar rules in `DeliverySettings`.
 - Keep `DeliveryZoneResource`, `DeliverySlotResource`, and `DeliveryResource` in the shared `SalesCluster` under `src/Filament/Clusters/Resources`, with forms in `Schemas` and tables in `Tables`.
 - Keep the complete resource tree under `src/Filament/Clusters/Resources/`, use the matching `Misaf\VendraDelivery\Filament\Clusters\Resources` namespace, and keep plugin registration aligned. Any future resource without a `$cluster` must instead live under `src/Filament/Resources/`.
 - Keep the resources ungrouped and assign `$navigationSort` from `NavigationPriority::DeliveryZones`, `NavigationPriority::DeliverySlots`, and `NavigationPriority::Deliveries`; never hardcode numeric resource sort values.

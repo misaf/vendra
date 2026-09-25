@@ -7,6 +7,7 @@ namespace Misaf\VendraWishlist;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesPluginInstances;
+use Misaf\VendraWishlist\Filament\Pages\ManageWishlistSettings;
 
 final class WishlistPlugin implements Plugin
 {
@@ -25,6 +26,10 @@ final class WishlistPlugin implements Plugin
             in: __DIR__.'/Filament/Clusters/Resources',
             for: 'Misaf\\VendraWishlist\\Filament\\Clusters\\Resources',
         );
+
+        $panel->pages([
+            ManageWishlistSettings::class,
+        ]);
     }
 
     public function boot(Panel $panel): void {}

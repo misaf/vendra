@@ -6,6 +6,7 @@ namespace Misaf\VendraInquiry;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Misaf\VendraInquiry\Filament\Pages\ManageInquirySettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesPluginInstances;
 
 final class InquiryPlugin implements Plugin
@@ -25,6 +26,10 @@ final class InquiryPlugin implements Plugin
             in: __DIR__.'/Filament/Clusters/Resources',
             for: 'Misaf\\VendraInquiry\\Filament\\Clusters\\Resources',
         );
+
+        $panel->pages([
+            ManageInquirySettings::class,
+        ]);
     }
 
     public function boot(Panel $panel): void {}

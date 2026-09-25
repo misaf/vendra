@@ -7,5 +7,6 @@ return [
     'wishlist' => 'فهرست علاقه‌مندی',
     'wishlist_item' => 'قلم ذخیره‌شده',
     'wishlist_items' => 'اقلام ذخیره‌شده',
+    'wishlist_settings' => 'علاقه‌مندی‌ها',
     'wishlists' => 'علاقه‌مندی‌ها',
 ];

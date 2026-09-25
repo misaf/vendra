@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Filament\Admin\Pages\ManageGeneralSettings;
+use App\Filament\Admin\Pages\ManageStorefrontSettings;
 use App\Settings\GeneralSettings;
 use Filament\Facades\Filament;
 use Illuminate\Support\Arr;
@@ -44,7 +45,7 @@ it('lets the store administrator replace sample details and request a redeployme
     Queue::fake();
     actAsStoreAdministrator($store);
 
-    livewire(ManageGeneralSettings::class)
+    livewire(ManageStorefrontSettings::class)
         ->assertFormFieldExists('storefront_mobile_phone')
         ->assertFormFieldDoesNotExist('storefront_slug')
         ->fillForm(Arr::only($form, StorefrontConfigurationMap::EDITABLE_FIELDS))
@@ -72,7 +73,7 @@ it('lets the store administrator update contact details without changing another
     actAsStoreAdministrator($store);
     Queue::fake();
 
-    livewire(ManageGeneralSettings::class)
+    livewire(ManageStorefrontSettings::class)
         ->assertFormSet(['storefront_office_phone' => '02100000000'])
         ->fillForm(['storefront_office_phone' => '02199999999'])
         ->call('save')
@@ -92,7 +93,7 @@ it('rejects an empty phone without changing storefront configuration', function 
     actAsStoreAdministrator($store);
     Queue::fake();
 
-    livewire(ManageGeneralSettings::class)
+    livewire(ManageStorefrontSettings::class)
         ->fillForm(['storefront_mobile_phone' => ''])
         ->call('save')
         ->assertHasFormErrors(['storefront_mobile_phone' => 'required']);
@@ -101,12 +102,13 @@ it('rejects an empty phone without changing storefront configuration', function 
     Queue::assertNotPushed(ProvisionStorefrontJob::class);
 });
 
-it('keeps General Settings usable for a store without a managed storefront', function (): void {
+it('hides the storefront page from a store without a managed storefront', function (): void {
     $store = Store::factory()->active()->create();
     actAsStoreAdministrator($store);
 
+    expect(ManageStorefrontSettings::canAccess())->toBeFalse();
+
     livewire(ManageGeneralSettings::class)
-        ->assertFormFieldDoesNotExist('storefront_mobile_phone')
         ->fillForm(['site_title' => 'Local Flowers'])
         ->call('save')
         ->assertHasNoFormErrors();

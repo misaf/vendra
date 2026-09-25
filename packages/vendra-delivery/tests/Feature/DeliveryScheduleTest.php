@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
+use Misaf\VendraDelivery\Settings\DeliverySettings;
 use Misaf\VendraDelivery\Support\DeliverySchedule;
 
 it('offers today when the same-day cutoff has not passed', function (): void {
-    Config::set('vendra-delivery.schedule.same_day_cutoff_hour', 14);
+    resolve(DeliverySettings::class)->fill(['same_day_cutoff_hour' => 14])->save();
 
     $dates = (new DeliverySchedule)->bookableDates(Date::parse('2026-09-01 09:30:00'));
 
@@ -16,7 +16,7 @@ it('offers today when the same-day cutoff has not passed', function (): void {
 });
 
 it('starts from tomorrow once the cutoff has passed', function (): void {
-    Config::set('vendra-delivery.schedule.same_day_cutoff_hour', 14);
+    resolve(DeliverySettings::class)->fill(['same_day_cutoff_hour' => 14])->save();
 
     $dates = (new DeliverySchedule)->bookableDates(Date::parse('2026-09-01 15:00:00'));
 
@@ -24,7 +24,7 @@ it('starts from tomorrow once the cutoff has passed', function (): void {
 });
 
 it('offers as many days ahead as configured', function (): void {
-    Config::set('vendra-delivery.schedule.advance_days', 5);
+    resolve(DeliverySettings::class)->fill(['advance_days' => 5])->save();
 
     $dates = (new DeliverySchedule)->bookableDates(Date::parse('2026-09-01 09:00:00'));
 
@@ -33,7 +33,7 @@ it('offers as many days ahead as configured', function (): void {
 });
 
 it('rejects a date outside the bookable window', function (): void {
-    Config::set('vendra-delivery.schedule.advance_days', 3);
+    resolve(DeliverySettings::class)->fill(['advance_days' => 3])->save();
 
     $schedule = new DeliverySchedule;
     $from = Date::parse('2026-09-01 09:00:00');

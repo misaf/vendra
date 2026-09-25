@@ -9,7 +9,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Config;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 
 enum ConversionTypeEnum: string implements HasColor, HasIcon, HasLabel
 {
@@ -27,7 +27,7 @@ enum ConversionTypeEnum: string implements HasColor, HasIcon, HasLabel
 
     public function isEnabled(): bool
     {
-        return Config::boolean(sprintf('vendra-affiliate.conversions.%s.enabled', $this->value), false);
+        return resolve(AffiliateSettings::class)->earnsOn($this);
     }
 
     /**

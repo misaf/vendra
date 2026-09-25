@@ -16,11 +16,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateFactory;
 use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Observers\AffiliateObserver;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraSupport\Capabilities\HasOptionalTags;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
@@ -145,7 +145,7 @@ final class Affiliate extends Model implements ShouldLogActivity
 
     public function signupBounty(): int
     {
-        return $this->signup_bounty ?? Config::integer('vendra-affiliate.defaults.signup_bounty', 0);
+        return $this->signup_bounty ?? resolve(AffiliateSettings::class)->signup_bounty;
     }
 
     public function referralUrl(): string

@@ -13,7 +13,9 @@ use Misaf\VendraDelivery\DeliveryPlugin;
 use Misaf\VendraDelivery\Models\Delivery;
 use Misaf\VendraDelivery\Models\DeliverySlot;
 use Misaf\VendraDelivery\Models\DeliveryZone;
+use Misaf\VendraDelivery\Settings\DeliverySettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -22,6 +24,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class DeliveryServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
     use ResolvesConfiguredPanels;
 
     public function configurePackage(Package $package): void
@@ -41,6 +44,8 @@ final class DeliveryServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->registerSettings([DeliverySettings::class], __DIR__.'/../../database/settings');
+
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), DeliveryPlugin::ID)) {
                 return;

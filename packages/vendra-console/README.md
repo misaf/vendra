@@ -260,7 +260,7 @@ managed storefront.
 Store creation asks for the domain, administrator email, and managed storefront
 identity. The managed storefront starts with sample contact, location, and social
 details and deploys when the runtime is configured. The store administrator
-replaces those details in Admin General Settings.
+replaces those details on the admin Storefront settings page.
 
 ## Layering
 

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Filament\Admin\Pages\ManageGeneralSettings;
+use App\Filament\Admin\Pages\ManageStorefrontSettings;
 use App\Providers\Filament\AdminPanelServiceProvider;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
@@ -12,25 +13,30 @@ use Misaf\VendraActivityLog\Filament\Clusters\Resources\ActivityLogResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliateCommissions\AffiliateCommissionResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\AffiliatePayouts\AffiliatePayoutResource;
 use Misaf\VendraAffiliate\Filament\Clusters\Resources\Affiliates\AffiliateResource;
+use Misaf\VendraAffiliate\Filament\Pages\ManageAffiliateSettings;
 use Misaf\VendraAttribute\Filament\Clusters\Resources\Attributes\AttributeResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPostCategories\BlogPostCategoryResource;
 use Misaf\VendraBlog\Filament\Clusters\Resources\BlogPosts\BlogPostResource;
 use Misaf\VendraCart\Filament\Clusters\Resources\Carts\CartResource;
+use Misaf\VendraCart\Filament\Pages\ManageCartSettings;
 use Misaf\VendraCurrency\Filament\Clusters\Resources\Currencies\CurrencyResource;
 use Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPageCategories\CustomPageCategoryResource;
 use Misaf\VendraCustomPage\Filament\Clusters\Resources\CustomPages\CustomPageResource;
 use Misaf\VendraDelivery\Filament\Clusters\Resources\Deliveries\DeliveryResource;
 use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliverySlots\DeliverySlotResource;
 use Misaf\VendraDelivery\Filament\Clusters\Resources\DeliveryZones\DeliveryZoneResource;
+use Misaf\VendraDelivery\Filament\Pages\ManageDeliverySettings;
 use Misaf\VendraFaq\Filament\Clusters\Resources\FaqCategories\FaqCategoryResource;
 use Misaf\VendraFaq\Filament\Clusters\Resources\Faqs\FaqResource;
 use Misaf\VendraInquiry\Filament\Clusters\Resources\Inquiries\InquiryResource;
+use Misaf\VendraInquiry\Filament\Pages\ManageInquirySettings;
 use Misaf\VendraLanguage\Filament\Clusters\Resources\LanguageLines\LanguageLineResource;
 use Misaf\VendraLanguage\Filament\Clusters\Resources\Languages\LanguageResource;
 use Misaf\VendraMultimedia\Filament\Clusters\Resources\MultimediaResource;
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\Newsletters\NewsletterResource;
 use Misaf\VendraNewsletter\Filament\Clusters\Resources\NewsletterSubscribers\NewsletterSubscriberResource;
 use Misaf\VendraOrder\Filament\Clusters\Resources\Orders\OrderResource;
+use Misaf\VendraOrder\Filament\Pages\ManageOrderSettings;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Permissions\PermissionResource;
 use Misaf\VendraPermission\Filament\Clusters\Resources\Roles\RoleResource;
 use Misaf\VendraProduct\Filament\Clusters\Resources\ProductCategories\ProductCategoryResource;
@@ -52,6 +58,7 @@ use Misaf\VendraTransaction\Filament\Clusters\Resources\Wallets\WalletResource;
 use Misaf\VendraUser\Filament\Clusters\Resources\Users\UserResource;
 use Misaf\VendraUserProfile\Filament\Clusters\Resources\UserProfileResource;
 use Misaf\VendraWishlist\Filament\Clusters\Resources\Wishlists\WishlistResource;
+use Misaf\VendraWishlist\Filament\Pages\ManageWishlistSettings;
 
 it('uses domain clusters as top-level navigation without redundant groups', function (): void {
     $panel = new AdminPanelServiceProvider(app())->panel(Panel::make());
@@ -116,6 +123,13 @@ it('orders navigation resources by centralized priority', function (
     'languages' => [LanguageResource::class, NavigationPriority::Languages],
     'language lines' => [LanguageLineResource::class, NavigationPriority::LanguageLines],
     'general settings' => [ManageGeneralSettings::class, NavigationPriority::GeneralSettings],
+    'storefront settings' => [ManageStorefrontSettings::class, NavigationPriority::StorefrontSettings],
+    'order settings' => [ManageOrderSettings::class, NavigationPriority::OrderSettings],
+    'cart settings' => [ManageCartSettings::class, NavigationPriority::CartSettings],
+    'delivery settings' => [ManageDeliverySettings::class, NavigationPriority::DeliverySettings],
+    'affiliate settings' => [ManageAffiliateSettings::class, NavigationPriority::AffiliateSettings],
+    'inquiry settings' => [ManageInquirySettings::class, NavigationPriority::InquirySettings],
+    'wishlist settings' => [ManageWishlistSettings::class, NavigationPriority::WishlistSettings],
     'activity logs' => [ActivityLogResource::class, NavigationPriority::ActivityLogs],
 ]);
 

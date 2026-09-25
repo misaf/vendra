@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     'deliveries' => 'Lieferungen',
     'delivery' => 'Lieferung',
+    'delivery_settings' => 'Lieferung',
     'delivery_slot' => 'Lieferfenster',
     'delivery_slots' => 'Lieferfenster',
     'delivery_zone' => 'Lieferzone',

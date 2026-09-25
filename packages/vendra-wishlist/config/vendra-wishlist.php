@@ -20,16 +20,4 @@ return [
 
     'panels' => ['admin'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Default List Name
-    |--------------------------------------------------------------------------
-    |
-    | The name given to the list a heart button writes to when a customer has
-    | not created one themselves.
-    |
-    */
-
-    'default_name' => env('WISHLIST_DEFAULT_NAME', 'Favourites'),
-
 ];

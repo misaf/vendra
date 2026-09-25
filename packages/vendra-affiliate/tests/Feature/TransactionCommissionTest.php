@@ -10,6 +10,7 @@ use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Listeners\TransactionCommissionSubscriber;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraTransaction\Actions\ApproveTransactionAction;
 use Misaf\VendraTransaction\Database\Factories\TransactionFactory;
 use Misaf\VendraTransaction\Database\Factories\WalletFactory;
@@ -43,7 +44,7 @@ function referredDeposit(int $amount, int $commissionPercent = 20): Transaction
 }
 
 it('credits a commission when a referred deposit is approved', function (): void {
-    config()->set('vendra-affiliate.conversions.deposit.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['deposit_conversions' => true])->save();
 
     $transaction = referredDeposit(amount: 10_000, commissionPercent: 20);
 
@@ -58,7 +59,7 @@ it('credits a commission when a referred deposit is approved', function (): void
 });
 
 it('credits a repeated event only once', function (): void {
-    config()->set('vendra-affiliate.conversions.deposit.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['deposit_conversions' => true])->save();
 
     $transaction = referredDeposit(amount: 10_000);
     $subscriber = resolve(TransactionCommissionSubscriber::class);
@@ -70,7 +71,7 @@ it('credits a repeated event only once', function (): void {
 });
 
 it('queues nothing when a deposit is updated without being approved', function (): void {
-    config()->set('vendra-affiliate.conversions.deposit.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['deposit_conversions' => true])->save();
     $transaction = referredDeposit(amount: 10_000);
     Queue::fake();
 
@@ -81,7 +82,7 @@ it('queues nothing when a deposit is updated without being approved', function (
 });
 
 it('ignores deposits when the deposit conversion is disabled', function (): void {
-    config()->set('vendra-affiliate.conversions.deposit.enabled', false);
+    resolve(AffiliateSettings::class)->fill(['deposit_conversions' => false])->save();
 
     $transaction = referredDeposit(amount: 10_000);
 
@@ -91,7 +92,7 @@ it('ignores deposits when the deposit conversion is disabled', function (): void
 });
 
 it('ignores deposits from users without a referral', function (): void {
-    config()->set('vendra-affiliate.conversions.deposit.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['deposit_conversions' => true])->save();
 
     $transaction = TransactionFactory::new()
         ->deposit()
@@ -104,7 +105,7 @@ it('ignores deposits from users without a referral', function (): void {
 });
 
 it('credits a deposit whose wallet was deleted before the queued listener ran', function (): void {
-    config()->set('vendra-affiliate.conversions.deposit.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['deposit_conversions' => true])->save();
 
     $transaction = referredDeposit(amount: 10_000, commissionPercent: 20);
     $transaction->wallet->delete();

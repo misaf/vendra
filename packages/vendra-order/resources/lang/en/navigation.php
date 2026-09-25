@@ -7,5 +7,6 @@ return [
     'order' => 'Order',
     'order_line' => 'Order Line',
     'order_lines' => 'Order Lines',
+    'order_settings' => 'Orders',
     'orders' => 'Orders',
 ];

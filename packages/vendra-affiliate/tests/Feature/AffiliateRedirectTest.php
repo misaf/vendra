@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Misaf\VendraAffiliate\Database\Factories\AffiliateFactory;
 use Misaf\VendraAffiliate\Models\AffiliateClick;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 
 beforeEach(function (): void {
     makeCurrentTestTenant();
@@ -16,7 +17,7 @@ it('records a click, drops the attribution cookie, and redirects', function (): 
 
     $click = AffiliateClick::query()->sole();
 
-    $response->assertRedirect(config('vendra-affiliate.attribution.redirect_url'))
+    $response->assertRedirect(resolve(AffiliateSettings::class)->redirect_url)
         ->assertCookie(
             config()->string('vendra-affiliate.attribution.cookie_name'),
             sprintf('%s|%d', $affiliate->code, $click->id),
@@ -29,7 +30,7 @@ it('records a click, drops the attribution cookie, and redirects', function (): 
 it('redirects silently without recording anything for unknown codes', function (): void {
     $response = $this->get(route('affiliate.redirect', ['code' => 'UNKNOWN1']));
 
-    $response->assertRedirect(config('vendra-affiliate.attribution.redirect_url'))
+    $response->assertRedirect(resolve(AffiliateSettings::class)->redirect_url)
         ->assertCookieMissing(config()->string('vendra-affiliate.attribution.cookie_name'));
 
     expect(AffiliateClick::query()->count())->toBe(0);

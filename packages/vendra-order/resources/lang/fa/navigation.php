@@ -7,5 +7,6 @@ return [
     'order' => 'سفارش',
     'order_line' => 'ردیف سفارش',
     'order_lines' => 'ردیف‌های سفارش',
+    'order_settings' => 'سفارش‌ها',
     'orders' => 'سفارش‌ها',
 ];

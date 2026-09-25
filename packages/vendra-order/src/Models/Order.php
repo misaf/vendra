@@ -19,10 +19,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraOrder\Database\Factories\OrderFactory;
+use Misaf\VendraOrder\Settings\OrderSettings;
 use Misaf\VendraOrder\States\Cancelled;
 use Misaf\VendraOrder\States\Completed;
 use Misaf\VendraOrder\States\Confirmed;
@@ -96,7 +96,7 @@ final class Order extends Model implements ShouldLogActivity
 
     public static function generateNumber(): string
     {
-        return Str::upper(Config::string('vendra-order.number_prefix', 'ORD').'-'.Str::random(10));
+        return Str::upper(resolve(OrderSettings::class)->number_prefix.'-'.Str::random(10));
     }
 
     /**

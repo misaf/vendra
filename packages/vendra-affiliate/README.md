@@ -31,8 +31,12 @@ stats widgets.
    (approved and not yet in a payout) selects what it settles, and `earned()`
    (approved or paid) is what the dashboards total.
 
-Each conversion type is toggled in `config/vendra-affiliate.php`, alongside
-the attribution cookie, payout minimum, and defaults.
+Each store toggles the conversion types on the affiliate settings page
+(`Settings\AffiliateSettings`), alongside the referral cookie lifetime and
+redirect, commission auto-approval, the payout minimum, and the defaults for new
+affiliates. The platform defaults are seeded by the package's settings
+migration. `config/vendra-affiliate.php` keeps only the cookie name and the
+payout gateway.
 
 ## Requirements
 

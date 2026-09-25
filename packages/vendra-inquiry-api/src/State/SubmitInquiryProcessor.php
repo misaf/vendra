@@ -8,8 +8,8 @@ use ApiPlatform\Laravel\ApiResource\ValidationError;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Misaf\VendraInquiry\Actions\SubmitInquiryAction;
+use Misaf\VendraInquiry\Settings\InquirySettings;
 use Misaf\VendraInquiryApi\ApiResource\InquiryResource;
 
 /**
@@ -26,7 +26,7 @@ final readonly class SubmitInquiryProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
     {
-        $this->ensureConfiguredOccasion($data->occasion);
+        $this->ensureKnownOccasion($data->occasion);
 
         $this->submitInquiry->execute(
             name: $data->name,
@@ -40,11 +40,11 @@ final readonly class SubmitInquiryProcessor implements ProcessorInterface
     }
 
     /**
-     * Reject an occasion outside the configured list, which a constant rule cannot check.
+     * Reject an occasion outside the store's list, which a constant rule cannot check.
      */
-    private function ensureConfiguredOccasion(?string $occasion): void
+    private function ensureKnownOccasion(?string $occasion): void
     {
-        if ($occasion === null || in_array($occasion, Config::array('vendra-inquiry.occasions', []), true)) {
+        if ($occasion === null || in_array($occasion, resolve(InquirySettings::class)->occasions, true)) {
             return;
         }
 

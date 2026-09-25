@@ -6,6 +6,7 @@ namespace Misaf\VendraDelivery;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Misaf\VendraDelivery\Filament\Pages\ManageDeliverySettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesPluginInstances;
 
 final class DeliveryPlugin implements Plugin
@@ -25,6 +26,10 @@ final class DeliveryPlugin implements Plugin
             in: __DIR__.'/Filament/Clusters/Resources',
             for: 'Misaf\\VendraDelivery\\Filament\\Clusters\\Resources',
         );
+
+        $panel->pages([
+            ManageDeliverySettings::class,
+        ]);
     }
 
     public function boot(Panel $panel): void {}

@@ -6795,7 +6795,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-affiliate",
-                "reference": "8345e3702c8afc088a5ca192ec741186372a5f5b"
+                "reference": "16631efc2b4a5ba6717831cc71ec1dfcde26bcb8"
             },
             "require": {
                 "misaf/vendra-support": "self.version",
@@ -6803,7 +6803,8 @@
                 "misaf/vendra-user": "self.version",
                 "php": "^8.4",
                 "spatie/laravel-package-tools": "^1.93.1",
-                "spatie/laravel-queueable-action": "^2.17"
+                "spatie/laravel-queueable-action": "^2.17",
+                "spatie/laravel-settings": "^3.9"
             },
             "suggest": {
                 "misaf/vendra-tagger": "Install this in the host application to assign typed tags to affiliates."
@@ -7218,12 +7219,13 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-cart",
-                "reference": "81d2bf9027e3c40b2dc04a8b2ada01494fdcb4b1"
+                "reference": "98611fbcc8cfe60f8dfc873ca10eb10a79c7d936"
             },
             "require": {
                 "misaf/vendra-support": "self.version",
                 "php": "^8.4",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {
@@ -7335,7 +7337,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-console",
-                "reference": "c5329530b3cada65dda34f41d0fcb79a08675aa2"
+                "reference": "bc0b4d571f695c8a9be5428b69f145140e5b9f5f"
             },
             "require": {
                 "awcodes/filament-badgeable-column": "^4.0",
@@ -7606,7 +7608,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-delivery",
-                "reference": "0dd656bdb5b3b3c8417f692ac385b261880fa394"
+                "reference": "5c34706a55c0809cd23181a475d91bda614a2c82"
             },
             "require": {
                 "cknow/laravel-money": "^8.5",
@@ -7617,7 +7619,8 @@
                 "misaf/vendra-support": "self.version",
                 "php": "^8.4",
                 "spatie/eloquent-sortable": "^5.0.1",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {
@@ -7916,14 +7919,15 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-inquiry",
-                "reference": "dc93dad30316899a362c39ee977b4d671bd95a24"
+                "reference": "fd45a30a18abeedbced476807141fe6d5630ec81"
             },
             "require": {
                 "misaf/filament-jalali": "^5.1.4",
                 "misaf/vendra-support": "self.version",
                 "php": "^8.4",
                 "spatie/laravel-model-states": "^2.11",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {
@@ -8333,7 +8337,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-order",
-                "reference": "281266a5c680bdfefbce72ba160f45bd1a01cbe6"
+                "reference": "a59ac565c6f9f70bc8987f1428f916160e9ceeac"
             },
             "require": {
                 "cknow/laravel-money": "^8.5",
@@ -8344,7 +8348,8 @@
                 "misaf/vendra-transaction": "self.version",
                 "php": "^8.4",
                 "spatie/laravel-model-states": "^2.11",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {
@@ -8993,16 +8998,18 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-support",
-                "reference": "63925d715e09096a890217ed181415c34f1c9539"
+                "reference": "e7cde3e08ebda7874f7b40b72a7c52c3f74f2e03"
             },
             "require": {
                 "filament/filament": "^5.6.8",
+                "filament/spatie-laravel-settings-plugin": "^5.6.8",
                 "illuminate/console": "^13.0",
                 "illuminate/database": "^13.0",
                 "illuminate/support": "^13.0",
                 "laravel/prompts": "^0.3.21",
                 "misaf/filament-jalali": "^5.1.4",
                 "php": "^8.4",
+                "spatie/laravel-settings": "^3.9",
                 "symfony/intl": "^7.4 || ^8.0"
             },
             "type": "vendra-module",
@@ -9492,13 +9499,14 @@
             "dist": {
                 "type": "path",
                 "url": "packages/vendra-wishlist",
-                "reference": "4e2765fdee6594e497176689015ff4c55c7fe2cc"
+                "reference": "67175b1addd07ffde9903836650c390126c24969"
             },
             "require": {
                 "misaf/filament-jalali": "^5.1.4",
                 "misaf/vendra-support": "self.version",
                 "php": "^8.4",
-                "spatie/laravel-package-tools": "^1.93.1"
+                "spatie/laravel-package-tools": "^1.93.1",
+                "spatie/laravel-settings": "^3.9"
             },
             "type": "vendra-module",
             "extra": {

@@ -11,7 +11,9 @@ use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraInquiry\Console\Commands\SeedCommand;
 use Misaf\VendraInquiry\InquiryPlugin;
 use Misaf\VendraInquiry\Models\Inquiry;
+use Misaf\VendraInquiry\Settings\InquirySettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -20,6 +22,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class InquiryServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
     use ResolvesConfiguredPanels;
 
     public function configurePackage(Package $package): void
@@ -39,6 +42,8 @@ final class InquiryServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->registerSettings([InquirySettings::class], __DIR__.'/../../database/settings');
+
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), InquiryPlugin::ID)) {
                 return;

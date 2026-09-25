@@ -11,6 +11,7 @@ use Misaf\VendraAffiliate\Enums\PayoutStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
 use Misaf\VendraAffiliate\Models\AffiliatePayout;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraTransaction\Actions\ApproveTransactionAction;
 use Misaf\VendraTransaction\Actions\CreateTransactionAction;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
@@ -40,7 +41,7 @@ final class ProcessAffiliatePayoutAction
 
             $amount = (int) $commissions->sum(fn (AffiliateCommission $commission): int => $commission->amount);
 
-            if ($amount < Config::integer('vendra-affiliate.payout.minimum', 0) || $commissions->count() === 0) {
+            if ($amount < resolve(AffiliateSettings::class)->payout_minimum || $commissions->count() === 0) {
                 return null;
             }
 

@@ -8,11 +8,11 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Schema;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rules\Unique;
 use Livewire\Component as Livewire;
 use Misaf\VendraAffiliate\Enums\AffiliateStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraTagger\Filament\Forms\Components\ModelTagsInput;
@@ -52,7 +52,7 @@ final class AffiliateForm
             TextInput::make('commission_percent')
                 ->afterStateUpdated(fn (Livewire $livewire) => $livewire->validateOnly('data.commission_percent'))
                 ->columnSpan(['lg' => 1])
-                ->default(fn (): int => Config::integer('vendra-affiliate.defaults.commission_percent', 20))
+                ->default(fn (): int => resolve(AffiliateSettings::class)->commission_percent)
                 ->integer()
                 ->label(__('vendra-affiliate::attributes.commission_percent'))
                 ->live(onBlur: true)

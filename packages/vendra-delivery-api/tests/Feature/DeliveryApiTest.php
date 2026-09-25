@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Config;
 use Misaf\VendraDelivery\Database\Factories\DeliverySlotFactory;
 use Misaf\VendraDelivery\Database\Factories\DeliveryZoneFactory;
+use Misaf\VendraDelivery\Settings\DeliverySettings;
 
 beforeEach(function (): void {
     makeCurrentTestTenant();
@@ -26,7 +26,7 @@ it('lists only active delivery bands, tightest first', function (): void {
 });
 
 it('lists bookable dates and active delivery windows', function (): void {
-    Config::set('vendra-delivery.schedule.advance_days', 3);
+    resolve(DeliverySettings::class)->fill(['advance_days' => 3])->save();
 
     $morning = DeliverySlotFactory::new()->active()->window('Morning', '09:00:00', '12:00:00')->createOne(['position' => 1]);
     DeliverySlotFactory::new()->window('Night', '20:00:00', '23:00:00')->inactive()->createOne(['position' => 2]);

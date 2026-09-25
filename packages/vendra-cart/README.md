@@ -38,6 +38,8 @@ The Filament resource is registered in the shared `Sales` cluster on the
 configured panels. Cart creation and mutation remain application concerns; the
 administration UI is limited to viewing and deletion.
 
+How long a new cart lives is a store setting (`Settings\CartSettings`), edited
+on the cart settings page; leave it empty to create carts without an expiry.
 Expired carts are pruned daily by default. Change the schedule in the
 published configuration or run `php artisan vendra-cart:prune-expired`
 manually. `Cart::query()->expired()` and `unexpired()` select the same carts; a

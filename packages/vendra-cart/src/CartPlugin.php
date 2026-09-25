@@ -6,6 +6,7 @@ namespace Misaf\VendraCart;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Misaf\VendraCart\Filament\Pages\ManageCartSettings;
 use Misaf\VendraSupport\Filament\Concerns\HasPluginNavigationGroup;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesPluginInstances;
 
@@ -32,6 +33,10 @@ final class CartPlugin implements Plugin
             in: __DIR__.'/Filament/Clusters/Resources',
             for: 'Misaf\\VendraCart\\Filament\\Clusters\\Resources',
         );
+
+        $panel->pages([
+            ManageCartSettings::class,
+        ]);
     }
 
     public function boot(Panel $panel): void {}

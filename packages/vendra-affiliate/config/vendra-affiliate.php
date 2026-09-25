@@ -32,75 +32,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Affiliate Defaults
+    | Referral Cookie
     |--------------------------------------------------------------------------
     |
-    | These values are applied to newly created affiliates. Monetary amounts
-    | are stored as integer minor units, such as cents.
-    |
-    */
-
-    'defaults' => [
-        'commission_percent' => 20,
-        'signup_bounty' => 0,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Commission Conversions
-    |--------------------------------------------------------------------------
-    |
-    | Each supported conversion type may independently credit commissions.
-    |
-    */
-
-    'conversions' => [
-        'deposit' => ['enabled' => true],
-        'signup' => ['enabled' => false],
-        'checkout' => ['enabled' => false],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Commission Approval
-    |--------------------------------------------------------------------------
-    |
-    | When enabled, credited commissions are immediately payable. Otherwise,
-    | they remain pending until approved in the administration panel.
-    |
-    */
-
-    'commissions' => [
-        'auto_approve' => true,
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Referral Attribution
-    |--------------------------------------------------------------------------
-    |
-    | These options control the referral cookie and post-attribution redirect.
+    | The cookie that carries a referral from the redirect to registration.
+    | Its lifetime, the redirect target and every commission and payout rule
+    | are store settings, edited on the affiliate settings page.
     |
     */
 
     'attribution' => [
         'cookie_name' => 'vendra_affiliate_ref',
-        'cookie_ttl_days' => 30,
-        'redirect_url' => '/',
     ],
 
     /*
     |--------------------------------------------------------------------------
-    | Payout Settlement
+    | Payout Gateway
     |--------------------------------------------------------------------------
     |
-    | The minimum is the smallest payable balance in minor units. The gateway
-    | slug must identify a gateway registered by vendra-transaction.
+    | The slug must identify a gateway registered by vendra-transaction.
     |
     */
 
     'payout' => [
-        'minimum' => 1000,
         'transaction_gateway' => 'internal-transactions',
     ],
 

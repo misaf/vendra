@@ -13,10 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use Misaf\VendraSupport\Tenancy\BelongsToTenant;
 use Misaf\VendraWishlist\Database\Factories\WishlistFactory;
+use Misaf\VendraWishlist\Settings\WishlistSettings;
 
 /**
  * A customer's saved items; one of their lists is the default.
@@ -50,7 +50,7 @@ final class Wishlist extends Model
             }
 
             if (! array_key_exists('name', $wishlist->getAttributes())) {
-                $wishlist->name = Config::string('vendra-wishlist.default_name', 'Favourites');
+                $wishlist->name = resolve(WishlistSettings::class)->default_name;
             }
         });
     }
@@ -69,7 +69,7 @@ final class Wishlist extends Model
             ],
             [
                 'token' => (string) Str::uuid(),
-                'name' => Config::string('vendra-wishlist.default_name', 'Favourites'),
+                'name' => resolve(WishlistSettings::class)->default_name,
             ],
         );
     }

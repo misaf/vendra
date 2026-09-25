@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Facades\Config;
 use Misaf\VendraDelivery\Actions\ScheduleDeliveryAction;
 use Misaf\VendraDelivery\Data\DeliveryQuote;
 use Misaf\VendraDelivery\Database\Factories\DeliverySlotFactory;
 use Misaf\VendraDelivery\Database\Factories\DeliveryZoneFactory;
 use Misaf\VendraDelivery\Models\Delivery;
+use Misaf\VendraDelivery\Settings\DeliverySettings;
 use Misaf\VendraOrder\Database\Factories\OrderFactory;
 
 beforeEach(function (): void {
@@ -64,7 +64,7 @@ it('refuses to schedule an address that is quoted by hand', function (): void {
 });
 
 it('refuses a date outside the bookable window', function (): void {
-    Config::set('vendra-delivery.schedule.advance_days', 3);
+    resolve(DeliverySettings::class)->fill(['advance_days' => 3])->save();
 
     $order = OrderFactory::new()->createOne();
     $zone = DeliveryZoneFactory::new()->freeWithin(12)->createOne();

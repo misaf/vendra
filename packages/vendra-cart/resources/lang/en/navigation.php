@@ -6,6 +6,7 @@ return [
     'cart' => 'Shopping Cart',
     'cart_item' => 'Cart Item',
     'cart_items' => 'Cart Items',
+    'cart_settings' => 'Carts',
     'carts' => 'Shopping Carts',
     'navigation_badge_tooltip' => 'Total shopping carts',
 ];

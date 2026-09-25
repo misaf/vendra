@@ -19,12 +19,14 @@ use Misaf\VendraStore\Observers\StoreDomainObserver;
 use Misaf\VendraStore\Scopes\StoreScope;
 use Misaf\VendraStore\Services\ContainerStorefrontProvisioner;
 use Misaf\VendraStore\Services\StoreDomainFinder;
+use Misaf\VendraStore\Settings\StoreCreationSettings;
 use Misaf\VendraStore\Support\NullStoreResellerResolver;
 use Misaf\VendraStore\Support\StorefrontRuntimeConfiguration;
 use Misaf\VendraStore\Support\StorefrontSettings;
 use Misaf\VendraStore\Support\StoreTenantEntitlements;
 use Misaf\VendraSupport\Contracts\TenantEntitlements;
 use Misaf\VendraSupport\Enums\PlanLimit;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantUsageRegistry;
 use Misaf\VendraTenant\Contracts\HostTenantFinder;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -33,6 +35,8 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class StoreServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
+
     public function configurePackage(Package $package): void
     {
         $package
@@ -58,6 +62,8 @@ final class StoreServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->registerSettings([StoreCreationSettings::class], __DIR__.'/../../database/settings');
+
         /*
          | Bound rather than shared, so a configuration change — a test setting
          | an image, an administrator reloading config — is picked up on the next

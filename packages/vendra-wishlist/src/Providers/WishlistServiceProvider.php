@@ -9,11 +9,13 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Misaf\VendraWishlist\Console\Commands\SeedCommand;
 use Misaf\VendraWishlist\Models\Wishlist;
 use Misaf\VendraWishlist\Models\WishlistItem;
+use Misaf\VendraWishlist\Settings\WishlistSettings;
 use Misaf\VendraWishlist\WishlistPlugin;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
@@ -21,6 +23,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class WishlistServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
     use ResolvesConfiguredPanels;
 
     public function configurePackage(Package $package): void
@@ -40,6 +43,8 @@ final class WishlistServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->registerSettings([WishlistSettings::class], __DIR__.'/../../database/settings');
+
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), WishlistPlugin::ID)) {
                 return;

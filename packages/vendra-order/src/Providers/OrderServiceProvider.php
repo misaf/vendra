@@ -12,7 +12,9 @@ use Misaf\VendraOrder\Console\Commands\SeedCommand;
 use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraOrder\Models\OrderLine;
 use Misaf\VendraOrder\OrderPlugin;
+use Misaf\VendraOrder\Settings\OrderSettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -21,6 +23,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class OrderServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
     use ResolvesConfiguredPanels;
 
     public function configurePackage(Package $package): void
@@ -40,6 +43,8 @@ final class OrderServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->registerSettings([OrderSettings::class], __DIR__.'/../../database/settings');
+
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), OrderPlugin::ID)) {
                 return;

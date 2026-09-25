@@ -20,23 +20,4 @@ return [
 
     'panels' => ['admin'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Occasions
-    |--------------------------------------------------------------------------
-    |
-    | The occasions a storefront contact form may offer. Keep them as stable
-    | slugs: the storefront translates them for display, and an enquiry stores
-    | whichever slug the customer picked.
-    |
-    */
-
-    'occasions' => [
-        'wedding',
-        'event',
-        'sympathy',
-        'corporate',
-        'other',
-    ],
-
 ];

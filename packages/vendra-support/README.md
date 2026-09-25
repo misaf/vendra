@@ -12,6 +12,7 @@ Shared support infrastructure used by every Vendra module.
 - Request and queued-job context propagation primitives
 - Shared tenant seeders and console commands
 - Shared Filament clusters, navigation taxonomy, and concerns
+- `Settings\RegistersSettings`, which lets a package register its own settings classes and settings migrations from its service provider, and `Filament\Pages\SystemSettingsPage`, the base for a package's store settings page in the admin System cluster
 - `IsActiveToggle` form field and `IsActiveToggleColumn` table column for boolean active/inactive columns
 - `IsActiveEntry` infolist entry, `IsActiveConstraint` query-builder constraint, and `IsActiveFilter` ternary filter (Active / Inactive) for reading and filtering the same columns
 - `IsDefaultToggle` form field, `IsDefaultEntry` infolist entry, `IsDefaultIconColumn` table column, `IsDefaultFilter` ternary filter, and `IsDefaultConstraint` query-builder constraint for boolean `is_default` columns

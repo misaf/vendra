@@ -6,6 +6,7 @@ return [
     'cart' => 'سبد خرید',
     'cart_item' => 'آیتم سبد خرید',
     'cart_items' => 'آیتم‌های سبد خرید',
+    'cart_settings' => 'سبدهای خرید',
     'carts' => 'سبدهای خرید',
     'navigation_badge_tooltip' => 'تعداد کل سبدهای خرید',
 ];

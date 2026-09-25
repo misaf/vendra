@@ -39,7 +39,8 @@ php artisan vendor:publish --tag=vendra-order-translations
 The Filament resource is registered in the shared `Sales` cluster on the
 configured panels. Orders are created by the application through
 `PlaceOrderAction`; the administration UI inspects orders and moves them
-through their lifecycle.
+through their lifecycle. The order number prefix is a store setting
+(`Settings\OrderSettings`) edited on the order settings page.
 
 Every cancellation, whether through `CancelOrderAction` or `Order::cancel()`,
 runs `States\CancelOrderTransition`. It locks the order, cancels it, and

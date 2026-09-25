@@ -7,6 +7,7 @@ namespace Misaf\VendraAffiliate;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Illuminate\Support\Facades\Config;
+use Misaf\VendraAffiliate\Filament\Pages\ManageAffiliateSettings;
 use Misaf\VendraAffiliate\Filament\Widgets\AffiliateOverviewWidget;
 use Misaf\VendraAffiliate\Filament\Widgets\UserAffiliateOverviewWidget;
 use Misaf\VendraSupport\Filament\Concerns\HasPluginNavigationGroup;
@@ -36,6 +37,10 @@ final class AffiliatePlugin implements Plugin
                 in: __DIR__.'/Filament/Clusters/Resources',
                 for: 'Misaf\\VendraAffiliate\\Filament\\Clusters\\Resources',
             );
+
+            $panel->pages([
+                ManageAffiliateSettings::class,
+            ]);
 
             $panel->widgets([
                 AffiliateOverviewWidget::class,

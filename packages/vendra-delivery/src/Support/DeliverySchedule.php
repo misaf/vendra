@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Misaf\VendraDelivery\Support;
 
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Date;
+use Misaf\VendraDelivery\Settings\DeliverySettings;
 
 /**
- * After the configured cutoff hour, the earliest date is tomorrow.
+ * After the store's cutoff hour, the earliest date is tomorrow.
  */
 final class DeliverySchedule
 {
@@ -19,8 +19,9 @@ final class DeliverySchedule
     public function bookableDates(?Carbon $from = null): array
     {
         $now = $from?->copy() ?? Date::now();
-        $advanceDays = max(1, Config::integer('vendra-delivery.schedule.advance_days', 14));
-        $cutoffHour = Config::integer('vendra-delivery.schedule.same_day_cutoff_hour', 14);
+        $settings = resolve(DeliverySettings::class);
+        $advanceDays = max(1, $settings->advance_days);
+        $cutoffHour = $settings->same_day_cutoff_hour;
 
         $firstDate = $now->hour >= $cutoffHour
             ? $now->copy()->addDay()

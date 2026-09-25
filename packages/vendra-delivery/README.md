@@ -9,7 +9,7 @@ the scheduled delivery attached to a placed order.
 - `DeliveryZone` bands measured from the studio, ordered tightest-first, each with its own fee
 - An outermost band that is quoted by hand and refuses checkout instead of inventing a price
 - `DeliverySlot` windows with optional per-date capacity
-- Bookable dates that respect a configurable same-day cutoff
+- Bookable dates that respect each store's same-day cutoff
 - `Delivery` records the address, pin, distance, window, date and the fee snapshot for one order
 - Tenant-aware Filament administration and permission seeding
 
@@ -59,8 +59,9 @@ app(ScheduleDeliveryAction::class)->execute(
 ```
 
 Zones, windows and fees are tenant business data managed in the administration
-UI. Only the calendar rules — how far ahead customers may book and the same-day
-cutoff hour — are configuration.
+UI. The calendar rules, how far ahead customers may book and the same-day
+cutoff hour, are store settings (`Settings\DeliverySettings`) edited on the
+delivery settings page.
 
 ## Testing
 

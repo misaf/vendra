@@ -194,6 +194,7 @@ it('registers domain routes', function (string $routeName): void {
     'sales transactions' => 'filament.admin.sales.resources.transactions.index',
     'content multimedia' => 'filament.admin.content.resources.multimedia.index',
     'system settings' => 'filament.admin.system.pages.configurations',
+    'system storefront' => 'filament.admin.system.pages.storefront',
 ]);
 
 it('does not register legacy or user-panel domain routes', function (string $routeName): void {

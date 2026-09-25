@@ -48,6 +48,9 @@ app(SubmitInquiryAction::class)->execute(
 );
 ```
 
+The occasions a storefront may send are a store setting
+(`Settings\InquirySettings`), edited on the enquiry settings page.
+
 This is a contact inbox, not a ticketing system: no threads, assignees, or
 SLAs. A person answers by email and marks the enquiry answered.
 

@@ -1068,7 +1068,7 @@ it('manages platform currencies apart from store currencies', function (): void 
 
 it('manages platform languages apart from store languages', function (): void {
     $store = createTestTenant();
-    $storeEnglish = LanguageFactory::new()->createOne(['tenant_id' => $store?->getKey(), 'locale' => 'en']);
+    $storeEnglish = LanguageFactory::new()->active()->createOne(['tenant_id' => $store?->getKey(), 'locale' => 'en']);
 
     actAsConsoleAdmin();
 

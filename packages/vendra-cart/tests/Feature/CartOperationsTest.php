@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Misaf\VendraCart\Actions\AddCartItemAction;
 use Misaf\VendraCart\Models\Cart;
 use Misaf\VendraCart\Models\CartItem;
+use Misaf\VendraCart\Settings\CartSettings;
 
 beforeEach(function (): void {
     makeCurrentTestTenant();
@@ -78,7 +79,7 @@ it('prunes expired carts together with their items', function (): void {
 
 it('defaults the cart expiry from configuration', function (): void {
     $this->freezeTime();
-    config()->set('vendra-cart.expires_after_days', 3);
+    resolve(CartSettings::class)->fill(['expires_after_days' => 3])->save();
 
     $cart = Cart::query()->create(['token' => (string) Str::uuid()]);
 
@@ -91,7 +92,7 @@ it('honours an explicit or disabled expiry', function (): void {
         'expires_at' => null,
     ]);
 
-    config()->set('vendra-cart.expires_after_days', null);
+    resolve(CartSettings::class)->fill(['expires_after_days' => null])->save();
     $unset = Cart::query()->create(['token' => (string) Str::uuid()]);
 
     expect($everlasting->expires_at)->toBeNull()

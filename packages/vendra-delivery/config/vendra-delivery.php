@@ -20,20 +20,4 @@ return [
 
     'panels' => ['admin'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Schedule
-    |--------------------------------------------------------------------------
-    |
-    | How far ahead customers may book, and the hour after which same-day
-    | delivery closes. Zones, slots, and fees are tenant data managed in the
-    | administration UI; only these two calendar rules are configuration.
-    |
-    */
-
-    'schedule' => [
-        'advance_days' => (int) env('DELIVERY_ADVANCE_DAYS', 14),
-        'same_day_cutoff_hour' => (int) env('DELIVERY_SAME_DAY_CUTOFF_HOUR', 14),
-    ],
-
 ];

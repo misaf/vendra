@@ -10,6 +10,7 @@ use Misaf\VendraAffiliate\Enums\CommissionStatusEnum;
 use Misaf\VendraAffiliate\Enums\PayoutStatusEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraTransaction\Database\Factories\TransactionGatewayFactory;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Models\Transaction;
@@ -40,7 +41,7 @@ function internalGateway(): void
 }
 
 it('settles approved commissions into a completed payout and commission transaction', function (): void {
-    config()->set('vendra-affiliate.payout.minimum', 1000);
+    resolve(AffiliateSettings::class)->fill(['payout_minimum' => 1000])->save();
     internalGateway();
 
     $affiliate = affiliateWithApprovedBalance(1_500, 2_500);
@@ -64,7 +65,7 @@ it('settles approved commissions into a completed payout and commission transact
 });
 
 it('rolls back the payout entirely when the commission transaction cannot be created', function (): void {
-    config()->set('vendra-affiliate.payout.minimum', 0);
+    resolve(AffiliateSettings::class)->fill(['payout_minimum' => 0])->save();
 
     $affiliate = affiliateWithApprovedBalance(1_500);
 
@@ -76,7 +77,7 @@ it('rolls back the payout entirely when the commission transaction cannot be cre
 });
 
 it('records a failed payout without consuming commissions when the affiliate user is missing', function (): void {
-    config()->set('vendra-affiliate.payout.minimum', 0);
+    resolve(AffiliateSettings::class)->fill(['payout_minimum' => 0])->save();
     internalGateway();
 
     $affiliate = affiliateWithApprovedBalance(1_500);
@@ -92,7 +93,7 @@ it('records a failed payout without consuming commissions when the affiliate use
 });
 
 it('refuses to pay out below the configured minimum', function (): void {
-    config()->set('vendra-affiliate.payout.minimum', 5_000);
+    resolve(AffiliateSettings::class)->fill(['payout_minimum' => 5_000])->save();
 
     $affiliate = affiliateWithApprovedBalance(1_000);
 
@@ -101,7 +102,7 @@ it('refuses to pay out below the configured minimum', function (): void {
 });
 
 it('does not pay pending or reversed commissions', function (): void {
-    config()->set('vendra-affiliate.payout.minimum', 0);
+    resolve(AffiliateSettings::class)->fill(['payout_minimum' => 0])->save();
     internalGateway();
 
     $affiliate = AffiliateFactory::new()->active()->create();

@@ -7,11 +7,12 @@ use Misaf\VendraAffiliate\Database\Factories\AffiliateFactory;
 use Misaf\VendraAffiliate\Database\Factories\AffiliateReferralFactory;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Models\AffiliateCommission;
+use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraUser\Models\User;
 
 beforeEach(function (): void {
     makeCurrentTestTenant();
-    config()->set('vendra-affiliate.conversions.checkout.enabled', true);
+    resolve(AffiliateSettings::class)->fill(['checkout_conversions' => true])->save();
 });
 
 it('credits the affiliate who referred the buyer', function (): void {

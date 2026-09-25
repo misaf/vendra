@@ -24,8 +24,8 @@ Anyone may write to a shop, so the endpoint is unauthenticated and throttled to
 10 requests a minute. It answers `204`: an enquiry is inbox material for the
 studio, not a resource the sender reads back. The source and the sender's
 locale are taken from the request rather than the body, so neither can be
-spoofed. An `occasion` must be one of the slugs in `vendra-inquiry.occasions`;
-anything else answers `422`.
+spoofed. An `occasion` must be one of the store's occasion slugs
+(`Misaf\VendraInquiry\Settings\InquirySettings`); anything else answers `422`.
 
 ## Requirements
 

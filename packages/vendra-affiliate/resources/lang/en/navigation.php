@@ -11,6 +11,7 @@ return [
     'affiliate_payout' => 'Payout',
     'affiliate_payouts' => 'Payouts',
     'affiliate_referral' => 'Referral',
+    'affiliate_settings' => 'Affiliates',
     'affiliates' => 'Affiliates',
     'marketing' => 'Marketing',
 ];

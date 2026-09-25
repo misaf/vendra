@@ -11,6 +11,7 @@ return [
     'affiliate_payout' => 'تسویه',
     'affiliate_payouts' => 'تسویه‌ها',
     'affiliate_referral' => 'معرفی',
+    'affiliate_settings' => 'همکاری در فروش',
     'affiliates' => 'همکاران فروش',
     'marketing' => 'بازاریابی',
 ];

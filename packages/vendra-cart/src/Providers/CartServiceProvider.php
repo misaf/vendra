@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraCart\CartPlugin;
 use Misaf\VendraCart\Console\Commands\PruneExpiredCartsCommand;
 use Misaf\VendraCart\Console\Commands\SeedCommand;
+use Misaf\VendraCart\Settings\CartSettings;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
+use Misaf\VendraSupport\Settings\RegistersSettings;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
 use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
@@ -21,6 +23,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 final class CartServiceProvider extends PackageServiceProvider
 {
+    use RegistersSettings;
     use ResolvesConfiguredPanels;
 
     public function configurePackage(Package $package): void
@@ -43,6 +46,8 @@ final class CartServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->registerSettings([CartSettings::class], __DIR__.'/../../database/settings');
+
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), CartPlugin::ID)) {
                 return;

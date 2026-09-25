@@ -27,6 +27,7 @@ description: "Create, modify, review, or test the Vendra Affiliate package in pa
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
 - Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Store rules a store administrator may change (the default commission percent and signup bounty, which conversions earn commission, commission auto-approval, the referral cookie lifetime and redirect URL, and the payout minimum) live in `Settings\AffiliateSettings` (group `affiliate`, tenant repository), registered with `RegistersSettings` in the service provider and seeded as the platform default by `database/settings`. `Filament\Pages\ManageAffiliateSettings` edits them in the admin System cluster; read them with `resolve(AffiliateSettings::class)`, never from config.
 
 ## Module Boundary
 
