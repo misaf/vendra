@@ -2,35 +2,18 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Arr;
-use Misaf\VendraReseller\Actions\CreateResellerAction;
-use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Support\StoreQuota;
-use Misaf\VendraSubscription\Enums\PeriodUnit;
-use Misaf\VendraSubscription\Enums\SubscriptionStatus;
+use Misaf\VendraStore\Tests\Fixtures\BillingSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
-use Misaf\VendraUser\Models\User;
 
-function resellerWithPlan(int $maxUnits, int $existingProperties = 0): Reseller
-{
-    $reseller = Reseller::factory()->active()->create();
-
-    Subscription::factory()
-        ->forSubscriber($reseller)
-        ->for(Plan::factory()->active()->maxUnits($maxUnits))
-        ->create();
-
-    for ($index = 0; $index < $existingProperties; $index++) {
-        createTestTenant(['reseller_id' => $reseller->getKey()]);
-    }
-
-    return $reseller;
-}
+beforeEach(function (): void {
+    BillingSubscriber::createTable();
+});
 
 it('allows creating a property below the plan limit', function (): void {
-    $reseller = resellerWithPlan(maxUnits: 2, existingProperties: 1);
+    $reseller = BillingSubscriber::withPlan(maxUnits: 2, existingStores: 1);
     $quota = resolve(StoreQuota::class);
 
     expect($quota->remainingStores($reseller))->toBe(1);
@@ -39,7 +22,7 @@ it('allows creating a property below the plan limit', function (): void {
 });
 
 it('blocks creating a property at the plan limit', function (): void {
-    $reseller = resellerWithPlan(maxUnits: 1, existingProperties: 1);
+    $reseller = BillingSubscriber::withPlan(maxUnits: 1, existingStores: 1);
     $quota = resolve(StoreQuota::class);
 
     expect($quota->remainingStores($reseller))->toBe(0);
@@ -48,7 +31,7 @@ it('blocks creating a property at the plan limit', function (): void {
 })->throws(SubscriptionLimitException::class);
 
 it('blocks property creation when no subscription is active', function (): void {
-    $reseller = Reseller::factory()->active()->create();
+    $reseller = BillingSubscriber::query()->create();
     Subscription::factory()->expired()->forSubscriber($reseller)->for(Plan::factory()->active()->maxUnits(5))->create();
 
     $quota = resolve(StoreQuota::class);
@@ -59,7 +42,7 @@ it('blocks property creation when no subscription is active', function (): void 
 })->throws(SubscriptionLimitException::class);
 
 it('blocks property creation for an inactive reseller with an active subscription', function (): void {
-    $reseller = resellerWithPlan(maxUnits: 2);
+    $reseller = BillingSubscriber::withPlan(maxUnits: 2);
     $reseller->update(['active' => false]);
 
     $quota = resolve(StoreQuota::class);
@@ -68,36 +51,3 @@ it('blocks property creation for an inactive reseller with an active subscriptio
 
     $quota->assertCanCreateStore($reseller);
 })->throws(SubscriptionLimitException::class, 'is inactive');
-
-it('creates a reseller subscribed to a plan for its period', function (): void {
-    $plan = Plan::factory()->active()->period(PeriodUnit::Month, 1)->create();
-
-    $result = resolve(CreateResellerAction::class)->execute(
-        plan: $plan,
-        username: 'acme_owner',
-        email: 'admin@acme.test',
-        password: 'Secure123',
-    );
-
-    expect(Arr::get($result, 'reseller'))->toBeInstanceOf(Reseller::class)
-        ->and(Arr::get($result, 'reseller')->exists)->toBeTrue()
-        ->and(Arr::get($result, 'user'))->toBeInstanceOf(User::class)
-        ->and(Reseller::forUser(Arr::get($result, 'user'))?->is(Arr::get($result, 'reseller')))->toBeTrue()
-        ->and(Arr::get($result, 'subscription')->status)->toBe(SubscriptionStatus::Active)
-        ->and(Arr::get($result, 'subscription')->plan_id)->toBe($plan->getKey())
-        ->and(Arr::get($result, 'subscription')->ends_at->toDateString())
-        ->toBe(Arr::get($result, 'subscription')->starts_at->copy()->addMonth()->toDateString())
-        ->and(Arr::get($result, 'reseller')->activeSubscription()?->getKey())->toBe(Arr::get($result, 'subscription')->getKey());
-});
-
-it('creates a reseller with the requested active state', function (): void {
-    $result = resolve(CreateResellerAction::class)->execute(
-        plan: Plan::factory()->active()->create(),
-        username: 'paused_owner',
-        email: 'admin@paused.test',
-        password: 'Secure123',
-        active: false,
-    );
-
-    expect(Arr::get($result, 'reseller')->active)->toBeFalse();
-});

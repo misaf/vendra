@@ -7,9 +7,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
-use Misaf\VendraReseller\Models\Reseller;
+use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Jobs\CompleteStoreProvisioningJob;
 use Misaf\VendraStore\Models\Store;
+use Misaf\VendraStore\Tests\Fixtures\BillingSubscriber;
+use Misaf\VendraStore\Tests\Fixtures\BillingSubscriberResolver;
 use Misaf\VendraSupport\Context\ContextKeys;
 use Misaf\VendraSupport\Context\RequestJobContext;
 use Misaf\VendraSupport\Tenancy\Events\TenantProvisioned;
@@ -89,7 +91,9 @@ it('records a failed checkpoint and safely retries unfinished work', function ()
 
 it('activates an unsubscribed reseller property under billing suspension', function (): void {
     Event::fake([TenantProvisioned::class]);
-    $reseller = Reseller::factory()->create();
+    BillingSubscriber::createTable();
+    app()->bind(StoreResellerResolver::class, BillingSubscriberResolver::class);
+    $reseller = BillingSubscriber::query()->create();
     $tenant = Store::factory()->create([
         'reseller_id' => $reseller->id,
         'active' => false,
@@ -109,7 +113,9 @@ it('activates an unsubscribed reseller property under billing suspension', funct
 
 it('scopes provisioning identifiers without leaking them afterward', function (): void {
     Event::fake([TenantProvisioned::class]);
-    $reseller = Reseller::factory()->create();
+    BillingSubscriber::createTable();
+    app()->bind(StoreResellerResolver::class, BillingSubscriberResolver::class);
+    $reseller = BillingSubscriber::query()->create();
     $tenant = Store::factory()->create([
         'reseller_id' => $reseller->id,
         'active' => false,

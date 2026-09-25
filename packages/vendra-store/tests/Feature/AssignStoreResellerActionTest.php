@@ -4,38 +4,23 @@ declare(strict_types=1);
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Queue;
-use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\AssignStoreResellerAction;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StorefrontDeployment;
+use Misaf\VendraStore\Tests\Fixtures\BillingSubscriber;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
 
-/*
- | The store package names no reseller: the action takes a SubscriptionSubscriber
- | and writes the plain `stores.reseller_id` key. The reseller model is only the
- | subscriber the monorepo has to hand.
- */
-function subscriberWithUnits(int $maxUnits, int $existingStores = 0): Reseller
-{
-    $reseller = Reseller::factory()->active()->create();
-
-    Subscription::factory()
-        ->forSubscriber($reseller)
-        ->for(Plan::factory()->active()->maxUnits($maxUnits))
-        ->create();
-
-    Store::factory()->count($existingStores)->create(['reseller_id' => $reseller->getKey()]);
-
-    return $reseller;
-}
+beforeEach(function (): void {
+    BillingSubscriber::createTable();
+});
 
 it('moves a store to a reseller with room in their plan', function (): void {
-    $from = subscriberWithUnits(maxUnits: 2, existingStores: 1);
-    $to = subscriberWithUnits(maxUnits: 2);
+    $from = BillingSubscriber::withPlan(maxUnits: 2, existingStores: 1);
+    $to = BillingSubscriber::withPlan(maxUnits: 2);
     $store = Store::factory()->create(['reseller_id' => $from->getKey()]);
 
     resolve(AssignStoreResellerAction::class)->execute($store, $to);
@@ -44,7 +29,7 @@ it('moves a store to a reseller with room in their plan', function (): void {
 });
 
 it('hands a store back to the platform when no reseller is given', function (): void {
-    $reseller = subscriberWithUnits(maxUnits: 2);
+    $reseller = BillingSubscriber::withPlan(maxUnits: 2);
     $store = Store::factory()->create(['reseller_id' => $reseller->getKey()]);
 
     resolve(AssignStoreResellerAction::class)->execute($store, null);
@@ -53,7 +38,7 @@ it('hands a store back to the platform when no reseller is given', function (): 
 });
 
 it('refuses a reseller whose plan is already full', function (): void {
-    $to = subscriberWithUnits(maxUnits: 1, existingStores: 1);
+    $to = BillingSubscriber::withPlan(maxUnits: 1, existingStores: 1);
     $store = Store::factory()->create(['reseller_id' => null]);
 
     expect(fn (): Store => resolve(AssignStoreResellerAction::class)->execute($store, $to))
@@ -66,7 +51,7 @@ it('refuses a reseller whose plan is already full', function (): void {
  | not turn a no-op into a failure.
  */
 it('leaves a store with the reseller it already has even at the plan limit', function (): void {
-    $reseller = subscriberWithUnits(maxUnits: 1);
+    $reseller = BillingSubscriber::withPlan(maxUnits: 1);
     $store = Store::factory()->create(['reseller_id' => $reseller->getKey()]);
 
     resolve(AssignStoreResellerAction::class)->execute($store, $reseller);
@@ -75,7 +60,7 @@ it('leaves a store with the reseller it already has even at the plan limit', fun
 });
 
 it('refuses a reseller whose subscription has lapsed', function (): void {
-    $to = Reseller::factory()->active()->create();
+    $to = BillingSubscriber::query()->create();
     Subscription::factory()->expired()->forSubscriber($to)->for(Plan::factory()->active()->maxUnits(5))->create();
     $store = Store::factory()->create(['reseller_id' => null]);
 
@@ -84,7 +69,7 @@ it('refuses a reseller whose subscription has lapsed', function (): void {
 });
 
 it('refuses to reassign an offboarded store', function (): void {
-    $to = subscriberWithUnits(maxUnits: 2);
+    $to = BillingSubscriber::withPlan(maxUnits: 2);
     $store = Store::factory()->create(['reseller_id' => null]);
     $store->delete();
 
@@ -95,7 +80,7 @@ it('refuses to reassign an offboarded store', function (): void {
 
 it("lifts the previous reseller's billing suspension and restarts the storefront", function (): void {
     Queue::fake();
-    $to = subscriberWithUnits(maxUnits: 2);
+    $to = BillingSubscriber::withPlan(maxUnits: 2);
     $store = Store::factory()->active()->create(['billing_suspended_at' => now()]);
     $deployment = StorefrontDeployment::factory()->for($store)->create(['desired_state' => StorefrontDesiredState::Stopped]);
 

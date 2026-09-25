@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
-use Misaf\VendraReseller\Models\Reseller;
 use Misaf\VendraStore\Actions\OffboardStoreAction;
 use Misaf\VendraStore\Actions\ReactivateStoreAction;
 use Misaf\VendraStore\Actions\RedeployStoreStorefrontAction;
@@ -17,6 +16,7 @@ use Misaf\VendraStore\Actions\StartStoreStorefrontAction;
 use Misaf\VendraStore\Actions\StopStoreStorefrontAction;
 use Misaf\VendraStore\Actions\SuspendStoreAction;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
+use Misaf\VendraStore\Contracts\StoreResellerResolver;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
 use Misaf\VendraStore\Enums\StoreStatus;
@@ -28,6 +28,8 @@ use Misaf\VendraStore\Jobs\RestartStorefrontJob;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Models\StoreDomain;
 use Misaf\VendraStore\Models\StorefrontDeployment;
+use Misaf\VendraStore\Tests\Fixtures\BillingSubscriber;
+use Misaf\VendraStore\Tests\Fixtures\BillingSubscriberResolver;
 use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
@@ -123,7 +125,9 @@ it('offboards and restores a store while preserving its history and stopping its
 });
 
 it('revalidates reseller quota before restoring an offboarded store', function (): void {
-    $reseller = Reseller::factory()->create();
+    BillingSubscriber::createTable();
+    app()->bind(StoreResellerResolver::class, BillingSubscriberResolver::class);
+    $reseller = BillingSubscriber::query()->create();
     Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->maxUnits(1))->create();
     $archived = Store::factory()->active()->create(['reseller_id' => $reseller->id]);
 
