@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Misaf\VendraAffiliate\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Settings\AffiliateSettings;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
@@ -15,6 +17,8 @@ use Misaf\VendraSupport\Filament\Pages\SystemSettingsPage;
 
 final class ManageAffiliateSettings extends SystemSettingsPage
 {
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedLink;
+
     protected static ?int $navigationSort = NavigationPriority::AffiliateSettings->value;
 
     protected static string $settings = AffiliateSettings::class;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\Auth\Login;
+use App\Settings\GeneralSettings;
 use Filament\Contracts\Plugin;
 use Filament\FontProviders\SpatieGoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -25,6 +26,7 @@ use LaraZeus\SpatieTranslatable\SpatieTranslatablePlugin;
 use Misaf\VendraLanguage\Support\Locales;
 use Misaf\VendraLocalization\Http\Middleware\SetLocale;
 use Misaf\VendraReseller\Http\Middleware\AddResellerToRequestJobContext;
+use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Http\Middleware\AddPanelToRequestJobContext;
 use Misaf\VendraTenant\Http\Middleware\EnsureAdminDomain;
 use Misaf\VendraUser\Filament\Pages\Auth\EditProfile;
@@ -49,7 +51,7 @@ final class AdminPanelServiceProvider extends PanelProvider
             ->id('admin')
             ->brandLogo(fn () => asset('images/vendra-logo.svg'))
             ->brandLogoHeight('2rem')
-            ->brandName('Vendra')
+            ->brandName(fn (): ?string => $this->brandName())
             ->darkModeBrandLogo(fn () => asset('images/vendra-logo-dark.svg'))
             ->databaseNotifications()
             ->databaseTransactions()
@@ -95,6 +97,17 @@ final class AdminPanelServiceProvider extends PanelProvider
             ->strictAuthorization()
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->plugins($this->plugins());
+    }
+
+    /**
+     * Name the panel after the store, in the admin's language when it has one.
+     */
+    private function brandName(): ?string
+    {
+        $storeName = resolve(TenantResolver::class)->current()?->getAttribute('name');
+
+        return resolve(GeneralSettings::class)->nameFor(app()->getLocale())
+            ?? (is_string($storeName) ? $storeName : null);
     }
 
     /**

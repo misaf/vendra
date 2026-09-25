@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 return [
     'storefront_configuration' => 'Florist storefront',
+    'storefront_contact' => 'Contact',
+    'storefront_location_and_social' => 'Location and social',
     'storefront_configuration_description' => 'Configure the store-specific storefront build and deployment.',
     'storefront_sample_description' => 'New storefronts start with sample details. Replace the contact, location, and social details with your own.',
     'create_storefront' => 'Create florist storefront',

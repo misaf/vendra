@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Misaf\VendraOrder\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Misaf\VendraOrder\Settings\OrderSettings;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 use Misaf\VendraSupport\Filament\Pages\SystemSettingsPage;
 
 final class ManageOrderSettings extends SystemSettingsPage
 {
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
+
     protected static ?int $navigationSort = NavigationPriority::OrderSettings->value;
 
     protected static string $settings = OrderSettings::class;

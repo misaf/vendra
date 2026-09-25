@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Misaf\VendraWishlist\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 use Misaf\VendraSupport\Filament\Pages\SystemSettingsPage;
 use Misaf\VendraWishlist\Settings\WishlistSettings;
 
 final class ManageWishlistSettings extends SystemSettingsPage
 {
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHeart;
+
     protected static ?int $navigationSort = NavigationPriority::WishlistSettings->value;
 
     protected static string $settings = WishlistSettings::class;

@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Misaf\VendraDelivery\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Misaf\VendraDelivery\Settings\DeliverySettings;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 use Misaf\VendraSupport\Filament\Pages\SystemSettingsPage;
 
 final class ManageDeliverySettings extends SystemSettingsPage
 {
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTruck;
+
     protected static ?int $navigationSort = NavigationPriority::DeliverySettings->value;
 
     protected static string $settings = DeliverySettings::class;

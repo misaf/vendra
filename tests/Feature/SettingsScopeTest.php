@@ -5,7 +5,6 @@ declare(strict_types=1);
 use App\Models\SettingsProperty;
 use App\Settings\GeneralSettings;
 use App\Settings\SettingsScope;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraStore\Models\Store;
 use Misaf\VendraStore\Settings\StoreCreationSettings;
@@ -72,31 +71,31 @@ describe('platform settings', function (): void {
 
 describe('store settings', function (): void {
     it('falls back to the platform row until the store saves its own', function (): void {
-        $platformTitle = Config::string('app.name');
+        $platformName = [];
         Store::factory()->active()->create()->makeCurrent();
 
-        expect(resolve(GeneralSettings::class)->site_title)->toBe($platformTitle)
-            ->and(settingsRowCount('general', 'site_title'))->toBe(1);
+        expect(resolve(GeneralSettings::class)->name)->toBe($platformName)
+            ->and(settingsRowCount('general', 'name'))->toBe(1);
     });
 
     it('writes a store row without touching the platform default', function (): void {
-        $platformTitle = Config::string('app.name');
+        $platformName = [];
         $store = Store::factory()->active()->create();
         $store->makeCurrent();
 
-        resolve(GeneralSettings::class)->fill(['site_title' => 'Acme Flowers'])->save();
+        resolve(GeneralSettings::class)->fill(['name' => ['en' => 'Acme Flowers']])->save();
 
-        expect(settingsRowCount('general', 'site_title', SettingsScope::forTenant($store->id)))->toBe(1)
-            ->and(settingsRowCount('general', 'site_title', SettingsScope::PLATFORM))->toBe(1);
+        expect(settingsRowCount('general', 'name', SettingsScope::forTenant($store->id)))->toBe(1)
+            ->and(settingsRowCount('general', 'name', SettingsScope::PLATFORM))->toBe(1);
 
-        $storedPlatformTitle = SettingsProperty::query()
+        $storedPlatformName = SettingsProperty::query()
             ->withoutGlobalScopes()
             ->where('scope', SettingsScope::PLATFORM)
             ->where('group', 'general')
-            ->where('name', 'site_title')
+            ->where('name', 'name')
             ->value('payload');
 
-        expect($storedPlatformTitle)->toBe(json_encode($platformTitle));
+        expect($storedPlatformName)->toBe(json_encode($platformName));
     });
 
     it('never grows a second row for a store however often it is saved', function (): void {
@@ -104,11 +103,11 @@ describe('store settings', function (): void {
         $store->makeCurrent();
 
         foreach (['One', 'Two', 'Three'] as $title) {
-            resolve(GeneralSettings::class)->fill(['site_title' => $title])->save();
+            resolve(GeneralSettings::class)->fill(['name' => ['en' => $title]])->save();
         }
 
-        expect(settingsRowCount('general', 'site_title', SettingsScope::forTenant($store->id)))->toBe(1)
-            ->and(resolve(GeneralSettings::class)->site_title)->toBe('Three');
+        expect(settingsRowCount('general', 'name', SettingsScope::forTenant($store->id)))->toBe(1)
+            ->and(resolve(GeneralSettings::class)->name)->toBe(['en' => 'Three']);
     });
 
     it('keeps one store out of another store settings', function (): void {
@@ -116,16 +115,16 @@ describe('store settings', function (): void {
         $second = Store::factory()->active()->create();
 
         $first->makeCurrent();
-        resolve(GeneralSettings::class)->fill(['site_title' => 'First'])->save();
+        resolve(GeneralSettings::class)->fill(['name' => ['en' => 'First']])->save();
 
         $second->makeCurrent();
-        resolve(GeneralSettings::class)->fill(['site_title' => 'Second'])->save();
+        resolve(GeneralSettings::class)->fill(['name' => ['en' => 'Second']])->save();
 
         $first->makeCurrent();
-        expect(resolve(GeneralSettings::class)->site_title)->toBe('First');
+        expect(resolve(GeneralSettings::class)->name)->toBe(['en' => 'First']);
 
         $second->makeCurrent();
-        expect(resolve(GeneralSettings::class)->site_title)->toBe('Second');
+        expect(resolve(GeneralSettings::class)->name)->toBe(['en' => 'Second']);
     });
 
     /*
@@ -134,19 +133,19 @@ describe('store settings', function (): void {
      | switched to after it.
      */
     it('re-reads settings when the current tenant changes', function (): void {
-        $platformTitle = Config::string('app.name');
+        $platformName = [];
         $first = Store::factory()->active()->create();
         $second = Store::factory()->active()->create();
 
         $first->makeCurrent();
-        resolve(GeneralSettings::class)->fill(['site_title' => 'First'])->save();
-        expect(resolve(GeneralSettings::class)->site_title)->toBe('First');
+        resolve(GeneralSettings::class)->fill(['name' => ['en' => 'First']])->save();
+        expect(resolve(GeneralSettings::class)->name)->toBe(['en' => 'First']);
 
         $second->makeCurrent();
-        expect(resolve(GeneralSettings::class)->site_title)->toBe($platformTitle);
+        expect(resolve(GeneralSettings::class)->name)->toBe($platformName);
 
         Store::forgetCurrent();
-        expect(resolve(GeneralSettings::class)->site_title)->toBe($platformTitle);
+        expect(resolve(GeneralSettings::class)->name)->toBe($platformName);
     });
 });
 

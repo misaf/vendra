@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Filament\Admin\Pages\ManageGeneralSettings;
 use App\Filament\Admin\Pages\ManageStorefrontSettings;
 use App\Providers\Filament\AdminPanelServiceProvider;
 use Filament\Pages\Enums\SubNavigationPosition;
@@ -122,7 +121,6 @@ it('orders navigation resources by centralized priority', function (
     'newsletter subscribers' => [NewsletterSubscriberResource::class, NavigationPriority::NewsletterSubscribers],
     'languages' => [LanguageResource::class, NavigationPriority::Languages],
     'language lines' => [LanguageLineResource::class, NavigationPriority::LanguageLines],
-    'general settings' => [ManageGeneralSettings::class, NavigationPriority::GeneralSettings],
     'storefront settings' => [ManageStorefrontSettings::class, NavigationPriority::StorefrontSettings],
     'order settings' => [ManageOrderSettings::class, NavigationPriority::OrderSettings],
     'cart settings' => [ManageCartSettings::class, NavigationPriority::CartSettings],
@@ -268,7 +266,7 @@ it('keeps cluster resources ungrouped so priority controls visible order', funct
     'language lines' => LanguageLineResource::class,
 ]);
 
-it('uses semantic icons for domain resources', function (string $resource, Heroicon $icon): void {
+it('uses semantic icons for domain resources and settings pages', function (string $resource, Heroicon $icon): void {
     expect($resource::getNavigationIcon())->toBe($icon);
 })->with([
     'activity logs' => [ActivityLogResource::class, Heroicon::OutlinedClipboardDocumentList],
@@ -306,4 +304,11 @@ it('uses semantic icons for domain resources', function (string $resource, Heroi
     'wallets' => [WalletResource::class, Heroicon::OutlinedWallet],
     'wishlists' => [WishlistResource::class, Heroicon::OutlinedHeart],
     'enquiries' => [InquiryResource::class, Heroicon::OutlinedInbox],
+    'storefront settings' => [ManageStorefrontSettings::class, Heroicon::OutlinedBuildingStorefront],
+    'order settings' => [ManageOrderSettings::class, Heroicon::OutlinedShoppingBag],
+    'cart settings' => [ManageCartSettings::class, Heroicon::OutlinedShoppingCart],
+    'delivery settings' => [ManageDeliverySettings::class, Heroicon::OutlinedTruck],
+    'affiliate settings' => [ManageAffiliateSettings::class, Heroicon::OutlinedLink],
+    'inquiry settings' => [ManageInquirySettings::class, Heroicon::OutlinedInbox],
+    'wishlist settings' => [ManageWishlistSettings::class, Heroicon::OutlinedHeart],
 ]);

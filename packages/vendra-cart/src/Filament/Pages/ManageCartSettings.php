@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Misaf\VendraCart\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Misaf\VendraCart\Settings\CartSettings;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 use Misaf\VendraSupport\Filament\Pages\SystemSettingsPage;
 
 final class ManageCartSettings extends SystemSettingsPage
 {
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingCart;
+
     protected static ?int $navigationSort = NavigationPriority::CartSettings->value;
 
     protected static string $settings = CartSettings::class;

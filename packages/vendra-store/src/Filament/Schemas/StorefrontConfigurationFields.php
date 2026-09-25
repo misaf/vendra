@@ -10,6 +10,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
@@ -27,17 +29,27 @@ final class StorefrontConfigurationFields
         ));
     }
 
-    public static function editable(): Section
+    /**
+     * The fields a store may change after deployment, one tab per group.
+     *
+     * @return list<Tab>
+     */
+    public static function editableTabs(): array
     {
-        return Section::make(__('vendra-store::attributes.storefront_configuration'))
-            ->description(__('vendra-store::attributes.storefront_sample_description'))
-            ->schema([
-                Grid::make(2)->schema(array_values(array_filter(
-                    [...self::identityFields(optional: false), ...self::contactFields(optional: false), ...self::locationAndSocialFields(optional: false)],
-                    fn (Select|TextInput|Hidden $field): bool => in_array($field->getName(), StorefrontConfigurationMap::EDITABLE_FIELDS, true),
-                ))),
-            ])
-            ->columnSpanFull();
+        return [
+            Tab::make(__('vendra-store::attributes.storefront_configuration'))
+                ->schema([
+                    Text::make(__('vendra-store::attributes.storefront_sample_description'))->columnSpanFull(),
+                    ...self::onlyEditable(self::identityFields(optional: false)),
+                ])
+                ->columns(2),
+            Tab::make(__('vendra-store::attributes.storefront_contact'))
+                ->schema(self::onlyEditable(self::contactFields(optional: false)))
+                ->columns(2),
+            Tab::make(__('vendra-store::attributes.storefront_location_and_social'))
+                ->schema(self::onlyEditable(self::locationAndSocialFields(optional: false)))
+                ->columns(2),
+        ];
     }
 
     /**
@@ -214,5 +226,17 @@ final class StorefrontConfigurationFields
                 ->extraAttributes(['dir' => 'ltr'])
                 ->maxLength(100),
         ];
+    }
+
+    /**
+     * @param  list<Select|TextInput|Hidden>  $fields
+     * @return list<Select|TextInput|Hidden>
+     */
+    private static function onlyEditable(array $fields): array
+    {
+        return array_values(array_filter(
+            $fields,
+            fn (Select|TextInput|Hidden $field): bool => in_array($field->getName(), StorefrontConfigurationMap::EDITABLE_FIELDS, true),
+        ));
     }
 }

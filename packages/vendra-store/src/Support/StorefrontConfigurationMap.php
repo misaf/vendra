@@ -33,9 +33,13 @@ final class StorefrontConfigurationMap
         'storefront_instagram_username' => 'social.instagramUsername',
     ];
 
-    /** @var list<string> */
+    /**
+     * The store names its storefront through the admin's per-locale `storefront_name` instead.
+     *
+     * @var list<string>
+     */
     public const array EDITABLE_FIELDS = [
-        'storefront_name_en', 'storefront_name_fa', 'storefront_price_currency', 'storefront_og_image',
+        'storefront_price_currency', 'storefront_og_image',
         'storefront_locality', 'storefront_country', 'storefront_mobile_phone', 'storefront_office_phone',
         'storefront_contact_email', 'storefront_hours_open', 'storefront_hours_close',
         'storefront_map_query', 'storefront_whatsapp_phone', 'storefront_telegram_username',
@@ -117,6 +121,17 @@ final class StorefrontConfigurationMap
      */
     public static function updateEditable(array $configuration, array $form): array
     {
+        $names = Arr::get($form, 'storefront_name');
+
+        // Locales the store no longer edits keep their deployed name, so the storefront never loses one.
+        if (is_array($names)) {
+            $configuration['name'] = [...Arr::wrap(Arr::get($configuration, 'name', [])), ...array_filter(
+                $names,
+                fn (mixed $name, mixed $locale): bool => is_string($locale) && is_string($name) && mb_trim($name) !== '',
+                ARRAY_FILTER_USE_BOTH,
+            )];
+        }
+
         foreach (self::EDITABLE_FIELDS as $field) {
             if (! array_key_exists($field, $form)) {
                 continue;

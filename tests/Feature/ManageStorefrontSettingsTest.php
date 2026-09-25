@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use App\Filament\Admin\Pages\ManageGeneralSettings;
 use App\Filament\Admin\Pages\ManageStorefrontSettings;
 use App\Settings\GeneralSettings;
 use Filament\Facades\Filament;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
+use Misaf\VendraLanguage\Models\Language;
 use Misaf\VendraPermission\Actions\CreateRoleAction;
 use Misaf\VendraStore\Actions\RequestStorefrontDeploymentAction;
 use Misaf\VendraStore\Jobs\ProvisionStorefrontJob;
@@ -75,12 +75,17 @@ it('lets the store administrator update contact details without changing another
 
     livewire(ManageStorefrontSettings::class)
         ->assertFormSet(['storefront_office_phone' => '02100000000'])
-        ->fillForm(['storefront_office_phone' => '02199999999'])
+        ->assertFormSet(['name' => 'Acme Flowers'])
+        ->fillForm(['storefront_office_phone' => '02199999999', 'name' => 'Rose Garden', 'description' => 'Fresh flowers daily.'])
         ->call('save')
         ->assertHasNoFormErrors();
 
     expect(Arr::get($deployment->fresh()->configuration, 'contact.officePhone'))->toBe('02199999999')
-        ->and(Arr::get($otherDeployment->fresh()->configuration, 'contact.officePhone'))->toBe('02100000000');
+        ->and(Arr::get($deployment->fresh()->configuration, 'name'))->toBe(['en' => 'Rose Garden', 'fa' => 'گل‌فروشی اکمی'])
+        ->and(resolve(GeneralSettings::class)->name)->toBe(['en' => 'Rose Garden'])
+        ->and(resolve(GeneralSettings::class)->description)->toBe(['en' => 'Fresh flowers daily.'])
+        ->and(Arr::get($otherDeployment->fresh()->configuration, 'contact.officePhone'))->toBe('02100000000')
+        ->and(Arr::get($otherDeployment->fresh()->configuration, 'name.en'))->toBe('Acme Flowers');
     Queue::assertPushed(ProvisionStorefrontJob::class, fn (ProvisionStorefrontJob $job): bool => $job->deploymentId === $deployment->id && $job->force);
 });
 
@@ -102,17 +107,60 @@ it('rejects an empty phone without changing storefront configuration', function 
     Queue::assertNotPushed(ProvisionStorefrontJob::class);
 });
 
-it('hides the storefront page from a store without a managed storefront', function (): void {
-    $store = Store::factory()->active()->create();
+it('lets a store without a managed storefront name itself and the admin panel', function (): void {
+    $store = Store::factory()->active()->create(['name' => 'Local Flowers']);
     actAsStoreAdministrator($store);
 
-    expect(ManageStorefrontSettings::canAccess())->toBeFalse();
-
-    livewire(ManageGeneralSettings::class)
-        ->fillForm(['site_title' => 'Local Flowers'])
+    livewire(ManageStorefrontSettings::class)
+        ->assertFormSet(['name' => 'Local Flowers'])
+        ->assertFormFieldDoesNotExist('storefront_mobile_phone')
+        ->fillForm(['name' => 'Rose Garden'])
         ->call('save')
         ->assertHasNoFormErrors();
 
-    expect(resolve(GeneralSettings::class)->site_title)->toBe('Local Flowers')
+    expect(resolve(GeneralSettings::class)->name)->toBe(['en' => 'Rose Garden'])
+        ->and(Filament::getPanel('admin')->getBrandName())->toBe('Rose Garden')
         ->and($store->storefrontDeployment()->exists())->toBeFalse();
+});
+
+it('switches the name and description by installed language', function (): void {
+    $store = Store::factory()->active()->create(['name' => 'Local Flowers']);
+    actAsStoreAdministrator($store);
+    Language::factory()->active()->create(['locale' => 'en']);
+    Language::factory()->active()->create(['locale' => 'fa']);
+
+    livewire(ManageStorefrontSettings::class)
+        ->set('activeLocale', 'en')
+        ->fillForm(['name' => 'Rose Garden', 'description' => 'Fresh flowers daily.'])
+        ->set('activeLocale', 'fa')
+        ->assertFormSet(['name' => 'Local Flowers', 'description' => null])
+        ->fillForm(['name' => 'گل رز'])
+        ->set('activeLocale', 'en')
+        ->assertFormSet(['name' => 'Rose Garden', 'description' => 'Fresh flowers daily.'])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect(resolve(GeneralSettings::class)->name)->toBe(['en' => 'Rose Garden', 'fa' => 'گل رز'])
+        ->and(resolve(GeneralSettings::class)->description)->toBe(['en' => 'Fresh flowers daily.']);
+});
+
+it('requires a name for every installed language', function (): void {
+    actAsStoreAdministrator(Store::factory()->active()->create());
+    Language::factory()->active()->create(['locale' => 'en']);
+    Language::factory()->active()->create(['locale' => 'fa']);
+
+    livewire(ManageStorefrontSettings::class)
+        ->fillForm(['name' => ''])
+        ->call('save')
+        ->assertHasFormErrors(['name' => 'required']);
+
+    livewire(ManageStorefrontSettings::class)
+        ->set('activeLocale', 'fa')
+        ->fillForm(['name' => ''])
+        ->set('activeLocale', 'en')
+        ->call('save')
+        ->assertSet('activeLocale', 'fa')
+        ->assertHasFormErrors(['name']);
+
+    expect(resolve(GeneralSettings::class)->name)->toBeEmpty();
 });

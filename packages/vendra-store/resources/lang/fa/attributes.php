@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 return [
     'storefront_configuration' => 'فروشگاه گل‌فروشی',
+    'storefront_contact' => 'تماس',
+    'storefront_location_and_social' => 'مکان و شبکه‌های اجتماعی',
     'storefront_configuration_description' => 'پیکربندی ساخت و استقرار فروشگاه اختصاصی ملک.',
     'storefront_sample_description' => 'فروشگاه‌های جدید با اطلاعات نمونه ساخته می‌شوند. اطلاعات تماس، مکان و شبکه‌های اجتماعی را با اطلاعات خود جایگزین کنید.',
     'create_storefront' => 'ایجاد فروشگاه گل‌فروشی',

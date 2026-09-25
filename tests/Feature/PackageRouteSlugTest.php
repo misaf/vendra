@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Filament\Admin\Pages\ManageGeneralSettings;
+use App\Filament\Admin\Pages\ManageStorefrontSettings;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -91,7 +91,7 @@ it('activates only the owning domain navigation item', function (string $routeNa
     'content' => ['filament.admin.content.resources.blog-posts.index', ContentCluster::class],
     'marketing' => ['filament.admin.marketing.resources.affiliates.index', MarketingCluster::class],
     'localization' => ['filament.admin.localization.resources.languages.index', LocalizationCluster::class],
-    'system' => ['filament.admin.system.pages.configurations', SystemCluster::class],
+    'system' => ['filament.admin.system.pages.storefront', SystemCluster::class],
 ]);
 
 it('uses the full resource name as the resource slug', function (string $resource): void {
@@ -181,9 +181,9 @@ it('assigns each admin resource to its domain cluster', function (string $resour
     'system / activity logs' => [ActivityLogResource::class, SystemCluster::class],
 ]);
 
-it('assigns general settings to the system domain', function (): void {
-    expect(ManageGeneralSettings::getCluster())->toBe(SystemCluster::class)
-        ->and(ManageGeneralSettings::getRouteName(Filament::getPanel('admin')))
+it('assigns storefront settings to the system domain', function (): void {
+    expect(ManageStorefrontSettings::getCluster())->toBe(SystemCluster::class)
+        ->and(ManageStorefrontSettings::getRouteName(Filament::getPanel('admin')))
         ->toStartWith('filament.admin.system.pages.');
 });
 
@@ -193,7 +193,6 @@ it('registers domain routes', function (string $routeName): void {
     'catalog products' => 'filament.admin.catalog.resources.products.index',
     'sales transactions' => 'filament.admin.sales.resources.transactions.index',
     'content multimedia' => 'filament.admin.content.resources.multimedia.index',
-    'system settings' => 'filament.admin.system.pages.configurations',
     'system storefront' => 'filament.admin.system.pages.storefront',
 ]);
 

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Filament\Admin\Pages\ManageGeneralSettings;
 use App\Settings\SettingsScope;
 use Illuminate\Support\Facades\DB;
 use Misaf\VendraActivityLog\Listeners\LogSettingsActivity;
@@ -48,7 +47,6 @@ it('saves each store settings page into the store scope without touching the pla
         ->and(settingsPayloads($group, SettingsScope::PLATFORM))->toBe($platformDefaults)
         ->and(array_keys(settingsPayloads($group, SettingsScope::forTenant($store->getKey()))))->toBe(array_keys($platformDefaults));
 })->with([
-    'general' => ManageGeneralSettings::class,
     'orders' => ManageOrderSettings::class,
     'carts' => ManageCartSettings::class,
     'delivery' => ManageDeliverySettings::class,

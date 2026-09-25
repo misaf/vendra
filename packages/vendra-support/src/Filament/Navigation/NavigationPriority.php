@@ -46,7 +46,6 @@ enum NavigationPriority: int
     case Languages = 6100;
     case LanguageLines = 6110;
 
-    case GeneralSettings = 7100;
     case StorefrontSettings = 7110;
     case OrderSettings = 7120;
     case CartSettings = 7130;

@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace Misaf\VendraInquiry\Filament\Pages;
 
+use BackedEnum;
 use Filament\Forms\Components\TagsInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Misaf\VendraInquiry\Settings\InquirySettings;
 use Misaf\VendraSupport\Filament\Navigation\NavigationPriority;
 use Misaf\VendraSupport\Filament\Pages\SystemSettingsPage;
 
 final class ManageInquirySettings extends SystemSettingsPage
 {
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInbox;
+
     protected static ?int $navigationSort = NavigationPriority::InquirySettings->value;
 
     protected static string $settings = InquirySettings::class;
