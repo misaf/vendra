@@ -26,7 +26,7 @@ description: "Create, modify, review, or test the Vendra Language package in pac
 - Do not add a redundant direct Composer requirement solely because source code imports a type from that exposed dependency.
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
-- Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Keep `languages` and `language_lines` out of `TenantTableRegistry`: their null tenant id is a platform row, and `vendra-tenant:enable {tenant}` would backfill those rows and force the column NOT NULL. Register any new tenant-only table (a non-nullable `TenantSchema::addTenantColumn()`) there, preserving configured table names and connections.
 - Platform language and translation rows have a null tenant ID. Scope shared form options, progress, translation loading, and synchronization to the current tenant or tenantless platform rows, and preserve the platform uniqueness guards in migrations.
 
 ## Module Boundary

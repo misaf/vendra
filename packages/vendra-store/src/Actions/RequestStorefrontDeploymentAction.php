@@ -30,7 +30,7 @@ final readonly class RequestStorefrontDeploymentAction
     public function execute(Store $store, string $domain, array $form): StorefrontDeployment
     {
         $configuration = StorefrontConfigurationMap::toConfiguration([
-            ...StorefrontConfigurationMap::sampleForm($store->name, Arr::string($form, 'email', 'contact@'.$domain)),
+            ...StorefrontConfigurationMap::sampleForm($store->name, 'contact@'.$domain),
             ...$form,
         ]);
 

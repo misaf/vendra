@@ -12,6 +12,7 @@ use Filament\Pages\SettingsPage;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Misaf\VendraStore\Actions\UpdateStorefrontConfigurationAction;
 use Misaf\VendraStore\Filament\Schemas\StorefrontConfigurationFields;
 use Misaf\VendraStore\Models\Store;
@@ -34,6 +35,11 @@ final class ManageGeneralSettings extends SettingsPage
     protected static string $settings = GeneralSettings::class;
 
     protected static ?string $slug = 'configurations';
+
+    /**
+     * Save the settings and the storefront configuration together or not at all.
+     */
+    protected ?bool $hasDatabaseTransactions = true;
 
     public static function getModelLabel(): string
     {
@@ -106,19 +112,46 @@ final class ManageGeneralSettings extends SettingsPage
         $deployment = $this->deployment();
 
         if ($deployment instanceof StorefrontDeployment && $storefrontData !== []) {
-            $configuration = StorefrontConfigurationMap::updateEditable($deployment->configuration, $storefrontData);
-            Validator::make($configuration, StorefrontConfigurationValidator::deploymentRules())->validate();
+            $this->validateStorefrontConfiguration(StorefrontConfigurationMap::updateEditable($deployment->configuration, $storefrontData));
             resolve(UpdateStorefrontConfigurationAction::class)->execute($deployment, $storefrontData);
         }
 
         return $data;
     }
 
+    /**
+     * Report configuration errors on the form fields that feed them.
+     *
+     * @param  array<string, mixed>  $configuration
+     *
+     * @throws ValidationException
+     */
+    private function validateStorefrontConfiguration(array $configuration): void
+    {
+        $validator = Validator::make($configuration, StorefrontConfigurationValidator::deploymentRules());
+
+        if ($validator->passes()) {
+            return;
+        }
+
+        $fieldsByPath = array_flip(StorefrontConfigurationMap::FIELDS);
+        $messages = [];
+
+        foreach ($validator->errors()->messages() as $path => $pathMessages) {
+            $key = array_key_exists($path, $fieldsByPath) ? 'data.'.$fieldsByPath[$path] : $path;
+            $messages[$key] = $pathMessages;
+        }
+
+        throw ValidationException::withMessages($messages);
+    }
+
     private function deployment(): ?StorefrontDeployment
     {
-        $tenant = resolve(TenantResolver::class)->current();
+        return once(function (): ?StorefrontDeployment {
+            $tenant = resolve(TenantResolver::class)->current();
 
-        return $tenant instanceof Store ? $tenant->storefrontDeployment()->first() : null;
+            return $tenant instanceof Store ? $tenant->storefrontDeployment()->first() : null;
+        });
     }
 
     public function getTitle(): string

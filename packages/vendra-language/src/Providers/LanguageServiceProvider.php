@@ -22,7 +22,6 @@ use Misaf\VendraLocalization\Contracts\LocaleResolver;
 use Misaf\VendraLocalization\Resolvers\QueryLocaleResolver;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
-use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -66,7 +65,12 @@ final class LanguageServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->app->make(TenantTableRegistry::class)->register('languages', 'language_lines');
+        /*
+        | `languages` and `language_lines` are deliberately absent from the
+        | TenantTableRegistry: a null tenant id is a platform row, so the
+        | `vendra-tenant:enable` retrofit must never backfill those rows or
+        | force the column NOT NULL.
+        */
         $this->app->make(TenantSeeders::class)->register(SeedCommand::class, priority: 80);
 
         $this->configureLanguageSwitch();

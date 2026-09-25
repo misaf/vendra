@@ -14,7 +14,7 @@ The `misaf/vendra-language` package owns multi-language support with store and t
 - Do not add a redundant direct Composer requirement solely because source code imports a type from that exposed dependency.
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
-- Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Keep `languages` and `language_lines` out of `TenantTableRegistry`: their null tenant id is a platform row, and `vendra-tenant:enable {tenant}` would backfill those rows and force the column NOT NULL. Register any new tenant-only table (a non-nullable `TenantSchema::addTenantColumn()`) there, preserving configured table names and connections.
 
 - Keep language domain code inside `packages/vendra-language` using the `Misaf\VendraLanguage` namespace.
 - Use this package for models, migrations, factories, seeders, policies, permission enums, observers, Filament resources, translations, config, and package bootstrapping.

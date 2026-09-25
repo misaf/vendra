@@ -47,8 +47,12 @@ final class StorefrontConfigurationMap
      */
     private const array UPPERCASED = ['storefront_price_currency', 'storefront_country'];
 
-    /** @return array<string, string> */
-    public static function sampleForm(string $storeName, string $administratorEmail): array
+    /**
+     * The contact email is a placeholder on the store's own domain, since the storefront publishes it.
+     *
+     * @return array<string, string>
+     */
+    public static function sampleForm(string $storeName, string $contactEmail): array
     {
         return [
             'storefront_name_en' => $storeName,
@@ -59,7 +63,7 @@ final class StorefrontConfigurationMap
             'storefront_country' => 'IR',
             'storefront_mobile_phone' => '00000000000',
             'storefront_office_phone' => '00000000000',
-            'storefront_contact_email' => $administratorEmail,
+            'storefront_contact_email' => $contactEmail,
             'storefront_hours_open' => '08:00',
             'storefront_hours_close' => '21:00',
             'storefront_map_query' => '35.7,51.4',
