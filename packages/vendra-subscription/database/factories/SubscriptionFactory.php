@@ -29,6 +29,7 @@ final class SubscriptionFactory extends Factory
             'status' => SubscriptionStatus::Active,
             'starts_at' => now()->subDay(),
             'ends_at' => now()->addMonth(),
+            'activated_at' => now()->subDay(),
         ];
     }
 
@@ -53,6 +54,7 @@ final class SubscriptionFactory extends Factory
             'status' => SubscriptionStatus::Expired,
             'starts_at' => now()->subMonths(2),
             'ends_at' => now()->subDay(),
+            'activated_at' => now()->subMonths(2),
         ]);
     }
 

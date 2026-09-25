@@ -9,42 +9,80 @@ use Misaf\VendraSubscription\Contracts\SubscriptionSubscriber;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Events\SubscriptionExpiringSoon;
 use Misaf\VendraSubscription\Events\SubscriptionGraceExpired;
+use Misaf\VendraSubscription\Exceptions\SubscriptionLimitException;
+use Misaf\VendraSubscription\Exceptions\SubscriptionPaymentException;
 use Misaf\VendraSubscription\Models\Subscription;
 
 /**
  * Notifications and unit suspension happen in the events' listeners.
  */
-final class EnforceSubscriptionsAction
+final readonly class EnforceSubscriptionsAction
 {
     private const int EXPIRY_REMINDER_DAYS = 7;
 
+    public function __construct(private RenewSubscriptionAction $renewSubscriptionAction) {}
+
     /**
-     * @return array{expired: int, reminded: int, grace_expired: int}
+     * @return array{renewed: int, expired: int, reminded: int, grace_expired: int}
      */
     public function execute(): array
     {
+        [$renewed, $expired] = $this->renewOrExpireLapsedSubscriptions();
+
         return [
-            'expired' => $this->expireLapsedSubscriptions(),
+            'renewed' => $renewed,
+            'expired' => $expired,
             'reminded' => $this->remindExpiringSubscriptions(),
             'grace_expired' => $this->flagPastGraceSubscribers(),
         ];
     }
 
-    private function expireLapsedSubscriptions(): int
+    /**
+     * A renewal that still has to be paid leaves the lapsed period to expire;
+     * a failed payment then falls through to the grace window like any other.
+     *
+     * @return array{int, int}
+     */
+    private function renewOrExpireLapsedSubscriptions(): array
     {
+        $renewed = 0;
         $expired = 0;
 
         Subscription::query()
             ->lapsed()
-            ->chunkById(100, function (Collection $subscriptions) use (&$expired): void {
+            ->with('subscriber')
+            ->chunkById(100, function (Collection $subscriptions) use (&$renewed, &$expired): void {
                 /** @var Collection<int, Subscription> $subscriptions */
                 foreach ($subscriptions as $subscription) {
-                    $subscription->expire();
-                    $expired++;
+                    if ($this->renew($subscription)) {
+                        $renewed++;
+                    }
+
+                    if ($subscription->refresh()->status === SubscriptionStatus::Active) {
+                        $subscription->expire();
+                        $expired++;
+                    }
                 }
             });
 
-        return $expired;
+        return [$renewed, $expired];
+    }
+
+    private function renew(Subscription $subscription): bool
+    {
+        $subscriber = $subscription->subscriber;
+
+        if (! $subscription->auto_renews || ! $subscriber instanceof SubscriptionSubscriber || ! $subscriber->canHoldUnits()) {
+            return false;
+        }
+
+        try {
+            $this->renewSubscriptionAction->execute($subscription);
+        } catch (SubscriptionLimitException|SubscriptionPaymentException) {
+            return false;
+        }
+
+        return true;
     }
 
     private function remindExpiringSubscriptions(): int
@@ -100,7 +138,7 @@ final class EnforceSubscriptionsAction
                         continue;
                     }
 
-                    $latest = $subscriber->latestSubscription();
+                    $latest = self::latestActivatedSubscription($subscription);
                     $suspendAt = $latest?->suspendAt();
 
                     if ($latest === null || $suspendAt === null || $suspendAt->isFuture()) {
@@ -113,5 +151,20 @@ final class EnforceSubscriptionsAction
             });
 
         return $flagged;
+    }
+
+    /**
+     * Grace runs from the last period that was ever live. An unpaid renewal
+     * starts later than it, and measuring from it would postpone suspension
+     * for as long as renewals keep failing.
+     */
+    private static function latestActivatedSubscription(Subscription $subscription): ?Subscription
+    {
+        return Subscription::query()
+            ->where('subscriber_type', $subscription->subscriber_type)
+            ->where('subscriber_id', $subscription->subscriber_id)
+            ->activated()
+            ->latest('starts_at')
+            ->first();
     }
 }

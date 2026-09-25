@@ -6,6 +6,7 @@ use Filament\Actions\Testing\TestAction;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Hash;
 use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ListResellers;
+use Misaf\VendraConsole\Filament\Resources\Resellers\Pages\ViewReseller;
 use Misaf\VendraConsole\Filament\Widgets\PlatformMetrics;
 use Misaf\VendraConsole\Models\Console;
 use Misaf\VendraReseller\Actions\OffboardResellerAction;
@@ -15,6 +16,7 @@ use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 use Misaf\VendraSubscription\Models\Plan;
 use Misaf\VendraSubscription\Models\Subscription;
 use Misaf\VendraSupport\Filament\Tables\Columns\IsActiveIconColumn;
+use Misaf\VendraTransaction\Database\Factories\TransactionGatewayFactory;
 use Misaf\VendraUser\Models\User;
 
 use function Pest\Laravel\actingAs;
@@ -161,7 +163,31 @@ it('hides account and subscription actions on an offboarded reseller', function 
     'extendSubscription',
     'cancelSubscription',
     'reactivateSubscription',
+    'creditWallet',
 ]);
+
+it('credits a reseller wallet through the table row action and shows the balance', function (): void {
+    actingConsoleAdmin();
+    TransactionGatewayFactory::new()->active()->internal()->create();
+
+    $reseller = Reseller::factory()->active()->create();
+    consoleResellerUserFor($reseller);
+    Subscription::factory()->forSubscriber($reseller)->for(Plan::factory()->active()->priced(3_000))->create(['currency_code' => 'USD']);
+
+    livewire(ListResellers::class)
+        ->callAction(TestAction::make('creditWallet')->table($reseller), [
+            'amount' => 5_000,
+            'currency_code' => 'usd',
+            'note' => 'Bank transfer 1234',
+        ])
+        ->assertHasNoFormErrors()
+        ->assertNotified();
+
+    expect($reseller->walletBalance('USD'))->toBe(5_000);
+
+    livewire(ViewReseller::class, ['record' => $reseller->getKey()])
+        ->assertSee('$50.00');
+});
 
 it('changes a reseller user password through the table row action', function (): void {
     $admin = actingConsoleAdmin();

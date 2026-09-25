@@ -80,6 +80,13 @@ return new class extends Migration
                 ->nullable();
             $table->timestampTz('expiry_reminder_sent_at')
                 ->nullable();
+            $table->timestampTz('activated_at')
+                ->nullable();
+            $table->boolean('auto_renews')
+                ->default(true);
+            $table->unsignedBigInteger('scheduled_plan_id')
+                ->nullable()
+                ->index();
             $table->timestampsTz();
             $table->softDeletesTz();
             $table->unsignedBigInteger('active_subscriber_guard')

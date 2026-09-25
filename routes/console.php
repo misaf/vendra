@@ -14,3 +14,5 @@ Artisan::command('inspire', function (): void {
 Schedule::command('horizon:snapshot')->everyFiveMinutes();
 Schedule::command('vendra-store:reconcile')->everyFiveMinutes()->withoutOverlapping();
 Schedule::job(new RecordStorefrontRuntimeHealthJob)->everyMinute();
+Schedule::command('vendra-subscription:enforce')->hourly()->withoutOverlapping();
+Schedule::command('vendra-subscription:recover-payments')->everyFifteenMinutes()->withoutOverlapping();

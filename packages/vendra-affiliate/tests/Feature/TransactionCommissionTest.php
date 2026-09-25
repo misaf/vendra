@@ -113,3 +113,13 @@ it('credits a deposit whose wallet was deleted before the queued listener ran', 
 
     expect(AffiliateCommission::query()->sole()->amount)->toBe(2_000);
 });
+
+it('does not queue a commission for a platform ledger deposit', function (): void {
+    Queue::fake();
+    $transaction = referredDeposit(amount: 10_000);
+    $transaction->forceFill(['tenant_id' => null])->save();
+
+    event(new TransactionApproved($transaction->refresh()));
+
+    Queue::assertNotPushed(CallQueuedListener::class, fn (CallQueuedListener $job): bool => $job->class === TransactionCommissionSubscriber::class);
+});

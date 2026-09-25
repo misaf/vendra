@@ -139,7 +139,11 @@ page manages store administrators without permitting the final enabled
 administrator to be removed, demoted, or disabled. Reseller row actions manage
 user credentials/account replacement and subscription change, renewal,
 extension, cancellation, and reactivation; a plan change or renewal whose plan
-cannot hold the reseller's current stores is refused with a notification. Each control invokes the owning
+cannot hold the reseller's current stores is refused with a notification. The
+`Credit wallet` row action records a payment the reseller made outside the
+platform through `Misaf\VendraReseller\Actions\CreditResellerWalletAction`
+(amount in minor units, currency, and a required note), and the reseller
+overview lists the wallet balance per currency. Each control invokes the owning
 domain package; no meaningful transition is an Eloquent column toggle. Every
 password form uses the shared `NewPasswordInput` and
 `PasswordConfirmationInput` fields.

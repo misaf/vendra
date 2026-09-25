@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Models;
 
-use Cknow\Money\Money;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -17,14 +16,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Date;
-use Illuminate\Support\Number;
 use Misaf\VendraSubscription\Database\Factories\PlanFactory;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
 use Misaf\VendraSubscription\Observers\PlanObserver;
+use Misaf\VendraSubscription\Support\MoneyFormatter;
 use Misaf\VendraSupport\Contracts\ShouldLogActivity;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Throwable;
 
 /**
  * @property int $id
@@ -141,28 +139,10 @@ final class Plan extends Model implements ShouldLogActivity
 
     /**
      * Format the plan's price for display, such as `$29.00`.
-     *
-     * Unknown currencies fall back to a plain number and code.
      */
     public function formattedPrice(): string
     {
-        if ($this->currency_code === null) {
-            return $this->formatPlainPrice();
-        }
-
-        try {
-            return new Money($this->price, $this->currency_code)->format();
-        } catch (Throwable) {
-            return $this->formatPlainPrice().' '.$this->currency_code;
-        }
-    }
-
-    /**
-     * Format the price as a plain localized number, or the raw value on failure.
-     */
-    private function formatPlainPrice(): string
-    {
-        return Number::format($this->price, locale: 'en') ?: (string) $this->price;
+        return MoneyFormatter::format($this->price, $this->currency_code);
     }
 
     public function hasTrial(): bool

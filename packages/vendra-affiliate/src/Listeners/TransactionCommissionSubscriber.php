@@ -11,6 +11,7 @@ use Misaf\VendraAffiliate\Actions\CreditCommissionAction;
 use Misaf\VendraAffiliate\Enums\ConversionTypeEnum;
 use Misaf\VendraAffiliate\Models\Affiliate;
 use Misaf\VendraAffiliate\Models\AffiliateReferral;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Misaf\VendraTransaction\Enums\TransactionTypeEnum;
 use Misaf\VendraTransaction\Events\TransactionApproved;
 use Misaf\VendraTransaction\Models\Wallet;
@@ -27,6 +28,16 @@ final class TransactionCommissionSubscriber implements ShouldQueueAfterCommit
     public function __construct(
         private readonly CreditCommissionAction $creditCommission,
     ) {}
+
+    /**
+     * Platform ledger deposits, such as a reseller wallet credit, belong to no
+     * store and earn no store commission; queueing them would also fail, as
+     * the job is tenant-aware and they have no tenant to restore.
+     */
+    public function shouldQueue(TransactionApproved $event): bool
+    {
+        return ! TenantAwareness::enabled() || $event->transaction->hasTenant();
+    }
 
     public function transactionApproved(TransactionApproved $event): void
     {

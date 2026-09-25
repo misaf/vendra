@@ -53,4 +53,5 @@ return [
     'runtime_unavailable' => 'Runtime unavailable',
     'runtime_unavailable_message' => 'Runtime unavailable: :message',
     'storefront_reconciled' => 'Storefront reconciliation queued',
+    'wallet_credited' => 'Wallet credited',
 ];

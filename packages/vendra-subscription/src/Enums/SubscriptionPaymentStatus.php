@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSubscription\Enums;
 
-enum SubscriptionPaymentStatus: string
+use Filament\Support\Contracts\HasLabel;
+
+enum SubscriptionPaymentStatus: string implements HasLabel
 {
     case Pending = 'pending';
     case Processing = 'processing';
@@ -20,5 +22,10 @@ enum SubscriptionPaymentStatus: string
     public function isTerminal(): bool
     {
         return in_array($this, [self::Paid, self::Failed, self::Cancelled, self::Refunded], true);
+    }
+
+    public function getLabel(): string
+    {
+        return __('vendra-subscription::enums.subscription_payment_status_'.$this->value);
     }
 }

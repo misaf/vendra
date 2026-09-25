@@ -37,12 +37,21 @@ final readonly class SubscribeAction
      * Paid periods stay pending until their payment succeeds, leaving current
      * access in place.
      *
+     * An upgrade passes the current period's end and the prorated amount, so
+     * the new plan runs on the old billing anchor and collects only the difference.
+     *
      * @param  Model&SubscriptionSubscriber  $subscriber
      *
      * @throws SubscriptionLimitException
      */
-    public function execute(SubscriptionSubscriber $subscriber, Plan $plan, ?Carbon $startsAt = null): Subscription
-    {
+    public function execute(
+        SubscriptionSubscriber $subscriber,
+        Plan $plan,
+        ?Carbon $startsAt = null,
+        ?Carbon $endsAt = null,
+        ?int $amount = null,
+        bool $autoRenews = true,
+    ): Subscription {
         if ($plan->price > 0 && $plan->currency_code === null) {
             throw SubscriptionPaymentException::missingCurrency($plan);
         }
@@ -54,7 +63,7 @@ final readonly class SubscribeAction
             'payment' => $payment,
         ] = DB::transaction(
             /** @return array{subscription: Subscription, payment: SubscriptionPayment|null} */
-            function () use ($subscriber, $plan, $startsAt): array {
+            function () use ($subscriber, $plan, $startsAt, $endsAt, $amount, $autoRenews): array {
                 $lockedSubscriber = $this->subscriptionRegistry->lockSubscriber($subscriber);
 
                 $currentUnits = $lockedSubscriber->subscribedUnitCount();
@@ -99,7 +108,9 @@ final readonly class SubscribeAction
                     'currency_code' => $plan->currency_code,
                     'trial_ends_at' => $trialEndsAt,
                     'starts_at' => $startsAt,
-                    'ends_at' => $plan->resolveEndDate($startsAt),
+                    'ends_at' => $endsAt ?? $plan->resolveEndDate($startsAt),
+                    'activated_at' => $requiresImmediatePayment ? null : Date::now(),
+                    'auto_renews' => $autoRenews,
                 ]);
                 $subscription->subscriber()->associate($lockedSubscriber);
                 $subscription->save();
@@ -125,7 +136,7 @@ final readonly class SubscribeAction
                 $payment = $subscription->payments()->make([
                     'provider' => $this->subscriptionCharger->provider(),
                     'idempotency_key' => (string) Str::uuid(),
-                    'amount' => $subscription->price,
+                    'amount' => $amount ?? $subscription->price,
                     'currency_code' => $subscription->currency_code,
                     'next_retry_at' => $trialEndsAt,
                 ]);

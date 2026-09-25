@@ -37,7 +37,7 @@ use Spatie\ModelStates\HasStates;
  * `amount` is unsigned minor units; the transaction type decides the sign.
  *
  * @property int $id
- * @property int $tenant_id
+ * @property int|null $tenant_id
  * @property int $wallet_id
  * @property int $transaction_gateway_id
  * @property int|null $counterparty_wallet_id
@@ -51,7 +51,7 @@ use Spatie\ModelStates\HasStates;
  * @property Carbon|null $deleted_at
  */
 #[Fillable(['wallet_id', 'transaction_gateway_id', 'counterparty_wallet_id', 'transaction_type', 'token', 'idempotency_key', 'amount', 'status'])]
-#[Hidden(['tenant_id', 'idempotency_key'])]
+#[Hidden(['tenant_id', 'idempotency_key', 'platform_idempotency_guard'])]
 #[UseFactory(TransactionFactory::class)]
 final class Transaction extends Model implements ShouldLogActivity
 {

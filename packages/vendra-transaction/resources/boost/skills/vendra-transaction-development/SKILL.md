@@ -26,7 +26,7 @@ description: "Create, modify, review, or test the Vendra Transaction package in 
 - Do not add a redundant direct Composer requirement solely because source code imports a type from that exposed dependency.
 - Apply this only to Vendra platform packages listed under `require`; never extend it to `require-dev`, `suggest`, incidental implementation dependencies, or third-party packages. Removing or replacing an exposed dependency is a breaking change; keep `self.version` alignment across the Vendra package graph.
 
-- Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled.
+- Register every table whose migration calls `TenantSchema::addTenantColumn()` with `TenantTableRegistry` in this package's service provider, preserving configured table names and connections, so `vendra-tenant:enable {tenant}` can retrofit schemas migrated before tenancy was enabled — except tables where a null tenant id is a legitimate end state, which this package's ledger tables now are (see Module Boundary).
 
 ## Module Boundary
 
@@ -48,7 +48,7 @@ The ledger is the single source of balance truth.
 - Resolve the user model through `Support\TransactionUsers::model()`; the provider attaches the `wallets` relation to the configured auth model.
 - Resolve currency defaults and options through Support's `CurrencyIntegration`; persist only scalar `currency_code` values. The null resolver keeps the module functional without `misaf/vendra-currency`, while an installed provider supplies managed active/default currencies.
 - Gateways are admin-managed labels: translatable `name`/`description`, scalar `slug` (lookup key; internal slug is `TransactionGatewayRegistry::INTERNAL_GATEWAY_SLUG`), media logo, sortable position. No payment-processing logic here.
-- Keep the module tenant-agnostic (`BelongsToTenant`, `TenantSchema`, registry registration for `transaction_gateways`, `wallets`, `transactions`); never reference `Misaf\VendraTenant`.
+- Keep the module tenant-agnostic (`BelongsToTenant`, `TenantSchema`); never reference `Misaf\VendraTenant`. `transaction_gateways`, `wallets` and `transactions` carry a nullable tenant id: a null tenant is the platform ledger (tenantless reseller wallets and the platform internal gateway seeded by `Database\Seeders\PlatformGatewaySeeder`), kept unique by the `platform_*_guard` virtual columns. They are therefore not registered with `TenantTableRegistry`, whose retrofit would backfill and force NOT NULL. Outside a tenant, `TransactionGatewayRegistry` resolves only tenantless gateways, never another tenant's by slug.
 - Tag-consuming models must use `Misaf\VendraSupport\Capabilities\HasOptionalTags` as the single source of their `tags()` relationship and pivot metadata. Keep the package tag-agnostic: define a stable package-owned tag type, use `TagIntegration` for availability and UI integration, never import the concrete Vendra Tagger model/provider or define the relationship through Spatie `HasTags`, and list Tagger only under Composer `suggest`.
 
 ## Filament Standards

@@ -220,7 +220,9 @@ it('ships every non-framework application baseline as a package migration stub',
  | id and then forces the column NOT NULL. `settings` is excluded because its
  | null `tenant_id` is the platform scope and must stay null; `users` is
  | excluded because tenantless identities (console users, reseller
- | users) legitimately carry a null tenant id; `store_domains` and
+ | users) legitimately carry a null tenant id; `transaction_gateways`,
+ | `wallets` and `transactions` because their null tenant id is the platform
+ | ledger that bills those reseller users; `store_domains` and
  | `store_user` are keyed by `store_id` instead.
  */
 it('registers every tenant-aware application table for legacy schema retrofits', function (): void {
@@ -231,7 +233,7 @@ it('registers every tenant-aware application table for legacy schema retrofits',
 
     $tenantAwareTables = collect(Schema::getTableListing(schemaQualified: false))
         ->filter(fn (string $table): bool => Schema::hasColumn($table, 'tenant_id'))
-        ->reject(fn (string $table): bool => in_array($table, ['settings', 'users', 'store_domains', 'store_user'], true))
+        ->reject(fn (string $table): bool => in_array($table, ['settings', 'users', 'transaction_gateways', 'wallets', 'transactions', 'store_domains', 'store_user'], true))
         ->values();
 
     expect($registeredTables->all())->toEqualCanonicalizing($tenantAwareTables->all());

@@ -53,4 +53,5 @@ return [
     'runtime_unavailable' => 'محیط اجرا در دسترس نیست',
     'runtime_unavailable_message' => 'محیط اجرا در دسترس نیست: :message',
     'storefront_reconciled' => 'همگام‌سازی ویترین در صف قرار گرفت',
+    'wallet_credited' => 'کیف پول شارژ شد',
 ];

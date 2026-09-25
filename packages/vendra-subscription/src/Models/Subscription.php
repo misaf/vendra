@@ -32,11 +32,14 @@ use Misaf\VendraSupport\Contracts\ShouldLogActivity;
  * @property Carbon $starts_at
  * @property Carbon|null $ends_at
  * @property Carbon|null $expiry_reminder_sent_at
+ * @property Carbon|null $activated_at
+ * @property bool $auto_renews
+ * @property int|null $scheduled_plan_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
  */
-#[Fillable(['subscriber_type', 'subscriber_id', 'plan_id', 'status', 'price', 'currency_code', 'trial_ends_at', 'starts_at', 'ends_at', 'expiry_reminder_sent_at'])]
+#[Fillable(['subscriber_type', 'subscriber_id', 'plan_id', 'status', 'price', 'currency_code', 'trial_ends_at', 'starts_at', 'ends_at', 'expiry_reminder_sent_at', 'activated_at', 'auto_renews', 'scheduled_plan_id'])]
 #[Hidden(['active_subscriber_guard'])]
 #[UseFactory(SubscriptionFactory::class)]
 final class Subscription extends Model implements ShouldLogActivity
@@ -63,6 +66,9 @@ final class Subscription extends Model implements ShouldLogActivity
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'expiry_reminder_sent_at' => 'datetime',
+            'activated_at' => 'datetime',
+            'auto_renews' => 'boolean',
+            'scheduled_plan_id' => 'integer',
         ];
     }
 
@@ -80,6 +86,14 @@ final class Subscription extends Model implements ShouldLogActivity
     public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    /**
+     * @return BelongsTo<Plan, $this>
+     */
+    public function scheduledPlan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class, 'scheduled_plan_id');
     }
 
     /**
@@ -105,6 +119,19 @@ final class Subscription extends Model implements ShouldLogActivity
                     ->whereNull('ends_at')
                     ->orWhere('ends_at', '>=', now());
             });
+    }
+
+    /**
+     * Periods that were live at some point, as opposed to renewals or
+     * changes whose payment never went through.
+     *
+     * @param  Builder<self>  $query
+     * @return Builder<self>
+     */
+    #[Scope]
+    protected function activated(Builder $query): Builder
+    {
+        return $query->whereNotNull('activated_at');
     }
 
     /**
@@ -208,7 +235,7 @@ final class Subscription extends Model implements ShouldLogActivity
 
     public function activate(): bool
     {
-        return $this->update(['status' => SubscriptionStatus::Active]);
+        return $this->update(['status' => SubscriptionStatus::Active, 'activated_at' => now()]);
     }
 
     public function markPastDue(): bool

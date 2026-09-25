@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;
-use Misaf\VendraSupport\Tenancy\TenantTableRegistry;
 use Misaf\VendraTransaction\Console\Commands\SeedCommand;
 use Misaf\VendraTransaction\Console\Commands\VerifyWalletBalancesCommand;
 use Misaf\VendraTransaction\Models\Wallet;
@@ -64,7 +63,13 @@ final class TransactionServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->app->make(TenantTableRegistry::class)->register('transaction_gateways', 'wallets', 'transactions');
+        /*
+        | `transaction_gateways`, `wallets` and `transactions` are deliberately
+        | absent from the TenantTableRegistry: a null tenant id is the platform
+        | ledger (tenantless reseller wallets and their internal gateway), so
+        | the `vendra-tenant:enable` retrofit must never backfill those rows or
+        | force the column NOT NULL.
+        */
         $this->app->make(TenantSeeders::class)->register('vendra-transaction:seed', priority: 32);
 
         AboutCommand::add('Vendra Transaction', fn (): array => ['Version' => InstalledVersions::getPrettyVersion('misaf/vendra-transaction')]);

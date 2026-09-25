@@ -25,6 +25,7 @@ final class EnforceSubscriptionsCommand extends Command
 
             $this->info('Subscriptions enforced.');
             $this->table(['Metric', 'Count'], [
+                ['Renewed subscriptions', Arr::get($result, 'renewed')],
                 ['Expired subscriptions', Arr::get($result, 'expired')],
                 ['Expiry reminders sent', Arr::get($result, 'reminded')],
                 ['Subscribers past grace', Arr::get($result, 'grace_expired')],

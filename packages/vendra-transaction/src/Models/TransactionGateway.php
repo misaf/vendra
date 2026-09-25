@@ -34,7 +34,7 @@ use Spatie\Translatable\HasTranslations;
  * A payment channel label, identified in code by its `slug`.
  *
  * @property int $id
- * @property int $tenant_id
+ * @property int|null $tenant_id
  * @property array<string, string> $name
  * @property array<string, string>|null $description
  * @property string $slug
@@ -46,7 +46,7 @@ use Spatie\Translatable\HasTranslations;
  * @property Carbon|null $deleted_at
  */
 #[Fillable(['name', 'description', 'slug', 'position', 'active', 'is_default'])]
-#[Hidden(['tenant_id', 'default_guard'])]
+#[Hidden(['tenant_id', 'default_guard', 'platform_default_guard'])]
 #[ObservedBy([TransactionGatewayObserver::class])]
 #[UseFactory(TransactionGatewayFactory::class)]
 final class TransactionGateway extends Model implements HasMedia, ShouldLogActivity, Sortable

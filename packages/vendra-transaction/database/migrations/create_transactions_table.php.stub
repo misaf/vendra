@@ -26,7 +26,7 @@ return new class extends Migration
     {
         Schema::create('transaction_gateways', function (Blueprint $table): void {
             $table->id();
-            TenantSchema::addTenantColumn($table);
+            TenantSchema::addTenantColumn($table, nullable: true);
             $table->json('name');
             $table->json('description')
                 ->nullable();
@@ -42,7 +42,21 @@ return new class extends Migration
             $table->timestampsTz();
             $table->softDeletesTz();
 
+            /*
+            | Platform gateways (reseller billing) carry a null tenant id, where
+            | the tenant default guard above stops discriminating.
+            */
+            if (TenantSchema::enabled()) {
+                $table->unsignedTinyInteger('platform_default_guard')
+                    ->nullable()
+                    ->virtualAs('CASE WHEN is_default AND '.TenantSchema::column().' IS NULL THEN 1 ELSE NULL END');
+            }
+
             $table->unique('default_guard', 'transaction_gateways_one_default_unique');
+            if (TenantSchema::enabled()) {
+                $table->unique('platform_default_guard', 'transaction_gateways_one_platform_default_unique');
+            }
+
             $table->index(TenantSchema::tenantIndex(['slug']));
             $table->index(TenantSchema::tenantIndex(['position']));
             $table->index(TenantSchema::tenantIndex(['active']));
@@ -54,7 +68,7 @@ return new class extends Migration
     {
         Schema::create('wallets', function (Blueprint $table): void {
             $table->id();
-            TenantSchema::addTenantColumn($table);
+            TenantSchema::addTenantColumn($table, nullable: true);
             $table->foreignId('user_id')
                 ->constrained()
                 ->restrictOnDelete();
@@ -64,7 +78,21 @@ return new class extends Migration
             $table->timestampsTz();
             $table->softDeletesTz();
 
+            /*
+            | Platform wallets (tenantless reseller users) carry a null tenant
+            | id, where the tenant-scoped unique below stops discriminating.
+            */
+            if (TenantSchema::enabled()) {
+                $table->unsignedBigInteger('platform_user_guard')
+                    ->nullable()
+                    ->virtualAs('CASE WHEN '.TenantSchema::column().' IS NULL THEN user_id ELSE NULL END');
+            }
+
             $table->unique(TenantSchema::tenantIndex(['user_id', 'currency_code']));
+            if (TenantSchema::enabled()) {
+                $table->unique(['platform_user_guard', 'currency_code'], 'wallets_platform_user_currency_unique');
+            }
+
             $table->index(TenantSchema::tenantIndex(['currency_code']));
         });
     }
@@ -89,7 +117,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table): void {
             $table->id();
-            TenantSchema::addTenantColumn($table);
+            TenantSchema::addTenantColumn($table, nullable: true);
             $table->foreignId('wallet_id')
                 ->constrained()
                 ->restrictOnDelete();
@@ -114,6 +142,13 @@ return new class extends Migration
             $table->index(TenantSchema::tenantIndex(['transaction_type']));
             $table->index(TenantSchema::tenantIndex(['token']));
             $table->unique(TenantSchema::tenantIndex(['idempotency_key']));
+            if (TenantSchema::enabled()) {
+                $table->string('platform_idempotency_guard')
+                    ->nullable()
+                    ->virtualAs('CASE WHEN '.TenantSchema::column().' IS NULL THEN idempotency_key ELSE NULL END');
+                $table->unique('platform_idempotency_guard', 'transactions_platform_idempotency_unique');
+            }
+
             $table->index(TenantSchema::tenantIndex(['status']));
         });
     }

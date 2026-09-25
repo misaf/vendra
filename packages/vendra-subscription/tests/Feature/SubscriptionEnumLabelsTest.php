@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 use Illuminate\Support\Facades\Lang;
 use Misaf\VendraSubscription\Enums\PeriodUnit;
+use Misaf\VendraSubscription\Enums\SubscriptionPaymentStatus;
 use Misaf\VendraSubscription\Enums\SubscriptionStatus;
 
-it('translates every subscription status and period unit label in each locale', function (string $locale): void {
+it('translates every subscription status, payment status and period unit label in each locale', function (string $locale): void {
     $prefixedEnums = [
         'subscription_status_' => SubscriptionStatus::cases(),
+        'subscription_payment_status_' => SubscriptionPaymentStatus::cases(),
         'period_unit_' => PeriodUnit::cases(),
     ];
 

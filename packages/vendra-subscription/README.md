@@ -41,6 +41,23 @@ subscriber and plan, then creates a new period through `SubscribeAction`, so
 payment handling and subscriber reactions are not duplicated. Plan changes and
 renewals also continue to use `SubscribeAction`.
 
+`ChangeSubscriptionPlanAction` applies an upgrade now and schedules anything
+else for the next renewal in `scheduled_plan_id`. An upgrade from a paid,
+running period keeps its end date and collects only the price difference for the
+time left; `Support\PlanChangeQuote` computes that outcome for a panel to show
+before the change. A downgrade the subscriber's current units exceed throws
+`SubscriptionLimitException`. Choosing the current plan drops a scheduled change.
+
+`RenewSubscriptionAction` starts the next period on the scheduled plan, or the
+same one, for a period that is no longer active. Within the grace window it
+continues from the old end date, so paying late loses no paid time; afterwards it
+starts now. `vendra-subscription:enforce` renews every lapsed period whose
+`auto_renews` flag is set before expiring it; `SetSubscriptionAutoRenewAction`
+turns the flag on or off. Grace is measured from the last period that was ever
+live (`activated_at`, the `activated()` scope), so an unpaid renewal never
+postpones unit suspension. Schedule `vendra-subscription:enforce` (hourly) and
+`vendra-subscription:recover-payments` in the host.
+
 `Subscription::canBeCancelled()`, `canBeReactivated()`, and `canBeExtended()`
 decide which change a status allows: cancel while pending payment, active, or
 past due (`SubscriptionStatus::cancellable()`); reactivate while cancelled,
@@ -78,7 +95,7 @@ and `awaitingActivation()` scopes.
 ## Panel labels
 
 `SubscriptionStatus` implements Filament's `HasLabel` and `HasColor`, and
-`PeriodUnit` implements `HasLabel`, with translations in
+`SubscriptionPaymentStatus` and `PeriodUnit` implement `HasLabel`, with translations in
 `vendra-subscription::enums`. A `->badge()` column or entry that returns the
 status is translated and colored without `formatStateUsing()`, and
 `->options(PeriodUnit::class)` builds a translated select.

@@ -33,7 +33,12 @@ cluster for transactions, gateways, and wallets.
    `FailTransactionAction` rather than the model methods: each re-reads the
    transaction under a row lock, so a stale copy cannot decline a transaction
    another request has just approved.
-5. Gateways are admin-managed labels (translatable name and description, a
+5. A null tenant id marks the platform ledger: tenantless wallets (such as
+   reseller users') and the platform's own gateways. Outside a tenant,
+   `TransactionGatewayRegistry` resolves only tenantless gateways. Seed the
+   platform internal gateway once with
+   `php artisan db:seed --class="Misaf\VendraTransaction\Database\Seeders\PlatformGatewaySeeder"`.
+6. Gateways are admin-managed labels (translatable name and description, a
    scalar `slug` lookup key, logo, sortable position); payment-processing
    logic lives in the host application. Internal movements use the
    `internal-transactions` gateway.

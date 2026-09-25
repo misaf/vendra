@@ -25,7 +25,7 @@ use Misaf\VendraTransaction\Support\TransactionUsers;
  * A user's balance in one currency; `balance` is only written through the ledger.
  *
  * @property int $id
- * @property int $tenant_id
+ * @property int|null $tenant_id
  * @property int $user_id
  * @property string $currency_code
  * @property int $balance
@@ -34,7 +34,7 @@ use Misaf\VendraTransaction\Support\TransactionUsers;
  * @property Carbon|null $deleted_at
  */
 #[Fillable(['user_id', 'currency_code'])]
-#[Hidden(['tenant_id'])]
+#[Hidden(['tenant_id', 'platform_user_guard'])]
 #[UseFactory(WalletFactory::class)]
 final class Wallet extends Model implements ShouldLogActivity
 {

@@ -53,4 +53,5 @@ return [
     'runtime_unavailable' => 'Laufzeit nicht verfügbar',
     'runtime_unavailable_message' => 'Laufzeit nicht verfügbar: :message',
     'storefront_reconciled' => 'Abgleich der Storefront eingeplant',
+    'wallet_credited' => 'Guthaben aufgeladen',
 ];
