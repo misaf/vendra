@@ -97,6 +97,25 @@ it('points the tenancy, store, reseller and console layers one way', function ()
         ->toContain('misaf/vendra-reseller');
 });
 
+it('keeps the store test suite free of the reseller domain', function (): void {
+    $testFiles = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(base_path('packages/vendra-store/tests'), FilesystemIterator::SKIP_DOTS),
+    );
+    $resellerImports = [];
+
+    foreach ($testFiles as $testFile) {
+        if ($testFile->getExtension() !== 'php') {
+            continue;
+        }
+
+        if (preg_match('/^use Misaf\\\\VendraReseller\\\\/m', (string) file_get_contents($testFile->getPathname())) === 1) {
+            $resellerImports[] = $testFile->getFilename();
+        }
+    }
+
+    expect($resellerImports)->toBeEmpty();
+});
+
 it('keeps reusable domain packages free of the tenant provider and the store', function (): void {
     $dependencyGraph = vendraPackageDependencyGraph();
 
@@ -107,10 +126,10 @@ it('keeps reusable domain packages free of the tenant provider and the store', f
     }
 });
 
-it('imports only Vendra namespaces reachable through declared package dependencies', function (): void {
+it('imports only Vendra namespaces its package directly requires or suggests', function (): void {
     $dependencyGraph = vendraPackageDependencyGraph();
     $namespacePackages = [];
-    $unreachableImports = [];
+    $undeclaredImports = [];
 
     foreach (glob(base_path('packages/*/composer.json')) ?: [] as $manifestPath) {
         $manifest = json_decode(
@@ -131,15 +150,17 @@ it('imports only Vendra namespaces reachable through declared package dependenci
             true,
             flags: JSON_THROW_ON_ERROR,
         );
-        $reachablePackages = [
-            ...reachableVendraPackages($package, $dependencyGraph),
+
+        // A transitive dependency does not count, and a suggested module is an optional integration its source guards.
+        $declaredPackages = [
+            ...$dependencyGraph[$package],
             ...array_values(array_filter(
                 array_keys(Arr::get($manifest, 'suggest', [])),
                 fn (string $dependency): bool => str_starts_with($dependency, 'misaf/vendra-'),
             )),
         ];
 
-        foreach (['src', 'database'] as $sourceDirectory) {
+        foreach (['src', 'config', 'database', 'routes'] as $sourceDirectory) {
             $sourcePath = "{$packagePath}/{$sourceDirectory}";
 
             if (! is_dir($sourcePath)) {
@@ -158,18 +179,18 @@ it('imports only Vendra namespaces reachable through declared package dependenci
                 $contents = (string) file_get_contents($sourceFile->getPathname());
 
                 foreach ($namespacePackages as $namespace => $namespacePackage) {
-                    if ($package === $namespacePackage || in_array($namespacePackage, $reachablePackages, true)) {
+                    if ($package === $namespacePackage || in_array($namespacePackage, $declaredPackages, true)) {
                         continue;
                     }
 
                     if (preg_match('/^use '.preg_quote($namespace, '/').'\\\\/m', $contents) === 1) {
                         $relativePath = mb_substr($sourceFile->getPathname(), mb_strlen(base_path()) + 1);
-                        $unreachableImports[] = "{$relativePath} → {$namespacePackage}";
+                        $undeclaredImports[] = "{$relativePath} → {$namespacePackage}";
                     }
                 }
             }
         }
     }
 
-    expect($unreachableImports)->toBeEmpty();
+    expect($undeclaredImports)->toBeEmpty();
 });
