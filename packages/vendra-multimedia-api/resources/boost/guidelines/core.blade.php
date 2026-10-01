@@ -2,6 +2,8 @@
 
 The `misaf/vendra-multimedia-api` package exposes `misaf/vendra-multimedia` domain models through API Platform for Laravel.
 
+Public multimedia responses include a `url`. Select `tenant_id` for media URL generation. Local public-disk URLs are relative to the API host; clients on another host must resolve them against the API origin.
+
 ### Translatable Persistence
 
 - Making a persisted model field translatable is an explicit domain choice unless this package already requires it.

@@ -52,4 +52,6 @@ it('exposes only public multimedia without storage internals', function (): void
         ->assertJsonPath('member.0.generatedConversions', [])
         ->assertJsonMissing(['id' => $privateAsset->id])
         ->assertJsonMissingPath('member.0.conversionsDisk');
+
+    expect($response->json('member.0.url'))->toBeString()->toStartWith('/storage/');
 });

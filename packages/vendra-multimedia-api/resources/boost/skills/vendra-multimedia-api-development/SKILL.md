@@ -30,6 +30,8 @@ description: "Create, modify, review, or test the Vendra Multimedia API module i
 
 Treat `packages/vendra-multimedia-api` as the API Platform layer for `misaf/vendra-multimedia`.
 
+Public media URLs need `tenant_id` in the selected columns. Local public-disk URLs are relative to the API host; clients on another host must resolve them against the API origin.
+
 - Use namespace `Misaf\VendraMultimediaApi`.
 - Keep API resource DTOs, state providers, query parameters, service providers, and API tests inside this module.
 - Import domain models from `Misaf\VendraMultimedia`; do not duplicate domain models or persistence logic in the API module.

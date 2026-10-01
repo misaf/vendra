@@ -21,7 +21,7 @@ final class MultimediaLinksHandler implements LinksHandlerInterface
     public function handleLinks(Builder $builder, array $uriVariables, array $context): Builder
     {
         $builder->select([
-            'id', 'uuid', 'name', 'file_name', 'collection_name', 'mime_type', 'size',
+            'id', 'tenant_id', 'uuid', 'name', 'file_name', 'collection_name', 'mime_type', 'size',
             'disk', 'conversions_disk', 'manipulations', 'custom_properties', 'generated_conversions', 'responsive_images',
         ]);
 

@@ -7,8 +7,9 @@ Read-only API Platform resources for Vendra media records.
 - `GET /api/content/multimedia`
 - Individual media record retrieval
 - MIME type filtering and pagination
+- A public `url` for each asset; local storage URLs are relative to the API host
 
-The asset DTO intentionally omits disks, paths, and other storage internals.
+The asset DTO intentionally omits storage paths and other internal details.
 Other API modules use stable resource references and do not depend on this package.
 
 ## Requirements
