@@ -49,6 +49,27 @@ it('serves the canonical admin host after tenant switching changes the applicati
     $this->get('https://acme.admin.vendra.test/login')->assertSuccessful();
 });
 
+it('serves a registered quick tunnel alias as an admin host', function (): void {
+    $tenant = Store::factory()->active()->create(['slug' => 'acme']);
+    StoreDomain::factory()->for($tenant)->create([
+        'name' => 'preview.trycloudflare.com',
+        'active' => true,
+    ]);
+
+    $this->get('https://preview.trycloudflare.com/login')->assertSuccessful();
+    $this->get('https://unknown.trycloudflare.com/login')->assertNotFound();
+});
+
+it('does not serve a quick tunnel alias when its store is inaccessible', function (): void {
+    $tenant = Store::factory()->active()->create(['slug' => 'acme', 'active' => false]);
+    StoreDomain::factory()->for($tenant)->create([
+        'name' => 'preview.trycloudflare.com',
+        'active' => true,
+    ]);
+
+    $this->get('https://preview.trycloudflare.com/login')->assertNotFound();
+});
+
 it('does not serve the admin panel on the storefront host', function (): void {
     $tenant = Store::factory()->active()->create(['slug' => 'acme']);
     StoreDomain::factory()->for($tenant)->create([

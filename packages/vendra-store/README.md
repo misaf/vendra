@@ -197,6 +197,11 @@ lists the primary and each alias, and reconciliation treats a container routing 
 different alias set as drift. Container labels cannot change in place, so each of
 these actions moves the deployment's `domain` where needed and forces a redeploy.
 
+For a temporary Cloudflare quick tunnel, add its exact `*.trycloudflare.com`
+hostname as an active alias. That alias also serves the admin panel while the
+store is accessible; `trycloudflare.com` alone does not match the tunnel hostname.
+Remove the alias after the tunnel expires.
+
 A reseller's plan decides which domains its stores may use. A domain outside
 `*.{storefront.base_domain}` is custom (`StoreDomain::isCustom()`), and creating,
 aliasing or replacing onto one needs the plan's `custom_domain` feature; with no base

@@ -31,6 +31,7 @@ final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFi
     public function findForAdminHost(string $host): ?IsTenant
     {
         $host = Str::lower($host);
+
         $adminDomain = 'admin.'.config()->string('vendra-tenant.central_host');
 
         if (Str::endsWith($host, '.'.$adminDomain)) {
@@ -46,6 +47,10 @@ final class StoreDomainFinder extends SpatieTenantFinder implements HostTenantFi
 
         if (Str::startsWith($host, 'admin.')) {
             return $this->findForStoreDomain(Str::after($host, 'admin.'));
+        }
+
+        if (Str::endsWith($host, '.trycloudflare.com')) {
+            return $this->findForStoreDomain($host);
         }
 
         return null;
