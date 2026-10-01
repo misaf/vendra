@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
+use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Misaf\VendraTransaction\Actions\CreateTransactionAction;
 use Misaf\VendraTransaction\Database\Factories\TransactionGatewayFactory;
 use Misaf\VendraTransaction\Database\Factories\TransactionLimitFactory;
@@ -131,5 +132,18 @@ it('provisions one wallet per user and currency', function (): void {
 
     expect($again->is($wallet))->toBeTrue()
         ->and($wallet->currency_code)->toBe('EUR')
+        ->and($user->wallets()->count())->toBe(1);
+});
+
+it('provisions a default wallet without a currency provider', function (): void {
+    app()->offsetUnset(CurrencyResolver::class);
+    config(['money.defaultCurrency' => 'EUR']);
+    $user = TransactionUsers::model()::factory()->create();
+
+    $wallet = WalletResolver::firstOrCreateDefaultWalletFor($user);
+    $again = WalletResolver::firstOrCreateDefaultWalletFor($user);
+
+    expect($wallet->currency_code)->toBe('EUR')
+        ->and($again->is($wallet))->toBeTrue()
         ->and($user->wallets()->count())->toBe(1);
 });

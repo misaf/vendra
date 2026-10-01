@@ -123,3 +123,11 @@ it('selects attribute values through the attribute_value_selections pivot', func
         ->and($selectedAttributeValues->getMorphType())->toBe('selectable_type')
         ->and($selectedAttributeValues->getRelatedPivotKeyName())->toBe('attribute_value_id');
 });
+
+it('keeps product attribute relations unavailable when no resolver is registered', function (): void {
+    app()->offsetUnset(AttributeResolver::class);
+
+    expect(AttributeIntegration::options())->toBeEmpty()
+        ->and(fn () => (new Product)->attributeValues())->toThrow(LogicException::class)
+        ->and(fn () => (new ProductCategory)->attributeValues())->toThrow(LogicException::class);
+});

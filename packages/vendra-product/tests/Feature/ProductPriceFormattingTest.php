@@ -44,3 +44,11 @@ it('formats legacy prices with unsupported currency codes without throwing', fun
 
     expect($productPrice->formattedPrice())->toBe('19,900 KS');
 });
+
+it('uses the configured product currency when no currency resolver is registered', function (): void {
+    app()->offsetUnset(CurrencyResolver::class);
+    config(['money.defaultCurrency' => 'EUR']);
+
+    expect(ProductPrice::defaultCurrencyCode())->toBe('EUR')
+        ->and(ProductPrice::currencyOptions())->toBe(['EUR' => 'EUR']);
+});
