@@ -114,3 +114,5 @@ Use `Misaf\VendraSupport\Filament\Navigation\NavigationGroup` as the single sour
 - If PHP files changed, run `vendor/bin/pint --dirty --format agent`.
 
 - Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.
+
+- `Contracts\StockRestorer` is the provider-neutral stock restoration boundary: `sellableType()` supplies the supported morph alias and `restore()` accepts quantities keyed by sellable ID. `Capabilities\NullStockRestorer` returns no alias and throws on restoration. Stock restoration is correctness-critical; callers must preserve their transaction when no provider is available rather than silently clearing deducted stock.

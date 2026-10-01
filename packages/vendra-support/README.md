@@ -6,6 +6,8 @@ Keep Support provider-neutral: shared contracts, null defaults, integration help
 
 `Capabilities\IntegrationExceptions` reports unexpected capability failures through Laravel while preserving fallback results. Missing integration tables remain quiet; do not suppress connection failures, invalid columns, or programming errors. The host isolated-consumer tests boot required packages in fresh processes without optional provider classes or package metadata.
 
+`Contracts\StockRestorer` is the provider-neutral stock restoration boundary: `sellableType()` supplies the supported morph alias and `restore()` accepts quantities keyed by sellable ID. `Capabilities\NullStockRestorer` returns no alias and throws on restoration. Stock restoration is correctness-critical; callers must preserve their transaction when no provider is available rather than silently clearing deducted stock.
+
 ## Features
 
 - Provider-neutral tenant resolution and tenant-awareness helpers

@@ -8,7 +8,10 @@ use Composer\InstalledVersions;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Foundation\Console\AboutCommand;
+use Illuminate\Support\Facades\Event;
 use Misaf\VendraOrder\Console\Commands\SeedCommand;
+use Misaf\VendraOrder\Events\OrderCancelled;
+use Misaf\VendraOrder\Listeners\RestockCancelledOrder;
 use Misaf\VendraOrder\Models\Order;
 use Misaf\VendraOrder\Models\OrderLine;
 use Misaf\VendraOrder\OrderPlugin;
@@ -56,6 +59,8 @@ final class OrderServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        Event::listen(OrderCancelled::class, RestockCancelledOrder::class);
+
         // Stable aliases, so moving a model class never orphans stored morph rows.
         Relation::morphMap([
             'order' => Order::class,

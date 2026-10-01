@@ -37,3 +37,5 @@ The `misaf/vendra-order` package owns placed orders, their immutable line snapsh
 - Keep architecture expectations enforcing that `Misaf\VendraOrder` does not use `Misaf\VendraTenant` or `Misaf\VendraProduct`.
 
 - Cart conversion locks and rechecks the persisted cart before creating an order. Empty or already consumed carts are rejected, including stale model instances. The cart token can be reused after adding new items.
+
+- `Listeners\RestockCancelledOrder` belongs to this package and runs synchronously inside cancellation’s transaction. It aggregates lines using the provider-neutral `Misaf\VendraSupport\Contracts\StockRestorer` metadata, restores stock, then clears `stock_deducted`. No API package is required. Orders without deducted stock need no provider; deducted orders refuse cancellation when none is installed, preserving their status and stock flag.

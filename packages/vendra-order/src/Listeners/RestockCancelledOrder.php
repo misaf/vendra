@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraOrderApi\Listeners;
+namespace Misaf\VendraOrder\Listeners;
 
-use Illuminate\Database\Eloquent\Relations\Relation;
+use LogicException;
 use Misaf\VendraOrder\Events\OrderCancelled;
 use Misaf\VendraOrder\Models\OrderLine;
-use Misaf\VendraProduct\Actions\RestockProductsAction;
-use Misaf\VendraProduct\Models\Product;
+use Misaf\VendraSupport\Contracts\StockRestorer;
 
 /**
  * Return the stock checkout took for a cancelled order's product lines.
@@ -18,7 +17,7 @@ use Misaf\VendraProduct\Models\Product;
  */
 final readonly class RestockCancelledOrder
 {
-    public function __construct(private RestockProductsAction $restockProducts) {}
+    public function __construct(private StockRestorer $stockRestorer) {}
 
     public function handle(OrderCancelled $event): void
     {
@@ -28,16 +27,20 @@ final readonly class RestockCancelledOrder
             return;
         }
 
+        $sellableType = $this->stockRestorer->sellableType();
+
+        throw_if($sellableType === null, LogicException::class, 'Install a stock provider before cancelling an order with deducted stock.');
+
         $quantities = [];
 
         $order->lines()
-            ->where('sellable_type', Relation::getMorphAlias(Product::class))
+            ->where('sellable_type', $sellableType)
             ->get()
             ->each(function (OrderLine $line) use (&$quantities): void {
                 $quantities[$line->sellable_id] = ($quantities[$line->sellable_id] ?? 0) + $line->quantity;
             });
 
-        $this->restockProducts->execute($quantities);
+        $this->stockRestorer->restore($quantities);
 
         $order->update(['stock_deducted' => false]);
     }

@@ -12,7 +12,7 @@ use Misaf\VendraBlog\Models\BlogPost;
 use Misaf\VendraFaq\Models\Faq;
 use Misaf\VendraProduct\Models\Product;
 
-it('boots a consumer with only its required Vendra packages', function (string $package, ?string $tagModel): void {
+it('boots a consumer with only its required Vendra packages', function (string $package, ?string $tagModel, array $additionalPackages = []): void {
     $filesystem = new Filesystem;
     $directory = sys_get_temp_dir().'/vendra-isolation-'.bin2hex(random_bytes(8));
     $installed = json_decode(file_get_contents(base_path('vendor/composer/installed.json')), true, flags: JSON_THROW_ON_ERROR);
@@ -24,7 +24,7 @@ it('boots a consumer with only its required Vendra packages', function (string $
     }
 
     $required = [];
-    $pending = ['laravel/framework', 'misaf/'.$package];
+    $pending = ['laravel/framework', 'misaf/'.$package, ...$additionalPackages];
 
     while ($pending !== []) {
         $dependency = array_pop($pending);
@@ -126,6 +126,7 @@ it('boots a consumer with only its required Vendra packages', function (string $
 
             $absent = [];
             foreach ([
+                'vendra-order-api' => Misaf\VendraOrderApi\Providers\OrderApiServiceProvider::class,
                 'vendra-attribute' => Misaf\VendraAttribute\Models\Attribute::class,
                 'vendra-currency' => Misaf\VendraCurrency\Models\Currency::class,
                 'vendra-tagger' => Misaf\VendraTagger\Models\Tagger::class,
@@ -179,6 +180,35 @@ it('boots a consumer with only its required Vendra packages', function (string $
                 $checks['wallet_resolver'] = resolve(Misaf\VendraTransaction\Services\WalletResolver::class)
                     instanceof Misaf\VendraTransaction\Services\WalletResolver;
             }
+            if ($isolation['package'] === 'vendra-order') {
+                config(['app.currency' => 'EUR']);
+                Illuminate\Database\Eloquent\Relations\Relation::morphMap([
+                    'isolated_product' => Misaf\VendraProduct\Models\Product::class,
+                ], merge: false);
+                foreach (['vendra-order/create_orders_table', 'vendra-product/create_products_table'] as $migration) {
+                    [$package, $name] = explode('/', $migration);
+                    (require 'packages/'.$package.'/database/migrations/'.$name.'.php.stub')->up();
+                }
+                Illuminate\Support\Facades\Schema::withoutForeignKeyConstraints(function () {
+                    Illuminate\Support\Facades\DB::table('products')->insert([
+                        'id' => 1, 'product_category_id' => 1, 'name' => '{}', 'slug' => '{}',
+                        'token' => 'stock-test', 'quantity' => 3, 'position' => 1,
+                    ]);
+                    Illuminate\Support\Facades\DB::table('orders')->insert([
+                        'id' => 1, 'number' => 'isolated-order', 'status' => 'pending',
+                        'currency_code' => 'EUR', 'stock_deducted' => true,
+                    ]);
+                    Illuminate\Support\Facades\DB::table('order_lines')->insert([
+                        'order_id' => 1, 'sellable_type' => 'isolated_product', 'sellable_id' => 1,
+                        'name' => '{}', 'currency_code' => 'EUR', 'quantity' => 2,
+                    ]);
+                });
+                $order = Misaf\VendraOrder\Models\Order::query()->findOrFail(1);
+                $order->cancel();
+                $checks['stock_restored_without_api'] = Misaf\VendraProduct\Models\Product::query()->findOrFail(1)->quantity === 5;
+                $checks['cancelled_without_api'] = $order->fresh()->status instanceof Misaf\VendraOrder\States\Cancelled;
+                $checks['stock_flag_cleared'] = $order->fresh()->stock_deducted === false;
+            }
             Illuminate\Support\Facades\Exceptions::assertNothingReported();
             echo json_encode(['absent' => $absent, 'checks' => $checks], JSON_THROW_ON_ERROR);
             CHILD, base_path()]);
@@ -195,6 +225,7 @@ it('boots a consumer with only its required Vendra packages', function (string $
         $filesystem->deleteDirectory($directory);
     }
 })->with([
+    'order with product and without API' => ['vendra-order', null, ['misaf/vendra-product']],
     'product' => ['vendra-product', Product::class],
     'attribute' => ['vendra-attribute', Attribute::class],
     'faq' => ['vendra-faq', Faq::class],

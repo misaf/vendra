@@ -38,3 +38,5 @@ The `misaf/vendra-product` package owns products, product categories, and pricin
 - Keep Pest architecture tests in `tests/ArchTest.php`: the `php`, `security`, and `laravel` presets plus a tenant-agnostic expectation, e.g. `arch()->expect('Misaf\VendraProduct')->not->toUse('Misaf\VendraTenant')`.
 
 - Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.
+
+- `Support\ProductStockRestorer` binds `Misaf\VendraSupport\Contracts\StockRestorer`, supplies Product’s morph alias, and delegates restoration to `RestockProductsAction`. It preserves tenant scoping, restores soft-deleted products, and leaves `in_stock` unchanged. Product imports no Order or Order API types.

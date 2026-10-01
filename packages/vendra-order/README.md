@@ -5,6 +5,8 @@ snapshots, cart-to-order conversion, an explicit order lifecycle, bank-transfer
 references against a `misaf/vendra-transaction` gateway, Filament
 administration, and permission seeding.
 
+`Listeners\RestockCancelledOrder` belongs to this package and runs synchronously inside cancellation’s transaction. It aggregates lines using the provider-neutral `Misaf\VendraSupport\Contracts\StockRestorer` metadata, restores stock, then clears `stock_deducted`. No API package is required. Orders without deducted stock need no provider; deducted orders refuse cancellation when none is installed, preserving their status and stock flag.
+
 ## Features
 
 - Orders with a human-readable number, optional polymorphic customer, and money snapshots in minor units

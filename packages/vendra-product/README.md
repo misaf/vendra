@@ -2,6 +2,8 @@
 
 Tenant-aware product management for Vendra applications.
 
+`Support\ProductStockRestorer` binds `Misaf\VendraSupport\Contracts\StockRestorer`, supplies Product’s morph alias, and delegates restoration to `RestockProductsAction`. It preserves tenant scoping, restores soft-deleted products, and leaves `in_stock` unchanged. Product imports no Order or Order API types.
+
 ## Features
 
 - Product categories

@@ -99,3 +99,5 @@ Prefer focused Pest tests in the module.
 - If PHP files changed, run Pint for the touched code: `vendor/bin/pint --dirty --format agent` from the host app.
 
 - Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.
+
+- `Support\ProductStockRestorer` binds `Misaf\VendraSupport\Contracts\StockRestorer`, supplies Product’s morph alias, and delegates restoration to `RestockProductsAction`. It preserves tenant scoping, restores soft-deleted products, and leaves `in_stock` unchanged. Product imports no Order or Order API types.

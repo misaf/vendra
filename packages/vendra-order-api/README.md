@@ -3,6 +3,8 @@
 API Platform resources for the Vendra Order module: customers read their own
 orders and convert their cart into one through a single checkout operation.
 
+Cancellation stock restoration belongs to `Misaf\VendraOrder\Listeners\RestockCancelledOrder`, using the shared `StockRestorer` contract and Product’s adapter. This API package does not register a stock listener. Cancellation works with Order and Product installed even when Order API is absent.
+
 ## Endpoints
 
 | Method | URI | Description |
@@ -57,7 +59,7 @@ composer require misaf/vendra-order-api
 
 The service provider registers the resources and processors automatically.
 
-Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility; eligibility and unit prices come from `ProductPurchaseQuoter` in `vendra-product`, which loads the whole cart's products in one query. Checkout then takes the ordered stock through `DeductProductStockAction` in the same transaction, refusing the cart with `out_of_stock` if another checkout took it first, and records `stock_deducted` on the order. `Listeners\RestockCancelledOrder` returns the stock when the order is cancelled, only for orders with that flag, and clears it afterwards.
+Checkout locks the cart before loading its current items and commits the order, cart clearing, and delivery together. Invalid delivery slots, addresses, or booking dates leave the cart intact. Products must belong to an active category, matching catalog visibility; eligibility and unit prices come from `ProductPurchaseQuoter` in `vendra-product`, which loads the whole cart's products in one query. Checkout then takes the ordered stock through `DeductProductStockAction` in the same transaction, refusing the cart with `out_of_stock` if another checkout took it first, and records `stock_deducted` on the order. `Misaf\VendraOrder\Listeners\RestockCancelledOrder` returns the stock through the shared `StockRestorer` contract when the order is cancelled, only for orders with that flag, and clears it afterwards; this listener is registered by Order, independently of the API.
 
 ## Testing
 

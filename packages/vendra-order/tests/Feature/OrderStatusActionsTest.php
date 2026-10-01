@@ -13,6 +13,8 @@ use Misaf\VendraOrder\States\Cancelled;
 use Misaf\VendraOrder\States\Completed;
 use Misaf\VendraOrder\States\Confirmed;
 use Misaf\VendraOrder\States\Pending;
+use Misaf\VendraSupport\Capabilities\NullStockRestorer;
+use Misaf\VendraSupport\Contracts\StockRestorer;
 use Spatie\ModelStates\Exceptions\TransitionNotFound;
 
 beforeEach(function (): void {
@@ -74,4 +76,21 @@ it('refuses to complete an order that was never confirmed', function (): void {
 
     expect(fn (): mixed => resolve(CompleteOrderAction::class)->execute($order))
         ->toThrow(TransitionNotFound::class);
+});
+
+it('cancels an order without deducted stock when no stock provider is installed', function (): void {
+    $this->app->instance(StockRestorer::class, new NullStockRestorer);
+    $order = OrderFactory::new()->createOne();
+
+    $order->cancel();
+
+    expect($order->fresh()?->status)->toBeInstanceOf(Cancelled::class);
+});
+
+it('preserves a deducted order when no stock provider is installed', function (): void {
+    $this->app->instance(StockRestorer::class, new NullStockRestorer);
+    $order = OrderFactory::new()->createOne(['stock_deducted' => true]);
+
+    expect(fn () => $order->cancel())->toThrow(LogicException::class, 'Install a stock provider')
+        ->and($order->fresh())->status->toBeInstanceOf(Pending::class)->stock_deducted->toBeTrue();
 });

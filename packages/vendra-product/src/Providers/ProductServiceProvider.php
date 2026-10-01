@@ -14,6 +14,8 @@ use Misaf\VendraProduct\Console\Commands\SeedCommand;
 use Misaf\VendraProduct\Models\Product;
 use Misaf\VendraProduct\Models\ProductCategory;
 use Misaf\VendraProduct\ProductPlugin;
+use Misaf\VendraProduct\Support\ProductStockRestorer;
+use Misaf\VendraSupport\Contracts\StockRestorer;
 use Misaf\VendraSupport\Contracts\TenantResolver;
 use Misaf\VendraSupport\Enums\PlanLimit;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
@@ -49,6 +51,8 @@ final class ProductServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
+        $this->app->singleton(StockRestorer::class, ProductStockRestorer::class);
+
         Panel::configureUsing(function (Panel $panel): void {
             if (! $this->shouldRegisterOnPanel($panel->getId(), 'vendra-product')) {
                 return;
