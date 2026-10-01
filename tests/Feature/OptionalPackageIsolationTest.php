@@ -38,7 +38,7 @@ it('boots a consumer with only its required Vendra packages', function (string $
     }
 
     try {
-        foreach (['bootstrap/cache', 'config', 'storage/logs', 'storage/framework/views'] as $path) {
+        foreach (['app', 'bootstrap/cache', 'config', 'storage/logs', 'storage/framework/views'] as $path) {
             $filesystem->ensureDirectoryExists($directory.'/'.$path);
         }
 
@@ -173,6 +173,10 @@ it('boots a consumer with only its required Vendra packages', function (string $
                     $checks['attribute_relation'] = true;
                 }
             }
+            if ($isolation['package'] === 'vendra-newsletter-api') {
+                $checks['newsletter_processor'] = resolve(Misaf\VendraNewsletterApi\State\SubscribeNewsletterProcessor::class)
+                    instanceof Misaf\VendraNewsletterApi\State\SubscribeNewsletterProcessor;
+            }
             if ($isolation['package'] === 'vendra-language') {
                 $checks['localization'] = config('vendra-localization') === null;
             }
@@ -234,4 +238,5 @@ it('boots a consumer with only its required Vendra packages', function (string $
     'user' => ['vendra-user', Misaf\VendraUser\Models\User::class],
     'transaction' => ['vendra-transaction', null],
     'language' => ['vendra-language', null],
+    'newsletter API' => ['vendra-newsletter-api', null],
 ]);

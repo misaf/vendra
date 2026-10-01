@@ -1,0 +1,58 @@
+{
+    "name": "misaf/vendra-newsletter-api",
+    "description": "API Platform services for the Vendra Newsletter module",
+    "keywords": [
+        "laravel",
+        "filamentphp",
+        "misaf",
+        "vendra",
+        "newsletter-api"
+    ],
+    "homepage": "https://github.com/misaf/vendra-newsletter-api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ehsan Mahmoodi",
+            "email": "misaf.1990@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "type": "vendra-module",
+    "require": {
+        "php": "^8.4",
+        "illuminate/support": "^13.0",
+        "misaf/vendra-api": "self.version",
+        "misaf/vendra-newsletter": "self.version",
+        "misaf/vendra-support": "self.version",
+        "spatie/laravel-package-tools": "^1.93.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Misaf\\VendraNewsletterApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Misaf\\VendraNewsletterApi\\Providers\\NewsletterApiServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "support": {
+        "issues": "https://github.com/misaf/vendra-newsletter-api/issues",
+        "source": "https://github.com/misaf/vendra-newsletter-api"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "$schema": "https://getcomposer.org/schema.json"
+}

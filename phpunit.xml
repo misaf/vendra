@@ -88,6 +88,9 @@
         <testsuite name="vendra-multimedia-api">
             <directory>packages/vendra-multimedia-api/tests</directory>
         </testsuite>
+        <testsuite name="vendra-newsletter-api">
+            <directory>packages/vendra-newsletter-api/tests</directory>
+        </testsuite>
         <testsuite name="vendra-newsletter">
             <directory>packages/vendra-newsletter/tests</directory>
         </testsuite>

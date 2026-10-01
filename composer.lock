@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcbe8d19b9abf20b62dce8bfe59e49f2",
+    "content-hash": "01fdbd1eba50bd090dea6601f1bc9dc7",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -8475,6 +8475,63 @@
             "support": {
                 "issues": "https://github.com/misaf/vendra-newsletter/issues",
                 "source": "https://github.com/misaf/vendra-newsletter"
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "misaf/vendra-newsletter-api",
+            "version": "1.x-dev",
+            "dist": {
+                "type": "path",
+                "url": "packages/vendra-newsletter-api",
+                "reference": "f4add06a946cb9df327a66381090a50579c8a636"
+            },
+            "require": {
+                "illuminate/support": "^13.0",
+                "misaf/vendra-api": "self.version",
+                "misaf/vendra-newsletter": "self.version",
+                "misaf/vendra-support": "self.version",
+                "php": "^8.4",
+                "spatie/laravel-package-tools": "^1.93.1"
+            },
+            "type": "vendra-module",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Misaf\\VendraNewsletterApi\\Providers\\NewsletterApiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Misaf\\VendraNewsletterApi\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ehsan Mahmoodi",
+                    "email": "misaf.1990@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "API Platform services for the Vendra Newsletter module",
+            "homepage": "https://github.com/misaf/vendra-newsletter-api",
+            "keywords": [
+                "filamentphp",
+                "laravel",
+                "misaf",
+                "newsletter-api",
+                "vendra"
+            ],
+            "support": {
+                "issues": "https://github.com/misaf/vendra-newsletter-api/issues",
+                "source": "https://github.com/misaf/vendra-newsletter-api"
             },
             "transport-options": {
                 "symlink": true,
@@ -25951,6 +26008,7 @@
         "misaf/vendra-multimedia": 20,
         "misaf/vendra-multimedia-api": 20,
         "misaf/vendra-newsletter": 20,
+        "misaf/vendra-newsletter-api": 20,
         "misaf/vendra-order": 20,
         "misaf/vendra-order-api": 20,
         "misaf/vendra-permission": 20,

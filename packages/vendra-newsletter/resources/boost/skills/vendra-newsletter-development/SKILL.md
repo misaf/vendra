@@ -112,3 +112,5 @@ Prefer focused Pest tests in the module.
 - If PHP files changed, run Pint for the touched code: `vendor/bin/pint --dirty --format agent`.
 
 - Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.
+
+- The optional `misaf/vendra-newsletter-api` package owns the public `POST /api/marketing/newsletter-subscriptions` endpoint. It delegates to this package’s subscribe and resubscribe actions, including restoring deleted subscribers; its 204 response exposes no subscriber data. Keep the existing token-based unsubscribe web flow and all sending behavior in this domain package.

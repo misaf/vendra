@@ -91,3 +91,5 @@ composer stan
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+The optional `misaf/vendra-newsletter-api` package owns the public `POST /api/marketing/newsletter-subscriptions` endpoint. It delegates to this package’s subscribe and resubscribe actions, including restoring deleted subscribers; its 204 response exposes no subscriber data. Keep the existing token-based unsubscribe web flow and all sending behavior in this domain package.

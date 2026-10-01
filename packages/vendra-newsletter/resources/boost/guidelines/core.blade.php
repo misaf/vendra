@@ -54,3 +54,5 @@ The `misaf/vendra-newsletter` package owns newsletter domain behavior and the Fi
 - Keep Pest architecture tests in `tests/ArchTest.php`: the `php`, `security`, and `laravel` presets plus a tenant-agnostic expectation, e.g. `arch()->expect('Misaf\VendraNewsletter')->not->toUse('Misaf\VendraTenant')`.
 
 - Demo seeders declare their factory dependencies in `FACTORIES`; the shared base uses bundled fixtures when any declared factory is unavailable, including standalone Composer installs. Keep factories in development autoloading.
+
+- The optional `misaf/vendra-newsletter-api` package owns the public `POST /api/marketing/newsletter-subscriptions` endpoint. It delegates to this package’s subscribe and resubscribe actions, including restoring deleted subscribers; its 204 response exposes no subscriber data. Keep the existing token-based unsubscribe web flow and all sending behavior in this domain package.
