@@ -73,6 +73,23 @@ it('keeps the Vendra package dependency graph complete and acyclic', function ()
     expect($unknownDependencies)->toBeEmpty()->and($cycles)->toBeEmpty();
 });
 
+it('keeps support free of first-party package requirements and suggestions', function (): void {
+    $manifest = json_decode(
+        file_get_contents(base_path('packages/vendra-support/composer.json')),
+        true,
+        flags: JSON_THROW_ON_ERROR,
+    );
+    $dependencies = array_keys([
+        ...Arr::get($manifest, 'require', []),
+        ...Arr::get($manifest, 'suggest', []),
+    ]);
+
+    expect(array_values(array_filter(
+        $dependencies,
+        fn (string $dependency): bool => str_starts_with($dependency, 'misaf/vendra-'),
+    )))->toBeEmpty();
+});
+
 it('points the tenancy, store, reseller and console layers one way', function (): void {
     $dependencyGraph = vendraPackageDependencyGraph();
 
@@ -116,14 +133,40 @@ it('keeps the store test suite free of the reseller domain', function (): void {
     expect($resellerImports)->toBeEmpty();
 });
 
-it('keeps reusable domain packages free of the tenant provider and the store', function (): void {
+it('keeps reusable packages independent of the tenancy and platform layers', function (): void {
     $dependencyGraph = vendraPackageDependencyGraph();
+    $platformPackages = [
+        'misaf/vendra-tenant',
+        'misaf/vendra-store',
+        'misaf/vendra-reseller',
+        'misaf/vendra-console',
+    ];
+    $forbiddenDependencies = [];
 
-    foreach (['misaf/vendra-product', 'misaf/vendra-blog', 'misaf/vendra-cart', 'misaf/vendra-attribute'] as $package) {
-        expect(reachableVendraPackages($package, $dependencyGraph))
-            ->not->toContain('misaf/vendra-tenant', "[{$package}] must stay tenant-provider agnostic.")
-            ->not->toContain('misaf/vendra-store', "[{$package}] must not depend on the Store.");
+    foreach (array_diff(array_keys($dependencyGraph), $platformPackages) as $package) {
+        foreach (array_intersect(reachableVendraPackages($package, $dependencyGraph), $platformPackages) as $dependency) {
+            $forbiddenDependencies[] = "{$package} → {$dependency}";
+        }
     }
+
+    expect($forbiddenDependencies)->toBeEmpty();
+});
+
+it('keeps domain packages independent of API packages', function (): void {
+    $dependencyGraph = vendraPackageDependencyGraph();
+    $apiPackages = array_filter(
+        array_keys($dependencyGraph),
+        fn (string $package): bool => $package === 'misaf/vendra-api' || str_ends_with($package, '-api'),
+    );
+    $forbiddenDependencies = [];
+
+    foreach (array_diff(array_keys($dependencyGraph), $apiPackages) as $package) {
+        foreach (array_intersect(reachableVendraPackages($package, $dependencyGraph), $apiPackages) as $dependency) {
+            $forbiddenDependencies[] = "{$package} → {$dependency}";
+        }
+    }
+
+    expect($forbiddenDependencies)->toBeEmpty();
 });
 
 it('imports only Vendra namespaces its package directly requires or suggests', function (): void {
