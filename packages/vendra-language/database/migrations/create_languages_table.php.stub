@@ -39,6 +39,7 @@ return new class extends Migration
                     ->nullable()
                     ->virtualAs('CASE WHEN is_default AND '.TenantSchema::column().' IS NULL THEN 1 ELSE NULL END');
             }
+
             $table->unsignedBigInteger('position');
             $table->timestampsTz();
 
@@ -48,6 +49,7 @@ return new class extends Migration
                 $table->unique('platform_locale_guard', 'languages_platform_locale_unique');
                 $table->unique('platform_default_guard', 'languages_platform_one_default_unique');
             }
+
             $table->index(TenantSchema::tenantIndex(['active']));
             $table->index(TenantSchema::tenantIndex(['is_default']));
             $table->index(TenantSchema::tenantIndex(['position']));
@@ -67,6 +69,7 @@ return new class extends Migration
                     ->nullable()
                     ->virtualAs('CASE WHEN '.TenantSchema::column().' IS NULL THEN 1 ELSE NULL END');
             }
+
             $table->string('group')->index();
             $table->string('key');
             $table->json('text');
