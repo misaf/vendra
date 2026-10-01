@@ -10,6 +10,7 @@ use Misaf\VendraStore\Support\StorefrontOrigins;
 beforeEach(function (): void {
     config()->set('app.url', 'https://vendra.test');
     config()->set('vendra-tenant.central_host', 'vendra.test');
+    config()->set('cors.allow_all_origins', false);
     StorefrontOrigins::forget();
 });
 
@@ -61,6 +62,24 @@ it('never allows a wildcard origin', function (): void {
     expect((new StorefrontOrigins)->all())->not->toContain('*')
         ->and(config('cors.allowed_origins_patterns'))->toBe([])
         ->and(config('cors.supports_credentials'))->toBeFalse();
+});
+
+it('allows any origin on API routes when the temporary override is enabled', function (): void {
+    config()->set('cors.allow_all_origins', true);
+
+    $this->withHeaders(['Origin' => 'https://unregistered.example'])
+        ->get('https://api.vendra.test/api/docs.jsonopenapi')
+        ->assertHeader('Access-Control-Allow-Origin', '*');
+
+    $this->withHeaders([
+        'Origin' => 'https://unregistered.example',
+        'Access-Control-Request-Method' => 'GET',
+    ])->options('https://api.vendra.test/api/docs.jsonopenapi')
+        ->assertHeader('Access-Control-Allow-Origin', '*');
+
+    $this->withHeaders(['Origin' => 'https://unregistered.example'])
+        ->get('https://console.vendra.test/login')
+        ->assertHeaderMissing('Access-Control-Allow-Origin');
 });
 
 it('excludes inactive storefront domains from the allowlist', function (): void {

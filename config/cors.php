@@ -17,6 +17,8 @@ return [
 
     'paths' => ['api/*'],
 
+    'allow_all_origins' => (bool) env('CORS_ALLOW_ALL_ORIGINS', false),
+
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
     'allowed_origins' => [],

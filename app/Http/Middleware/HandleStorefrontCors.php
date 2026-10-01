@@ -32,7 +32,10 @@ final class HandleStorefrontCors extends HandleCors
     {
         // Only look up origins for paths CORS covers, such as `api/*`.
         if ($this->hasMatchingPath($request)) {
-            Config::set('cors.allowed_origins', $this->origins->all());
+            Config::set(
+                'cors.allowed_origins',
+                Config::boolean('cors.allow_all_origins') ? ['*'] : $this->origins->all(),
+            );
         }
 
         return parent::handle($request, $next);
