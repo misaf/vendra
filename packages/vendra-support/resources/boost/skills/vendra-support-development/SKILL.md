@@ -7,6 +7,8 @@ description: "Create, modify, review, or test the Vendra Support module in packa
 
 ## Workflow
 
+- `Capabilities\IntegrationExceptions` reports unexpected capability failures through Laravel while preserving fallback results. Missing integration tables remain quiet; do not suppress connection failures, invalid columns, or programming errors. The host isolated-consumer tests boot required packages in fresh processes without optional provider classes or package metadata.
+
 - Keep Support provider-neutral: shared contracts, null defaults, integration helpers, tenancy primitives, and reusable UI belong here. Concrete Attribute, Currency, and Tag adapters belong to their provider packages. Support must not require, suggest, or reference another first-party package. The former `Misaf\VendraSupport\Capabilities\EloquentAttributeResolver`, `EloquentCurrencyResolver`, and `EloquentTagResolver` names have moved to `Misaf\VendraAttribute\Support`, `Misaf\VendraCurrency\Support`, and `Misaf\VendraTagger\Support`, respectively; update imports directly, with no compatibility aliases.
 
 - Inspect `composer.json`, sibling files, and existing tests before changing the package.
