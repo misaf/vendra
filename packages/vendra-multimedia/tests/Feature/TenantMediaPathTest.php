@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraMultimedia\Support\DefaultPathGenerator;
@@ -99,5 +100,25 @@ describe('relocate command', function (): void {
             ->assertSuccessful();
 
         Storage::disk('public')->assertExists("{$media->uuid}/photo.jpg");
+    });
+
+    it('keeps the legacy directory when moving a file fails', function (): void {
+        makeCurrentTestTenant();
+        $media = addGalleryMedia();
+        $legacyFile = "{$media->uuid}/photo.jpg";
+        $originalDisk = Storage::disk('public');
+        $originalDisk->move($media->getPathRelativeToRoot(), $legacyFile);
+
+        $disk = Mockery::mock(FilesystemAdapter::class);
+        $disk->shouldReceive('allFiles')->andReturn([$legacyFile]);
+        $disk->shouldReceive('exists')->andReturnFalse();
+        $disk->shouldReceive('move')->andReturnFalse();
+        $disk->shouldNotReceive('deleteDirectory');
+        Storage::set('public', $disk);
+
+        expect(fn () => $this->artisan('vendra-multimedia:relocate')->run())
+            ->toThrow(RuntimeException::class);
+
+        $originalDisk->assertExists($legacyFile);
     });
 });

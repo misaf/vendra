@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraMultimedia\Support\DefaultPathGenerator;
+use RuntimeException;
 
 #[Signature('vendra-multimedia:relocate {--dry-run : Report the media to move without moving files}')]
 #[Description('Move media stored before the tenant path prefix into its tenant directory')]
@@ -59,7 +60,10 @@ final class RelocateMediaCommand extends Command
                 $movedFiles++;
 
                 if (! $this->option('dry-run')) {
-                    $disk->move($legacyFile, $basePath.mb_substr($legacyFile, mb_strlen($legacyBasePath)));
+                    $destination = $basePath.mb_substr($legacyFile, mb_strlen($legacyBasePath));
+
+                    throw_if($disk->exists($destination), RuntimeException::class, "Media destination already exists: {$destination}");
+                    throw_unless($disk->move($legacyFile, $destination), RuntimeException::class, "Could not move media file: {$legacyFile}");
                 }
             }
 
