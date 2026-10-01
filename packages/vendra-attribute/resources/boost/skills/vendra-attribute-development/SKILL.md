@@ -7,6 +7,8 @@ description: "Create, modify, review, or test the Vendra Attribute package in pa
 
 ## Workflow
 
+- The resolver applies `TenantAwareness::constrainToCurrentTenant()` even when a configured model has no tenant scope. With tenancy enabled, use the resolver-defined tenant column: a current tenant sees its own active attributes and a tenantless caller sees only platform rows. Unexpected failures are reported through Laravel before falling back; empty catalogs and missing tables remain quiet.
+
 - Own the concrete `Misaf\VendraAttribute\Support\EloquentAttributeResolver` adapter here and bind it to Support's `AttributeResolver` contract. Preserve configurable attribute/value models, column names, active filtering, ordering, and fallback behavior. Consumers depend on the shared contract rather than this adapter.
 
 - Inspect `composer.json`, sibling files, and existing tests before changing the package.

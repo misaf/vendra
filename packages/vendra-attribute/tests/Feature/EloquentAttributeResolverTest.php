@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraAttribute\Support\EloquentAttributeResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
+use Misaf\VendraSupport\Contracts\TenantResolver;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
 
 it('provides enabled attribute options and the value model', function (): void {
     Schema::create('support_test_attributes', function (Blueprint $table): void {
@@ -61,6 +63,40 @@ it('uses the injected attribute fallback when options are unavailable', function
     expect($resolver->options())->toBe([7 => 'Fallback']);
     Exceptions::assertNothingReported();
 })->with(['empty table' => true, 'missing table' => false]);
+
+it('isolates a configured attribute model without a tenant scope', function (?int $tenantId, bool $enabled, array $expected): void {
+    Schema::create('support_test_attributes', function (Blueprint $table): void {
+        $table->id();
+        $table->unsignedBigInteger('workspace_id')->nullable();
+        $table->string('name');
+        $table->string('unit')->nullable();
+        $table->boolean('active');
+        $table->unsignedBigInteger('position');
+    });
+    TenantSchema::forgetTenantColumn('support_test_attributes');
+    AttributeResolverTestAttribute::query()->insert([
+        ['id' => 1, 'workspace_id' => null, 'name' => 'Platform', 'active' => true, 'position' => 1],
+        ['id' => 2, 'workspace_id' => 11, 'name' => 'First tenant', 'active' => true, 'position' => 2],
+        ['id' => 3, 'workspace_id' => 22, 'name' => 'Second tenant', 'active' => true, 'position' => 3],
+        ['id' => 4, 'workspace_id' => 11, 'name' => 'Inactive', 'active' => false, 'position' => 4],
+    ]);
+    $tenantResolver = $this->mock(TenantResolver::class);
+    $tenantResolver->shouldReceive('available')->andReturn($enabled);
+    $tenantResolver->shouldReceive('currentId')->andReturn($tenantId);
+    $tenantResolver->shouldReceive('foreignKey')->andReturn('workspace_id');
+
+    $resolver = new EloquentAttributeResolver(
+        AttributeResolverTestAttribute::class,
+        AttributeResolverTestResolvedAttributeValue::class,
+    );
+
+    expect($resolver->options())->toBe($expected);
+})->with([
+    'platform' => [null, true, [1 => 'Platform']],
+    'first tenant' => [11, true, [2 => 'First tenant']],
+    'second tenant' => [22, true, [3 => 'Second tenant']],
+    'tenancy disabled' => [null, false, [3 => 'Second tenant', 2 => 'First tenant', 1 => 'Platform']],
+]);
 
 it('reports invalid attribute queries while returning the fallback', function (): void {
     Exceptions::fake();

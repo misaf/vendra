@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Misaf\VendraSupport\Capabilities\IntegrationExceptions;
 use Misaf\VendraSupport\Capabilities\NullAttributeResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
+use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Throwable;
 
 final readonly class EloquentAttributeResolver implements AttributeResolver
@@ -69,6 +70,6 @@ final readonly class EloquentAttributeResolver implements AttributeResolver
     /** @return Builder<Model> */
     private function query(): Builder
     {
-        return (new $this->attributeModel)->newQuery();
+        return TenantAwareness::constrainToCurrentTenant((new $this->attributeModel)->newQuery());
     }
 }
