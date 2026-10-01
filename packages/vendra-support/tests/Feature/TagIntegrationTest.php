@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Misaf\VendraSupport\Tests\Feature;
 
+use Illuminate\Support\Facades\Exceptions;
 use Misaf\VendraSupport\Capabilities\NullTagResolver;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Contracts\TagResolver;
@@ -30,6 +31,7 @@ it('exposes relationship metadata from the bound tag resolver', function (): voi
 });
 
 it('falls back when the bound tag resolver throws', function (): void {
+    Exceptions::fake();
     app()->instance(TagResolver::class, new class implements TagResolver
     {
         public function available(): bool
@@ -45,11 +47,16 @@ it('falls back when the bound tag resolver throws', function (): void {
 
     expect(TagIntegration::isAvailable())->toBeFalse()
         ->and(TagIntegration::relationship())->toBeNull();
+
+    Exceptions::assertReportedCount(2);
 });
 
 it('falls back when no tag resolver is registered', function (): void {
+    Exceptions::fake();
     app()->offsetUnset(TagResolver::class);
 
     expect(TagIntegration::isAvailable())->toBeFalse()
         ->and(TagIntegration::relationship())->toBeNull();
+
+    Exceptions::assertNothingReported();
 });

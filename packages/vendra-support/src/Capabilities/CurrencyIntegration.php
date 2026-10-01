@@ -13,7 +13,9 @@ final class CurrencyIntegration
     {
         try {
             return self::resolver()->defaultCode();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return self::fallbackResolver()->defaultCode();
         }
     }
@@ -25,7 +27,9 @@ final class CurrencyIntegration
     {
         try {
             return self::resolver()->options();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return self::fallbackResolver()->options();
         }
     }
@@ -37,7 +41,9 @@ final class CurrencyIntegration
     {
         try {
             return self::resolver()->activeCodes();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return self::fallbackResolver()->activeCodes();
         }
     }
@@ -46,7 +52,9 @@ final class CurrencyIntegration
     {
         try {
             return self::resolver()->available();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return false;
         }
     }

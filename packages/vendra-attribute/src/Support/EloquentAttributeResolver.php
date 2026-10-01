@@ -6,6 +6,7 @@ namespace Misaf\VendraAttribute\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Capabilities\IntegrationExceptions;
 use Misaf\VendraSupport\Capabilities\NullAttributeResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
 use Throwable;
@@ -58,7 +59,9 @@ final readonly class EloquentAttributeResolver implements AttributeResolver
                 ->all();
 
             return $options !== [] ? $options : $this->fallback->options();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return $this->fallback->options();
         }
     }

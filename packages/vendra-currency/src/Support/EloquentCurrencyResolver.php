@@ -6,6 +6,7 @@ namespace Misaf\VendraCurrency\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Capabilities\IntegrationExceptions;
 use Misaf\VendraSupport\Capabilities\NullCurrencyResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
@@ -42,7 +43,9 @@ final readonly class EloquentCurrencyResolver implements CurrencyResolver
             if (is_string($defaultCode) && $defaultCode !== '') {
                 return $defaultCode;
             }
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return $this->fallback->defaultCode();
         }
 
@@ -67,7 +70,9 @@ final readonly class EloquentCurrencyResolver implements CurrencyResolver
             if ($options !== []) {
                 return $options;
             }
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return $this->fallback->options();
         }
 
@@ -88,7 +93,9 @@ final readonly class EloquentCurrencyResolver implements CurrencyResolver
                 ->all();
 
             return $currencyCodes !== [] ? array_values($currencyCodes) : $this->fallback->activeCodes();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return $this->fallback->activeCodes();
         }
     }

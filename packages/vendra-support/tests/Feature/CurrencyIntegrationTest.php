@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Exceptions;
 use Misaf\VendraSupport\Capabilities\CurrencyIntegration;
 use Misaf\VendraSupport\Capabilities\NullCurrencyResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
@@ -77,6 +78,7 @@ it('uses the bound currency resolver when available', function (): void {
 });
 
 it('falls back when the bound resolver throws', function (): void {
+    Exceptions::fake();
     config(['app.currency' => 'CAD']);
     config(['money' => Arr::except(config('money', []), ['defaultCurrency'])]);
 
@@ -107,6 +109,8 @@ it('falls back when the bound resolver throws', function (): void {
         ->and(CurrencyIntegration::defaultCode())->toBe('CAD')
         ->and(CurrencyIntegration::options())->toBe(['CAD' => 'CAD'])
         ->and(CurrencyIntegration::activeCurrencyCodes())->toBe(['CAD']);
+
+    Exceptions::assertReportedCount(4);
 });
 
 it('uses the support null resolver fallback shape', function (): void {
@@ -120,6 +124,7 @@ it('uses the support null resolver fallback shape', function (): void {
 });
 
 it('uses the configured currency when no currency resolver is registered', function (): void {
+    Exceptions::fake();
     app()->offsetUnset(CurrencyResolver::class);
     config(['money.defaultCurrency' => 'EUR']);
 
@@ -127,4 +132,6 @@ it('uses the configured currency when no currency resolver is registered', funct
         ->and(CurrencyIntegration::defaultCode())->toBe('EUR')
         ->and(CurrencyIntegration::options())->toBe(['EUR' => 'EUR'])
         ->and(CurrencyIntegration::activeCurrencyCodes())->toBe(['EUR']);
+
+    Exceptions::assertNothingReported();
 });

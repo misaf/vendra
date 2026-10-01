@@ -14,7 +14,9 @@ final class AttributeIntegration
     {
         try {
             return self::resolver()->available();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return false;
         }
     }
@@ -24,7 +26,9 @@ final class AttributeIntegration
     {
         try {
             return self::resolver()->valueModel();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return null;
         }
     }
@@ -34,7 +38,9 @@ final class AttributeIntegration
     {
         try {
             return self::resolver()->options();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return [];
         }
     }

@@ -14,7 +14,9 @@ final class TagIntegration
     {
         try {
             return self::resolver()->available();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return false;
         }
     }
@@ -23,7 +25,9 @@ final class TagIntegration
     {
         try {
             return self::resolver()->relationship();
-        } catch (Throwable) {
+        } catch (Throwable $exception) {
+            IntegrationExceptions::report($exception);
+
             return null;
         }
     }

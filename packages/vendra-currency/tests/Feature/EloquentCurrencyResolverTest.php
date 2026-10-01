@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Misaf\VendraCurrency\Tests\Feature;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Exceptions;
 use Illuminate\Support\Facades\Schema;
 use Misaf\VendraCurrency\Support\EloquentCurrencyResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
@@ -58,6 +59,7 @@ it('provides active currency values from an eloquent model', function (): void {
 });
 
 it('uses the injected currency fallback when currency values are unavailable', function (bool $tableExists): void {
+    Exceptions::fake();
     if ($tableExists) {
         Schema::create('support_test_currencies', function (Blueprint $table): void {
             $table->id();
@@ -79,4 +81,20 @@ it('uses the injected currency fallback when currency values are unavailable', f
     expect($resolver->defaultCode())->toBe('EUR')
         ->and($resolver->options())->toBe(['EUR' => 'Euro'])
         ->and($resolver->activeCodes())->toBe(['EUR']);
+    Exceptions::assertNothingReported();
 })->with(['empty table' => true, 'missing table' => false]);
+
+it('reports invalid currency queries while returning defaults', function (): void {
+    Exceptions::fake();
+    config(['money.defaultCurrency' => 'EUR']);
+    Schema::create('support_test_currencies', function (Blueprint $table): void {
+        $table->id();
+    });
+    $resolver = new EloquentCurrencyResolver(CurrencyResolverTestCurrency::class, activeColumn: 'missing.active');
+
+    expect($resolver->defaultCode())->toBe('EUR')
+        ->and($resolver->options())->toBe(['EUR' => 'EUR'])
+        ->and($resolver->activeCodes())->toBe(['EUR']);
+
+    Exceptions::assertReportedCount(3);
+});
