@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Tests\Feature;
+namespace Misaf\VendraAttribute\Tests\Feature;
 
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\Unguarded;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Unguarded]
 #[Table(name: 'support_test_attributes')]
 #[WithoutTimestamps]
-final class SupportTestAttribute extends Model
+final class AttributeResolverTestAttribute extends Model
 {
     use HasFactory;
 }

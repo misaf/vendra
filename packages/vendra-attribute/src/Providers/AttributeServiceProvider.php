@@ -11,7 +11,7 @@ use Misaf\VendraAttribute\AttributePlugin;
 use Misaf\VendraAttribute\Console\Commands\SeedCommand;
 use Misaf\VendraAttribute\Models\Attribute;
 use Misaf\VendraAttribute\Models\AttributeValue;
-use Misaf\VendraSupport\Capabilities\EloquentAttributeResolver;
+use Misaf\VendraAttribute\Support\EloquentAttributeResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;

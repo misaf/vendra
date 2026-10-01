@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Tests\Unit;
+namespace Misaf\VendraSupport\Tests\Feature;
 
 use Misaf\VendraSupport\Capabilities\AttributeIntegration;
 use Misaf\VendraSupport\Capabilities\NullAttributeResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
+use Misaf\VendraSupport\Tests\Unit\SupportTestAttributeValue;
+use RuntimeException;
 
 it('falls back to unavailable attribute integration', function (): void {
     app()->instance(AttributeResolver::class, new class implements AttributeResolver
@@ -86,4 +88,12 @@ it('uses the support null resolver fallback shape', function (): void {
     expect($resolver->available())->toBeFalse()
         ->and($resolver->valueModel())->toBeNull()
         ->and($resolver->options())->toBeEmpty();
+});
+
+it('falls back when no attribute resolver is registered', function (): void {
+    app()->offsetUnset(AttributeResolver::class);
+
+    expect(AttributeIntegration::isAvailable())->toBeFalse()
+        ->and(AttributeIntegration::valueModel())->toBeNull()
+        ->and(AttributeIntegration::options())->toBeEmpty();
 });

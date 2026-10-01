@@ -2,6 +2,8 @@
 
 Reusable, tenant-agnostic attributes and polymorphic values for Vendra applications.
 
+Own the concrete `Misaf\VendraAttribute\Support\EloquentAttributeResolver` adapter here and bind it to Support's `AttributeResolver` contract. Preserve configurable attribute/value models, column names, active filtering, ordering, and fallback behavior. Consumers depend on the shared contract rather than this adapter.
+
 ## Features
 
 - Reusable attribute definitions with optional units

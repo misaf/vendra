@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Tests\Feature;
+namespace Misaf\VendraCurrency\Tests\Feature;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Misaf\VendraSupport\Capabilities\EloquentCurrencyResolver;
+use Misaf\VendraCurrency\Support\EloquentCurrencyResolver;
+use Misaf\VendraSupport\Contracts\CurrencyResolver;
 
 it('provides active currency values from an eloquent model', function (): void {
     Schema::create('support_test_currencies', function (Blueprint $table): void {
@@ -21,7 +22,7 @@ it('provides active currency values from an eloquent model', function (): void {
             ->default(false);
     });
 
-    SupportTestCurrency::query()->insert([
+    CurrencyResolverTestCurrency::query()->insert([
         [
             'name' => 'US Dollar',
             'code' => 'USD',
@@ -45,7 +46,7 @@ it('provides active currency values from an eloquent model', function (): void {
         ],
     ]);
 
-    $resolver = new EloquentCurrencyResolver(SupportTestCurrency::class);
+    $resolver = new EloquentCurrencyResolver(CurrencyResolverTestCurrency::class);
 
     expect($resolver->available())->toBeTrue()
         ->and($resolver->defaultCode())->toBe('USD')
@@ -55,3 +56,27 @@ it('provides active currency values from an eloquent model', function (): void {
         ])
         ->and($resolver->activeCodes())->toBe(['USD', 'EUR']);
 });
+
+it('uses the injected currency fallback when currency values are unavailable', function (bool $tableExists): void {
+    if ($tableExists) {
+        Schema::create('support_test_currencies', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->string('code');
+            $table->boolean('active');
+            $table->boolean('is_default');
+            $table->unsignedBigInteger('position');
+        });
+    }
+
+    $fallback = $this->mock(CurrencyResolver::class);
+    $fallback->shouldReceive('defaultCode')->once()->andReturn('EUR');
+    $fallback->shouldReceive('options')->once()->andReturn(['EUR' => 'Euro']);
+    $fallback->shouldReceive('activeCodes')->once()->andReturn(['EUR']);
+
+    $resolver = new EloquentCurrencyResolver(CurrencyResolverTestCurrency::class, fallback: $fallback);
+
+    expect($resolver->defaultCode())->toBe('EUR')
+        ->and($resolver->options())->toBe(['EUR' => 'Euro'])
+        ->and($resolver->activeCodes())->toBe(['EUR']);
+})->with(['empty table' => true, 'missing table' => false]);

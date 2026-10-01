@@ -7,7 +7,6 @@ namespace Misaf\VendraProduct\Tests\Feature;
 use LogicException;
 use Misaf\VendraProduct\Database\Factories\ProductFactory;
 use Misaf\VendraProduct\Models\Product;
-use Misaf\VendraSupport\Capabilities\EloquentTagResolver;
 use Misaf\VendraSupport\Capabilities\NullTagResolver;
 use Misaf\VendraSupport\Capabilities\TagIntegration;
 use Misaf\VendraSupport\Contracts\TagResolver;
@@ -21,10 +20,9 @@ it('keeps product tags unavailable without a tag provider', function (): void {
 });
 
 it('builds a typed polymorphic tag relation through the support contract', function (): void {
-    app()->instance(
-        TagResolver::class,
-        new EloquentTagResolver(new TagRelationship(ProductTestTag::class)),
-    );
+    $resolver = $this->mock(TagResolver::class);
+    $resolver->shouldReceive('available')->andReturnTrue();
+    $resolver->shouldReceive('relationship')->andReturn(new TagRelationship(ProductTestTag::class));
 
     $relation = (new Product)->tags();
 
@@ -51,3 +49,11 @@ it('syncs a single tag name', function (): void {
     expect($product->tags()->count())->toBe(1)
         ->and($product->tags()->first()?->getAttribute('name'))->toBe('Summer');
 })->skip(fn (): bool => ! TagIntegration::isAvailable(), 'no tag provider is installed');
+
+it('keeps product tags unavailable when no tag resolver is registered', function (): void {
+    app()->offsetUnset(TagResolver::class);
+
+    expect(TagIntegration::isAvailable())->toBeFalse()
+        ->and(fn () => (new Product)->tags())
+        ->toThrow(LogicException::class, 'Install a tag provider to use tags.');
+});

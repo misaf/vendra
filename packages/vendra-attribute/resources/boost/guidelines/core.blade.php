@@ -27,3 +27,4 @@ The `misaf/vendra-attribute` package owns reusable tenant-aware attributes and p
 - Keep `AttributeResource` ungrouped and assign `$navigationSort` from `NavigationPriority::Attributes`; never hardcode numeric resource sort values.
 - Provide separate singular and plural resource labels in `en`, `de`, and `fa`: model labels use the singular key, while navigation and plural model labels use the plural key. Keep navigation labels at 24 characters or fewer.
 - Keep architecture tests enforcing independence from Product, Tenant, Vendra Tagger, and Spatie Tags.
+- Own the concrete `Misaf\VendraAttribute\Support\EloquentAttributeResolver` adapter here and bind it to Support's `AttributeResolver` contract. Preserve configurable attribute/value models, column names, active filtering, ordering, and fallback behavior. Consumers depend on the shared contract rather than this adapter.

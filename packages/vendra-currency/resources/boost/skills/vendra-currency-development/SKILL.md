@@ -7,6 +7,8 @@ description: "Create, modify, review, or test the Vendra Currency package in pac
 
 ## Workflow
 
+- Own the concrete `Misaf\VendraCurrency\Support\EloquentCurrencyResolver` adapter here and bind it to Support's `CurrencyResolver` contract. Preserve configurable models and columns, active filtering, default selection, tenant isolation, and fallback behavior. Consumers depend on the shared contract rather than this adapter.
+
 - Inspect `composer.json`, sibling files, and existing tests before changing the package.
 - Use Laravel Boost `application-info` and `search-docs` before code changes.
 - Apply `laravel-best-practices` to Laravel PHP and `pest-testing` whenever tests change.

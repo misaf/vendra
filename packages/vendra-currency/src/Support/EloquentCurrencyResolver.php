@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Capabilities;
+namespace Misaf\VendraCurrency\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Capabilities\NullCurrencyResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Misaf\VendraSupport\Tenancy\TenantAwareness;
 use Throwable;

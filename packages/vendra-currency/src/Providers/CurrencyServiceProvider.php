@@ -10,7 +10,7 @@ use Illuminate\Foundation\Console\AboutCommand;
 use Misaf\VendraCurrency\Console\Commands\SeedCommand;
 use Misaf\VendraCurrency\CurrencyPlugin;
 use Misaf\VendraCurrency\Models\Currency;
-use Misaf\VendraSupport\Capabilities\EloquentCurrencyResolver;
+use Misaf\VendraCurrency\Support\EloquentCurrencyResolver;
 use Misaf\VendraSupport\Contracts\CurrencyResolver;
 use Misaf\VendraSupport\Filament\Concerns\ResolvesConfiguredPanels;
 use Misaf\VendraSupport\Tenancy\TenantSeeders;

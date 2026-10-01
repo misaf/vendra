@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Capabilities;
+namespace Misaf\VendraAttribute\Support;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Misaf\VendraSupport\Capabilities\NullAttributeResolver;
 use Misaf\VendraSupport\Contracts\AttributeResolver;
 use Throwable;
 

@@ -7,6 +7,8 @@ description: "Create, modify, review, or test the Vendra Tagger module in packag
 
 ## Workflow
 
+- Own the concrete `Misaf\VendraTagger\Support\EloquentTagResolver` adapter here and bind it to Support's `TagResolver` contract. Keep `TagRelationship` and null defaults in Support. Tag consumers and their tests use the contract and relationship metadata without importing the concrete adapter.
+
 - Inspect `composer.json`, sibling files, and existing tests before changing the package.
 - Use Laravel Boost `application-info` and `search-docs` before code changes.
 - Apply `laravel-best-practices` to Laravel PHP and `pest-testing` whenever tests change.

@@ -2,6 +2,8 @@
 
 Tenant-aware currency management for Vendra applications.
 
+Own the concrete `Misaf\VendraCurrency\Support\EloquentCurrencyResolver` adapter here and bind it to Support's `CurrencyResolver` contract. Preserve configurable models and columns, active filtering, default selection, tenant isolation, and fallback behavior. Consumers depend on the shared contract rather than this adapter.
+
 ## Features
 
 - Catalog of installable currencies: ISO 4217 fiat (via `moneyphp/money`) and crypto currencies (via `moneyphp/crypto-currencies`)

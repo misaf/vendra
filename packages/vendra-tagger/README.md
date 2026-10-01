@@ -2,6 +2,8 @@
 
 Translated, sortable, and tenant-compatible tag management for Vendra applications, with a Filament administration resource built on `spatie/laravel-tags`.
 
+Own the concrete `Misaf\VendraTagger\Support\EloquentTagResolver` adapter here and bind it to Support's `TagResolver` contract. Keep `TagRelationship` and null defaults in Support. Tag consumers and their tests use the contract and relationship metadata without importing the concrete adapter.
+
 ## Features
 
 - Uses Spatie's translated tag names and slugs

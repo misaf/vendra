@@ -118,3 +118,13 @@ it('uses the support null resolver fallback shape', function (): void {
         ->and($resolver->options())->toBe([$resolver->defaultCode() => $resolver->defaultCode()])
         ->and($resolver->activeCodes())->toBe([$resolver->defaultCode()]);
 });
+
+it('uses the configured currency when no currency resolver is registered', function (): void {
+    app()->offsetUnset(CurrencyResolver::class);
+    config(['money.defaultCurrency' => 'EUR']);
+
+    expect(CurrencyIntegration::isAvailable())->toBeFalse()
+        ->and(CurrencyIntegration::defaultCode())->toBe('EUR')
+        ->and(CurrencyIntegration::options())->toBe(['EUR' => 'EUR'])
+        ->and(CurrencyIntegration::activeCurrencyCodes())->toBe(['EUR']);
+});

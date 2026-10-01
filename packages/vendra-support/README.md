@@ -2,6 +2,8 @@
 
 Shared support infrastructure used by every Vendra module.
 
+Keep Support provider-neutral: shared contracts, null defaults, integration helpers, tenancy primitives, and reusable UI belong here. Concrete Attribute, Currency, and Tag adapters belong to their provider packages. Support must not require, suggest, or reference another first-party package. The former `Misaf\VendraSupport\Capabilities\EloquentAttributeResolver`, `EloquentCurrencyResolver`, and `EloquentTagResolver` names have moved to `Misaf\VendraAttribute\Support`, `Misaf\VendraCurrency\Support`, and `Misaf\VendraTagger\Support`, respectively; update imports directly, with no compatibility aliases.
+
 ## Features
 
 - Provider-neutral tenant resolution and tenant-awareness helpers

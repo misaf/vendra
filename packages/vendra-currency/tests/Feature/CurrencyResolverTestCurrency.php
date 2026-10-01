@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Tests\Feature;
+namespace Misaf\VendraCurrency\Tests\Feature;
 
 use Illuminate\Database\Eloquent\Attributes\Table;
 use Illuminate\Database\Eloquent\Attributes\Unguarded;
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 #[Unguarded]
 #[Table(name: 'support_test_currencies')]
 #[WithoutTimestamps]
-final class SupportTestCurrency extends Model
+final class CurrencyResolverTestCurrency extends Model
 {
     use HasFactory;
 }

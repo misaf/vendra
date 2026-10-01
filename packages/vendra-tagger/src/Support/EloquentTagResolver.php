@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Misaf\VendraSupport\Capabilities;
+namespace Misaf\VendraTagger\Support;
 
 use Misaf\VendraSupport\Contracts\TagResolver;
 use Misaf\VendraSupport\Support\TagRelationship;
