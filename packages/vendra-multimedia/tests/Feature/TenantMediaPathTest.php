@@ -3,10 +3,13 @@
 declare(strict_types=1);
 
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Misaf\VendraMultimedia\Models\Multimedia;
 use Misaf\VendraMultimedia\Support\DefaultPathGenerator;
 use Misaf\VendraMultimedia\Tests\Fixtures\Gallery;
+use Misaf\VendraSupport\Tenancy\TenantSchema;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 beforeEach(function (): void {
     Storage::fake('public');
@@ -69,6 +72,26 @@ it('keeps the uuid layout for media without a tenant', function (): void {
     $media = new Multimedia(['uuid' => 'legacy-uuid']);
 
     expect(resolve(DefaultPathGenerator::class)->getPath($media))->toBe('legacy-uuid/');
+});
+
+it('preserves string tenant keys in media paths', function (string $prefix, string $expected): void {
+    Config::set('media-library.prefix', $prefix);
+    $media = new Media;
+    $media->setAttribute('uuid', 'photo-uuid');
+    $media->setAttribute(TenantSchema::column(), 'workspace-42');
+
+    expect(resolve(DefaultPathGenerator::class)->getPath($media))->toBe($expected);
+})->with([
+    ['', 'workspace-42/photo-uuid/'],
+    ['assets', 'assets/workspace-42/photo-uuid/'],
+]);
+
+it('rejects a media tenant key that cannot identify a tenant', function (): void {
+    $media = new Media;
+    $media->setAttribute(TenantSchema::column(), ['invalid']);
+
+    expect(fn (): string => resolve(DefaultPathGenerator::class)->getPath($media))
+        ->toThrow(UnexpectedValueException::class, 'The media tenant key must be an integer or string.');
 });
 
 describe('relocate command', function (): void {

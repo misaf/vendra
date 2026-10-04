@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 use Misaf\VendraSupport\Tenancy\TenantSchema;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
+use UnexpectedValueException;
 
 /**
  * Store each tenant's media under its own directory.
@@ -53,6 +54,8 @@ final class DefaultPathGenerator implements PathGenerator
         if ($tenantKey === null) {
             return $this->getLegacyBasePath($media);
         }
+
+        throw_unless(is_int($tenantKey) || is_string($tenantKey), UnexpectedValueException::class, 'The media tenant key must be an integer or string.');
 
         $prefix = Config::string('media-library.prefix', '');
 
