@@ -494,7 +494,7 @@ it('refuses to operate a foreign container that happens to carry a storefront na
 
     expect(fn () => resolve(StorefrontProvisioner::class)->{$operation}($reference))
         ->toThrow(RuntimeException::class, 'was not placed by the platform');
-})->with(['start', 'stop', 'restart', 'observe']);
+})->with(['start', 'stop', 'restart', 'observe', 'logs']);
 
 it('provisions again when the domain changed while a provision job was running', function (): void {
     $deployment = StorefrontDeployment::factory()->create([

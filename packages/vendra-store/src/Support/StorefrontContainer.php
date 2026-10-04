@@ -17,6 +17,7 @@ final readonly class StorefrontContainer
         public ?int $exitCode,
         public ?string $image,
         public array $labels,
+        public ?string $encodedConfiguration = null,
     ) {}
 
     /** @param array<array-key, mixed> $payload */
@@ -34,6 +35,7 @@ final readonly class StorefrontContainer
             exitCode: is_numeric($exitCode) ? (int) $exitCode : null,
             image: self::string($payload, 'Config.Image'),
             labels: self::labels($payload),
+            encodedConfiguration: self::encodedConfiguration($payload),
         );
     }
 
@@ -68,6 +70,18 @@ final readonly class StorefrontContainer
         }
 
         return $labels;
+    }
+
+    /** @param array<array-key, mixed> $payload */
+    private static function encodedConfiguration(array $payload): ?string
+    {
+        foreach ((array) Arr::get($payload, 'Config.Env', []) as $variable) {
+            if (is_string($variable) && str_starts_with($variable, 'STOREFRONT_CONFIG_BASE64=')) {
+                return substr($variable, strlen('STOREFRONT_CONFIG_BASE64='));
+            }
+        }
+
+        return null;
     }
 
     /** @param array<array-key, mixed> $payload */

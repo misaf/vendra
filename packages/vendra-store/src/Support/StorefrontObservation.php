@@ -15,6 +15,7 @@ final readonly class StorefrontObservation
         public ?string $domain = null,
         /** @var list<string>|null */
         public ?array $aliases = null,
+        public ?string $encodedConfiguration = null,
     ) {}
 
     /**
@@ -28,6 +29,7 @@ final readonly class StorefrontObservation
             containerName: $container?->name,
             domain: $container?->labels[StorefrontContainerDefinitionFactory::DOMAIN_LABEL] ?? null,
             aliases: self::aliasesFrom($container?->labels[StorefrontContainerDefinitionFactory::ALIASES_LABEL] ?? null),
+            encodedConfiguration: $container?->encodedConfiguration,
         );
     }
 
@@ -46,6 +48,11 @@ final readonly class StorefrontObservation
     public function isAbsent(): bool
     {
         return $this->state === StorefrontRuntimeState::Absent;
+    }
+
+    public function isConfiguredOtherThan(string $encodedConfiguration): bool
+    {
+        return $this->encodedConfiguration !== null && $this->encodedConfiguration !== $encodedConfiguration;
     }
 
     /**

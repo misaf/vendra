@@ -52,6 +52,7 @@ description: "Create, modify, review, or test the Vendra Store module in package
 - `provision`, `start`, `stop`, `restart`, `destroy`, `observe`, `logs` — typed value objects on both sides, never arrays.
 - Idempotence is part of the contract: provisioning twice leaves one storefront; starting a running one, stopping a stopped one, and destroying an absent one all succeed.
 - `observe()` returns a `StorefrontObservation` rich enough to tell "stopped" from "running the wrong image", and must never answer "absent" for an unreachable runtime.
+- Compare the inspected `STOREFRONT_CONFIG_BASE64` environment value with the saved deployment configuration. Configuration, image, and domain drift must trigger replacement before starting a stopped container; unchanged containers are started. Check the platform ownership label before reading logs too.
 - `ContainerStorefrontProvisioner` builds its container through `Support\StorefrontContainerDefinitionFactory` after `Support\StorefrontConfigurationValidator` accepts the configuration. `Services\StorefrontContainerRuntime` resolves the selected Engine client through `ContainerManager`; no Docker or Podman CLI calls are allowed.
 
 ## Deployment Lifecycle

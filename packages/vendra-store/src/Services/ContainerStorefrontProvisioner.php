@@ -117,7 +117,11 @@ final readonly class ContainerStorefrontProvisioner implements StorefrontProvisi
 
     public function logs(StorefrontReference $storefront, int $lines = 200): string
     {
-        return $this->runtime->logs($this->containerName($storefront), $lines);
+        $container = $this->containerName($storefront);
+
+        $this->assertPlatformOwned($container);
+
+        return $this->runtime->logs($container, $lines);
     }
 
     private function containerName(StorefrontReference $storefront): string

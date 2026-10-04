@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
 use Misaf\VendraStore\Actions\ReconcileStoreStorefrontAction;
+use Misaf\VendraStore\Actions\StartStoreStorefrontAction;
+use Misaf\VendraStore\Actions\UpdateStorefrontConfigurationAction;
 use Misaf\VendraStore\Contracts\StorefrontProvisioner;
 use Misaf\VendraStore\Enums\StorefrontDeploymentStatus;
 use Misaf\VendraStore\Enums\StorefrontDesiredState;
@@ -14,6 +18,7 @@ use Misaf\VendraStore\Jobs\ReconcileStorefrontJob;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Models\StorefrontImage;
 use Misaf\VendraStore\Support\StorefrontObservation;
+use Misaf\VendraStore\Support\StorefrontProvisionRequest;
 use Misaf\VendraStore\Support\StorefrontProvisionResult;
 
 const RECONCILE_IMAGE = 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123';
@@ -94,11 +99,57 @@ describe('a storefront meant to be running', function (): void {
     });
 
     it('starts a stopped storefront instead of rebuilding it', function (): void {
-        $engine = fakeExistingStorefront(['Status' => 'exited', 'ExitCode' => 0]);
+        $deployment = reconcilable();
+        $engine = fakeExistingStorefront(
+            ['Status' => 'exited', 'ExitCode' => 0],
+            encodedConfiguration: StorefrontProvisionRequest::for($deployment)->encodedConfiguration(),
+        );
 
-        expect(reconcile(reconcilable()))->toBe(StorefrontReconciliationOutcome::Started)
+        expect(reconcile($deployment))->toBe(StorefrontReconciliationOutcome::Started)
             ->and($engine->calls)->toBe(['start'])
             ->and($engine->calls)->not->toContain('remove');
+    });
+
+    it('applies configuration saved while stopped when the storefront is started', function (string $state): void {
+        Queue::fake();
+        $deployment = reconcilable(['desired_state' => StorefrontDesiredState::Stopped]);
+        $engine = fakeExistingStorefront(
+            ['Status' => $state, 'ExitCode' => 0],
+            encodedConfiguration: StorefrontProvisionRequest::for($deployment)->encodedConfiguration(),
+        );
+
+        resolve(UpdateStorefrontConfigurationAction::class)->execute($deployment, ['storefront_mobile_phone' => '09129999999']);
+        Queue::assertNotPushed(ProvisionStorefrontJob::class);
+
+        resolve(StartStoreStorefrontAction::class)->execute($deployment->refresh());
+        new ReconcileStorefrontJob($deployment->id)->handle(resolve(ReconcileStoreStorefrontAction::class));
+
+        expect($engine->calls)->toContain('remove', 'containers/create');
+        assertDockerRequestSent(function ($request): bool {
+            if (! Str::endsWith($request->path, '/containers/create')) {
+                return false;
+            }
+
+            $configuration = collect(Arr::get($request->body, 'Env'))->first(fn (string $value): bool => Str::startsWith($value, 'STOREFRONT_CONFIG_BASE64='));
+            $decoded = json_decode(base64_decode(Str::after($configuration, 'STOREFRONT_CONFIG_BASE64=')), true, flags: JSON_THROW_ON_ERROR);
+
+            return Arr::get($decoded, 'contact.mobilePhone') === '09129999999';
+        });
+    })->with(['exited', 'created']);
+
+    it('redeploys a stopped storefront whose image changed', function (): void {
+        $engine = fakeExistingStorefront(['Status' => 'exited', 'ExitCode' => 0], image: 'ghcr.io/misaf/vendra-storefront-florist@sha256:older');
+
+        expect(reconcile(reconcilable()))->toBe(StorefrontReconciliationOutcome::Redeployed)
+            ->and($engine->calls)->toContain('remove', 'containers/create');
+    });
+
+    it('redeploys a running storefront whose configuration changed', function (): void {
+        $deployment = reconcilable();
+        $engine = fakeExistingStorefront(encodedConfiguration: base64_encode('{}'));
+
+        expect(reconcile($deployment))->toBe(StorefrontReconciliationOutcome::Redeployed)
+            ->and($engine->calls)->toContain('remove', 'containers/create');
     });
 
     it('deploys one the runtime does not have at all', function (): void {

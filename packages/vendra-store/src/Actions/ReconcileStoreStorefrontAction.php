@@ -11,6 +11,7 @@ use Misaf\VendraStore\Enums\StorefrontReconciliationOutcome;
 use Misaf\VendraStore\Enums\StorefrontRuntimeState;
 use Misaf\VendraStore\Models\StorefrontDeployment;
 use Misaf\VendraStore\Support\StorefrontObservation;
+use Misaf\VendraStore\Support\StorefrontProvisionRequest;
 use Misaf\VendraStore\Support\StorefrontReference;
 
 /**
@@ -44,6 +45,15 @@ final readonly class ReconcileStoreStorefrontAction
             return StorefrontReconciliationOutcome::Deployed;
         }
 
+        if ($observed->isServingOtherThan($this->desiredImage($deployment))
+            || $observed->isServingDomainOtherThan($deployment->domain)
+            || $observed->isServingAliasesOtherThan($deployment->aliasDomains())
+            || $observed->isConfiguredOtherThan(StorefrontProvisionRequest::for($deployment)->encodedConfiguration())) {
+            $this->redeploy($deployment);
+
+            return StorefrontReconciliationOutcome::Redeployed;
+        }
+
         /*
          | Placed but not running. Starting it preserves the container, its image,
          | and its labels — rebuilding would discard all three to achieve the same
@@ -55,10 +65,7 @@ final readonly class ReconcileStoreStorefrontAction
             return StorefrontReconciliationOutcome::Started;
         }
 
-        if ($observed->state->isServing()
-            && ! $observed->isServingOtherThan($this->desiredImage($deployment))
-            && ! $observed->isServingDomainOtherThan($deployment->domain)
-            && ! $observed->isServingAliasesOtherThan($deployment->aliasDomains())) {
+        if ($observed->state->isServing()) {
             /*
              | A deployment whose health gate timed out was recorded as Requested
              | for this pass to revisit. Serving the desired image on its domain

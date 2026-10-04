@@ -298,6 +298,10 @@ php artisan vendra-store:lifecycle {start|stop|restart|status|logs} {slug}
 
 `vendra-store:reconcile` is cheap and safe to repeat: it corrects with the
 narrowest verb that works, so a converged estate comes through a pass untouched.
+It compares the container's `STOREFRONT_CONFIG_BASE64` environment value with
+the saved deployment configuration. Configuration, image, and domain drift
+trigger replacement before a stopped container is started; unchanged containers
+are simply started. Reading logs also requires the platform ownership label.
 Reach for `vendra-store:redeploy` only for a change convergence cannot see — an
 image republished under the same reference, or an edge label that only a fresh
 container will carry. `vendra-store:lifecycle` records intent, so a storefront

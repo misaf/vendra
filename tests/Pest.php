@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Misaf\DockerEngine\ApiVersion;
 use Misaf\DockerEngine\DockerClient;
@@ -48,6 +49,7 @@ function fakeExistingStorefront(
     string $image = 'ghcr.io/misaf/vendra-storefront-florist@sha256:abc123',
     bool $present = true,
     string $logs = '',
+    ?string $encodedConfiguration = null,
 ): object {
     $recorder = new class
     {
@@ -57,7 +59,7 @@ function fakeExistingStorefront(
         public FakeDockerTransport $transport;
     };
 
-    $transport = bindFakeDockerEngine(function (Request $request, bool $stream) use ($state, $image, &$present, $logs, $recorder): Response|StreamResponse {
+    $transport = bindFakeDockerEngine(function (Request $request, bool $stream) use (&$state, &$image, &$present, $logs, &$encodedConfiguration, $recorder): Response|StreamResponse {
         $path = $request->path;
 
         foreach (['/start', '/stop', '/restart', '/containers/create', '/images/create'] as $verb) {
@@ -77,6 +79,14 @@ function fakeExistingStorefront(
         // A created container can be inspected from then on.
         if (Str::endsWith($path, '/containers/create')) {
             $present = true;
+            $state = ['Status' => 'running', 'Health' => ['Status' => 'healthy']];
+            $image = Arr::get($request->body, 'Image');
+
+            foreach (Arr::get($request->body, 'Env') as $variable) {
+                if (Str::startsWith($variable, 'STOREFRONT_CONFIG_BASE64=')) {
+                    $encodedConfiguration = Str::after($variable, 'STOREFRONT_CONFIG_BASE64=');
+                }
+            }
         }
 
         return match (true) {
@@ -93,6 +103,7 @@ function fakeExistingStorefront(
                     'Name' => '/vendra-storefront-acme-flowers',
                     'Config' => [
                         'Image' => $image,
+                        'Env' => $encodedConfiguration === null ? [] : ['STOREFRONT_CONFIG_BASE64='.$encodedConfiguration],
                         'Labels' => [
                             'io.vendra.managed-by' => 'vendra',
                             'io.vendra.slug' => 'acme-flowers',
