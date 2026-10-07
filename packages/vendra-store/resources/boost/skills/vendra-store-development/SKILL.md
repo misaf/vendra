@@ -63,6 +63,7 @@ description: "Create, modify, review, or test the Vendra Store module in package
 - Write status only via `markProcessing()`, `markReady()`, `markRequested()`, `markFailed()`. `Enums\StorefrontDeploymentStatus::transitions()` is the transition table and `InvalidStorefrontTransitionException` is the rejection.
 - A failing attempt with retries left stays `Processing`; only `ProvisionStorefrontJob::failed()` writes `Failed`.
 - `ProvisionStorefrontJob` runs on its own `storefronts` queue, served by the single worker that holds a runtime socket. Do not move it onto a shared queue.
+- Panel observation/log reads use `Support\StorefrontRuntimeSnapshots`, which throttles collection through `RecordStorefrontRuntimeSnapshotJob` on the same worker. Only `RecordStorefrontRuntimeSnapshotAction` accesses the provisioner. Central-cache snapshots contain plain arrays, expire after 30 seconds, and are keyed by deployment intent; synchronous queue connections must never run panel reads inline.
 
 ## Configuration
 

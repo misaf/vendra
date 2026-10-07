@@ -317,6 +317,15 @@ the storefront network as a `Support\StorefrontRuntimeHealthReport`. Read the
 latest one with `Support\StorefrontRuntimeHealth::latest()`; a report older
 than five minutes is stale, meaning the worker or the scheduler stopped.
 
+Per-storefront observation and logs use `Support\StorefrontRuntimeSnapshots::latest()`.
+Missing results queue `RecordStorefrontRuntimeSnapshotJob` on `storefronts`; only
+the worker calls the provisioner through `RecordStorefrontRuntimeSnapshotAction`.
+Requests are throttled, and observation and log results expire after 30 seconds.
+Snapshots use the central shared cache as plain arrays, keyed by deployment and
+requested storefront configuration. Errors remain distinct from an absent
+container. Use an asynchronous database, Redis, SQS, or Beanstalkd queue connection;
+these reads never fall back to running synchronously in the web process.
+
 `Support\StoreStatusCounts::for(?Builder $stores)` counts stores per
 `StoreStatus` in one grouped query, using the same rule as `Store::status()`.
 `StoreStatusCounts::NEEDING_ATTENTION` lists the unsettled statuses
